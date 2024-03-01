@@ -1,3 +1,7 @@
+"use client";
+
+import { useAccount, useBlock } from "wagmi";
+
 export function Code({
   children,
   className,
@@ -5,5 +9,12 @@ export function Code({
   children: React.ReactNode;
   className?: string;
 }): JSX.Element {
-  return <code className={className}>{children}</code>;
+  const account = useAccount();
+
+  return (
+    <code className={className}>
+      addresses: {JSON.stringify(account.addresses)}
+      It can take children: {children}
+    </code>
+  );
 }
