@@ -2,8 +2,6 @@
 
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
-import { Code } from "@winrlabs/games/code";
-
 function App() {
   const account = useAccount();
   const { connectors, connect, status, error } = useConnect();
@@ -22,7 +20,6 @@ function App() {
           chainId: {account.chainId}
           <br />
           <br />
-          <Code>Hello</Code>
         </div>
 
         {account.status === "connected" && (

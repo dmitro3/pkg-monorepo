@@ -1,6 +1,5 @@
 {
   "name": "pkg-monorepo",
-  "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
