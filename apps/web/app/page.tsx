@@ -1,50 +1,11 @@
 "use client";
 
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+// import "@winrlabs/games/dist/index.css";
+// import { Range } from "@winrlabs/games";
 
-function App() {
-  const account = useAccount();
-  const { connectors, connect, status, error } = useConnect();
-  const { disconnect } = useDisconnect();
+// import "@winrlabs/ui/globals.css";
+// import { Button } from "@winrlabs/ui";
 
-  return (
-    <>
-      <div>
-        <h2>Account</h2>
-
-        <div>
-          status: {account.status}
-          <br />
-          addresses: {JSON.stringify(account.addresses)}
-          <br />
-          chainId: {account.chainId}
-          <br />
-          <br />
-        </div>
-
-        {account.status === "connected" && (
-          <button type="button" onClick={() => disconnect()}>
-            Disconnect
-          </button>
-        )}
-      </div>
-
-      <div>
-        <h2>Connect</h2>
-        {connectors.map((connector) => (
-          <button
-            key={connector.uid}
-            onClick={() => connect({ connector })}
-            type="button"
-          >
-            {connector.name}
-          </button>
-        ))}
-        <div>{status}</div>
-        <div>{error?.message}</div>
-      </div>
-    </>
-  );
+export default function Home() {
+  return <div>{/* <Button>dsadas</Button> */}</div>;
 }
-
-export default App;

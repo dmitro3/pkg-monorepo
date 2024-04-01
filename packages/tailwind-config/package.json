@@ -1,0 +1,11 @@
+{
+  "name": "@winrlabs/tailwind-config",
+  "version": "1.0.0",
+  "exports": {
+    ".": "./tailwind.config.ts"
+  },
+  "devDependencies": {
+    "@winrlabs/typescript-config": "workspace:*",
+    "tailwindcss": "^3.4.3"
+  }
+}

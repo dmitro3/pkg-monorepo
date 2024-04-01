@@ -1,1 +1,3 @@
-export { Code } from "./code";
+import "./assets/main.css";
+
+// export { default as Range } from "./components/range";
