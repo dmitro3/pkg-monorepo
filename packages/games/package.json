@@ -29,6 +29,7 @@
     "@winrlabs/eslint-config": "workspace:*",
     "@winrlabs/tailwind-config": "workspace:*",
     "@winrlabs/typescript-config": "workspace:*",
+    "@winrlabs/ui": "workspace:*",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.56.0",
     "postcss": "^8.4.38",

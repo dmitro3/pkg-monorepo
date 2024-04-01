@@ -7,5 +7,5 @@
 // import { Button } from "@winrlabs/ui";
 
 export default function Home() {
-  return <div>{/* <Button>dsadas</Button> */}</div>;
+  return <div>xd</div>;
 }
