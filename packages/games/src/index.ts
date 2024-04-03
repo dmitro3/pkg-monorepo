@@ -1,3 +1,5 @@
 import "./assets/main.css";
 
-// export { default as Range } from "./components/range";
+export { GameProvider } from "./lib/GameProvider";
+
+export { default as Range } from "./lib/solo/range";
