@@ -10,7 +10,7 @@ import { Range } from "@winrlabs/games";
 export default function Home() {
   return (
     <div>
-      <Range.Slider />
+      <Range.Game />
     </div>
   );
 }
