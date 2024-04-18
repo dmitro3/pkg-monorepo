@@ -6,18 +6,18 @@ export interface SliderProps {
   rollType?: "UNDER" | "OVER";
   isLoading?: boolean;
   rollValue?: number;
-  minValue?: number;
-  maxValue?: number;
   onRollValueChange?: (value: number) => void;
   disabled?: boolean;
 }
 
-const Slider = ({
+const MIN_VALUE = 5;
+
+const MAX_VALUE = 95;
+
+export const Slider = ({
   rollType = "UNDER",
   isLoading,
   onRollValueChange,
-  minValue = 5,
-  maxValue = 95,
   disabled,
 }: SliderProps) => {
   const { updateRollValue, rollValue } = useRangeGameStore([
@@ -34,7 +34,7 @@ const Slider = ({
             "cursor-not-allowed": isLoading,
           }
         )}
-        defaultValue={[20]}
+        defaultValue={[rollValue]}
         min={0}
         max={100}
         onValueChange={(e) => {
@@ -44,7 +44,7 @@ const Slider = ({
           updateRollValue(newValue!);
         }}
         step={0.01}
-        value={rollValue <= minValue ? [rollValue] : [maxValue]}
+        value={rollValue <= MAX_VALUE ? [rollValue] : [MAX_VALUE]}
         disabled={disabled}
       >
         <SliderPrimitive.Track
@@ -69,7 +69,7 @@ const Slider = ({
           aria-label="Volume"
         >
           <div className="absolute -top-[50px] text-4xl font-bold">
-            {rollValue <= maxValue ? rollValue : minValue}
+            {rollValue <= MAX_VALUE ? rollValue : MIN_VALUE}
           </div>
           <div className="flex gap-[6px]">
             <div className="h-[34px] w-[6px] rounded-[2px] bg-zinc-400" />
@@ -81,5 +81,3 @@ const Slider = ({
     </div>
   );
 };
-
-export default Slider;

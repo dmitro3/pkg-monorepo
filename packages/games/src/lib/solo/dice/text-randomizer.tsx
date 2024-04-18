@@ -85,7 +85,7 @@ export const TextRandomizer = () => {
           <TooltipProvider>
             <Tooltip key={key}>
               <TooltipTrigger>
-                <div className="relative  -top-2 block h-1.5  w-1.5 rounded " />
+                <div className="relative  -top-2 block h-1.5  w-1.5 rounded" />
               </TooltipTrigger>
               <TooltipContent className=" absolute top-0 z-[100]">
                 <p>{result?.resultNumber}</p>
