@@ -1,21 +1,30 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { cn } from "@winrlabs/ui";
+import useRangeGameStore from "./_store";
 
 export interface SliderProps {
-  rollType: "UNDER" | "OVER";
-  isLoading: boolean;
-  rollValue: number;
-  minValue: number;
-  maxValue: number;
+  rollType?: "UNDER" | "OVER";
+  isLoading?: boolean;
+  rollValue?: number;
+  minValue?: number;
+  maxValue?: number;
+  onRollValueChange?: (value: number) => void;
+  disabled?: boolean;
 }
 
 const Slider = ({
-  rollType,
+  rollType = "UNDER",
   isLoading,
-  rollValue,
-  minValue,
-  maxValue,
+  onRollValueChange,
+  minValue = 5,
+  maxValue = 95,
+  disabled,
 }: SliderProps) => {
+  const { updateRollValue, rollValue } = useRangeGameStore([
+    "updateRollValue",
+    "rollValue",
+  ]);
+
   return (
     <div className="w-full shrink-0">
       <SliderPrimitive.Root
@@ -29,16 +38,14 @@ const Slider = ({
         min={0}
         max={100}
         onValueChange={(e) => {
-          // field.onChange(e[0]);
-          // const { rollType } = form.getValues();
-          // const newValue = rollType === "UNDER" ? e[0] : 100 - e[0];
-          // form.setValue("winChance", newValue, {
-          //   shouldValidate: true,
-          // });
+          const newValue = rollType === "UNDER" ? e[0] : 100 - e[0]!;
+
+          onRollValueChange?.(newValue!);
+          updateRollValue(newValue!);
         }}
         step={0.01}
         value={rollValue <= minValue ? [rollValue] : [maxValue]}
-        // disabled={form.formState.isSubmitting || form.formState.isLoading}
+        disabled={disabled}
       >
         <SliderPrimitive.Track
           className={cn(
@@ -63,7 +70,6 @@ const Slider = ({
         >
           <div className="absolute -top-[50px] text-4xl font-bold">
             {rollValue <= maxValue ? rollValue : minValue}
-            20
           </div>
           <div className="flex gap-[6px]">
             <div className="h-[34px] w-[6px] rounded-[2px] bg-zinc-400" />

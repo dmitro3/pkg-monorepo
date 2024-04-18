@@ -7,6 +7,7 @@ interface RangeGameState {
   rangeGameResults: RangeGameResult[];
   gameStatus: "IDLE" | "PLAYING" | "ENDED";
   currentAnimationCount: number;
+  rollValue: number;
 }
 
 interface RangeGameStateActions {
@@ -17,6 +18,7 @@ interface RangeGameStateActions {
   updateRangeGameResults: (item: RangeGameResult[]) => void;
   updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
   updateCurrentAnimationCount: (count: number) => void;
+  updateRollValue: (value: number) => void;
 }
 
 export type RangeGameStore = RangeGameState & RangeGameStateActions;
@@ -25,6 +27,8 @@ export const rangeResultStore = create<RangeGameStore>()((set) => ({
   lastBets: [],
   rangeGameResults: [],
   currentAnimationCount: 0,
+  rollValue: 0,
+  updateRollValue: (value) => set(() => ({ rollValue: value })),
   addLastBet: (item) =>
     set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
@@ -43,6 +47,7 @@ export const rangeResultStore = create<RangeGameStore>()((set) => ({
       rangeGameResults: [],
       gameStatus: "IDLE",
       currentAnimationCount: 0,
+      rollValue: 50,
     }),
   gameStatus: "IDLE",
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
