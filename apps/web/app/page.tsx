@@ -1,6 +1,6 @@
 "use client";
 
-import { Range } from "@winrlabs/games";
+import { Dice } from "@winrlabs/games";
 import { useState } from "react";
 
 export default function Home() {
@@ -8,13 +8,12 @@ export default function Home() {
 
   return (
     <div style={{ width: 500 }}>
-      <Range.Game results={results}>
-        <Range.Body>
-          <Range.TextRandomizer />
-          <Range.Slider />
-        </Range.Body>
-      </Range.Game>
-
+      <Dice.Game results={results}>
+        <Dice.Body>
+          <Dice.TextRandomizer />
+          <Dice.Slider />
+        </Dice.Body>
+      </Dice.Game>
       <button
         style={{ marginTop: 20 }}
         onClick={() => {
