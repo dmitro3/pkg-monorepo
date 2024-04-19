@@ -39,6 +39,8 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
         }}
       >
         <Dice.Game {...props}>
+          {/* last bets */}
+          <div />
           <Dice.Body>
             <Dice.TextRandomizer />
             <Dice.Slider track={options?.slider?.track} />
