@@ -1,4 +1,5 @@
 import { defineConfig } from "tsup";
+import svgr from "esbuild-plugin-svgr"
 
 export default defineConfig({
   entry: ["src/index.ts"],

@@ -3,12 +3,10 @@ import * as React from "react";
 import useRangeGameStore from "./_store";
 import { RangeGameResult } from "./_types";
 
-export interface RangeGameProps {
+export type RangeGameProps = React.ComponentProps<"div"> & {
   results?: RangeGameResult[];
   onAnimationStep?: (step: number) => void;
-
-  children: React.ReactNode;
-}
+};
 
 export const RangeGame = ({
   onAnimationStep = () => {},

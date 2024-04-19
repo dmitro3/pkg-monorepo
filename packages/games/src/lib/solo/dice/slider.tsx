@@ -2,12 +2,18 @@ import * as SliderPrimitive from "@radix-ui/react-slider";
 import { cn } from "@winrlabs/ui";
 import useRangeGameStore from "./_store";
 
+export interface SliderTrackOptions {
+  color?: string;
+  activeColor?: string;
+}
+
 export interface SliderProps {
   rollType?: "UNDER" | "OVER";
   isLoading?: boolean;
   rollValue?: number;
   onRollValueChange?: (value: number) => void;
   disabled?: boolean;
+  track?: SliderTrackOptions;
 }
 
 const MIN_VALUE = 5;
@@ -19,6 +25,7 @@ export const Slider = ({
   isLoading,
   onRollValueChange,
   disabled,
+  track,
 }: SliderProps) => {
   const { updateRollValue, rollValue } = useRangeGameStore([
     "updateRollValue",
@@ -49,19 +56,20 @@ export const Slider = ({
       >
         <SliderPrimitive.Track
           className={cn(
-            "relative h-6 grow rounded-sm bg-zinc-400 transition-all duration-300 ease-linear",
-            {
-              "bg-lime-600": rollType === "OVER",
-            }
+            "relative h-6 grow rounded-sm transition-all duration-300 ease-linear"
           )}
+          style={{
+            background: rollType === "OVER" ? track?.activeColor : track?.color,
+          }}
         >
           <SliderPrimitive.Range
             className={cn(
-              "absolute h-full rounded-sm  bg-lime-600 transition-all duration-300 ease-linear",
-              {
-                "bg-zinc-400": rollType === "OVER",
-              }
+              "absolute h-full rounded-sm  transition-all duration-300 ease-linear"
             )}
+            style={{
+              background:
+                rollType === "OVER" ? track?.color : track?.activeColor,
+            }}
           />
         </SliderPrimitive.Track>
         <SliderPrimitive.Thumb

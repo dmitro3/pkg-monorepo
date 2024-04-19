@@ -1,21 +1,21 @@
 "use client";
 
-import { Dice } from "@winrlabs/games";
+import { DiceTemplate } from "@winrlabs/games";
 import { useState } from "react";
 
 export default function Home() {
-  const [results, setResults] = useState();
+  // const [results, setResults] = useState();
 
   return (
-    <div style={{ width: 500, height: 400 }}>
-      <Dice.Game results={results}>
-        <Dice.Body>
-          <Dice.TextRandomizer />
-          <Dice.Slider />
-        </Dice.Body>
-        <Dice.Controller winMultiplier={32} />
-      </Dice.Game>
-      <button
+    <div>
+      <DiceTemplate
+        options={{
+          scene: {
+            backgroundImage: "url(/range.svg)",
+          },
+        }}
+      />
+      {/* <button
         style={{ marginTop: 400 }}
         onClick={() => {
           setResults([
@@ -38,7 +38,7 @@ export default function Home() {
         }}
       >
         xd
-      </button>
+      </button> */}
     </div>
   );
 }

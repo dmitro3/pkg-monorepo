@@ -22,3 +22,11 @@ export const SceneContainer: React.FC<Props> = ({
     </section>
   );
 };
+
+export const GameContainer: React.FC<Props> = ({ children, className }) => {
+  return (
+    <div className={cn("flex gap-3 pt-3 max-lg:flex-col-reverse", className)}>
+      {children}
+    </div>
+  );
+};

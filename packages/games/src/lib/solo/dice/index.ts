@@ -4,7 +4,7 @@ import {Slider} from "./slider";
 import { Controller } from "./controller";
 import { TextRandomizer } from "./text-randomizer";
 
-const Dice = {
+export const Dice = {
   Game: RangeGame,
   Slider,
   Body,
@@ -12,4 +12,5 @@ const Dice = {
   Controller
 };
 
-export default Dice;
+export { default as DiceTemplate } from "./template"
+
