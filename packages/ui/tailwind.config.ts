@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import sharedConfig from "@winrlabs/tailwind-config";
 
 const config = {
   darkMode: ["class"],
@@ -71,8 +72,9 @@ const config = {
   },
   plugins: [require("tailwindcss-animate")],
   corePlugins: {
-    // preflight: false,
+    preflight: false,
   },
+  presets: [sharedConfig],
 } satisfies Config;
 
 export default config;

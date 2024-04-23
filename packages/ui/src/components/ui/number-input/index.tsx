@@ -2,8 +2,11 @@
 
 import React from "react";
 import { NumericFormat } from "react-number-format";
-import { cn, toFormatted } from "@/index";
+import { toFormatted, cn } from "@/lib/utils";
 // import { ArrowDown, ArrowUp } from 'src/components/icons';
+// import { TokenAddress, getTokenDisplayDecimal } from "@winrlabs/chain-config";
+import { ChevronDown } from "../../svgs";
+import * as Slider from "@radix-ui/react-slider";
 
 // min max tool
 // label
@@ -152,6 +155,50 @@ const Root: React.FC<RootProps & { children: React.ReactNode }> = ({
   );
 };
 
+const LabelText: React.FC<{
+  className?: string;
+  children?: React.ReactNode;
+}> = ({ children, className }) => {
+  return <p className={cn("mb-3 text-zinc-500", className)}>{children}</p>;
+};
+
+const LabelBalance: React.FC<{
+  balance: number;
+  // unit: TokenAddress;
+  unit: any;
+  className?: string;
+}> = ({ balance, unit, className }) => {
+  const { onChange, maxValue } = useNumberInput();
+
+  return (
+    <div
+      className={cn(className)}
+      onClick={() => {
+        if (maxValue) {
+          maxValue > balance ? onChange(balance) : onChange(maxValue);
+        }
+      }}
+    >
+      <span>
+        {/* {toFormatted(balance, getTokenDisplayDecimal({ token: unit }))} */}
+      </span>
+      {unit}
+    </div>
+  );
+};
+
+const Label: React.FC<{
+  htmlFor?: string;
+  className?: string;
+  children: React.ReactNode;
+}> = ({ htmlFor, children, className }) => {
+  return (
+    <label className={cn(className)} htmlFor={htmlFor}>
+      {children}
+    </label>
+  );
+};
+
 const Container: React.FC<{
   className?: string;
   children: React.ReactNode;
@@ -208,10 +255,177 @@ const Input: React.FC<{
   );
 };
 
+const Tools: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <div className={""}>{children}</div>;
+};
+
+const InputUnit: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <div
+      className={
+        "absolute left-2 top-1/2 mr-1 flex h-5 w-5 -translate-y-1/2 items-center justify-center"
+      }
+    >
+      {children}
+    </div>
+  );
+};
+
+const AdjustValue: React.FC = () => {
+  const { onChange, value, minValue, maxValue } = useNumberInput();
+
+  const [isMouseDown, setIsMouseDown] = React.useState(false);
+
+  const [action, setAction] = React.useState<
+    "increase" | "decrease" | undefined
+  >();
+
+  const [step, setStep] = React.useState(0.001);
+
+  const handleArrows = ({
+    step,
+    type,
+  }: {
+    step: number;
+    type: "increase" | "decrease";
+  }) => {
+    const _value = value || 0;
+
+    const _maxValue = maxValue || 10000000000000;
+
+    const _minValue = minValue || 0;
+
+    if (type === "increase") {
+      if (_value + step > _maxValue) return;
+
+      onChange(_value + step);
+    } else {
+      if (_value - step < _minValue) return;
+      else onChange(_value - step);
+    }
+  };
+
+  React.useEffect(() => {
+    if (!action || !isMouseDown) return;
+
+    setTimeout(() => {
+      setStep(0.01);
+    }, 1000);
+
+    const valueTimeout = setTimeout(() => {
+      handleArrows({ step, type: action });
+    }, 100);
+
+    return () => {
+      clearTimeout(valueTimeout);
+    };
+  }, [value, isMouseDown, handleArrows, action]);
+
+  const clearState = () => {
+    setIsMouseDown(false);
+
+    setAction(undefined);
+
+    setStep(0.001);
+  };
+
+  return (
+    <div className={""}>
+      <ChevronDown
+        onClick={() => {
+          handleArrows({ step, type: "increase" });
+        }}
+        onMouseDown={() => {
+          setAction("increase");
+
+          setIsMouseDown(true);
+        }}
+        onMouseUp={clearState}
+        onMouseLeave={clearState}
+        onMouseOut={clearState}
+        className="h-5 w-5"
+      />
+      <ChevronDown
+        onClick={() => {
+          handleArrows({ step, type: "decrease" });
+        }}
+        onMouseDown={() => {
+          setAction("decrease");
+
+          setIsMouseDown(true);
+        }}
+        onMouseUp={clearState}
+        onMouseLeave={clearState}
+        onMouseOut={clearState}
+        className="h-5 w-5"
+      />
+    </div>
+  );
+};
+
+const ToolsNameSpace = Object.assign(Tools, {
+  Unit: InputUnit,
+  AdjustValue,
+});
+
+const LabelNameSpace = Object.assign(Label, {
+  Text: LabelText,
+  Balance: LabelBalance,
+});
+
+const SliderInput: React.FC = () => {
+  const {
+    isDisabled,
+    minValue: min,
+    maxValue: max,
+    value,
+    onChange,
+    sliderStep,
+  } = useNumberInput();
+
+  const handleChange = (_value: number[]) => {
+    if (typeof min !== "undefined" && min > _value[0]) {
+      _value[0] = min;
+    }
+
+    if (typeof max !== "undefined" && _value[0] > max) {
+      _value[0] = max;
+    }
+
+    onChange(_value[0]);
+  };
+
+  return (
+    <Slider.Root
+      className="relative mx-auto my-3 flex h-[5px] w-[100%] cursor-pointer touch-none select-none items-center"
+      defaultValue={[value]}
+      value={[value]}
+      min={min}
+      max={max}
+      step={sliderStep}
+      onValueChange={handleChange}
+      minStepsBetweenThumbs={4}
+      disabled={isDisabled}
+    >
+      <Slider.Track className="relative h-full w-full rounded-lg bg-zinc-800">
+        <Slider.Range className="absolute h-full rounded-lg bg-red-500" />
+      </Slider.Track>
+      <Slider.Thumb
+        className="block h-[18px] w-[18px] cursor-pointer rounded-full bg-red-500 outline-none"
+        aria-label="Volume"
+      />
+    </Slider.Root>
+  );
+};
+
 const NumberInput = {
   Root,
-  Container,
+  Label: LabelNameSpace,
   Input,
+  Container,
+  Unit: InputUnit,
+  Tools: ToolsNameSpace,
+  Slider: SliderInput,
 };
 
 export { NumberInput };

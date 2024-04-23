@@ -14,6 +14,9 @@ export default function Home() {
             backgroundImage: "url(/range.svg)",
           },
         }}
+        onSubmit={(data) => {
+          console.log(data);
+        }}
       />
       {/* <button
         style={{ marginTop: 400 }}

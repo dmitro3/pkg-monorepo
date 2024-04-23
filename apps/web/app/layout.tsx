@@ -3,9 +3,13 @@ import "@winrlabs/games/dist/index.css";
 import "@winrlabs/ui/dist/index.css";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-notoSans",
+});
 
 export const metadata: Metadata = {
   title: "Create Turborepo",
@@ -20,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={inter.className}
+        className={notoSans.className}
         style={{ background: "#000", color: "#fff" }}
       >
         {children}
