@@ -6,4 +6,7 @@ module.exports = {
   parserOptions: {
     project: "./tsconfig.lint.json",
   },
+  globals: {
+    "NodeJS": true
+  }
 };

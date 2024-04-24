@@ -1,16 +1,68 @@
 "use client";
 
-import { Range } from "@winrlabs/games";
-
-// import { Range } from "@winrlabs/games";
-
-// import "@winrlabs/ui/globals.css";
-// import { Button } from "@winrlabs/ui";
+import { DiceTemplate } from "@winrlabs/games";
+import { useState } from "react";
 
 export default function Home() {
+  const [results, setResults] = useState<any>();
+
   return (
     <div>
-      <Range.Slider />
+      <DiceTemplate
+        options={{
+          scene: {
+            backgroundImage: "url(/range.svg)",
+          },
+        }}
+        onSubmit={(data) => {
+          // send request
+          // get results
+
+          setResults([
+            {
+              payout: 0,
+              payoutInUsd: 0,
+              resultNumber: Math.floor(Math.random() * 100),
+            },
+            {
+              payout: 2,
+              payoutInUsd: 2,
+              resultNumber: Math.floor(Math.random() * 100),
+            },
+            {
+              payout: 0,
+              payoutInUsd: 0,
+              resultNumber: Math.floor(Math.random() * 100),
+            },
+          ]);
+        }}
+        onAnimationComplete={() => setResults([])}
+        results={results}
+      />
+      {/* <button
+        style={{ marginTop: 400 }}
+        onClick={() => {
+          setResults([
+            {
+              payout: 0,
+              payoutInUsd: 0,
+              resultNumber: 30,
+            },
+            {
+              payout: 2,
+              payoutInUsd: 2,
+              resultNumber: 49,
+            },
+            {
+              payout: 0,
+              payoutInUsd: 0,
+              resultNumber: 10,
+            },
+          ]);
+        }}
+      >
+        xd
+      </button> */}
     </div>
   );
 }

@@ -1,10 +1,16 @@
 import "./globals.css";
 import "@winrlabs/games/dist/index.css";
+import "@winrlabs/ui/dist/index.css";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
+import { GameProvider } from "@winrlabs/games";
 
-const inter = Inter({ subsets: ["latin"] });
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-notoSans",
+});
 
 export const metadata: Metadata = {
   title: "Create Turborepo",
@@ -18,7 +24,12 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={notoSans.className}
+        style={{ background: "#000", color: "#fff" }}
+      >
+        <GameProvider>{children}</GameProvider>
+      </body>
     </html>
   );
 }

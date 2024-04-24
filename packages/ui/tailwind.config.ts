@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import sharedConfig from "@winrlabs/tailwind-config";
 
 const config = {
   darkMode: ["class"],
@@ -73,6 +74,7 @@ const config = {
   corePlugins: {
     preflight: false,
   },
+  presets: [sharedConfig],
 } satisfies Config;
 
 export default config;

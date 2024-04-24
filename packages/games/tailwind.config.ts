@@ -6,7 +6,7 @@ const config: Pick<Config, "prefix" | "presets" | "content" | "corePlugins"> = {
   // prefix: "wr-",
   presets: [sharedConfig],
   corePlugins: {
-    preflight: false,
+    // preflight: false,
   },
 };
 
