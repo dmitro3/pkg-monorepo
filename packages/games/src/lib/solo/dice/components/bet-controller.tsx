@@ -1,20 +1,20 @@
 "use client";
 import * as React from "react";
 
-import { BetControllerContainer } from "../../common/containers";
+import { BetControllerContainer } from "../../../common/containers";
 import {
   BetControllerTitle,
   BetCountFormField,
   StopGainFormField,
   StopLossFormField,
   WagerFormField,
-} from "../../common/controller";
+} from "../../../common/controller";
 import { FormLabel, Button, cn } from "@winrlabs/ui";
-import { TotalWager } from "../../common/wager";
-import { Advanced } from "../../common/advanced";
+import { TotalWager } from "../../../common/wager";
+import { Advanced } from "../../../common/advanced";
 import { useFormContext } from "react-hook-form";
-import { toDecimals } from "../../utils/web3";
-import { RangeForm } from "./_constants";
+import { toDecimals } from "../../../utils/web3";
+import { RangeForm } from "../constant";
 // import { AudioController } from "@/components/common/audio-controller";
 // import { PreBetButton } from "@/app/(games)/_components/bet-button";
 

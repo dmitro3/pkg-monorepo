@@ -10,7 +10,7 @@ import {
   NumberInput,
   Icons,
 } from "@winrlabs/ui";
-import { RangeForm } from "./_constants";
+import { RangeForm } from "../constant";
 import { useFormContext } from "react-hook-form";
 
 export interface RangeControllerProps {

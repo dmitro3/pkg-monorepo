@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { shallow } from "zustand/shallow";
-import { RangeGameResult } from "../_types";
+import { RangeGameResult } from "../types";
 
 interface RangeGameState {
   lastBets: RangeGameResult[];

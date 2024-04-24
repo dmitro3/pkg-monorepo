@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
-import useRangeGameStore from "./_store";
-import { RangeGameResult } from "./_types";
+import useRangeGameStore from "../store";
+import { RangeGameResult } from "../types";
 
 export type RangeGameProps = React.ComponentProps<"div"> & {
   results?: RangeGameResult[];

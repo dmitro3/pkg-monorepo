@@ -1,6 +1,6 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { cn } from "@winrlabs/ui";
-import useRangeGameStore from "./_store";
+import useRangeGameStore from "../store";
 
 export interface SliderTrackOptions {
   color?: string;

@@ -1,12 +1,12 @@
 import { cn } from "@winrlabs/ui";
-import { GameContainer, SceneContainer } from "../../common/containers";
+import { GameContainer, SceneContainer } from "../../../common/containers";
 import { RangeGameProps } from "./game";
-import { Dice } from "./index";
+import { Dice } from "../index";
 import { SliderTrackOptions } from "./slider";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MAX_BET_COUNT, MIN_BET_COUNT } from "./_constants";
+import { MAX_BET_COUNT, MIN_BET_COUNT } from "../constant";
 import { Form } from "@winrlabs/ui";
 import { BetController } from "./bet-controller";
 
