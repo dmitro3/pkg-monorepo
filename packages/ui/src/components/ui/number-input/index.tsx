@@ -384,15 +384,15 @@ const SliderInput: React.FC = () => {
   } = useNumberInput();
 
   const handleChange = (_value: number[]) => {
-    if (typeof min !== "undefined" && min > _value[0]) {
+    if (typeof min !== "undefined" && min > _value[0]!) {
       _value[0] = min;
     }
 
-    if (typeof max !== "undefined" && _value[0] > max) {
+    if (typeof max !== "undefined" && _value[0]! > max) {
       _value[0] = max;
     }
 
-    onChange(_value[0]);
+    onChange(_value[0]!);
   };
 
   return (
