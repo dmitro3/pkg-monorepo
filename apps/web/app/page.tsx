@@ -1,10 +1,10 @@
 "use client";
 
 import { DiceTemplate } from "@winrlabs/games";
-// import { useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
-  // const [results, setResults] = useState();
+  const [results, setResults] = useState<any>();
 
   return (
     <div>
@@ -15,8 +15,29 @@ export default function Home() {
           },
         }}
         onSubmit={(data) => {
-          console.log(data);
+          // send request
+          // get results
+
+          setResults([
+            {
+              payout: 0,
+              payoutInUsd: 0,
+              resultNumber: Math.floor(Math.random() * 100),
+            },
+            {
+              payout: 2,
+              payoutInUsd: 2,
+              resultNumber: Math.floor(Math.random() * 100),
+            },
+            {
+              payout: 0,
+              payoutInUsd: 0,
+              resultNumber: Math.floor(Math.random() * 100),
+            },
+          ]);
         }}
+        onAnimationComplete={() => setResults([])}
+        results={results}
       />
       {/* <button
         style={{ marginTop: 400 }}
