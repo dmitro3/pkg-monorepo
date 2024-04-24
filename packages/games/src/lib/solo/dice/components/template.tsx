@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@winrlabs/ui";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { RangeGameProps } from "./game";
@@ -6,9 +8,11 @@ import { SliderTrackOptions } from "./slider";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MAX_BET_COUNT, MIN_BET_COUNT } from "../constant";
+import { LUCK_MULTIPLIER, MAX_BET_COUNT, MIN_BET_COUNT } from "../constant";
 import { Form } from "@winrlabs/ui";
 import { BetController } from "./bet-controller";
+import { toDecimals } from "../../../utils/web3";
+import { useMemo } from "react";
 
 type TemplateOptions = {
   slider?: {
@@ -77,6 +81,12 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
     },
   });
 
+  const winChance = form.watch("winChance");
+
+  const winMultiplier = useMemo(() => {
+    return toDecimals((100 / winChance) * LUCK_MULTIPLIER, 2);
+  }, [winChance]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmit)}>
@@ -84,7 +94,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
           <BetController
             minWager={props.minWager || 2}
             maxWager={props.maxWager || 10}
-            winMultiplier={32}
+            winMultiplier={winMultiplier}
           />
           <SceneContainer
             className={cn("h-[640px]  max-md:h-[425px] lg:py-12")}
@@ -99,7 +109,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
                 <Dice.TextRandomizer />
                 <Dice.Slider track={options?.slider?.track} />
               </Dice.Body>
-              <Dice.Controller winMultiplier={32} />
+              <Dice.Controller winMultiplier={winMultiplier} />
             </Dice.Game>
           </SceneContainer>
         </GameContainer>

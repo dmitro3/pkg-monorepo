@@ -1,4 +1,5 @@
 "use client";
+
 import * as React from "react";
 import useRangeGameStore from "../store";
 import { RangeGameResult } from "../types";
