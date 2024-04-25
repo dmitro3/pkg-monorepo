@@ -6,13 +6,19 @@ import { RangeGameResult } from "../types";
 
 export type RangeGameProps = React.ComponentProps<"div"> & {
   results?: RangeGameResult[];
+  /**
+   * Runs on each animation step
+   */
   onAnimationStep?: (step: number) => void;
-  onAnimationComplete?: () => void;
+  /**
+   * Runs when the animation is completed
+   */
+  onAnimationCompleted?: () => void;
 };
 
 export const RangeGame = ({
   onAnimationStep = () => {},
-  onAnimationComplete = () => {},
+  onAnimationCompleted = () => {},
   results,
   children,
 }: RangeGameProps) => {
@@ -52,7 +58,7 @@ export const RangeGame = ({
 
       if (isAnimationFinished) {
         setTimeout(() => {
-          onAnimationComplete();
+          onAnimationCompleted();
           updateCurrentAnimationCount(0);
         });
 

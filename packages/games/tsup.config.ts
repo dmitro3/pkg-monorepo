@@ -1,8 +1,11 @@
 import { defineConfig } from "tsup";
-import svgr from "esbuild-plugin-svgr"
 
 export default defineConfig({
-  entry: ["src/index.ts"],
+  entry: ["src/index.ts", "src/lib/game-provider.tsx"],
+  // loader: {
+  //   ".svg": "base64",
+  // }
+  splitting: true,
   format: ["esm", "cjs"],
   dts: true,
   sourcemap: true,

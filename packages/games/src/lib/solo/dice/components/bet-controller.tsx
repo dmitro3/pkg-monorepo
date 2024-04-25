@@ -10,7 +10,7 @@ import {
   WagerFormField,
 } from "../../../common/controller";
 import { FormLabel, Button, cn } from "@winrlabs/ui";
-import { TotalWager } from "../../../common/wager";
+import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
 import { Advanced } from "../../../common/advanced";
 import { useFormContext } from "react-hook-form";
 import { toDecimals } from "../../../utils/web3";
@@ -60,7 +60,7 @@ export const BetController: React.FC<Props> = ({
                 "flex w-full items-center gap-1 rounded-lg bg-zinc-800 px-2 py-[10px]"
               )}
             >
-              {/* <WagerCurrencyIcon /> */}
+              <WagerCurrencyIcon />
               <span className={cn("font-semibold text-zinc-100")}>
                 ${maxPayout}
               </span>
