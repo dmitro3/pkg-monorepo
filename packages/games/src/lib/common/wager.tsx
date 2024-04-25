@@ -1,10 +1,30 @@
 import { INumberInputContext, NumberInput, cn, Button } from "@winrlabs/ui";
 import { toFormatted } from "../utils/web3";
+import { useGameOptions } from "../game-provider";
 
 interface Props {
   children?: React.ReactNode;
   className?: string;
 }
+
+export const WagerBalance = ({ className }: Props) => {
+  const { account } = useGameOptions();
+
+  return (
+    <span
+      className={cn("mr-2 cursor-pointer", className)}
+      // onClick={() => form.setValue("wager", data?.maxWager || 10)}
+    >
+      ${account?.balance}
+    </span>
+  );
+};
+
+export const WagerCurrency = ({ className }: Props) => {
+  const { currency } = useGameOptions();
+
+  return <span className={cn(className)}>{currency.symbol}</span>;
+};
 
 interface WagerInputProps extends Props, INumberInputContext {
   containerClassName?: string;
@@ -35,7 +55,7 @@ export const WagerInput = ({
             className
           )}
         />
-        {/* <WagerCurrencyIcon /> */}
+        <WagerCurrencyIcon />
       </NumberInput.Container>
     </NumberInput.Root>
   );
@@ -134,10 +154,26 @@ export const TotalWager = ({
         containerClassName
       )}
     >
-      {/* <WagerCurrencyIcon /> */}
+      <WagerCurrencyIcon />
       <span className={cn("font-semibold text-zinc-100", className)}>
         ${totalWager}
       </span>
     </div>
+  );
+};
+
+export const WagerCurrencyIcon = ({ className }: Props) => {
+  const { currency } = useGameOptions();
+
+  const tokenIcon = currency?.icon;
+
+  return (
+    <img
+      className={cn("mr-1 h-5 w-5", className)}
+      width={20}
+      height={20}
+      alt={`${currency.name}-icon`}
+      src={tokenIcon}
+    />
   );
 };

@@ -10,8 +10,14 @@ import {
 import { BetCount } from "./bet-count";
 import { BetCountSlider } from "./containers";
 import { StopGainLossInput } from "./stop-gain-loss-input";
-import { WagerInput, WagerSetterButtons } from "./wager";
+import {
+  WagerBalance,
+  WagerCurrency,
+  WagerInput,
+  WagerSetterButtons,
+} from "./wager";
 import * as React from "react";
+import { WagerCurrencyIcon } from "./wager";
 
 interface WagerFormFieldProps {
   minWager: number;
@@ -150,8 +156,8 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
           <FormLabel>
             Wager
             <div>
-              {/* <WagerBalance className="text-zinc-100" /> */}
-              {/* <WagerCurrency /> */}
+              <WagerBalance className="text-zinc-100" />
+              <WagerCurrency />
             </div>
           </FormLabel>
 

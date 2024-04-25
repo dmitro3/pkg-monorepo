@@ -4,6 +4,7 @@ import "@winrlabs/ui/dist/index.css";
 
 import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";
+import { Providers } from "./providers";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -27,7 +28,7 @@ export default function RootLayout({
         className={notoSans.className}
         style={{ background: "#000", color: "#fff" }}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
