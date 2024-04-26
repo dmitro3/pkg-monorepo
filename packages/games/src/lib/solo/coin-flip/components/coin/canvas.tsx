@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
-import { CoinCanvasProps } from "../../_types";
+import { CoinCanvasProps } from "../../types";
 
 const CoinCanvas: React.FC<CoinCanvasProps> = ({
   width = 250,
@@ -49,9 +49,9 @@ const CoinCanvas: React.FC<CoinCanvasProps> = ({
   }, [canvas, width, height, onLoad, initialized]);
 
   return (
-    <div className="relative w-[250px] h-[250px] max-md:scale-95">
-      <div className="absolute z-[-1] top-[40%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-[#ff9500] opacity-40 blur-[50px]" />
-      <canvas ref={canvas} />
+    <div className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] max-md:scale-95">
+      <div className="absolute z-[0] top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-white opacity-40 blur-[50px]" />
+      <canvas ref={canvas} className="relative z-[1]" />
     </div>
   );
 };

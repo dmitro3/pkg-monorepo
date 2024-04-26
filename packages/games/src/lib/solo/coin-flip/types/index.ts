@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { CoinSide } from "../_constants";
+import { CoinSide } from "../constants";
 import THREE from "three";
 
 export interface CoinFlipFormField {
@@ -27,6 +27,8 @@ export interface CoinCanvasProps {
 export interface CoinProps {
   width?: number;
   height?: number;
+  onAnimationStep?: (step: number) => void;
+  onAnimationCompleted?: () => void;
 }
 
 export interface CoinSpeedArgs {
