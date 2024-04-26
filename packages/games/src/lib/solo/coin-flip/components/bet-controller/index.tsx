@@ -16,9 +16,6 @@ import { BetControllerContainer } from "../../../../common/containers";
 import { CoinFlipForm } from "../../types";
 import { PreBetButton } from "../../../../common/pre-bet-button";
 
-// import { AudioController } from "@/components/common/audio-controller";
-// import { PreBetButton } from "@/app/(games)/_components/bet-button";
-
 interface Props {
   minWager: number;
   maxWager: number;
