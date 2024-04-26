@@ -1,6 +1,6 @@
 # @winrlabs/games
 
-`@winrlabs/games` includes a collection of games that can be integrated into your application. It is ready to use and can be customized to fit your needs.
+`@winrlabs/games` includes a collection of games that can be integrated into your application. It is ready to use and can be customized to fit your needs. Test.
 
 ## Installation
 
