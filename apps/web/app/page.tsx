@@ -15,6 +15,7 @@ export default function Home() {
           },
         }}
         onSubmit={(data) => {
+          console.log(data, "data");
           // send request
           // get results
 
@@ -36,7 +37,7 @@ export default function Home() {
             },
           ]);
         }}
-        onAnimationComplete={() => setResults([])}
+        onAnimationCompleted={() => setResults([])}
         results={results}
       />
       {/* <button
