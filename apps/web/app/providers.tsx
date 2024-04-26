@@ -13,7 +13,8 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
           symbol: "WINR",
         },
         account: {
-          balance: 1000,
+          isLoggedIn: true,
+          balance: 2,
         },
       }}
     >

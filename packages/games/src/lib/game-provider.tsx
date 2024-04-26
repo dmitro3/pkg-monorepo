@@ -9,6 +9,7 @@ interface Currency {
 }
 
 interface Account {
+  isLoggedIn?: boolean;
   balance: number;
 }
 

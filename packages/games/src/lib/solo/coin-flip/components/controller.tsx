@@ -9,6 +9,7 @@ import {
 import { CoinSide, WIN_MULTIPLIER } from "../constants";
 import { useFormContext } from "react-hook-form";
 import { CoinFlipForm } from "../types";
+import { CDN_URL } from "../../../constants";
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlipForm;
@@ -36,7 +37,7 @@ export const CoinFlipController = () => {
                         className="relative flex h-full w-full items-center justify-center gap-1 text-unity-white-50"
                       >
                         <img
-                          src="/images/tokens/eth.png"
+                          src={`${CDN_URL}/coin-flip-2d/eth.png`}
                           width={20}
                           height={20}
                           alt="eth_icon"
@@ -44,7 +45,7 @@ export const CoinFlipController = () => {
                         ETH
                         <RadioGroupPrimitive.Indicator className="absolute left-0 top-0 flex h-12 w-full items-center justify-center gap-1 rounded-md bg-gradient-to-t bg-green-500 text-zinc-100">
                           <img
-                            src="/images/tokens/eth.png"
+                            src={`${CDN_URL}/coin-flip-2d/eth.png`}
                             width={20}
                             height={20}
                             alt="eth_icon"
@@ -76,7 +77,7 @@ export const CoinFlipController = () => {
                         className="relative flex h-full w-full items-center justify-center gap-1 text-unity-white-50"
                       >
                         <img
-                          src="/images/tokens/.png"
+                          src={`${CDN_URL}/coin-flip-2d/btc.png`}
                           width={20}
                           height={20}
                           alt="btc_icon"
@@ -84,7 +85,7 @@ export const CoinFlipController = () => {
                         BTC
                         <RadioGroupPrimitive.Indicator className="h-12 absolute left-0 top-0 flex w-full items-center justify-center gap-1 rounded-md bg-gradient-to-t bg-green-500 text-zinc-100">
                           <img
-                            src="/images/tokens/.png"
+                            src={`${CDN_URL}/coin-flip-2d/btc.png`}
                             width={20}
                             height={20}
                             alt="btc_icon"
