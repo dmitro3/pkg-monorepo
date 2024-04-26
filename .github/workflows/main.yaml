@@ -1,21 +1,34 @@
-name: CI
+name: Release
+
 on:
   push:
     branches:
       - main
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
-  build:
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8.9.0
-      - uses: actions/setup-node@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v3
         with:
           node-version: 20.x
           cache: "pnpm"
+
       - run: pnpm install --frozen-lockfile
       # todo: add lint here
-      - run: pnpm run build
+      - run:
+
+     - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm run build
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
