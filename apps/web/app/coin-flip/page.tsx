@@ -25,34 +25,9 @@ export default function CoinFlipPage() {
 
           setResults([
             {
-              payout: 0,
-              payoutInUsd: 0,
+              payout: 1,
+              payoutInUsd: 1,
               coinSide: CoinSide.HEADS,
-            },
-            {
-              payout: 2,
-              payoutInUsd: 2,
-              coinSide: CoinSide.HEADS,
-            },
-            {
-              payout: 3,
-              payoutInUsd: 3,
-              coinSide: CoinSide.TAILS,
-            },
-            {
-              payout: 0,
-              payoutInUsd: 0,
-              coinSide: CoinSide.TAILS,
-            },
-            {
-              payout: 3,
-              payoutInUsd: 3,
-              coinSide: CoinSide.HEADS,
-            },
-            {
-              payout: 3,
-              payoutInUsd: 3,
-              coinSide: CoinSide.TAILS,
             },
           ]);
         }}

@@ -6,6 +6,10 @@ import { useFormContext } from "react-hook-form";
 import { useCoinFlipGameStore } from "../..";
 import { Player } from "@lottiefiles/react-lottie-player";
 import CoinConfetti from "./lottie/coins-confetti.json";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
 
 export const Coin: React.FC<CoinProps> = ({
   width,
@@ -18,8 +22,20 @@ export const Coin: React.FC<CoinProps> = ({
     coinRotate.setCanvas(canvas).initialize();
   };
 
-  const { coinFlipGameResults, updateCoinFlipGameResults } =
-    useCoinFlipGameStore(["coinFlipGameResults", "updateCoinFlipGameResults"]);
+  const flipEffect = useAudioEffect(SoundEffects.COIN_FLIP_TOSS);
+  const winEffect = useAudioEffect(SoundEffects.COIN_FLIP_WIN);
+
+  const {
+    gameStatus,
+    coinFlipGameResults,
+    updateCoinFlipGameResults,
+    updateGameStatus,
+  } = useCoinFlipGameStore([
+    "gameStatus",
+    "coinFlipGameResults",
+    "updateCoinFlipGameResults",
+    "updateGameStatus",
+  ]);
 
   const form = useFormContext() as CoinFlipForm;
 
@@ -33,18 +49,24 @@ export const Coin: React.FC<CoinProps> = ({
         const side = coinFlipGameResults[i]?.coinSide || 0;
         const payout = coinFlipGameResults[i]?.payout || 0;
 
-        coinRotate.finish(side, 1500).then(() => {
+        flipEffect.play();
+
+        coinRotate.finish(side, 1250).then(() => {
           const curr = i + 1;
 
           onAnimationStep && onAnimationStep(curr);
 
-          payout > 0 && lottieRef.current.play();
+          if (payout > 0) {
+            lottieRef.current.play();
+            winEffect.play();
+          }
 
           if (coinFlipGameResults.length === curr) {
             updateCoinFlipGameResults([]);
             onAnimationCompleted && onAnimationCompleted();
+            updateGameStatus("ENDED");
           } else {
-            setTimeout(() => turn(curr), 250);
+            setTimeout(() => turn(curr), 350);
           }
         });
       };
@@ -58,21 +80,21 @@ export const Coin: React.FC<CoinProps> = ({
   }, [coinSide]);
 
   useEffect(() => {
-    console.log(coinFlipGameResults.length);
-  }, [coinFlipGameResults]);
+    console.log(gameStatus);
+  }, [gameStatus]);
 
   return (
     <>
       <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-        {coinFlipGameResults.length ? (
-          <Player
-            ref={lottieRef}
-            src={CoinConfetti}
-            style={{ width: "600px", height: "600px" }}
-          />
-        ) : (
-          ""
-        )}
+        <Player
+          ref={lottieRef}
+          src={CoinConfetti}
+          keepLastFrame={false}
+          style={{
+            width: "600px",
+            height: "600px",
+          }}
+        />
       </div>
       <Canvas width={width} height={height} onLoad={handleLoad} />
     </>
