@@ -23,17 +23,17 @@ export default function Home() {
             {
               payout: 0,
               payoutInUsd: 0,
-              resultNumber: Math.floor(Math.random() * 100),
+              resultNumber: 10,
             },
             {
               payout: 2,
               payoutInUsd: 2,
-              resultNumber: Math.floor(Math.random() * 100),
+              resultNumber: 20,
             },
             {
               payout: 0,
               payoutInUsd: 0,
-              resultNumber: Math.floor(Math.random() * 100),
+              resultNumber: 30,
             },
           ]);
         }}

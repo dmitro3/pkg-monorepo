@@ -17,8 +17,8 @@ export type RangeGameProps = React.ComponentProps<"div"> & {
 };
 
 export const RangeGame = ({
-  onAnimationStep = () => {},
-  onAnimationCompleted = () => {},
+  onAnimationStep = () => { },
+  onAnimationCompleted = () => { },
   results,
   children,
 }: RangeGameProps) => {
@@ -44,28 +44,33 @@ export const RangeGame = ({
 
   const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
+
+  const animCallback = async (curr = 0) => {
+    const isAnimationFinished = curr === rangeGameResults.length;
+
+    if (isAnimationFinished) {
+      setTimeout(() => {
+        updateCurrentAnimationCount(0);
+        onAnimationCompleted();
+      }, 1000);
+
+      clearInterval(intervalRef.current!);
+      intervalRef.current = null;
+    }
+
+    updateCurrentAnimationCount(curr);
+    onAnimationStep(curr);
+  }
+
   React.useEffect(() => {
     if (rangeGameResults.length === 0) return;
     let curr = currentAnimationCount;
 
-    intervalRef.current = setInterval(async () => {
-      setTimeout(() => {
-        updateCurrentAnimationCount(++curr);
-        onAnimationStep(curr);
-      }, 0);
-
-      const isAnimationFinished = curr === rangeGameResults.length - 1;
-
-      if (isAnimationFinished) {
-        setTimeout(() => {
-          onAnimationCompleted();
-          updateCurrentAnimationCount(0);
-        });
-
-        clearInterval(intervalRef.current!);
-        intervalRef.current = null;
-      }
+    intervalRef.current = setInterval(() => {
+      animCallback(curr);
+      curr += 1;
     }, 1000);
+
   }, [rangeGameResults]);
 
   return <>{children}</>;
