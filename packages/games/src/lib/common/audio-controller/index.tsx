@@ -42,6 +42,8 @@ export const AudioController: React.FC<{
         type="button"
         className="h-9 w-9 p-0"
         onClick={() => {
+          console.log("clicked");
+
           volume > 0
             ? onVolumeChange(0)
             : onVolumeChange(localStorage["lastVolume"] || 50);

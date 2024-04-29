@@ -51,10 +51,6 @@ export const AudioContextProvider = ({
     return isNaN(parsedVolume) ? 1 : parsedVolume;
   });
 
-  React.useEffect(() => {
-    console.log("vol", volume);
-  }, [volume]);
-
   const onVolumeChange = (vol: number) => {
     if (typeof window == "undefined") return;
 
