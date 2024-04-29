@@ -3,6 +3,7 @@
 import * as React from "react";
 import useRangeGameStore from "../store";
 import { RangeGameResult } from "../types";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 export type RangeGameProps = React.ComponentProps<"div"> & {
   results?: RangeGameResult[];
@@ -22,6 +23,8 @@ export const RangeGame = ({
   results,
   children,
 }: RangeGameProps) => {
+  const sliderEffect = useAudioEffect(SoundEffects.SLIDER);
+
   const {
     rangeGameResults,
     updateCurrentAnimationCount,
@@ -56,8 +59,11 @@ export const RangeGame = ({
 
       clearInterval(intervalRef.current!);
       intervalRef.current = null;
+      return;
     }
 
+
+    sliderEffect.play();
     updateCurrentAnimationCount(curr);
     onAnimationStep(curr);
   }
