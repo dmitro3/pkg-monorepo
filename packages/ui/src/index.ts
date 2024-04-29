@@ -9,7 +9,8 @@ export * from "./components/ui/label";
 export * from "./components/ui/switch";
 export * from "./components/ui/accordion";
 
-
 export * as Icons from "./components/svgs";
 
 export * from "./lib/utils";
+
+export * from "./lib/hooks";

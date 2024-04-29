@@ -15,6 +15,7 @@ import { Advanced } from "../../../common/advanced";
 import { useFormContext } from "react-hook-form";
 import { toDecimals } from "../../../utils/web3";
 import { RangeForm } from "../constant";
+import { PreBetButton } from "../../../common/pre-bet-button";
 // import { AudioController } from "@/components/common/audio-controller";
 // import { PreBetButton } from "@/app/(games)/_components/bet-button";
 
@@ -91,22 +92,22 @@ export const BetController: React.FC<Props> = ({
             </div>
           </Advanced>
         </div>
-        {/* <PreBetButton> */}
-        <Button
-          type="submit"
-          variant={"success"}
-          className="w-full max-lg:-order-1 max-lg:mb-3.5"
-          size={"xl"}
-          isLoading={form.formState.isSubmitting || form.formState.isLoading}
-          disabled={
-            !form.formState.isValid ||
-            form.formState.isSubmitting ||
-            form.formState.isLoading
-          }
-        >
-          Bet
-        </Button>
-        {/* </PreBetButton> */}
+        <PreBetButton>
+          <Button
+            type="submit"
+            variant={"success"}
+            className="w-full max-lg:-order-1 max-lg:mb-3.5"
+            size={"xl"}
+            isLoading={form.formState.isSubmitting || form.formState.isLoading}
+            disabled={
+              !form.formState.isValid ||
+              form.formState.isSubmitting ||
+              form.formState.isLoading
+            }
+          >
+            Bet
+          </Button>
+        </PreBetButton>
       </div>
       <footer className="flex items-center justify-between">
         {/* <AudioController /> */}
