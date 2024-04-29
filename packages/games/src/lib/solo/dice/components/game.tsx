@@ -27,6 +27,7 @@ export const RangeGame = ({
     updateCurrentAnimationCount,
     currentAnimationCount,
     updateRangeGameResults,
+    addLastBet,
   } = useRangeGameStore([
     "updateRangeGameResults",
     "rangeGameResults",
@@ -34,6 +35,7 @@ export const RangeGame = ({
     "currentAnimationCount",
     "updateRollValue",
     "rollValue",
+    "addLastBet",
   ]);
 
   React.useEffect(() => {
@@ -52,6 +54,7 @@ export const RangeGame = ({
       setTimeout(() => {
         updateCurrentAnimationCount(++curr);
         onAnimationStep(curr);
+        // addLastBet(rangeGameResults[curr - 1] as RangeGameResult);
       }, 0);
 
       const isAnimationFinished = curr === rangeGameResults.length - 1;

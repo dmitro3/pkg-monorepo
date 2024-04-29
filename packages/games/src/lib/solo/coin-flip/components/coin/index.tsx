@@ -30,11 +30,13 @@ export const Coin: React.FC<CoinProps> = ({
     coinFlipGameResults,
     updateCoinFlipGameResults,
     updateGameStatus,
+    addLastBet,
   } = useCoinFlipGameStore([
     "gameStatus",
     "coinFlipGameResults",
     "updateCoinFlipGameResults",
     "updateGameStatus",
+    "addLastBet",
   ]);
 
   const form = useFormContext() as CoinFlipForm;
@@ -48,6 +50,7 @@ export const Coin: React.FC<CoinProps> = ({
       const turn = (i = 0) => {
         const side = coinFlipGameResults[i]?.coinSide || 0;
         const payout = coinFlipGameResults[i]?.payout || 0;
+        const payoutInUsd = coinFlipGameResults[i]?.payoutInUsd || 0;
 
         flipEffect.play();
 
@@ -55,6 +58,12 @@ export const Coin: React.FC<CoinProps> = ({
           const curr = i + 1;
 
           onAnimationStep && onAnimationStep(curr);
+
+          addLastBet({
+            coinSide: side,
+            payout,
+            payoutInUsd,
+          });
 
           if (payout > 0) {
             lottieRef.current.play();

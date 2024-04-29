@@ -82,6 +82,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
           >
             <CoinFlip.Body>
               <CoinFlip.Game {...props}>
+                <CoinFlip.LastBets />
                 <CoinFlip.Coin {...props} />
                 <CoinFlip.Controller />
               </CoinFlip.Game>
