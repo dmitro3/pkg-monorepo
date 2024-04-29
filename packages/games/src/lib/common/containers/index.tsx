@@ -1,6 +1,7 @@
 import * as Slider from "@radix-ui/react-slider";
 import { cn } from "@winrlabs/ui";
 import { useFormContext } from "react-hook-form";
+import { AudioContextProvider } from "../../hooks/use-audio-effect";
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
   children?: React.ReactNode;
@@ -38,14 +39,16 @@ export const BetControllerContainer: React.FC<Props> = ({
   className,
 }) => {
   return (
-    <section
-      className={cn(
-        "flex flex-shrink-0 flex-col justify-between rounded-lg bg-zinc-900 p-4 lg:w-[340px]",
-        className
-      )}
-    >
-      {children}
-    </section>
+    <AudioContextProvider>
+      <section
+        className={cn(
+          "flex flex-shrink-0 flex-col justify-between rounded-lg bg-zinc-900 p-4 lg:w-[340px]",
+          className
+        )}
+      >
+        {children}
+      </section>
+    </AudioContextProvider>
   );
 };
 

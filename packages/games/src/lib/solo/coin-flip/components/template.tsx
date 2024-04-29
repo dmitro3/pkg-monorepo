@@ -14,8 +14,6 @@ import { Form, cn } from "@winrlabs/ui";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { BetController } from "./bet-controller";
 import { CoinFlip } from "..";
-import CoinConfetti from "./coin/lottie/coins-confetti.json";
-import { Player } from "@lottiefiles/react-lottie-player";
 
 type TemplateOptions = {
   scene?: {
@@ -84,6 +82,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
           >
             <CoinFlip.Body>
               <CoinFlip.Game {...props}>
+                <CoinFlip.LastBets />
                 <CoinFlip.Coin {...props} />
                 <CoinFlip.Controller />
               </CoinFlip.Game>

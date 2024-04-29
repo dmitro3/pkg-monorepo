@@ -18,8 +18,8 @@ export type RangeGameProps = React.ComponentProps<"div"> & {
 };
 
 export const RangeGame = ({
-  onAnimationStep = () => { },
-  onAnimationCompleted = () => { },
+  onAnimationStep = () => {},
+  onAnimationCompleted = () => {},
   results,
   children,
 }: RangeGameProps) => {
@@ -30,6 +30,7 @@ export const RangeGame = ({
     updateCurrentAnimationCount,
     currentAnimationCount,
     updateRangeGameResults,
+    addLastBet,
   } = useRangeGameStore([
     "updateRangeGameResults",
     "rangeGameResults",
@@ -37,6 +38,7 @@ export const RangeGame = ({
     "currentAnimationCount",
     "updateRollValue",
     "rollValue",
+    "addLastBet",
   ]);
 
   React.useEffect(() => {
@@ -46,7 +48,6 @@ export const RangeGame = ({
   }, [results]);
 
   const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
-
 
   const animCallback = async (curr = 0) => {
     const isAnimationFinished = curr === rangeGameResults.length;
@@ -62,11 +63,10 @@ export const RangeGame = ({
       return;
     }
 
-
     sliderEffect.play();
     updateCurrentAnimationCount(curr);
     onAnimationStep(curr);
-  }
+  };
 
   React.useEffect(() => {
     if (rangeGameResults.length === 0) return;
@@ -74,9 +74,10 @@ export const RangeGame = ({
 
     intervalRef.current = setInterval(() => {
       animCallback(curr);
+      rangeGameResults[curr] &&
+        addLastBet(rangeGameResults[curr] as RangeGameResult);
       curr += 1;
     }, 1000);
-
   }, [rangeGameResults]);
 
   return <>{children}</>;

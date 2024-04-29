@@ -15,6 +15,7 @@ import {
 import { BetControllerContainer } from "../../../../common/containers";
 import { CoinFlipForm } from "../../types";
 import { PreBetButton } from "../../../../common/pre-bet-button";
+import { AudioController } from "../../../../common/audio-controller";
 
 interface Props {
   minWager: number;
@@ -107,7 +108,7 @@ export const BetController: React.FC<Props> = ({
         </PreBetButton>
       </div>
       <footer className="flex items-center justify-between">
-        {/* <AudioController /> */}
+        <AudioController />
       </footer>
     </BetControllerContainer>
   );

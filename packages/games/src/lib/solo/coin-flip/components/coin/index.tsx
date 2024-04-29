@@ -30,11 +30,13 @@ export const Coin: React.FC<CoinProps> = ({
     coinFlipGameResults,
     updateCoinFlipGameResults,
     updateGameStatus,
+    addLastBet,
   } = useCoinFlipGameStore([
     "gameStatus",
     "coinFlipGameResults",
     "updateCoinFlipGameResults",
     "updateGameStatus",
+    "addLastBet",
   ]);
 
   const form = useFormContext() as CoinFlipForm;
@@ -48,6 +50,7 @@ export const Coin: React.FC<CoinProps> = ({
       const turn = (i = 0) => {
         const side = coinFlipGameResults[i]?.coinSide || 0;
         const payout = coinFlipGameResults[i]?.payout || 0;
+        const payoutInUsd = coinFlipGameResults[i]?.payoutInUsd || 0;
 
         flipEffect.play();
 
@@ -55,6 +58,12 @@ export const Coin: React.FC<CoinProps> = ({
           const curr = i + 1;
 
           onAnimationStep && onAnimationStep(curr);
+
+          addLastBet({
+            coinSide: side,
+            payout,
+            payoutInUsd,
+          });
 
           if (payout > 0) {
             lottieRef.current.play();
@@ -64,7 +73,7 @@ export const Coin: React.FC<CoinProps> = ({
           if (coinFlipGameResults.length === curr) {
             updateCoinFlipGameResults([]);
             onAnimationCompleted && onAnimationCompleted();
-            updateGameStatus("ENDED");
+            setTimeout(() => updateGameStatus("ENDED"), 1000);
           } else {
             setTimeout(() => turn(curr), 350);
           }
@@ -79,20 +88,16 @@ export const Coin: React.FC<CoinProps> = ({
     coinRotate.flipTo(coinSide, 1000);
   }, [coinSide]);
 
-  useEffect(() => {
-    console.log(gameStatus);
-  }, [gameStatus]);
-
   return (
     <>
-      <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 ">
         <Player
           ref={lottieRef}
           src={CoinConfetti}
-          keepLastFrame={false}
           style={{
-            width: "600px",
-            height: "600px",
+            width: "700px",
+            height: "700px",
+            opacity: gameStatus == "IDLE" || gameStatus == "ENDED" ? 0 : 1,
           }}
         />
       </div>
