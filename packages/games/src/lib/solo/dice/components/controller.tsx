@@ -73,7 +73,7 @@ export const Controller: React.FC<RangeControllerProps> = ({
         variant={"success"}
         size={"sm"}
         type="button"
-        className="mb-1 h-10 w-10 shrink-0 bg-lime-600 p-0 hover:bg-lime-700"
+        className="mb-1 h-10 w-10 shrink-0 bg-green-500 p-0 hover:bg-green-600"
         onClick={() => {
           const { rollType, winChance } = form.getValues();
 

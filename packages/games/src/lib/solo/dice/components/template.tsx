@@ -35,7 +35,7 @@ const defaultOptions: TemplateOptions = {
   slider: {
     track: {
       color: "#a1a1aa",
-      activeColor: "#65a30d",
+      activeColor: "#22c55e",
     },
   },
 };

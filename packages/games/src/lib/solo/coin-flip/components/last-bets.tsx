@@ -38,7 +38,7 @@ export const CoinFlipLastBets: React.FC = () => {
   const { lastBets } = useCoinFlipGameStore(["lastBets"]);
 
   return (
-    <section className="absolute left-1/2 top-5  flex max-w-[375px] -translate-x-1/2 items-center justify-end gap-[6px] overflow-hidden">
+    <section className="absolute left-1/2 top-5  flex max-w-[375px] -translate-x-1/2 items-center justify-end gap-[6px] overflow-hidden max-md:scale-75">
       {lastBets?.map((result, index) => {
         return <LastBet result={result} key={index} />;
       })}

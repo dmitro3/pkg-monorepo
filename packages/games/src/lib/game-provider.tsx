@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import React, { createContext, useContext } from "react";
 
 interface Currency {
   icon: string;
@@ -34,6 +34,9 @@ interface GameContextProps {
      */
     defaults?: Defaults;
   };
+
+  isAnimationSkipped: boolean;
+  updateSkipAnimation: (b: boolean) => void;
 }
 
 interface GameProviderProps extends GameContextProps {
@@ -48,11 +51,24 @@ const GameContext = createContext<GameContextProps>({
       symbol: "",
     },
   },
+  isAnimationSkipped: false,
+  updateSkipAnimation: () => null,
 });
 
 export const GameProvider = ({ children, options }: GameProviderProps) => {
+  const [isAnimationSkipped, setIsAnimationSkipped] =
+    React.useState<boolean>(false);
+
   return (
-    <GameContext.Provider value={{ options }}>{children}</GameContext.Provider>
+    <GameContext.Provider
+      value={{
+        options,
+        updateSkipAnimation: setIsAnimationSkipped,
+        isAnimationSkipped,
+      }}
+    >
+      {children}
+    </GameContext.Provider>
   );
 };
 
@@ -62,4 +78,11 @@ export const useGame = () => {
 
 export const useGameOptions = () => {
   return useGame().options;
+};
+
+export const useGameSkip = () => {
+  return {
+    isAnimationSkipped: useGame().isAnimationSkipped,
+    updateSkipAnimation: useGame().updateSkipAnimation,
+  };
 };

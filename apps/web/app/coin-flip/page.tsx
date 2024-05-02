@@ -53,6 +53,9 @@ export default function CoinFlipPage() {
           setResults([]);
           console.log("game completed");
         }}
+        onAnimationSkipped={() => {
+          console.log("game skipped");
+        }}
         gameResults={results}
       />
     </div>

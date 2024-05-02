@@ -365,7 +365,7 @@ const config: Omit<Config, "content"> = {
         lg: "24px",
         xl: "36px",
       },
-    }
-  }
+    },
+  },
 };
 export default config;

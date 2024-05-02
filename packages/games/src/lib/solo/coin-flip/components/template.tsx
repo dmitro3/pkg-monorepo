@@ -84,7 +84,9 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
               <CoinFlip.Game {...props}>
                 <CoinFlip.LastBets />
                 <CoinFlip.Coin {...props} />
-                <CoinFlip.Controller />
+                <div className="hidden lg:block">
+                  <CoinFlip.Controller />
+                </div>
               </CoinFlip.Game>
             </CoinFlip.Body>
           </SceneContainer>

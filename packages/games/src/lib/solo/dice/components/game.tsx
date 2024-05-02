@@ -4,6 +4,7 @@ import * as React from "react";
 import useRangeGameStore from "../store";
 import { RangeGameResult } from "../types";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
+import { useGameSkip } from "../../../game-provider";
 
 export type RangeGameProps = React.ComponentProps<"div"> & {
   results?: RangeGameResult[];
@@ -15,15 +16,19 @@ export type RangeGameProps = React.ComponentProps<"div"> & {
    * Runs when the animation is completed
    */
   onAnimationCompleted?: () => void;
+  onAnimationSkipped?: () => void;
 };
 
 export const RangeGame = ({
   onAnimationStep = () => {},
   onAnimationCompleted = () => {},
+  onAnimationSkipped = () => {},
   results,
   children,
 }: RangeGameProps) => {
   const sliderEffect = useAudioEffect(SoundEffects.SLIDER);
+
+  const { isAnimationSkipped, updateSkipAnimation } = useGameSkip();
 
   const {
     rangeGameResults,
@@ -31,6 +36,8 @@ export const RangeGame = ({
     currentAnimationCount,
     updateRangeGameResults,
     addLastBet,
+    updateLastBets,
+    updateGameStatus,
   } = useRangeGameStore([
     "updateRangeGameResults",
     "rangeGameResults",
@@ -39,11 +46,18 @@ export const RangeGame = ({
     "updateRollValue",
     "rollValue",
     "addLastBet",
+    "updateLastBets",
+    "updateGameStatus",
   ]);
 
   React.useEffect(() => {
     if (results) {
       updateRangeGameResults(results);
+    }
+
+    if (results?.length) {
+      updateSkipAnimation(false);
+      updateGameStatus("PLAYING");
     }
   }, [results]);
 
@@ -58,6 +72,7 @@ export const RangeGame = ({
         onAnimationCompleted();
       }, 1000);
 
+      updateGameStatus("ENDED");
       clearInterval(intervalRef.current!);
       intervalRef.current = null;
       return;
@@ -70,15 +85,30 @@ export const RangeGame = ({
 
   React.useEffect(() => {
     if (rangeGameResults.length === 0) return;
-    let curr = currentAnimationCount;
 
-    intervalRef.current = setInterval(() => {
-      animCallback(curr);
-      rangeGameResults[curr] &&
-        addLastBet(rangeGameResults[curr] as RangeGameResult);
-      curr += 1;
-    }, 1000);
-  }, [rangeGameResults]);
+    if (!isAnimationSkipped) {
+      let curr = currentAnimationCount;
+
+      intervalRef.current = setInterval(() => {
+        animCallback(curr);
+        rangeGameResults[curr] &&
+          addLastBet(rangeGameResults[curr] as RangeGameResult);
+        curr += 1;
+      }, 1000);
+    } else {
+      onSkip();
+    }
+  }, [rangeGameResults, isAnimationSkipped]);
+
+  const onSkip = () => {
+    updateLastBets(rangeGameResults);
+    clearInterval(intervalRef.current as NodeJS.Timeout);
+    setTimeout(() => {
+      updateGameStatus("ENDED");
+      updateRangeGameResults([]);
+      onAnimationSkipped();
+    }, 50);
+  };
 
   return <>{children}</>;
 };

@@ -60,7 +60,11 @@ export const BetCountFormField: React.FC<{
                   maxValue={maxValue}
                   {...field}
                 />
-                <BetCountSlider maxValue={maxValue} {...field} />
+                <BetCountSlider
+                  disabled={isDisabled}
+                  maxValue={maxValue}
+                  {...field}
+                />
               </div>
             </FormControl>
             <FormMessage />

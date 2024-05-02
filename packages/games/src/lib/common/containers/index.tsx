@@ -58,7 +58,10 @@ export const BetCountSlider = ({ ...props }) => {
   return (
     <Slider.Root
       className={cn(
-        "relative -mt-2 flex w-full touch-none select-none items-center"
+        "relative -mt-2 flex w-full touch-none select-none items-center",
+        {
+          "cursor-none pointer-events-none opacity-60": props.disabled,
+        }
       )}
       min={1}
       value={[props.value]}

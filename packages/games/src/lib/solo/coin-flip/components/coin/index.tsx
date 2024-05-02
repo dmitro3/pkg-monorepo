@@ -10,12 +10,14 @@ import {
   SoundEffects,
   useAudioEffect,
 } from "../../../../hooks/use-audio-effect";
+import { useGameSkip } from "../../../../game-provider";
 
 export const Coin: React.FC<CoinProps> = ({
   width,
   height,
   onAnimationCompleted,
   onAnimationStep,
+  onAnimationSkipped = () => {},
 }) => {
   const [coinRotate] = useState<CoinRotate>(new CoinRotate());
   const handleLoad = (canvas: CoinCanvas) => {
@@ -31,12 +33,14 @@ export const Coin: React.FC<CoinProps> = ({
     updateCoinFlipGameResults,
     updateGameStatus,
     addLastBet,
+    updateLastBets,
   } = useCoinFlipGameStore([
     "gameStatus",
     "coinFlipGameResults",
     "updateCoinFlipGameResults",
     "updateGameStatus",
     "addLastBet",
+    "updateLastBets",
   ]);
 
   const form = useFormContext() as CoinFlipForm;
@@ -45,52 +49,69 @@ export const Coin: React.FC<CoinProps> = ({
 
   const lottieRef = React.useRef<any>(null);
 
+  const skipRef = React.useRef<boolean>(false);
+
+  const { isAnimationSkipped } = useGameSkip();
+
   React.useEffect(() => {
-    if (coinFlipGameResults.length) {
-      const turn = (i = 0) => {
-        const side = coinFlipGameResults[i]?.coinSide || 0;
-        const payout = coinFlipGameResults[i]?.payout || 0;
-        const payoutInUsd = coinFlipGameResults[i]?.payoutInUsd || 0;
+    if (coinFlipGameResults.length == 0) return;
 
-        flipEffect.play();
+    const turn = (i = 0) => {
+      const side = coinFlipGameResults[i]?.coinSide || 0;
+      const payout = coinFlipGameResults[i]?.payout || 0;
+      const payoutInUsd = coinFlipGameResults[i]?.payoutInUsd || 0;
 
-        coinRotate.finish(side, 1250).then(() => {
-          const curr = i + 1;
+      flipEffect.play();
 
-          onAnimationStep && onAnimationStep(curr);
+      coinRotate.finish(side, 1250).then(() => {
+        const curr = i + 1;
 
-          addLastBet({
-            coinSide: side,
-            payout,
-            payoutInUsd,
-          });
+        onAnimationStep && onAnimationStep(curr);
 
-          if (payout > 0) {
-            lottieRef.current.play();
-            winEffect.play();
-          }
-
-          if (coinFlipGameResults.length === curr) {
-            updateCoinFlipGameResults([]);
-            onAnimationCompleted && onAnimationCompleted();
-            setTimeout(() => updateGameStatus("ENDED"), 1000);
-          } else {
-            setTimeout(() => turn(curr), 350);
-          }
+        addLastBet({
+          coinSide: side,
+          payout,
+          payoutInUsd,
         });
-      };
 
-      turn();
-    }
+        if (payout > 0) {
+          lottieRef.current.play();
+          winEffect.play();
+        }
+
+        if (skipRef.current) {
+          onSkip();
+        } else if (coinFlipGameResults.length === curr) {
+          updateCoinFlipGameResults([]);
+          onAnimationCompleted && onAnimationCompleted();
+          setTimeout(() => updateGameStatus("ENDED"), 350);
+        } else {
+          setTimeout(() => turn(curr), 350);
+        }
+      });
+    };
+
+    turn();
   }, [coinFlipGameResults]);
+
+  const onSkip = () => {
+    updateLastBets(coinFlipGameResults);
+    updateCoinFlipGameResults([]);
+    onAnimationSkipped();
+    setTimeout(() => updateGameStatus("ENDED"), 50);
+  };
 
   useEffect(() => {
     coinRotate.flipTo(coinSide, 1000);
   }, [coinSide]);
 
+  useEffect(() => {
+    skipRef.current = isAnimationSkipped;
+  }, [isAnimationSkipped]);
+
   return (
     <>
-      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 max-md:scale-75">
         <Player
           ref={lottieRef}
           src={CoinConfetti}

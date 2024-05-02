@@ -14,7 +14,7 @@ export const RangeLastBets: React.FC = () => {
             className={cn(
               "flex h-7 w-[53px] flex-shrink-0 items-center justify-center rounded-[1000px] bg-zinc-700 font-semibold text-zinc-100",
               {
-                "bg-lime-500": result.payout > 0,
+                "bg-green-500": result.payout > 0,
               }
             )}
           >

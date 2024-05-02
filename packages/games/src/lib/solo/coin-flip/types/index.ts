@@ -29,6 +29,7 @@ export interface CoinProps {
   height?: number;
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: () => void;
+  onAnimationSkipped?: () => void;
 }
 
 export interface CoinSpeedArgs {
