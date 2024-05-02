@@ -34,16 +34,18 @@ interface GameContextProps {
      */
     defaults?: Defaults;
   };
-
-  isAnimationSkipped: boolean;
-  updateSkipAnimation: (b: boolean) => void;
 }
 
 interface GameProviderProps extends GameContextProps {
   children: React.ReactNode;
 }
 
-const GameContext = createContext<GameContextProps>({
+const GameContext = createContext<
+  GameContextProps & {
+    isAnimationSkipped: boolean;
+    updateSkipAnimation: (b: boolean) => void;
+  }
+>({
   options: {
     currency: {
       icon: "",
