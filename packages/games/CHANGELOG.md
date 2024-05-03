@@ -1,5 +1,11 @@
 # @winrlabs/games
 
+## 2.4.0
+
+### Minor Changes
+
+- a6eacb8: Sound effects
+
 ## 2.3.1
 
 ### Patch Changes
