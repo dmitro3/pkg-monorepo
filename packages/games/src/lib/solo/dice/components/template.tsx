@@ -71,7 +71,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: "onSubmit",
     defaultValues: {
-      wager: 2,
+      wager: props?.minWager || 2,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
