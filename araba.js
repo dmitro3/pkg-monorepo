@@ -1,37 +1,52 @@
-const fs = require('fs');
-const path = require('path');
-const glob = require("glob");
+module.exports = function (fileInfo, api, options) {
+  const j = api.jscodeshift;
+  const { statement, expression } = j.template;
+  const prefix = options.prefix || 'wr-';
 
-const rootDir = "./packages/games";
-const classNameRegex = /className=["']([\w\s-]+)["']/g;
+  return j(fileInfo.source, { parser: require('@babel/preset-typescript') })
+    .find(j.JSXAttribute)
+    .filter(path => path.node.name.name === 'className')
+    .forEach(path => {
+      // Handling for a simple string literal
+      console.log(path.node.value.type);
+      if (path.node.value.type === 'StringLiteral') {
+        path.node.value.value = path.node.value.value
+          .split(/\s+/)
+          .map(className => `${prefix}${className}`)
+          .join(' ');
 
-glob("**/*.{js,jsx,tsx}", { cwd: rootDir }, (er, files) => {
-  files.forEach((file) => {
-    const filePath = path.join(rootDir, file);
-
-    if (filePath.includes("node_modules")) {
-      return;
-    }
-
-    fs.readFile(filePath, 'utf-8', (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
       }
-      const result = data.replace(classNameRegex, (match, p1) => {
-        const classNames = p1.split(" ");
-        const prefixedClassNames = classNames.map((className) => {
-          if (className.startsWith("inav-")) {
-            return className;
-          } else {
-            return `inav-${className}`;
-          }
-        });
-        return `className="${prefixedClassNames.join(" ")}"`;
-      });
-      fs.writeFile(filePath, result, 'utf-8', (err) => {
-        if (err) console.error(err);
-      });
-    });
-  });
-});
+      // Handling for JSX expression containers
+      else if (path.node.value.type === 'JSXExpressionContainer') {
+        // Simple string within JSX expression
+        if (path.node.value.expression.type === 'StringLiteral') {
+          path.node.value.expression.value = path.node.value.expression.value
+            .split(/\s+/)
+            .map(className => `${prefix}${className}`)
+            .join(' ');
+        }
+        // Template literal or complex expression
+        else if (path.node.value.expression.type === 'CallExpression' &&
+          path.node.value.expression.callee.name === 'cn') {
+          path.node.value.expression.arguments = path.node.value.expression.arguments.map(arg => {
+            // Template strings within cn()
+            if (arg.type === 'TemplateLiteral') {
+              arg.quasis.forEach(quasi => {
+                quasi.value.raw = quasi.value.raw.split(/\s+/).map(className => `${prefix}${className}`).join(' ');
+                quasi.value.cooked = quasi.value.cooked.split(/\s+/).map(className => `${prefix}${className}`).join(' ');
+              });
+            }
+            // Simple strings within cn()
+            else if (arg.type === 'StringLiteral') {
+              arg.value = arg.value
+                .split(/\s+/)
+                .map(className => `${prefix}${className}`)
+                .join(' ');
+            }
+            return arg;
+          });
+        }
+      }
+    })
+    .toSource();
+};

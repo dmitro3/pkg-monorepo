@@ -16,7 +16,7 @@ export const SceneContainer: React.FC<Props> = ({
   return (
     <section
       className={cn(
-        "relative flex w-full flex-col items-center justify-between rounded-lg border border-zinc-800 bg-cover bg-no-repeat p-3.5  lg:px-16 lg:pb-12 lg:pt-[14px]",
+        "wr-relative wr-flex wr-w-full wr-flex-col wr-items-center wr-justify-between wr-rounded-lg wr-border wr-border-zinc-800 wr-bg-cover wr-bg-no-repeat wr-p-3.5 wr- lg:wr-px-16 lg:wr-pb-12 lg:wr-pt-[14px]",
         className
       )}
       {...props}
@@ -28,7 +28,12 @@ export const SceneContainer: React.FC<Props> = ({
 
 export const GameContainer: React.FC<Props> = ({ children, className }) => {
   return (
-    <div className={cn("flex gap-3 pt-3 max-lg:flex-col-reverse", className)}>
+    <div
+      className={cn(
+        "wr-flex wr-gap-3 wr-pt-3 max-lg:wr-flex-col-reverse",
+        className
+      )}
+    >
       {children}
     </div>
   );
@@ -42,7 +47,7 @@ export const BetControllerContainer: React.FC<Props> = ({
     <AudioContextProvider>
       <section
         className={cn(
-          "flex flex-shrink-0 flex-col justify-between rounded-lg bg-zinc-900 p-4 lg:w-[340px]",
+          "wr-flex wr-flex-shrink-0 wr-flex-col wr-justify-between wr-rounded-lg wr-bg-zinc-900 wr-p-4 lg:wr-w-[340px]",
           className
         )}
       >
@@ -58,9 +63,9 @@ export const BetCountSlider = ({ ...props }) => {
   return (
     <Slider.Root
       className={cn(
-        "relative -mt-2 flex w-full touch-none select-none items-center",
+        "wr-relative -wr-mt-2 wr-flex wr-w-full wr-touch-none wr-select-none wr-items-center",
         {
-          "cursor-none pointer-events-none opacity-60": props.disabled,
+          "wr-cursor-none wr-pointer-events-none wr-opacity-60": props.disabled,
         }
       )}
       min={1}
@@ -70,10 +75,10 @@ export const BetCountSlider = ({ ...props }) => {
         form.setValue("betCount", e[0], { shouldValidate: true });
       }}
     >
-      <Slider.Track className="relative h-[6px] w-full grow cursor-pointer overflow-hidden rounded-full rounded-tl-md rounded-tr-md bg-zinc-600">
-        <Slider.Range className="absolute h-full bg-red-600" />
+      <Slider.Track className="wr-relative wr-h-[6px] wr-w-full wr-grow wr-cursor-pointer wr-overflow-hidden wr-rounded-full wr-rounded-tl-md wr-rounded-tr-md wr-bg-zinc-600">
+        <Slider.Range className="wr-absolute wr-h-full wr-bg-red-600" />
       </Slider.Track>
-      <Slider.Thumb className="border-primary ring-offset-background focus-visible:ring-ring flex  h-[10px] w-[10px] cursor-pointer items-center justify-center rounded-full border-2 bg-white text-[12px] font-medium text-zinc-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50" />
+      <Slider.Thumb className="wr-border-primary wr-ring-offset-background wr-focus-visible:ring-ring wr-flex wr-h-[10px] wr-w-[10px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-border-2 wr-bg-white wr-text-[12px] wr-font-medium wr-text-zinc-900 wr-transition-colors wr-focus-visible:outline-none wr-focus-visible:ring-2 wr-focus-visible:ring-offset-2 wr-disabled:pointer-events-none wr-disabled:opacity-50" />
     </Slider.Root>
   );
 };

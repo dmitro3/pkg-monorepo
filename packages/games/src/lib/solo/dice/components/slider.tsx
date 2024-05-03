@@ -26,18 +26,18 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
   const rollType = form.watch("rollType");
 
   return (
-    <div className="w-full shrink-0">
+    <div className="wr-w-full wr-shrink-0">
       <FormField
         control={form.control}
         name="rollValue"
         render={({ field }) => (
-          <FormItem className="mb-0">
+          <FormItem className="wr-mb-0">
             <FormControl>
               <SliderPrimitive.Root
                 className={cn(
-                  "relative flex h-6 cursor-pointer touch-none select-none items-center",
+                  "wr-relative wr-flex wr-h-6 wr-cursor-pointer wr-touch-none wr-select-none wr-items-center",
                   {
-                    "cursor-not-allowed": isLoading,
+                    "wr-cursor-not-allowed": isLoading,
                   }
                 )}
                 defaultValue={[rollValue]}
@@ -60,7 +60,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
               >
                 <SliderPrimitive.Track
                   className={cn(
-                    "relative h-6 grow rounded-sm transition-all duration-300 ease-linear"
+                    "wr-relative wr-h-6 wr-grow wr-rounded-sm wr-transition-all wr-duration-300 wr-ease-linear"
                   )}
                   style={{
                     background:
@@ -69,7 +69,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                 >
                   <SliderPrimitive.Range
                     className={cn(
-                      "absolute h-full rounded-sm  transition-all duration-300 ease-linear"
+                      "wr-absolute wr-h-full wr-rounded-sm wr- wr-transition-all wr-duration-300 wr-ease-linear"
                     )}
                     style={{
                       background:
@@ -78,16 +78,16 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                   />
                 </SliderPrimitive.Track>
                 <SliderPrimitive.Thumb
-                  className="relative  grid h-16 w-16  place-items-center rounded-[10px] bg-gradient-to-b from-white to-[#C5C5CC] shadow-[0_1px_5px] focus:shadow-[0_2px_10px] focus:outline-none focus:ring-0"
+                  className="wr-relative wr-grid wr-h-16 wr-w-16 wr-place-items-center wr-rounded-[10px] wr-bg-gradient-to-b wr-from-white wr-to-[#C5C5CC] wr-shadow-[0_1px_5px] wr-focus:shadow-[0_2px_10px] wr-focus:outline-none wr-focus:ring-0"
                   aria-label="Volume"
                 >
-                  <div className="absolute -top-[50px] text-4xl font-bold">
+                  <div className="wr-absolute wr--top-[50px] wr-text-4xl wr-font-bold">
                     {rollValue <= MAX_VALUE ? rollValue : MIN_VALUE}
                   </div>
-                  <div className="flex gap-[6px]">
-                    <div className="h-[34px] w-[6px] rounded-[2px] bg-zinc-400" />
-                    <div className="h-[34px] w-[6px] rounded-[2px] bg-zinc-400" />
-                    <div className="h-[34px] w-[6px] rounded-[2px] bg-zinc-400" />
+                  <div className="wr-flex wr-gap-[6px]">
+                    <div className="wr-h-[34px] wr-w-[6px] wr-rounded-[2px] wr-bg-zinc-400" />
+                    <div className="wr-h-[34px] wr-w-[6px] wr-rounded-[2px] wr-bg-zinc-400" />
+                    <div className="wr-h-[34px] wr-w-[6px] wr-rounded-[2px] wr-bg-zinc-400" />
                   </div>
                 </SliderPrimitive.Thumb>
               </SliderPrimitive.Root>
@@ -95,8 +95,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
           </FormItem>
         )}
       />
-
-      <div className="mt-[22px] flex justify-between text-[15px] font-bold">
+      <div className="wr-mt-[22px] wr-flex wr-justify-between wr-text-[15px] wr-font-bold">
         <span>{MIN_VALUE}</span>
         <span>{MAX_VALUE}</span>
       </div>

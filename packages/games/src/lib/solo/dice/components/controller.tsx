@@ -25,12 +25,12 @@ export const Controller: React.FC<RangeControllerProps> = ({
   const form = useFormContext() as RangeForm;
 
   return (
-    <div className="relative flex w-full shrink-0 items-end justify-center gap-2 ">
+    <div className="wr-relative wr-flex wr-w-full wr-shrink-0 wr-items-end wr-justify-center wr-gap-2 wr-">
       <FormField
         control={form.control}
         name="rollValue"
         render={({ field }) => (
-          <FormItem className="mb-0 max-w-[148px]">
+          <FormItem className="!wr-mb-0 wr-max-w-[148px]">
             <FormControl>
               <NumberInput.Root
                 {...field}
@@ -47,33 +47,32 @@ export const Controller: React.FC<RangeControllerProps> = ({
                   });
                 }}
               >
-                <FormLabel className="justify-center text-zinc-400">
+                <FormLabel className="wr-justify-center wr-text-zinc-400">
                   Roll {form.getValues().rollType === "OVER" ? "Over" : "Under"}
                 </FormLabel>
                 <NumberInput.Container
                   className={cn(
-                    "rounded-md border border-zinc-600 bg-zinc-950 py-[10px]"
+                    "wr-rounded-md wr-border wr-border-zinc-600 wr-bg-zinc-950 wr-py-[10px]"
                   )}
                 >
                   <NumberInput.Input
                     decimalScale={2}
                     className={cn(
-                      "border-none bg-transparent px-2 py-2 text-center font-semibold leading-5 outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0"
+                      "wr-border-none wr-bg-transparent wr-px-2 wr-py-2 wr-text-center wr-font-semibold wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
                     )}
                   />
                 </NumberInput.Container>
               </NumberInput.Root>
             </FormControl>
-            <FormMessage className="absolute left-2 top-20" />
+            <FormMessage className="wr-absolute wr-left-2 wr-top-20" />
           </FormItem>
         )}
       />
-
       <Button
         variant={"success"}
         size={"sm"}
         type="button"
-        className="mb-1 h-10 w-10 shrink-0 bg-green-500 p-0 hover:bg-green-600"
+        className="wr-mb-1 wr-h-10 wr-w-10 wr-shrink-0 wr-bg-green-500 wr-p-0 wr-hover:bg-green-600"
         onClick={() => {
           const { rollType, winChance } = form.getValues();
 
@@ -90,16 +89,20 @@ export const Controller: React.FC<RangeControllerProps> = ({
         disabled={form.formState.isSubmitting || form.formState.isLoading}
       >
         <Icons.IconChevronUp
-          className={cn("h-5 w-5 text-zinc-100 transition-all duration-300", {
-            ["rotate-180 transform"]: form.getValues().rollType === "UNDER",
-          })}
+          className={cn(
+            "wr-h-5 wr-w-5 wr-text-zinc-100 wr-transition-all wr-duration-300",
+            {
+              ["wr-rotate-180 wr-transform"]:
+                form.getValues().rollType === "UNDER",
+            }
+          )}
         />
       </Button>
       <FormField
         control={form.control}
         name="winChance"
         render={({ field }) => (
-          <FormItem className="mb-0 max-w-[148px]">
+          <FormItem className="!wr-mb-0 wr-max-w-[148px]">
             <FormControl>
               <NumberInput.Root
                 {...field}
@@ -118,36 +121,35 @@ export const Controller: React.FC<RangeControllerProps> = ({
                   });
                 }}
               >
-                <FormLabel className="justify-center text-center text-zinc-400">
+                <FormLabel className="wr-justify-center wr-text-center wr-text-zinc-400">
                   Win Chance
                 </FormLabel>
                 <NumberInput.Container
                   className={cn(
-                    " rounded-md border border-zinc-600 bg-zinc-950 py-[10px] text-center"
+                    " wr-rounded-md wr-border wr-border-zinc-600 wr-bg-zinc-950 wr-py-[10px] wr-text-center"
                   )}
                 >
                   <NumberInput.Input
                     decimalScale={2}
                     className={cn(
-                      "border-none bg-transparent px-2 py-2 text-center font-semibold leading-5 outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0"
+                      "wr-border-none wr-bg-transparent wr-px-2 wr-py-2 wr-text-center wr-font-semibold wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
                     )}
                   />
-                  <div className="absolute right-2  flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-zinc-600">
-                    <span className="text-xs">%</span>
+                  <div className="wr-absolute wr-right-2 wr-flex wr-h-5 wr-w-5 wr-flex-shrink-0 wr-items-center wr-justify-center wr-rounded-full wr-bg-zinc-600">
+                    <span className="wr-text-xs">%</span>
                   </div>
                 </NumberInput.Container>
               </NumberInput.Root>
             </FormControl>
-            <FormMessage className="absolute left-2 top-20" />
+            <FormMessage className="wr-absolute wr-left-2 wr-top-20" />
           </FormItem>
         )}
       />
-
-      <div className="w-[140px]">
-        <FormLabel className="justify-center text-zinc-400">
+      <div className="wr-w-[140px]">
+        <FormLabel className="wr-justify-center wr-text-zinc-400">
           Multiplier
         </FormLabel>
-        <div className="mb-1 flex h-10 w-full flex-shrink-0 items-center justify-center rounded-lg bg-zinc-600 px-2 py-[10px] text-center font-bold">
+        <div className="wr-mb-1 wr-flex wr-h-10 wr-w-full wr-flex-shrink-0 wr-items-center wr-justify-center wr-rounded-lg wr-bg-zinc-600 wr-px-2 wr-py-[10px] wr-text-center wr-font-bold">
           x{winMultiplier}
         </div>
       </div>

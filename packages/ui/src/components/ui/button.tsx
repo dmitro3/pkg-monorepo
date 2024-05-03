@@ -7,36 +7,36 @@ import { cn } from "@/lib/utils";
 import { Spinner } from "./spinner";
 
 const buttonVariants = cva(
-  "focus-visible:ring-ring inline-flex h-2 items-center justify-center rounded-md px-3 py-0 text-[15px] font-semibold leading-4  transition duration-300 ease-out hover:ease-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed",
+  "focus-visible:wr-ring-ring wr-inline-flex wr-h-2 wr-items-center wr-justify-center wr-rounded-md wr-px-3 wr-py-0 wr-text-[15px] wr-font-semibold wr-leading-4 wr- wr-transition wr-duration-300 wr-ease-out hover:wr-ease-in focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-pointer-events-none disabled:wr-cursor-not-allowed",
   {
     variants: {
       variant: {
         default:
-          "bg-red-600 text-white transition-all duration-200 hover:bg-red-700 disabled:bg-red-950 disabled:text-zinc-500",
+          "wr-bg-red-600 wr-text-white wr-transition-all wr-duration-200 hover:wr-bg-red-700 disabled:wr-bg-red-950 disabled:wr-text-zinc-500",
         secondary:
-          "bg-zinc-800 text-zinc-100 hover:bg-zinc-700 disabled:bg-zinc-800 disabled:text-zinc-500",
+          "wr-bg-zinc-800 wr-text-zinc-100 hover:wr-bg-zinc-700 disabled:wr-bg-zinc-800 disabled:wr-text-zinc-500",
         third:
-          "bg-unity-white-15 font-semibold text-unity-white-50 backdrop-blur-md hover:bg-unity-white-50 hover:text-white disabled:bg-unity-white-5",
+          "wr-bg-unity-white-15 wr-font-semibold wr-text-unity-white-50 wr-backdrop-blur-md hover:wr-bg-unity-white-50 hover:wr-text-white disabled:wr-bg-unity-white-5",
         outline:
-          "border border-zinc-800 bg-transparent text-zinc-100 hover:bg-zinc-800 disabled:text-zinc-500",
+          "wr-border wr-border-zinc-800 wr-bg-transparent wr-text-zinc-100 hover:wr-bg-zinc-800 disabled:wr-text-zinc-500",
         success:
-          "bg-green-500 transition-all duration-200 hover:bg-green-600 disabled:bg-green-800 disabled:text-zinc-400 disabled:opacity-90",
+          "wr-bg-green-500 wr-transition-all wr-duration-200 hover:wr-bg-green-600 disabled:wr-bg-green-800 disabled:wr-text-zinc-400 disabled:wr-opacity-90",
         coinflip:
           // eslint-disable-next-line
-          "bg-gradient-to-t from-unity-coinflip-purple-700 to-unity-coinflip-purple-400 bg-[size:_200%] bg-[position:_0%_0%] font-furore transition-all duration-300 hover:from-unity-coinflip-purple-400 hover:to-unity-coinflip-purple-700 hover:bg-[position:_100%_100%]",
+          "wr-bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400 bg-[size:wr-_200%] bg-[position:wr-_0%_0%] wr-font-furore wr-transition-all wr-duration-300 hover:wr-from-unity-coinflip-purple-400 hover:wr-to-unity-coinflip-purple-700 hover:wr-bg-[position",
         "horse-race":
           // eslint-disable-next-line
-          "bg-horse-race-bet-button-bg bg-[size:100%] bg-no-repeat font-barlowCondensed text-[22px] font-[900] uppercase italic leading-8 tracking-wider transition-all duration-300 [text-shadow:_0px_2px_0px_#054352] hover:scale-110 hover:ease-in disabled:bg-horse-race-bet-button-bg-disabled md:bg-contain",
+          "wr-bg-horse-race-bet-button-bg bg-[size:wr-100%] wr-bg-no-repeat wr-font-barlowCondensed wr-text-[22px] wr-font-[900] wr-uppercase wr-italic wr-leading-8 wr-tracking-wider wr-transition-all wr-duration-300 [text-shadow:wr-_0px_2px_0px_#054352] hover:wr-scale-110 hover:wr-ease-in disabled:wr-bg-horse-race-bet-button-bg-disabled md:wr-bg-contain",
         crash:
           "bg-[#5B6CFF] transition-all duration-300 hover:bg-[#3C4DE1] disabled:bg-zinc-700",
         plinko:
-          "!rounded-none bg-plinko-button bg-[size:100%] bg-no-repeat font-furore text-2xl leading-6 transition-all duration-300 [text-shadow:_0px_2px_0px_#054352] [box-shadow:0px_2.7px_0px_0px_#004265] hover:scale-110 hover:ease-in disabled:bg-plinko-button-disabled lg:bg-contain",
+          "!wr-rounded-none wr-bg-plinko-button bg-[size:wr-100%] wr-bg-no-repeat wr-font-furore wr-text-2xl wr-leading-6 wr-transition-all wr-duration-300 [text-shadow:wr-_0px_2px_0px_#054352] [box-shadow:wr-0px_2.7px_0px_0px_#004265] hover:wr-scale-110 hover:wr-ease-in disabled:wr-bg-plinko-button-disabled lg:wr-bg-contain",
       },
       size: {
-        sm: "h-7 rounded-sm",
-        md: "h-9 rounded-md",
-        lg: "h-10 rounded-md",
-        xl: "h-12 rounded-lg",
+        sm: "wr-h-7 wr-rounded-sm",
+        md: "wr-h-9 wr-rounded-md",
+        lg: "wr-h-10 wr-rounded-md",
+        xl: "wr-h-12 wr-rounded-lg",
       },
     },
     defaultVariants: {
@@ -72,7 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }), {
-          "flex items-center gap-2": withIcon,
+          "wr-flex wr-items-center wr-gap-2": withIcon,
         })}
         ref={ref}
         {...props}

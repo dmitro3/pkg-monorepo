@@ -20,16 +20,16 @@ export const StopGainLossInput = ({
     <NumberInput.Root {...rest}>
       <NumberInput.Container
         className={cn(
-          "border-none bg-zinc-950 px-2 py-[10px]",
+          "wr-border-none wr-bg-zinc-950 wr-px-2 wr-py-[10px]",
           {
-            ["border border-solid border-red-600"]: !!hasError,
+            ["wr-border wr-border-solid wr-border-red-600"]: !!hasError,
           },
           containerClassName
         )}
       >
         <NumberInput.Input
           className={cn(
-            "border-none bg-transparent px-0 py-2 text-xl leading-5 outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0",
+            "wr-border-none wr-bg-transparent wr-px-0 wr-py-2 wr-text-xl wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0",
             className
           )}
         />

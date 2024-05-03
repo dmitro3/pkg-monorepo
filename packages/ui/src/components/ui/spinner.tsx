@@ -1,7 +1,5 @@
 "use client";
 
 export const Spinner = () => {
-  return (
-    <div className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600" />
-  );
+  return (<div className="wr-h-5 wr-w-5 wr-animate-spin wr-rounded-full wr-border-2 wr-border-zinc-300 wr-border-t-zinc-600" />);
 };

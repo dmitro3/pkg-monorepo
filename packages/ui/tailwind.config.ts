@@ -4,7 +4,7 @@ import sharedConfig from "@winrlabs/tailwind-config";
 const config = {
   darkMode: ["class"],
   content: ["./src/**/*.{ts,tsx}"],
-  prefix: "",
+  prefix: "wr-",
   theme: {
     container: {
       center: true,

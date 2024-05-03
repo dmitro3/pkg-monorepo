@@ -152,7 +152,7 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
   const form = useFormContext();
 
   return (
-    <FormField
+    (<FormField
       control={form.control}
       name="wager"
       render={({ field }) => (
@@ -160,7 +160,7 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
           <FormLabel>
             Wager
             <div>
-              <WagerBalance className="text-zinc-100" />
+              <WagerBalance className="wr-text-zinc-100" />
               <WagerCurrency />
             </div>
           </FormLabel>
@@ -184,6 +184,6 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
           <FormMessage />
         </FormItem>
       )}
-    />
+    />)
   );
 };

@@ -36,23 +36,23 @@ export const TextRandomizer = () => {
   }, [rangeGameResults]);
 
   return (
-    <div className="relative w-full">
+    <div className="wr-relative wr-w-full">
       <div>
         {currentResult ? (
           <div
-            className={cn("transition-all", {
-              "opacity-0 delay-1000":
+            className={cn("wr-transition-all", {
+              "wr-opacity-0 delay-1000":
                 currentAnimationCount + 1 === rangeGameResults.length,
-              "opacity-0": resetAnimation,
-              "opacity-100 delay-100": rangeGameResults.length === 1,
+              "wr-opacity-0": resetAnimation,
+              "wr-opacity-100 wr-delay-100": rangeGameResults.length === 1,
             })}
           >
             <span
               className={cn(
-                "absolute bottom-6  z-10 -translate-x-1/2 rounded-lg p-2 text-4xl font-bold transition-all",
+                "wr-absolute wr-bottom-6 wr- wr-z-10 -wr-translate-x-1/2 wr-rounded-lg wr-p-2 wr-text-4xl wr-font-bold wr-transition-all",
                 {
-                  "bg-lime-600": currentResult?.payout > 0,
-                  "bg-red-600": currentResult?.payout <= 0,
+                  "wr-bg-lime-600": currentResult?.payout > 0,
+                  "wr-bg-red-600": currentResult?.payout <= 0,
                 }
               )}
               style={{ left: `${currentResult.resultNumber}%` }}
@@ -66,28 +66,27 @@ export const TextRandomizer = () => {
           </div>
         ) : null}
       </div>
-
       {/* Dots */}
       {rangeGameResults.map((result, key) => (
         <span
           key={key}
           style={{ left: `${result.resultNumber}%` }}
           className={cn(
-            "absolute  bottom-[-40px] h-1.5 w-1.5 -translate-x-1/2 rounded-full opacity-0 transition-all",
+            "wr-absolute wr- wr-bottom-[-40px] wr-h-1.5 wr-w-1.5 -wr-translate-x-1/2 wr-rounded-full wr-opacity-0 wr-transition-all",
             {
-              "bg-lime-600": result?.payout > 0,
-              "bg-red-600": result?.payout <= 0,
-              "opacity-100 transition-all": key <= currentAnimationCount,
-              "opacity-0": resetAnimation,
+              "wr-bg-lime-600": result?.payout > 0,
+              "wr-bg-red-600": result?.payout <= 0,
+              "wr-opacity-100 transition-all": key <= currentAnimationCount,
+              "wr-opacity-0": resetAnimation,
             }
           )}
         >
           <TooltipProvider>
             <Tooltip key={key}>
               <TooltipTrigger>
-                <div className="relative  -top-2 block h-1.5  w-1.5 rounded" />
+                <div className="wr-relative wr--top-2 wr-block wr-h-1.5 wr-w-1.5 wr-rounded" />
               </TooltipTrigger>
-              <TooltipContent className=" absolute top-0 z-[100]">
+              <TooltipContent className="wr- wr-absolute wr-top-0 wr-z-[100]">
                 <p>{result?.resultNumber}</p>
               </TooltipContent>
             </Tooltip>
@@ -112,7 +111,7 @@ const Polygon = ({
       viewBox="0 0 21 15"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="absolute bottom-[9px] z-10 -translate-x-1/2 transition-all"
+      className="wr-absolute wr-bottom-[9px] wr-z-10 wr--translate-x-1/2 wr-transition-all"
       style={{ left: `${resultNumber}%` }}
     >
       <path

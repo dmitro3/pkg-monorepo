@@ -10,7 +10,7 @@ export const LastBetsContainer: React.FC<{
   return (
     <div
       className={cn(
-        "absolute top-5 left-1/2 -translate-x-1/2 flex max-w-[350px] items-center justify-end gap-[6px] overflow-hidden",
+        "wr-absolute wr-top-5 wr-left-1/2 -wr-translate-x-1/2 wr-flex wr-max-w-[350px] wr-items-center wr-justify-end wr-gap-[6px] wr-overflow-hidden",
         className
       )}
     >

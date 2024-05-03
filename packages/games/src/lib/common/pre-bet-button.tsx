@@ -29,7 +29,7 @@ export const PreBetButton = ({
     return (
       <Button
         variant={variant}
-        className={cn("w-full", className)}
+        className={cn("wr-w-full", className)}
         size={"xl"}
         type="button"
       >
@@ -46,7 +46,7 @@ export const PreBetButton = ({
         disabled
         variant={variant}
         type="button"
-        className={cn("w-full", className)}
+        className={cn("wr-w-full", className)}
         size={"xl"}
       >
         Not enough Balance

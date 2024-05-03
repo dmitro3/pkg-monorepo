@@ -49,10 +49,10 @@ const ErrorMessage: React.FC<{
   return (
     <div
       className={cn(
-        "mt-1 text-red-600 transition-all motion-safe:ease-in",
+        "wr-mt-1 wr-text-red-600 wr-transition-all wr-motion-safe:ease-in",
         {
-          "h-10": hasErrorMessage,
-          "h-0": !hasErrorMessage,
+          "wr-h-10": hasErrorMessage,
+          "wr-h-0": !hasErrorMessage,
         },
         className
       )}
@@ -145,11 +145,7 @@ const Root: React.FC<RootProps & { children: React.ReactNode }> = ({
             errorMessage={errorMessage}
           />
         )}
-        {secondaryValue ? (
-          <div className={""}>${toFormatted(secondaryValue, 0)}</div>
-        ) : (
-          ""
-        )}
+        {secondaryValue ? <div>${toFormatted(secondaryValue, 0)}</div> : ""}
       </fieldset>
     </NumberInputContext.Provider>
   );
@@ -159,7 +155,9 @@ const LabelText: React.FC<{
   className?: string;
   children?: React.ReactNode;
 }> = ({ children, className }) => {
-  return <p className={cn("mb-3 text-zinc-500", className)}>{children}</p>;
+  return (
+    <p className={cn("wr-mb-3 wr-text-zinc-500", className)}>{children}</p>
+  );
 };
 
 const LabelBalance: React.FC<{
@@ -208,11 +206,11 @@ const Container: React.FC<{
   return (
     <div
       className={cn(
-        "relative flex h-10 w-full items-center rounded-md border border-zinc-800",
+        "wr-relative wr-flex wr-h-10 wr-w-full wr-items-center wr-rounded-md wr-border wr-border-zinc-800",
         className,
         {
-          ["border-red-600"]: !!errorMessage,
-          ["pointer-events-none opacity-50"]: isDisabled,
+          ["wr-border-red-600"]: !!errorMessage,
+          ["wr-pointer-events-none wr-opacity-50"]: isDisabled,
         }
       )}
     >
@@ -248,7 +246,7 @@ const Input: React.FC<{
       thousandSeparator=","
       prefix={prefix}
       className={cn(
-        "h-full w-full rounded-md  border-none bg-transparent p-0 py-2  outline-none",
+        "wr-h-full wr-w-full wr-rounded-md wr-border-none wr-bg-transparent wr-p-0 wr-py-2 wr-outline-none",
         className
       )}
     />
@@ -256,14 +254,14 @@ const Input: React.FC<{
 };
 
 const Tools: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <div className={""}>{children}</div>;
+  return <div className={"wr-"}>{children}</div>;
 };
 
 const InputUnit: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div
       className={
-        "absolute left-2 top-1/2 mr-1 flex h-5 w-5 -translate-y-1/2 items-center justify-center"
+        "wr-absolute wr-left-2 wr-top-1/2 wr-mr-1 wr-flex wr-h-5 wr-w-5 wr--translate-y-1/2 wr-items-center wr-justify-center"
       }
     >
       {children}
@@ -330,7 +328,7 @@ const AdjustValue: React.FC = () => {
   };
 
   return (
-    <div className={""}>
+    <div>
       <ChevronDown
         onClick={() => {
           handleArrows({ step, type: "increase" });
@@ -343,7 +341,7 @@ const AdjustValue: React.FC = () => {
         onMouseUp={clearState}
         onMouseLeave={clearState}
         onMouseOut={clearState}
-        className="h-5 w-5"
+        className="wr-h-5 wr-w-5"
       />
       <ChevronDown
         onClick={() => {
@@ -357,7 +355,7 @@ const AdjustValue: React.FC = () => {
         onMouseUp={clearState}
         onMouseLeave={clearState}
         onMouseOut={clearState}
-        className="h-5 w-5"
+        className="wr-h-5 wr-w-5"
       />
     </div>
   );
@@ -397,7 +395,7 @@ const SliderInput: React.FC = () => {
 
   return (
     <Slider.Root
-      className="relative mx-auto my-3 flex h-[5px] w-[100%] cursor-pointer touch-none select-none items-center"
+      className="wr-relative wr-mx-auto wr-my-3 wr-flex wr-h-[5px] wr-w-[100%] wr-cursor-pointer wr-touch-none wr-select-none wr-items-center"
       defaultValue={[value]}
       value={[value]}
       min={min}
@@ -407,11 +405,11 @@ const SliderInput: React.FC = () => {
       minStepsBetweenThumbs={4}
       disabled={isDisabled}
     >
-      <Slider.Track className="relative h-full w-full rounded-lg bg-zinc-800">
-        <Slider.Range className="absolute h-full rounded-lg bg-red-500" />
+      <Slider.Track className="wr-relative wr-h-full wr-w-full wr-rounded-lg wr-bg-zinc-800">
+        <Slider.Range className="wr-absolute wr-h-full wr-rounded-lg wr-bg-red-500" />
       </Slider.Track>
       <Slider.Thumb
-        className="block h-[18px] w-[18px] cursor-pointer rounded-full bg-red-500 outline-none"
+        className="wr-block wr-h-[18px] wr-w-[18px] wr-cursor-pointer wr-rounded-full wr-bg-red-500 wr-outline-none"
         aria-label="Volume"
       />
     </Slider.Root>

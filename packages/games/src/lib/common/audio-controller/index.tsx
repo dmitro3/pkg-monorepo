@@ -24,7 +24,7 @@ export const AudioController: React.FC<{
   };
 
   return (
-    <div
+    (<div
       className={cn(
         "relative flex cursor-pointer items-center justify-center gap-2",
         className
@@ -40,7 +40,7 @@ export const AudioController: React.FC<{
       <Button
         variant="secondary"
         type="button"
-        className="h-9 w-9 p-0"
+        className="wr-h-9 wr-w-9 wr-p-0"
         onClick={() => {
           console.log("clicked");
 
@@ -55,7 +55,6 @@ export const AudioController: React.FC<{
           <img src={`${CDN_URL}/icons/icon-sound.svg`} />
         )}
       </Button>
-
       <div
         className={cn("transition-all duration-300", {
           "opacity-0": !isSliderOpen,
@@ -63,7 +62,7 @@ export const AudioController: React.FC<{
         })}
       >
         <Slider.Root
-          className="relative z-20 flex h-1 w-12 items-center rounded-lg bg-gray-300"
+          className="wr-relative wr-z-20 wr-flex wr-h-1 wr-w-12 wr-items-center wr-rounded-lg wr-bg-gray-300"
           value={[volume]}
           max={100}
           step={1}
@@ -71,17 +70,17 @@ export const AudioController: React.FC<{
           orientation="horizontal"
           onValueChange={handleVolumeChange}
         >
-          <Slider.Track className="relative flex-grow rounded-[9999px] bg-zinc-700">
-            <Slider.Range className="absolute h-full rounded-full bg-white" />
+          <Slider.Track className="wr-relative wr-flex-grow wr-rounded-[9999px] wr-bg-zinc-700">
+            <Slider.Range className="wr-absolute wr-h-full wr-rounded-full wr-bg-white" />
           </Slider.Track>
           <Slider.Thumb
-            className="absolute left-[-6px] top-1/2 block h-3 w-3 -translate-y-1/2 rounded-md bg-white"
+            className="wr-absolute wr-left-[-6px] wr-top-1/2 wr-block wr-h-3 wr-w-3 wr--translate-y-1/2 wr-rounded-md wr-bg-white"
             data-orientation="horizontal"
             aria-label="Volume"
           />
         </Slider.Root>
       </div>
-    </div>
+    </div>)
   );
 };
 
@@ -91,7 +90,7 @@ export const UnityAudioController: React.FC<{
   const { volume, onVolumeChange } = useAudioContext();
 
   return (
-    <div
+    (<div
       className={cn(
         "relative flex cursor-pointer items-center justify-center gap-2",
         className
@@ -100,7 +99,7 @@ export const UnityAudioController: React.FC<{
       <Button
         variant="secondary"
         type="button"
-        className="h-9 w-9 p-0"
+        className="wr-h-9 wr-w-9 wr-p-0"
         onClick={() => {
           volume > 0 ? onVolumeChange(0) : onVolumeChange(100);
         }}
@@ -111,6 +110,6 @@ export const UnityAudioController: React.FC<{
           <img src={`${CDN_URL}/icons/icon-sound.svg`} />
         )}
       </Button>
-    </div>
+    </div>)
   );
 };

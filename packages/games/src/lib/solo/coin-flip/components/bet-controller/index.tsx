@@ -52,8 +52,8 @@ export const BetController: React.FC<Props> = ({
 
   return (
     <BetControllerContainer>
-      <div className="max-lg:flex max-lg:flex-col">
-        <div className="mb-3">
+      <div className="wr-max-lg:flex wr-max-lg:flex-col">
+        <div className="wr-mb-3">
           <BetControllerTitle>Coin Flip</BetControllerTitle>
         </div>
 
@@ -73,16 +73,16 @@ export const BetController: React.FC<Props> = ({
             gameStatus == "PLAYING"
           }
         />
-        <div className="mb-6 grid grid-cols-2 gap-2">
+        <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "flex w-full items-center gap-1 rounded-lg bg-zinc-800 px-2 py-[10px] overflow-hidden"
+                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden"
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("font-semibold text-zinc-100")}>
+              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
                 ${toFormatted(maxPayout, 2)}
               </span>
             </div>
@@ -98,7 +98,7 @@ export const BetController: React.FC<Props> = ({
 
         <div>
           <Advanced>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="wr-grid wr-grid-cols-2 wr-gap-2">
               <StopGainFormField
                 isDisabled={
                   form.formState.isSubmitting ||
@@ -121,7 +121,7 @@ export const BetController: React.FC<Props> = ({
             <Button
               type="submit"
               variant={"success"}
-              className="w-full max-lg:-order-1 max-lg:mb-3.5"
+              className="wr-w-full wr-max-lg:-order-1 wr-max-lg:mb-3.5"
               size={"xl"}
               isLoading={
                 form.formState.isSubmitting || form.formState.isLoading
@@ -139,7 +139,7 @@ export const BetController: React.FC<Props> = ({
           <SkipButton />
         )}
       </div>
-      <footer className="flex items-center justify-between">
+      <footer className="wr-flex wr-items-center wr-justify-between">
         <AudioController />
       </footer>
     </BetControllerContainer>

@@ -12,7 +12,7 @@ export const WagerBalance = ({ className }: Props) => {
 
   return (
     <span
-      className={cn("mr-2 cursor-pointer", className)}
+      className={cn("wr-mr-2 wr-cursor-pointer", className)}
       // onClick={() => form.setValue("wager", data?.maxWager || 10)}
     >
       ${toFormatted(account?.balance || 0, 2)}
@@ -41,17 +41,17 @@ export const WagerInput = ({
     <NumberInput.Root {...rest}>
       <NumberInput.Container
         className={cn(
-          "border-none bg-zinc-950 px-2 py-[10px] text-base font-semibold leading-4",
+          "wr-border-none wr-bg-zinc-950 wr-px-2 wr-py-[10px] wr-text-base wr-font-semibold wr-leading-4",
           {
-            ["border border-solid border-red-600"]: !!hasError,
+            ["wr-border wr-border-solid wr-border-red-600"]: !!hasError,
           },
           containerClassName
         )}
       >
-        <span className="mt-[1px] text-lg">$</span>
+        <span className="wr-mt-[1px] wr-text-lg">$</span>
         <NumberInput.Input
           className={cn(
-            "z-10 border-none bg-transparent pl-1 text-base leading-4 outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0",
+            "wr-z-10 wr-border-none wr-bg-transparent wr-pl-1 wr-text-base wr-leading-4 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0",
             className
           )}
         />
@@ -78,7 +78,7 @@ export const WagerSetterButtons = ({
   isDisabled,
 }: WagerSetterButtonsProps) => {
   return (
-    <div className="flex items-center gap-1 ">
+    <div className="wr-flex wr-items-center wr-gap-1 wr-">
       <Button
         className={cn("w-full font-[500]", className)}
         type="button"
@@ -150,12 +150,12 @@ export const TotalWager = ({
   return (
     <div
       className={cn(
-        "flex w-full items-center gap-1 rounded-lg bg-zinc-800 px-2 py-[10px]",
+        "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]",
         containerClassName
       )}
     >
       <WagerCurrencyIcon />
-      <span className={cn("font-semibold text-zinc-100", className)}>
+      <span className={cn("wr-font-semibold wr-text-zinc-100", className)}>
         ${totalWager}
       </span>
     </div>
@@ -169,7 +169,7 @@ export const WagerCurrencyIcon = ({ className }: Props) => {
 
   return (
     <img
-      className={cn("mr-1 h-5 w-5", className)}
+      className={cn("wr-mr-1 wr-h-5 wr-w-5", className)}
       width={20}
       height={20}
       alt={`${currency.name}-icon`}

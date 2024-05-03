@@ -75,7 +75,9 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
             winMultiplier={WIN_MULTIPLIER}
           />
           <SceneContainer
-            className={cn("h-[640px]  max-md:h-[425px] lg:py-12 relative")}
+            className={cn(
+              "wr-h-[640px] wr- max-md:wr-h-[425px] lg:wr-py-12 wr-relative"
+            )}
             style={{
               backgroundImage: options?.scene?.backgroundImage,
             }}
@@ -84,7 +86,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
               <CoinFlip.Game {...props}>
                 <CoinFlip.LastBets />
                 <CoinFlip.Coin {...props} />
-                <div className="hidden lg:block">
+                <div className="wr-hidden wr-lg:block">
                   <CoinFlip.Controller />
                 </div>
               </CoinFlip.Game>

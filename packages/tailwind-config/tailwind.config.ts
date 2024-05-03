@@ -2,6 +2,7 @@ import type { Config } from "tailwindcss";
 
 const config: Omit<Config, "content"> = {
   plugins: [],
+  prefix: "wr-",
   theme: {
     extend: {
       colors: {
