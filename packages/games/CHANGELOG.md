@@ -1,5 +1,11 @@
 # @winrlabs/games
 
+## 2.5.0
+
+### Minor Changes
+
+- 292b34f: release
+
 ## 2.4.0
 
 ### Minor Changes
