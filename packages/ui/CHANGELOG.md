@@ -1,5 +1,11 @@
 # @winrlabs/ui
 
+## 1.3.0
+
+### Minor Changes
+
+- 292b34f: release
+
 ## 1.0.0
 
 ### Major Changes
