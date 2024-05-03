@@ -9,7 +9,7 @@ import {
   StopLossFormField,
   WagerFormField,
 } from "../../../common/controller";
-import { FormLabel, Button, cn } from "@winrlabs/ui";
+import { FormLabel, Button, cn, toFormatted } from "@winrlabs/ui";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
 import { Advanced } from "../../../common/advanced";
 import { useFormContext } from "react-hook-form";
@@ -86,7 +86,7 @@ export const BetController: React.FC<Props> = ({
             >
               <WagerCurrencyIcon />
               <span className={cn("font-semibold text-zinc-100")}>
-                ${maxPayout}
+                ${toFormatted(maxPayout, 2)}
               </span>
             </div>
           </div>

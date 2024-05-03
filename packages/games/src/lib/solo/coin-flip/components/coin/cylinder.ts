@@ -1,16 +1,26 @@
-import * as THREE from 'three';
+import * as THREE from "three";
+import { CDN_URL } from "../../../../constants";
 
 const getMaterials = () => {
   const loader = new THREE.TextureLoader();
 
   return [
-    new THREE.MeshBasicMaterial({ map: loader.load('/coin-flip/side.png') }),
-    new THREE.MeshBasicMaterial({ map: loader.load('/coin-flip/back.jpg') }),
-    new THREE.MeshBasicMaterial({ map: loader.load('/coin-flip/front.jpg') }),
+    new THREE.MeshBasicMaterial({
+      map: loader.load(`${CDN_URL}/coin-flip-2d/side.png`),
+    }),
+    new THREE.MeshBasicMaterial({
+      map: loader.load(`${CDN_URL}/coin-flip-2d/back.jpg`),
+    }),
+    new THREE.MeshBasicMaterial({
+      map: loader.load(`${CDN_URL}/coin-flip-2d/front.jpg`),
+    }),
   ];
 };
 
-const createCylinder = (): THREE.Mesh<THREE.CylinderGeometry, THREE.MeshBasicMaterial[]> => {
+const createCylinder = (): THREE.Mesh<
+  THREE.CylinderGeometry,
+  THREE.MeshBasicMaterial[]
+> => {
   const materials = getMaterials();
 
   const cylinder = new THREE.Mesh(
