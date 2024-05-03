@@ -1,10 +1,14 @@
 "use client";
 import * as React from "react";
 
-import { FormLabel, Button, cn, toDecimals } from "@winrlabs/ui";
+import { FormLabel, Button, cn, toDecimals, toFormatted } from "@winrlabs/ui";
 import { useFormContext } from "react-hook-form";
 import { Advanced } from "../../../../common/advanced";
-import { TotalWager } from "../../../../common/wager";
+import {
+  TotalWager,
+  WagerCurrency,
+  WagerCurrencyIcon,
+} from "../../../../common/wager";
 import {
   BetControllerTitle,
   BetCountFormField,
@@ -74,12 +78,12 @@ export const BetController: React.FC<Props> = ({
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "flex w-full items-center gap-1 rounded-lg bg-zinc-800 px-2 py-[10px]"
+                "flex w-full items-center gap-1 rounded-lg bg-zinc-800 px-2 py-[10px] overflow-hidden"
               )}
             >
-              {/* <WagerCurrencyIcon /> */}
+              <WagerCurrencyIcon />
               <span className={cn("font-semibold text-zinc-100")}>
-                ${maxPayout}
+                ${toFormatted(maxPayout, 2)}
               </span>
             </div>
           </div>

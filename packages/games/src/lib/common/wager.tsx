@@ -15,7 +15,7 @@ export const WagerBalance = ({ className }: Props) => {
       className={cn("mr-2 cursor-pointer", className)}
       // onClick={() => form.setValue("wager", data?.maxWager || 10)}
     >
-      ${account?.balance}
+      ${toFormatted(account?.balance || 0, 2)}
     </span>
   );
 };

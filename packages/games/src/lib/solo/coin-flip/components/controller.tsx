@@ -17,7 +17,7 @@ export const CoinFlipController = () => {
   const wager = form.watch("wager");
 
   return (
-    <div className="flex items-center lg:absolute lg:bottom-16 lg:left-1/2 lg:-translate-x-1/2 w-full max-w-[350px]">
+    <div className="flex items-center lg:absolute bottom-[56px] lg:left-1/2 lg:-translate-x-1/2 w-full max-w-[350px]">
       <FormField
         control={form.control}
         name="coinSide"
