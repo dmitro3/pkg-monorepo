@@ -3,7 +3,7 @@ import sharedConfig from "@winrlabs/tailwind-config";
 
 const config: Pick<Config, "prefix" | "presets" | "content" | "corePlugins"> = {
   content: ["./src/**/*.tsx"],
-  // prefix: "wr-",
+  prefix: "wr-",
   presets: [sharedConfig],
   corePlugins: {
     // preflight: false,

@@ -15,44 +15,44 @@ const config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: "hsl(var(--wr-border))",
+        input: "hsl(var(--wr-input))",
+        ring: "hsl(var(--wr-ring))",
+        background: "hsl(var(--wr-background))",
+        foreground: "hsl(var(--wr-foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "hsl(var(--wr-primary))",
+          foreground: "hsl(var(--wr-primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "hsl(var(--wr-secondary))",
+          foreground: "hsl(var(--wr-secondary-foreground))",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "hsl(var(--wr-destructive))",
+          foreground: "hsl(var(--wr-destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "hsl(var(--wr-muted))",
+          foreground: "hsl(var(--wr-muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "hsl(var(--wr-accent))",
+          foreground: "hsl(var(--wr-accent-foreground))",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "hsl(var(--wr-popover))",
+          foreground: "hsl(var(--wr-popover-foreground))",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "hsl(var(--wr-card))",
+          foreground: "hsl(var(--wr-card-foreground))",
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "var(--wr-radius)",
+        md: "calc(var(--wr-radius) - 2px)",
+        sm: "calc(var(--wr-radius) - 4px)",
       },
       keyframes: {
         "accordion-down": {
@@ -72,7 +72,7 @@ const config = {
   },
   plugins: [require("tailwindcss-animate")],
   corePlugins: {
-    preflight: false,
+    // preflight: false,
   },
   presets: [sharedConfig],
 } satisfies Config;
