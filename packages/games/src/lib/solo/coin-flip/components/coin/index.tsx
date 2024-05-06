@@ -84,7 +84,7 @@ export const Coin: React.FC<CoinProps> = ({
         } else if (coinFlipGameResults.length === curr) {
           updateCoinFlipGameResults([]);
           onAnimationCompleted && onAnimationCompleted();
-          setTimeout(() => updateGameStatus("ENDED"), 350);
+          setTimeout(() => updateGameStatus("ENDED"), 1000);
         } else {
           setTimeout(() => turn(curr), 350);
         }
