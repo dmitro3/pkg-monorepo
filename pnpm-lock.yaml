@@ -185,12 +185,18 @@ importers:
       '@types/three':
         specifier: ^0.150.1
         version: 0.150.2
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.1
       esbuild-plugin-svgr:
         specifier: ^2.1.0
         version: 2.1.0(esbuild@0.19.12)(typescript@5.4.5)
       react-hook-form:
         specifier: ^7.51.2
         version: 7.51.3(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.2.2
+        version: 2.3.0
       three:
         specifier: ^0.151.3
         version: 0.151.3

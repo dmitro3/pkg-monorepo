@@ -1,5 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
+
+export const twMerge = extendTailwindMerge({
+  prefix: "wr-ui-",
+});
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,7 +31,7 @@ export const toDecimals = (amount: number | string, decimals = 2): number => {
 export function adjustForDecimals(
   _amount: bigint,
   decimalsDiv: number,
-  decimalsMul: number
+  decimalsMul: number,
 ): bigint {
   const div = 10 ** decimalsMul / 10 ** decimalsDiv;
 
