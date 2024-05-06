@@ -1,7 +1,8 @@
 "use client";
 
-import { INumberInputContext, NumberInput, cn } from "@winrlabs/ui";
+import { INumberInputContext, NumberInput } from "@winrlabs/ui";
 import React from "react";
+import { cn } from "../utils/style";
 
 interface Props extends INumberInputContext {
   children?: React.ReactNode;

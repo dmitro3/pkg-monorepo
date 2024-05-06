@@ -5,9 +5,9 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  cn,
 } from "@winrlabs/ui";
 import useRangeGameStore from "../store";
+import { cn } from "../../../../lib/utils/style";
 
 export const TextRandomizer = () => {
   const { rangeGameResults, currentAnimationCount } = useRangeGameStore([

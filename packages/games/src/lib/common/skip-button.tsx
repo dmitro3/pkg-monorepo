@@ -1,6 +1,7 @@
-import { Button, ButtonProps, cn } from "@winrlabs/ui";
+import { Button, ButtonProps } from "@winrlabs/ui";
 import { CDN_URL } from "../constants";
 import { useGameSkip } from "../game-provider";
+import { cn } from "../utils/style";
 
 export const SkipButton: React.FC = ({
   variant,

@@ -2,9 +2,10 @@
 
 import React from "react";
 import * as Slider from "@radix-ui/react-slider";
-import { Button, cn, useOutsideClick } from "@winrlabs/ui";
+import { Button, useOutsideClick } from "@winrlabs/ui";
 import { useAudioContext } from "../../hooks/use-audio-effect";
 import { CDN_URL } from "../../constants";
+import { cn } from "../../utils/style";
 
 export const AudioController: React.FC<{
   className?: string;

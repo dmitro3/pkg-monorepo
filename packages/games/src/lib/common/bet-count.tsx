@@ -1,7 +1,7 @@
 "use client";
 
 import { INumberInputContext, NumberInput } from "@winrlabs/ui";
-import { cn } from "@winrlabs/ui";
+import { cn } from "../utils/style";
 
 interface Props extends INumberInputContext {
   className?: string;

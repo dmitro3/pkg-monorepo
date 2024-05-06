@@ -1,6 +1,6 @@
-import { cn } from "@winrlabs/ui";
 import { CoinFlipGameResult, CoinSide, useCoinFlipGameStore } from "..";
 import { CDN_URL } from "../../../constants";
+import { cn } from "../../../utils/style";
 
 const LastBet = ({ result }: { result: CoinFlipGameResult }) => {
   return (

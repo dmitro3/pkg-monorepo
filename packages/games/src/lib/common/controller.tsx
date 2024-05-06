@@ -1,6 +1,5 @@
 import { useFormContext } from "react-hook-form";
 import {
-  cn,
   FormField,
   FormControl,
   FormLabel,
@@ -18,6 +17,7 @@ import {
 } from "./wager";
 import * as React from "react";
 import { WagerCurrencyIcon } from "./wager";
+import { cn } from "../utils/style";
 
 interface WagerFormFieldProps {
   minWager: number;
@@ -35,7 +35,9 @@ export const BetControllerTitle: React.FC<Props> = ({
   children,
   className,
 }) => {
-  return <h1 className={cn("text-lg font-bold", className)}>{children}</h1>;
+  return (
+    <h1 className={cn("wr-text-lg wr-font-bold", className)}>{children}</h1>
+  );
 };
 
 export const BetCountFormField: React.FC<{
@@ -152,7 +154,7 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
   const form = useFormContext();
 
   return (
-    (<FormField
+    <FormField
       control={form.control}
       name="wager"
       render={({ field }) => (
@@ -184,6 +186,6 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
           <FormMessage />
         </FormItem>
       )}
-    />)
+    />
   );
 };

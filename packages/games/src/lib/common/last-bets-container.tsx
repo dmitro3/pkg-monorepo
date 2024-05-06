@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@winrlabs/ui";
 import React from "react";
+import { cn } from "../utils/style";
 
 export const LastBetsContainer: React.FC<{
   children: React.ReactNode;

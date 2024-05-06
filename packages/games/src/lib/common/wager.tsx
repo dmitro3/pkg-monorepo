@@ -1,6 +1,7 @@
-import { INumberInputContext, NumberInput, cn, Button } from "@winrlabs/ui";
+import { INumberInputContext, NumberInput, Button } from "@winrlabs/ui";
 import { toFormatted } from "../utils/web3";
 import { useGameOptions } from "../game-provider";
+import { cn } from "../utils/style";
 
 interface Props {
   children?: React.ReactNode;

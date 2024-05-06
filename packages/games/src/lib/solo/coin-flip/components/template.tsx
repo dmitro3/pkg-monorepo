@@ -10,10 +10,11 @@ import {
 import { CoinFlipGameProps } from "./game";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, cn } from "@winrlabs/ui";
+import { Form } from "@winrlabs/ui";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { BetController } from "./bet-controller";
 import { CoinFlip } from "..";
+import { cn } from "../../../utils/style";
 
 type TemplateOptions = {
   scene?: {

@@ -1,6 +1,6 @@
-import { cn } from "@winrlabs/ui";
 import { useRangeGameStore } from "..";
 import { LastBetsContainer } from "../../../common/last-bets-container";
+import { cn } from "../../../../lib/utils/style";
 
 export const RangeLastBets: React.FC = () => {
   const { lastBets } = useRangeGameStore(["lastBets"]);

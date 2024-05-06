@@ -46,8 +46,10 @@
     "@radix-ui/react-slider": "^1.1.2",
     "@tweenjs/tween.js": "^19.0.0",
     "@types/three": "^0.150.1",
+    "clsx": "^2.1.0",
     "esbuild-plugin-svgr": "^2.1.0",
     "react-hook-form": "^7.51.2",
+    "tailwind-merge": "^2.2.2",
     "three": "^0.151.3",
     "zod": "^3.22.4",
     "zustand": "^4.4.1"

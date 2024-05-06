@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
-  cn,
   FormControl,
   FormField,
   FormItem,
@@ -12,6 +11,7 @@ import {
 } from "@winrlabs/ui";
 import { RangeForm } from "../constant";
 import { useFormContext } from "react-hook-form";
+import { cn } from "../../../../lib/utils/style";
 
 export interface RangeControllerProps {
   winMultiplier: number;

@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@winrlabs/ui";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { RangeGameProps } from "./game";
 import { Dice } from "../index";
@@ -13,6 +12,7 @@ import { Form } from "@winrlabs/ui";
 import { BetController } from "./bet-controller";
 import { toDecimals } from "../../../utils/web3";
 import { useMemo } from "react";
+import { cn } from "../../../../lib/utils/style";
 
 type TemplateOptions = {
   slider?: {

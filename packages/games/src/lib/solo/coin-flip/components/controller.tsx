@@ -1,15 +1,10 @@
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  cn,
-  toFormatted,
-} from "@winrlabs/ui";
+import { FormControl, FormField, FormItem, toFormatted } from "@winrlabs/ui";
 import { CoinSide, WIN_MULTIPLIER } from "../constants";
 import { useFormContext } from "react-hook-form";
 import { CoinFlipForm } from "../types";
 import { CDN_URL } from "../../../constants";
+import { cn } from "../../../utils/style";
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlipForm;

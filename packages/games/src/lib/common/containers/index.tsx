@@ -1,7 +1,7 @@
 import * as Slider from "@radix-ui/react-slider";
-import { cn } from "@winrlabs/ui";
 import { useFormContext } from "react-hook-form";
 import { AudioContextProvider } from "../../hooks/use-audio-effect";
+import { cn } from "../../utils/style";
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
   children?: React.ReactNode;

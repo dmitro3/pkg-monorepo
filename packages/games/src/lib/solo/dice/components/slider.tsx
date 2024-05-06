@@ -1,7 +1,8 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
-import { cn, FormControl, FormField, FormItem } from "@winrlabs/ui";
+import { FormControl, FormField, FormItem } from "@winrlabs/ui";
 import { useFormContext } from "react-hook-form";
 import { RangeForm } from "../constant";
+import { cn } from "../../../../lib/utils/style";
 
 export interface SliderTrackOptions {
   color?: string;
