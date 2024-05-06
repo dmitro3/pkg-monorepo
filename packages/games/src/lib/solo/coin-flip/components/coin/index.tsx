@@ -57,7 +57,7 @@ export const Coin: React.FC<CoinProps> = ({
     if (coinFlipGameResults.length == 0) return;
 
     const turn = (i = 0) => {
-      const side = coinFlipGameResults[i]?.coinSide || 0;
+      const side = Number(coinFlipGameResults[i]?.coinSide) || 0;
       const payout = coinFlipGameResults[i]?.payout || 0;
       const payoutInUsd = coinFlipGameResults[i]?.payoutInUsd || 0;
 
