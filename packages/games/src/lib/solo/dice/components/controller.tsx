@@ -11,6 +11,7 @@ import {
 } from "../../../ui/form";
 import { NumberInput } from "../../../ui/number-input";
 import { IconChevronUp } from "../../../svgs";
+import { useRangeGameStore } from "..";
 
 export interface RangeControllerProps {
   winMultiplier: number;
@@ -23,6 +24,8 @@ export const Controller: React.FC<RangeControllerProps> = ({
 }) => {
   const form = useFormContext() as RangeForm;
 
+  const { gameStatus } = useRangeGameStore(["gameStatus"]);
+
   return (
     <div className="wr-relative wr-flex wr-w-full wr-shrink-0 wr-items-end wr-justify-center wr-gap-2 wr-">
       <FormField
@@ -33,7 +36,12 @@ export const Controller: React.FC<RangeControllerProps> = ({
             <FormControl>
               <NumberInput.Root
                 {...field}
-                isDisabled={disabled}
+                isDisabled={
+                  disabled ||
+                  form.formState.isSubmitting ||
+                  form.formState.isLoading ||
+                  gameStatus == "PLAYING"
+                }
                 onChange={(val) => {
                   field.onChange(val);
 
@@ -85,7 +93,12 @@ export const Controller: React.FC<RangeControllerProps> = ({
             shouldValidate: true,
           });
         }}
-        disabled={form.formState.isSubmitting || form.formState.isLoading}
+        disabled={
+          disabled ||
+          form.formState.isSubmitting ||
+          form.formState.isLoading ||
+          gameStatus == "PLAYING"
+        }
       >
         <IconChevronUp
           className={cn(
@@ -106,7 +119,10 @@ export const Controller: React.FC<RangeControllerProps> = ({
               <NumberInput.Root
                 {...field}
                 isDisabled={
-                  form.formState.isSubmitting || form.formState.isLoading
+                  disabled ||
+                  form.formState.isSubmitting ||
+                  form.formState.isLoading ||
+                  gameStatus == "PLAYING"
                 }
                 onChange={(val) => {
                   field.onChange(val);

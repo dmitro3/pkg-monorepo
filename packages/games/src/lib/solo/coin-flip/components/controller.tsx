@@ -6,11 +6,14 @@ import { CDN_URL } from "../../../constants";
 import { cn } from "../../../utils/style";
 import { toFormatted } from "../../../utils/web3";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
+import { useCoinFlipGameStore } from "..";
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlipForm;
 
   const wager = form.watch("wager");
+
+  const { gameStatus } = useCoinFlipGameStore(["gameStatus"]);
 
   return (
     <div className="wr-flex wr-items-center lg:wr-absolute wr-bottom-[56px] lg:wr-left-1/2 lg:-wr-translate-x-1/2 wr-w-full wr-max-w-[412px]">
@@ -24,6 +27,11 @@ export const CoinFlipController = () => {
                 onValueChange={field.onChange}
                 className="wr-grid wr-h-full wr-w-full wr-grid-cols-2 wr-items-center wr-justify-center wr-gap-0 wr-rounded-md wr-bg-unity-white-15 wr-font-semibold lg:wr-w-[412px]"
                 defaultValue={field.value as unknown as string}
+                disabled={
+                  form.formState.isSubmitting ||
+                  form.formState.isLoading ||
+                  gameStatus == "PLAYING"
+                }
               >
                 <FormItem className="wr-mb-0 wr-h-full wr-text-center">
                   <FormControl>

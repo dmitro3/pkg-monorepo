@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form";
 import { RangeForm } from "../constant";
 import { cn } from "../../../../lib/utils/style";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
+import { useRangeGameStore } from "..";
 
 export interface SliderTrackOptions {
   color?: string;
@@ -22,6 +23,8 @@ const MAX_VALUE = 95;
 export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
   const form = useFormContext() as RangeForm;
 
+  const { gameStatus } = useRangeGameStore(["gameStatus"]);
+
   const rollValue = form.watch("rollValue");
 
   const rollType = form.watch("rollType");
@@ -38,7 +41,11 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                 className={cn(
                   "wr-relative wr-flex wr-h-6 wr-cursor-pointer wr-touch-none wr-select-none wr-items-center",
                   {
-                    "wr-cursor-not-allowed": isLoading,
+                    "wr-pointer-events-none wr-cursor-not-allowed":
+                      form.formState.isSubmitting ||
+                      form.formState.isLoading ||
+                      isLoading ||
+                      gameStatus == "PLAYING",
                   }
                 )}
                 defaultValue={[rollValue]}
