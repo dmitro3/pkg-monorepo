@@ -24,9 +24,9 @@ export const AudioController: React.FC<{
   };
 
   return (
-    (<div
+    <div
       className={cn(
-        "relative flex cursor-pointer items-center justify-center gap-2",
+        "wr-relative wr-flex wr-cursor-pointer wr-items-center wr-justify-center wr-gap-2",
         className
       )}
       ref={ref}
@@ -56,9 +56,9 @@ export const AudioController: React.FC<{
         )}
       </Button>
       <div
-        className={cn("transition-all duration-300", {
-          "opacity-0": !isSliderOpen,
-          "opacity-100": isSliderOpen,
+        className={cn("wr-transition-all wr-duration-300", {
+          "wr-opacity-0": !isSliderOpen,
+          "wr-opacity-100": isSliderOpen,
         })}
       >
         <Slider.Root
@@ -80,7 +80,7 @@ export const AudioController: React.FC<{
           />
         </Slider.Root>
       </div>
-    </div>)
+    </div>
   );
 };
 
@@ -90,9 +90,9 @@ export const UnityAudioController: React.FC<{
   const { volume, onVolumeChange } = useAudioContext();
 
   return (
-    (<div
+    <div
       className={cn(
-        "relative flex cursor-pointer items-center justify-center gap-2",
+        "wr-relative wr-flex wr-cursor-pointer wr-items-center wr-justify-center wr-gap-2",
         className
       )}
     >
@@ -110,6 +110,6 @@ export const UnityAudioController: React.FC<{
           <img src={`${CDN_URL}/icons/icon-sound.svg`} />
         )}
       </Button>
-    </div>)
+    </div>
   );
 };

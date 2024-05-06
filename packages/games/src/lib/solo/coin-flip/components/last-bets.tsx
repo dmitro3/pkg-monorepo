@@ -12,7 +12,7 @@ const LastBet = ({ result }: { result: CoinFlipGameResult }) => {
         }
       )}
     >
-      {result.coinSide === CoinSide.HEADS ? (
+      {Number(result.coinSide) === CoinSide.HEADS ? (
         <img
           src={`${CDN_URL}/coin-flip-2d/eth.png`}
           width={20}
@@ -28,7 +28,7 @@ const LastBet = ({ result }: { result: CoinFlipGameResult }) => {
         />
       )}
       <div className="wr-ml-1 wr-text-zinc-100">
-        {result.coinSide === CoinSide.HEADS ? "ETH" : "BTC"}
+        {Number(result.coinSide) === CoinSide.HEADS ? "ETH" : "BTC"}
       </div>
     </div>
   );

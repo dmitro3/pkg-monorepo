@@ -4,73 +4,73 @@
 
 @layer base {
   :root {
-    --wr-background: 0 0% 100%;
-    --wr-foreground: 224 71.4% 4.1%;
+    --wr-ui-background: 0 0% 100%;
+    --wr-ui-foreground: 224 71.4% 4.1%;
 
-    --wr-card: 0 0% 100%;
-    --wr-card-foreground: 224 71.4% 4.1%;
+    --wr-ui-card: 0 0% 100%;
+    --wr-ui-card-foreground: 224 71.4% 4.1%;
 
-    --wr-popover: 0 0% 100%;
-    --wr-popover-foreground: 224 71.4% 4.1%;
+    --wr-ui-popover: 0 0% 100%;
+    --wr-ui-popover-foreground: 224 71.4% 4.1%;
 
-    --wr-primary: 220.9 39.3% 11%;
-    --wr-primary-foreground: 210 20% 98%;
+    --wr-ui-primary: 220.9 39.3% 11%;
+    --wr-ui-primary-foreground: 210 20% 98%;
 
-    --wr-secondary: 220 14.3% 95.9%;
-    --wr-secondary-foreground: 220.9 39.3% 11%;
+    --wr-ui-secondary: 220 14.3% 95.9%;
+    --wr-ui-secondary-foreground: 220.9 39.3% 11%;
 
-    --wr-muted: 220 14.3% 95.9%;
-    --wr-muted-foreground: 220 8.9% 46.1%;
+    --wr-ui-muted: 220 14.3% 95.9%;
+    --wr-ui-muted-foreground: 220 8.9% 46.1%;
 
-    --wr-accent: 220 14.3% 95.9%;
-    --wr-accent-foreground: 220.9 39.3% 11%;
+    --wr-ui-accent: 220 14.3% 95.9%;
+    --wr-ui-accent-foreground: 220.9 39.3% 11%;
 
-    --wr-destructive: 0 84.2% 60.2%;
-    --wr-destructive-foreground: 210 20% 98%;
+    --wr-ui-destructive: 0 84.2% 60.2%;
+    --wr-ui-destructive-foreground: 210 20% 98%;
 
-    --wr-border: 220 13% 91%;
-    --wr-input: 220 13% 91%;
-    --wr-ring: 224 71.4% 4.1%;
+    --wr-ui-border: 220 13% 91%;
+    --wr-ui-input: 220 13% 91%;
+    --wr-ui-ring: 224 71.4% 4.1%;
 
-    --wr-radius: 0.5rem;
+    --wr-ui-radius: 0.5rem;
   }
 
   .dark {
-    --wr-background: 224 71.4% 4.1%;
-    --wr-foreground: 210 20% 98%;
+    --wr-ui-background: 224 71.4% 4.1%;
+    --wr-ui-foreground: 210 20% 98%;
 
-    --wr-card: 224 71.4% 4.1%;
-    --wr-card-foreground: 210 20% 98%;
+    --wr-ui-card: 224 71.4% 4.1%;
+    --wr-ui-card-foreground: 210 20% 98%;
 
-    --wr-popover: 224 71.4% 4.1%;
-    --wr-popover-foreground: 210 20% 98%;
+    --wr-ui-popover: 224 71.4% 4.1%;
+    --wr-ui-popover-foreground: 210 20% 98%;
 
-    --wr-primary: 210 20% 98%;
-    --wr-primary-foreground: 220.9 39.3% 11%;
+    --wr-ui-primary: 210 20% 98%;
+    --wr-ui-primary-foreground: 220.9 39.3% 11%;
 
-    --wr-secondary: 215 27.9% 16.9%;
-    --wr-secondary-foreground: 210 20% 98%;
+    --wr-ui-secondary: 215 27.9% 16.9%;
+    --wr-ui-secondary-foreground: 210 20% 98%;
 
-    --wr-muted: 215 27.9% 16.9%;
-    --wr-muted-foreground: 217.9 10.6% 64.9%;
+    --wr-ui-muted: 215 27.9% 16.9%;
+    --wr-ui-muted-foreground: 217.9 10.6% 64.9%;
 
-    --wr-accent: 215 27.9% 16.9%;
-    --wr-accent-foreground: 210 20% 98%;
+    --wr-ui-accent: 215 27.9% 16.9%;
+    --wr-ui-accent-foreground: 210 20% 98%;
 
-    --wr-destructive: 0 62.8% 30.6%;
-    --wr-destructive-foreground: 210 20% 98%;
+    --wr-ui-destructive: 0 62.8% 30.6%;
+    --wr-ui-destructive-foreground: 210 20% 98%;
 
-    --wr-border: 215 27.9% 16.9%;
-    --wr-input: 215 27.9% 16.9%;
-    --wr-ring: 216 12.2% 83.9%;
+    --wr-ui-border: 215 27.9% 16.9%;
+    --wr-ui-input: 215 27.9% 16.9%;
+    --wr-ui-ring: 216 12.2% 83.9%;
   }
 }
 
 @layer base {
   * {
-    @apply wr-border-border;
+    @apply wr-ui-border-border;
   }
   body {
-    @apply wr-bg-background wr-text-foreground;
+    @apply wr-ui-bg-background wr-ui-text-foreground;
   }
 }

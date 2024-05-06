@@ -18,7 +18,7 @@ const TooltipContent = React.forwardRef<
     ref={ref}
     sideOffset={sideOffset}
     className={cn(
-      "wr-z-50 wr-overflow-hidden wr-rounded-md wr-border wr-border-zinc-800 wr-bg-zinc-900 wr-px-3 wr-py-1.5 wr-text-sm wr-text-white wr-shadow-md wr-animate-in wr-fade-in-0 wr-zoom-in-95 wr-data-[state=closed]:animate-out wr-data-[state=closed]:fade-out-0 wr-data-[state=closed]:zoom-out-95 wr-data-[side=bottom]:slide-in-from-top-2 wr-data-[side=left]:slide-in-from-right-2 wr-data-[side=right]:slide-in-from-left-2 wr-data-[side=top]:slide-in-from-bottom-2",
+      "wr-ui-z-50 wr-ui-overflow-hidden wr-ui-rounded-md wr-ui-border wr-ui-border-zinc-800 wr-ui-bg-zinc-900 wr-ui-px-3 wr-ui-py-1.5 wr-ui-text-sm wr-ui-text-white wr-ui-shadow-md wr-ui-animate-in wr-ui-fade-in-0 wr-ui-zoom-in-95 wr-ui-data-[state=closed]:animate-out wr-ui-data-[state=closed]:fade-out-0 wr-ui-data-[state=closed]:zoom-out-95 wr-ui-data-[side=bottom]:slide-in-from-top-2 wr-ui-data-[side=left]:slide-in-from-right-2 wr-ui-data-[side=right]:slide-in-from-left-2 wr-ui-data-[side=top]:slide-in-from-bottom-2",
       className
     )}
     {...props}

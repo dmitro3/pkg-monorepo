@@ -80,7 +80,7 @@ export const WagerSetterButtons = ({
   return (
     <div className="wr-flex wr-items-center wr-gap-1 wr-">
       <Button
-        className={cn("w-full font-[500]", className)}
+        className={cn("wr-w-full wr-font-[500]", className)}
         type="button"
         disabled={isDisabled}
         variant={"secondary"}
@@ -91,7 +91,7 @@ export const WagerSetterButtons = ({
         MIN
       </Button>
       <Button
-        className={cn("w-full font-[500]", className)}
+        className={cn("wr-w-full wr-font-[500]", className)}
         type="button"
         disabled={isDisabled}
         variant={"secondary"}
@@ -105,7 +105,7 @@ export const WagerSetterButtons = ({
         1/3
       </Button>
       <Button
-        className={cn("w-full font-[500]", className)}
+        className={cn("wr-w-full wr-font-[500]", className)}
         type="button"
         disabled={isDisabled}
         variant={"secondary"}
@@ -119,7 +119,7 @@ export const WagerSetterButtons = ({
         2x
       </Button>
       <Button
-        className={cn("w-full font-[500]", className)}
+        className={cn("wr-w-full wr-font-[500]", className)}
         type="button"
         disabled={isDisabled}
         variant={"secondary"}
