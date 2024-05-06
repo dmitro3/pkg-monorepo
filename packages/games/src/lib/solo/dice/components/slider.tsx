@@ -1,8 +1,8 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
-import { FormControl, FormField, FormItem } from "@winrlabs/ui";
 import { useFormContext } from "react-hook-form";
 import { RangeForm } from "../constant";
 import { cn } from "../../../../lib/utils/style";
+import { FormControl, FormField, FormItem } from "../../../ui/form";
 
 export interface SliderTrackOptions {
   color?: string;
@@ -70,7 +70,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                 >
                   <SliderPrimitive.Range
                     className={cn(
-                      "wr-absolute wr-h-full wr-rounded-sm wr- wr-transition-all wr-duration-300 wr-ease-linear"
+                      "wr-absolute wr-h-full wr-rounded-sm wr-transition-all wr-duration-300 wr-ease-linear"
                     )}
                     style={{
                       background:
@@ -79,10 +79,10 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                   />
                 </SliderPrimitive.Track>
                 <SliderPrimitive.Thumb
-                  className="wr-relative wr-grid wr-h-16 wr-w-16 wr-place-items-center wr-rounded-[10px] wr-bg-gradient-to-b wr-from-white wr-to-[#C5C5CC] wr-shadow-[0_1px_5px] wr-focus:shadow-[0_2px_10px] wr-focus:outline-none wr-focus:ring-0"
+                  className="wr-relative wr-grid wr-h-16 wr-w-16 wr-place-items-center wr-rounded-[10px] wr-bg-gradient-to-b wr-from-white wr-to-[#C5C5CC] wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
                   aria-label="Volume"
                 >
-                  <div className="wr-absolute wr--top-[50px] wr-text-4xl wr-font-bold">
+                  <div className="wr-absolute -wr-top-[50px] wr-text-4xl wr-font-bold">
                     {rollValue <= MAX_VALUE ? rollValue : MIN_VALUE}
                   </div>
                   <div className="wr-flex wr-gap-[6px]">

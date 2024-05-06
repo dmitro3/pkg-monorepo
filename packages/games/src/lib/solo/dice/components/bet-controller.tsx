@@ -9,11 +9,10 @@ import {
   StopLossFormField,
   WagerFormField,
 } from "../../../common/controller";
-import { FormLabel, Button, toFormatted } from "@winrlabs/ui";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
 import { Advanced } from "../../../common/advanced";
 import { useFormContext } from "react-hook-form";
-import { toDecimals } from "../../../utils/web3";
+import { toDecimals, toFormatted } from "../../../utils/web3";
 import { RangeForm } from "../constant";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { useRangeGameStore } from "..";
@@ -21,6 +20,8 @@ import { useGameSkip } from "../../../game-provider";
 import { SkipButton } from "../../../common/skip-button";
 import { AudioController } from "../../../common/audio-controller";
 import { cn } from "../../../utils/style";
+import { FormLabel } from "../../../ui/form";
+import { Button } from "../../../ui/button";
 // import { AudioController } from "@/components/common/audio-controller";
 // import { PreBetButton } from "@/app/(games)/_components/bet-button";
 

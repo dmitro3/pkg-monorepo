@@ -1,6 +1,5 @@
 import "./globals.css";
 import "@winrlabs/games/dist/index.css";
-import "@winrlabs/ui/dist/index.css";
 
 import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";

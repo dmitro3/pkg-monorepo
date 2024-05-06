@@ -1,10 +1,11 @@
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { FormControl, FormField, FormItem, toFormatted } from "@winrlabs/ui";
 import { CoinSide, WIN_MULTIPLIER } from "../constants";
 import { useFormContext } from "react-hook-form";
 import { CoinFlipForm } from "../types";
 import { CDN_URL } from "../../../constants";
 import { cn } from "../../../utils/style";
+import { toFormatted } from "../../../utils/web3";
+import { FormControl, FormField, FormItem } from "../../../ui/form";
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlipForm;
@@ -12,7 +13,7 @@ export const CoinFlipController = () => {
   const wager = form.watch("wager");
 
   return (
-    <div className="wr-flex wr-items-center wr-lg:absolute wr-bottom-[56px] wr-lg:left-1/2 wr-lg:-translate-x-1/2 wr-w-full wr-max-w-[350px]">
+    <div className="wr-flex wr-items-center lg:wr-absolute wr-bottom-[56px] lg:wr-left-1/2 lg:-wr-translate-x-1/2 wr-w-full wr-max-w-[412px]">
       <FormField
         control={form.control}
         name="coinSide"
@@ -21,7 +22,7 @@ export const CoinFlipController = () => {
             <FormControl>
               <RadioGroupPrimitive.Root
                 onValueChange={field.onChange}
-                className="wr-grid wr-h-full wr-w-full wr-grid-cols-2 wr-items-center wr-justify-center wr-gap-0 wr-rounded-md wr-bg-unity-white-15 wr-font-semibold wr-lg:w-[412px]"
+                className="wr-grid wr-h-full wr-w-full wr-grid-cols-2 wr-items-center wr-justify-center wr-gap-0 wr-rounded-md wr-bg-unity-white-15 wr-font-semibold lg:wr-w-[412px]"
                 defaultValue={field.value as unknown as string}
               >
                 <FormItem className="wr-mb-0 wr-h-full wr-text-center">

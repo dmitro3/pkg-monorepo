@@ -109,18 +109,20 @@ export const Coin: React.FC<CoinProps> = ({
     skipRef.current = isAnimationSkipped;
   }, [isAnimationSkipped]);
 
-  return (<>
-    <div className="wr-absolute wr-top-[40%] wr-left-1/2 wr--translate-x-1/2 wr--translate-y-1/2 wr-max-md:scale-75">
-      <Player
-        ref={lottieRef}
-        src={CoinConfetti}
-        style={{
-          width: "700px",
-          height: "700px",
-          opacity: gameStatus == "IDLE" || gameStatus == "ENDED" ? 0 : 1,
-        }}
-      />
-    </div>
-    <Canvas width={width} height={height} onLoad={handleLoad} />
-  </>);
+  return (
+    <>
+      <div className="wr-absolute wr-top-[40%] wr-left-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 max-md:wr-scale-75">
+        <Player
+          ref={lottieRef}
+          src={CoinConfetti}
+          style={{
+            width: "700px",
+            height: "700px",
+            opacity: gameStatus == "IDLE" || gameStatus == "ENDED" ? 0 : 1,
+          }}
+        />
+      </div>
+      <Canvas width={width} height={height} onLoad={handleLoad} />
+    </>
+  );
 };

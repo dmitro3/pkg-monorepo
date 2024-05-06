@@ -1,4 +1,6 @@
-import { INumberInputContext, NumberInput, Button } from "@winrlabs/ui";
+import { INumberInputContext, NumberInput } from "../ui/number-input";
+import { Button } from "../ui/button";
+
 import { toFormatted } from "../utils/web3";
 import { useGameOptions } from "../game-provider";
 import { cn } from "../utils/style";

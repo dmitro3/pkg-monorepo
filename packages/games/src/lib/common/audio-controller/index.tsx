@@ -2,10 +2,11 @@
 
 import React from "react";
 import * as Slider from "@radix-ui/react-slider";
-import { Button, useOutsideClick } from "@winrlabs/ui";
 import { useAudioContext } from "../../hooks/use-audio-effect";
 import { CDN_URL } from "../../constants";
 import { cn } from "../../utils/style";
+import { Button } from "../../ui/button";
+import { useOutsideClick } from "../../hooks/use-outside-click";
 
 export const AudioController: React.FC<{
   className?: string;
@@ -75,7 +76,7 @@ export const AudioController: React.FC<{
             <Slider.Range className="wr-absolute wr-h-full wr-rounded-full wr-bg-white" />
           </Slider.Track>
           <Slider.Thumb
-            className="wr-absolute wr-left-[-6px] wr-top-1/2 wr-block wr-h-3 wr-w-3 wr--translate-y-1/2 wr-rounded-md wr-bg-white"
+            className="wr-absolute wr-left-[-6px] wr-top-1/2 wr-block wr-h-3 wr-w-3 -wr-translate-y-1/2 wr-rounded-md wr-bg-white"
             data-orientation="horizontal"
             aria-label="Volume"
           />

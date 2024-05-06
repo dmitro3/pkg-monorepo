@@ -49,10 +49,10 @@ const CoinCanvas: React.FC<CoinCanvasProps> = ({
   }, [canvas, width, height, onLoad, initialized]);
 
   return (
-    (<div className="wr-absolute wr-left-1/2 wr-top-[45%] wr--translate-x-1/2 wr--translate-y-1/2 wr-w-[250px] wr-h-[250px] wr-max-md:scale-75 wr-max-md:top-1/2">
-      <div className="wr-absolute wr-z-[0] wr-top-[50%] wr-left-[50%] wr--translate-x-1/2 wr--translate-y-1/2 wr-w-[250px] wr-h-[250px] wr-bg-white wr-opacity-40 wr-blur-[50px]" />
+    <div className="wr-absolute wr-left-1/2 wr-top-[45%] -wr-translate-x-1/2 -wr-translate-y-1/2 wr-w-[250px] wr-h-[250px] max-md:wr-scale-75 max-md:wr-top-1/2">
+      <div className="wr-absolute wr-z-[0] wr-top-[50%] wr-left-[50%] -wr-translate-x-1/2 -wr-translate-y-1/2 wr-w-[250px] wr-h-[250px] wr-bg-white wr-opacity-40 wr-blur-[50px]" />
       <canvas ref={canvas} className="wr-relative wr-z-[1]" />
-    </div>)
+    </div>
   );
 };
 

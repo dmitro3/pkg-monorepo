@@ -1,7 +1,7 @@
-import { Button, ButtonProps } from "@winrlabs/ui";
 import { useFormContext } from "react-hook-form";
 import { useGameOptions } from "../game-provider";
 import { cn } from "../utils/style";
+import { Button, ButtonProps } from "../ui/button";
 
 export const PreBetButton = ({
   children,

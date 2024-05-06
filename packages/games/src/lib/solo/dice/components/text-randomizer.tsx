@@ -1,13 +1,13 @@
 "use client";
 import * as React from "react";
+import useRangeGameStore from "../store";
+import { cn } from "../../../../lib/utils/style";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@winrlabs/ui";
-import useRangeGameStore from "../store";
-import { cn } from "../../../../lib/utils/style";
+} from "../../../ui/tooltip";
 
 export const TextRandomizer = () => {
   const { rangeGameResults, currentAnimationCount } = useRangeGameStore([
@@ -49,7 +49,7 @@ export const TextRandomizer = () => {
           >
             <span
               className={cn(
-                "wr-absolute wr-bottom-6 wr- wr-z-10 -wr-translate-x-1/2 wr-rounded-lg wr-p-2 wr-text-4xl wr-font-bold wr-transition-all",
+                "wr-absolute wr-bottom-6 wr-z-10 -wr-translate-x-1/2 wr-rounded-lg wr-p-2 wr-text-4xl wr-font-bold wr-transition-all",
                 {
                   "wr-bg-lime-600": currentResult?.payout > 0,
                   "wr-bg-red-600": currentResult?.payout <= 0,
@@ -72,7 +72,7 @@ export const TextRandomizer = () => {
           key={key}
           style={{ left: `${result.resultNumber}%` }}
           className={cn(
-            "wr-absolute wr- wr-bottom-[-40px] wr-h-1.5 wr-w-1.5 -wr-translate-x-1/2 wr-rounded-full wr-opacity-0 wr-transition-all",
+            "wr-absolute wr-bottom-[-40px] wr-h-1.5 wr-w-1.5 -wr-translate-x-1/2 wr-rounded-full wr-opacity-0 wr-transition-all",
             {
               "wr-bg-lime-600": result?.payout > 0,
               "wr-bg-red-600": result?.payout <= 0,
@@ -84,7 +84,7 @@ export const TextRandomizer = () => {
           <TooltipProvider>
             <Tooltip key={key}>
               <TooltipTrigger>
-                <div className="wr-relative wr--top-2 wr-block wr-h-1.5 wr-w-1.5 wr-rounded" />
+                <div className="wr-relative wr-top-2 wr-block wr-h-1.5 wr-w-1.5 wr-rounded" />
               </TooltipTrigger>
               <TooltipContent className="wr- wr-absolute wr-top-0 wr-z-[100]">
                 <p>{result?.resultNumber}</p>
@@ -111,7 +111,7 @@ const Polygon = ({
       viewBox="0 0 21 15"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="wr-absolute wr-bottom-[9px] wr-z-10 wr--translate-x-1/2 wr-transition-all"
+      className="wr-absolute wr-bottom-[9px] wr-z-10 -wr-translate-x-1/2 wr-transition-all"
       style={{ left: `${resultNumber}%` }}
     >
       <path

@@ -10,11 +10,11 @@ import {
 import { CoinFlipGameProps } from "./game";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@winrlabs/ui";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { BetController } from "./bet-controller";
 import { CoinFlip } from "..";
 import { cn } from "../../../utils/style";
+import { Form } from "../../../ui/form";
 
 type TemplateOptions = {
   scene?: {
@@ -77,7 +77,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
           />
           <SceneContainer
             className={cn(
-              "wr-h-[640px] wr- max-md:wr-h-[425px] lg:wr-py-12 wr-relative"
+              "wr-h-[640px] max-md:wr-h-[425px] lg:wr-py-12 wr-relative"
             )}
             style={{
               backgroundImage: options?.scene?.backgroundImage,
@@ -87,7 +87,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
               <CoinFlip.Game {...props}>
                 <CoinFlip.LastBets />
                 <CoinFlip.Coin {...props} />
-                <div className="wr-hidden wr-lg:block">
+                <div className="wr-hidden lg:wr-block">
                   <CoinFlip.Controller />
                 </div>
               </CoinFlip.Game>

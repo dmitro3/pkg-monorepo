@@ -1,6 +1,6 @@
 "use client";
 
-import { INumberInputContext, NumberInput } from "@winrlabs/ui";
+import { INumberInputContext, NumberInput } from "../ui/number-input";
 import React from "react";
 import { cn } from "../utils/style";
 

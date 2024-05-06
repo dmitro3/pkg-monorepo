@@ -8,11 +8,11 @@ import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LUCK_MULTIPLIER, MAX_BET_COUNT, MIN_BET_COUNT } from "../constant";
-import { Form } from "@winrlabs/ui";
 import { BetController } from "./bet-controller";
 import { toDecimals } from "../../../utils/web3";
 import { useMemo } from "react";
 import { cn } from "../../../../lib/utils/style";
+import { Form } from "../../../ui/form";
 
 type TemplateOptions = {
   slider?: {
@@ -97,7 +97,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
             winMultiplier={winMultiplier}
           />
           <SceneContainer
-            className={cn("h-[640px]  max-md:h-[425px] lg:py-12")}
+            className={cn("wr-h-[640px]  max-md:wr-h-[425px] lg:wr-py-12")}
             style={{
               backgroundImage: options?.scene?.backgroundImage,
             }}

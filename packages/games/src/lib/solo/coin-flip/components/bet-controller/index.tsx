@@ -1,7 +1,5 @@
 "use client";
 import * as React from "react";
-
-import { FormLabel, Button, toDecimals, toFormatted } from "@winrlabs/ui";
 import { useFormContext } from "react-hook-form";
 import { Advanced } from "../../../../common/advanced";
 import {
@@ -24,6 +22,9 @@ import { useCoinFlipGameStore } from "../..";
 import { useGameSkip } from "../../../../game-provider";
 import { SkipButton } from "../../../../common/skip-button";
 import { cn } from "../../../../utils/style";
+import { toDecimals, toFormatted } from "../../../../utils/web3";
+import { FormLabel } from "../../../../ui/form";
+import { Button } from "../../../../ui/button";
 
 interface Props {
   minWager: number;

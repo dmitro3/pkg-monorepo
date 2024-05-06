@@ -2,11 +2,12 @@
 
 import React from "react";
 import { NumericFormat } from "react-number-format";
-import { toFormatted, cn } from "@/lib/utils";
 // import { ArrowDown, ArrowUp } from 'src/components/icons';
 // import { TokenAddress, getTokenDisplayDecimal } from "@winrlabs/chain-config";
 import { ChevronDown } from "../../svgs";
 import * as Slider from "@radix-ui/react-slider";
+import { toFormatted } from "../../utils/web3";
+import { cn } from "../../utils/style";
 
 // min max tool
 // label
@@ -49,10 +50,10 @@ const ErrorMessage: React.FC<{
   return (
     <div
       className={cn(
-        "wr-ui-mt-1 wr-ui-text-red-600 wr-ui-transition-all wr-ui-motion-safe:ease-in",
+        "wr-mt-1 wr-text-red-600 wr-transition-all wr-motion-safe:ease-in",
         {
-          "wr-ui-h-10": hasErrorMessage,
-          "wr-ui-h-0": !hasErrorMessage,
+          "wr-h-10": hasErrorMessage,
+          "wr-h-0": !hasErrorMessage,
         },
         className
       )}
@@ -156,9 +157,7 @@ const LabelText: React.FC<{
   children?: React.ReactNode;
 }> = ({ children, className }) => {
   return (
-    <p className={cn("wr-ui-mb-3 wr-ui-text-zinc-500", className)}>
-      {children}
-    </p>
+    <p className={cn("wr-mb-3 wr-text-zinc-500", className)}>{children}</p>
   );
 };
 
@@ -208,11 +207,11 @@ const Container: React.FC<{
   return (
     <div
       className={cn(
-        "wr-ui-relative wr-ui-flex wr-ui-h-10 wr-ui-w-full wr-ui-items-center wr-ui-rounded-md wr-ui-border wr-ui-border-zinc-800",
+        "wr-relative wr-flex wr-h-10 wr-w-full wr-items-center wr-rounded-md wr-border wr-border-zinc-800",
         className,
         {
-          ["wr-ui-border-red-600"]: !!errorMessage,
-          ["wr-ui-pointer-events-none wr-ui-opacity-50"]: isDisabled,
+          ["wr-border-red-600"]: !!errorMessage,
+          ["wr-pointer-events-none wr-opacity-50"]: isDisabled,
         }
       )}
     >
@@ -248,7 +247,7 @@ const Input: React.FC<{
       thousandSeparator=","
       prefix={prefix}
       className={cn(
-        "wr-ui-h-full wr-ui-w-full wr-ui-rounded-md wr-ui-border-none wr-ui-bg-transparent wr-ui-p-0 wr-ui-py-2 wr-ui-outline-none",
+        "wr-h-full wr-w-full wr-rounded-md wr-border-none wr-bg-transparent wr-p-0 wr-py-2 wr-outline-none",
         className
       )}
     />
@@ -256,14 +255,14 @@ const Input: React.FC<{
 };
 
 const Tools: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <div className={"wr-ui-"}>{children}</div>;
+  return <div>{children}</div>;
 };
 
 const InputUnit: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div
       className={
-        "wr-ui-absolute wr-ui-left-2 wr-ui-top-1/2 wr-ui-mr-1 wr-ui-flex wr-ui-h-5 wr-ui-w-5 wr-ui--translate-y-1/2 wr-ui-items-center wr-ui-justify-center"
+        "wr-absolute wr-left-2 wr-top-1/2 wr-mr-1 wr-flex wr-h-5 wr-w-5 -wr-translate-y-1/2 wr-items-center wr-justify-center"
       }
     >
       {children}
@@ -343,7 +342,7 @@ const AdjustValue: React.FC = () => {
         onMouseUp={clearState}
         onMouseLeave={clearState}
         onMouseOut={clearState}
-        className="wr-ui-h-5 wr-ui-w-5"
+        className="wr-h-5 wr-w-5"
       />
       <ChevronDown
         onClick={() => {
@@ -357,7 +356,7 @@ const AdjustValue: React.FC = () => {
         onMouseUp={clearState}
         onMouseLeave={clearState}
         onMouseOut={clearState}
-        className="wr-ui-h-5 wr-ui-w-5"
+        className="wr-h-5 wr-w-5"
       />
     </div>
   );
@@ -397,7 +396,7 @@ const SliderInput: React.FC = () => {
 
   return (
     <Slider.Root
-      className="wr-ui-relative wr-ui-mx-auto wr-ui-my-3 wr-ui-flex wr-ui-h-[5px] wr-ui-w-[100%] wr-ui-cursor-pointer wr-ui-touch-none wr-ui-select-none wr-ui-items-center"
+      className="wr-relative wr-mx-auto wr-my-3 wr-flex wr-h-[5px] wr-w-[100%] wr-cursor-pointer wr-touch-none wr-select-none wr-items-center"
       defaultValue={[value]}
       value={[value]}
       min={min}
@@ -407,11 +406,11 @@ const SliderInput: React.FC = () => {
       minStepsBetweenThumbs={4}
       disabled={isDisabled}
     >
-      <Slider.Track className="wr-ui-relative wr-ui-h-full wr-ui-w-full wr-ui-rounded-lg wr-ui-bg-zinc-800">
-        <Slider.Range className="wr-ui-absolute wr-ui-h-full wr-ui-rounded-lg wr-ui-bg-red-500" />
+      <Slider.Track className="wr-relative wr-h-full wr-w-full wr-rounded-lg wr-bg-zinc-800">
+        <Slider.Range className="wr-absolute wr-h-full wr-rounded-lg wr-bg-red-500" />
       </Slider.Track>
       <Slider.Thumb
-        className="wr-ui-block wr-ui-h-[18px] wr-ui-w-[18px] wr-ui-cursor-pointer wr-ui-rounded-full wr-ui-bg-red-500 wr-ui-outline-none"
+        className="wr-block wr-h-[18px] wr-w-[18px] wr-cursor-pointer wr-rounded-full wr-bg-red-500 wr-outline-none"
         aria-label="Volume"
       />
     </Slider.Root>

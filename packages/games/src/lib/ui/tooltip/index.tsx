@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { cn } from "@/lib/utils";
+import { cn } from "../../utils/style";
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
@@ -18,7 +18,7 @@ const TooltipContent = React.forwardRef<
     ref={ref}
     sideOffset={sideOffset}
     className={cn(
-      "wr-ui-z-50 wr-ui-overflow-hidden wr-ui-rounded-md wr-ui-border wr-ui-border-zinc-800 wr-ui-bg-zinc-900 wr-ui-px-3 wr-ui-py-1.5 wr-ui-text-sm wr-ui-text-white wr-ui-shadow-md wr-ui-animate-in wr-ui-fade-in-0 wr-ui-zoom-in-95 wr-ui-data-[state=closed]:animate-out wr-ui-data-[state=closed]:fade-out-0 wr-ui-data-[state=closed]:zoom-out-95 wr-ui-data-[side=bottom]:slide-in-from-top-2 wr-ui-data-[side=left]:slide-in-from-right-2 wr-ui-data-[side=right]:slide-in-from-left-2 wr-ui-data-[side=top]:slide-in-from-bottom-2",
+      "wr-z-50 wr-overflow-hidden wr-rounded-md wr-border wr-border-zinc-800 wr-bg-zinc-900 wr-px-3 wr-py-1.5 wr-text-sm wr-text-white wr-shadow-md wr-animate-in wr-fade-in-0 wr-zoom-in-95 data-[state=closed]:wr-animate-out data-[state=closed]:wr-fade-out-0 data-[state=closed]:wr-zoom-out-95 data-[side=bottom]:wr-slide-in-from-top-2 data-[side=left]:wr-slide-in-from-right-2 data-[side=right]:wr-slide-in-from-left-2 data-[side=top]:wr-slide-in-from-bottom-2",
       className
     )}
     {...props}

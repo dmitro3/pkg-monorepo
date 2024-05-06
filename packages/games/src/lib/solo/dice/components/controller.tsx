@@ -1,17 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { RangeForm } from "../constant";
+import { useFormContext } from "react-hook-form";
+import { cn } from "../../../../lib/utils/style";
+import { Button } from "../../../ui/button";
 import {
-  Button,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  NumberInput,
-  Icons,
-} from "@winrlabs/ui";
-import { RangeForm } from "../constant";
-import { useFormContext } from "react-hook-form";
-import { cn } from "../../../../lib/utils/style";
+} from "../../../ui/form";
+import { NumberInput } from "../../../ui/number-input";
+import { IconChevronUp } from "../../../svgs";
 
 export interface RangeControllerProps {
   winMultiplier: number;
@@ -72,7 +71,7 @@ export const Controller: React.FC<RangeControllerProps> = ({
         variant={"success"}
         size={"sm"}
         type="button"
-        className="wr-mb-1 wr-h-10 wr-w-10 wr-shrink-0 wr-bg-green-500 wr-p-0 wr-hover:bg-green-600"
+        className="wr-mb-1 wr-h-10 wr-w-10 wr-shrink-0 wr-bg-green-500 wr-p-0 hover:wr-bg-green-600"
         onClick={() => {
           const { rollType, winChance } = form.getValues();
 
@@ -88,7 +87,7 @@ export const Controller: React.FC<RangeControllerProps> = ({
         }}
         disabled={form.formState.isSubmitting || form.formState.isLoading}
       >
-        <Icons.IconChevronUp
+        <IconChevronUp
           className={cn(
             "wr-h-5 wr-w-5 wr-text-zinc-100 wr-transition-all wr-duration-300",
             {

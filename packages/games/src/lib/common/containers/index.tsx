@@ -16,7 +16,7 @@ export const SceneContainer: React.FC<Props> = ({
   return (
     <section
       className={cn(
-        "wr-relative wr-flex wr-w-full wr-flex-col wr-items-center wr-justify-between wr-rounded-lg wr-border wr-border-zinc-800 wr-bg-cover wr-bg-no-repeat wr-p-3.5 wr- lg:wr-px-16 lg:wr-pb-12 lg:wr-pt-[14px]",
+        "wr-relative wr-flex wr-w-full wr-flex-col wr-items-center wr-justify-between wr-rounded-lg wr-border wr-border-zinc-800 wr-bg-cover wr-bg-no-repeat wr-p-3.5 lg:wr-px-16 lg:wr-pb-12 lg:wr-pt-[14px]",
         className
       )}
       {...props}
@@ -78,7 +78,7 @@ export const BetCountSlider = ({ ...props }) => {
       <Slider.Track className="wr-relative wr-h-[6px] wr-w-full wr-grow wr-cursor-pointer wr-overflow-hidden wr-rounded-full wr-rounded-tl-md wr-rounded-tr-md wr-bg-zinc-600">
         <Slider.Range className="wr-absolute wr-h-full wr-bg-red-600" />
       </Slider.Track>
-      <Slider.Thumb className="wr-border-primary wr-ring-offset-background wr-focus-visible:ring-ring wr-flex wr-h-[10px] wr-w-[10px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-border-2 wr-bg-white wr-text-[12px] wr-font-medium wr-text-zinc-900 wr-transition-colors wr-focus-visible:outline-none wr-focus-visible:ring-2 wr-focus-visible:ring-offset-2 wr-disabled:pointer-events-none wr-disabled:opacity-50" />
+      <Slider.Thumb className="wr-border-primary wr-ring-offset-background focus-visible:wr-ring-ring wr-flex wr-h-[10px] wr-w-[10px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-border-2 wr-bg-white wr-text-[12px] wr-font-medium wr-text-zinc-900 wr-transition-colors focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 wr-disabled:pointer-events-none wr-disabled:opacity-50" />
     </Slider.Root>
   );
 };

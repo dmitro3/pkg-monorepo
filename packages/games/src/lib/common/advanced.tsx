@@ -1,15 +1,10 @@
 "use client";
 
 import * as React from "react";
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  Label,
-  Switch,
-} from "@winrlabs/ui";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { Accordion, AccordionContent, AccordionItem } from "../ui/accordion";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
 
 interface Props {
   children?: React.ReactNode;
@@ -19,7 +14,7 @@ export const Advanced: React.FC<Props> = ({ children }) => {
   const [accordionValue, setAccordionValue] = React.useState<string>("");
 
   return (
-    (<Accordion
+    <Accordion
       type="single"
       collapsible
       value={accordionValue}
@@ -36,8 +31,8 @@ export const Advanced: React.FC<Props> = ({ children }) => {
           >
             <Label className="wr-text-white">Advanced</Label>
             <Switch
-              className="wr-h-5 wr-w-10 wr-rounded-md wr-bg-zinc-800 wr-data-[state=checked]:bg-lime-600"
-              thumbClassName="rounded-sm bg-zinc-500 h-5 w-5 border-zinc-500 data-[state=checked]:border-white data-[state=checked]:bg-white"
+              className="wr-h-5 wr-w-10 wr-rounded-md wr-bg-zinc-800 data-[state=checked]:wr-bg-lime-600"
+              thumbClassName="wr-rounded-sm wr-bg-zinc-500 wr-h-5 wr-w-5 wr-border-zinc-500 data-[state=checked]:wr-border-white data-[state=checked]:wr-bg-white"
               id="advanced-switch"
               checked={accordionValue === "advanced"}
               onCheckedChange={(checked) => {
@@ -52,6 +47,6 @@ export const Advanced: React.FC<Props> = ({ children }) => {
         </AccordionPrimitive.Header>
         <AccordionContent>{children}</AccordionContent>
       </AccordionItem>
-    </Accordion>)
+    </Accordion>
   );
 };
