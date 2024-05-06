@@ -15,44 +15,44 @@ const config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--wr-border))",
-        input: "hsl(var(--wr-input))",
-        ring: "hsl(var(--wr-ring))",
-        background: "hsl(var(--wr-background))",
-        foreground: "hsl(var(--wr-foreground))",
+        border: "hsl(var(--wr-ui-border))",
+        input: "hsl(var(--wr-ui-input))",
+        ring: "hsl(var(--wr-ui-ring))",
+        background: "hsl(var(--wr-ui-background))",
+        foreground: "hsl(var(--wr-ui-foreground))",
         primary: {
-          DEFAULT: "hsl(var(--wr-primary))",
-          foreground: "hsl(var(--wr-primary-foreground))",
+          DEFAULT: "hsl(var(--wr-ui-primary))",
+          foreground: "hsl(var(--wr-ui-primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--wr-secondary))",
-          foreground: "hsl(var(--wr-secondary-foreground))",
+          DEFAULT: "hsl(var(--wr-ui-secondary))",
+          foreground: "hsl(var(--wr-ui-secondary-foreground))",
         },
         destructive: {
-          DEFAULT: "hsl(var(--wr-destructive))",
-          foreground: "hsl(var(--wr-destructive-foreground))",
+          DEFAULT: "hsl(var(--wr-ui-destructive))",
+          foreground: "hsl(var(--wr-ui-destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--wr-muted))",
-          foreground: "hsl(var(--wr-muted-foreground))",
+          DEFAULT: "hsl(var(--wr-ui-muted))",
+          foreground: "hsl(var(--wr-ui-muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--wr-accent))",
-          foreground: "hsl(var(--wr-accent-foreground))",
+          DEFAULT: "hsl(var(--wr-ui-accent))",
+          foreground: "hsl(var(--wr-ui-accent-foreground))",
         },
         popover: {
-          DEFAULT: "hsl(var(--wr-popover))",
-          foreground: "hsl(var(--wr-popover-foreground))",
+          DEFAULT: "hsl(var(--wr-ui-popover))",
+          foreground: "hsl(var(--wr-ui-popover-foreground))",
         },
         card: {
-          DEFAULT: "hsl(var(--wr-card))",
-          foreground: "hsl(var(--wr-card-foreground))",
+          DEFAULT: "hsl(var(--wr-ui-card))",
+          foreground: "hsl(var(--wr-ui-card-foreground))",
         },
       },
       borderRadius: {
-        lg: "var(--wr-radius)",
-        md: "calc(var(--wr-radius) - 2px)",
-        sm: "calc(var(--wr-radius) - 4px)",
+        lg: "var(--wr-ui-radius)",
+        md: "calc(var(--wr-ui-radius) - 2px)",
+        sm: "calc(var(--wr-ui-radius) - 4px)",
       },
       keyframes: {
         "accordion-down": {
