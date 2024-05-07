@@ -15,6 +15,7 @@ export const SceneContainer: React.FC<Props> = ({
 }) => {
   return (
     <section
+      id="animationScene"
       className={cn(
         "wr-relative wr-flex wr-w-full wr-flex-col wr-items-center wr-justify-between wr-rounded-lg wr-border wr-border-zinc-800 wr-bg-cover wr-bg-no-repeat wr-p-3.5 lg:wr-px-16 lg:wr-pb-12 lg:wr-pt-[14px]",
         className
