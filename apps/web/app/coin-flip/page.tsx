@@ -44,6 +44,31 @@ export default function CoinFlipPage() {
               payoutInUsd: 1,
               coinSide: CoinSide.HEADS,
             },
+            {
+              payout: 1,
+              payoutInUsd: 1,
+              coinSide: CoinSide.HEADS,
+            },
+            {
+              payout: 1,
+              payoutInUsd: 1,
+              coinSide: CoinSide.HEADS,
+            },
+            {
+              payout: 1,
+              payoutInUsd: 1,
+              coinSide: CoinSide.HEADS,
+            },
+            {
+              payout: 1,
+              payoutInUsd: 1,
+              coinSide: CoinSide.HEADS,
+            },
+            {
+              payout: 1,
+              payoutInUsd: 1,
+              coinSide: CoinSide.TAILS,
+            },
           ]);
         }}
         onAnimationStep={(e) => {
