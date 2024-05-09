@@ -41,7 +41,7 @@ const RollPage = () => {
             {
               payout: 1,
               payoutInUsd: 1,
-              coinSide: 1,
+              dice: 1,
             },
           ]);
         }}

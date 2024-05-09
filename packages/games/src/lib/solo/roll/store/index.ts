@@ -9,7 +9,7 @@ interface RollLastBetsState {
   currentAnimationCount: number;
 }
 
-interface DiceLastBetsActions {
+interface RollLastBetsActions {
   addLastBet: (item: RollGameResult) => void;
   updateLastBets: (item: RollGameResult[]) => void;
   removeLastBet: (index: number) => void;
@@ -19,9 +19,9 @@ interface DiceLastBetsActions {
   updateCurrentAnimationCount: (count: number) => void;
 }
 
-export type DiceLastBetsStore = RollLastBetsState & DiceLastBetsActions;
+export type RollLastBetsStore = RollLastBetsState & RollLastBetsActions;
 
-export const diceResultStore = create<DiceLastBetsStore>()((set) => ({
+export const diceResultStore = create<RollLastBetsStore>()((set) => ({
   lastBets: [],
   rollGameResults: [],
   currentAnimationCount: 0,
@@ -50,7 +50,7 @@ export const diceResultStore = create<DiceLastBetsStore>()((set) => ({
     set(() => ({ currentAnimationCount: count })),
 }));
 
-export const useRollGameStore = <T extends keyof DiceLastBetsStore>(
+export const useRollGameStore = <T extends keyof RollLastBetsStore>(
   keys: T[]
 ) =>
   diceResultStore((state) => {
@@ -58,9 +58,9 @@ export const useRollGameStore = <T extends keyof DiceLastBetsStore>(
       acc[cur] = state[cur];
 
       return acc;
-    }, {} as DiceLastBetsStore);
+    }, {} as RollLastBetsStore);
 
-    return x as Pick<DiceLastBetsStore, T>;
+    return x as Pick<RollLastBetsStore, T>;
   }, shallow);
 
 export default useRollGameStore;
