@@ -26,6 +26,8 @@ export const GameArea: React.FC<GameAreaProps> = ({
 
   const winEffect = useAudioEffect(SoundEffects.WIN);
 
+  const [loading, setLoading] = React.useState(false);
+
   const {
     gameStatus,
     rollGameResults,
@@ -33,6 +35,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
     updateGameStatus,
     addLastBet,
     updateLastBets,
+    lastBets,
   } = useRollGameStore([
     "gameStatus",
     "rollGameResults",
@@ -40,6 +43,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
     "updateGameStatus",
     "addLastBet",
     "updateLastBets",
+    "lastBets",
   ]);
 
   React.useEffect(() => {
@@ -52,6 +56,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
 
       flipEffect.play();
 
+      setLoading(true);
       setTimeout(() => {
         const curr = i + 1;
 
@@ -76,6 +81,8 @@ export const GameArea: React.FC<GameAreaProps> = ({
         } else {
           setTimeout(() => turn(curr), 350);
         }
+
+        setLoading(false);
       }, 1250);
     };
     turn();
@@ -104,7 +111,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
             className={cn(
               "wr-grid-row-2 wr-relative wr-grid wr-grid-cols-3 wr-items-center wr-gap-4 wr-transition-all wr-ease-in-out",
               {
-                "wr-animate-dice-shake ": gameStatus === "PLAYING",
+                "wr-animate-dice-shake ": loading,
               }
             )}
           >
@@ -112,7 +119,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
               <Dice
                 key={item}
                 item={item}
-                winner={rollGameResults[-1]?.dice}
+                winner={lastBets[lastBets.length - 1]?.dice}
                 isBetting={gameStatus === "PLAYING" ? true : false}
                 isDisabled={
                   form.formState.isLoading || form.formState.isSubmitting
