@@ -4,6 +4,9 @@ import { DiceGameResult } from "../types";
 
 interface DiceLastBetsState {
   lastBets: DiceGameResult[];
+  rollGameResults: DiceGameResult[];
+  gameStatus: "IDLE" | "PLAYING" | "ENDED";
+  currentAnimationCount: number;
 }
 
 interface DiceLastBetsActions {
@@ -11,12 +14,17 @@ interface DiceLastBetsActions {
   updateLastBets: (item: DiceGameResult[]) => void;
   removeLastBet: (index: number) => void;
   clearStore: () => void;
+  updateRollGameResults: (item: DiceGameResult[]) => void;
+  updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
+  updateCurrentAnimationCount: (count: number) => void;
 }
 
 export type DiceLastBetsStore = DiceLastBetsState & DiceLastBetsActions;
 
 export const diceResultStore = create<DiceLastBetsStore>()((set) => ({
   lastBets: [],
+  rollGameResults: [],
+  currentAnimationCount: 0,
   addLastBet: (item) =>
     set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
@@ -28,7 +36,18 @@ export const diceResultStore = create<DiceLastBetsStore>()((set) => ({
 
       return { lastBets };
     }),
-  clearStore: () => set({ lastBets: [] }),
+  updateRollGameResults: (item) => set(() => ({ rollGameResults: item })),
+  clearStore: () =>
+    set({
+      lastBets: [],
+      rollGameResults: [],
+      gameStatus: "IDLE",
+      currentAnimationCount: 0,
+    }),
+  gameStatus: "IDLE",
+  updateGameStatus: (status) => set(() => ({ gameStatus: status })),
+  updateCurrentAnimationCount: (count) =>
+    set(() => ({ currentAnimationCount: count })),
 }));
 
 export const useDiceLastBetStore = <T extends keyof DiceLastBetsStore>(
