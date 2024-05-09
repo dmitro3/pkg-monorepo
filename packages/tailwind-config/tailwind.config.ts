@@ -359,12 +359,17 @@ const config: Omit<Config, "content"> = {
         "keno-gem-flip": "keno-gem-flip .5s linear forwards",
         "blackjack-highlight": "blackjack-highlight 2s linear infinite",
       },
-      fon4tSize: {
+      fontSize: {
         small: "13px",
         base: "15px",
         md: "18px",
         lg: "24px",
         xl: "36px",
+      },
+      backgroundImage: {
+        dice: "linear-gradient(318deg, #FFF 17.93%, #B7B7C8 88.39%)",
+        "dice-selected":
+          "linear-gradient(317.54deg, #30303A 17.93%, #09090B 88.39%),linear-gradient(0deg, #41414C, #41414C)",
       },
     },
   },
