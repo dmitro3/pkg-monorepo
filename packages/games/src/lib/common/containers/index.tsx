@@ -69,7 +69,7 @@ export const BetCountSlider = ({ ...props }) => {
           "wr-cursor-none wr-pointer-events-none wr-opacity-60": props.disabled,
         }
       )}
-      min={1}
+      min={props.minValue || 1}
       value={[props.value]}
       max={props.maxValue}
       onValueChange={(e) => {

@@ -1,20 +1,14 @@
-"use client";
-
-import { useForm } from "react-hook-form";
-import {
-  CoinSide,
-  MAX_BET_COUNT,
-  MIN_BET_COUNT,
-  WIN_MULTIPLIER,
-} from "../constants";
-import { CoinFlipGameProps } from "./game";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PlinkoFormField } from "../types";
+import { PlinkoGameProps } from "./game";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { MAX_BET_COUNT, MIN_BET_COUNT } from "../constants";
 import { GameContainer, SceneContainer } from "../../../common/containers";
-import { BetController } from "./bet-controller";
-import { CoinFlip, CoinFlipFormField } from "..";
 import { cn } from "../../../utils/style";
+import { BetController } from "./bet-controller";
 import { Form } from "../../../ui/form";
+import { Plinko } from "..";
 
 type TemplateOptions = {
   scene?: {
@@ -22,14 +16,14 @@ type TemplateOptions = {
   };
 };
 
-type TemplateProps = CoinFlipGameProps & {
+type TemplateProps = PlinkoGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: CoinFlipFormField) => void;
+  onSubmit: (data: any) => void;
 };
 
-const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
+const PlinkoTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
 
   const formSchema = z.object({
@@ -38,6 +32,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       .min(props?.minWager || 2, {
         message: `Minimum wager is ${props?.minWager}`,
       })
+
       .max(props?.maxWager || 2000, {
         message: `Maximum wager is ${props?.maxWager}`,
       }),
@@ -49,7 +44,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       }),
     stopGain: z.number(),
     stopLoss: z.number(),
-    coinSide: z.nativeEnum(CoinSide),
+    plinkoSize: z.number().min(6).max(12),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,11 +53,11 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: "onSubmit",
     defaultValues: {
-      wager: props?.minWager || 2,
+      wager: 2,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
-      coinSide: CoinSide.HEADS,
+      plinkoSize: 10,
     },
   });
 
@@ -73,7 +68,6 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
           <BetController
             minWager={props.minWager || 2}
             maxWager={props.maxWager || 10}
-            winMultiplier={WIN_MULTIPLIER}
           />
           <SceneContainer
             className={cn(
@@ -83,15 +77,11 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
               backgroundImage: options?.scene?.backgroundImage,
             }}
           >
-            <CoinFlip.Body>
-              <CoinFlip.Game {...props}>
-                <CoinFlip.LastBets />
-                <CoinFlip.Coin {...props} />
-                <div className="wr-hidden lg:wr-block">
-                  <CoinFlip.Controller />
-                </div>
-              </CoinFlip.Game>
-            </CoinFlip.Body>
+            <Plinko.Body>
+              <Plinko.Game {...props}>
+                <Plinko.Canvas {...props} />
+              </Plinko.Game>
+            </Plinko.Body>
           </SceneContainer>
         </GameContainer>
       </form>
@@ -99,4 +89,4 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
   );
 };
 
-export default CoinFlipTemplate;
+export default PlinkoTemplate;

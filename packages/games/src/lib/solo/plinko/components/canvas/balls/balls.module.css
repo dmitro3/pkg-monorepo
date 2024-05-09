@@ -1,0 +1,59 @@
+@keyframes jump {
+  0% {
+    transform: translate(0, 0);
+  }
+  80% {
+    transform: translate(0, -8px);
+  }
+  90% {
+    transform: translate(0, 2px);
+  }
+  100% {
+    transform: translate(0, 0px);
+  }
+}
+
+.ballMover {
+  position: absolute;
+  left: 50%;
+  top: 0;
+}
+
+.ballMover .ball {
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: 0px;
+  border-radius: 100%;
+  background-color: #979797;
+  overflow: hidden;
+}
+
+.ballMover .ball.jump {
+  animation: jump 400ms ease-out infinite;
+  -webkit-animation: jump 400ms ease-out infinite;
+}
+
+.ballMover .ball::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  margin-left: -1px;
+  margin-top: -1px;
+  background-color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+  .ballMover .ball {
+    width: 8px;
+    height: 8px;
+    margin-left: -3px;
+  }
+
+  .ballMover .ball::before {
+    width: 7px;
+    height: 7px;
+  }
+}

@@ -6,7 +6,8 @@ import { CDN_URL } from "../constants";
 export enum SoundEffects {
   COIN_FLIP_TOSS,
   COIN_FLIP_WIN,
-  SLIDER
+  SLIDER,
+  FALLING,
 }
 
 export interface AudioContextType {
@@ -72,7 +73,6 @@ export const effects: Map<SoundEffects, string> = new Map();
 effects.set(SoundEffects.COIN_FLIP_TOSS, "coin-toss.wav");
 effects.set(SoundEffects.COIN_FLIP_WIN, "coin-flip-win.wav");
 effects.set(SoundEffects.SLIDER, "slider-effect.mp3");
-
 
 type PlayOptions = {
   playbackRate?: number;
