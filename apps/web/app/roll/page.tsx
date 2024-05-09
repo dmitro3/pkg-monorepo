@@ -4,10 +4,10 @@ import { RollTemplate } from "@winrlabs/games";
 import React from "react";
 
 const RollPage = () => {
-  const [loading, setLoading] = React.useState(false);
+  const [results, setResults] = React.useState<any>([]);
+
   return (
     <div>
-      <button onClick={() => setLoading(!loading)}>trigger loading</button>
       <RollTemplate
         maxWager={100}
         minWager={1}
@@ -16,9 +16,46 @@ const RollPage = () => {
             backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
           },
         }}
-        onSubmit={() => console.log("submit")}
-        loading={loading}
-        winner={4}
+        onSubmit={(data) => {
+          console.log(data, "data");
+          // send request
+
+          // get results
+
+          setResults([
+            {
+              payout: 1,
+              payoutInUsd: 1,
+              dice: 1,
+            },
+            {
+              payout: 1,
+              payoutInUsd: 1,
+              dice: 2,
+            },
+            {
+              payout: 1,
+              payoutInUsd: 1,
+              dice: 4,
+            },
+            {
+              payout: 1,
+              payoutInUsd: 1,
+              coinSide: 1,
+            },
+          ]);
+        }}
+        onAnimationStep={(e) => {
+          console.log("STEP", e);
+        }}
+        onAnimationCompleted={() => {
+          setResults([]);
+          console.log("game completed");
+        }}
+        onAnimationSkipped={() => {
+          console.log("game skipped");
+        }}
+        gameResults={results}
       />
     </div>
   );

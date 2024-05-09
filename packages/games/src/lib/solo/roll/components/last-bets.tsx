@@ -3,12 +3,12 @@ import { cn } from "../../../utils/style";
 import { FormLabel } from "../../../ui/form";
 import React from "react";
 import { miniDotPosition } from "./dice";
-import useDiceLastBetStore from "../store";
+import useRollGameStore from "../store";
 
 type DiceResultIndex = 0 | 1 | 2 | 3 | 4 | 5;
 
 export const LastBets = () => {
-  const { lastBets } = useDiceLastBetStore(["lastBets"]);
+  const { lastBets } = useRollGameStore(["lastBets"]);
 
   return (
     <LastBetsContainer className="h-12">

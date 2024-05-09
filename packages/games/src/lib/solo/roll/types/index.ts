@@ -11,17 +11,18 @@ export enum DICE {
 
 export type DiceType = DICE;
 
-export interface DiceGameResult {
+export interface RollGameResult {
   dice: number;
   payout: number;
   payoutInUsd: number;
 }
 
-export type DiceResult = SoloGameResult<DiceGameResult[]>;
+export type RollResult = SoloGameResult<RollGameResult[]>;
 
-export type DiceEventResult = GameHubEvent<SoloGameResult<DiceGameResult[]>>;
+export type DiceEventResult = GameHubEvent<SoloGameResult<RollGameResult[]>>;
 
 export interface GameAreaProps {
-  winner?: number;
-  loading: boolean;
+  onAnimationStep?: (step: number) => void;
+  onAnimationCompleted?: () => void;
+  onAnimationSkipped?: () => void;
 }

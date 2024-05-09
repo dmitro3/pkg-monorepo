@@ -6,7 +6,9 @@ import { CDN_URL } from "../constants";
 export enum SoundEffects {
   COIN_FLIP_TOSS,
   COIN_FLIP_WIN,
-  SLIDER
+  SLIDER,
+  WIN,
+  ROLLING_DICE,
 }
 
 export interface AudioContextType {
@@ -72,7 +74,11 @@ export const effects: Map<SoundEffects, string> = new Map();
 effects.set(SoundEffects.COIN_FLIP_TOSS, "coin-toss.wav");
 effects.set(SoundEffects.COIN_FLIP_WIN, "coin-flip-win.wav");
 effects.set(SoundEffects.SLIDER, "slider-effect.mp3");
-
+effects.set(
+  SoundEffects.WIN,
+  "mixkit-quick-win-video-game-notification-269.wav"
+);
+effects.set(SoundEffects.ROLLING_DICE, "rolling-dice.mp3");
 
 type PlayOptions = {
   playbackRate?: number;

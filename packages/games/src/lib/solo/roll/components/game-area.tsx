@@ -5,11 +5,92 @@ import { cn } from "../../../utils/style";
 import Dice from "./dice";
 import { ALL_DICES, DiceForm } from "../constant";
 import { GameAreaProps } from "../types";
+import useRollGameStore from "../store";
+import { useGameSkip } from "../../../game-provider";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
-export const GameArea: React.FC<GameAreaProps> = ({ winner, loading }) => {
+export const GameArea: React.FC<GameAreaProps> = ({
+  onAnimationCompleted,
+  onAnimationStep,
+  onAnimationSkipped = () => {},
+}) => {
   const form = useFormContext() as DiceForm;
 
   const selectedDices = form.watch("dices");
+
+  const skipRef = React.useRef<boolean>(false);
+
+  const { isAnimationSkipped } = useGameSkip();
+
+  const flipEffect = useAudioEffect(SoundEffects.ROLLING_DICE);
+
+  const winEffect = useAudioEffect(SoundEffects.WIN);
+
+  const {
+    gameStatus,
+    rollGameResults,
+    updateRollGameResults,
+    updateGameStatus,
+    addLastBet,
+    updateLastBets,
+  } = useRollGameStore([
+    "gameStatus",
+    "rollGameResults",
+    "updateRollGameResults",
+    "updateGameStatus",
+    "addLastBet",
+    "updateLastBets",
+  ]);
+
+  React.useEffect(() => {
+    if (rollGameResults.length === 0) return;
+
+    const turn = (i = 0) => {
+      const dice = Number(rollGameResults[i]?.dice) || 0;
+      const payout = rollGameResults[i]?.payout || 0;
+      const payoutInUsd = rollGameResults[i]?.payoutInUsd || 0;
+
+      flipEffect.play();
+
+      setTimeout(() => {
+        const curr = i + 1;
+
+        onAnimationStep && onAnimationStep(curr);
+
+        addLastBet({
+          dice: dice,
+          payout,
+          payoutInUsd,
+        });
+
+        if (payout > 0) {
+          winEffect.play();
+        }
+
+        if (skipRef.current) {
+          onSkip();
+        } else if (rollGameResults.length === curr) {
+          updateRollGameResults([]);
+          onAnimationCompleted && onAnimationCompleted();
+          setTimeout(() => updateGameStatus("ENDED"), 1000);
+        } else {
+          setTimeout(() => turn(curr), 350);
+        }
+      }, 1250);
+    };
+    turn();
+  }, [rollGameResults]);
+
+  const onSkip = () => {
+    updateLastBets(rollGameResults);
+    updateRollGameResults([]);
+    onAnimationSkipped();
+    setTimeout(() => updateGameStatus("ENDED"), 50);
+  };
+
+  React.useEffect(() => {
+    skipRef.current = isAnimationSkipped;
+  }, [isAnimationSkipped]);
 
   return (
     <div className="wr-w-full wr-max-w-[422px]">
@@ -21,7 +102,7 @@ export const GameArea: React.FC<GameAreaProps> = ({ winner, loading }) => {
             className={cn(
               "wr-grid-row-2 wr-relative wr-grid wr-grid-cols-3 wr-items-center wr-gap-4 wr-transition-all wr-ease-in-out",
               {
-                "wr-animate-dice-shake ": loading,
+                "wr-animate-dice-shake ": gameStatus === "PLAYING",
               }
             )}
           >
@@ -29,8 +110,8 @@ export const GameArea: React.FC<GameAreaProps> = ({ winner, loading }) => {
               <Dice
                 key={item}
                 item={item}
-                winner={winner}
-                isBetting={loading}
+                winner={rollGameResults[-1]?.dice}
+                isBetting={gameStatus === "PLAYING" ? true : false}
                 isDisabled={
                   form.formState.isLoading || form.formState.isSubmitting
                 }

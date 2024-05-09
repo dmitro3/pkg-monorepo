@@ -17,6 +17,7 @@ import { GameContainer, SceneContainer } from "../../../common/containers";
 import { BetController } from "./bet-controller";
 import { Roll } from "..";
 import { cn } from "../../../utils/style";
+import { RollGameProps } from "./game";
 
 type TemplateOptions = {
   scene?: {
@@ -24,13 +25,11 @@ type TemplateOptions = {
   };
 };
 
-type TemplateProps = {
+type TemplateProps = RollGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
   onSubmit: (data: any) => void;
-  winner?: number;
-  loading: boolean;
 };
 
 const RollTemplate = ({ ...props }: TemplateProps) => {
@@ -114,12 +113,14 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
               backgroundImage: options?.scene?.backgroundImage,
             }}
           >
-            <Roll.LastBets />
-            <Roll.GameArea winner={props.winner} loading={props.loading} />
-            <Roll.RollController
-              multiplier={winMultiplier}
-              winChance={winChance}
-            />
+            <Roll.Game {...props}>
+              <Roll.LastBets />
+              <Roll.GameArea {...props} />
+              <Roll.RollController
+                multiplier={winMultiplier}
+                winChance={winChance}
+              />
+            </Roll.Game>
           </SceneContainer>
         </GameContainer>
       </form>
