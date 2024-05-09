@@ -14,64 +14,68 @@ interface Props {
 }
 
 export const dotPosition = {
-  0: ["top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 transform"],
-  1: ["top-[16px] left-[16px]", "bottom-[16px] right-[16px]"],
+  0: [
+    "wr-top-1/2 wr-left-1/2  -wr-translate-x-1/2 -wr-translate-y-1/2 wr-transform",
+  ],
+  1: ["wr-top-[16px] wr-left-[16px]", "wr-bottom-[16px] wr-right-[16px]"],
   2: [
-    "top-[16px]  left-[16px] ",
-    "top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 transform",
-    "bottom-[16px] right-[16px]",
+    "wr-top-[16px]  wr-left-[16px] ",
+    "wr-top-1/2 wr-left-1/2  -wr-translate-x-1/2 -wr-translate-y-1/2 wr-transform",
+    "wr-bottom-[16px] wr-right-[16px]",
   ],
   3: [
-    "top-[16px] left-[16px] ",
-    "top-[16px] right-[16px]",
-    "bottom-[16px] left-[16px]",
-    "bottom-[16px] right-[16px]",
+    "wr-top-[16px] wr-left-[16px] ",
+    "wr-top-[16px] wr-right-[16px]",
+    "wr-bottom-[16px] wr-left-[16px]",
+    "wr-bottom-[16px] wr-right-[16px]",
   ],
   4: [
-    "top-[16px] left-[16px] ",
-    "top-[16px] right-[16px]",
-    "top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 transform",
-    "bottom-[16px] left-[16px]",
-    "bottom-[16px] right-[16px]",
+    "wr-top-[16px] wr-left-[16px] ",
+    "wr-top-[16px] wr-right-[16px]",
+    "wr-top-1/2 wr-left-1/2  -wr-translate-x-1/2 -wr-translate-y-1/2 wr-transform",
+    "wr-bottom-[16px] wr-left-[16px]",
+    "wr-bottom-[16px] wr-right-[16px]",
   ],
   5: [
-    "top-[16px] left-[16px] ",
-    "top-[16px] right-[16px]",
-    "top-1/2 left-[16px] -translate-y-1/2 transform",
-    "top-1/2 right-[16px]   -translate-y-1/2 transform",
-    "bottom-[16px] left-[16px]",
-    "bottom-[16px] right-[16px]",
+    "wr-top-[16px] wr-left-[16px] ",
+    "wr-top-[16px] wr-right-[16px]",
+    "wr-top-1/2 wr-left-[16px] -wr-translate-y-1/2 wr-transform",
+    "wr-top-1/2 wr-right-[16px]   -wr-translate-y-1/2 wr-transform",
+    "wr-bottom-[16px] wr-left-[16px]",
+    "wr-bottom-[16px] wr-right-[16px]",
   ],
 };
 
 export const miniDotPosition = {
-  0: ["top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 transform"],
-  1: ["top-[4px] left-[4px]", "bottom-[4px] right-[4px]"],
+  0: [
+    "wr-top-1/2 wr-left-1/2  -wr-translate-x-1/2 -wr-translate-y-1/2 wr-transform",
+  ],
+  1: ["wr-top-[4px] wr-left-[4px]", "wr-bottom-[4px] wr-right-[4px]"],
   2: [
-    "top-[4px]  left-[4px] ",
-    "top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 transform",
-    "bottom-[4px] right-[4px]",
+    "wr-top-[4px]  wr-left-[4px] ",
+    "wr-top-1/2 wr-left-1/2  -wr-translate-x-1/2 -wr-translate-y-1/2 wr-transform",
+    "wr-bottom-[4px] wr-right-[4px]",
   ],
   3: [
-    "top-[4px] left-[4px] ",
-    "top-[4px] right-[4px]",
-    "bottom-[4px] left-[4px]",
-    "bottom-[4px] right-[4px]",
+    "wr-top-[4px] wr-left-[4px] ",
+    "wr-top-[4px] wr-right-[4px]",
+    "wr-bottom-[4px] wr-left-[4px]",
+    "wr-bottom-[4px] wr-right-[4px]",
   ],
   4: [
-    "top-[4px] left-[4px] ",
-    "top-[4px] right-[4px]",
-    "top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 transform",
-    "bottom-[4px] left-[4px]",
-    "bottom-[4px] right-[4px]",
+    "wr-top-[4px] wr-left-[4px] ",
+    "wr-top-[4px] wr-right-[4px]",
+    "wr-top-1/2 wr-left-1/2  -wr-translate-x-1/2 -wr-translate-y-1/2 wr-transform",
+    "wr-bottom-[4px] wr-left-[4px]",
+    "wr-bottom-[4px] wr-right-[4px]",
   ],
   5: [
-    "top-[4px] left-[4px] ",
-    "top-[4px] right-[4px]",
-    "top-1/2 left-[4px] -translate-y-1/2 transform",
-    "top-1/2 right-[4px]   -translate-y-1/2 transform",
-    "bottom-[4px] left-[4px]",
-    "bottom-[4px] right-[4px]",
+    "wr-top-[4px] wr-left-[4px] ",
+    "wr-top-[4px] wr-right-[4px]",
+    "wr-top-1/2 wr-left-[4px] -wr-translate-y-1/2 wr-transform",
+    "wr-top-1/2 wr-right-[4px]   -wr-translate-y-1/2 wr-transform",
+    "wr-bottom-[4px] wr-left-[4px]",
+    "wr-bottom-[4px] wr-right-[4px]",
   ],
 };
 
@@ -92,19 +96,19 @@ const Dice: React.FC<Props> = ({
         return (
           <FormItem
             key={item}
-            className="mb-0 aspect-square h-full transform-gpu transition-all duration-300 ease-in-out hover:scale-[1.2]"
+            className="wr-mb-0 wr-aspect-square wr-h-full wr-transform-gpu wr-transition-all wr-duration-300 wr-ease-in-out hover:wr-scale-[1.2]"
           >
             <FormControl>
               <CheckboxPrimitive.Root
                 className={cn(
-                  " focus-visible:ring-ring  data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground peer relative mb-0 h-full w-full shrink-0 rounded-xl bg-zinc-700    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                  " focus-visible:wr-ring-ring  data-[state=checked]:wr-bg-primary data-[state=checked]:wr-text-primary-foreground wr-peer wr-relative wr-mb-0 wr-h-full wr-w-full wr-shrink-0 wr-rounded-xl wr-bg-zinc-700    focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-cursor-not-allowed disabled:wr-opacity-50",
                   {
-                    "bg-white": field.value?.includes(item),
-                    "bg-green-500":
+                    "wr-bg-white": field.value?.includes(item),
+                    "wr-bg-green-500":
                       field.value?.includes(item) &&
                       item + 1 === winner &&
                       isBetting,
-                    "bg-red-600":
+                    "wr-bg-red-600":
                       !field.value?.includes(item) &&
                       item + 1 === winner &&
                       isBetting,
@@ -152,9 +156,9 @@ export const Dot = ({
   return (
     <div
       className={cn(
-        "ease transfrom  absolute h-4 w-4 shrink-0 rounded-full border-2 border-[#EDEDF1] bg-dice transition-all sm:h-[23px] sm:w-[23px]",
+        "wr-ease wr-transfrom  wr-absolute wr-h-4 wr-w-4 wr-shrink-0 wr-rounded-full wr-border-2 wr-border-[#EDEDF1] wr-bg-dice wr-transition-all sm:wr-h-[23px] sm:wr-w-[23px]",
         className,
-        { "border-[#41414C] bg-dice-selected": selected }
+        { "wr-border-[#41414C] wr-bg-dice-selected": selected }
       )}
     />
   );

@@ -16,9 +16,9 @@ export const LastBets = () => {
         return (
           <div
             className={cn(
-              "relative aspect-square h-9 w-9 rounded-md border-2 border-zinc-800 bg-black",
+              "wr-relative wr-aspect-square wr-h-9 wr-w-9 wr-rounded-md wr-border-2 wr-border-zinc-800 wr-bg-black",
               {
-                "bg-green-500": result.payout > 0,
+                "wr-bg-green-500": result.payout > 0,
               }
             )}
             key={`dot-${index}`}
@@ -28,7 +28,7 @@ export const LastBets = () => {
                 <div
                   key={i}
                   className={cn(
-                    "ease transfrom  absolute h-2 w-2 shrink-0 rounded-full border-2 border-[#EDEDF1] bg-dice transition-all ",
+                    "wr-ease wr-transfrom  wr-absolute wr-h-2 wr-w-2 wr-shrink-0 wr-rounded-full wr-border-2 wr-border-[#EDEDF1] wr-bg-dice wr-transition-all ",
                     dot
                   )}
                 />
@@ -46,16 +46,16 @@ export const RollController: React.FC<{
   winChance: number;
 }> = ({ multiplier, winChance }) => {
   return (
-    <section className="z-10 grid w-[280px] grid-cols-2 items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-950 p-[14px]">
+    <section className="wr-z-10 wr-grid wr-w-[280px] wr-grid-cols-2 wr-items-center wr-gap-2 wr-rounded-xl wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-p-[14px]">
       <div>
         <FormLabel>Multiplier</FormLabel>
-        <div className="rounded-md bg-zinc-800 p-3 font-semibold">
+        <div className="wr-rounded-md wr-bg-zinc-800 wr-p-3 wr-font-semibold">
           {multiplier}x
         </div>
       </div>
       <div>
         <FormLabel>Win Chance</FormLabel>
-        <div className="rounded-md bg-zinc-800 p-3 font-semibold">
+        <div className="wr-rounded-md wr-bg-zinc-800 wr-p-3 wr-font-semibold">
           {winChance}%
         </div>
       </div>

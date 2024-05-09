@@ -16,8 +16,26 @@ import { Form } from "../../../ui/form";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { BetController } from "./bet-controller";
 import { Roll } from "..";
+import { cn } from "../../../utils/style";
 
-const RollTemplate = ({ ...props }) => {
+type TemplateOptions = {
+  scene?: {
+    backgroundImage?: string;
+  };
+};
+
+type TemplateProps = {
+  options: TemplateOptions;
+  minWager?: number;
+  maxWager?: number;
+  onSubmit: (data: any) => void;
+  winner?: number;
+  loading: boolean;
+};
+
+const RollTemplate = ({ ...props }: TemplateProps) => {
+  const options = { ...props.options };
+
   const formSchema = z.object({
     wager: z
       .number()
@@ -88,12 +106,14 @@ const RollTemplate = ({ ...props }) => {
             winMultiplier={winMultiplier}
           />
 
-          <SceneContainer className="wr-relative wr-h-[640px]">
-            <img
-              src="/images/game-bg/dice-scene-bg.png"
-              alt="bg"
-              className="wr-absolute wr-left-0 wr-top-0 wr-z-0 wr-h-full wr-w-full wr-rounded-lg wr-object-cover"
-            />
+          <SceneContainer
+            className={cn(
+              "wr-h-[640px] max-md:wr-h-[425px] lg:wr-py-12 wr-relative"
+            )}
+            style={{
+              backgroundImage: options?.scene?.backgroundImage,
+            }}
+          >
             <Roll.LastBets />
             <Roll.GameArea winner={props.winner} loading={props.loading} />
             <Roll.RollController

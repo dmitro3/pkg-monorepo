@@ -46,7 +46,7 @@ export const BetController: React.FC<Props> = ({
 
   return (
     <BetControllerContainer>
-      <div className="wr-max-lg:flex wr-max-lg:flex-col">
+      <div className="max-lg:wr-flex max-lg:wr-flex-col">
         <div className="wr-mb-3">
           <BetControllerTitle>Roll</BetControllerTitle>
         </div>
@@ -89,7 +89,7 @@ export const BetController: React.FC<Props> = ({
           <Button
             type="submit"
             variant={"success"}
-            className="wr-w-full wr-max-lg:-order-1 wr-max-lg:mb-3.5"
+            className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
             size={"xl"}
             disabled={!form.formState.isValid || isFormInProgress}
             isLoading={isFormInProgress}

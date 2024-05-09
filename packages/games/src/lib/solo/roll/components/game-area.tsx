@@ -12,16 +12,16 @@ export const GameArea: React.FC<GameAreaProps> = ({ winner, loading }) => {
   const selectedDices = form.watch("dices");
 
   return (
-    <div className="w-full max-w-[422px]">
+    <div className="wr-w-full wr-max-w-[422px]">
       <FormField
         control={form.control}
         name="dices"
         render={() => (
           <FormItem
             className={cn(
-              "grid-row-2 relative grid grid-cols-3 items-center gap-4 transition-all ease-in-out",
+              "wr-grid-row-2 wr-relative wr-grid wr-grid-cols-3 wr-items-center wr-gap-4 wr-transition-all wr-ease-in-out",
               {
-                "animate-dice-shake ": loading,
+                "wr-animate-dice-shake ": loading,
               }
             )}
           >
@@ -37,11 +37,11 @@ export const GameArea: React.FC<GameAreaProps> = ({ winner, loading }) => {
               />
             ))}
             {selectedDices.length === 0 ? (
-              <span className="absolute -bottom-10 text-lg font-bold max-md:w-full max-md:text-center">
+              <span className="wr-absolute -wr-bottom-10 wr-text-md wr-font-bold max-md:wr-w-full max-md:wr-text-center">
                 You have to select at least one dice.
               </span>
             ) : (
-              <FormMessage className="absolute -bottom-10 text-lg font-bold" />
+              <FormMessage className="wr-absolute -wr-bottom-10 wr-text-md wr-font-bold" />
             )}
           </FormItem>
         )}
