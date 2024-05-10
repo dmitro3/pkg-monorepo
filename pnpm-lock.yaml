@@ -218,9 +218,6 @@ importers:
       three:
         specifier: ^0.151.3
         version: 0.151.3
-      viem:
-        specifier: 2.x
-        version: 2.10.2(typescript@5.4.5)(zod@3.23.7)
       zod:
         specifier: ^3.22.4
         version: 3.23.7
