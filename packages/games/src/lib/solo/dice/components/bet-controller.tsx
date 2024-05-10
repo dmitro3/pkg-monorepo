@@ -16,7 +16,6 @@ import { toDecimals, toFormatted } from "../../../utils/web3";
 import { RangeForm } from "../types";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { useRangeGameStore } from "..";
-import { useGameSkip } from "../../../game-provider";
 import { SkipButton } from "../../../common/skip-button";
 import { AudioController } from "../../../common/audio-controller";
 import { cn } from "../../../utils/style";
@@ -48,12 +47,6 @@ export const BetController: React.FC<Props> = ({
     "gameStatus",
     "rangeGameResults",
   ]);
-
-  const { updateSkipAnimation, isAnimationSkipped } = useGameSkip();
-
-  React.useEffect(() => {
-    console.log(gameStatus, "gamestats", rangeGameResults, isAnimationSkipped);
-  }, [gameStatus]);
 
   return (
     <BetControllerContainer>

@@ -30,8 +30,6 @@ const Ball: React.FC<PlinkoBallProps> = ({
   const isMobile = useMediaQuery("(max-width:768px)");
   const mobileRef = React.useRef<boolean>(isMobile);
 
-  console.log(isSkipped, "isskp");
-
   React.useEffect(() => {
     skipRef.current = isSkipped;
   }, [isSkipped]);

@@ -99,8 +99,6 @@ export const Canvas: React.FC<CanvasProps> = ({
         ...r,
       })) as PlinkoLastBet[];
 
-      console.log(order, skipped);
-
       dispatch({ type: PlinkoResultActions.CLEAR });
       updateLastBets(lastBets);
       onAnimationSkipped(plinkoGameResults);
@@ -126,13 +124,11 @@ export const Canvas: React.FC<CanvasProps> = ({
         ] as number,
         ...(plinkoGameResults[order] as PlinkoGameResult),
       });
-      console.log("test", order);
     }
 
     if (!skipped && order === paths.length - 1) {
       dispatch({ type: PlinkoResultActions.CLEAR });
 
-      console.log("finish game", order);
       updatePlinkoGameResults([]);
       updateGameStatus("ENDED");
     }
