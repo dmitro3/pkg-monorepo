@@ -76,7 +76,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
           onSkip();
         } else if (rollGameResults.length === curr) {
           updateRollGameResults([]);
-          onAnimationCompleted && onAnimationCompleted();
+          onAnimationCompleted && onAnimationCompleted(rollGameResults);
           setTimeout(() => updateGameStatus("ENDED"), 1000);
         } else {
           setTimeout(() => turn(curr), 350);
@@ -91,7 +91,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
   const onSkip = () => {
     updateLastBets(rollGameResults);
     updateRollGameResults([]);
-    onAnimationSkipped();
+    onAnimationSkipped(rollGameResults);
     setTimeout(() => updateGameStatus("ENDED"), 50);
   };
 

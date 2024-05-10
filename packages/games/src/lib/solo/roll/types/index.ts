@@ -17,6 +17,6 @@ export interface RollGameResult {
 
 export interface GameAreaProps {
   onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: () => void;
-  onAnimationSkipped?: () => void;
+  onAnimationCompleted?: (result: RollGameResult[]) => void;
+  onAnimationSkipped?: (result: RollGameResult[]) => void;
 }

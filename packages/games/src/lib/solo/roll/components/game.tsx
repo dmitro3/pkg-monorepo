@@ -6,8 +6,8 @@ import { RollGameResult } from "../types";
 export type RollGameProps = React.ComponentProps<"div"> & {
   gameResults: RollGameResult[];
   onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: () => void;
-  onAnimationSkipped?: () => void;
+  onAnimationCompleted?: (result: RollGameResult[]) => void;
+  onAnimationSkipped?: (result: RollGameResult[]) => void;
 };
 
 export const RollGame = ({ gameResults, children }: RollGameProps) => {
