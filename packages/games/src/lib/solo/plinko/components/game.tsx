@@ -5,9 +5,13 @@ import { PlinkoGameResult } from "../types";
 
 export type PlinkoGameProps = React.ComponentProps<"div"> & {
   gameResults: PlinkoGameResult[];
-  onAnimationStep?: (step: number, multiplier: number) => void;
+  onAnimationStep?: (
+    step: number,
+    multiplier: number,
+    currentWager: number
+  ) => void;
   onAnimationCompleted?: (result: PlinkoLastBet[]) => void;
-  onAnimationSkipped?: (result: PlinkoLastBet[]) => void;
+  onAnimationSkipped?: (result: PlinkoLastBet[], currentWager: number) => void;
 };
 
 export const PlinkoGame = ({ gameResults, children }: PlinkoGameProps) => {

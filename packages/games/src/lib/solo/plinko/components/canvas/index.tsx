@@ -12,7 +12,7 @@ import {
   PlinkoResultActions,
   usePlinkoGameStore,
 } from "../..";
-import { useEffect, useMemo, useReducer } from "react";
+import { useMemo, useReducer } from "react";
 import { DotRows } from "./dot-rows";
 import { Buckets } from "./buckets";
 import { rowMultipliers } from "../../constants";
@@ -41,9 +41,13 @@ const reducer = (state: any, action: any) => {
 };
 
 export interface CanvasProps {
-  onAnimationStep?: (step: number, multiplier: number) => void;
+  onAnimationStep?: (
+    step: number,
+    multiplier: number,
+    currentWager: number
+  ) => void;
   onAnimationCompleted?: (result: PlinkoLastBet[]) => void;
-  onAnimationSkipped?: (result: PlinkoLastBet[]) => void;
+  onAnimationSkipped?: (result: PlinkoLastBet[], currentWager: number) => void;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({
@@ -68,6 +72,7 @@ export const Canvas: React.FC<CanvasProps> = ({
     "addLastBet",
   ]);
 
+  const currentWager = form.watch("wager");
   const betCount = form.watch("betCount");
   const plinkoSize = useMemo(() => {
     const _ps = form.watch("plinkoSize");
@@ -101,7 +106,7 @@ export const Canvas: React.FC<CanvasProps> = ({
     if (skipped) {
       dispatch({ type: PlinkoResultActions.CLEAR });
       updateLastBets(lastBets);
-      onAnimationSkipped(lastBets);
+      onAnimationSkipped(lastBets, currentWager);
       updatePlinkoGameResults([]);
       updateGameStatus("ENDED");
 
@@ -120,7 +125,7 @@ export const Canvas: React.FC<CanvasProps> = ({
           plinkoGameResults[order]?.outcomes as number[]
         )
       ] as number;
-      onAnimationStep(order, multiplier);
+      onAnimationStep(order, multiplier, currentWager);
       addLastBet({
         multiplier,
         ...(plinkoGameResults[order] as PlinkoGameResult),
