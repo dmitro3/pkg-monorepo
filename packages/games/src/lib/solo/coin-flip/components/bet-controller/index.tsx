@@ -2,11 +2,7 @@
 import * as React from "react";
 import { useFormContext } from "react-hook-form";
 import { Advanced } from "../../../../common/advanced";
-import {
-  TotalWager,
-  WagerCurrency,
-  WagerCurrencyIcon,
-} from "../../../../common/wager";
+import { TotalWager, WagerCurrencyIcon } from "../../../../common/wager";
 import {
   BetControllerTitle,
   BetCountFormField,
@@ -19,7 +15,6 @@ import { CoinFlipForm } from "../../types";
 import { PreBetButton } from "../../../../common/pre-bet-button";
 import { AudioController } from "../../../../common/audio-controller";
 import { useCoinFlipGameStore } from "../..";
-import { useGameSkip } from "../../../../game-provider";
 import { SkipButton } from "../../../../common/skip-button";
 import { cn } from "../../../../utils/style";
 import { toDecimals, toFormatted } from "../../../../utils/web3";
@@ -49,8 +44,6 @@ export const BetController: React.FC<Props> = ({
     "coinFlipGameResults",
     "gameStatus",
   ]);
-
-  const { updateSkipAnimation } = useGameSkip();
 
   return (
     <BetControllerContainer>

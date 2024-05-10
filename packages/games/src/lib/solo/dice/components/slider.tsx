@@ -1,6 +1,6 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { useFormContext } from "react-hook-form";
-import { RangeForm } from "../constant";
+import { RangeForm } from "../types";
 import { cn } from "../../../../lib/utils/style";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { useRangeGameStore } from "..";

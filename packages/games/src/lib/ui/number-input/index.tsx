@@ -237,8 +237,6 @@ const Input: React.FC<{
       displayType="input"
       autoComplete="off"
       onValueChange={(valueObj) => {
-        console.log("valueObj", valueObj);
-
         onChange(valueObj.floatValue || 0);
       }}
       allowNegative={false}

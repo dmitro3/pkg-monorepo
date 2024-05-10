@@ -13,6 +13,7 @@ import { toDecimals } from "../../../utils/web3";
 import { useMemo } from "react";
 import { cn } from "../../../../lib/utils/style";
 import { Form } from "../../../ui/form";
+import { RangeFormField } from "../types";
 
 type TemplateOptions = {
   slider?: {
@@ -28,7 +29,7 @@ type TemplateProps = RangeGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: RangeFormField) => void;
 };
 
 const defaultOptions: TemplateOptions = {
