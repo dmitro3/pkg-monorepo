@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import {
   ALL_DICES,
+  DiceFormField,
   LUCK_MULTIPLIER,
   MAX_BET_COUNT,
   MIN_BET_COUNT,
@@ -29,7 +30,7 @@ type TemplateProps = RollGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: DiceFormField) => void;
 };
 
 const RollTemplate = ({ ...props }: TemplateProps) => {

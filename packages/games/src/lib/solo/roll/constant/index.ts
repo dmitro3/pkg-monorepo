@@ -5,17 +5,15 @@ export const MIN_BET_COUNT = 1 as const;
 
 export const MAX_BET_COUNT = 100 as const;
 
-export type DiceForm = UseFormReturn<
-  {
-    wager: number;
-    betCount: number;
-    stopGain: number;
-    stopLoss: number;
-    dices: DICE[];
-  },
-  any,
-  undefined
->;
+export interface DiceFormField {
+  wager: number;
+  betCount: number;
+  stopGain: number;
+  stopLoss: number;
+  dices: DICE[];
+}
+
+export type DiceForm = UseFormReturn<DiceFormField, any, undefined>;
 
 export const ALL_DICES = [
   DICE.ONE,
