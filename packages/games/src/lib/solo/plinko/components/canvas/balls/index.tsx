@@ -81,6 +81,8 @@ const Ball: React.FC<PlinkoBallProps> = ({
 
               if (i - 1 === path.length && !skipRef.current) {
                 onAnimationEnd(order);
+
+                clearTimeout(t);
               }
 
               // if (skipRef.current) {

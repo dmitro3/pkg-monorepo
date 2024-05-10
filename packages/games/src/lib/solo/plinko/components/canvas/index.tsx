@@ -90,7 +90,12 @@ export const Canvas: React.FC<CanvasProps> = ({
 
     if (skipped) {
       const lastBets = plinkoGameResults.map((r) => ({
-        multiplier: getMultiplierIndex(plinkoSize, r.outcomes as number[]),
+        multiplier: multipliers[
+          getMultiplierIndex(
+            plinkoSize,
+            plinkoGameResults[order]?.outcomes as number[]
+          )
+        ] as number,
         ...r,
       })) as PlinkoLastBet[];
 
@@ -113,10 +118,12 @@ export const Canvas: React.FC<CanvasProps> = ({
     if (!skipped) {
       onAnimationStep(order);
       addLastBet({
-        multiplier: getMultiplierIndex(
-          plinkoSize,
-          plinkoGameResults[order]?.outcomes as number[]
-        ),
+        multiplier: multipliers[
+          getMultiplierIndex(
+            plinkoSize,
+            plinkoGameResults[order]?.outcomes as number[]
+          )
+        ] as number,
         ...(plinkoGameResults[order] as PlinkoGameResult),
       });
       console.log("test", order);
