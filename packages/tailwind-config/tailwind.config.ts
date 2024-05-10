@@ -361,10 +361,10 @@ const config: Omit<Config, "content"> = {
       },
       fontSize: {
         small: "13px",
-        base: "15px",
-        md: "18px",
-        lg: "24px",
-        xl: "36px",
+        base: "14px",
+        md: "16px",
+        lg: "18px",
+        xl: "20px",
       },
       backgroundImage: {
         dice: "linear-gradient(318deg, #FFF 17.93%, #B7B7C8 88.39%)",
