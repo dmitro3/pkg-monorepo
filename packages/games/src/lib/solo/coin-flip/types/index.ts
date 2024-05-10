@@ -28,8 +28,8 @@ export interface CoinProps {
   width?: number;
   height?: number;
   onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: () => void;
-  onAnimationSkipped?: () => void;
+  onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
+  onAnimationSkipped?: (result: CoinFlipGameResult[]) => void;
 }
 
 export interface CoinSpeedArgs {

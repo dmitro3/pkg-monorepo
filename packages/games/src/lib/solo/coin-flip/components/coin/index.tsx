@@ -83,7 +83,7 @@ export const Coin: React.FC<CoinProps> = ({
           onSkip();
         } else if (coinFlipGameResults.length === curr) {
           updateCoinFlipGameResults([]);
-          onAnimationCompleted && onAnimationCompleted();
+          onAnimationCompleted && onAnimationCompleted(coinFlipGameResults);
           setTimeout(() => updateGameStatus("ENDED"), 1000);
         } else {
           setTimeout(() => turn(curr), 350);
@@ -97,7 +97,7 @@ export const Coin: React.FC<CoinProps> = ({
   const onSkip = () => {
     updateLastBets(coinFlipGameResults);
     updateCoinFlipGameResults([]);
-    onAnimationSkipped();
+    onAnimationSkipped(coinFlipGameResults);
     setTimeout(() => updateGameStatus("ENDED"), 50);
   };
 

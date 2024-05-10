@@ -9,6 +9,7 @@ export enum SoundEffects {
   SLIDER,
   WIN,
   ROLLING_DICE,
+  FALLING,
 }
 
 export interface AudioContextType {

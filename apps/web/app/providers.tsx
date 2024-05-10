@@ -14,7 +14,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
         },
         account: {
           isLoggedIn: true,
-          balance: 2,
+          balance: 25,
         },
       }}
     >

@@ -15,6 +15,7 @@ export const SceneContainer: React.FC<Props> = ({
 }) => {
   return (
     <section
+      id="animationScene"
       className={cn(
         "wr-relative wr-flex wr-w-full wr-flex-col wr-items-center wr-justify-between wr-rounded-lg wr-border wr-border-zinc-800 wr-bg-cover wr-bg-no-repeat wr-p-3.5 lg:wr-px-16 lg:wr-pb-12 lg:wr-pt-[14px]",
         className
@@ -68,7 +69,7 @@ export const BetCountSlider = ({ ...props }) => {
           "wr-cursor-none wr-pointer-events-none wr-opacity-60": props.disabled,
         }
       )}
-      min={1}
+      min={props.minValue || 1}
       value={[props.value]}
       max={props.maxValue}
       onValueChange={(e) => {

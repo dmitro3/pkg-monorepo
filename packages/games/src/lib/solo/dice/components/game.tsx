@@ -15,8 +15,8 @@ export type RangeGameProps = React.ComponentProps<"div"> & {
   /**
    * Runs when the animation is completed
    */
-  onAnimationCompleted?: () => void;
-  onAnimationSkipped?: () => void;
+  onAnimationCompleted?: (result: RangeGameResult[]) => void;
+  onAnimationSkipped?: (result: RangeGameResult[]) => void;
 };
 
 export const RangeGame = ({
@@ -69,7 +69,7 @@ export const RangeGame = ({
     if (isAnimationFinished) {
       setTimeout(() => {
         updateCurrentAnimationCount(0);
-        onAnimationCompleted();
+        onAnimationCompleted(rangeGameResults);
       }, 1000);
 
       updateGameStatus("ENDED");
@@ -106,7 +106,7 @@ export const RangeGame = ({
     setTimeout(() => {
       updateGameStatus("ENDED");
       updateRangeGameResults([]);
-      onAnimationSkipped();
+      onAnimationSkipped(rangeGameResults);
     }, 50);
   };
 
