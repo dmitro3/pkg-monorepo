@@ -1,13 +1,13 @@
 import React from "react";
 import { useGameSkip } from "../../../game-provider";
-import usePlinkoGameStore from "../store";
+import usePlinkoGameStore, { PlinkoLastBet } from "../store";
 import { PlinkoGameResult } from "../types";
 
 export type PlinkoGameProps = React.ComponentProps<"div"> & {
   gameResults: PlinkoGameResult[];
-  onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: (result: PlinkoGameResult[]) => void;
-  onAnimationSkipped?: (result: PlinkoGameResult[]) => void;
+  onAnimationStep?: (step: number, multiplier: number) => void;
+  onAnimationCompleted?: (result: PlinkoLastBet[]) => void;
+  onAnimationSkipped?: (result: PlinkoLastBet[]) => void;
 };
 
 export const PlinkoGame = ({ gameResults, children }: PlinkoGameProps) => {
