@@ -11,7 +11,7 @@ export default function PlinkoPage() {
       <PlinkoTemplate
         options={{
           scene: {
-            backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
+            backgroundImage: "url(/plinko.png)",
           },
         }}
         onSubmit={(data) => {
@@ -28,7 +28,7 @@ export default function PlinkoPage() {
             {
               payout: 1,
               payoutInUsd: 1,
-              outcomes: [0, 0, 0, 1, 1, 0, 0, 0, 1, 0],
+              outcomes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             },
             {
               payout: 1,

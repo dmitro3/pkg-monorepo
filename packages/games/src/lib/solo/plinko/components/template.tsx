@@ -79,6 +79,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
           >
             <Plinko.Body>
               <Plinko.Game {...props}>
+                <Plinko.LastBets />
                 <Plinko.Canvas {...props} />
               </Plinko.Game>
             </Plinko.Body>

@@ -11,10 +11,12 @@ export type PlinkoGameProps = React.ComponentProps<"div"> & {
 };
 
 export const PlinkoGame = ({ gameResults, children }: PlinkoGameProps) => {
-  const { updatePlinkoGameResults, updateGameStatus } = usePlinkoGameStore([
-    "updatePlinkoGameResults",
-    "updateGameStatus",
-  ]);
+  const { updatePlinkoGameResults, updateGameStatus, gameStatus } =
+    usePlinkoGameStore([
+      "updatePlinkoGameResults",
+      "updateGameStatus",
+      "gameStatus",
+    ]);
 
   const { updateSkipAnimation } = useGameSkip();
 

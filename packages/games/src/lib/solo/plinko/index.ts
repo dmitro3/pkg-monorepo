@@ -1,11 +1,13 @@
 import { Body } from "./components/body";
 import { Canvas } from "./components/canvas";
 import { PlinkoGame } from "./components/game";
+import { PlinkoLastBets } from "./components/last-bets";
 
 export const Plinko = {
   Game: PlinkoGame,
   Body,
   Canvas,
+  LastBets: PlinkoLastBets,
 };
 
 export { default as PlinkoTemplate } from "./components/template";

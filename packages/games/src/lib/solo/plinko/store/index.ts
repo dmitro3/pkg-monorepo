@@ -2,16 +2,20 @@ import { create } from "zustand";
 import { shallow } from "zustand/shallow";
 import { PlinkoGameResult } from "../types";
 
+export interface PlinkoLastBet extends PlinkoGameResult {
+  multiplier: number;
+}
+
 interface PlinkoGameState {
-  lastBets: PlinkoGameResult[];
+  lastBets: PlinkoLastBet[];
   plinkoGameResults: PlinkoGameResult[];
   gameStatus: "IDLE" | "PLAYING" | "ENDED";
   currentAnimationCount: number;
 }
 
 interface PlinkoGameStateActions {
-  addLastBet: (item: PlinkoGameResult) => void;
-  updateLastBets: (item: PlinkoGameResult[]) => void;
+  addLastBet: (item: PlinkoLastBet) => void;
+  updateLastBets: (item: PlinkoLastBet[]) => void;
   removeLastBet: (index: number) => void;
   clearStore: () => void;
   updatePlinkoGameResults: (item: PlinkoGameResult[]) => void;

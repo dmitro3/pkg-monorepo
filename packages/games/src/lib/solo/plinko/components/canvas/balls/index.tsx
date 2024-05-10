@@ -30,6 +30,8 @@ const Ball: React.FC<PlinkoBallProps> = ({
   const isMobile = useMediaQuery("(max-width:768px)");
   const mobileRef = React.useRef<boolean>(isMobile);
 
+  console.log(isSkipped, "isskp");
+
   React.useEffect(() => {
     skipRef.current = isSkipped;
   }, [isSkipped]);
@@ -41,7 +43,7 @@ const Ball: React.FC<PlinkoBallProps> = ({
   React.useEffect(() => {
     if (path.length > 0) {
       let x = 0;
-      const delay = order * 1000;
+      let delay = order * 1000;
 
       const initialX = mobileRef.current ? 10 : 25;
       const initialY = mobileRef.current ? 20 : 30;
@@ -59,6 +61,8 @@ const Ball: React.FC<PlinkoBallProps> = ({
 
           if (skipRef.current) {
             clearTimeout(t);
+
+            return;
           }
         } else {
           const t = setTimeout(
@@ -79,9 +83,9 @@ const Ball: React.FC<PlinkoBallProps> = ({
                 onAnimationEnd(order);
               }
 
-              if (skipRef.current) {
-                onAnimationEnd(order, true);
-              }
+              // if (skipRef.current) {
+              //   onAnimationEnd(order, true);
+              // }
 
               if (i === path.length) {
                 const t = setTimeout(() => {
@@ -104,8 +108,6 @@ const Ball: React.FC<PlinkoBallProps> = ({
       }
     }
   }, [path]);
-
-  console.log(styles.ballMover, "ballmover");
 
   return (
     <div className={styles.ballMover} style={style}>
@@ -135,6 +137,12 @@ export const Balls: React.FC<PlinkoBallsProps> = ({
       return genNumberArray(count);
     }
   }, [count, skipRef.current]);
+
+  React.useEffect(() => {
+    if (isAnimationSkipped) {
+      onAnimationEnd(0, true);
+    }
+  }, [isAnimationSkipped]);
 
   React.useEffect(() => {
     skipRef.current = isAnimationSkipped;

@@ -8,37 +8,16 @@ import { useFormContext } from "react-hook-form";
 import {
   PlinkoForm,
   PlinkoGameResult,
+  PlinkoLastBet,
   PlinkoResultActions,
   usePlinkoGameStore,
 } from "../..";
-import { useMemo, useReducer } from "react";
+import { useEffect, useMemo, useReducer } from "react";
 import { DotRows } from "./dot-rows";
 import { Buckets } from "./buckets";
 import { rowMultipliers } from "../../constants";
 import { Balls } from "./balls";
-
-export const getMultiplierIndex = (size: number, path: number[]): number => {
-  let movement = 0;
-  const bucketSize = size + 1;
-  const center = bucketSize / 2;
-
-  path.forEach((v) => {
-    if (v === 0) {
-      movement -= 1;
-    } else {
-      movement += 1;
-    }
-  });
-
-  const index = center + movement / 2;
-  let roundedIndex = Math.round(index);
-
-  if (roundedIndex > index) {
-    roundedIndex--;
-  }
-
-  return roundedIndex;
-};
+import { getMultiplierIndex } from "../../utils";
 
 const initialState = { results: [] };
 
@@ -75,13 +54,27 @@ export const Canvas: React.FC<CanvasProps> = ({
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const form = useFormContext() as PlinkoForm;
-  const { plinkoGameResults, updateGameStatus } = usePlinkoGameStore([
+  const {
+    plinkoGameResults,
+    updateGameStatus,
+    updatePlinkoGameResults,
+    updateLastBets,
+    addLastBet,
+  } = usePlinkoGameStore([
     "plinkoGameResults",
     "updateGameStatus",
+    "updatePlinkoGameResults",
+    "updateLastBets",
+    "addLastBet",
   ]);
 
   const betCount = form.watch("betCount");
-  const plinkoSize = form.watch("plinkoSize");
+  const plinkoSize = useMemo(() => {
+    const _ps = form.watch("plinkoSize");
+    if (_ps < 6) return 6;
+    if (_ps > 12) return 12;
+    else return _ps;
+  }, [form]);
   const multipliers = rowMultipliers[plinkoSize] as number[];
 
   const paths = useMemo(() => {
@@ -96,8 +89,18 @@ export const Canvas: React.FC<CanvasProps> = ({
     }
 
     if (skipped) {
+      const lastBets = plinkoGameResults.map((r) => ({
+        multiplier: getMultiplierIndex(plinkoSize, r.outcomes as number[]),
+        ...r,
+      })) as PlinkoLastBet[];
+
+      console.log(order, skipped);
+
       dispatch({ type: PlinkoResultActions.CLEAR });
+      updateLastBets(lastBets);
       onAnimationSkipped(plinkoGameResults);
+      updatePlinkoGameResults([]);
+      updateGameStatus("ENDED");
 
       return;
     }
@@ -109,6 +112,13 @@ export const Canvas: React.FC<CanvasProps> = ({
 
     if (!skipped) {
       onAnimationStep(order);
+      addLastBet({
+        multiplier: getMultiplierIndex(
+          plinkoSize,
+          plinkoGameResults[order]?.outcomes as number[]
+        ),
+        ...(plinkoGameResults[order] as PlinkoGameResult),
+      });
       console.log("test", order);
     }
 
@@ -116,6 +126,7 @@ export const Canvas: React.FC<CanvasProps> = ({
       dispatch({ type: PlinkoResultActions.CLEAR });
 
       console.log("finish game", order);
+      updatePlinkoGameResults([]);
       updateGameStatus("ENDED");
     }
   };
@@ -132,7 +143,7 @@ export const Canvas: React.FC<CanvasProps> = ({
         <Buckets
           size={plinkoSize}
           multipliers={multipliers}
-          values={state.result}
+          values={state.results}
         />
       </div>
     </div>
