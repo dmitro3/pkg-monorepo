@@ -19,6 +19,8 @@ import { Advanced } from "../../../common/advanced";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { Button } from "../../../ui/button";
 import { AudioController } from "../../../common/audio-controller";
+import useRollGameStore from "../store";
+import { SkipButton } from "../../../common/skip-button";
 
 interface Props {
   minWager: number;
@@ -37,8 +39,14 @@ export const BetController: React.FC<Props> = ({
 
   const betCount = form.watch("betCount");
 
+  const { rollGameResults, gameStatus } = useRollGameStore([
+    "rollGameResults",
+    "gameStatus",
+  ]);
   const isFormInProgress =
-    form.formState.isSubmitting || form.formState.isLoading;
+    form.formState.isSubmitting ||
+    form.formState.isLoading ||
+    gameStatus == "PLAYING";
 
   const maxPayout = React.useMemo(() => {
     return toDecimals(wager * betCount * winMultiplier, 2);
@@ -85,18 +93,23 @@ export const BetController: React.FC<Props> = ({
             </div>
           </Advanced>
         </div>
-        <PreBetButton>
-          <Button
-            type="submit"
-            variant={"success"}
-            className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
-            size={"xl"}
-            disabled={!form.formState.isValid || isFormInProgress}
-            isLoading={isFormInProgress}
-          >
-            Bet
-          </Button>
-        </PreBetButton>
+
+        {!(rollGameResults.length > 2) && gameStatus !== "PLAYING" ? (
+          <PreBetButton>
+            <Button
+              type="submit"
+              variant={"success"}
+              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
+              size={"xl"}
+              disabled={!form.formState.isValid || isFormInProgress}
+              isLoading={isFormInProgress}
+            >
+              Bet
+            </Button>
+          </PreBetButton>
+        ) : (
+          <SkipButton />
+        )}
       </div>
       <footer className="wr-flex wr-items-center wr-justify-between">
         <AudioController />
