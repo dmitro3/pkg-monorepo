@@ -1,4 +1,4 @@
-import { RangeForm } from "../constant";
+import { RangeForm } from "../types";
 import { useFormContext } from "react-hook-form";
 import { cn } from "../../../../lib/utils/style";
 import { Button } from "../../../ui/button";

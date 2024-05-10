@@ -20,7 +20,7 @@ type TemplateProps = PlinkoGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: PlinkoFormField) => void;
 };
 
 const PlinkoTemplate = ({ ...props }: TemplateProps) => {

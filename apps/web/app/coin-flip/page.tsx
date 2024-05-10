@@ -19,7 +19,7 @@ export default function CoinFlipPage() {
           },
         }}
         onSubmit={(data) => {
-          console.log(data, "data");
+          console.log("data");
           // send request
           // get results
 

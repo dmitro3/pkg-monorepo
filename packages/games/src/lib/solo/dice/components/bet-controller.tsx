@@ -13,7 +13,7 @@ import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
 import { Advanced } from "../../../common/advanced";
 import { useFormContext } from "react-hook-form";
 import { toDecimals, toFormatted } from "../../../utils/web3";
-import { RangeForm } from "../constant";
+import { RangeForm } from "../types";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { useRangeGameStore } from "..";
 import { useGameSkip } from "../../../game-provider";
