@@ -41,9 +41,9 @@ const reducer = (state: any, action: any) => {
 };
 
 export interface CanvasProps {
-  onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: (result: PlinkoGameResult[]) => void;
-  onAnimationSkipped?: (result: PlinkoGameResult[]) => void;
+  onAnimationStep?: (step: number, multiplier: number) => void;
+  onAnimationCompleted?: (result: PlinkoLastBet[]) => void;
+  onAnimationSkipped?: (result: PlinkoLastBet[]) => void;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({
@@ -88,20 +88,20 @@ export const Canvas: React.FC<CanvasProps> = ({
       return;
     }
 
-    if (skipped) {
-      const lastBets = plinkoGameResults.map((r) => ({
-        multiplier: multipliers[
-          getMultiplierIndex(
-            plinkoSize,
-            plinkoGameResults[order]?.outcomes as number[]
-          )
-        ] as number,
-        ...r,
-      })) as PlinkoLastBet[];
+    const lastBets = plinkoGameResults.map((r) => ({
+      multiplier: multipliers[
+        getMultiplierIndex(
+          plinkoSize,
+          plinkoGameResults[order]?.outcomes as number[]
+        )
+      ] as number,
+      ...r,
+    })) as PlinkoLastBet[];
 
+    if (skipped) {
       dispatch({ type: PlinkoResultActions.CLEAR });
       updateLastBets(lastBets);
-      onAnimationSkipped(plinkoGameResults);
+      onAnimationSkipped(lastBets);
       updatePlinkoGameResults([]);
       updateGameStatus("ENDED");
 
@@ -114,14 +114,15 @@ export const Canvas: React.FC<CanvasProps> = ({
     dispatch({ type: PlinkoResultActions.ADD, index });
 
     if (!skipped) {
-      onAnimationStep(order);
+      const multiplier = multipliers[
+        getMultiplierIndex(
+          plinkoSize,
+          plinkoGameResults[order]?.outcomes as number[]
+        )
+      ] as number;
+      onAnimationStep(order, multiplier);
       addLastBet({
-        multiplier: multipliers[
-          getMultiplierIndex(
-            plinkoSize,
-            plinkoGameResults[order]?.outcomes as number[]
-          )
-        ] as number,
+        multiplier,
         ...(plinkoGameResults[order] as PlinkoGameResult),
       });
     }
@@ -129,6 +130,7 @@ export const Canvas: React.FC<CanvasProps> = ({
     if (!skipped && order === paths.length - 1) {
       dispatch({ type: PlinkoResultActions.CLEAR });
 
+      onAnimationCompleted(lastBets);
       updatePlinkoGameResults([]);
       updateGameStatus("ENDED");
     }
