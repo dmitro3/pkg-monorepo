@@ -6,4 +6,6 @@ export * from "./lib/solo/dice";
 
 export * from "./lib/solo/coin-flip";
 
+export * from "./lib/solo/roll";
+
 export * from "./lib/solo/plinko";
