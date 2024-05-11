@@ -41,7 +41,7 @@ const Ball: React.FC<PlinkoBallProps> = ({
   React.useEffect(() => {
     if (path.length > 0) {
       let x = 0;
-      let delay = order * 1000;
+      let delay = order * 750;
 
       const initialX = mobileRef.current ? 10 : 25;
       const initialY = mobileRef.current ? 20 : 30;

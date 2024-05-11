@@ -1,5 +1,4 @@
-import { useFormContext } from "react-hook-form";
-import { PlinkoForm, usePlinkoGameStore } from "..";
+import { usePlinkoGameStore } from "..";
 import { LastBetsContainer } from "../../../common/last-bets-container";
 import { cn } from "../../../utils/style";
 
@@ -7,7 +6,7 @@ export const PlinkoLastBets = () => {
   const { lastBets } = usePlinkoGameStore(["lastBets"]);
 
   return (
-    <LastBetsContainer className="wr-absolute wr-right-5 wr-top-5">
+    <LastBetsContainer className="wr-absolute wr-right-5 wr-top-5 wr-w-full max-md:wr-max-w-[290px]">
       {lastBets?.map((result, index) => {
         return (
           <div
