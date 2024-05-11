@@ -41,13 +41,9 @@ const reducer = (state: any, action: any) => {
 };
 
 export interface CanvasProps {
-  onAnimationStep?: (
-    step: number,
-    multiplier: number,
-    currentWager: number
-  ) => void;
+  onAnimationStep?: (step: number, multiplier: number) => void;
   onAnimationCompleted?: (result: PlinkoLastBet[]) => void;
-  onAnimationSkipped?: (result: PlinkoLastBet[], currentWager: number) => void;
+  onAnimationSkipped?: (result: PlinkoLastBet[]) => void;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({
@@ -72,7 +68,6 @@ export const Canvas: React.FC<CanvasProps> = ({
     "addLastBet",
   ]);
 
-  const currentWager = form.watch("wager");
   const betCount = form.watch("betCount");
   const plinkoSize = useMemo(() => {
     const _ps = form.watch("plinkoSize");
@@ -106,7 +101,7 @@ export const Canvas: React.FC<CanvasProps> = ({
     if (skipped) {
       dispatch({ type: PlinkoResultActions.CLEAR });
       updateLastBets(lastBets);
-      onAnimationSkipped(lastBets, currentWager);
+      onAnimationSkipped(lastBets);
       updatePlinkoGameResults([]);
       updateGameStatus("ENDED");
 
@@ -125,7 +120,7 @@ export const Canvas: React.FC<CanvasProps> = ({
           plinkoGameResults[order]?.outcomes as number[]
         )
       ] as number;
-      onAnimationStep(order, multiplier, currentWager);
+      onAnimationStep(order, multiplier);
       addLastBet({
         multiplier,
         ...(plinkoGameResults[order] as PlinkoGameResult),
