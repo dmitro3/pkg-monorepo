@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import useRangeGameStore from "../store";
+import useDiceGameStore from "../store";
 import { cn } from "../../../../lib/utils/style";
 import {
   Tooltip,
@@ -10,22 +10,22 @@ import {
 } from "../../../ui/tooltip";
 
 export const TextRandomizer = () => {
-  const { rangeGameResults, currentAnimationCount } = useRangeGameStore([
-    "rangeGameResults",
+  const { diceGameResults, currentAnimationCount } = useDiceGameStore([
+    "diceGameResults",
     "currentAnimationCount",
   ]);
 
-  const currentResult = rangeGameResults[currentAnimationCount];
+  const currentResult = diceGameResults[currentAnimationCount];
 
   const [resetAnimation, setResetAnimation] = React.useState(false);
 
   React.useEffect(() => {
-    if (rangeGameResults.length === 0) {
+    if (diceGameResults.length === 0) {
       return;
     } else {
       setResetAnimation(false);
     }
-  }, [rangeGameResults]);
+  }, [diceGameResults]);
 
   React.useEffect(() => {
     setResetAnimation(true);
@@ -33,7 +33,7 @@ export const TextRandomizer = () => {
     setTimeout(() => {
       setResetAnimation(false);
     }, 1000);
-  }, [rangeGameResults]);
+  }, [diceGameResults]);
 
   return (
     <div className="wr-relative wr-w-full">
@@ -42,9 +42,9 @@ export const TextRandomizer = () => {
           <div
             className={cn("wr-transition-all", {
               "wr-opacity-0 delay-1000":
-                currentAnimationCount + 1 === rangeGameResults.length,
+                currentAnimationCount + 1 === diceGameResults.length,
               "wr-opacity-0": resetAnimation,
-              "wr-opacity-100 wr-delay-100": rangeGameResults.length === 1,
+              "wr-opacity-100 wr-delay-100": diceGameResults.length === 1,
             })}
           >
             <span
@@ -67,7 +67,7 @@ export const TextRandomizer = () => {
         ) : null}
       </div>
       {/* Dots */}
-      {rangeGameResults.map((result, key) => (
+      {diceGameResults.map((result, key) => (
         <span
           key={key}
           style={{ left: `${result.resultNumber}%` }}

@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 
-export interface RangeFormField {
+export interface DiceFormFields {
   wager: number;
   betCount: number;
   stopGain: number;
@@ -9,9 +9,9 @@ export interface RangeFormField {
   winChance: number;
   rollType: "OVER" | "UNDER";
 }
-export type RangeForm = UseFormReturn<RangeFormField, any, undefined>;
+export type DiceForm = UseFormReturn<DiceFormFields, any, undefined>;
 
-export interface RangeGameResult {
+export interface DiceGameResult {
   resultNumber: number;
   payout: number;
   payoutInUsd: number;
