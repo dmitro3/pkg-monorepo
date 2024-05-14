@@ -1,15 +1,50 @@
 "use client";
 
+import React from "react";
+import { Chip } from "../../../common/chip-controller/types";
 import { GameContainer, SceneContainer } from "../../../common/containers";
+import { BlackjackGameProps } from "..";
 import { CDN_URL } from "../../../constants";
+import { BetController } from "./bet-controller";
 
-const BlackjackTemplate = () => {
+type TemplateOptions = {
+  scene?: {
+    backgroundImage?: string;
+  };
+};
+
+type TemplateProps = BlackjackGameProps & {
+  options: TemplateOptions;
+  minWager?: number;
+  maxWager?: number;
+};
+
+const BlackjackTemplate: React.FC<TemplateProps> = ({
+  activeGameData,
+  activeGameHands,
+}) => {
+  const [selectedChip, setSelectedChip] = React.useState<Chip>(Chip.ONE);
+
   return (
-    <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0">
+    <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0 wr-max-w-[1140px]">
       <SceneContainer
-        className={`wr-relative wr-flex wr-h-[675px] wr-border-0 wr-bg-center !wr-p-0 [background-image:url('${CDN_URL}/blackjack/blackjack-bg.png')]`}
+        style={{
+          backgroundImage: `url(${CDN_URL}/blackjack/blackjack-bg.png)`,
+        }}
+        className="wr-relative wr-flex wr-h-[675px] wr-border-0 wr-bg-center !wr-p-0"
       >
-        asd
+        <BetController
+          totalWager={10}
+          selectedChip={selectedChip}
+          onSelectedChipChange={setSelectedChip}
+          isDisabled={false}
+          isDistributionCompleted={false}
+          isLastDistributionCompleted={false}
+          status={0}
+          onDeal={() => {}}
+          onClear={() => {}}
+          onRebet={() => {}}
+        />
       </SceneContainer>
     </GameContainer>
   );
