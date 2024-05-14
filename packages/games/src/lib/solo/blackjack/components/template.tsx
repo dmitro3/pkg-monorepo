@@ -25,6 +25,9 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 }) => {
   const [selectedChip, setSelectedChip] = React.useState<Chip>(Chip.ONE);
 
+  const [firstHandWager, setFirstHandWager] = React.useState<number>(0);
+  const [secondHandWager, setSecondHandWager] = React.useState<number>(0);
+
   return (
     <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0 wr-max-w-[1140px]">
       <SceneContainer
