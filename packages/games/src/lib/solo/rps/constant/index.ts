@@ -1,3 +1,4 @@
+import { CDN_URL } from "../../../constants";
 import { RockPaperScissors } from "../types";
 
 export const ALL_RPS_CHOICES = [
@@ -7,10 +8,16 @@ export const ALL_RPS_CHOICES = [
 ] as const;
 
 export const rpsChoiceMap = {
-  [RockPaperScissors.ROCK]: { label: "Rock", icon: "/svgs/icon-rock.svg" },
-  [RockPaperScissors.PAPER]: { label: "Paper", icon: "/svgs/icon-paper.svg" },
+  [RockPaperScissors.ROCK]: {
+    label: "Rock",
+    icon: `${CDN_URL}/rps/icon-rock.svg`,
+  },
+  [RockPaperScissors.PAPER]: {
+    label: "Paper",
+    icon: `${CDN_URL}/rps/icon-paper.svg`,
+  },
   [RockPaperScissors.SCISSORS]: {
     label: "Scissors",
-    icon: "/svgs/icon-scissors.svg",
+    icon: `${CDN_URL}/rps/icon-scissors.svg`,
   },
 } as const;

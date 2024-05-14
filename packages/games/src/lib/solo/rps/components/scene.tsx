@@ -14,6 +14,7 @@ import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { useFormContext } from "react-hook-form";
 import { useGameSkip } from "../../../game-provider";
 import useRpsGameStore from "../store";
+import { CDN_URL } from "../../../constants";
 
 const Scene: React.FC<GameAreaProps> = ({
   onAnimationCompleted,
@@ -53,8 +54,6 @@ const Scene: React.FC<GameAreaProps> = ({
   ]);
 
   const { isAnimationSkipped } = useGameSkip();
-
-  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     if (rpsGameResults.length === 0) return;
@@ -114,9 +113,10 @@ const Scene: React.FC<GameAreaProps> = ({
     skipRef.current = isAnimationSkipped;
   }, [isAnimationSkipped]);
 
+  console.log(rpsGameResults);
+
   return (
     <div>
-      {" "}
       <div className="wr-relative wr-flex wr-h-full wr-w-full  ">
         <div className="wr-relative wr-basis-1/2 ">
           <div
@@ -173,7 +173,7 @@ const Scene: React.FC<GameAreaProps> = ({
               )}
             >
               <img
-                src="/images/games/rps/rock.png"
+                src={`${CDN_URL}/rps/rock.png`}
                 width={294}
                 height={116}
                 alt="rock"
@@ -186,7 +186,7 @@ const Scene: React.FC<GameAreaProps> = ({
                 )}
               />
               <img
-                src="/images/games/rps/paper.png"
+                src={`${CDN_URL}/rps/paper.png`}
                 width={294}
                 height={116}
                 alt="paper"
@@ -199,7 +199,7 @@ const Scene: React.FC<GameAreaProps> = ({
                 )}
               />
               <img
-                src="/images/games/rps/scissors.png"
+                src={`${CDN_URL}/rps/scissors.png`}
                 width={294}
                 height={116}
                 alt="scissors"
@@ -216,7 +216,7 @@ const Scene: React.FC<GameAreaProps> = ({
         </div>
         <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-z-10 -wr-translate-x-1/2 -wr-translate-y-1/2  wr-transform max-md:wr-hidden">
           <img
-            src="/images/games/rps/VS.svg"
+            src={`${CDN_URL}/rps/VS.svg`}
             width={105}
             height={38.5}
             alt="VS"

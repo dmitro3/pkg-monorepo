@@ -1,19 +1,7 @@
 "use client";
 
-import { RpsTemplate } from "@winrlabs/games";
+import { RPSGameResult, RockPaperScissors, RpsTemplate } from "@winrlabs/games";
 import React from "react";
-
-enum RockPaperScissors {
-  ROCK = "0",
-  PAPER = "1",
-  SCISSORS = "2",
-}
-
-interface RPSGameResult {
-  rps: RockPaperScissors;
-  payout: number;
-  payoutInUsd: number;
-}
 
 const RpsPage = () => {
   const [results, setResults] = React.useState<RPSGameResult[]>([]);

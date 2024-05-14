@@ -7,8 +7,9 @@ import {
   RpsScissorsSm,
 } from "../../../svgs";
 import { cn } from "../../../utils/style";
-import { RockPaperScissors } from "../types";
+import { RPSForm, RockPaperScissors } from "../types";
 import useRpsGameStore from "../store";
+import { useFormContext } from "react-hook-form";
 
 const MiniRPSIcon = ({ rps }: { rps: string }) => {
   switch (rps) {
@@ -28,6 +29,9 @@ const MiniRPSIcon = ({ rps }: { rps: string }) => {
 
 const LastBets = () => {
   const { lastBets } = useRpsGameStore(["lastBets"]);
+  const form = useFormContext() as RPSForm;
+
+  const rpsChoice = form.watch("rpsChoice");
 
   return (
     <LastBetsContainer className="wr-absolute wr-top-3 wr-z-10 wr-max-w-[430px] max-md:wr-max-w-[340px]">
@@ -40,14 +44,14 @@ const LastBets = () => {
               {
                 "wr-bg-green-500": result.payout > 0,
                 "wr-bg-yellow-500":
-                  result.rps.toString() === result.choice.toString(),
+                  result.rps.toString() === rpsChoice.toString(),
               }
             )}
           >
             <div className="wr-flex wr-items-center">
               <MiniRPSIcon rps={result.rps.toString()} />
               <RpsArrowRightSm />
-              <MiniRPSIcon rps={result.choice} />
+              <MiniRPSIcon rps={rpsChoice} />
             </div>
           </div>
         );

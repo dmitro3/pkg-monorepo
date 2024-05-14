@@ -9,3 +9,5 @@ export const Rps = {
 };
 
 export { default as RpsTemplate } from "./components/template";
+
+export * from "./types";
