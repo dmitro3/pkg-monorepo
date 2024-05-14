@@ -12,7 +12,7 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { BetController } from "./bet-controller";
-import { CoinFlip, CoinFlipFormField } from "..";
+import { CoinFlip, CoinFlipFormFields } from "..";
 import { cn } from "../../../utils/style";
 import { Form } from "../../../ui/form";
 
@@ -26,7 +26,7 @@ type TemplateProps = CoinFlipGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: CoinFlipFormField) => void;
+  onSubmitGameForm: (data: CoinFlipFormFields) => void;
 };
 
 const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
@@ -68,7 +68,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmit)}>
+      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
             minWager={props.minWager || 2}
