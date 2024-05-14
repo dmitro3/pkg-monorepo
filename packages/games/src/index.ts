@@ -9,3 +9,5 @@ export * from "./lib/solo/coin-flip";
 export * from "./lib/solo/roll";
 
 export * from "./lib/solo/plinko";
+
+export * from "./lib/solo/rps";
