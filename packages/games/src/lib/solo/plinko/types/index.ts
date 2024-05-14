@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 
-export interface PlinkoFormField {
+export interface PlinkoFormFields {
   wager: number;
   betCount: number;
   stopGain: number;
@@ -8,7 +8,7 @@ export interface PlinkoFormField {
   plinkoSize: number;
 }
 
-export type PlinkoForm = UseFormReturn<PlinkoFormField, any, undefined>;
+export type PlinkoForm = UseFormReturn<PlinkoFormFields, any, undefined>;
 
 export interface PlinkoGameResult {
   outcomes: number[];
