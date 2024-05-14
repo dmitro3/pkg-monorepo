@@ -78,7 +78,7 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
           >
             <Rps.Game {...props}>
               <Rps.LastBets />
-              <Rps.Scene />
+              <Rps.Scene {...props} />
             </Rps.Game>
           </SceneContainer>
         </GameContainer>
