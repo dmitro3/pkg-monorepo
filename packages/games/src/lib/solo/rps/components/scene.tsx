@@ -2,7 +2,12 @@ import React from "react";
 import { cn } from "../../../utils/style";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { GameAreaProps, RPSForm, RockPaperScissors } from "../types";
+import {
+  GameAreaProps,
+  RPSForm,
+  RPSGameResult,
+  RockPaperScissors,
+} from "../types";
 import { ALL_RPS_CHOICES } from "../constant";
 import { RPSChoiceRadio } from "./bet-controller";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
@@ -24,6 +29,12 @@ const Scene: React.FC<GameAreaProps> = ({
   const rpsChoice = form.watch("rpsChoice");
 
   const skipRef = React.useRef<boolean>(false);
+
+  const [winnerAnimation, setWinnerAnimation] = React.useState(false);
+
+  const [winner, setWinner] = React.useState<RPSGameResult | undefined>(
+    undefined
+  );
 
   const {
     rpsGameResults,
@@ -49,20 +60,24 @@ const Scene: React.FC<GameAreaProps> = ({
     if (rpsGameResults.length === 0) return;
 
     const turn = (i = 0) => {
-      const rps = Number(rpsGameResults[i]?.rps) || 0;
+      const rps = rpsGameResults[i]?.rps || RockPaperScissors["ROCK"];
       const payout = rpsGameResults[i]?.payout || 0;
       const payoutInUsd = rpsGameResults[i]?.payoutInUsd || 0;
 
       playingEffect.play();
 
-      setLoading(true);
+      setWinner({
+        rps,
+        payout,
+        payoutInUsd,
+      });
       setTimeout(() => {
         const curr = i + 1;
 
         onAnimationStep && onAnimationStep(curr);
 
         addLastBet({
-          rps: rps,
+          rps,
           payout,
           payoutInUsd,
         });
@@ -81,8 +96,9 @@ const Scene: React.FC<GameAreaProps> = ({
           setTimeout(() => turn(curr), 350);
         }
 
-        setLoading(false);
+        setWinnerAnimation(true);
       }, 1250);
+      setWinnerAnimation(false);
     };
     turn();
   }, [rpsGameResults]);
