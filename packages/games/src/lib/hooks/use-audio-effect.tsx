@@ -10,6 +10,7 @@ export enum SoundEffects {
   WIN,
   ROLLING_DICE,
   FALLING,
+  RPS,
 }
 
 export interface AudioContextType {
@@ -80,6 +81,7 @@ effects.set(
   "mixkit-quick-win-video-game-notification-269.wav"
 );
 effects.set(SoundEffects.ROLLING_DICE, "rolling-dice.mp3");
+effects.set(SoundEffects.RPS, "rps.mp3");
 
 type PlayOptions = {
   playbackRate?: number;
