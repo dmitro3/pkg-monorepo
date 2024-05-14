@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { DICE } from "../types";
-import { DiceForm } from "../constant";
+import { RollForm } from "../constant";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
@@ -85,7 +85,7 @@ const Dice: React.FC<Props> = ({
   isBetting = false,
   isDisabled = false,
 }) => {
-  const form = useFormContext() as DiceForm;
+  const form = useFormContext() as RollForm;
 
   return (
     <FormField

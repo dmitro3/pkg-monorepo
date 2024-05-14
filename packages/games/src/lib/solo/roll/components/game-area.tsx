@@ -3,7 +3,7 @@ import React from "react";
 import { FormField, FormItem, FormMessage } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import Dice from "./dice";
-import { ALL_DICES, DiceForm } from "../constant";
+import { ALL_DICES, RollForm } from "../constant";
 import { GameAreaProps } from "../types";
 import useRollGameStore from "../store";
 import { useGameSkip } from "../../../game-provider";
@@ -14,7 +14,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
   onAnimationStep,
   onAnimationSkipped = () => {},
 }) => {
-  const form = useFormContext() as DiceForm;
+  const form = useFormContext() as RollForm;
 
   const selectedDices = form.watch("dices");
 

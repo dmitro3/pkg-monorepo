@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { DiceForm } from "../constant";
+import { RollForm } from "../constant";
 import { toDecimals } from "../../../utils/web3";
 import { BetControllerContainer } from "../../../common/containers";
 import {
@@ -33,7 +33,7 @@ export const BetController: React.FC<Props> = ({
   maxWager,
   winMultiplier,
 }) => {
-  const form = useFormContext() as DiceForm;
+  const form = useFormContext() as RollForm;
 
   const wager = form.watch("wager");
 
