@@ -63,7 +63,11 @@ export const GameArea: React.FC<GameAreaProps> = ({
       flipEffect.play();
 
       setLoading(true);
-      setTimeout(() => {
+      const t = setTimeout(() => {
+        if (skipRef.current) {
+          clearTimeout(t);
+          return;
+        }
         const curr = i + 1;
 
         onAnimationStep && onAnimationStep(curr);
@@ -103,6 +107,10 @@ export const GameArea: React.FC<GameAreaProps> = ({
 
   React.useEffect(() => {
     skipRef.current = isAnimationSkipped;
+
+    if (isAnimationSkipped) {
+      onSkip();
+    }
   }, [isAnimationSkipped]);
 
   console.log({ rollGameResults });
