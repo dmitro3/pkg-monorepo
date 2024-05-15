@@ -1,9 +1,9 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { useFormContext } from "react-hook-form";
-import { RangeForm } from "../types";
+import { DiceForm } from "../types";
 import { cn } from "../../../../lib/utils/style";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
-import { useRangeGameStore } from "..";
+import { useDiceGameStore } from "..";
 
 export interface SliderTrackOptions {
   color?: string;
@@ -21,9 +21,9 @@ const MIN_VALUE = 5;
 const MAX_VALUE = 95;
 
 export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
-  const form = useFormContext() as RangeForm;
+  const form = useFormContext() as DiceForm;
 
-  const { gameStatus } = useRangeGameStore(["gameStatus"]);
+  const { gameStatus } = useDiceGameStore(["gameStatus"]);
 
   const rollValue = form.watch("rollValue");
 

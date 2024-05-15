@@ -370,6 +370,17 @@ const config: Omit<Config, "content"> = {
         dice: "linear-gradient(318deg, #FFF 17.93%, #B7B7C8 88.39%)",
         "dice-selected":
           "linear-gradient(317.54deg, #30303A 17.93%, #09090B 88.39%),linear-gradient(0deg, #41414C, #41414C)",
+        "rps-scene-shadow":
+          "radial-gradient(68.75% 68.75% at 50% 31.25%, rgba(9, 9, 11, 0) 52.15%, #09090B 100%)",
+        "rps-select":
+          " linear-gradient(127deg, rgba(255, 255, 255, 0.15) 13.87%, rgba(255, 255, 255, 0.00) 41.21%)",
+        "rps-win":
+          "linear-gradient(127deg, rgba(101, 163, 13, 0.35) 13.87%, rgba(101, 163, 13, 0.35) 41.21%) ",
+        "rps-win-text": "linear-gradient(180deg, #A6D95C 0%, #65A30D 100%)",
+        "rps-lost":
+          "linear-gradient(127deg, rgba(220, 38, 38, 0.35) 13.87%, rgba(220, 38, 38, 0.35) 41.21%)",
+        "rps-default":
+          "linear-gradient(126.52deg, rgba(255, 255, 255, 0.15) 13.87%, rgba(255, 255, 255, 0) 41.21%)",
       },
     },
   },

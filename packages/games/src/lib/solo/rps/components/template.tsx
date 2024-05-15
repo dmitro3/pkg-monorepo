@@ -1,20 +1,15 @@
 "use client";
 
+import React from "react";
 import { useForm } from "react-hook-form";
-import {
-  CoinSide,
-  MAX_BET_COUNT,
-  MIN_BET_COUNT,
-  WIN_MULTIPLIER,
-} from "../constants";
-import { CoinFlipGameProps } from "./game";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { BetController } from "./bet-controller";
-import { CoinFlip, CoinFlipFormFields } from "..";
-import { cn } from "../../../utils/style";
+import z from "zod";
 import { Form } from "../../../ui/form";
+import { GameContainer, SceneContainer } from "../../../common/containers";
+import { Rps } from "..";
+import { BetController } from "./bet-controller";
+import { RockPaperScissors, RpsFormFields } from "../types";
+import { RpsGameProps } from "./game";
 
 type TemplateOptions = {
   scene?: {
@@ -22,14 +17,14 @@ type TemplateOptions = {
   };
 };
 
-type TemplateProps = CoinFlipGameProps & {
+type TemplateProps = RpsGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmitGameForm: (data: CoinFlipFormFields) => void;
+  onSubmit: (data: RpsFormFields) => void;
 };
 
-const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
+const RpsTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
 
   const formSchema = z.object({
@@ -43,55 +38,48 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       }),
     betCount: z
       .number()
-      .min(MIN_BET_COUNT, { message: "Minimum bet count is 1" })
-      .max(MAX_BET_COUNT, {
+      .min(1, { message: "Minimum bet count is 1" })
+      .max(100, {
         message: "Maximum bet count is 100",
       }),
     stopGain: z.number(),
     stopLoss: z.number(),
-    coinSide: z.nativeEnum(CoinSide),
+    rpsChoice: z.nativeEnum(RockPaperScissors),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "onSubmit",
+    mode: "all",
     defaultValues: {
-      wager: props?.minWager || 2,
+      wager: 2,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
-      coinSide: CoinSide.HEADS,
+      rpsChoice: RockPaperScissors.ROCK,
     },
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
+      <form onSubmit={form.handleSubmit(props.onSubmit)}>
         <GameContainer>
           <BetController
-            minWager={props.minWager || 2}
-            maxWager={props.maxWager || 10}
-            winMultiplier={WIN_MULTIPLIER}
+            maxWager={props?.maxWager || 10}
+            minWager={props?.minWager || 2}
+            winMultiplier={1.96}
           />
           <SceneContainer
-            className={cn(
-              "wr-h-[640px] max-md:wr-h-[425px] lg:wr-py-12 wr-relative"
-            )}
+            className="wr-relative wr-h-[640px] wr-overflow-hidden !wr-p-0 max-md:wr-h-[450px]"
             style={{
               backgroundImage: options?.scene?.backgroundImage,
             }}
           >
-            <CoinFlip.Body>
-              <CoinFlip.Game {...props}>
-                <CoinFlip.LastBets />
-                <CoinFlip.Coin {...props} />
-                <div className="wr-hidden lg:wr-block">
-                  <CoinFlip.Controller />
-                </div>
-              </CoinFlip.Game>
-            </CoinFlip.Body>
+            <Rps.Game {...props}>
+              <Rps.LastBets />
+              <Rps.Scene {...props} />
+            </Rps.Game>
           </SceneContainer>
         </GameContainer>
       </form>
@@ -99,4 +87,4 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
   );
 };
 
-export default CoinFlipTemplate;
+export default RpsTemplate;

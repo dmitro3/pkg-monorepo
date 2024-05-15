@@ -2,12 +2,12 @@
 
 import * as React from "react";
 import useRangeGameStore from "../store";
-import { RangeGameResult } from "../types";
+import { DiceGameResult } from "../types";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { useGameSkip } from "../../../game-provider";
 
 export type RangeGameProps = React.ComponentProps<"div"> & {
-  results?: RangeGameResult[];
+  results?: DiceGameResult[];
   /**
    * Runs on each animation step
    */
@@ -15,8 +15,8 @@ export type RangeGameProps = React.ComponentProps<"div"> & {
   /**
    * Runs when the animation is completed
    */
-  onAnimationCompleted?: (result: RangeGameResult[]) => void;
-  onAnimationSkipped?: (result: RangeGameResult[]) => void;
+  onAnimationCompleted?: (result: DiceGameResult[]) => void;
+  onAnimationSkipped?: (result: DiceGameResult[]) => void;
 };
 
 export const RangeGame = ({
@@ -31,16 +31,16 @@ export const RangeGame = ({
   const { isAnimationSkipped, updateSkipAnimation } = useGameSkip();
 
   const {
-    rangeGameResults,
+    diceGameResults,
     updateCurrentAnimationCount,
     currentAnimationCount,
-    updateRangeGameResults,
+    updateDiceGameResults,
     addLastBet,
     updateLastBets,
     updateGameStatus,
   } = useRangeGameStore([
-    "updateRangeGameResults",
-    "rangeGameResults",
+    "updateDiceGameResults",
+    "diceGameResults",
     "updateCurrentAnimationCount",
     "currentAnimationCount",
     "updateRollValue",
@@ -52,7 +52,7 @@ export const RangeGame = ({
 
   React.useEffect(() => {
     if (results) {
-      updateRangeGameResults(results);
+      updateDiceGameResults(results);
     }
 
     if (results?.length) {
@@ -64,12 +64,12 @@ export const RangeGame = ({
   const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const animCallback = async (curr = 0) => {
-    const isAnimationFinished = curr === rangeGameResults.length;
+    const isAnimationFinished = curr === diceGameResults.length;
 
     if (isAnimationFinished) {
       setTimeout(() => {
         updateCurrentAnimationCount(0);
-        onAnimationCompleted(rangeGameResults);
+        onAnimationCompleted(diceGameResults);
       }, 1000);
 
       updateGameStatus("ENDED");
@@ -84,29 +84,29 @@ export const RangeGame = ({
   };
 
   React.useEffect(() => {
-    if (rangeGameResults.length === 0) return;
+    if (diceGameResults.length === 0) return;
 
     if (!isAnimationSkipped) {
       let curr = currentAnimationCount;
 
       intervalRef.current = setInterval(() => {
         animCallback(curr);
-        rangeGameResults[curr] &&
-          addLastBet(rangeGameResults[curr] as RangeGameResult);
+        diceGameResults[curr] &&
+          addLastBet(diceGameResults[curr] as DiceGameResult);
         curr += 1;
       }, 1000);
     } else {
       onSkip();
     }
-  }, [rangeGameResults, isAnimationSkipped]);
+  }, [diceGameResults, isAnimationSkipped]);
 
   const onSkip = () => {
-    updateLastBets(rangeGameResults);
+    updateLastBets(diceGameResults);
     clearInterval(intervalRef.current as NodeJS.Timeout);
     setTimeout(() => {
       updateGameStatus("ENDED");
-      updateRangeGameResults([]);
-      onAnimationSkipped(rangeGameResults);
+      updateDiceGameResults([]);
+      onAnimationSkipped(diceGameResults);
     }, 50);
   };
 

@@ -1,14 +1,15 @@
 "use client";
 
-import { RollTemplate } from "@winrlabs/games";
+import { RPSGameResult, RockPaperScissors, RpsTemplate } from "@winrlabs/games";
 import React from "react";
 
-const RollPage = () => {
-  const [results, setResults] = React.useState<any>([]);
+const RpsPage = () => {
+  const [results, setResults] = React.useState<RPSGameResult[]>([]);
 
   return (
     <div>
-      <RollTemplate
+      {" "}
+      <RpsTemplate
         maxWager={100}
         minWager={1}
         options={{
@@ -16,7 +17,7 @@ const RollPage = () => {
             backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
           },
         }}
-        onSubmitGameForm={(data) => {
+        onSubmit={(data) => {
           console.log(data, "data");
           // send request
 
@@ -26,22 +27,22 @@ const RollPage = () => {
             {
               payout: 1,
               payoutInUsd: 1,
-              dice: 1,
+              rps: RockPaperScissors.PAPER,
             },
             {
               payout: 1,
               payoutInUsd: 1,
-              dice: 2,
+              rps: RockPaperScissors.ROCK,
             },
             {
               payout: 1,
               payoutInUsd: 1,
-              dice: 4,
+              rps: RockPaperScissors.SCISSORS,
             },
             {
               payout: 1,
               payoutInUsd: 1,
-              dice: 1,
+              rps: RockPaperScissors.PAPER,
             },
           ]);
         }}
@@ -61,4 +62,4 @@ const RollPage = () => {
   );
 };
 
-export default RollPage;
+export default RpsPage;

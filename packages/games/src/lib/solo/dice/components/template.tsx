@@ -13,7 +13,7 @@ import { toDecimals } from "../../../utils/web3";
 import { useMemo } from "react";
 import { cn } from "../../../../lib/utils/style";
 import { Form } from "../../../ui/form";
-import { RangeFormField } from "../types";
+import { DiceFormFields } from "../types";
 
 type TemplateOptions = {
   slider?: {
@@ -29,7 +29,7 @@ type TemplateProps = RangeGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: RangeFormField) => void;
+  onSubmitGameForm: (data: DiceFormFields) => void;
 };
 
 const defaultOptions: TemplateOptions = {
@@ -90,7 +90,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmit)}>
+      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
             minWager={props.minWager || 2}

@@ -3,18 +3,24 @@ import React from "react";
 import { FormField, FormItem, FormMessage } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import Dice from "./dice";
-import { ALL_DICES, DiceForm } from "../constant";
-import { GameAreaProps } from "../types";
+import { ALL_DICES } from "../constant";
+import { RollForm, RollGameResult } from "../types";
 import useRollGameStore from "../store";
 import { useGameSkip } from "../../../game-provider";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
+
+export interface GameAreaProps {
+  onAnimationStep?: (step: number) => void;
+  onAnimationCompleted?: (result: RollGameResult[]) => void;
+  onAnimationSkipped?: (result: RollGameResult[]) => void;
+}
 
 export const GameArea: React.FC<GameAreaProps> = ({
   onAnimationCompleted,
   onAnimationStep,
   onAnimationSkipped = () => {},
 }) => {
-  const form = useFormContext() as DiceForm;
+  const form = useFormContext() as RollForm;
 
   const selectedDices = form.watch("dices");
 
@@ -57,7 +63,11 @@ export const GameArea: React.FC<GameAreaProps> = ({
       flipEffect.play();
 
       setLoading(true);
-      setTimeout(() => {
+      const t = setTimeout(() => {
+        if (skipRef.current) {
+          clearTimeout(t);
+          return;
+        }
         const curr = i + 1;
 
         onAnimationStep && onAnimationStep(curr);
@@ -97,6 +107,10 @@ export const GameArea: React.FC<GameAreaProps> = ({
 
   React.useEffect(() => {
     skipRef.current = isAnimationSkipped;
+
+    if (isAnimationSkipped) {
+      onSkip();
+    }
   }, [isAnimationSkipped]);
 
   console.log({ rollGameResults });

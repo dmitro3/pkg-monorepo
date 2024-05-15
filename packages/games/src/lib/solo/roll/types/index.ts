@@ -1,3 +1,5 @@
+import { UseFormReturn } from "react-hook-form";
+
 export enum DICE {
   ONE,
   TWO,
@@ -15,8 +17,12 @@ export interface RollGameResult {
   payoutInUsd: number;
 }
 
-export interface GameAreaProps {
-  onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: (result: RollGameResult[]) => void;
-  onAnimationSkipped?: (result: RollGameResult[]) => void;
+export interface RollFormFields {
+  wager: number;
+  betCount: number;
+  stopGain: number;
+  stopLoss: number;
+  dices: DICE[];
 }
+
+export type RollForm = UseFormReturn<RollFormFields, any, undefined>;

@@ -1,34 +1,31 @@
 import { create } from "zustand";
 import { shallow } from "zustand/shallow";
-import { DiceGameResult } from "../types";
+import { RPSGameResult, RockPaperScissors } from "../types";
 
-interface DiceGameState {
-  lastBets: DiceGameResult[];
-  diceGameResults: DiceGameResult[];
+interface RPSLastBetsState {
+  lastBets: RPSGameResult[];
+  rpsGameResults: RPSGameResult[];
   gameStatus: "IDLE" | "PLAYING" | "ENDED";
   currentAnimationCount: number;
-  rollValue: number;
 }
 
-interface DiceGameStateActions {
-  addLastBet: (item: DiceGameResult) => void;
-  updateLastBets: (item: DiceGameResult[]) => void;
+interface RPSLastBetsActions {
+  addLastBet: (item: RPSGameResult) => void;
+  updateLastBets: (item: RPSGameResult[]) => void;
   removeLastBet: (index: number) => void;
   clearStore: () => void;
-  updateDiceGameResults: (item: DiceGameResult[]) => void;
+  updateRpsGameResults: (item: RPSGameResult[]) => void;
   updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
   updateCurrentAnimationCount: (count: number) => void;
-  updateRollValue: (value: number) => void;
 }
 
-export type DiceGameStore = DiceGameState & DiceGameStateActions;
+export type RPSLastBetsStore = RPSLastBetsState & RPSLastBetsActions;
 
-export const diceResultsStore = create<DiceGameStore>()((set) => ({
+export const rpsLastBetsStore = create<RPSLastBetsStore>()((set) => ({
   lastBets: [],
-  diceGameResults: [],
+  rpsGameResults: [],
   currentAnimationCount: 0,
-  rollValue: 0,
-  updateRollValue: (value) => set(() => ({ rollValue: value })),
+  gameStatus: "IDLE",
   addLastBet: (item) =>
     set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
@@ -40,30 +37,28 @@ export const diceResultsStore = create<DiceGameStore>()((set) => ({
 
       return { lastBets };
     }),
-  updateDiceGameResults: (item) => set(() => ({ diceGameResults: item })),
+  updateRpsGameResults: (item) => set(() => ({ rpsGameResults: item })),
   clearStore: () =>
     set({
       lastBets: [],
-      diceGameResults: [],
+      rpsGameResults: [],
       gameStatus: "IDLE",
       currentAnimationCount: 0,
-      rollValue: 50,
     }),
-  gameStatus: "IDLE",
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
   updateCurrentAnimationCount: (count) =>
     set(() => ({ currentAnimationCount: count })),
 }));
 
-export const useDiceGameStore = <T extends keyof DiceGameStore>(keys: T[]) =>
-  diceResultsStore((state) => {
+export const useRpsGameStore = <T extends keyof RPSLastBetsStore>(keys: T[]) =>
+  rpsLastBetsStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];
 
       return acc;
-    }, {} as DiceGameStore);
+    }, {} as RPSLastBetsStore);
 
-    return x as Pick<DiceGameStore, T>;
+    return x as Pick<RPSLastBetsStore, T>;
   }, shallow);
 
-export default useDiceGameStore;
+export default useRpsGameStore;
