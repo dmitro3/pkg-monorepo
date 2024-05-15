@@ -27,6 +27,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
   const [firstHandWager, setFirstHandWager] = React.useState<number>(0);
   const [secondHandWager, setSecondHandWager] = React.useState<number>(0);
+  const [thirdHandWager, setThirdHandWager] = React.useState<number>(0);
 
   return (
     <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0 wr-max-w-[1140px]">
