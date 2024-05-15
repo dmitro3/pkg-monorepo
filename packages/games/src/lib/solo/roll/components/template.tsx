@@ -6,12 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import {
   ALL_DICES,
-  DiceFormField,
   LUCK_MULTIPLIER,
   MAX_BET_COUNT,
   MIN_BET_COUNT,
 } from "../constant";
-import { DICE } from "../types";
+import { DICE, RollFormFields } from "../types";
 import { toDecimals } from "../../../utils/web3";
 import { Form } from "../../../ui/form";
 import { GameContainer, SceneContainer } from "../../../common/containers";
@@ -30,7 +29,7 @@ type TemplateProps = RollGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: DiceFormField) => void;
+  onSubmitGameForm: (data: RollFormFields) => void;
 };
 
 const RollTemplate = ({ ...props }: TemplateProps) => {
@@ -98,7 +97,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmit)}>
+      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
             maxWager={props?.maxWager || 10}

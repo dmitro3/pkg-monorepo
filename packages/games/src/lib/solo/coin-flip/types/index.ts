@@ -2,7 +2,7 @@ import { UseFormReturn } from "react-hook-form";
 import { CoinSide } from "../constants";
 import THREE from "three";
 
-export interface CoinFlipFormField {
+export interface CoinFlipFormFields {
   wager: number;
   betCount: number;
   stopGain: number;
@@ -10,7 +10,7 @@ export interface CoinFlipFormField {
   coinSide: CoinSide;
 }
 
-export type CoinFlipForm = UseFormReturn<CoinFlipFormField, any, undefined>;
+export type CoinFlipForm = UseFormReturn<CoinFlipFormFields, any, undefined>;
 
 export interface CoinFlipGameResult {
   coinSide: CoinSide;

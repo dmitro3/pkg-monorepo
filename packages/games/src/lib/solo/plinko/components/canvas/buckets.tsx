@@ -32,7 +32,7 @@ const Bucket: React.FC<PlinkoBucketProps> = ({ multiplier, value }) => {
 
     if (value) {
       setFlash(true);
-      setTimeout(() => setFlash(false), 500);
+      setTimeout(() => setFlash(false), 250);
     }
   }, [value]);
 

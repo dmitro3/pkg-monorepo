@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlinkoFormField } from "../types";
+import { PlinkoFormFields } from "../types";
 import { PlinkoGameProps } from "./game";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -20,7 +20,7 @@ type TemplateProps = PlinkoGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: PlinkoFormField) => void;
+  onSubmitGameForm: (data: PlinkoFormFields) => void;
 };
 
 const PlinkoTemplate = ({ ...props }: TemplateProps) => {
@@ -63,7 +63,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmit)}>
+      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
             minWager={props.minWager || 2}

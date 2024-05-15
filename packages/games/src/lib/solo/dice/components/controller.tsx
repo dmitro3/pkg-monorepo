@@ -1,4 +1,4 @@
-import { RangeForm } from "../types";
+import { DiceForm } from "../types";
 import { useFormContext } from "react-hook-form";
 import { cn } from "../../../../lib/utils/style";
 import { Button } from "../../../ui/button";
@@ -11,7 +11,7 @@ import {
 } from "../../../ui/form";
 import { NumberInput } from "../../../ui/number-input";
 import { IconChevronUp } from "../../../svgs";
-import { useRangeGameStore } from "..";
+import { useDiceGameStore } from "..";
 
 export interface RangeControllerProps {
   winMultiplier: number;
@@ -22,9 +22,9 @@ export const Controller: React.FC<RangeControllerProps> = ({
   winMultiplier,
   disabled,
 }) => {
-  const form = useFormContext() as RangeForm;
+  const form = useFormContext() as DiceForm;
 
-  const { gameStatus } = useRangeGameStore(["gameStatus"]);
+  const { gameStatus } = useDiceGameStore(["gameStatus"]);
 
   return (
     <div className="wr-relative wr-flex wr-w-full wr-shrink-0 wr-items-end wr-justify-center wr-gap-2 wr-">
