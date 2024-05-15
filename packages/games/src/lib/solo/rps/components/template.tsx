@@ -21,7 +21,7 @@ type TemplateProps = RpsGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: RpsFormFields) => void;
+  onSubmitGameForm: (data: RpsFormFields) => void;
 };
 
 const RpsTemplate = ({ ...props }: TemplateProps) => {
@@ -63,7 +63,7 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmit)}>
+      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
             maxWager={props?.maxWager || 10}
