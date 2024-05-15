@@ -6,12 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import {
   ALL_DICES,
-  RollFormFields,
   LUCK_MULTIPLIER,
   MAX_BET_COUNT,
   MIN_BET_COUNT,
 } from "../constant";
-import { DICE } from "../types";
+import { DICE, RollFormFields } from "../types";
 import { toDecimals } from "../../../utils/web3";
 import { Form } from "../../../ui/form";
 import { GameContainer, SceneContainer } from "../../../common/containers";

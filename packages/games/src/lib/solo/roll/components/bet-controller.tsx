@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { RollForm } from "../constant";
+import { RollForm } from "../types";
 import { toDecimals } from "../../../utils/web3";
 import { BetControllerContainer } from "../../../common/containers";
 import {
