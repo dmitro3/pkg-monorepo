@@ -14,7 +14,7 @@ export default function PlinkoPage() {
             backgroundImage: "url(/plinko.png)",
           },
         }}
-        onSubmit={(data) => {
+        onSubmitGameForm={(data) => {
           console.log(data, "data");
           // send request
           // get results

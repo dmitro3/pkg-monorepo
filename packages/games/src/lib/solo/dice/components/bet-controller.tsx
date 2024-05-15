@@ -13,9 +13,9 @@ import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
 import { Advanced } from "../../../common/advanced";
 import { useFormContext } from "react-hook-form";
 import { toDecimals, toFormatted } from "../../../utils/web3";
-import { RangeForm } from "../types";
+import { DiceForm } from "../types";
 import { PreBetButton } from "../../../common/pre-bet-button";
-import { useRangeGameStore } from "..";
+import { useDiceGameStore } from "..";
 import { SkipButton } from "../../../common/skip-button";
 import { AudioController } from "../../../common/audio-controller";
 import { cn } from "../../../utils/style";
@@ -35,7 +35,7 @@ export const BetController: React.FC<Props> = ({
   maxWager,
   winMultiplier,
 }) => {
-  const form = useFormContext() as RangeForm;
+  const form = useFormContext() as DiceForm;
 
   const maxPayout = React.useMemo(() => {
     const { wager, betCount } = form.getValues();
@@ -43,9 +43,9 @@ export const BetController: React.FC<Props> = ({
     return toDecimals(wager * betCount * winMultiplier, 2);
   }, [form.getValues().wager, form.getValues().betCount, winMultiplier]);
 
-  const { gameStatus, rangeGameResults } = useRangeGameStore([
+  const { gameStatus, diceGameResults } = useDiceGameStore([
     "gameStatus",
-    "rangeGameResults",
+    "diceGameResults",
   ]);
 
   return (
@@ -114,7 +114,7 @@ export const BetController: React.FC<Props> = ({
             </div>
           </Advanced>
         </div>
-        {!(rangeGameResults.length > 2) && gameStatus !== "PLAYING" ? (
+        {!(diceGameResults.length > 2) && gameStatus !== "PLAYING" ? (
           <PreBetButton>
             <Button
               type="submit"

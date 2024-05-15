@@ -16,7 +16,7 @@ const RollPage = () => {
             backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
           },
         }}
-        onSubmit={(data) => {
+        onSubmitGameForm={(data) => {
           console.log(data, "data");
           // send request
 
