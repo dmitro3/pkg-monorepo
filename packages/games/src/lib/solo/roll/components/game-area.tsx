@@ -3,11 +3,17 @@ import React from "react";
 import { FormField, FormItem, FormMessage } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import Dice from "./dice";
-import { ALL_DICES, RollForm } from "../constant";
-import { GameAreaProps } from "../types";
+import { ALL_DICES } from "../constant";
+import { RollForm, RollGameResult } from "../types";
 import useRollGameStore from "../store";
 import { useGameSkip } from "../../../game-provider";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
+
+export interface GameAreaProps {
+  onAnimationStep?: (step: number) => void;
+  onAnimationCompleted?: (result: RollGameResult[]) => void;
+  onAnimationSkipped?: (result: RollGameResult[]) => void;
+}
 
 export const GameArea: React.FC<GameAreaProps> = ({
   onAnimationCompleted,
