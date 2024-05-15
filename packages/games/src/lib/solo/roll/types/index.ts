@@ -26,9 +26,3 @@ export interface RollFormFields {
 }
 
 export type RollForm = UseFormReturn<RollFormFields, any, undefined>;
-
-export interface GameAreaProps {
-  onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: (result: RollGameResult[]) => void;
-  onAnimationSkipped?: (result: RollGameResult[]) => void;
-}

@@ -1,4 +1,3 @@
-import { UseFormReturn } from "react-hook-form";
 import { DICE } from "../types";
 
 export const MIN_BET_COUNT = 1 as const;
