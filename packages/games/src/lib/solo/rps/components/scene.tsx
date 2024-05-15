@@ -73,13 +73,13 @@ const Scene: React.FC<GameAreaProps> = ({
 
         const curr = i + 1;
 
-        onAnimationStep && onAnimationStep(curr);
-
         setWinner({
           rps,
           payout,
           payoutInUsd,
         });
+
+        onAnimationStep && onAnimationStep(curr);
 
         addLastBet({
           rps,
