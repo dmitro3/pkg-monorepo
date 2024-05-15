@@ -65,7 +65,12 @@ const Scene: React.FC<GameAreaProps> = ({
 
       playingEffect.play();
 
-      setTimeout(() => {
+      const t = setTimeout(() => {
+        if (skipRef.current) {
+          clearTimeout(t);
+          return;
+        }
+
         const curr = i + 1;
         setWinner({
           rps,
@@ -84,9 +89,7 @@ const Scene: React.FC<GameAreaProps> = ({
         if (payout > 0) {
           winEffect.play();
         }
-        if (skipRef.current) {
-          onSkip();
-        } else if (rpsGameResults.length === curr) {
+        if (rpsGameResults.length === curr) {
           updateRpsGameResults([]);
           onAnimationCompleted && onAnimationCompleted(rpsGameResults);
           setTimeout(() => {
@@ -114,7 +117,15 @@ const Scene: React.FC<GameAreaProps> = ({
   };
 
   React.useEffect(() => {
+    console.log(gameStatus, rpsGameResults);
+  }, [gameStatus, rpsGameResults]);
+
+  React.useEffect(() => {
     skipRef.current = isAnimationSkipped;
+
+    if (isAnimationSkipped) {
+      onSkip();
+    }
   }, [isAnimationSkipped]);
 
   return (

@@ -8,7 +8,7 @@ import { Form } from "../../../ui/form";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { Rps } from "..";
 import { BetController } from "./bet-controller";
-import { RockPaperScissors, RpsFormField } from "../types";
+import { RockPaperScissors, RpsFormFields } from "../types";
 import { RpsGameProps } from "./game";
 
 type TemplateOptions = {
@@ -21,7 +21,7 @@ type TemplateProps = RpsGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmit: (data: RpsFormField) => void;
+  onSubmit: (data: RpsFormFields) => void;
 };
 
 const RpsTemplate = ({ ...props }: TemplateProps) => {

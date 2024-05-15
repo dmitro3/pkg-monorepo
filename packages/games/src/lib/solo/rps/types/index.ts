@@ -14,7 +14,7 @@ export interface RPSGameResult {
   payoutInUsd: number;
 }
 
-export interface RpsFormField {
+export interface RpsFormFields {
   wager: number;
   betCount: number;
   stopGain: number;
@@ -22,7 +22,7 @@ export interface RpsFormField {
   rpsChoice: RockPaperScissors;
 }
 
-export type RPSForm = UseFormReturn<RpsFormField, any, undefined>;
+export type RPSForm = UseFormReturn<RpsFormFields, any, undefined>;
 
 export interface GameAreaProps {
   onAnimationStep?: (step: number) => void;
