@@ -14,7 +14,7 @@ export default function Home() {
             backgroundImage: "url(/range.svg)",
           },
         }}
-        onSubmit={(data) => {
+        onSubmitGameForm={(data) => {
           console.log(data, "data");
           // send request
           // get results

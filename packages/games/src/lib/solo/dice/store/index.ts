@@ -1,31 +1,31 @@
 import { create } from "zustand";
 import { shallow } from "zustand/shallow";
-import { RangeGameResult } from "../types";
+import { DiceGameResult } from "../types";
 
-interface RangeGameState {
-  lastBets: RangeGameResult[];
-  rangeGameResults: RangeGameResult[];
+interface DiceGameState {
+  lastBets: DiceGameResult[];
+  diceGameResults: DiceGameResult[];
   gameStatus: "IDLE" | "PLAYING" | "ENDED";
   currentAnimationCount: number;
   rollValue: number;
 }
 
-interface RangeGameStateActions {
-  addLastBet: (item: RangeGameResult) => void;
-  updateLastBets: (item: RangeGameResult[]) => void;
+interface DiceGameStateActions {
+  addLastBet: (item: DiceGameResult) => void;
+  updateLastBets: (item: DiceGameResult[]) => void;
   removeLastBet: (index: number) => void;
   clearStore: () => void;
-  updateRangeGameResults: (item: RangeGameResult[]) => void;
+  updateDiceGameResults: (item: DiceGameResult[]) => void;
   updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
   updateCurrentAnimationCount: (count: number) => void;
   updateRollValue: (value: number) => void;
 }
 
-export type RangeGameStore = RangeGameState & RangeGameStateActions;
+export type DiceGameStore = DiceGameState & DiceGameStateActions;
 
-export const rangeResultStore = create<RangeGameStore>()((set) => ({
+export const diceResultsStore = create<DiceGameStore>()((set) => ({
   lastBets: [],
-  rangeGameResults: [],
+  diceGameResults: [],
   currentAnimationCount: 0,
   rollValue: 0,
   updateRollValue: (value) => set(() => ({ rollValue: value })),
@@ -40,11 +40,11 @@ export const rangeResultStore = create<RangeGameStore>()((set) => ({
 
       return { lastBets };
     }),
-  updateRangeGameResults: (item) => set(() => ({ rangeGameResults: item })),
+  updateDiceGameResults: (item) => set(() => ({ diceGameResults: item })),
   clearStore: () =>
     set({
       lastBets: [],
-      rangeGameResults: [],
+      diceGameResults: [],
       gameStatus: "IDLE",
       currentAnimationCount: 0,
       rollValue: 50,
@@ -55,15 +55,15 @@ export const rangeResultStore = create<RangeGameStore>()((set) => ({
     set(() => ({ currentAnimationCount: count })),
 }));
 
-export const useRangeGameStore = <T extends keyof RangeGameStore>(keys: T[]) =>
-  rangeResultStore((state) => {
+export const useDiceGameStore = <T extends keyof DiceGameStore>(keys: T[]) =>
+  diceResultsStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];
 
       return acc;
-    }, {} as RangeGameStore);
+    }, {} as DiceGameStore);
 
-    return x as Pick<RangeGameStore, T>;
+    return x as Pick<DiceGameStore, T>;
   }, shallow);
 
-export default useRangeGameStore;
+export default useDiceGameStore;

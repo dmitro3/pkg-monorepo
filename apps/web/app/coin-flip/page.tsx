@@ -18,7 +18,7 @@ export default function CoinFlipPage() {
             backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
           },
         }}
-        onSubmit={(data) => {
+        onSubmitGameForm={(data) => {
           console.log("data");
           // send request
           // get results

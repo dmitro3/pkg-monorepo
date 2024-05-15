@@ -5,7 +5,7 @@ export const MIN_BET_COUNT = 1 as const;
 
 export const MAX_BET_COUNT = 100 as const;
 
-export interface DiceFormField {
+export interface RollFormFields {
   wager: number;
   betCount: number;
   stopGain: number;
@@ -13,7 +13,7 @@ export interface DiceFormField {
   dices: DICE[];
 }
 
-export type DiceForm = UseFormReturn<DiceFormField, any, undefined>;
+export type RollForm = UseFormReturn<RollFormFields, any, undefined>;
 
 export const ALL_DICES = [
   DICE.ONE,
