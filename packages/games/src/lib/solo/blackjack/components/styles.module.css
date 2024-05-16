@@ -1,0 +1,54 @@
+@media only screen and (max-width: 1700px) {
+  .bjSceneWrapper {
+    height: 610px;
+  }
+
+  .canvas {
+    zoom: 0.9;
+    -ms-zoom: 0.9;
+    -webkit-zoom: 0.9;
+    -moz-transform: scale(0.9, 0.9);
+    -moz-transform-origin: top center;
+  }
+}
+
+@media only screen and (max-width: 1250px) {
+  .bjSceneWrapper {
+    height: 575px;
+  }
+
+  .canvas {
+    zoom: 0.85;
+    -ms-zoom: 0.85;
+    -webkit-zoom: 0.85;
+    -moz-transform: scale(0.85, 0.85);
+    -moz-transform-origin: top center;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .bjSceneWrapper {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+}
+
+@media only screen and (max-width: 1024px) and (max-height: 600px) {
+  .canvas {
+    zoom: 0.6;
+    -ms-zoom: 0.6;
+    -webkit-zoom: 0.6;
+    -moz-transform: scale(0.6, 0.6);
+    -moz-transform-origin: top center;
+  }
+}
+
+@media only screen and (max-width: 768px) and (max-height: 400px) {
+  .canvas {
+    zoom: 0.55;
+    -ms-zoom: 0.55;
+    -webkit-zoom: 0.55;
+    -moz-transform: scale(0.55, 0.55);
+    -moz-transform-origin: top center;
+  }
+}

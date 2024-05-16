@@ -3,11 +3,14 @@
 import React from "react";
 import { Chip } from "../../../common/chip-controller/types";
 import { GameContainer, SceneContainer } from "../../../common/containers";
-import { BlackjackGameProps } from "..";
+import { BlackjackGameProps, BlackjackGameStatus } from "..";
 import { CDN_URL } from "../../../constants";
 import { BetController } from "./bet-controller";
 import { MoveController } from "./move-controller";
 import { BlackjackCard } from "../utils";
+import styles from "./styles.module.css";
+import { cn } from "../../../utils/style";
+import { DealerCardArea } from "./dealer-card-area";
 
 type TemplateOptions = {
   scene?: {
@@ -117,32 +120,79 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
         style={{
           backgroundImage: `url(${CDN_URL}/blackjack/blackjack-bg.png)`,
         }}
-        className="wr-relative wr-flex wr-h-[675px] wr-border-0 wr-bg-center !wr-p-0"
+        className={cn(
+          styles.bjSceneWrapper,
+          "wr-relative wr-flex wr-h-[675px] wr-border-0 wr-bg-center !wr-p-0"
+        )}
       >
-        <MoveController
-          isDistributionCompleted={false}
-          isControllerDisabled={false}
-          activeHandByIndex={activeHandByIndex}
-          activeGameData={activeGameData}
-          activeHandChipAmount={0}
-          onHit={() => {}}
-          onSplit={() => {}}
-          onDoubleDown={() => {}}
-          onInsure={() => {}}
-          onStand={() => {}}
-        />
-        <BetController
-          totalWager={10}
-          selectedChip={selectedChip}
-          onSelectedChipChange={setSelectedChip}
-          isDisabled={false}
-          isDistributionCompleted={false}
-          isLastDistributionCompleted={false}
-          status={0}
-          onDeal={() => {}}
-          onClear={() => {}}
-          onRebet={() => {}}
-        />
+        {/* canvas start */}
+        <div
+          className={cn(
+            styles.canvas,
+            "wr-absolute wr-h-full wr-max-h-[675px] wr-w-[1140px] wr-select-none"
+          )}
+        >
+          <img
+            src={`${CDN_URL}/blackjack/deck.svg`}
+            width={105}
+            height={115}
+            alt="Justbet Blackjack Deck"
+            className="wr-absolute wr-right-[-10px] wr-top-[-20px] wr-z-[5]"
+          />
+          <img
+            src={`${CDN_URL}/blackjack/distributed-deck.svg`}
+            width={80}
+            height={128}
+            alt="Justbet Blackjack Distributed Deck"
+            className="wr-absolute wr-left-[-35px] wr-top-[100px] wr-z-[5]"
+          />
+
+          {/* dealer cards area start */}
+          <div className="absolute h-full w-full">
+            {activeGameData.status !== BlackjackGameStatus.NONE && (
+              <DealerCardArea
+                hand={activeGameHands.dealer}
+                uiCards={dealerCards}
+                activeGameData={activeGameData}
+                isDistributionCompleted={isDistributionCompleted}
+                isLastDistributionCompleted={false}
+              />
+            )}
+          </div>
+          {/* dealer cards area end */}
+
+          {/* controller start */}
+          {activeGameData.status !== BlackjackGameStatus.FINISHED &&
+            activeGameData.status !== BlackjackGameStatus.NONE && (
+              <MoveController
+                isDistributionCompleted={false}
+                isControllerDisabled={false}
+                activeHandByIndex={activeHandByIndex}
+                activeGameData={activeGameData}
+                activeHandChipAmount={0}
+                onHit={() => {}}
+                onSplit={() => {}}
+                onDoubleDown={() => {}}
+                onInsure={() => {}}
+                onStand={() => {}}
+              />
+            )}
+
+          <BetController
+            totalWager={10}
+            selectedChip={selectedChip}
+            onSelectedChipChange={setSelectedChip}
+            isDisabled={false}
+            isDistributionCompleted={false}
+            isLastDistributionCompleted={false}
+            status={0}
+            onDeal={() => {}}
+            onClear={() => {}}
+            onRebet={() => {}}
+          />
+          {/* controller end */}
+        </div>
+        {/* canvas end */}
       </SceneContainer>
     </GameContainer>
   );
