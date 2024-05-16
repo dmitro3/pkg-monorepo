@@ -72,6 +72,7 @@ const Scene: React.FC<GameAreaProps> = ({
         }
 
         const curr = i + 1;
+
         setWinner({
           rps,
           payout,

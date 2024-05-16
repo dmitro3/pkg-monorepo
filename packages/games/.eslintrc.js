@@ -7,6 +7,15 @@ module.exports = {
     project: "./tsconfig.lint.json",
   },
   globals: {
-    "NodeJS": true
-  }
+    NodeJS: true,
+  },
+  overrides: [
+    {
+      files: ["jest.config.js", "jest.config.cjs"],
+      parserOptions: {
+        sourceType: "script", // CommonJS files should use 'script' as the source type
+        project: "./tsconfig.lint.json", // Specify your tsconfig for linting
+      },
+    },
+  ],
 };

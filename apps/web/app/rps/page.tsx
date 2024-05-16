@@ -8,7 +8,6 @@ const RpsPage = () => {
 
   return (
     <div>
-      {" "}
       <RpsTemplate
         maxWager={100}
         minWager={1}
