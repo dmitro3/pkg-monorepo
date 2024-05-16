@@ -1,8 +1,17 @@
 {
   "extends": "@winrlabs/typescript-config/react-library.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true
   },
-  "include": ["src", "turbo", "tailwind.config.ts", "postcss.config.js"],
+  "include": [
+    "src",
+    "turbo",
+    "tailwind.config.ts",
+    "postcss.config.js",
+    "jest.config.cjs"
+  ],
   "exclude": ["node_modules", "dist"]
 }
