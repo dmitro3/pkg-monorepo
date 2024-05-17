@@ -22,6 +22,7 @@ import { CardArea } from "./card-area";
 import { wait } from "../../../utils/promise";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { useGameOptions } from "../../../game-provider";
+import { AudioController } from "../../../common/audio-controller";
 
 type TemplateOptions = {
   scene?: {
@@ -662,6 +663,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
           "wr-relative wr-flex wr-h-[675px] wr-border-0 wr-bg-center !wr-p-0"
         )}
       >
+        <AudioController className="wr-absolute wr-left-3 wr-top-3 wr-z-[999] wr-hidden lg:wr-block" />
         {/* canvas start */}
         <div
           className={cn(
