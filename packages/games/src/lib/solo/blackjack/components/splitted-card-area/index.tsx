@@ -44,7 +44,16 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
   const [isCompletedAndBusted, setIsCompletedAndBusted] =
     React.useState<boolean>(false);
 
+  const [delayedCardAmounts, setDelayedCardAmounts] = React.useState({
+    amount: 0,
+    softHandAmount: 0,
+  });
+
   const cardAmounts = React.useMemo(() => calcTotalAmounts(uiCards), [uiCards]);
+
+  React.useEffect(() => {
+    setTimeout(() => setDelayedCardAmounts(cardAmounts), 1000);
+  }, [cardAmounts]);
 
   const isBusted = React.useMemo(() => {
     const handStatus = hand.hand?.status;
@@ -179,7 +188,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
         />
       )}
 
-      {cardAmounts.amount > 0 && !isCompletedAndBusted ? (
+      {delayedCardAmounts.amount > 0 && !isCompletedAndBusted ? (
         <div
           className={cn(styles.cardAmount, {
             [styles.firstHand as any]:
@@ -190,19 +199,19 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
               BlackjackHandIndex.SPLITTED_THIRD === handType,
           })}
         >
-          {cardAmounts.softHandAmount < 22 ? (
+          {delayedCardAmounts.softHandAmount < 22 ? (
             cardData?.isSoftHand ? (
               <span>
-                {cardAmounts.softHandAmount === 21
+                {delayedCardAmounts.softHandAmount === 21
                   ? ""
-                  : cardAmounts.amount + "/"}
-                {cardAmounts.softHandAmount}
+                  : delayedCardAmounts.amount + "/"}
+                {delayedCardAmounts.softHandAmount}
               </span>
             ) : (
-              <span>{cardAmounts.amount}</span>
+              <span>{delayedCardAmounts.amount}</span>
             )
           ) : (
-            <span> {cardAmounts.amount} </span>
+            <span> {delayedCardAmounts.amount} </span>
           )}
         </div>
       ) : (

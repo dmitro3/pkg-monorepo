@@ -762,7 +762,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
                   }
                   isInsured={activeGameHands.splittedFirstHand.hand?.isInsured}
                   isTurn={isTurn(activeGameHands.splittedFirstHand.handId)}
-                  className="right-[120px] top-[170px] -translate-x-1/2 -translate-y-1/2"
+                  className="wr-right-[120px] wr-top-[170px] -wr-translate-x-1/2 -wr-translate-y-1/2"
                 />
               </SplittedCardArea>
 
@@ -789,7 +789,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
                   }
                   isInsured={activeGameHands.splittedSecondHand.hand?.isInsured}
                   isTurn={isTurn(activeGameHands.splittedSecondHand.handId)}
-                  className="bottom-[275px] left-[50%] -translate-x-1/2 -translate-y-1/2"
+                  className="wr-bottom-[275px] wr-left-[50%] -wr-translate-x-1/2 -wr-translate-y-1/2"
                 />
               </SplittedCardArea>
 
@@ -816,7 +816,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
                   }
                   isInsured={activeGameHands.splittedThirdHand.hand?.isInsured}
                   isTurn={isTurn(activeGameHands.splittedThirdHand.handId)}
-                  className="left-[200px] top-[170px] -translate-x-1/2 -translate-y-1/2"
+                  className="wr-left-[200px] wr-top-[170px] -wr-translate-x-1/2 -wr-translate-y-1/2"
                 />
               </SplittedCardArea>
 

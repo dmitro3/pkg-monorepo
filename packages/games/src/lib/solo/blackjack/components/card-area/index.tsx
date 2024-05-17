@@ -45,6 +45,11 @@ export const CardArea: React.FC<CardAreaProps> = ({
   const [isSplittedWithDelay, setIsSplittedWithDelay] =
     React.useState<boolean>(false);
 
+  const [delayedCardAmounts, setDelayedCardAmounts] = React.useState({
+    amount: 0,
+    softHandAmount: 0,
+  });
+
   const cardAmounts = React.useMemo(() => {
     const _uiCards = uiCards;
 
@@ -54,6 +59,10 @@ export const CardArea: React.FC<CardAreaProps> = ({
       return calcTotalAmounts(_uiCards);
     } else return calcTotalAmounts(uiCards);
   }, [uiCards, splittedCard, hand.hand?.isSplitted]);
+
+  React.useEffect(() => {
+    setTimeout(() => setDelayedCardAmounts(cardAmounts), 1000);
+  }, [cardAmounts]);
 
   const isBusted = React.useMemo(() => {
     const handStatus = hand.hand?.status;
@@ -192,7 +201,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
         flipped={isCompletedAndBusted ? true : false}
       />
 
-      {cardAmounts.amount > 0 && !isCompletedAndBusted ? (
+      {delayedCardAmounts.amount > 0 && !isCompletedAndBusted ? (
         <div
           className={cn(styles.cardAmount, {
             [styles.firstHand as any]: BlackjackHandIndex.FIRST === handType,
@@ -200,19 +209,19 @@ export const CardArea: React.FC<CardAreaProps> = ({
             [styles.thirdHand as any]: BlackjackHandIndex.THIRD === handType,
           })}
         >
-          {cardAmounts.softHandAmount < 22 ? (
+          {delayedCardAmounts.softHandAmount < 22 ? (
             cardData?.isSoftHand ? (
               <span>
-                {cardAmounts.softHandAmount === 21
+                {delayedCardAmounts.softHandAmount === 21
                   ? ""
-                  : cardAmounts.amount + "/"}
-                {cardAmounts.softHandAmount}
+                  : delayedCardAmounts.amount + "/"}
+                {delayedCardAmounts.softHandAmount}
               </span>
             ) : (
-              <span>{cardAmounts.amount}</span>
+              <span>{delayedCardAmounts.amount}</span>
             )
           ) : (
-            <span> {cardAmounts.amount} </span>
+            <span> {delayedCardAmounts.amount} </span>
           )}
         </div>
       ) : (

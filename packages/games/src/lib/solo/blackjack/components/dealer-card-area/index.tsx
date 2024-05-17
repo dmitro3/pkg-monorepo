@@ -31,7 +31,16 @@ export const DealerCardArea: React.FC<DealerCardAreaProps> = ({
   const [isCompletedAndBusted, setIsCompletedAndBusted] =
     React.useState<boolean>(false);
 
+  const [delayedCardAmounts, setDelayedCardAmounts] = React.useState({
+    amount: 0,
+    softHandAmount: 0,
+  });
+
   const cardAmounts = React.useMemo(() => calcTotalAmounts(uiCards), [uiCards]);
+
+  React.useEffect(() => {
+    setTimeout(() => setDelayedCardAmounts(cardAmounts), 1000);
+  }, [cardAmounts]);
 
   const isBusted = React.useMemo(() => {
     const handStatus = hand.hand?.status;
@@ -96,21 +105,21 @@ export const DealerCardArea: React.FC<DealerCardAreaProps> = ({
         </Card>
       ))}
 
-      {cardAmounts.amount > 0 ? (
+      {delayedCardAmounts.amount > 0 ? (
         <div className={styles.cardAmount}>
-          {cardAmounts.softHandAmount < 22 ? (
+          {delayedCardAmounts.softHandAmount < 22 ? (
             cardData?.isSoftHand ? (
               <span>
-                {cardAmounts.softHandAmount === 21
+                {delayedCardAmounts.softHandAmount === 21
                   ? ""
-                  : cardAmounts.amount + "/"}
-                {cardAmounts.softHandAmount}
+                  : delayedCardAmounts.amount + "/"}
+                {delayedCardAmounts.softHandAmount}
               </span>
             ) : (
-              <span>{cardAmounts.amount}</span>
+              <span>{delayedCardAmounts.amount}</span>
             )
           ) : (
-            <span> {cardAmounts.amount} </span>
+            <span> {delayedCardAmounts.amount} </span>
           )}
         </div>
       ) : (
