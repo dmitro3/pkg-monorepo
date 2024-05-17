@@ -50,7 +50,7 @@ export const limboStore = create<LimboStore>()((set) => ({
     set(() => ({ currentAnimationCount: count })),
 }));
 
-export const useRpsGameStore = <T extends keyof LimboStore>(keys: T[]) =>
+export const useLimboGameStore = <T extends keyof LimboStore>(keys: T[]) =>
   limboStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];
@@ -61,4 +61,4 @@ export const useRpsGameStore = <T extends keyof LimboStore>(keys: T[]) =>
     return x as Pick<LimboStore, T>;
   }, shallow);
 
-export default useRpsGameStore;
+export default useLimboGameStore;

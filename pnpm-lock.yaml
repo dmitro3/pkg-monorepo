@@ -206,6 +206,9 @@ importers:
       esbuild-plugin-svgr:
         specifier: ^2.1.0
         version: 2.1.0(esbuild@0.21.1)(typescript@5.4.5)
+      react-cool-dimensions:
+        specifier: ^3.0.1
+        version: 3.0.1(react@18.3.1)
       react-hook-form:
         specifier: ^7.51.2
         version: 7.51.4(react@18.3.1)
@@ -12185,6 +12188,14 @@ packages:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
     dev: true
+
+  /react-cool-dimensions@3.0.1(react@18.3.1):
+    resolution: {integrity: sha512-DUsDB5WUN1Qh6fJJlBtqFKCktrZCPRYcVn8NTeM6hP/5AhZNjDOa2sC2Dg0EM3WUObPDNV5nFLA34vHQfahUeg==}
+    peerDependencies:
+      react: '>= 16.8.0'
+    dependencies:
+      react: 18.3.1
+    dev: false
 
   /react-devtools-core@5.1.0:
     resolution: {integrity: sha512-NRtLBqYVLrIY+lOa2oTpFiAhI7Hru0AUXI0tP9neCyaPPAzlZyeH0i+VZ0shIyRTJbpvyqbD/uCsewA2hpfZHw==}

@@ -87,7 +87,7 @@ export const BetController: React.FC<Props> = ({
                       value={[field.value]}
                       max={100}
                       step={1}
-                      onValueChange={(e) => {
+                      onValueChange={(e: any) => {
                         form.setValue("limboMultiplier", e[0], {
                           shouldValidate: true,
                         });
