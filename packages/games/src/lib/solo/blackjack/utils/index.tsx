@@ -1,6 +1,7 @@
 import React from "react";
 import { CDN_URL } from "../../../constants";
-import { BlackjackGameResult } from "..";
+import { BlackjackGameResult, TIMEOUT } from "..";
+import { wait } from "../../../utils/promise";
 
 const BigDiamonds = <img src={`${CDN_URL}/blackjack/suits/big-diamonds.svg`} />;
 const BigClubs = <img src={`${CDN_URL}/blackjack/suits/big-clubs.svg`} />;
@@ -160,4 +161,26 @@ export const calcTotalAmounts = (cards: (BlackjackCard | null)[]) => {
     amount,
     softHandAmount,
   };
+};
+
+export const distributeNewCards = async (
+  cardNumbers: number[],
+  cards: (BlackjackCard | null)[],
+  setNewCards: (value: React.SetStateAction<(BlackjackCard | null)[]>) => void,
+  sfxCb: (options?: any) => Promise<void>
+) => {
+  for (let i = 0; i <= 5; i++) {
+    const card = cardNumbers[i];
+
+    if (!cards[i] && card) {
+      setNewCards((prev) => [
+        ...prev,
+        new BlackjackCard(card, getBlackjackSuit()),
+      ]);
+
+      sfxCb();
+
+      await wait(TIMEOUT);
+    }
+  }
 };

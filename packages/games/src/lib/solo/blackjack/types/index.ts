@@ -80,4 +80,19 @@ export enum BlackjackHandStatus {
 export interface BlackjackGameProps {
   activeGameData: GameStruct;
   activeGameHands: ActiveGameHands;
+  isControllerDisabled?: boolean;
+  initialDataFetched: boolean;
+
+  onGameCompleted: () => void;
+  onDeal: (
+    firstHandWager: number,
+    secondHandWager: number,
+    thirdHandWager: number
+  ) => void;
+  onReset: () => void;
+  onHit: (handIndex: number) => void;
+  onSplit: (handIndex: number) => void;
+  onDoubleDown: (handIndex: number) => void;
+  onInsure: (handIndex: number) => void;
+  onStand: (handIndex: number) => void;
 }

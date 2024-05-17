@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Card } from "../card";
-import styles from "./styles.module.css";
+import styles from "./dealer-card-area.module.css";
 import { genNumberArray } from "../../../../utils/number";
 import { BlackjackCard, calcTotalAmounts } from "../../utils";
 import { cn } from "../../../../utils/style";

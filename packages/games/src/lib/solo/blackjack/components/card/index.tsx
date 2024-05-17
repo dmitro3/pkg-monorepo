@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import styles from "./styles.module.css";
+import styles from "./card.module.css";
 import { cn } from "../../../../utils/style";
 import { BlackjackCard, BlackjackSuit, getBlackjackIcon } from "../../utils";
 import { CDN_URL } from "../../../../constants";
@@ -55,7 +55,12 @@ export const Card: React.FC<CardProps> = ({
               />
             </div>
           </div>
-          <div className={styles.mainIcon}>
+          <div
+            className={styles.mainIcon}
+            style={{
+              backgroundImage: `url(${CDN_URL}/blackjack/card-bg-black.png)`,
+            }}
+          >
             {getBlackjackIcon(card?.suit || BlackjackSuit.CLUBS)?.main}
           </div>
           <div className={styles.cardSuitArea}>
@@ -72,7 +77,12 @@ export const Card: React.FC<CardProps> = ({
             />
           </div>
         </div>
-        <div className={styles.back} />
+        <div
+          className={styles.back}
+          style={{
+            backgroundImage: `url(${CDN_URL}/blackjack/card-bg.svg)`,
+          }}
+        />
       </div>
 
       {children && !flippedWithDelay && children}

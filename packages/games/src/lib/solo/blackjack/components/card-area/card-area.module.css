@@ -1,0 +1,540 @@
+.cardArea {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.busted {
+  top: 100px;
+  right: 1095px;
+}
+
+.hidden {
+  display: none;
+  transition: 0;
+}
+
+.state {
+  position: absolute;
+  right: -30px;
+  top: -10px;
+}
+
+.cardAmount {
+  position: absolute;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 15px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #396c4c;
+  font-weight: 700;
+  transition: all;
+  transition-duration: 300ms;
+}
+
+.cardAmount.firstHand {
+  top: 230px;
+  right: 185px;
+}
+
+.cardAmount.secondHand {
+  top: 370px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cardAmount.thirdHand {
+  top: 230px;
+  left: 185px;
+}
+
+.animatedText {
+  position: absolute;
+  z-index: 10;
+  width: 115px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.animatedText.firstHand {
+  top: 295px;
+  right: 150px;
+}
+
+.animatedText.secondHand {
+  top: 435px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.animatedText.thirdHand {
+  top: 300px;
+  left: 150px;
+}
+
+.animatedText .text {
+  width: 115px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffd000;
+  text-shadow:
+    1.5px 1.5px 0 #000,
+    -1.5px 1.5px 0 #000,
+    -1.5px -1.5px 0 #000,
+    1.5px -1.5px 0 #000;
+  font-style: italic;
+}
+
+.animatedText .text.loser {
+  color: #d9113a;
+}
+
+.animatedText .text.push {
+  color: white;
+}
+
+/* for first hand cards */
+.firstHand--1 .card--1 {
+  top: 270px;
+  right: 165px;
+  transform: rotate(0deg);
+}
+
+.firstHand--2 .card--1 {
+  top: 270px;
+  right: 170px;
+  transform: rotate(-10deg);
+}
+
+.firstHand--2 .card--2 {
+  top: 270px;
+  right: 150px;
+  transform: rotate(15deg);
+  z-index: 1;
+}
+
+.firstHand--3 .card--1 {
+  top: 270px;
+  right: 180px;
+  transform: rotate(-15deg);
+}
+
+.firstHand--3 .card--2 {
+  top: 270px;
+  right: 165px;
+  transform: rotate(0deg);
+  z-index: 1;
+}
+
+.firstHand--3 .card--3 {
+  top: 270px;
+  right: 150px;
+  transform: rotate(15deg);
+  z-index: 2;
+}
+
+.firstHand--4 .card--1 {
+  top: 270px;
+  right: 180px;
+  transform: rotate(-20deg);
+}
+
+.firstHand--4 .card--2 {
+  top: 270px;
+  right: 167px;
+  transform: rotate(0deg);
+  z-index: 1;
+}
+
+.firstHand--4 .card--3 {
+  top: 270px;
+  right: 150px;
+  transform: rotate(15deg);
+  z-index: 2;
+}
+
+.firstHand--4 .card--4 {
+  top: 280px;
+  right: 140px;
+  transform: rotate(30deg);
+  z-index: 3;
+}
+
+.firstHand--5 .card--1 {
+  top: 280px;
+  right: 190px;
+  transform: rotate(-30deg);
+}
+
+.firstHand--5 .card--2 {
+  top: 270px;
+  right: 180px;
+  transform: rotate(-15deg);
+  z-index: 1;
+}
+
+.firstHand--5 .card--3 {
+  top: 265px;
+  right: 165px;
+  transform: rotate(0deg);
+  z-index: 2;
+}
+
+.firstHand--5 .card--4 {
+  top: 270px;
+  right: 150px;
+  transform: rotate(15deg);
+  z-index: 3;
+}
+
+.firstHand--5 .card--5 {
+  top: 280px;
+  right: 140px;
+  transform: rotate(30deg);
+  z-index: 4;
+}
+
+.firstHand--6 .card--1 {
+  top: 280px;
+  right: 195px;
+  transform: rotate(-35deg);
+}
+
+.firstHand--6 .card--2 {
+  top: 270px;
+  right: 180px;
+  transform: rotate(-20deg);
+  z-index: 1;
+}
+
+.firstHand--6 .card--3 {
+  top: 270px;
+  right: 170px;
+  transform: rotate(-5deg);
+  z-index: 2;
+}
+
+.firstHand--6 .card--4 {
+  top: 270px;
+  right: 160px;
+  transform: rotate(10deg);
+  z-index: 3;
+}
+
+.firstHand--6 .card--5 {
+  top: 275px;
+  right: 150px;
+  transform: rotate(20deg);
+  z-index: 4;
+}
+
+.firstHand--6 .card--6 {
+  top: 285px;
+  right: 140px;
+  transform: rotate(30deg);
+  z-index: 5;
+}
+
+/* for second hand cards */
+.secondHand--1 .card--1 {
+  top: 410px;
+  right: 530px;
+  transform: rotate(0deg);
+}
+
+.secondHand--2 .card--1 {
+  top: 410px;
+  right: 535px;
+  transform: rotate(-10deg);
+}
+
+.secondHand--2 .card--2 {
+  top: 410px;
+  right: 515px;
+  transform: rotate(15deg);
+  z-index: 1;
+}
+
+.secondHand--3 .card--1 {
+  top: 410px;
+  right: 545px;
+  transform: rotate(-15deg);
+}
+
+.secondHand--3 .card--2 {
+  top: 410px;
+  right: 530px;
+  transform: rotate(0deg);
+  z-index: 1;
+}
+
+.secondHand--3 .card--3 {
+  top: 410px;
+  right: 515px;
+  transform: rotate(15deg);
+  z-index: 2;
+}
+
+.secondHand--4 .card--1 {
+  top: 410px;
+  right: 545px;
+  transform: rotate(-20deg);
+}
+
+.secondHand--4 .card--2 {
+  top: 410px;
+  right: 532px;
+  transform: rotate(0deg);
+  z-index: 1;
+}
+
+.secondHand--4 .card--3 {
+  top: 410px;
+  right: 515px;
+  transform: rotate(15deg);
+  z-index: 2;
+}
+
+.secondHand--4 .card--4 {
+  top: 420px;
+  right: 505px;
+  transform: rotate(30deg);
+  z-index: 3;
+}
+
+.secondHand--5 .card--1 {
+  top: 420px;
+  right: 550px;
+  transform: rotate(-30deg);
+}
+
+.secondHand--5 .card--2 {
+  top: 410px;
+  right: 540px;
+  transform: rotate(-15deg);
+  z-index: 1;
+}
+
+.secondHand--5 .card--3 {
+  top: 405px;
+  right: 525px;
+  transform: rotate(0deg);
+  z-index: 2;
+}
+
+.secondHand--5 .card--4 {
+  top: 410px;
+  right: 510px;
+  transform: rotate(15deg);
+  z-index: 3;
+}
+
+.secondHand--5 .card--5 {
+  top: 420px;
+  right: 500px;
+  transform: rotate(30deg);
+  z-index: 4;
+}
+
+.secondHand--6 .card--1 {
+  top: 420px;
+  right: 555px;
+  transform: rotate(-35deg);
+}
+
+.secondHand--6 .card--2 {
+  top: 410px;
+  right: 540px;
+  transform: rotate(-20deg);
+  z-index: 1;
+}
+
+.secondHand--6 .card--3 {
+  top: 410px;
+  right: 530px;
+  transform: rotate(-5deg);
+  z-index: 2;
+}
+
+.secondHand--6 .card--4 {
+  top: 410px;
+  right: 520px;
+  transform: rotate(10deg);
+  z-index: 3;
+}
+
+.secondHand--6 .card--5 {
+  top: 415px;
+  right: 510px;
+  transform: rotate(20deg);
+  z-index: 4;
+}
+
+.secondHand--6 .card--6 {
+  top: 425px;
+  right: 500px;
+  transform: rotate(30deg);
+  z-index: 5;
+}
+
+/* for third hand cards */
+.thirdHand--1 .card--1 {
+  top: 270px;
+  right: 900px;
+  transform: rotate(0deg);
+}
+
+.thirdHand--2 .card--1 {
+  top: 270px;
+  right: 905px;
+  transform: rotate(-10deg);
+}
+
+.thirdHand--2 .card--2 {
+  top: 270px;
+  right: 885px;
+  transform: rotate(15deg);
+  z-index: 1;
+}
+
+.thirdHand--3 .card--1 {
+  top: 270px;
+  right: 915px;
+  transform: rotate(-15deg);
+}
+
+.thirdHand--3 .card--2 {
+  top: 270px;
+  right: 900px;
+  transform: rotate(0deg);
+  z-index: 1;
+}
+
+.thirdHand--3 .card--3 {
+  top: 270px;
+  right: 885px;
+  transform: rotate(15deg);
+  z-index: 2;
+}
+
+.thirdHand--4 .card--1 {
+  top: 270px;
+  right: 915px;
+  transform: rotate(-20deg);
+}
+
+.thirdHand--4 .card--2 {
+  top: 270px;
+  right: 902px;
+  transform: rotate(0deg);
+  z-index: 1;
+}
+
+.thirdHand--4 .card--3 {
+  top: 270px;
+  right: 885px;
+  transform: rotate(15deg);
+  z-index: 2;
+}
+
+.thirdHand--4 .card--4 {
+  top: 280px;
+  right: 875px;
+  transform: rotate(30deg);
+  z-index: 3;
+}
+
+.thirdHand--5 .card--1 {
+  top: 280px;
+  right: 920px;
+  transform: rotate(-30deg);
+}
+
+.thirdHand--5 .card--2 {
+  top: 270px;
+  right: 910px;
+  transform: rotate(-15deg);
+  z-index: 1;
+}
+
+.thirdHand--5 .card--3 {
+  top: 265px;
+  right: 895px;
+  transform: rotate(0deg);
+  z-index: 2;
+}
+
+.thirdHand--5 .card--4 {
+  top: 270px;
+  right: 880px;
+  transform: rotate(15deg);
+  z-index: 3;
+}
+
+.thirdHand--5 .card--5 {
+  top: 280px;
+  right: 870px;
+  transform: rotate(30deg);
+  z-index: 4;
+}
+
+.thirdHand--6 .card--1 {
+  top: 280px;
+  right: 925px;
+  transform: rotate(-35deg);
+}
+
+.thirdHand--6 .card--2 {
+  top: 270px;
+  right: 910px;
+  transform: rotate(-20deg);
+  z-index: 1;
+}
+
+.thirdHand--6 .card--3 {
+  top: 270px;
+  right: 900px;
+  transform: rotate(-5deg);
+  z-index: 2;
+}
+
+.thirdHand--6 .card--4 {
+  top: 270px;
+  right: 890px;
+  transform: rotate(10deg);
+  z-index: 3;
+}
+
+.thirdHand--6 .card--5 {
+  top: 275px;
+  right: 880px;
+  transform: rotate(20deg);
+  z-index: 4;
+}
+
+.thirdHand--6 .card--6 {
+  top: 285px;
+  right: 870px;
+  transform: rotate(30deg);
+  z-index: 5;
+}
+
+@media only screen and (max-width: 1024px) and (max-height: 600px) {
+  .cardAmount {
+    padding: 1px 12px;
+    font-size: 12px;
+  }
+}

@@ -13,11 +13,11 @@ export interface MoveControllerProps {
   activeHandByIndex: ActiveGameHands["firstHand"];
   activeGameData: GameStruct;
   activeHandChipAmount: number | undefined;
-  onHit: () => void;
-  onStand: () => void;
-  onDoubleDown: () => void;
-  onSplit: () => void;
-  onInsure: () => void;
+  onHit: (handIndex: number) => void;
+  onStand: (handIndex: number) => void;
+  onDoubleDown: (handIndex: number) => void;
+  onSplit: (handIndex: number) => void;
+  onInsure: (handIndex: number) => void;
 }
 
 export const MoveController: React.FC<MoveControllerProps> = ({
@@ -45,7 +45,7 @@ export const MoveController: React.FC<MoveControllerProps> = ({
         size="sm"
         variant="third"
         className="wr-h-[30px] wr-w-[65px] wr-rounded-xl wr-text-[12px]"
-        onClick={() => onDoubleDown()}
+        onClick={() => onDoubleDown(activeGameData.activeHandIndex)}
         disabled={
           !isDistributionCompleted ||
           isControllerDisabled ||
@@ -57,7 +57,7 @@ export const MoveController: React.FC<MoveControllerProps> = ({
       </Button>
       <div className="wr-flex wr-items-center wr-justify-center wr-gap-2">
         <div
-          onClick={() => onHit()}
+          onClick={() => onHit(activeGameData.activeHandIndex)}
           className={cn(
             "wr-flex wr-h-[55px] wr-w-[55px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-bg-green-500 wr-text-center wr-text-[12px] wr-font-semibold wr-transition-all wr-duration-300 hover:wr-bg-green-500",
             {
@@ -69,7 +69,7 @@ export const MoveController: React.FC<MoveControllerProps> = ({
           Hit
         </div>
         <div
-          onClick={() => onStand()}
+          onClick={() => onStand(activeGameData.activeHandIndex)}
           className={cn(
             "wr-flex wr-h-[55px] wr-w-[55px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-bg-red-600 wr-text-center wr-text-[12px] wr-font-semibold wr-transition-all wr-duration-300 hover:wr-bg-red-700",
             {
@@ -84,7 +84,7 @@ export const MoveController: React.FC<MoveControllerProps> = ({
       <Button
         size="sm"
         variant="third"
-        onClick={() => onSplit()}
+        onClick={() => onSplit(activeGameData.activeHandIndex)}
         className="wr-h-[30px] wr-w-[65px] wr-rounded-xl wr-text-[12px]"
         disabled={
           !activeHandByIndex?.cards?.canSplit ||
@@ -104,7 +104,7 @@ export const MoveController: React.FC<MoveControllerProps> = ({
             variant="third"
             size="sm"
             className="wr-absolute -wr-top-6  wr-left-1/2 wr-h-[30px] -wr-translate-x-1/2 wr-rounded-xl wr-text-[13px]"
-            onClick={() => onInsure()}
+            onClick={() => onInsure(activeGameData.activeHandIndex)}
             disabled={
               !isDistributionCompleted ||
               isControllerDisabled ||
