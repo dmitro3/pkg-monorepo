@@ -48,7 +48,7 @@ const defaultGameData = {
 const mockActiveGameHands = {
   dealer: {
     cards: {
-      cards: [13, 0, 0, 0, 0, 0, 0, 0],
+      cards: [13, 6, 4, 2, 11, 0, 0, 0],
       amountCards: 1,
       totalCount: 13,
       isSoftHand: false,

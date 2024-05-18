@@ -23,7 +23,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
         />
 
         <PreBetButton>
-          <div className="wr-mb-3 wr-grid wr-grid-cols-2 wr-grid-rows-2 wr-gap-2">
+          <div className=" wr-grid wr-grid-cols-2 wr-grid-rows-2 wr-gap-x-4 wr-gap-y-5">
             <Button variant="secondary" size="xl">
               Hit
             </Button>
@@ -37,7 +37,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
               Double
             </Button>
           </div>
-          <Button variant="success" size="xl">
+          <Button className="wr-w-full wr-mt-6" variant="success" size="xl">
             Deal
           </Button>
         </PreBetButton>
