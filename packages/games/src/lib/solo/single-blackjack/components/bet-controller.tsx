@@ -56,8 +56,6 @@ export const BetController: React.FC<Props> = ({
     return _b >= chipAmount;
   };
 
-  console.log(activeHandByIndex, "ac");
-
   return (
     <BetControllerContainer>
       <div className="wr-max-lg:flex wr-max-lg:flex-col">
@@ -141,7 +139,10 @@ export const BetController: React.FC<Props> = ({
           <Button
             className="wr-w-full wr-mt-6"
             variant="success"
-            disabled={status !== BlackjackGameStatus.NONE}
+            disabled={
+              status !== BlackjackGameStatus.NONE &&
+              status !== BlackjackGameStatus.FINISHED
+            }
             size="xl"
             type="submit"
           >

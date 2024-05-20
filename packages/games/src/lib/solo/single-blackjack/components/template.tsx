@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { SingleBlackjackGameProps, SingleBlackjackHandIndex } from "..";
+import {
+  SingleBJDealFormFields,
+  SingleBlackjackGameProps,
+  SingleBlackjackHandIndex,
+} from "..";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { cn } from "../../../utils/style";
 import { BetController } from "./bet-controller";
@@ -323,9 +327,15 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
       form.setValue("wager", activeGameHands.firstHand.hand?.chipsAmount || 0);
   }, [activeGameHands.firstHand.hand?.chipsAmount, initialDataFetched]);
 
+  const handleSubmit = (values: SingleBJDealFormFields) => {
+    onReset();
+    resetUiCards();
+    onDeal(values);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onDeal)}>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
         <GameContainer>
           <BetController
             minWager={minWager || 2}

@@ -11,8 +11,8 @@
 }
 
 .busted {
-  top: 100px;
-  right: 1095px;
+  top: -20px !important;
+  right: calc(100% - 75px) !important;
 }
 
 .hidden {

@@ -47,8 +47,8 @@
 }
 
 .busted {
-  top: -20px;
-  right: calc(100% - 75px);
+  top: -20px !important;
+  right: calc(100% - 75px) !important;
 }
 
 .state {
