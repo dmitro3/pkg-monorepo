@@ -1,9 +1,10 @@
 import React from "react";
-import { SingleBJActiveGameHands, SingleBlackjackGameStatus } from "..";
+import { SingleBJActiveGameHands } from "..";
 import { BetControllerContainer } from "../../../common/containers";
 import { BetControllerTitle, WagerFormField } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { Button } from "../../../ui/button";
+import { BlackjackGameStatus } from "../../blackjack";
 
 interface Props {
   minWager: number;
@@ -11,7 +12,7 @@ interface Props {
 
   activeHandByIndex: SingleBJActiveGameHands["firstHand" | "splittedFirstHand"];
   canInsure: boolean;
-  status: SingleBlackjackGameStatus;
+  status: BlackjackGameStatus;
 
   onHit: (handIndex: number) => void;
   onStand: (handIndex: number) => void;
@@ -76,7 +77,7 @@ export const BetController: React.FC<Props> = ({
           <Button
             className="wr-w-full wr-mt-6"
             variant="success"
-            disabled={status !== SingleBlackjackGameStatus.NONE}
+            disabled={status !== BlackjackGameStatus.NONE}
             size="xl"
           >
             Deal

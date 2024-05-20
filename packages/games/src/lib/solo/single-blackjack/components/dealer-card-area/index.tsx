@@ -4,19 +4,21 @@ import React from "react";
 import styles from "./dealer-card-area.module.css";
 import { genNumberArray } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
-import {
-  SingleBJGameStruct,
-  SingleBlackjackHandStatus,
-  SingleBJActiveGameHands,
-} from "../..";
+
 import { CDN_URL } from "../../../../constants";
-import { BlackjackCard, calcTotalAmounts } from "../../../blackjack";
+import {
+  BlackjackCard,
+  BlackjackHandStatus,
+  GameStruct,
+  calcTotalAmounts,
+} from "../../../blackjack";
 import { Card } from "../card";
+import { SingleBJActiveGameHands } from "../..";
 
 interface DealerCardAreaProps {
   hand: SingleBJActiveGameHands["dealer"];
   uiCards: (BlackjackCard | null)[];
-  activeGameData: SingleBJGameStruct;
+  activeGameData: GameStruct;
   isDistributionCompleted: boolean;
   isLastDistributionCompleted: boolean;
 }
@@ -53,7 +55,7 @@ export const DealerCardArea: React.FC<DealerCardAreaProps> = ({
 
     if (cardAmounts.amount > 21) return true;
 
-    if (handStatus === SingleBlackjackHandStatus.BUST) return true;
+    if (handStatus === BlackjackHandStatus.BUST) return true;
     else return false;
   }, [isDistributionCompleted, hand.hand?.status, cardAmounts]);
 

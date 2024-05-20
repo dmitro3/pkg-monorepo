@@ -2,7 +2,7 @@
   "name": "@winrlabs/games",
   "description": "Games",
   "license": "MIT",
-  "version": "2.8.5",
+  "version": "2.8.6",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/WINRLabs/pkg-monrepo.git",
+    "url": "https://github.com/WINRLabs/pkg-monorepo.git",
     "directory": "packages/games"
   },
   "scripts": {

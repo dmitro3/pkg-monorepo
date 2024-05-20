@@ -1,25 +1,25 @@
 import React from "react";
 import { Card } from "../card";
-import {
-  SingleBJActiveGameHands,
-  SingleBlackjackGameResult,
-  SingleBlackjackHandIndex,
-  SingleBlackjackHandStatus,
-  SingleBJGameStruct,
-} from "../..";
 import { AnimatePresence, motion } from "framer-motion";
 import { genNumberArray } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
 import styles from "./card-area.module.css";
 import { CDN_URL } from "../../../../constants";
-import { BlackjackCard, calcTotalAmounts } from "../../../blackjack";
+import {
+  BlackjackCard,
+  BlackjackGameResult,
+  BlackjackHandStatus,
+  GameStruct,
+  calcTotalAmounts,
+} from "../../../blackjack";
+import { SingleBJActiveGameHands, SingleBlackjackHandIndex } from "../..";
 
 interface CardAreaProps {
   handType: SingleBlackjackHandIndex;
   uiCards: (BlackjackCard | null)[];
   splittedCard?: BlackjackCard | null;
   hand: SingleBJActiveGameHands["firstHand"];
-  activeGameData: SingleBJGameStruct;
+  activeGameData: GameStruct;
   isDistributionCompleted: boolean;
   isLastDistributionCompleted: boolean;
   className?: string;
@@ -66,7 +66,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
 
     if (!isDistributionCompleted) return false;
 
-    if (handStatus === SingleBlackjackHandStatus.BUST) return true;
+    if (handStatus === BlackjackHandStatus.BUST) return true;
     else return false;
   }, [isDistributionCompleted, hand.hand?.status, cardAmounts]);
 
@@ -81,56 +81,51 @@ export const CardArea: React.FC<CardAreaProps> = ({
 
   //result checks
   const isWinner = React.useMemo(() => {
-    const _result = settledResult?.result as SingleBlackjackGameResult;
+    const _result = settledResult?.result as BlackjackGameResult;
 
     if (!_result || !isLastDistributionCompleted) return false;
 
-    if (_result === SingleBlackjackGameResult.DEALER_STAND_PLAYER_WIN)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_STAND_PLAYER_WIN) return true;
 
-    if (_result === SingleBlackjackGameResult.DEALER_BUST_PLAYER_WIN)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_WIN) return true;
 
-    if (_result === SingleBlackjackGameResult.DEALER_BUST_PLAYER_BLACKJACK)
+    if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_BLACKJACK)
       return true;
     else return false;
   }, [settledResult, isLastDistributionCompleted]);
 
   const isLoser = React.useMemo(() => {
-    const _result = settledResult?.result as SingleBlackjackGameResult;
+    const _result = settledResult?.result as BlackjackGameResult;
 
     if (!_result || !isLastDistributionCompleted) return false;
 
-    if (_result === SingleBlackjackGameResult.DEALER_BLACKJACK_PLAYER_LOST)
+    if (_result === BlackjackGameResult.DEALER_BLACKJACK_PLAYER_LOST)
       return true;
 
-    if (_result === SingleBlackjackGameResult.DEALER_BUST_PLAYER_LOST)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_LOST) return true;
 
-    if (_result === SingleBlackjackGameResult.DEALER_STAND_PLAYER_LOST)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_STAND_PLAYER_LOST) return true;
     else return false;
   }, [settledResult, isLastDistributionCompleted]);
 
   const isPush = React.useMemo(() => {
-    const _result = settledResult?.result as SingleBlackjackGameResult;
+    const _result = settledResult?.result as BlackjackGameResult;
 
     if (!_result || !isLastDistributionCompleted) return false;
 
-    if (_result === SingleBlackjackGameResult.DEALER_STAND_HAND_PUSH)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_STAND_HAND_PUSH) return true;
 
-    if (Number(_result) == SingleBlackjackGameResult.DEALER_BLACKJACK_HAND_PUSH)
+    if (Number(_result) == BlackjackGameResult.DEALER_BLACKJACK_HAND_PUSH)
       return true;
     else return false;
   }, [settledResult, isLastDistributionCompleted]);
 
   const isInsured = React.useMemo(() => {
-    const _result = settledResult?.result as SingleBlackjackGameResult;
+    const _result = settledResult?.result as BlackjackGameResult;
 
     if (!_result || !isLastDistributionCompleted) return false;
 
-    if (_result === SingleBlackjackGameResult.DEALER_BLACKJACK_PLAYER_INSURED)
+    if (_result === BlackjackGameResult.DEALER_BLACKJACK_PLAYER_INSURED)
       return true;
     else return false;
   }, [settledResult, isLastDistributionCompleted]);

@@ -1,11 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  SingleBlackjackGameProps,
-  SingleBlackjackGameStatus,
-  SingleBlackjackHandIndex,
-} from "..";
+import { SingleBlackjackGameProps, SingleBlackjackHandIndex } from "..";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { cn } from "../../../utils/style";
 import { BetController } from "./bet-controller";
@@ -17,6 +13,7 @@ import { CDN_URL } from "../../../constants";
 import styles from "./styles.module.css";
 import {
   BlackjackCard,
+  BlackjackGameStatus,
   TIMEOUT,
   distributeNewCards,
   getBlackjackSuit,
@@ -85,7 +82,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     const dealerCardAmount = activeGameHands.dealer.cards?.amountCards || 0;
 
     if (
-      activeGameData.status === SingleBlackjackGameStatus.FINISHED &&
+      activeGameData.status === BlackjackGameStatus.FINISHED &&
       isDistributionCompleted &&
       dealerCardAmount === dealerCards.length &&
       dealerCards.length > 1
@@ -366,7 +363,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
               />
 
               {/* dealer card area start */}
-              {activeGameData.status !== SingleBlackjackGameStatus.NONE && (
+              {activeGameData.status !== BlackjackGameStatus.NONE && (
                 <DealerCardArea
                   hand={activeGameHands.dealer}
                   uiCards={dealerCards}
