@@ -42,6 +42,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
   activeGameData,
   activeGameHands,
   initialDataFetched,
+  isControllerDisabled = false,
 
   options,
 
@@ -111,6 +112,19 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
         };
     }
   }, [activeGameData, isDistributionCompleted, activeGameHands]);
+
+  const activeHandChipAmount = React.useMemo(() => {
+    switch (activeGameData.activeHandIndex) {
+      case activeGameHands.firstHand.handId:
+        return activeGameHands.firstHand.hand?.chipsAmount;
+
+      case activeGameHands.splittedFirstHand.handId:
+        return activeGameHands.firstHand.hand?.chipsAmount;
+
+      default:
+        return 0;
+    }
+  }, [activeGameData, activeGameHands]);
 
   const animateFirstDistribution = async () => {
     const { firstHand, splittedFirstHand, dealer } = activeGameHands;
@@ -317,8 +331,11 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
             minWager={minWager || 2}
             maxWager={maxWager || 1000}
             activeHandByIndex={activeHandByIndex}
+            activeHandChipAmount={activeHandChipAmount || 0}
             canInsure={activeGameData.canInsure}
             status={activeGameData.status}
+            isControllerDisabled={isControllerDisabled}
+            isDistributionCompleted={isDistributionCompleted}
             onHit={onHit}
             onDoubleDown={onDoubleDown}
             onSplit={onSplit}

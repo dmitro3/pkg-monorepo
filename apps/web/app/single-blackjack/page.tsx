@@ -2,9 +2,9 @@
 
 import React from "react";
 import {
+  BlackjackGameStatus,
+  GameStruct,
   SingleBJActiveGameHands,
-  SingleBJGameStruct,
-  SingleBlackjackGameStatus,
   SingleBlackjackTemplate,
 } from "@winrlabs/games";
 
@@ -26,7 +26,7 @@ const defaultActiveGameHands = {
 const defaultGameData = {
   activeHandIndex: 0,
   canInsure: false,
-  status: SingleBlackjackGameStatus.NONE,
+  status: BlackjackGameStatus.NONE,
 };
 
 const mockActiveGameHands = {
@@ -73,7 +73,7 @@ const mockGameData = {
 
 export default function SingleBlackjackPage() {
   const [activeGameData, setActiveGameData] =
-    React.useState<SingleBJGameStruct>(defaultGameData);
+    React.useState<GameStruct>(defaultGameData);
   const [activeGameHands, setActiveGameHands] =
     React.useState<SingleBJActiveGameHands>(defaultActiveGameHands);
   const [initialDataFetched, setInitialDataFetched] = React.useState(false);
