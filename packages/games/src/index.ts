@@ -13,3 +13,5 @@ export * from "./lib/solo/plinko";
 export * from "./lib/solo/rps";
 
 export * from "./lib/solo/blackjack";
+
+export * from "./lib/solo/single-blackjack";
