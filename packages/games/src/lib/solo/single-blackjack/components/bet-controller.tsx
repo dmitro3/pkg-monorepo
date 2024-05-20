@@ -56,6 +56,8 @@ export const BetController: React.FC<Props> = ({
     return _b >= chipAmount;
   };
 
+  console.log(activeHandByIndex, "ac");
+
   return (
     <BetControllerContainer>
       <div className="wr-max-lg:flex wr-max-lg:flex-col">

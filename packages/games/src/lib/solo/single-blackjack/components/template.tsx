@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "../../../ui/form";
 import { CDN_URL } from "../../../constants";
-import styles from "./styles.module.css";
+import styles from "./single-styles.module.css";
 import {
   BlackjackCard,
   BlackjackGameStatus,

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import styles from "./dealer-card-area.module.css";
+import styles from "./single-dealer-card-area.module.css";
 import { genNumberArray } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
 

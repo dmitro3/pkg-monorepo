@@ -3,7 +3,7 @@ import { Card } from "../card";
 import { AnimatePresence, motion } from "framer-motion";
 import { genNumberArray } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
-import styles from "./card-area.module.css";
+import styles from "./single-card-area.module.css";
 import { CDN_URL } from "../../../../constants";
 import {
   BlackjackCard,

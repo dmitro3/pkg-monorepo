@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import styles from "./card.module.css";
+import styles from "./single-card.module.css";
 import { cn } from "../../../../utils/style";
 
 import { CDN_URL } from "../../../../constants";

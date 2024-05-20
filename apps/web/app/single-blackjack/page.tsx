@@ -95,7 +95,9 @@ export default function SingleBlackjackPage() {
       onReset={() => {}}
       onDeal={() => {}}
       onDoubleDown={() => {}}
-      onHit={() => {}}
+      onHit={(a) => {
+        console.log(a, "a");
+      }}
       onInsure={() => {}}
       onSplit={() => {}}
       onStand={() => {}}
