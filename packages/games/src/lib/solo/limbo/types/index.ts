@@ -6,14 +6,12 @@ export interface LimboGameResult {
   payoutInUsd: number;
 }
 
-export type LimboForm = UseFormReturn<
-  {
-    wager: number;
-    stopGain: number;
-    stopLoss: number;
-    betCount: number;
-    limboMultiplier: number;
-  },
-  any,
-  undefined
->;
+export interface LimboFormField {
+  wager: number;
+  stopGain: number;
+  stopLoss: number;
+  betCount: number;
+  limboMultiplier: number;
+}
+
+export type LimboForm = UseFormReturn<LimboFormField, any, undefined>;

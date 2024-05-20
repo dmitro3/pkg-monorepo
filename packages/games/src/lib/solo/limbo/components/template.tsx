@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { BetController } from "./bet-controller";
-import { Limbo } from "..";
+import { Limbo, LimboFormField } from "..";
+import { LimboGameProps } from "./game";
 
 type TemplateOptions = {
   scene?: {
@@ -17,10 +18,10 @@ type TemplateProps = LimboGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onSubmitGameForm: (props: RpsFormFields) => void;
+  onSubmitGameForm: (props: LimboFormField) => void;
 };
 
-const LimboTemplate = ({ ...props }) => {
+const LimboTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
 
   const formSchema = z.object({
@@ -74,7 +75,13 @@ const LimboTemplate = ({ ...props }) => {
               backgroundImage: options?.scene?.backgroundImage,
             }}
           >
-            <Limbo.Scene status={status} setStatus={setStatus} />
+            <Limbo.Game {...props}>
+              <Limbo.Scene>
+                <Limbo.LastBets />
+                <Limbo.ResultAnimation result={result} won={won} />
+                <Limbo.Slider status={status} won={won} result={result} />
+              </Limbo.Scene>
+            </Limbo.Game>
           </SceneContainer>
         </GameContainer>
       </form>

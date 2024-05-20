@@ -11,6 +11,7 @@ export enum SoundEffects {
   ROLLING_DICE,
   FALLING,
   RPS,
+  RANGE_WIN,
 }
 
 export interface AudioContextType {
@@ -82,6 +83,7 @@ effects.set(
 );
 effects.set(SoundEffects.ROLLING_DICE, "rolling-dice.mp3");
 effects.set(SoundEffects.RPS, "rps.mp3");
+effects.set(SoundEffects.RANGE_WIN, "mixkit-magical-coin-win-1936.wav");
 
 type PlayOptions = {
   playbackRate?: number;

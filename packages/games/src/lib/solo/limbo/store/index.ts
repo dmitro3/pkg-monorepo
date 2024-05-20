@@ -4,7 +4,7 @@ import { LimboGameResult } from "../types";
 
 interface LimboState {
   lastBets: LimboGameResult[];
-  rpsGameResults: LimboGameResult[];
+  limboGameResults: LimboGameResult[];
   gameStatus: "IDLE" | "PLAYING" | "ENDED";
   currentAnimationCount: number;
 }
@@ -23,7 +23,7 @@ export type LimboStore = LimboState & LimboActions;
 
 export const limboStore = create<LimboStore>()((set) => ({
   lastBets: [],
-  rpsGameResults: [],
+  limboGameResults: [],
   currentAnimationCount: 0,
   gameStatus: "IDLE",
   addLastBet: (item) =>
@@ -37,11 +37,11 @@ export const limboStore = create<LimboStore>()((set) => ({
 
       return { lastBets };
     }),
-  updateLimboGameResults: (item) => set(() => ({ rpsGameResults: item })),
+  updateLimboGameResults: (item) => set(() => ({ limboGameResults: item })),
   clearStore: () =>
     set({
       lastBets: [],
-      rpsGameResults: [],
+      limboGameResults: [],
       gameStatus: "IDLE",
       currentAnimationCount: 0,
     }),
