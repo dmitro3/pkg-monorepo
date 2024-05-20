@@ -4,14 +4,14 @@ import useLimboGameStore from "../store";
 import { useGameSkip } from "../../../game-provider";
 import { LimboGameResult } from "../types";
 
-export interface SceneProps {
+export interface GameAreaProps {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: LimboGameResult[]) => void;
   onAnimationSkipped?: (result: LimboGameResult[]) => void;
   children: React.ReactNode;
 }
 
-const Scene: React.FC<SceneProps> = ({
+const GameArea: React.FC<GameAreaProps> = ({
   onAnimationCompleted,
   onAnimationStep,
   onAnimationSkipped = () => {},
@@ -97,4 +97,4 @@ const Scene: React.FC<SceneProps> = ({
   return <div className="relative h-full w-full">{children}</div>;
 };
 
-export default Scene;
+export default GameArea;

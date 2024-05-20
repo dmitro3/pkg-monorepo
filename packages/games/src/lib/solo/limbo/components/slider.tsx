@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form";
 import { LimboForm } from "../types";
 import { cn } from "../../../utils/style";
 import useDimensions from "react-cool-dimensions";
+import useLimboGameStore from "../store";
 
 type ScalePoint = {
   value: number;
@@ -68,15 +69,19 @@ function interpolate(value: number, points: ScalePoint[]): number {
   return interpolatedPercent;
 }
 
-const LimboSlider = ({
-  won,
-  status,
-  result,
-}: {
-  won: boolean;
-  result: number;
-  status: "idle" | "playing";
-}) => {
+const LimboSlider = () => {
+  const { limboGameResults, gameStatus } = useLimboGameStore([
+    "limboGameResults",
+    "gameStatus",
+  ]);
+
+  const won =
+    limboGameResults[limboGameResults.length - 1]?.payout || 0 > 0
+      ? true
+      : false;
+
+  const result = limboGameResults[limboGameResults.length - 1]?.number || 0;
+
   const { observe, width } = useDimensions<HTMLDivElement>({
     onResize: ({ observe, unobserve }) => {
       unobserve();
@@ -89,7 +94,7 @@ const LimboSlider = ({
 
   const limboMultiplier = form.watch("limboMultiplier");
 
-  const showNumber = status === "idle" ? limboMultiplier : result;
+  const showNumber = gameStatus === "IDLE" ? limboMultiplier : result;
 
   const firstSteps = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 

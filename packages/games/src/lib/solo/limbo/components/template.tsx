@@ -76,11 +76,11 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
             }}
           >
             <Limbo.Game {...props}>
-              <Limbo.Scene>
+              <Limbo.GameArea {...props}>
                 <Limbo.LastBets />
-                <Limbo.ResultAnimation result={result} won={won} />
-                <Limbo.Slider status={status} won={won} result={result} />
-              </Limbo.Scene>
+                <Limbo.ResultAnimation />
+                <Limbo.Slider />
+              </Limbo.GameArea>
             </Limbo.Game>
           </SceneContainer>
         </GameContainer>
