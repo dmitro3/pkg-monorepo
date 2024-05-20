@@ -27,6 +27,8 @@ import { Button } from "../../../ui/button";
 import { AudioController } from "../../../common/audio-controller";
 import * as Slider from "@radix-ui/react-slider";
 import { LimboForm } from "../types";
+import { SkipButton } from "../../../common/skip-button";
+import useLimboGameStore from "../store";
 
 interface Props {
   minWager: number;
@@ -41,6 +43,16 @@ export const BetController: React.FC<Props> = ({
 }) => {
   const form = useFormContext() as LimboForm;
 
+  const { limboGameResults, gameStatus } = useLimboGameStore([
+    "limboGameResults",
+    "gameStatus",
+  ]);
+
+  const isFormInProgress =
+    form.formState.isSubmitting ||
+    form.formState.isLoading ||
+    gameStatus == "PLAYING";
+
   const maxPayout = React.useMemo(() => {
     const { wager, betCount } = form.getValues();
 
@@ -54,8 +66,12 @@ export const BetController: React.FC<Props> = ({
           <BetControllerTitle>Limbo</BetControllerTitle>
         </div>
 
-        <WagerFormField minWager={minWager} maxWager={maxWager} />
-        <BetCountFormField />
+        <WagerFormField
+          minWager={minWager}
+          maxWager={maxWager}
+          isDisabled={isFormInProgress}
+        />
+        <BetCountFormField isDisabled={isFormInProgress} />
         <>
           <FormField
             control={form.control}
@@ -66,7 +82,7 @@ export const BetController: React.FC<Props> = ({
 
                 <FormControl>
                   <div>
-                    <NumberInput.Root {...field}>
+                    <NumberInput.Root {...field} isDisabled={isFormInProgress}>
                       <NumberInput.Container
                         className={cn(
                           " wr-rounded-b-[6px] wr-border-none wr-bg-zinc-950 wr-px-2  wr-py-[10px]"
@@ -87,6 +103,7 @@ export const BetController: React.FC<Props> = ({
                       value={[field.value]}
                       max={100}
                       step={1}
+                      disabled={isFormInProgress}
                       onValueChange={(e: any) => {
                         form.setValue("limboMultiplier", e[0], {
                           shouldValidate: true,
@@ -131,27 +148,28 @@ export const BetController: React.FC<Props> = ({
         <div>
           <Advanced>
             <div className="wr-grid wr-grid-cols-2 wr-gap-2">
-              <StopGainFormField />
-              <StopLossFormField />
+              <StopGainFormField isDisabled={isFormInProgress} />
+              <StopLossFormField isDisabled={isFormInProgress} />
             </div>
           </Advanced>
         </div>
-        <PreBetButton>
-          <Button
-            type="submit"
-            variant={"success"}
-            className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
-            size={"xl"}
-            disabled={
-              !form.formState.isValid ||
-              form.formState.isSubmitting ||
-              form.formState.isLoading
-            }
-            isLoading={form.formState.isSubmitting || form.formState.isLoading}
-          >
-            Bet
-          </Button>
-        </PreBetButton>
+
+        {!(limboGameResults.length > 2) && gameStatus !== "PLAYING" ? (
+          <PreBetButton>
+            <Button
+              type="submit"
+              variant={"success"}
+              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
+              size={"xl"}
+              disabled={!form.formState.isValid || isFormInProgress}
+              isLoading={isFormInProgress}
+            >
+              Bet
+            </Button>
+          </PreBetButton>
+        ) : (
+          <SkipButton />
+        )}
       </div>
       <footer className="wr-flex wr-items-center wr-justify-between">
         <AudioController />
