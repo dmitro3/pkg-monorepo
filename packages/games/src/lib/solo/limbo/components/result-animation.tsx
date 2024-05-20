@@ -3,19 +3,15 @@ import { cn } from "../../../utils/style";
 import useLimboGameStore from "../store";
 
 const ResultAnimation = () => {
-  const { limboGameResults } = useLimboGameStore(["limboGameResults"]);
+  const { lastBets } = useLimboGameStore(["lastBets"]);
 
-  const won =
-    limboGameResults[limboGameResults.length - 1]?.payout || 0 > 0
-      ? true
-      : false;
+  const won = lastBets[lastBets.length - 1]?.payout || 0 > 0 ? true : false;
   return (
     <div
       className={cn(
         "wr-absolute wr-left-0 wr-top-28 wr-h-[600%] wr-w-full  wr-overflow-hidden  wr-transition-all wr-ease-in",
         {
-          "wr-opacity-0":
-            limboGameResults[limboGameResults.length - 1]?.number === 0,
+          "wr-opacity-0": lastBets[lastBets.length - 1]?.number === 0,
         }
       )}
     >

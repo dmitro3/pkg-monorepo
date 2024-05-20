@@ -70,17 +70,14 @@ function interpolate(value: number, points: ScalePoint[]): number {
 }
 
 const LimboSlider = () => {
-  const { limboGameResults, gameStatus } = useLimboGameStore([
-    "limboGameResults",
+  const { gameStatus, lastBets } = useLimboGameStore([
     "gameStatus",
+    "lastBets",
   ]);
 
-  const won =
-    limboGameResults[limboGameResults.length - 1]?.payout || 0 > 0
-      ? true
-      : false;
+  const won = lastBets[lastBets.length - 1]?.payout || 0 > 0 ? true : false;
 
-  const result = limboGameResults[limboGameResults.length - 1]?.number || 0;
+  const result = lastBets[lastBets.length - 1]?.number || 0;
 
   const { observe, width } = useDimensions<HTMLDivElement>({
     onResize: ({ observe, unobserve }) => {
