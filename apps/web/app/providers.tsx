@@ -1,24 +1,19 @@
 "use client";
 
-import { GameProvider } from "@winrlabs/games";
-import React from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState, type ReactNode } from "react";
+import { WagmiProvider } from "wagmi";
 
-export const Providers = ({ children }: { children: React.ReactNode }) => {
+import { config } from "./wagmi";
+
+export function Providers(props: { children: ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
-    <GameProvider
-      options={{
-        currency: {
-          icon: "https://assets.coingecko.com/coins/images/325/standard/Tether.png?1696501661",
-          name: "Winr",
-          symbol: "WINR",
-        },
-        account: {
-          isLoggedIn: true,
-          balance: 25,
-        },
-      }}
-    >
-      {children}
-    </GameProvider>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        {props.children}
+      </QueryClientProvider>
+    </WagmiProvider>
   );
-};
+}
