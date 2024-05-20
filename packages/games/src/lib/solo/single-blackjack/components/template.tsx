@@ -50,6 +50,12 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
 
   onDeal,
   onReset,
+
+  onHit,
+  onDoubleDown,
+  onSplit,
+  onStand,
+  onInsure,
 }) => {
   // ui cards
   const [dealerCards, setDealerCards] = React.useState<
@@ -310,7 +316,18 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onDeal)}>
         <GameContainer>
-          <BetController minWager={minWager || 2} maxWager={maxWager || 1000} />
+          <BetController
+            minWager={minWager || 2}
+            maxWager={maxWager || 1000}
+            activeHandByIndex={activeHandByIndex}
+            canInsure={activeGameData.canInsure}
+            status={activeGameData.status}
+            onHit={onHit}
+            onDoubleDown={onDoubleDown}
+            onSplit={onSplit}
+            onStand={onStand}
+            onInsure={onInsure}
+          />
           <SceneContainer
             className={cn(
               "wr-relative wr-flex wr-h-[640px] !wr-p-0 wr-max-w-full"

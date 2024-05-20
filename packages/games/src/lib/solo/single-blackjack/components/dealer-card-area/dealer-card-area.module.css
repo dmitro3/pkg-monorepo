@@ -18,37 +18,37 @@
 
 .dealerCardArea .card--2 {
   top: 50px;
-  right: 49%;
+  right: 41%;
   z-index: 2;
 }
 
 .dealerCardArea .card--3 {
   top: 50px;
-  right: 53%;
+  right: 37%;
   z-index: 3;
 }
 
 .dealerCardArea .card--4 {
   top: 50px;
-  right: 57%;
+  right: 33%;
   z-index: 4;
 }
 
 .dealerCardArea .card--5 {
   top: 50px;
-  right: 61%;
+  right: 29%;
   z-index: 5;
 }
 
 .dealerCardArea .card--6 {
   top: 50px;
-  right: 65%;
+  right: 25%;
   z-index: 6;
 }
 
 .busted {
-  top: 75px;
-  left: 50%;
+  top: -20px;
+  right: calc(100% - 75px);
 }
 
 .state {
@@ -59,11 +59,12 @@
 
 .cardAmount {
   position: absolute;
-  left: 48%;
+  left: 50%;
   top: 175px;
-  font-size: 15px;
+  transform: translateX(-50%);
+  font-size: 13px;
   font-weight: 700;
-  padding: 4px 12px;
+  padding: 3px 12px;
   border-radius: 15px;
   background-color: white;
   display: flex;

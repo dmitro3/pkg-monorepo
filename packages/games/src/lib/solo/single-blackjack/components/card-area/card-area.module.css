@@ -29,7 +29,6 @@
 .cardAmount {
   position: absolute;
   font-size: 13px;
-  font-weight: 600;
   padding: 3px 12px;
   border-radius: 15px;
   background-color: white;
@@ -45,6 +44,7 @@
 .cardAmount.firstHand {
   top: 65%;
   left: 50%;
+  transform: translateX(-50%);
 }
 
 .animatedText {
@@ -59,7 +59,8 @@
 
 .animatedText.firstHand {
   top: 70%;
-  left: 48%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .animatedText .text {
@@ -92,27 +93,27 @@
 
 .firstHand .card--2 {
   top: 70%;
-  right: 49%;
+  right: 41%;
 }
 
 .firstHand .card--3 {
   top: 70%;
-  right: 53%;
+  right: 37%;
 }
 
 .firstHand .card--4 {
   top: 70%;
-  right: 57%;
+  right: 33%;
 }
 
 .firstHand .card--5 {
   top: 70%;
-  right: 61%;
+  right: 29%;
 }
 
 .firstHand .card--6 {
   top: 70%;
-  right: 65%;
+  right: 25%;
 }
 
 @media only screen and (max-width: 1024px) and (max-height: 600px) {
