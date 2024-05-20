@@ -49,8 +49,8 @@ export const BetController: React.FC<Props> = ({
 
   return (
     <BetControllerContainer>
-      <div className="max-lg:flex max-lg:flex-col">
-        <div className="mb-3">
+      <div className="max-lg:wr-flex max-lg:wr-flex-col">
+        <div className="wr-mb-3">
           <BetControllerTitle>Limbo</BetControllerTitle>
         </div>
 
@@ -69,19 +69,19 @@ export const BetController: React.FC<Props> = ({
                     <NumberInput.Root {...field}>
                       <NumberInput.Container
                         className={cn(
-                          " rounded-b-[6px] border-none bg-zinc-950 px-2  py-[10px]"
+                          " wr-rounded-b-[6px] wr-border-none wr-bg-zinc-950 wr-px-2  wr-py-[10px]"
                         )}
                       >
                         <NumberInput.Input
                           className={cn(
-                            "rounded-none border-none  bg-transparent px-0 py-2 text-base font-semibold leading-5 text-white outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0"
+                            "wr-rounded-none wr-border-none  wr-bg-transparent wr-px-0 wr-py-2 wr-text-base wr-font-semibold wr-leading-5 wr-text-white wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
                           )}
                         />
                       </NumberInput.Container>
                     </NumberInput.Root>
                     <Slider.Root
                       className={cn(
-                        "relative -mt-2 flex w-full touch-none select-none items-center"
+                        "wr-relative -wr-mt-2 wr-flex wr-w-full wr-touch-none wr-select-none wr-items-center"
                       )}
                       min={1.1}
                       value={[field.value]}
@@ -93,10 +93,10 @@ export const BetController: React.FC<Props> = ({
                         });
                       }}
                     >
-                      <Slider.Track className="relative h-[6px] w-full grow cursor-pointer overflow-hidden rounded-full rounded-tl-md rounded-tr-md bg-zinc-600">
-                        <Slider.Range className="absolute h-full bg-red-600" />
+                      <Slider.Track className="wr-relative wr-h-[6px] wr-w-full wr-grow wr-cursor-pointer wr-overflow-hidden wr-rounded-full wr-rounded-tl-md wr-rounded-tr-md wr-bg-zinc-600">
+                        <Slider.Range className="wr-absolute wr-h-full wr-bg-red-600" />
                       </Slider.Track>
-                      <Slider.Thumb className="border-primary ring-offset-background focus-visible:ring-ring flex  h-[10px] w-[10px] cursor-pointer items-center justify-center rounded-full border-2 bg-white text-[12px] font-medium text-zinc-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50" />
+                      <Slider.Thumb className="wr-border-primary wr-ring-offset-background focus-visible:wr-ring-ring wr-flex  wr-h-[10px] wr-w-[10px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-border-2 wr-bg-white wr-text-[12px] wr-font-medium wr-text-zinc-900 wr-transition-colors focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-pointer-events-none disabled:wr-opacity-50" />
                     </Slider.Root>
                   </div>
                 </FormControl>
@@ -105,16 +105,16 @@ export const BetController: React.FC<Props> = ({
             )}
           />
         </>
-        <div className="mb-6 grid grid-cols-2 gap-2">
+        <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "flex w-full items-center gap-1 rounded-lg bg-zinc-800 px-2 py-[10px]"
+                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]"
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("font-semibold text-zinc-100")}>
+              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
                 ${maxPayout}
               </span>
             </div>
@@ -130,7 +130,7 @@ export const BetController: React.FC<Props> = ({
 
         <div>
           <Advanced>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="wr-grid wr-grid-cols-2 wr-gap-2">
               <StopGainFormField />
               <StopLossFormField />
             </div>
@@ -140,7 +140,7 @@ export const BetController: React.FC<Props> = ({
           <Button
             type="submit"
             variant={"success"}
-            className="w-full max-lg:-order-1 max-lg:mb-3.5"
+            className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
             size={"xl"}
             disabled={
               !form.formState.isValid ||
@@ -153,7 +153,7 @@ export const BetController: React.FC<Props> = ({
           </Button>
         </PreBetButton>
       </div>
-      <footer className="flex items-center justify-between">
+      <footer className="wr-flex wr-items-center wr-justify-between">
         <AudioController />
       </footer>
     </BetControllerContainer>

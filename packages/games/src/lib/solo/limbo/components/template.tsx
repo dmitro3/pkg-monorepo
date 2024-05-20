@@ -70,7 +70,7 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
             winMultiplier={multiplier}
           />
           <SceneContainer
-            className="h-[790px] overflow-hidden !p-0"
+            className="wr-h-[790px] wr-overflow-hidden !wr-p-0"
             style={{
               backgroundImage: options?.scene?.backgroundImage,
             }}

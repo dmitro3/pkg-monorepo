@@ -13,13 +13,13 @@ const LastBets = () => {
           <div
             key={index}
             className={cn(
-              "flex h-7 w-[53px] flex-shrink-0 items-center justify-center rounded-[1000px] bg-zinc-700 font-semibold text-zinc-100",
+              "wr-flex wr-h-7 wr-w-[53px] wr-flex-shrink-0 wr-items-center wr-justify-center wr-rounded-[1000px] wr-bg-zinc-700 wr-font-semibold wr-text-zinc-100",
               {
-                "bg-green-500": result.payout > 0,
+                "wr-bg-green-500": result.payout > 0,
               }
             )}
           >
-            <div className="text-zinc-100">{result.number}</div>
+            <div className="wr-text-zinc-100">{result.number}</div>
           </div>
         );
       })}

@@ -12,25 +12,25 @@ const ResultAnimation = () => {
   return (
     <div
       className={cn(
-        "absolute left-0 top-28 h-[600%] w-full  overflow-hidden  transition-all ease-in",
+        "wr-absolute wr-left-0 wr-top-28 wr-h-[600%] wr-w-full  wr-overflow-hidden  wr-transition-all wr-ease-in",
         {
-          "opacity-0":
+          "wr-opacity-0":
             limboGameResults[limboGameResults.length - 1]?.number === 0,
         }
       )}
     >
-      <div className="relative h-full w-full ">
-        <div className="  absolute bottom-0 left-0 w-full transition-all ease-in">
+      <div className="wr-relative wr-h-full wr-w-full ">
+        <div className="wr-absolute wr-bottom-0 wr-left-0 wr-w-full wr-transition-all wr-ease-in">
           <div
-            className={cn("relative h-0.5 bg-blue-500", {
-              "bg-red-600": won,
-              "bg-green-600": won,
+            className={cn("wr-relative wr-h-0.5 wr-bg-blue-500", {
+              "wr-bg-red-600": won,
+              "wr-bg-green-600": won,
             })}
           >
             <div
               className={cn(
-                "absolute left-0 top-0 h-[70px] w-full  bg-limbo-result transition-all ease-in",
-                { "bg-limbo-win": won, "bg-limbo-loss": !won }
+                "wr-absolute wr-left-0 wr-top-0 wr-h-[70px] wr-w-full  wr-bg-limbo-result wr-transition-all wr-ease-in",
+                { "wr-bg-limbo-win": won, "wr-bg-limbo-loss": !won }
               )}
             ></div>
           </div>

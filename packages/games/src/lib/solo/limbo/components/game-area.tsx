@@ -94,7 +94,7 @@ const GameArea: React.FC<GameAreaProps> = ({
     }
   }, [isAnimationSkipped]);
 
-  return <div className="relative h-full w-full">{children}</div>;
+  return <div className="wr-relative wr-h-full wr-w-full">{children}</div>;
 };
 
 export default GameArea;
