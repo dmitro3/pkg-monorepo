@@ -6,6 +6,7 @@ import { PreBetButton } from "../../../common/pre-bet-button";
 import { Button } from "../../../ui/button";
 import { BlackjackGameStatus } from "../../blackjack";
 import { useGameOptions } from "../../../game-provider";
+import { useFormContext } from "react-hook-form";
 
 interface Props {
   minWager: number;
@@ -46,8 +47,14 @@ export const BetController: React.FC<Props> = ({
   >("hide");
 
   React.useEffect(() => {
-    if (canInsure) setShowInsuranceBox("show");
-  }, [canInsure, activeHandByIndex.handId]);
+    if (canInsure && !activeHandByIndex.hand?.isInsured)
+      setShowInsuranceBox("show");
+  }, [canInsure, activeHandByIndex.handId, activeHandByIndex.hand?.isInsured]);
+
+  React.useEffect(() => {
+    if (canInsure && activeHandByIndex.hand?.isInsured)
+      setShowInsuranceBox("hide");
+  }, [canInsure, activeHandByIndex.hand?.isInsured]);
 
   const { account } = useGameOptions();
 
@@ -55,6 +62,8 @@ export const BetController: React.FC<Props> = ({
     const _b = account?.balance || 0;
     return _b >= chipAmount;
   };
+
+  const form = useFormContext();
 
   return (
     <BetControllerContainer>
@@ -70,11 +79,13 @@ export const BetController: React.FC<Props> = ({
         />
 
         <PreBetButton>
-          {showInsuranceBox == "show" ? (
+          {showInsuranceBox == "show" &&
+          status !== BlackjackGameStatus.FINISHED ? (
             <InsuranceBox
               activeGameIndex={activeHandByIndex.handId || 0}
               onInsure={onInsure}
               setShow={setShowInsuranceBox}
+              disabled={!isDistributionCompleted || isControllerDisabled}
             />
           ) : (
             <div className="wr-grid wr-grid-cols-2 wr-grid-rows-2 wr-gap-x-4 wr-gap-y-5">
@@ -82,7 +93,9 @@ export const BetController: React.FC<Props> = ({
                 onClick={() => onHit(activeHandByIndex.handId || 0)}
                 disabled={
                   status == BlackjackGameStatus.FINISHED ||
-                  status == BlackjackGameStatus.NONE
+                  status == BlackjackGameStatus.NONE ||
+                  !isDistributionCompleted ||
+                  isControllerDisabled
                 }
                 type="button"
                 variant="secondary"
@@ -94,7 +107,9 @@ export const BetController: React.FC<Props> = ({
                 onClick={() => onStand(activeHandByIndex.handId || 0)}
                 disabled={
                   status == BlackjackGameStatus.FINISHED ||
-                  status == BlackjackGameStatus.NONE
+                  status == BlackjackGameStatus.NONE ||
+                  !isDistributionCompleted ||
+                  isControllerDisabled
                 }
                 type="button"
                 variant="secondary"
@@ -140,8 +155,12 @@ export const BetController: React.FC<Props> = ({
             className="wr-w-full wr-mt-6"
             variant="success"
             disabled={
-              status !== BlackjackGameStatus.NONE &&
-              status !== BlackjackGameStatus.FINISHED
+              !form.formState.isValid ||
+              form.formState.isSubmitting ||
+              form.formState.isLoading ||
+              status == BlackjackGameStatus.PLAYER_TURN ||
+              status == BlackjackGameStatus.DEALER_TURN ||
+              status == BlackjackGameStatus.TABLE_DEAL
             }
             size="xl"
             type="submit"
@@ -156,9 +175,10 @@ export const BetController: React.FC<Props> = ({
 
 const InsuranceBox: React.FC<{
   activeGameIndex: number;
+  disabled: boolean;
   onInsure: (handIndex: number) => void;
   setShow: (show: "show" | "hide") => void;
-}> = ({ activeGameIndex, onInsure, setShow }) => {
+}> = ({ activeGameIndex, disabled, onInsure, setShow }) => {
   return (
     <div className="wr-flex wr-flex-col wr-justify-center wr-items-center wr-gap-3 wr-font-bold">
       <h2>Insurance?</h2>
@@ -168,6 +188,8 @@ const InsuranceBox: React.FC<{
           variant="secondary"
           size="xl"
           className="wr-text-sm wr-font-semibold"
+          type="button"
+          disabled={disabled}
         >
           Accept Insurance
         </Button>
@@ -176,6 +198,7 @@ const InsuranceBox: React.FC<{
           variant="secondary"
           size="xl"
           className="wr-text-sm wr-font-semibold"
+          type="button"
         >
           No Insurance
         </Button>

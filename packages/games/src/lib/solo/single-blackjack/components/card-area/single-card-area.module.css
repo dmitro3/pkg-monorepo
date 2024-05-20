@@ -42,7 +42,7 @@
 }
 
 .cardAmount.firstHand {
-  top: 65%;
+  top: 64%;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -58,7 +58,7 @@
 }
 
 .animatedText.firstHand {
-  top: 70%;
+  top: 75%;
   left: 50%;
   transform: translateX(-50%);
 }

@@ -13,6 +13,7 @@ import {
   calcTotalAmounts,
 } from "../../../blackjack";
 import { SingleBJActiveGameHands, SingleBlackjackHandIndex } from "../..";
+import { BetArea } from "../bet-area";
 
 interface CardAreaProps {
   handType: SingleBlackjackHandIndex;
@@ -34,7 +35,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
   isDistributionCompleted,
   isLastDistributionCompleted,
 }) => {
-  const { cards: cardData, settledResult } = hand;
+  const { cards: cardData, settledResult, handId } = hand;
 
   const [isCompletedAndBusted, setIsCompletedAndBusted] =
     React.useState<boolean>(false);
@@ -46,6 +47,11 @@ export const CardArea: React.FC<CardAreaProps> = ({
     amount: 0,
     softHandAmount: 0,
   });
+
+  const isTurn = React.useMemo(
+    () => isDistributionCompleted && activeGameData.activeHandIndex === handId,
+    [isDistributionCompleted, activeGameData.activeHandIndex, handId]
+  );
 
   const cardAmounts = React.useMemo(() => {
     const _uiCards = uiCards;
@@ -227,6 +233,10 @@ export const CardArea: React.FC<CardAreaProps> = ({
         isBusted={isBusted}
         handType={handType}
       />
+
+      {isDistributionCompleted && (
+        <BetArea className="wr-top-[82%]" isTurn={isTurn} />
+      )}
     </div>
   );
 };
