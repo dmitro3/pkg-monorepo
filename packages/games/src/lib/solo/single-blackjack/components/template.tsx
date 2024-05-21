@@ -59,6 +59,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
   onSplit,
   onStand,
   onInsure,
+  onGameCompleted,
 }) => {
   // ui cards
   const [dealerCards, setDealerCards] = React.useState<
@@ -327,6 +328,10 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     if (initialDataFetched)
       form.setValue("wager", activeGameHands.firstHand.hand?.chipsAmount || 0);
   }, [activeGameHands.firstHand.hand?.chipsAmount, initialDataFetched]);
+
+  React.useEffect(() => {
+    if (isLastDistributionCompleted) onGameCompleted();
+  }, [isLastDistributionCompleted]);
 
   const handleSubmit = (values: SingleBJDealFormFields) => {
     onReset();

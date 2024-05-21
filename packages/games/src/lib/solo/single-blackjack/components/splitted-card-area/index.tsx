@@ -176,7 +176,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
             uiCards[0] && isCompletedAndBusted && styles.busted
           )}
           card={uiCards[0] as BlackjackCard}
-          flipped={false}
+          flipped={isCompletedAndBusted}
           removeDelayFromFlipped
         />
       )}
