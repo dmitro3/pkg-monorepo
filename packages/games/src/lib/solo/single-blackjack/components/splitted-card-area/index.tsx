@@ -3,7 +3,7 @@ import { Card } from "../card";
 import { AnimatePresence, motion } from "framer-motion";
 import { genNumberArray } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
-import styles from "./single-card-area.module.css";
+import styles from "./splitted-card-area.module.css";
 import { CDN_URL } from "../../../../constants";
 import {
   BlackjackCard,
@@ -13,34 +13,32 @@ import {
   calcTotalAmounts,
 } from "../../../blackjack";
 import { SingleBJActiveGameHands, SingleBlackjackHandIndex } from "../..";
-import { BetArea } from "../bet-area";
 
-interface CardAreaProps {
+interface SplittedCardAreaProps {
   handType: SingleBlackjackHandIndex;
   uiCards: (BlackjackCard | null)[];
-  splittedCard?: BlackjackCard | null;
-  hand: SingleBJActiveGameHands["firstHand"];
+  hand: SingleBJActiveGameHands["splittedFirstHand"];
   activeGameData: GameStruct;
   isDistributionCompleted: boolean;
   isLastDistributionCompleted: boolean;
+  isSplitted: boolean | undefined;
   className?: string;
+  children: React.ReactNode;
 }
 
-export const CardArea: React.FC<CardAreaProps> = ({
+export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
   handType,
   uiCards,
-  splittedCard,
-  hand,
   activeGameData,
+  isSplitted,
+  hand,
   isDistributionCompleted,
   isLastDistributionCompleted,
+  children,
 }) => {
-  const { cards: cardData, settledResult, handId } = hand;
+  const { cards: cardData, settledResult } = hand;
 
   const [isCompletedAndBusted, setIsCompletedAndBusted] =
-    React.useState<boolean>(false);
-
-  const [isSplittedWithDelay, setIsSplittedWithDelay] =
     React.useState<boolean>(false);
 
   const [delayedCardAmounts, setDelayedCardAmounts] = React.useState({
@@ -48,20 +46,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
     softHandAmount: 0,
   });
 
-  const isTurn = React.useMemo(
-    () => isDistributionCompleted && activeGameData.activeHandIndex === handId,
-    [isDistributionCompleted, activeGameData.activeHandIndex, handId]
-  );
-
-  const cardAmounts = React.useMemo(() => {
-    const _uiCards = uiCards;
-
-    if (hand.hand?.isSplitted && splittedCard) {
-      _uiCards[1] = splittedCard;
-
-      return calcTotalAmounts(_uiCards);
-    } else return calcTotalAmounts(uiCards);
-  }, [uiCards, splittedCard, hand.hand?.isSplitted]);
+  const cardAmounts = React.useMemo(() => calcTotalAmounts(uiCards), [uiCards]);
 
   React.useEffect(() => {
     setTimeout(() => setDelayedCardAmounts(cardAmounts), 1000);
@@ -74,7 +59,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
 
     if (handStatus === BlackjackHandStatus.BUST) return true;
     else return false;
-  }, [isDistributionCompleted, hand.hand?.status, cardAmounts]);
+  }, [isDistributionCompleted, hand.hand?.status]);
 
   const isBlackjack = React.useMemo(() => {
     if (!isDistributionCompleted) return false;
@@ -97,7 +82,6 @@ export const CardArea: React.FC<CardAreaProps> = ({
 
     if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_BLACKJACK)
       return true;
-    else return false;
   }, [settledResult, isLastDistributionCompleted]);
 
   const isLoser = React.useMemo(() => {
@@ -111,7 +95,6 @@ export const CardArea: React.FC<CardAreaProps> = ({
     if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_LOST) return true;
 
     if (_result === BlackjackGameResult.DEALER_STAND_PLAYER_LOST) return true;
-    else return false;
   }, [settledResult, isLastDistributionCompleted]);
 
   const isPush = React.useMemo(() => {
@@ -121,19 +104,8 @@ export const CardArea: React.FC<CardAreaProps> = ({
 
     if (_result === BlackjackGameResult.DEALER_STAND_HAND_PUSH) return true;
 
-    if (Number(_result) == BlackjackGameResult.DEALER_BLACKJACK_HAND_PUSH)
+    if (Number(_result) === BlackjackGameResult.DEALER_BLACKJACK_HAND_PUSH)
       return true;
-    else return false;
-  }, [settledResult, isLastDistributionCompleted]);
-
-  const isInsured = React.useMemo(() => {
-    const _result = settledResult?.result as BlackjackGameResult;
-
-    if (!_result || !isLastDistributionCompleted) return false;
-
-    if (_result === BlackjackGameResult.DEALER_BLACKJACK_PLAYER_INSURED)
-      return true;
-    else return false;
   }, [settledResult, isLastDistributionCompleted]);
 
   React.useEffect(() => {
@@ -143,25 +115,22 @@ export const CardArea: React.FC<CardAreaProps> = ({
   }, [isDistributionCompleted, isBusted]);
 
   React.useEffect(() => {
-    const _isSplitted = hand.hand?.isSplitted;
-
-    if (_isSplitted) setTimeout(() => setIsSplittedWithDelay(true), 500);
-    else setIsSplittedWithDelay(false);
-  }, [hand.hand?.isSplitted]);
+    console.log(isCompletedAndBusted, "iscom");
+  }, [isCompletedAndBusted]);
 
   return (
     <div
-      className={cn(styles.cardArea, {
-        [styles.firstHand as any]: SingleBlackjackHandIndex.FIRST === handType,
+      className={cn(styles.splittedCardArea, {
+        [styles[`firstHand--${uiCards.length}`] as any]:
+          SingleBlackjackHandIndex.SPLITTED_FIRST === handType,
       })}
     >
       {genNumberArray(6).map((n) => (
         <Card
           key={n}
           className={cn(
-            uiCards[n] && n === 1 && isSplittedWithDelay && styles.hidden,
+            uiCards[n] && isSplitted && n === 0 && styles.hidden,
             uiCards[n] && !isCompletedAndBusted && styles[`card--${n + 1}`],
-            uiCards[n] && isSplittedWithDelay && styles.splitted,
             uiCards[n] && isCompletedAndBusted && styles.busted
           )}
           card={uiCards[n] as BlackjackCard}
@@ -191,20 +160,28 @@ export const CardArea: React.FC<CardAreaProps> = ({
         </Card>
       ))}
 
-      <Card
-        className={cn(
-          splittedCard && !isCompletedAndBusted && styles[`card--2`],
-          splittedCard && isCompletedAndBusted && styles.busted
-        )}
-        card={splittedCard || null}
-        flipped={isCompletedAndBusted ? true : false}
-      />
+      {isDistributionCompleted && isSplitted && (
+        <Card
+          className={cn(
+            handType === SingleBlackjackHandIndex.SPLITTED_FIRST &&
+              styles.unsplittedFirstHand,
+            uiCards[0] &&
+              isSplitted &&
+              !isCompletedAndBusted &&
+              styles[`card--1`],
+            uiCards[0] && isCompletedAndBusted && styles.busted
+          )}
+          card={uiCards[0] as BlackjackCard}
+          flipped={false}
+          removeDelayFromFlipped
+        />
+      )}
 
       {delayedCardAmounts.amount > 0 && !isCompletedAndBusted ? (
         <div
           className={cn(styles.cardAmount, {
             [styles.firstHand as any]:
-              SingleBlackjackHandIndex.FIRST === handType,
+              SingleBlackjackHandIndex.SPLITTED_FIRST === handType,
           })}
         >
           {delayedCardAmounts.softHandAmount < 22 ? (
@@ -226,30 +203,32 @@ export const CardArea: React.FC<CardAreaProps> = ({
         ""
       )}
 
+      <div
+        className={cn("wr-transition-all wr-duration-200", {
+          "wr-opacity-0": !cardAmounts.amount && !isCompletedAndBusted,
+        })}
+      >
+        {children}
+      </div>
+
       <AnimatedText
         isWinner={isWinner}
         isLoser={isLoser && !isBusted}
         isPush={isPush}
-        isInsured={isInsured}
         isBusted={isBusted}
         handType={handType}
       />
-
-      {isDistributionCompleted && (
-        <BetArea className="wr-top-[82%]" isTurn={isTurn} />
-      )}
     </div>
   );
 };
 
 const AnimatedText: React.FC<{
-  isWinner: boolean;
-  isLoser: boolean;
-  isPush: boolean;
-  isInsured: boolean;
-  isBusted: boolean;
+  isWinner: boolean | undefined;
+  isLoser: boolean | undefined;
+  isPush: boolean | undefined;
+  isBusted: boolean | undefined;
   handType: SingleBlackjackHandIndex;
-}> = ({ isWinner, isLoser, isPush, isInsured, isBusted, handType }) => {
+}> = ({ isWinner, isLoser, isPush, isBusted, handType }) => {
   const [showAnimation, setShowAnimation] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -259,10 +238,8 @@ const AnimatedText: React.FC<{
 
     if (isPush) setShowAnimation(true);
 
-    if (isInsured) setShowAnimation(true);
-
     if (isBusted) setShowAnimation(true);
-  }, [isWinner, isLoser, isPush, isInsured, isBusted]);
+  }, [isWinner, isLoser, isPush, isBusted]);
 
   React.useEffect(() => {
     if (showAnimation) setTimeout(() => setShowAnimation(false), 5500);
@@ -272,7 +249,7 @@ const AnimatedText: React.FC<{
     <div
       className={cn(
         styles.animatedText,
-        handType === SingleBlackjackHandIndex.FIRST && styles.firstHand
+        handType === SingleBlackjackHandIndex.SPLITTED_FIRST && styles.firstHand
       )}
     >
       <AnimatePresence>
@@ -289,13 +266,12 @@ const AnimatedText: React.FC<{
           <span
             className={cn(styles.text, "font-furore", {
               [styles.loser as any]: isLoser || isBusted,
-              [styles.push as any]: isPush || isInsured,
+              [styles.push as any]: isPush,
             })}
           >
             {isWinner && showAnimation && "Win!"}
-            {isLoser && !isInsured && showAnimation && "Lost!"}
+            {isLoser && showAnimation && "Lost!"}
             {isPush && showAnimation && "Push!"}
-            {isInsured && showAnimation && "Insured!"}
             {isBusted && showAnimation && "Bust!"}
           </span>
         </motion.div>

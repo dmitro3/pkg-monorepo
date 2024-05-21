@@ -1,4 +1,4 @@
-.cardArea {
+.splittedCardArea {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -10,25 +10,10 @@
   align-items: flex-start;
 }
 
-.busted {
-  top: -20px !important;
-  right: calc(100% - 75px) !important;
-}
-
-.hidden {
-  display: none;
-  transition: 0;
-}
-
-.state {
-  position: absolute;
-  right: -30px;
-  top: -10px;
-}
-
 .cardAmount {
   position: absolute;
   font-size: 13px;
+  font-weight: 600;
   padding: 3px 12px;
   border-radius: 15px;
   background-color: white;
@@ -42,9 +27,8 @@
 }
 
 .cardAmount.firstHand {
-  top: 64%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 20px;
+  right: 185px;
 }
 
 .animatedText {
@@ -58,9 +42,8 @@
 }
 
 .animatedText.firstHand {
-  top: 75%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 90px;
+  right: 150px;
 }
 
 .animatedText .text {
@@ -88,63 +71,53 @@
 /* for first hand cards */
 .firstHand .card--1 {
   top: 70%;
-  right: 45%;
+  right: 24%;
 }
 
 .firstHand .card--2 {
   top: 70%;
-  right: 41%;
+  right: 20%;
 }
 
 .firstHand .card--3 {
   top: 70%;
-  right: 37%;
+  right: 16%;
 }
 
 .firstHand .card--4 {
   top: 70%;
-  right: 33%;
+  right: 12%;
 }
 
 .firstHand .card--5 {
   top: 70%;
-  right: 29%;
+  right: 8%;
 }
 
 .firstHand .card--6 {
   top: 70%;
-  right: 25%;
+  right: 4%;
 }
 
-/* for first hand cards */
-.firstHand .card--1.splitted {
+.unsplittedFirstHand {
   top: 70%;
-  right: 65%;
+  right: 41%;
 }
 
-.firstHand .card--2.splitted {
-  top: 70%;
-  right: 61%;
+.busted {
+  top: 100px;
+  right: 1095px;
 }
 
-.firstHand .card--3.splitted {
-  top: 70%;
-  right: 57%;
+.hidden {
+  transition: 0;
+  display: none;
 }
 
-.firstHand .card--4.splitted {
-  top: 70%;
-  right: 53%;
-}
-
-.firstHand .card--5.splitted {
-  top: 70%;
-  right: 49%;
-}
-
-.firstHand .card--6.splitted {
-  top: 70%;
-  right: 45%;
+.state {
+  position: absolute;
+  right: -30px;
+  top: -10px;
 }
 
 @media only screen and (max-width: 1024px) and (max-height: 600px) {
