@@ -158,6 +158,7 @@ export const BetController: React.FC<Props> = ({
           <Button
             className="wr-w-full wr-mt-6"
             variant="success"
+            isLoading={form.formState.isSubmitting || form.formState.isLoading}
             disabled={
               !form.formState.isValid ||
               form.formState.isSubmitting ||

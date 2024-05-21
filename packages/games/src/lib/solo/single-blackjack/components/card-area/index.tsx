@@ -246,12 +246,13 @@ export const CardArea: React.FC<CardAreaProps> = ({
         isInsured={isInsured}
         isBusted={isBusted}
         handType={handType}
+        hasSplittedCards={hasSplittedCards}
       />
 
       {isDistributionCompleted && (
         <BetArea
           className={cn("wr-top-[82%]", {
-            "wr-left-[27%]": isSplittedWithDelay,
+            "wr-left-[27%]": hasSplittedCards && isDistributionCompleted,
           })}
           isTurn={isTurn}
         />
@@ -267,7 +268,16 @@ const AnimatedText: React.FC<{
   isInsured: boolean;
   isBusted: boolean;
   handType: SingleBlackjackHandIndex;
-}> = ({ isWinner, isLoser, isPush, isInsured, isBusted, handType }) => {
+  hasSplittedCards: boolean;
+}> = ({
+  isWinner,
+  isLoser,
+  isPush,
+  isInsured,
+  isBusted,
+  handType,
+  hasSplittedCards,
+}) => {
   const [showAnimation, setShowAnimation] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -290,7 +300,8 @@ const AnimatedText: React.FC<{
     <div
       className={cn(
         styles.animatedText,
-        handType === SingleBlackjackHandIndex.FIRST && styles.firstHand
+        handType === SingleBlackjackHandIndex.FIRST && styles.firstHand,
+        hasSplittedCards && styles.splitted
       )}
     >
       <AnimatePresence>

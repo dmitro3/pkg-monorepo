@@ -4,7 +4,7 @@
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 5;
+  z-index: 6;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -69,6 +69,12 @@
   transform: translateX(-50%);
 }
 
+.animatedText.firstHand.splitted {
+  top: 75%;
+  left: 31%;
+  transform: translateX(-50%);
+}
+
 .animatedText .text {
   width: 115px;
   text-align: center;
@@ -95,62 +101,74 @@
 .firstHand .card--1 {
   top: 70%;
   right: 45%;
+  z-index: 0;
 }
 
 .firstHand .card--2 {
   top: 70%;
   right: 41%;
+  z-index: 1;
 }
 
 .firstHand .card--3 {
   top: 70%;
   right: 37%;
+  z-index: 2;
 }
 
 .firstHand .card--4 {
   top: 70%;
   right: 33%;
+  z-index: 3;
 }
 
 .firstHand .card--5 {
   top: 70%;
   right: 29%;
+  z-index: 4;
 }
 
 .firstHand .card--6 {
   top: 70%;
   right: 25%;
+  z-index: 5;
 }
 
 /* for first hand cards */
 .firstHand .card--1.splitted {
   top: 70%;
   right: 65%;
+  z-index: 0;
 }
 
 .firstHand .card--2.splitted {
   top: 70%;
   right: 61%;
+  z-index: 1;
 }
 
 .firstHand .card--3.splitted {
   top: 70%;
   right: 57%;
+  z-index: 2;
 }
 
 .firstHand .card--4.splitted {
   top: 70%;
   right: 53%;
+  z-index: 3;
 }
 
 .firstHand .card--5.splitted {
   top: 70%;
   right: 49%;
+  z-index: 4;
 }
 
 .firstHand .card--6.splitted {
   top: 70%;
   right: 45%;
+  z-index: 5;
 }
 
 @media only screen and (max-width: 1024px) and (max-height: 600px) {

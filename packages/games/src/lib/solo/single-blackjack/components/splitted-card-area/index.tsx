@@ -214,7 +214,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
       >
       </div> */}
 
-      {isDistributionCompleted && (
+      {isDistributionCompleted && !!cardData?.amountCards && (
         <BetArea
           className={cn("wr-top-[82%]", {
             "wr-right-[23%]": isDistributionCompleted,

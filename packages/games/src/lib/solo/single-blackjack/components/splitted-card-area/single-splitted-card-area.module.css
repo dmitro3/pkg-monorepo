@@ -42,8 +42,8 @@
 }
 
 .animatedText.firstHand {
-  top: 90px;
-  right: 150px;
+  top: 75%;
+  right: 19%;
 }
 
 .animatedText .text {
@@ -72,41 +72,48 @@
 .firstHand .card--1 {
   top: 70%;
   right: 24%;
+  z-index: 0;
 }
 
 .firstHand .card--2 {
   top: 70%;
   right: 20%;
+  z-index: 1;
 }
 
 .firstHand .card--3 {
   top: 70%;
   right: 16%;
+  z-index: 2;
 }
 
 .firstHand .card--4 {
   top: 70%;
   right: 12%;
+  z-index: 3;
 }
 
 .firstHand .card--5 {
   top: 70%;
   right: 8%;
+  z-index: 4;
 }
 
 .firstHand .card--6 {
   top: 70%;
   right: 4%;
+  z-index: 5;
 }
 
 .unsplittedFirstHand {
   top: 70%;
   right: 41%;
+  z-index: 0;
 }
 
 .busted {
-  top: 100px;
-  right: 1095px;
+  top: -20px !important;
+  right: calc(100% - 75px) !important;
 }
 
 .hidden {
