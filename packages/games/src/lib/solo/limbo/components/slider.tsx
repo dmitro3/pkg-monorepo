@@ -43,6 +43,55 @@ const largerScalePoints: ScalePoint[] = [
   { value: 100, topPercent: 60 },
 ];
 
+const clickScalePoint: ScalePoint[] = [
+  { value: 0, topPercent: 100 },
+  { value: 1, topPercent: 95 },
+  { value: 2, topPercent: 89 },
+  { value: 3, topPercent: 84 },
+  { value: 4, topPercent: 77 },
+  { value: 5, topPercent: 71 },
+  { value: 6, topPercent: 65 },
+  { value: 7, topPercent: 60 },
+  { value: 8, topPercent: 53 },
+  { value: 9, topPercent: 48 },
+  { value: 10, topPercent: 42 },
+  { value: 15, topPercent: 36 },
+  { value: 20, topPercent: 30 },
+  // { value: 25, topPercent:  },
+  // { value: 30, topPercent:  },
+  { value: 35, topPercent: 24 },
+  { value: 40, topPercent: 21 },
+  { value: 45, topPercent: 20 },
+  { value: 50, topPercent: 18 },
+  { value: 55, topPercent: 16 },
+  { value: 60, topPercent: 13 },
+  { value: 65, topPercent: 12 },
+  { value: 70, topPercent: 10 },
+  { value: 80, topPercent: 6 },
+  { value: 90, topPercent: 3 },
+  { value: 100, topPercent: 0 },
+];
+
+function interpolateValue(percent: number): number | null {
+  if (percent < 0 || percent > 100) return null;
+
+  for (let i = 0; i < clickScalePoint.length - 1; i++) {
+    const current = clickScalePoint[i];
+    const next = clickScalePoint[i + 1];
+
+    if (current && next) {
+      if (percent <= current.topPercent && percent >= next.topPercent) {
+        const ratio =
+          (current.topPercent - percent) /
+          (current.topPercent - next.topPercent);
+        return current.value + ratio * (next.value - current.value);
+      }
+    }
+  }
+
+  return null;
+}
+
 function interpolate(value: number, points: ScalePoint[]): number {
   // Find the two points between which we need to interpolate
   const lowerPoint = points.reduce((prev, curr) =>
@@ -120,21 +169,20 @@ const LimboSlider = () => {
       const divElement = divRef.current;
       const divRect = divElement.getBoundingClientRect();
       const mouseY = event.clientY;
-      const divBottomY = divRect.bottom;
+      const divTopY = divRect.top;
       const divHeight = divRect.height;
 
-      const distanceFromTop = divBottomY - mouseY;
-      const percentageFromTop = (distanceFromTop / divHeight) * 100;
+      const distanceFromTop = mouseY - divTopY;
+      const percentageFromTop = distanceFromTop / divHeight;
 
-      console.log(percentageFromTop);
+      const topPositionPercent = interpolateValue(percentageFromTop * 100);
 
-      let clickedValue;
-
-      // form.setValue("limboMultiplier", Math.round(clickedValue * 100) / 100);
+      form.setValue("limboMultiplier", Number(topPositionPercent?.toFixed(2)));
     }
   };
+
   return (
-    <div className="wr-h-full " ref={divRef} onClick={handleClick}>
+    <div className="wr-h-full ">
       <div
         className="wr-absolute wr-left-0 wr-top-28 wr-h-[calc(100%_-_64px_-_12px_-_48px)] wr-w-full"
         ref={observe}
@@ -152,6 +200,8 @@ const LimboSlider = () => {
             style={{
               top: `${calculatedTopPostion}%`,
             }}
+            ref={divRef}
+            onClick={handleClick}
           >
             {secondSteps.map((step) => (
               <>
