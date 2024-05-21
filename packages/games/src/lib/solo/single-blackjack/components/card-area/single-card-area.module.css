@@ -47,6 +47,12 @@
   transform: translateX(-50%);
 }
 
+.cardAmount.firstHand.splitted {
+  top: 64%;
+  left: 31%;
+  transform: translateX(-50%);
+}
+
 .animatedText {
   position: absolute;
   z-index: 10;

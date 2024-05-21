@@ -27,8 +27,8 @@
 }
 
 .cardAmount.firstHand {
-  top: 20px;
-  right: 185px;
+  top: 64%;
+  right: 25%;
 }
 
 .animatedText {
@@ -101,7 +101,7 @@
 
 .unsplittedFirstHand {
   top: 70%;
-  right: 61%;
+  right: 41%;
 }
 
 .busted {

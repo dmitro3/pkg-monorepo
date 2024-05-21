@@ -23,6 +23,7 @@ interface CardAreaProps {
   activeGameData: GameStruct;
   isDistributionCompleted: boolean;
   isLastDistributionCompleted: boolean;
+  hasSplittedCards: boolean;
   className?: string;
 }
 
@@ -34,6 +35,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
   activeGameData,
   isDistributionCompleted,
   isLastDistributionCompleted,
+  hasSplittedCards,
 }) => {
   const { cards: cardData, settledResult, handId } = hand;
 
@@ -41,6 +43,9 @@ export const CardArea: React.FC<CardAreaProps> = ({
     React.useState<boolean>(false);
 
   const [isSplittedWithDelay, setIsSplittedWithDelay] =
+    React.useState<boolean>(false);
+
+  const [hasSplittedCardsWithDelay, setHasSplittedCardsWithDelay] =
     React.useState<boolean>(false);
 
   const [delayedCardAmounts, setDelayedCardAmounts] = React.useState({
@@ -66,6 +71,10 @@ export const CardArea: React.FC<CardAreaProps> = ({
   React.useEffect(() => {
     setTimeout(() => setDelayedCardAmounts(cardAmounts), 1000);
   }, [cardAmounts]);
+
+  React.useEffect(() => {
+    setTimeout(() => setHasSplittedCardsWithDelay(hasSplittedCards), 1000);
+  }, [hasSplittedCards]);
 
   const isBusted = React.useMemo(() => {
     const handStatus = hand.hand?.status;
@@ -163,7 +172,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
           className={cn(
             uiCards[n] && n === 1 && isSplittedWithDelay && styles.hidden,
             uiCards[n] && !isCompletedAndBusted && styles[`card--${n + 1}`],
-            uiCards[n] && isSplittedWithDelay && styles.splitted,
+            uiCards[n] && hasSplittedCards && styles.splitted,
             uiCards[n] && isCompletedAndBusted && styles.busted
           )}
           card={uiCards[n] as BlackjackCard}
@@ -196,7 +205,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
       <Card
         className={cn(
           splittedCard && !isCompletedAndBusted && styles[`card--2`],
-          splittedCard && isSplittedWithDelay && styles.splitted,
+          splittedCard && hasSplittedCards && styles.splitted,
           splittedCard && isCompletedAndBusted && styles.busted
         )}
         card={splittedCard || null}
@@ -208,6 +217,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
           className={cn(styles.cardAmount, {
             [styles.firstHand as any]:
               SingleBlackjackHandIndex.FIRST === handType,
+            [styles.splitted as any]: hasSplittedCards,
           })}
         >
           {delayedCardAmounts.softHandAmount < 22 ? (
@@ -239,7 +249,12 @@ export const CardArea: React.FC<CardAreaProps> = ({
       />
 
       {isDistributionCompleted && (
-        <BetArea className="wr-top-[82%]" isTurn={isTurn} />
+        <BetArea
+          className={cn("wr-top-[82%]", {
+            "wr-left-[27%]": isSplittedWithDelay,
+          })}
+          isTurn={isTurn}
+        />
       )}
     </div>
   );

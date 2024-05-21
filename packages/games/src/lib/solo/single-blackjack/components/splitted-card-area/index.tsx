@@ -13,6 +13,7 @@ import {
   calcTotalAmounts,
 } from "../../../blackjack";
 import { SingleBJActiveGameHands, SingleBlackjackHandIndex } from "../..";
+import { BetArea } from "../bet-area";
 
 interface SplittedCardAreaProps {
   handType: SingleBlackjackHandIndex;
@@ -34,7 +35,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
   isDistributionCompleted,
   isLastDistributionCompleted,
 }) => {
-  const { cards: cardData, settledResult } = hand;
+  const { cards: cardData, settledResult, handId } = hand;
 
   const [isCompletedAndBusted, setIsCompletedAndBusted] =
     React.useState<boolean>(false);
@@ -45,6 +46,11 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
   });
 
   const cardAmounts = React.useMemo(() => calcTotalAmounts(uiCards), [uiCards]);
+
+  const isTurn = React.useMemo(
+    () => isDistributionCompleted && activeGameData.activeHandIndex === handId,
+    [isDistributionCompleted, activeGameData.activeHandIndex, handId]
+  );
 
   React.useEffect(() => {
     setTimeout(() => setDelayedCardAmounts(cardAmounts), 1000);
@@ -207,6 +213,15 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
         })}
       >
       </div> */}
+
+      {isDistributionCompleted && (
+        <BetArea
+          className={cn("wr-top-[82%]", {
+            "wr-right-[23%]": isDistributionCompleted,
+          })}
+          isTurn={isTurn}
+        />
+      )}
 
       <AnimatedText
         isWinner={isWinner}

@@ -429,6 +429,9 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
                     splittedCard={firstHandSplittedCard}
                     isDistributionCompleted={isDistributionCompleted}
                     isLastDistributionCompleted={isLastDistributionCompleted}
+                    hasSplittedCards={
+                      !!activeGameHands.splittedFirstHand.cards?.amountCards
+                    }
                   />
                 </>
               )}
