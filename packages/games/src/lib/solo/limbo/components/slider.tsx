@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { LimboForm } from "../types";
 import { cn } from "../../../utils/style";
@@ -93,6 +93,8 @@ const LimboSlider = () => {
 
   const showNumber = gameStatus === "IDLE" ? limboMultiplier : result;
 
+  const divRef = useRef<HTMLDivElement>(null);
+
   const firstSteps = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
   const secondSteps = [100, 80, 65, 50, 35, 20, 15];
@@ -113,91 +115,111 @@ const LimboSlider = () => {
     }
   }, [showNumber]);
 
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (divRef.current) {
+      const divElement = divRef.current;
+      const divRect = divElement.getBoundingClientRect();
+      const mouseY = event.clientY;
+      const divBottomY = divRect.bottom;
+      const divHeight = divRect.height;
+
+      const distanceFromTop = divBottomY - mouseY;
+      const percentageFromTop = (distanceFromTop / divHeight) * 100;
+
+      console.log(percentageFromTop);
+
+      let clickedValue;
+
+      // form.setValue("limboMultiplier", Math.round(clickedValue * 100) / 100);
+    }
+  };
   return (
-    <div
-      className="wr-absolute wr-left-0 wr-top-28 wr-h-[calc(100%_-_64px_-_12px_-_48px)] wr-w-full "
-      ref={observe}
-    >
-      <div className="wr-relative wr-h-full wr-w-full">
-        <div
-          className={cn(
-            "wr-absolute wr-flex wr-h-[400%] wr-w-full wr-flex-col wr-justify-between wr-px-[15px] wr-text-[14px] wr-text-zinc-600 wr-transition-all wr-duration-300 wr-ease-in-out",
+    <div className="wr-h-full " ref={divRef} onClick={handleClick}>
+      <div
+        className="wr-absolute wr-left-0 wr-top-28 wr-h-[calc(100%_-_64px_-_12px_-_48px)] wr-w-full"
+        ref={observe}
+      >
+        <div className="wr-relative wr-h-full wr-w-full ">
+          <div
+            className={cn(
+              "wr-absolute wr-flex wr-h-[400%] wr-w-full wr-flex-col wr-justify-between wr-px-[15px] wr-text-[14px] wr-text-zinc-600 wr-transition-all wr-duration-300 wr-ease-in-out",
 
-            {
-              "wr-bg-limbo-win": won && result !== 0,
-              "wr-bg-limbo-loss": !won && result !== 0,
-            }
-          )}
-          style={{
-            top: `${calculatedTopPostion}%`,
-          }}
-        >
-          {secondSteps.map((step, i) => (
-            <>
-              <div key={step} className="wr-flex wr-justify-between">
-                <div className="wr-flex wr-items-center wr-gap-1.5 wr-leading-[2px]">
-                  <div className="wr-h-[1px] wr-w-[40px] wr-bg-zinc-800" />
-                  {step.toFixed(2)} x
+              {
+                "wr-bg-limbo-win": won && result !== 0,
+                "wr-bg-limbo-loss": !won && result !== 0,
+              }
+            )}
+            style={{
+              top: `${calculatedTopPostion}%`,
+            }}
+          >
+            {secondSteps.map((step) => (
+              <>
+                <div key={step} className="wr-flex wr-justify-between">
+                  <div className="wr-flex wr-items-center wr-gap-1.5 wr-leading-[2px]">
+                    <div className="wr-h-[1px] wr-w-[40px] wr-bg-zinc-800" />
+                    {step.toFixed(2)} x
+                  </div>
+                  <div className="wr-flex wr-items-center wr-gap-1.5 wr-leading-[2px]">
+                    {step.toFixed(2)} x
+                    <div className="wr-h-[1px] wr-w-[40px] wr-bg-zinc-800" />
+                  </div>
                 </div>
-                <div className="wr-flex wr-items-center wr-gap-1.5 wr-leading-[2px]">
-                  {step.toFixed(2)} x
-                  <div className="wr-h-[1px] wr-w-[40px] wr-bg-zinc-800" />
+
+                <div className="wr-flex wr-justify-between ">
+                  <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
+                  <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
                 </div>
-              </div>
-
-              <div className="wr-flex wr-justify-between ">
-                <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-                <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-              </div>
-              <div className="wr-flex wr-justify-between ">
-                <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-                <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-              </div>
-              <div className="wr-flex wr-justify-between ">
-                <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-                <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-              </div>
-            </>
-          ))}
-          {firstSteps.map((step, i) => (
-            <>
-              <div key={step} className="wr-flex wr-justify-between">
-                <div className="wr-flex wr-items-center wr-gap-1.5 wr-leading-[2px]">
-                  <div className="wr-h-[1px] wr-w-[40px] wr-bg-zinc-800" />
-                  {step.toFixed(2)}x
+                <div className="wr-flex wr-justify-between ">
+                  <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
+                  <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
                 </div>
-                <div className=" wr-flex wr-items-center wr-gap-1.5 wr-leading-[2px]">
-                  {step.toFixed(2)}x
-                  <div className="wr-h-[1px] wr-w-[40px] wr-bg-zinc-800" />
+                <div className="wr-flex wr-justify-between ">
+                  <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
+                  <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
                 </div>
-              </div>
+              </>
+            ))}
+            {firstSteps.map((step) => (
+              <>
+                <div key={step} className="wr-flex wr-justify-between">
+                  <div className="wr-flex wr-items-center wr-gap-1.5 wr-leading-[2px]">
+                    <div className="wr-h-[1px] wr-w-[40px] wr-bg-zinc-800" />
+                    {step.toFixed(2)}x
+                  </div>
+                  <div className=" wr-flex wr-items-center wr-gap-1.5 wr-leading-[2px]">
+                    {step.toFixed(2)}x
+                    <div className="wr-h-[1px] wr-w-[40px] wr-bg-zinc-800" />
+                  </div>
+                </div>
 
-              <div className="wr-flex wr-justify-between ">
-                <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-                <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-              </div>
-              <div className="wr-flex wr-justify-between ">
-                <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-                <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-              </div>
-              <div className="wr-flex wr-justify-between ">
-                <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-                <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
-              </div>
-            </>
-          ))}
-        </div>
+                <div className="wr-flex wr-justify-between ">
+                  <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
+                  <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
+                </div>
+                <div className="wr-flex wr-justify-between ">
+                  <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
+                  <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
+                </div>
+                <div className="wr-flex wr-justify-between ">
+                  <div className=" wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
+                  <div className=" wr-ml-auto wr-h-[1px] wr-w-5 wr-bg-zinc-800" />
+                </div>
+              </>
+            ))}
+          </div>
 
-        <div
-          className="wr-absolute wr-top-1/2 wr-h-0.5 wr-w-[1020px] -wr-translate-y-1/2 wr-border wr-border-zinc-700  wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
-          aria-label="Volume"
-          style={{ width: `${width}px` }}
-        >
-          <div className="wr-h-[70px] wr-bg-limbo-track"></div>
+          <div
+            className="wr-absolute wr-top-1/2 wr-h-0.5 wr-w-[1020px] -wr-translate-y-1/2 wr-border wr-border-zinc-700  wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
+            aria-label="Volume"
+            style={{ width: `${width}px` }}
+          >
+            <div className="wr-h-[70px] wr-bg-limbo-track"></div>
 
-          <span className="wr-absolute  -wr-top-12  wr-left-1/2 wr-h-[64px] -wr-translate-x-1/2 wr-transform wr-border-none wr-text-[64px] wr-font-bold">
-            {showNumber.toFixed(2)}x
-          </span>
+            <span className="wr-absolute  -wr-top-12  wr-left-1/2 wr-h-[64px] -wr-translate-x-1/2 wr-transform wr-border-none wr-text-[64px] wr-font-bold">
+              {showNumber.toFixed(2)}x
+            </span>
+          </div>
         </div>
       </div>
     </div>
