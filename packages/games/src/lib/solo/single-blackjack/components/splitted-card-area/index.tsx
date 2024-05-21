@@ -3,7 +3,7 @@ import { Card } from "../card";
 import { AnimatePresence, motion } from "framer-motion";
 import { genNumberArray } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
-import styles from "./splitted-card-area.module.css";
+import styles from "./single-splitted-card-area.module.css";
 import { CDN_URL } from "../../../../constants";
 import {
   BlackjackCard,
@@ -23,7 +23,6 @@ interface SplittedCardAreaProps {
   isLastDistributionCompleted: boolean;
   isSplitted: boolean | undefined;
   className?: string;
-  children: React.ReactNode;
 }
 
 export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
@@ -34,7 +33,6 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
   hand,
   isDistributionCompleted,
   isLastDistributionCompleted,
-  children,
 }) => {
   const { cards: cardData, settledResult } = hand;
 
@@ -121,7 +119,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
   return (
     <div
       className={cn(styles.splittedCardArea, {
-        [styles[`firstHand--${uiCards.length}`] as any]:
+        [styles.firstHand as any]:
           SingleBlackjackHandIndex.SPLITTED_FIRST === handType,
       })}
     >
@@ -203,13 +201,12 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
         ""
       )}
 
-      <div
+      {/* <div
         className={cn("wr-transition-all wr-duration-200", {
           "wr-opacity-0": !cardAmounts.amount && !isCompletedAndBusted,
         })}
       >
-        {children}
-      </div>
+      </div> */}
 
       <AnimatedText
         isWinner={isWinner}

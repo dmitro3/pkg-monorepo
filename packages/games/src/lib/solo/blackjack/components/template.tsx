@@ -652,6 +652,13 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     if (isLastDistributionCompleted) onGameCompleted();
   }, [isLastDistributionCompleted]);
 
+  console.log(
+    firstHandCards,
+    "outer ui cards",
+    firstHandSplittedCard,
+    "firsthand sp"
+  );
+
   return (
     <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0 wr-max-w-[1140px]">
       <SceneContainer

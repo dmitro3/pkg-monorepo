@@ -56,6 +56,10 @@ export const BetController: React.FC<Props> = ({
       setShowInsuranceBox("hide");
   }, [canInsure, activeHandByIndex.hand?.isInsured]);
 
+  React.useEffect(() => {
+    if (status == BlackjackGameStatus.FINISHED) setShowInsuranceBox("hide");
+  }, [status]);
+
   const { account } = useGameOptions();
 
   const hasBalanceForMove = (chipAmount: number): boolean => {

@@ -32,9 +32,9 @@ const defaultGameData = {
 const mockActiveGameHands = {
   dealer: {
     cards: {
-      cards: [13, 9, 12, 5, 4, 8, 0, 0],
+      cards: [6, 0, 0, 0, 0, 0, 0, 0],
       amountCards: 1,
-      totalCount: 13,
+      totalCount: 6,
       isSoftHand: false,
       canSplit: false,
     },
@@ -42,33 +42,46 @@ const mockActiveGameHands = {
   },
   firstHand: {
     cards: {
-      cards: [13, 9, 12, 5, 4, 8, 0, 0],
+      cards: [11, 9, 0, 0, 0, 0, 0, 0],
       amountCards: 2,
-      totalCount: 22,
+      totalCount: 19,
+      isSoftHand: false,
+      canSplit: true,
+    },
+    hand: {
+      chipsAmount: 10,
+      isInsured: false,
+      status: 1,
+      isDouble: false,
+      isSplitted: true,
+      splittedHandIndex: 1248,
+    },
+    handId: 1247,
+  },
+  splittedFirstHand: {
+    cards: {
+      cards: [11, 12, 0, 0, 0, 0, 0, 0],
+      amountCards: 2,
+      totalCount: 20,
       isSoftHand: false,
       canSplit: false,
     },
     hand: {
-      chipsAmount: 12,
+      chipsAmount: 10,
       isInsured: false,
       status: 1,
       isDouble: false,
       isSplitted: false,
-      splittedHandIndex: 0,
+      splittedHandIndex: null,
     },
-    handId: 1143,
-    isCompleted: true,
-  },
-  splittedFirstHand: {
-    cards: null,
-    hand: null,
+    handId: 1248,
   },
 };
 
 const mockGameData = {
-  activeHandIndex: 1143,
+  activeHandIndex: 1247,
   canInsure: false,
-  status: 1,
+  status: 2,
 };
 
 export default function SingleBlackjackPage() {

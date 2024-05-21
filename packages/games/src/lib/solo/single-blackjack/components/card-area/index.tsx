@@ -149,6 +149,8 @@ export const CardArea: React.FC<CardAreaProps> = ({
     else setIsSplittedWithDelay(false);
   }, [hand.hand?.isSplitted]);
 
+  console.log(uiCards, "uicards");
+
   return (
     <div
       className={cn(styles.cardArea, {
@@ -194,6 +196,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
       <Card
         className={cn(
           splittedCard && !isCompletedAndBusted && styles[`card--2`],
+          splittedCard && isSplittedWithDelay && styles.splitted,
           splittedCard && isCompletedAndBusted && styles.busted
         )}
         card={splittedCard || null}

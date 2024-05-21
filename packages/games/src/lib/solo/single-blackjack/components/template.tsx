@@ -27,6 +27,7 @@ import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { useGameOptions } from "../../../game-provider";
 import { DealerCardArea } from "./dealer-card-area";
 import { CardArea } from "./card-area";
+import { SplittedCardArea } from "./splitted-card-area";
 
 type TemplateOptions = {
   scene?: {
@@ -333,6 +334,13 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     onDeal(values);
   };
 
+  console.log(
+    firstHandCards,
+    "outer ui cards",
+    firstHandSplittedCard,
+    "firsthand sp"
+  );
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -402,15 +410,28 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
               {/* dealer card area end */}
 
               {/* card area start */}
-              <CardArea
-                handType={SingleBlackjackHandIndex.FIRST}
-                hand={activeGameHands.firstHand}
-                uiCards={firstHandCards}
-                activeGameData={activeGameData}
-                splittedCard={firstHandSplittedCard}
-                isDistributionCompleted={isDistributionCompleted}
-                isLastDistributionCompleted={isLastDistributionCompleted}
-              />
+              {activeGameData.status !== BlackjackGameStatus.NONE && (
+                <>
+                  <SplittedCardArea
+                    handType={SingleBlackjackHandIndex.SPLITTED_FIRST}
+                    hand={activeGameHands.splittedFirstHand}
+                    uiCards={splittedFirstHandCards}
+                    activeGameData={activeGameData}
+                    isDistributionCompleted={isDistributionCompleted}
+                    isLastDistributionCompleted={isLastDistributionCompleted}
+                    isSplitted={activeGameHands.firstHand.hand?.isSplitted}
+                  />
+                  <CardArea
+                    handType={SingleBlackjackHandIndex.FIRST}
+                    hand={activeGameHands.firstHand}
+                    uiCards={firstHandCards}
+                    activeGameData={activeGameData}
+                    splittedCard={firstHandSplittedCard}
+                    isDistributionCompleted={isDistributionCompleted}
+                    isLastDistributionCompleted={isLastDistributionCompleted}
+                  />
+                </>
+              )}
               {/* card area start end */}
             </div>
             {/* canvas end */}
