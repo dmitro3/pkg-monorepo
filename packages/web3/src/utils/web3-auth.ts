@@ -28,6 +28,8 @@ function isIWeb3AuthModal(
   return typeof (obj as IWeb3AuthModal).initModal !== "undefined";
 }
 
+export type AccountAbstractionConnectorType = "Web3Auth";
+
 export type Provider = IProvider | null;
 
 export function Web3AuthConnector(parameters: Web3AuthConnectorParams) {
@@ -38,7 +40,7 @@ export function Web3AuthConnector(parameters: Web3AuthConnectorParams) {
   return createConnector<Provider>((config) => ({
     id: `web3auth-${parameters.loginParams?.loginProvider ?? WALLET_ADAPTERS.OPENLOGIN}`,
     name: parameters.loginParams?.loginProvider ?? WALLET_ADAPTERS.OPENLOGIN,
-    type: `Web3Auth`,
+    type: "Web3Auth" as AccountAbstractionConnectorType,
     async connect({ chainId } = {}) {
       try {
         config.emitter.emit("message", {

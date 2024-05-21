@@ -41,7 +41,9 @@
     "@web3auth/openlogin-adapter": "^8.4.0",
     "@web3auth/wallet-services-plugin": "^8.4.0",
     "@web3auth/web3auth-wagmi-connector": "^6.0.0",
+    "json-rpc-2.0": "^1.7.0",
     "viem": "2.x",
-    "wagmi": "^2.5.7"
+    "wagmi": "^2.5.7",
+    "zustand": "^4.4.1"
   }
 }

@@ -1,13 +1,14 @@
 "use client";
 
-import { useAccount, useDisconnect } from "wagmi";
-
-import { Code, useWinrConnect } from "@winrlabs/web3";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useCurrentAccount } from "@winrlabs/web3";
+import React from "react";
 
 function App() {
   const account = useAccount();
-  const { connectors, connect, status, error } = useWinrConnect();
+  const { connectors, connect, status, error } = useConnect();
   const { disconnect } = useDisconnect();
+  const currentAA = useCurrentAccount();
 
   return (
     <>
@@ -15,14 +16,8 @@ function App() {
         <h2>Account</h2>
 
         <div>
-          status: {account.status}
+          currentAA: {currentAA.address}
           <br />
-          addresses: {JSON.stringify(account.addresses)}
-          <br />
-          chainId: {account.chainId}
-          <br />
-          <br />
-          <Code>Hello</Code>
         </div>
 
         {account.status === "connected" && (
