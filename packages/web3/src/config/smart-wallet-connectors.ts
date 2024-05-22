@@ -28,15 +28,15 @@ interface Connectors {
   loginProvider: LOGIN_PROVIDER_TYPE | CUSTOM_LOGIN_PROVIDER_TYPE;
 }
 
-export const AccountAbstractionConnectorWagmiType = "Web3Auth";
+export const SmartWalletConnectorWagmiType = "Web3Auth";
 
-export class AccountAbstractionConnector {
+export class SmartWalletConnectors {
   private chains: Chain[];
   private loginProviders: (LOGIN_PROVIDER_TYPE | CUSTOM_LOGIN_PROVIDER_TYPE)[];
   private web3AuthOptions: IWeb3AuthCoreOptions;
   private openLoginOptions: OpenloginAdapterOptions;
 
-  public aaConnectors: Connectors[];
+  public connectors: Connectors[];
 
   constructor({
     chains,
@@ -48,7 +48,7 @@ export class AccountAbstractionConnector {
     this.loginProviders = loginProviders;
     this.web3AuthOptions = web3AuthOptions;
     this.openLoginOptions = openLoginOptions;
-    this.aaConnectors = this.createConnectors();
+    this.connectors = this.createConnectors();
   }
 
   private createConnectorInstance(

@@ -16,7 +16,7 @@ function App() {
         <h2>Account</h2>
 
         <div>
-          currentAA: {currentAA.address}
+          currentAA: {currentAA.readerAddress}
           <br />
         </div>
 

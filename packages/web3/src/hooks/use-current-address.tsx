@@ -5,17 +5,19 @@ import { BundlerMethods, useBundlerClient } from "./use-bundler-client";
 import { Address } from "viem";
 import { useQuery } from "@tanstack/react-query";
 import { TypedJSONRPCClient } from "json-rpc-2.0";
-import { AccountAbstractionConnectorWagmiType } from "../config/aa-connectors";
+import { SmartWalletConnectorWagmiType } from "../config/smart-wallet-connectors";
 import { createContext, useContext, useMemo } from "react";
 
 interface UseCurrentAccount {
-  address?: Address;
+  signerAddress?: Address;
+  readerAddress?: Address;
   isGettingAddress?: boolean;
   isSmartWallet?: boolean;
 }
 
 const CurrentAccountContext = createContext<UseCurrentAccount>({
-  address: undefined,
+  signerAddress: undefined,
+  readerAddress: undefined,
   isGettingAddress: false,
 });
 
@@ -47,7 +49,7 @@ export const CurrentAccountProvider: React.FC<{
   const { client, isLoading: isClientLoading } = useBundlerClient();
 
   const isSmartWallet = useMemo(
-    () => connector?.type === AccountAbstractionConnectorWagmiType,
+    () => connector?.type === SmartWalletConnectorWagmiType,
     [connector]
   );
 
@@ -60,7 +62,8 @@ export const CurrentAccountProvider: React.FC<{
   return (
     <CurrentAccountContext.Provider
       value={{
-        address: currentUserAddress,
+        readerAddress: currentUserAddress,
+        signerAddress: address,
         isGettingAddress: isGettingAddress || isClientLoading || isConnecting,
         isSmartWallet,
       }}

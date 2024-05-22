@@ -1,9 +1,9 @@
-import { AccountAbstractionConnector } from "@winrlabs/web3";
+import { SmartWalletConnectors } from "@winrlabs/web3";
 import { http, createConfig, Config } from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 import { coinbaseWallet, injected } from "wagmi/connectors";
 
-export const accountAbstractionConnectors = new AccountAbstractionConnector({
+export const smartWalletConnectors = new SmartWalletConnectors({
   chains: [arbitrumSepolia],
   loginProviders: ["google", "weibo", "twitter"],
   web3AuthOptions: {
@@ -36,9 +36,7 @@ export const config = createConfig({
   connectors: [
     injected(),
     coinbaseWallet({ appName: "Create Wagmi" }),
-    ...accountAbstractionConnectors.aaConnectors.map(
-      (aaConnector) => aaConnector.connector
-    ),
+    ...smartWalletConnectors.connectors.map(({ connector }) => connector),
   ],
 
   ssr: true,
