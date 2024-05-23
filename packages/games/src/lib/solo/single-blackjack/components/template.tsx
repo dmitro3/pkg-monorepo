@@ -367,7 +367,8 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
           />
           <SceneContainer
             className={cn(
-              "wr-relative wr-flex wr-h-[640px] !wr-p-0 wr-max-w-full"
+              "wr-relative wr-flex !wr-p-0 wr-max-w-full",
+              styles.sceneWrapper
             )}
             style={{
               backgroundImage: options?.scene?.backgroundImage,
@@ -377,7 +378,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
             <div
               className={cn(
                 styles.canvas,
-                "wr-absolute wr-h-full wr-w-[750px] wr-select-none wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-overflow-hidden"
+                "wr-absolute wr-h-full wr-max-w-[750px] wr-w-[calc(100%_-_28px)] wr-select-none wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-overflow-hidden"
               )}
             >
               <img

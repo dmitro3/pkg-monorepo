@@ -139,6 +139,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
           )}
           card={uiCards[n] as BlackjackCard}
           flipped={isCompletedAndBusted ? true : false}
+          isTurn={isTurn}
         >
           {n === uiCards.length - 1 && isBusted && (
             <div className={styles.state}>
@@ -177,6 +178,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
           )}
           card={uiCards[0] as BlackjackCard}
           flipped={isCompletedAndBusted}
+          isTurn={isTurn}
           removeDelayFromFlipped
         />
       )}
@@ -214,14 +216,14 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
       >
       </div> */}
 
-      {isDistributionCompleted && !!cardData?.amountCards && (
+      {/* {isDistributionCompleted && !!cardData?.amountCards && (
         <BetArea
           className={cn("wr-top-[82%]", {
             "wr-right-[23%]": isDistributionCompleted,
           })}
           isTurn={isTurn}
         />
-      )}
+      )} */}
 
       <AnimatedText
         isWinner={isWinner}

@@ -16,6 +16,7 @@ interface CardProps {
   flipped: boolean;
   removeDelayFromFlipped?: boolean;
   isWinner?: boolean;
+  isTurn?: boolean;
   className?: string;
   children?: React.ReactNode;
 }
@@ -26,6 +27,7 @@ export const Card: React.FC<CardProps> = ({
   removeDelayFromFlipped,
   isWinner,
   className,
+  isTurn,
   children,
 }) => {
   const [flippedWithDelay, setFlippedWithDelay] = React.useState<boolean>(true);
@@ -46,7 +48,11 @@ export const Card: React.FC<CardProps> = ({
       className={cn(styles.card, className && className)}
     >
       <div className={styles.innerWrapper}>
-        <div className={cn(styles.front, isWinner && styles.winner)}>
+        <div
+          className={cn(styles.front, isWinner && styles.winner, {
+            "wr-animate-blackjack-highlight": isTurn,
+          })}
+        >
           <div className={styles.cardSuitArea}>
             <CardValue
               suit={card?.suit || BlackjackSuit.CLUBS}

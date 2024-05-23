@@ -13,7 +13,6 @@ import {
   calcTotalAmounts,
 } from "../../../blackjack";
 import { SingleBJActiveGameHands, SingleBlackjackHandIndex } from "../..";
-import { BetArea } from "../bet-area";
 
 interface CardAreaProps {
   handType: SingleBlackjackHandIndex;
@@ -177,6 +176,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
           )}
           card={uiCards[n] as BlackjackCard}
           flipped={isCompletedAndBusted ? true : false}
+          isTurn={isTurn}
         >
           {n === uiCards.length - 1 && isBusted && (
             <div className={styles.state}>
@@ -210,6 +210,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
         )}
         card={splittedCard || null}
         flipped={isCompletedAndBusted ? true : false}
+        isTurn={isTurn}
       />
 
       {delayedCardAmounts.amount > 0 && !isCompletedAndBusted ? (
@@ -249,14 +250,14 @@ export const CardArea: React.FC<CardAreaProps> = ({
         hasSplittedCards={hasSplittedCards}
       />
 
-      {isDistributionCompleted && (
+      {/* {isDistributionCompleted && (
         <BetArea
           className={cn("wr-top-[82%]", {
             "wr-left-[27%]": hasSplittedCards && isDistributionCompleted,
           })}
           isTurn={isTurn}
         />
-      )}
+      )} */}
     </div>
   );
 };

@@ -36,6 +36,7 @@
   justify-content: space-between;
   flex-direction: column;
   transition: 500ms ease-in-out;
+  border: 3px solid transparent;
 }
 
 .winner {

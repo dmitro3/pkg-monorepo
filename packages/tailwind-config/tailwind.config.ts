@@ -333,13 +333,13 @@ const config: Omit<Config, "content"> = {
         },
         "blackjack-highlight": {
           "0%": {
-            borderColor: "#3F3F46",
+            borderColor: "transparent",
           },
           "50%": {
             borderColor: "#FACC15",
           },
           "100%": {
-            borderColor: "#3F3F46",
+            borderColor: "transparent",
           },
         },
       },

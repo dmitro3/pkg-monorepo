@@ -7,6 +7,7 @@ import { Button } from "../../../ui/button";
 import { BlackjackGameStatus } from "../../blackjack";
 import { useGameOptions } from "../../../game-provider";
 import { useFormContext } from "react-hook-form";
+import { AudioController } from "../../../common/audio-controller";
 
 interface Props {
   minWager: number;
@@ -73,7 +74,7 @@ export const BetController: React.FC<Props> = ({
     <BetControllerContainer>
       <div className="wr-max-lg:flex wr-max-lg:flex-col">
         <div className="wr-mb-3">
-          <BetControllerTitle>Blackjack</BetControllerTitle>
+          <BetControllerTitle>1-Hand Blackjack</BetControllerTitle>
         </div>
 
         <WagerFormField
@@ -174,6 +175,9 @@ export const BetController: React.FC<Props> = ({
           </Button>
         </PreBetButton>
       </div>
+      <footer className="wr-flex wr-items-center wr-justify-between">
+        <AudioController />
+      </footer>
     </BetControllerContainer>
   );
 };

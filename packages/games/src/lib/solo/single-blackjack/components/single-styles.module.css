@@ -1,0 +1,36 @@
+.sceneWrapper {
+  width: 100%;
+  aspect-ratio: auto 788/640;
+}
+
+@media only screen and (max-width: 768px) {
+  .sceneWrapper {
+    zoom: 0.8;
+    -ms-zoom: 0.8;
+    -webkit-zoom: 0.8;
+  }
+}
+
+@media only screen and (max-width: 540px) {
+  .sceneWrapper {
+    zoom: 0.7;
+    -ms-zoom: 0.7;
+    -webkit-zoom: 0.7;
+  }
+}
+
+@media only screen and (max-width: 440px) {
+  .sceneWrapper {
+    zoom: 0.6;
+    -ms-zoom: 0.6;
+    -webkit-zoom: 0.6;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .sceneWrapper {
+    zoom: 0.5;
+    -ms-zoom: 0.5;
+    -webkit-zoom: 0.5;
+  }
+}
