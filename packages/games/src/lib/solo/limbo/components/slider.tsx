@@ -1,4 +1,10 @@
-import React, { MouseEvent, useRef } from "react";
+import React, {
+  FocusEventHandler,
+  MouseEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useFormContext } from "react-hook-form";
 import { LimboForm } from "../types";
 import { cn } from "../../../utils/style";
@@ -113,7 +119,7 @@ function interpolate(value: number, points: ScalePoint[]): number {
   const interpolatedPercent =
     lowerPoint.topPercent + valuePosition * rangePercent;
 
-  console.log("interpolatedPercent", interpolatedPercent);
+  // console.log("interpolatedPercent", interpolatedPercent);
 
   return interpolatedPercent;
 }
@@ -148,6 +154,12 @@ const LimboSlider = () => {
 
   const secondSteps = [100, 80, 65, 50, 35, 20, 15];
 
+  const [percentage, setPercentage] = useState<number>(0);
+
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  const [isDragging, setIsDragging] = useState(false);
+
   const calculatedTopPostion = React.useMemo(() => {
     const topPositionPercent = interpolate(showNumber, scalePoints);
 
@@ -177,9 +189,67 @@ const LimboSlider = () => {
 
       const topPositionPercent = interpolateValue(percentageFromTop * 100);
 
-      form.setValue("limboMultiplier", Number(topPositionPercent?.toFixed(2)));
+      if (
+        Number(topPositionPercent) > 1.1 &&
+        Number(topPositionPercent) < 100 &&
+        gameStatus !== "PLAYING"
+      )
+        form.setValue(
+          "limboMultiplier",
+          Number(topPositionPercent?.toFixed(2))
+        );
     }
   };
+
+  const handleMouseDown = () => {
+    setIsDragging(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      const topPositionPercent = interpolateValue(percentage);
+
+      if (
+        Number(topPositionPercent) > 1.1 &&
+        Number(topPositionPercent) < 100 &&
+        gameStatus !== "PLAYING"
+      )
+        form.setValue(
+          "limboMultiplier",
+          Number(topPositionPercent?.toFixed(2))
+        );
+
+      window.addEventListener("mouseup", handleMouseUp);
+    } else {
+      window.removeEventListener("mouseup", handleMouseUp);
+    }
+    return () => {
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, percentage]);
+
+  useEffect(() => {
+    const handleMouse = (e: React.MouseEvent<Element, MouseEvent>): void => {
+      if (divRef.current) {
+        const rect = divRef.current.getBoundingClientRect();
+
+        const mouseY = e.clientY - rect.top;
+        const height = rect.height;
+        const calculatedPercentage = (mouseY / height) * 100;
+        setPercentage(calculatedPercentage);
+      }
+    };
+
+    document.addEventListener("mousemove", (e: any) => handleMouse(e));
+
+    return () => {
+      document.removeEventListener("mousemove", (e: any) => handleMouse(e));
+    };
+  }, []);
 
   return (
     <div className="wr-h-full ">
@@ -187,7 +257,7 @@ const LimboSlider = () => {
         className="wr-absolute wr-left-0 wr-top-28 wr-h-[calc(100%_-_64px_-_12px_-_48px)] wr-w-full"
         ref={observe}
       >
-        <div className="wr-relative wr-h-full wr-w-full ">
+        <div className="wr-relative wr-h-full wr-w-full wr-select-none">
           <div
             className={cn(
               "wr-absolute wr-flex wr-h-[400%] wr-w-full wr-flex-col wr-justify-between wr-px-[15px] wr-text-[14px] wr-text-zinc-600 wr-transition-all wr-duration-300 wr-ease-in-out",
@@ -260,9 +330,12 @@ const LimboSlider = () => {
           </div>
 
           <div
-            className="wr-absolute wr-top-1/2 wr-h-0.5 wr-w-[1020px] -wr-translate-y-1/2 wr-border wr-border-zinc-700  wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
+            className="wr-absolute wr-cursor-grab wr-top-1/2 wr-h-0.5 wr-w-[1020px] -wr-translate-y-1/2 wr-border wr-border-zinc-700  wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
             aria-label="Volume"
             style={{ width: `${width}px` }}
+            ref={sliderRef}
+            onMouseDown={handleMouseDown}
+            tabIndex={-1}
           >
             <div className="wr-h-[70px] wr-bg-limbo-track"></div>
 
