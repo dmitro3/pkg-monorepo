@@ -151,13 +151,13 @@ const LimboSlider = () => {
 
   const divRef = useRef<HTMLDivElement>(null);
 
+  const sliderRef = useRef<HTMLDivElement>(null);
+
   const firstSteps = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
   const secondSteps = [100, 80, 65, 50, 35, 20, 15];
 
   const [percentage, setPercentage] = useState<number>(0);
-
-  const sliderRef = useRef<HTMLDivElement>(null);
 
   const [isDragging, setIsDragging] = useState(false);
 
@@ -237,10 +237,9 @@ const LimboSlider = () => {
   }, [isDragging, percentage]);
 
   useEffect(() => {
-    const handleMouse = (e: React.MouseEvent<Element, MouseEvent>): void => {
+    const handleMouse = (e: MouseEvent): void => {
       if (divRef.current) {
         const rect = divRef.current.getBoundingClientRect();
-
         const mouseY = e.clientY - rect.top;
         const height = rect.height;
         const calculatedPercentage = (mouseY / height) * 100;
@@ -248,10 +247,13 @@ const LimboSlider = () => {
       }
     };
 
-    document.addEventListener("mousemove", (e: any) => handleMouse(e));
+    const handleMouseEvent = (e: Event) =>
+      handleMouse(e as unknown as MouseEvent);
+
+    document.addEventListener("mousemove", handleMouseEvent);
 
     return () => {
-      document.removeEventListener("mousemove", (e: any) => handleMouse(e));
+      document.removeEventListener("mousemove", handleMouseEvent);
     };
   }, []);
 
