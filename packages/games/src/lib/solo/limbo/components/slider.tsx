@@ -151,7 +151,7 @@ const LimboSlider = () => {
 
   const divRef = useRef<HTMLDivElement>(null);
 
-  const sliderRef = useRef<HTMLDivElement>(null);
+  // const sliderRef = useRef<HTMLDivElement>(null);
 
   const firstSteps = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
@@ -159,7 +159,7 @@ const LimboSlider = () => {
 
   const [percentage, setPercentage] = useState<number>(0);
 
-  const [isDragging, setIsDragging] = useState(false);
+  // const [isDragging, setIsDragging] = useState(false);
 
   const calculatedTopPostion = React.useMemo(() => {
     const topPositionPercent = interpolate(showNumber, scalePoints);
@@ -202,36 +202,36 @@ const LimboSlider = () => {
     }
   };
 
-  const handleMouseDown = () => {
-    setIsDragging(true);
-  };
+  // const handleMouseDown = () => {
+  //   setIsDragging(true);
+  // };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
+  // const handleMouseUp = () => {
+  //   setIsDragging(false);
+  // };
 
-  useEffect(() => {
-    if (isDragging) {
-      const topPositionPercent = interpolateValue(percentage);
+  // useEffect(() => {
+  //   if (isDragging) {
+  //     const topPositionPercent = interpolateValue(percentage);
 
-      if (
-        Number(topPositionPercent) > 1.1 &&
-        Number(topPositionPercent) < 100 &&
-        gameStatus !== "PLAYING"
-      )
-        form.setValue(
-          "limboMultiplier",
-          Number(topPositionPercent?.toFixed(2))
-        );
+  //     if (
+  //       Number(topPositionPercent) > 1.1 &&
+  //       Number(topPositionPercent) < 100 &&
+  //       gameStatus !== "PLAYING"
+  //     )
+  //       form.setValue(
+  //         "limboMultiplier",
+  //         Number(topPositionPercent?.toFixed(2))
+  //       );
 
-      window.addEventListener("mouseup", handleMouseUp);
-    } else {
-      window.removeEventListener("mouseup", handleMouseUp);
-    }
-    return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging, percentage]);
+  //     window.addEventListener("mouseup", handleMouseUp);
+  //   } else {
+  //     window.removeEventListener("mouseup", handleMouseUp);
+  //   }
+  //   return () => {
+  //     window.removeEventListener("mouseup", handleMouseUp);
+  //   };
+  // }, [isDragging, percentage]);
 
   useEffect(() => {
     const handleMouse = (e: MouseEvent): void => {
@@ -335,12 +335,11 @@ const LimboSlider = () => {
           </div>
 
           <div
-            className="wr-absolute wr-cursor-grab wr-top-1/2 wr-h-0.5 wr-w-[1020px] -wr-translate-y-1/2 wr-border wr-border-zinc-700  wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
-            aria-label="Volume"
+            className="wr-absolute  wr-top-1/2 wr-h-0.5 wr-w-[1020px] -wr-translate-y-1/2 wr-border wr-border-zinc-700  wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
             style={{ width: `${width}px` }}
-            ref={sliderRef}
-            onMouseDown={handleMouseDown}
-            tabIndex={-1}
+            // ref={sliderRef}
+            // onMouseDown={handleMouseDown}
+            // tabIndex={-1}
           >
             <div className="wr-h-[70px] wr-bg-limbo-track"></div>
 
