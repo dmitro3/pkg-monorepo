@@ -263,7 +263,7 @@ const LimboSlider = () => {
         <div className="wr-relative wr-h-full wr-w-full wr-select-none">
           <div
             className={cn(
-              "wr-absolute wr-flex wr-h-[400%] wr-w-full wr-flex-col wr-justify-between wr-px-[15px] wr-text-[14px] wr-text-zinc-600 wr-transition-all wr-duration-300 wr-ease-in-out",
+              "wr-absolute wr-flex wr-cursor-pointer wr-h-[400%] wr-w-full wr-flex-col wr-justify-between wr-px-[15px] wr-text-[14px] wr-text-zinc-600 wr-transition-all wr-duration-300 wr-ease-in-out",
 
               {
                 "wr-bg-limbo-win":
