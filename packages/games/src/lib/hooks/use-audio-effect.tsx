@@ -87,8 +87,8 @@ effects.set(SoundEffects.ROLLING_DICE, "rolling-dice.mp3");
 effects.set(SoundEffects.RPS, "rps.mp3");
 effects.set(SoundEffects.FLIP_CARD, "flip.mp3");
 effects.set(SoundEffects.THICK, "thick.wav");
-effects.set(SoundEffects.FALLING, "thick.wav");
-effects.set(SoundEffects.BALL_BUMP, "coin-toss.wav");
+effects.set(SoundEffects.FALLING, "bucket.wav");
+effects.set(SoundEffects.BALL_BUMP, "ball_bump.mp3");
 
 type PlayOptions = {
   playbackRate?: number;
