@@ -263,8 +263,10 @@ const LimboSlider = () => {
               "wr-absolute wr-flex wr-h-[400%] wr-w-full wr-flex-col wr-justify-between wr-px-[15px] wr-text-[14px] wr-text-zinc-600 wr-transition-all wr-duration-300 wr-ease-in-out",
 
               {
-                "wr-bg-limbo-win": won && result !== 0,
-                "wr-bg-limbo-loss": !won && result !== 0,
+                "wr-bg-limbo-win":
+                  won && result !== 0 && gameStatus === "PLAYING",
+                "wr-bg-limbo-loss":
+                  !won && result !== 0 && gameStatus === "PLAYING",
               }
             )}
             style={{
