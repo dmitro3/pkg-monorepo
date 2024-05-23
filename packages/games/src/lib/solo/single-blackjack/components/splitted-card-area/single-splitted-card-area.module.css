@@ -1,0 +1,139 @@
+.splittedCardArea {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.cardAmount {
+  position: absolute;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 15px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #396c4c;
+  font-weight: 700;
+  transition: all;
+  transition-duration: 300ms;
+}
+
+.cardAmount.firstHand {
+  top: 64%;
+  right: 25%;
+}
+
+.animatedText {
+  position: absolute;
+  z-index: 10;
+  width: 115px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.animatedText.firstHand {
+  top: 75%;
+  right: 19%;
+}
+
+.animatedText .text {
+  width: 115px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffd000;
+  text-shadow:
+    1.5px 1.5px 0 #000,
+    -1.5px 1.5px 0 #000,
+    -1.5px -1.5px 0 #000,
+    1.5px -1.5px 0 #000;
+  font-style: italic;
+}
+
+.animatedText .text.loser {
+  color: #d9113a;
+}
+
+.animatedText .text.push {
+  color: white;
+}
+
+/* for first hand cards */
+.firstHand .card--1 {
+  top: 70%;
+  right: 24%;
+  z-index: 0;
+}
+
+.firstHand .card--2 {
+  top: 70%;
+  right: 20%;
+  z-index: 1;
+}
+
+.firstHand .card--3 {
+  top: 70%;
+  right: 16%;
+  z-index: 2;
+}
+
+.firstHand .card--4 {
+  top: 70%;
+  right: 12%;
+  z-index: 3;
+}
+
+.firstHand .card--5 {
+  top: 70%;
+  right: 8%;
+  z-index: 4;
+}
+
+.firstHand .card--6 {
+  top: 70%;
+  right: 4%;
+  z-index: 5;
+}
+
+.unsplittedFirstHand {
+  top: 70%;
+  right: 41%;
+  z-index: 0;
+}
+
+.busted {
+  top: -20px !important;
+  right: calc(100% - 75px) !important;
+}
+
+.hidden {
+  transition: 0;
+  display: none;
+}
+
+.state {
+  position: absolute;
+  right: -30px;
+  top: -10px;
+}
+
+@media only screen and (max-width: 768px) {
+  .cardAmount {
+    padding: 1px 12px;
+    font-size: 11px;
+  }
+
+  .cardAmount.firstHand {
+    top: 61%;
+  }
+}
