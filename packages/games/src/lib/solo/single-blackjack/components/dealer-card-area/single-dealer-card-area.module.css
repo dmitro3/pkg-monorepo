@@ -73,7 +73,7 @@
   color: #396c4c;
 }
 
-@media only screen and (max-width: 1024px) and (max-height: 600px) {
+@media only screen and (max-width: 768px) {
   .cardAmount {
     padding: 1px 12px;
     font-size: 12px;
