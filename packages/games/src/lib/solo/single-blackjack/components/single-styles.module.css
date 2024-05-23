@@ -8,6 +8,7 @@
     zoom: 0.8;
     -ms-zoom: 0.8;
     -webkit-zoom: 0.8;
+    overflow: hidden;
   }
 }
 

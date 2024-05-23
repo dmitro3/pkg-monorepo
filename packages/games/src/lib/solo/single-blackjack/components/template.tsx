@@ -339,13 +339,6 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     onDeal(values);
   };
 
-  console.log(
-    firstHandCards,
-    "outer ui cards",
-    firstHandSplittedCard,
-    "firsthand sp"
-  );
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
