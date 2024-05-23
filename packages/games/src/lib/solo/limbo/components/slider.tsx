@@ -162,7 +162,6 @@ const LimboSlider = () => {
   const [isDragging, setIsDragging] = useState(false);
 
   const calculatedTopPostion = React.useMemo(() => {
-    console.log(showNumber, gameStatus);
     const topPositionPercent = interpolate(showNumber, scalePoints);
 
     const topPositionPercentLarger = interpolate(showNumber, largerScalePoints);
@@ -177,8 +176,6 @@ const LimboSlider = () => {
       return topPositionPixelsLarger;
     }
   }, [showNumber]);
-
-  console.log(showNumber);
 
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     if (divRef.current) {
