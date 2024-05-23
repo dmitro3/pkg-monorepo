@@ -11,6 +11,7 @@ export enum SoundEffects {
   ROLLING_DICE,
   FALLING,
   RPS,
+  RANGE_WIN,
   FLIP_CARD,
   THICK,
   BALL_BUMP,
@@ -85,6 +86,7 @@ effects.set(
 );
 effects.set(SoundEffects.ROLLING_DICE, "rolling-dice.mp3");
 effects.set(SoundEffects.RPS, "rps.mp3");
+effects.set(SoundEffects.RANGE_WIN, "mixkit-magical-coin-win-1936.wav");
 effects.set(SoundEffects.FLIP_CARD, "flip.mp3");
 effects.set(SoundEffects.THICK, "thick.wav");
 effects.set(SoundEffects.FALLING, "bucket.wav");
