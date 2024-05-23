@@ -63,8 +63,6 @@ const clickScalePoint: ScalePoint[] = [
   { value: 10, topPercent: 42 },
   { value: 15, topPercent: 36 },
   { value: 20, topPercent: 30 },
-  // { value: 25, topPercent:  },
-  // { value: 30, topPercent:  },
   { value: 35, topPercent: 24 },
   { value: 40, topPercent: 21 },
   { value: 45, topPercent: 20 },
@@ -87,17 +85,19 @@ function interpolateValue(percent: number): number | null {
 
     if (current && next) {
       if (percent <= current.topPercent && percent >= next.topPercent) {
+        // Calculate the interpolation ratio between the two points
         const ratio =
           (current.topPercent - percent) /
           (current.topPercent - next.topPercent);
+        // Interpolate the value based on the calculated ratio and return it
         return current.value + ratio * (next.value - current.value);
       }
     }
   }
 
+  // Return null if no matching interval was found
   return null;
 }
-
 function interpolate(value: number, points: ScalePoint[]): number {
   // Find the two points between which we need to interpolate
   const lowerPoint = points.reduce((prev, curr) =>
