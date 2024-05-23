@@ -4,6 +4,11 @@ import { cn } from "../../../../../utils/style";
 import { genNumberArray } from "../../../../../utils/number";
 import { useGameSkip } from "../../../../../game-provider";
 import useMediaQuery from "../../../../../hooks/use-media-query";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../../hooks/use-audio-effect";
+import { usePlinkoGameStore } from "../../..";
 
 const initialStyle = {
   transform: `translate(0px, -12px)`,
@@ -29,6 +34,8 @@ const Ball: React.FC<PlinkoBallProps> = ({
   const skipRef = React.useRef<boolean>(isSkipped);
   const isMobile = useMediaQuery("(max-width:768px)");
   const mobileRef = React.useRef<boolean>(isMobile);
+  const ballEffect = useAudioEffect(SoundEffects.BALL_BUMP);
+  const { gameStatus } = usePlinkoGameStore(["gameStatus"]);
 
   React.useEffect(() => {
     skipRef.current = isSkipped;
@@ -76,6 +83,8 @@ const Ball: React.FC<PlinkoBallProps> = ({
                 transitionDuration: "400ms",
                 transitionTimingFunction: "ease-in",
               });
+
+              // ballEffect.play();
 
               if (i - 1 === path.length && !skipRef.current) {
                 onAnimationEnd(order);
