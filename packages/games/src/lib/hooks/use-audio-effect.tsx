@@ -76,7 +76,6 @@ export const AudioContextProvider = ({
 };
 
 export const effects: Map<SoundEffects, string> = new Map();
-
 effects.set(SoundEffects.COIN_FLIP_TOSS, "coin-toss.wav");
 effects.set(SoundEffects.COIN_FLIP_WIN, "coin-flip-win.wav");
 effects.set(SoundEffects.SLIDER, "slider-effect.mp3");
@@ -97,6 +96,7 @@ type PlayOptions = {
   currentTime?: number;
   loop?: boolean;
   autoplay?: boolean;
+  volume?: number;
 };
 
 export const baseCdnUrl = CDN_URL + "/sounds";
@@ -127,6 +127,8 @@ export const useAudioEffect = (type: SoundEffects) => {
       audio.currentTime = options?.currentTime || 0;
 
       audio.loop = typeof options?.loop === "boolean" ? options.loop : false;
+
+      if (options?.volume) audio.volume = options.volume;
 
       audio.autoplay =
         typeof options?.autoplay === "boolean" ? options.autoplay : false;
