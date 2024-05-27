@@ -153,7 +153,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           <SkipButton />
         )}
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between">
+      <footer className="wr-flex wr-items-center wr-justify-between wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>

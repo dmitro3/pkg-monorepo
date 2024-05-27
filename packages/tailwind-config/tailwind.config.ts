@@ -333,13 +333,13 @@ const config: Omit<Config, "content"> = {
         },
         "blackjack-highlight": {
           "0%": {
-            borderColor: "#3F3F46",
+            borderColor: "transparent",
           },
           "50%": {
             borderColor: "#FACC15",
           },
           "100%": {
-            borderColor: "#3F3F46",
+            borderColor: "transparent",
           },
         },
       },
@@ -381,6 +381,14 @@ const config: Omit<Config, "content"> = {
           "linear-gradient(127deg, rgba(220, 38, 38, 0.35) 13.87%, rgba(220, 38, 38, 0.35) 41.21%)",
         "rps-default":
           "linear-gradient(126.52deg, rgba(255, 255, 255, 0.15) 13.87%, rgba(255, 255, 255, 0) 41.21%)",
+        "limbo-track":
+          "linear-gradient(180deg, rgba(113, 113, 122, 0.20) 0%, rgba(113, 113, 122, 0.00) 100%)",
+        "limbo-result":
+          "linear-gradient(180deg, rgba(59, 130, 246, 0.20) 0%, rgba(59, 130, 246, 0.00) 100%)",
+        "limbo-win":
+          "linear-gradient(180deg, rgba(34, 197, 94, 0.20) 0%, rgba(34, 197, 94, 0.04) 100%)",
+        "limbo-loss":
+          "linear-gradient(180deg, rgba(220, 38, 38, 0.20) 0%, rgba(220, 38, 38, 0.04) 100%)",
       },
     },
   },

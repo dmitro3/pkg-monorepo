@@ -4,6 +4,11 @@ import { cn } from "../../../../../utils/style";
 import { genNumberArray } from "../../../../../utils/number";
 import { useGameSkip } from "../../../../../game-provider";
 import useMediaQuery from "../../../../../hooks/use-media-query";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../../hooks/use-audio-effect";
+import { usePlinkoGameStore } from "../../..";
 
 const initialStyle = {
   transform: `translate(0px, -12px)`,
@@ -29,6 +34,8 @@ const Ball: React.FC<PlinkoBallProps> = ({
   const skipRef = React.useRef<boolean>(isSkipped);
   const isMobile = useMediaQuery("(max-width:768px)");
   const mobileRef = React.useRef<boolean>(isMobile);
+  const ballEffect = useAudioEffect(SoundEffects.BALL_BUMP);
+  const { gameStatus } = usePlinkoGameStore(["gameStatus"]);
 
   React.useEffect(() => {
     skipRef.current = isSkipped;
@@ -46,7 +53,10 @@ const Ball: React.FC<PlinkoBallProps> = ({
       const initialX = mobileRef.current ? 10 : 25;
       const initialY = mobileRef.current ? 20 : 30;
 
+      const ballInterval = setInterval(() => ballEffect.play(), 400);
+
       for (let i = 0; i < path.length + 2; i++) {
+        console.log(i, "i");
         if (i === 0) {
           const t = setTimeout(() => {
             setStyle({
@@ -81,6 +91,8 @@ const Ball: React.FC<PlinkoBallProps> = ({
                 onAnimationEnd(order);
 
                 clearTimeout(t);
+
+                clearInterval(ballInterval);
               }
 
               // if (skipRef.current) {
@@ -99,7 +111,7 @@ const Ball: React.FC<PlinkoBallProps> = ({
               }
 
               if (skipRef.current) {
-                clearTimeout(t);
+                clearInterval(ballInterval);
               }
             },
             delay + i * 400
