@@ -1,69 +1,58 @@
 "use client";
 
-import { DiceTemplate } from "@winrlabs/games";
-import { useState } from "react";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useCurrentAccount } from "@winrlabs/web3";
+import React from "react";
 
-export default function Home() {
-  const [results, setResults] = useState<any>();
+function App() {
+  const account = useAccount();
+  const { connectors, connect, status, error } = useConnect();
+  const { disconnect } = useDisconnect();
+  const currentAA = useCurrentAccount();
 
   return (
-    <div>
-      <DiceTemplate
-        options={{
-          scene: {
-            backgroundImage: "url(/range.svg)",
-          },
-        }}
-        onSubmitGameForm={(data) => {
-          console.log(data, "data");
-          // send request
-          // get results
+    <>
+      <div>
+        <h2>Account</h2>
 
-          setResults([
-            {
-              payout: 0,
-              payoutInUsd: 0,
-              resultNumber: 10,
-            },
-            {
-              payout: 2,
-              payoutInUsd: 2,
-              resultNumber: 20,
-            },
-            {
-              payout: 0,
-              payoutInUsd: 0,
-              resultNumber: 30,
-            },
-          ]);
-        }}
-        onAnimationCompleted={() => setResults([])}
-        results={results}
-      />
-      {/* <button
-        style={{ marginTop: 400 }}
-        onClick={() => {
-          setResults([
-            {
-              payout: 0,
-              payoutInUsd: 0,
-              resultNumber: 30,
-            },
-            {
-              payout: 2,
-              payoutInUsd: 2,
-              resultNumber: 49,
-            },
-            {
-              payout: 0,
-              payoutInUsd: 0,
-              resultNumber: 10,
-            },
-          ]);
-        }}
-      >
-        xd
-      </button> */}
-    </div>
+        <div>
+          currentAA: {currentAA.readerAddress}
+          <br />
+        </div>
+
+        {account.status === "connected" && (
+          <button type="button" onClick={() => disconnect()}>
+            Disconnect
+          </button>
+        )}
+      </div>
+
+      <div>
+        <h2>Connect</h2>
+        <section
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          {connectors.map((connector) => {
+            return (
+              <button
+                key={connector.id}
+                onClick={() => connect({ connector })}
+                type="button"
+              >
+                {connector.name} - {connector.id}
+              </button>
+            );
+          })}
+        </section>
+        <div>{status}</div>
+        <div>{error?.message}</div>
+      </div>
+    </>
   );
 }
+
+export default App;
