@@ -53,7 +53,10 @@ const Ball: React.FC<PlinkoBallProps> = ({
       const initialX = mobileRef.current ? 10 : 25;
       const initialY = mobileRef.current ? 20 : 30;
 
+      const ballInterval = setInterval(() => ballEffect.play(), 400);
+
       for (let i = 0; i < path.length + 2; i++) {
+        console.log(i, "i");
         if (i === 0) {
           const t = setTimeout(() => {
             setStyle({
@@ -84,12 +87,12 @@ const Ball: React.FC<PlinkoBallProps> = ({
                 transitionTimingFunction: "ease-in",
               });
 
-              // ballEffect.play();
-
               if (i - 1 === path.length && !skipRef.current) {
                 onAnimationEnd(order);
 
                 clearTimeout(t);
+
+                clearInterval(ballInterval);
               }
 
               // if (skipRef.current) {
@@ -108,7 +111,7 @@ const Ball: React.FC<PlinkoBallProps> = ({
               }
 
               if (skipRef.current) {
-                clearTimeout(t);
+                clearInterval(ballInterval);
               }
             },
             delay + i * 400
