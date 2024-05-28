@@ -28,46 +28,6 @@ importers:
         specifier: latest
         version: 1.13.3
 
-  apps/docs:
-    dependencies:
-      next:
-        specifier: ^14.0.4
-        version: 14.2.3(@babel/core@7.24.5)(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: ^18.2.0
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.3.1(react@18.3.1)
-    devDependencies:
-      '@next/eslint-plugin-next':
-        specifier: ^14.0.4
-        version: 14.2.3
-      '@types/eslint':
-        specifier: ^8.56.1
-        version: 8.56.10
-      '@types/node':
-        specifier: ^20.10.6
-        version: 20.12.10
-      '@types/react':
-        specifier: ^18.2.46
-        version: 18.3.1
-      '@types/react-dom':
-        specifier: ^18.2.18
-        version: 18.3.0
-      '@winrlabs/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@winrlabs/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
-      eslint:
-        specifier: ^8.56.0
-        version: 8.57.0
-      typescript:
-        specifier: ^5.3.3
-        version: 5.4.5
-
   apps/package-docs:
     dependencies:
       next:
