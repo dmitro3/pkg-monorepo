@@ -2,6 +2,8 @@ import "./assets/main.css";
 
 export { GameProvider } from "./lib/game-provider";
 
+export { AudioContextProvider } from "./lib/hooks/use-audio-effect";
+
 export * from "./lib/solo/dice";
 
 export * from "./lib/solo/coin-flip";

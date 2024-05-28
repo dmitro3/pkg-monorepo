@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AudioContextProvider,
   CoinFlipGameResult,
   CoinFlipTemplate,
   CoinSide,

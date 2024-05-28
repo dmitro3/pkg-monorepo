@@ -60,7 +60,7 @@ export const Coin: React.FC<CoinProps> = ({
       const side = Number(coinFlipGameResults[i]?.coinSide) || 0;
       const payout = coinFlipGameResults[i]?.payout || 0;
       const payoutInUsd = coinFlipGameResults[i]?.payoutInUsd || 0;
-      flipEffect.play({ volume: 0.1 });
+      flipEffect.play();
 
       coinRotate.finish(side, 1250).then(() => {
         const curr = i + 1;

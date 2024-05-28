@@ -96,7 +96,6 @@ type PlayOptions = {
   currentTime?: number;
   loop?: boolean;
   autoplay?: boolean;
-  volume?: number;
 };
 
 export const baseCdnUrl = CDN_URL + "/sounds";
@@ -127,8 +126,6 @@ export const useAudioEffect = (type: SoundEffects) => {
       audio.currentTime = options?.currentTime || 0;
 
       audio.loop = typeof options?.loop === "boolean" ? options.loop : false;
-
-      if (options?.volume) audio.volume = options.volume;
 
       audio.autoplay =
         typeof options?.autoplay === "boolean" ? options.autoplay : false;
