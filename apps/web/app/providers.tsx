@@ -6,6 +6,7 @@ import { WagmiProvider } from "wagmi";
 
 import { config } from "./wagmi";
 import { WinrLabsWeb3Provider } from "@winrlabs/web3";
+import { AudioContextProvider } from "@winrlabs/games";
 
 export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -14,7 +15,7 @@ export function Providers(props: { children: ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <WinrLabsWeb3Provider rpcUrl="https://jb-onchain-suppliers-development-u4m2y.ondigitalocean.app/rpc">
-          {props.children}
+          <AudioContextProvider>{props.children}</AudioContextProvider>
         </WinrLabsWeb3Provider>
       </QueryClientProvider>
     </WagmiProvider>
