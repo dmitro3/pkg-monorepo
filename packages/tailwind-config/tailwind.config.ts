@@ -389,6 +389,10 @@ const config: Omit<Config, "content"> = {
           "linear-gradient(180deg, rgba(34, 197, 94, 0.20) 0%, rgba(34, 197, 94, 0.04) 100%)",
         "limbo-loss":
           "linear-gradient(180deg, rgba(220, 38, 38, 0.20) 0%, rgba(220, 38, 38, 0.04) 100%)",
+        "rotated-header":
+          "linear-gradient(180deg, rgba(9, 9, 11, 0.50) 0%, rgba(9, 9, 11, 0.00) 100%)",
+        "rotated-footer":
+          "linear-gradient(180deg, rgba(9, 9, 11, 0.00) 0%, rgba(9, 9, 11, 0.50) 100%);",
       },
     },
   },

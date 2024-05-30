@@ -15,6 +15,7 @@ export enum SoundEffects {
   FLIP_CARD,
   THICK,
   BALL_BUMP,
+  ROULETTE,
 }
 
 export interface AudioContextType {
