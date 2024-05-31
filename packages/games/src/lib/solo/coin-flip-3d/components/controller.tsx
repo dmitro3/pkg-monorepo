@@ -3,10 +3,10 @@ import { useFormContext } from "react-hook-form";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { COIN_SIDE } from "../constants";
-import { CoinFlipForm } from "../types";
+import { CoinFlip3dForm } from "../types";
 
 export const CoinFlipController = () => {
-  const form = useFormContext() as CoinFlipForm;
+  const form = useFormContext() as CoinFlip3dForm;
 
   return (
     <div className="wr-flex wr-items-center lg:wr-absolute lg:wr-bottom-8 lg:wr-left-1/2 lg:-wr-translate-x-1/2">

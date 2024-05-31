@@ -1,27 +1,28 @@
 import { create } from "zustand";
 import { shallow } from "zustand/shallow";
-import { CoinFlipGameResult } from "../types";
+import { CoinFlip3dGameResult } from "../types";
 
-interface CoinFlipGameState {
-  lastBets: CoinFlipGameResult[];
-  coinFlipGameResults: CoinFlipGameResult[];
+interface CoinFlip3dGameState {
+  lastBets: CoinFlip3dGameResult[];
+  coinFlipGameResults: CoinFlip3dGameResult[];
   gameStatus: "IDLE" | "PLAYING" | "ENDED";
   currentAnimationCount: number;
 }
 
-interface CoinFlipGameStateActions {
-  addLastBet: (item: CoinFlipGameResult) => void;
-  updateLastBets: (item: CoinFlipGameResult[]) => void;
+interface CoinFlip3dGameStateActions {
+  addLastBet: (item: CoinFlip3dGameResult) => void;
+  updateLastBets: (item: CoinFlip3dGameResult[]) => void;
   removeLastBet: (index: number) => void;
   clearStore: () => void;
-  updateCoinFlipGameResults: (item: CoinFlipGameResult[]) => void;
+  updateCoinFlip3dGameResults: (item: CoinFlip3dGameResult[]) => void;
   updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
   updateCurrentAnimationCount: (count: number) => void;
 }
 
-export type CoinFlipGameStore = CoinFlipGameState & CoinFlipGameStateActions;
+export type CoinFlip3dGameStore = CoinFlip3dGameState &
+  CoinFlip3dGameStateActions;
 
-export const coinFlipResultStore = create<CoinFlipGameStore>()((set) => ({
+export const coinFlip3dResultStore = create<CoinFlip3dGameStore>()((set) => ({
   lastBets: [],
   coinFlipGameResults: [],
   currentAnimationCount: 0,
@@ -36,7 +37,7 @@ export const coinFlipResultStore = create<CoinFlipGameStore>()((set) => ({
 
       return { lastBets };
     }),
-  updateCoinFlipGameResults: (item) =>
+  updateCoinFlip3dGameResults: (item) =>
     set(() => ({ coinFlipGameResults: item })),
   clearStore: () =>
     set({
@@ -51,17 +52,17 @@ export const coinFlipResultStore = create<CoinFlipGameStore>()((set) => ({
     set(() => ({ currentAnimationCount: count })),
 }));
 
-export const useCoinFlipGameStore = <T extends keyof CoinFlipGameStore>(
+export const useCoinFlip3dGameStore = <T extends keyof CoinFlip3dGameStore>(
   keys: T[]
 ) =>
-  coinFlipResultStore((state) => {
+  coinFlip3dResultStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];
 
       return acc;
-    }, {} as CoinFlipGameStore);
+    }, {} as CoinFlip3dGameStore);
 
-    return x as Pick<CoinFlipGameStore, T>;
+    return x as Pick<CoinFlip3dGameStore, T>;
   }, shallow);
 
-export default useCoinFlipGameStore;
+export default useCoinFlip3dGameStore;

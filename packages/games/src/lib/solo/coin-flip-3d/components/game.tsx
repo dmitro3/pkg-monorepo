@@ -1,23 +1,24 @@
 import { useGameSkip } from "../../../game-provider";
 import useCoinFlipGameStore from "../store";
-import { CoinFlipGameResult } from "../types";
+import { CoinFlip3dGameResult } from "../types";
 import React from "react";
 
-export type CoinFlipGameProps = React.ComponentProps<"div"> & {
-  gameResults: CoinFlipGameResult[];
+export type CoinFlip3dGameProps = React.ComponentProps<"div"> & {
+  gameResults: CoinFlip3dGameResult[];
   onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
+  onAnimationCompleted?: (result: CoinFlip3dGameResult[]) => void;
 };
 
-export const CoinFlipGame = ({ gameResults, children }: CoinFlipGameProps) => {
-  const { updateCoinFlipGameResults, updateGameStatus } = useCoinFlipGameStore([
-    "updateCoinFlipGameResults",
-    "updateGameStatus",
-  ]);
+export const CoinFlipGame = ({
+  gameResults,
+  children,
+}: CoinFlip3dGameProps) => {
+  const { updateCoinFlip3dGameResults, updateGameStatus } =
+    useCoinFlipGameStore(["updateCoinFlip3dGameResults", "updateGameStatus"]);
 
   React.useEffect(() => {
     if (gameResults.length) {
-      updateCoinFlipGameResults(gameResults);
+      updateCoinFlip3dGameResults(gameResults);
       updateGameStatus("PLAYING");
     }
   }, [gameResults]);

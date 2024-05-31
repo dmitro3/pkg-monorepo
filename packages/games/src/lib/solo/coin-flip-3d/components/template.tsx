@@ -3,11 +3,10 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { Form } from "../../../ui/form";
 import { COIN_SIDE, MAX_BET_COUNT, MIN_BET_COUNT } from "../constants";
-import { CoinFlipFormFields } from "../types";
-import { CoinFlipGameProps } from "./game";
+import { CoinFlip3dFormFields } from "../types";
+import { CoinFlip3dGameProps } from "./game";
 import { UnityGameContainer } from "../../../common/containers";
 import { BetController } from "./bet-controller";
-import { CoinFlip } from "../../coin-flip";
 import { CoinFlip3D } from "..";
 
 type TemplateOptions = {
@@ -16,12 +15,12 @@ type TemplateOptions = {
   };
 };
 
-type TemplateProps = CoinFlipGameProps & {
+type TemplateProps = CoinFlip3dGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
   winMultiplier?: number;
-  onSubmitGameForm: (data: CoinFlipFormFields) => void;
+  onSubmitGameForm: (data: CoinFlip3dFormFields) => void;
   buildedGameUrl: string;
 };
 

@@ -6,14 +6,16 @@ import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
 import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
 import { toFormatted } from "../../../utils/web3";
 import useCoinFlipGameStore from "../store";
-import { CoinFlipGameProps } from "./game";
+import { CoinFlip3dGameProps } from "./game";
 import { COIN_SIDE } from "../constants";
 
 const UnityFlipEndEvent = "CF_FlipEnd";
 
 const UnitySequenceFlipEndEvent = "CF_FlipSequenceEnd";
 
-type ExtendedCoinFlipGameProps = CoinFlipGameProps & { buildedGameUrl: string };
+type ExtendedCoinFlipGameProps = CoinFlip3dGameProps & {
+  buildedGameUrl: string;
+};
 
 export const CoinFlipScene = ({
   onAnimationStep,
@@ -28,12 +30,12 @@ export const CoinFlipScene = ({
 
   const {
     coinFlipGameResults,
-    updateCoinFlipGameResults,
+    updateCoinFlip3dGameResults,
     updateGameStatus,
     addLastBet,
   } = useCoinFlipGameStore([
     "coinFlipGameResults",
-    "updateCoinFlipGameResults",
+    "updateCoinFlip3dGameResults",
     "updateGameStatus",
     "addLastBet",
   ]);
@@ -110,7 +112,7 @@ export const CoinFlipScene = ({
 
         setCount(0);
 
-        updateCoinFlipGameResults([]);
+        updateCoinFlip3dGameResults([]);
 
         onAnimationCompleted && onAnimationCompleted(coinFlipGameResults);
 

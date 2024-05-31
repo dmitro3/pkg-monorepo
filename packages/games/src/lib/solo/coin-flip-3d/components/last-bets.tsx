@@ -1,9 +1,9 @@
 import { cn } from "../../../utils/style";
 import { COIN_SIDE } from "../constants";
 import useCoinFlipGameStore from "../store";
-import { CoinFlipGameResult } from "../types";
+import { CoinFlip3dGameResult } from "../types";
 
-const LastBet = ({ result }: { result: CoinFlipGameResult }) => {
+const LastBet = ({ result }: { result: CoinFlip3dGameResult }) => {
   return (
     <div
       className={cn(

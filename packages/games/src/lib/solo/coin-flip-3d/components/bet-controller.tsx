@@ -16,7 +16,7 @@ import { Button } from "../../../ui/button";
 import { FormLabel } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { toDecimals } from "../../../utils/web3";
-import { CoinFlipForm } from "../types";
+import { CoinFlip3dForm } from "../types";
 import * as Slider from "@radix-ui/react-slider";
 import { CoinFlipController } from "./controller";
 
@@ -31,7 +31,7 @@ export const BetController: React.FC<Props> = ({
   maxWager,
   winMultiplier,
 }) => {
-  const form = useFormContext() as CoinFlipForm;
+  const form = useFormContext() as CoinFlip3dForm;
 
   const maxPayout = React.useMemo(() => {
     const { wager, betCount } = form.getValues();
