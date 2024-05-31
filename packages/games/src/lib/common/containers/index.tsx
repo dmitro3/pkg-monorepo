@@ -83,3 +83,50 @@ export const BetCountSlider = ({ ...props }) => {
     </Slider.Root>
   );
 };
+
+export const UnityGameContainer: React.FC<Props & { id?: string }> = ({
+  children,
+  className,
+  id,
+}) => {
+  return (
+    <section
+      className={cn("wr-relative wr-w-full wr-p-0", className)}
+      id="animationScene"
+    >
+      {children}
+    </section>
+  );
+};
+
+export const UnityBetControllerContainer: React.FC<Props> = ({
+  children,
+  className,
+}) => {
+  return (
+    <section
+      className={cn(
+        "wr-absolute wr-left-0 wr-top-0 wr-w-[264px] wr-p-[14px]",
+        className
+      )}
+    >
+      {children}
+    </section>
+  );
+};
+
+export const UnitySceneContainer: React.FC<Props> = ({
+  children,
+  className,
+}) => {
+  return (
+    <section
+      className={cn(
+        "wr-absolute wr-left-0 wr-top-0 wr-flex wr-h-full wr-w-full wr-flex-col wr-items-center wr-justify-between wr-pb-8 wr-pt-[14px]",
+        className
+      )}
+    >
+      {children}
+    </section>
+  );
+};
