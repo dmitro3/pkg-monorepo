@@ -9,24 +9,24 @@ export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlipForm;
 
   return (
-    <div className="flex items-center lg:absolute lg:bottom-8 lg:left-1/2 lg:-translate-x-1/2">
+    <div className="wr-flex wr-items-center lg:wr-absolute lg:wr-bottom-8 lg:wr-left-1/2 lg:-wr-translate-x-1/2">
       <FormField
         control={form.control}
         name="coinSide"
         render={({ field }) => (
-          <FormItem className="mb-0 h-10 max-lg:w-full">
+          <FormItem className="wr-mb-0 wr-h-10 max-lg:wr-w-full">
             <FormControl>
               <RadioGroupPrimitive.Root
                 onValueChange={field.onChange}
-                className="grid h-full w-full grid-cols-2 items-center justify-center gap-0 rounded-md bg-unity-white-15 font-semibold lg:w-[412px]"
+                className="wr-grid wr-h-full wr-w-full wr-grid-cols-2 wr-items-center wr-justify-center wr-gap-0 wr-rounded-md wr-bg-unity-white-15 wr-font-semibold lg:wr-w-[412px]"
                 defaultValue={field.value}
               >
-                <FormItem className="mb-0 h-full text-center">
+                <FormItem className="wr-mb-0 wr-h-full wr-text-center">
                   <FormControl>
                     <>
                       <RadioGroupPrimitive.Item
                         value={COIN_SIDE.ETH}
-                        className="relative flex h-full w-full items-center justify-center gap-1 text-unity-white-50"
+                        className="wr-relative wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-text-unity-white-50"
                       >
                         <img
                           src="/images/tokens/weth.png"
@@ -35,7 +35,7 @@ export const CoinFlipController = () => {
                           alt="eth_icon"
                         />
                         ETH
-                        <RadioGroupPrimitive.Indicator className="absolute left-0 top-0 flex h-full w-full items-center justify-center gap-1 rounded-md bg-gradient-to-t from-unity-coinflip-purple-700 to-unity-coinflip-purple-400 text-zinc-100">
+                        <RadioGroupPrimitive.Indicator className="wr-absolute wr-left-0 wr-top-0 wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md wr-bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400 wr-text-zinc-100">
                           <img
                             src="/images/tokens/weth.png"
                             width={20}
@@ -47,9 +47,9 @@ export const CoinFlipController = () => {
                       </RadioGroupPrimitive.Item>
                       <span
                         className={cn(
-                          "relative flex items-center justify-center gap-1 text-zinc-100 max-md:top-2",
+                          "wr-relative wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 max-md:wr-top-2",
                           {
-                            "text-green-500": field.value === COIN_SIDE.ETH,
+                            "wr-text-green-500": field.value === COIN_SIDE.ETH,
                           }
                         )}
                       >
@@ -64,12 +64,12 @@ export const CoinFlipController = () => {
                     </>
                   </FormControl>
                 </FormItem>
-                <FormItem className="mb-0 h-full">
+                <FormItem className="wr-mb-0 wr-h-full">
                   <>
                     <FormControl>
                       <RadioGroupPrimitive.Item
                         value={COIN_SIDE.BTC}
-                        className="relative flex h-full w-full items-center justify-center gap-1 text-unity-white-50"
+                        className="wr-relative wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-text-unity-white-50"
                       >
                         <img
                           src="/images/tokens/wbtc.png"
@@ -78,7 +78,7 @@ export const CoinFlipController = () => {
                           alt="btc_icon"
                         />
                         BTC
-                        <RadioGroupPrimitive.Indicator className="absolute left-0 top-0 flex h-full w-full items-center justify-center gap-1 rounded-md bg-gradient-to-t from-unity-coinflip-purple-700 to-unity-coinflip-purple-400 text-zinc-100">
+                        <RadioGroupPrimitive.Indicator className="wr-absolute wr-left-0 wr-top-0 wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400 wr-text-zinc-100">
                           <img
                             src="/images/tokens/wbtc.png"
                             width={20}
@@ -91,9 +91,9 @@ export const CoinFlipController = () => {
                     </FormControl>
                     <span
                       className={cn(
-                        "relative flex items-center justify-center gap-1 text-zinc-100 max-md:top-2",
+                        "wr-relative wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 max-md:wr-top-2",
                         {
-                          "text-green-500": field.value === COIN_SIDE.BTC,
+                          "wr-text-green-500": field.value === COIN_SIDE.BTC,
                         }
                       )}
                     >
