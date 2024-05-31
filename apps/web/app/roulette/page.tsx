@@ -6,7 +6,6 @@ import { useState } from "react";
 export default function RoulettePage() {
   const [results, setResults] = useState<RouletteGameResult[]>([]);
 
-  console.log(results, "res");
   return (
     <RouletteTemplate
       maxWager={100}

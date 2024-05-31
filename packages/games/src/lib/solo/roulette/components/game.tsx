@@ -14,16 +14,17 @@ export const RouletteGame = ({
     "updateGameStatus",
   ]);
 
-  const { updateSkipAnimation } = useGameSkip();
+  const { updateSkipAnimation, isAnimationSkipped } = useGameSkip();
 
   React.useEffect(() => {
-    if (gameResults.length) {
-      console.log(gameResults, "gameres");
-
-      updateSkipAnimation(false);
+    if (gameResults.length && !isAnimationSkipped) {
       updateRouletteGameResults(gameResults);
       updateGameStatus("PLAYING");
     }
+  }, [gameResults, isAnimationSkipped]);
+
+  React.useEffect(() => {
+    if (gameResults.length) updateSkipAnimation(false);
   }, [gameResults]);
 
   return <>{children}</>;

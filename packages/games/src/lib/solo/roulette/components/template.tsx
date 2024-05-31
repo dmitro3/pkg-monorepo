@@ -36,10 +36,6 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
 
   const [isPrepared, setIsPrepared] = React.useState<boolean>(false);
 
-  const [rouletteResult, setRouletteResult] = React.useState<
-    RouletteGameResult | undefined
-  >(undefined);
-
   const [lastSelecteds, setLastSelecteds] = React.useState<
     {
       index: number;
@@ -123,9 +119,14 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
     setLastSelecteds([...lastSelecteds]);
   };
 
+  const prepareSubmit = async (data: RouletteFormFields) => {
+    setIsPrepared(true);
+    onSubmitGameForm(data);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmitGameForm)}>
+      <form onSubmit={form.handleSubmit(prepareSubmit)}>
         <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0">
           <SceneContainer
             style={{

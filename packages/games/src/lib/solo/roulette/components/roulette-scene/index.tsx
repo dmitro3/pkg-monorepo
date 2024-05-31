@@ -61,7 +61,6 @@ export const RouletteScene: React.FC<{
   const { isAnimationSkipped } = useGameSkip();
 
   const skipRef = React.useRef<boolean>(false);
-  const timeOutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   React.useEffect(() => {
     if (rouletteResult && rouletteResult.length) {
@@ -86,7 +85,7 @@ export const RouletteScene: React.FC<{
 
         !skipRef.current && onAnimationStep(order);
 
-        addLastBet(rouletteResult[order] as RouletteGameResult);
+        addLastBet(rouletteResult[order - 1] as RouletteGameResult);
 
         setIsAnimating(false);
 
@@ -94,18 +93,14 @@ export const RouletteScene: React.FC<{
           setIsAnimating(false);
 
           setIsPrepared(false);
-
-          timeOutRef.current = setTimeout(() => {
-            onSkip();
-          }, 5000);
+          onSkip();
 
           return;
         } else if (rouletteResult.length === order) {
           setIsPrepared(false);
-
-          timeOutRef.current = setTimeout(() => {
-            onAnimationCompleted(rouletteResult);
-          }, 5000);
+          updateRouletteGameResults([]);
+          onAnimationCompleted(rouletteResult);
+          updateGameStatus("ENDED");
 
           return;
         } else {
@@ -115,21 +110,19 @@ export const RouletteScene: React.FC<{
 
       turn(0);
     }
-
-    return () => {
-      clearTimeout(timeOutRef.current as NodeJS.Timeout);
-    };
   }, [rouletteResult]);
 
   const onSkip = () => {
     updateLastBets(rouletteResult as RouletteGameResult[]);
-    onAnimationSkipped(rouletteResult as RouletteGameResult[]);
     updateRouletteGameResults([]);
+    onAnimationSkipped(rouletteResult as RouletteGameResult[]);
     setTimeout(() => updateGameStatus("ENDED"), 50);
   };
 
   React.useEffect(() => {
     skipRef.current = isAnimationSkipped;
+
+    console.log(isAnimationSkipped, "is");
   }, [isAnimationSkipped]);
 
   return (
