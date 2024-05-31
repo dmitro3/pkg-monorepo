@@ -16,7 +16,8 @@ export default function CoinFlip3DPage() {
       minWager={1}
       options={{
         scene: {
-          backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
+          loader: "/coin-flip-3d/loader.png",
+          logo: "/coin-flip-3d/coin-flip-logo.png",
         },
       }}
       onSubmitGameForm={(data) => {

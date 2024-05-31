@@ -12,6 +12,8 @@ import { CoinFlip3D } from "..";
 type TemplateOptions = {
   scene?: {
     backgroundImage?: string;
+    loader?: string;
+    logo?: string;
   };
 };
 
@@ -67,10 +69,14 @@ export const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
             maxWager={props?.maxWager || 10}
             minWager={props?.minWager || 2}
             winMultiplier={props?.winMultiplier || 1}
+            logo={props.options.scene?.logo || ""}
           />
           <CoinFlip3D.Game {...props}>
             <CoinFlip3D.LastBets />
-            <CoinFlip3D.Scene {...props} />
+            <CoinFlip3D.Scene
+              loader={props.options.scene?.loader || ""}
+              {...props}
+            />
             <div className="wr-hidden lg:wr-block">
               <CoinFlip3D.Controller />
             </div>

@@ -24,12 +24,14 @@ interface Props {
   minWager: number;
   maxWager: number;
   winMultiplier: number;
+  logo: string;
 }
 
 export const BetController: React.FC<Props> = ({
   minWager,
   maxWager,
   winMultiplier,
+  logo,
 }) => {
   const form = useFormContext() as CoinFlip3dForm;
 
@@ -44,12 +46,7 @@ export const BetController: React.FC<Props> = ({
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
         <div className="wr-mb-3 max-lg:wr-hidden">
           <BetControllerTitle>
-            <img
-              src={"/images/coin-flip/coin-flip-logo.png"}
-              width={140}
-              height={60}
-              alt="game_logo"
-            />
+            <img src={logo} width={140} height={60} alt="game_logo" />
           </BetControllerTitle>
         </div>
 
@@ -58,7 +55,7 @@ export const BetController: React.FC<Props> = ({
           <FormLabel className="wr-text-unity-white-50">Choose Side</FormLabel>
           <CoinFlipController />
         </div>
-        <div className="relative">
+        <div className="wr-relative">
           <UnityBetCountFormField>(1 - 100)</UnityBetCountFormField>
           <Slider.Root
             className={cn(

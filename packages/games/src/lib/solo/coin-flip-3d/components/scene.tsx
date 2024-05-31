@@ -15,12 +15,14 @@ const UnitySequenceFlipEndEvent = "CF_FlipSequenceEnd";
 
 type ExtendedCoinFlipGameProps = CoinFlip3dGameProps & {
   buildedGameUrl: string;
+  loader: string;
 };
 
 export const CoinFlipScene = ({
   onAnimationStep,
   onAnimationCompleted,
   buildedGameUrl,
+  loader,
 }: ExtendedCoinFlipGameProps) => {
   const percentageRef = React.useRef(0);
 
@@ -132,7 +134,7 @@ export const CoinFlipScene = ({
       {percentageRef.current !== 100 && (
         <div className="wr-absolute wr-left-0 wr-top-0 wr-z-[100] wr-flex wr-h-full wr-w-full wr-flex-col wr-items-center wr-justify-center wr-gap-4  wr-bg-zinc-900">
           <img
-            src={"/images/coin-flip/loader.png"}
+            src={loader}
             alt="loader"
             className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-h-full wr-w-full wr-rounded-md"
           />
