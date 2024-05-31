@@ -1,42 +1,45 @@
-import React from "react";
-import { toFormatted } from "../../../utils/web3";
 import * as Progress from "@radix-ui/react-progress";
+import React from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
-import useCoinFlipGameStore from "../store";
-import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
-import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
 import { useDevicePixelRatio } from "../../../hooks/use-device-pixel-ratio";
-
-const BUILDED_GAME_URL = `${process.env.NEXT_PUBLIC_BASE_CDN_URL}/builded-games/coin-flip`;
+import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
+import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
+import { toFormatted } from "../../../utils/web3";
+import useCoinFlipGameStore from "../store";
+import { CoinFlipGameProps } from "./game";
+import { COIN_SIDE } from "../constants";
 
 const UnityFlipEndEvent = "CF_FlipEnd";
 
 const UnitySequenceFlipEndEvent = "CF_FlipSequenceEnd";
 
-export const CoinFlipScene = () => {
+type ExtendedCoinFlipGameProps = CoinFlipGameProps & { buildedGameUrl: string };
+
+export const CoinFlipScene = ({
+  onAnimationStep,
+  onAnimationCompleted,
+  buildedGameUrl,
+}: ExtendedCoinFlipGameProps) => {
   const percentageRef = React.useRef(0);
 
   const devicePixelRatio = useDevicePixelRatio();
 
+  const BUILDED_GAME_URL = `${buildedGameUrl}/builded-games/coin-flip`;
+
   const {
-    gameStatus,
     coinFlipGameResults,
     updateCoinFlipGameResults,
     updateGameStatus,
     addLastBet,
-    updateLastBets,
   } = useCoinFlipGameStore([
-    "gameStatus",
     "coinFlipGameResults",
     "updateCoinFlipGameResults",
     "updateGameStatus",
     "addLastBet",
-    "updateLastBets",
   ]);
 
   const {
     sendMessage,
-    isLoaded,
     loadingProgression,
     unityProvider,
     UNSAFE__detachAndUnloadImmediate: detachAndUnloadImmediate,
@@ -54,8 +57,6 @@ export const CoinFlipScene = () => {
   const { unityEvent } = useListenUnityEvent();
 
   const [count, setCount] = React.useState(0);
-
-  const { refreshUserData } = useAfterEachGame({});
 
   React.useEffect(() => {
     return () => {
@@ -80,49 +81,43 @@ export const CoinFlipScene = () => {
 
     const currentResult = coinFlipGameResults?.[count];
 
-    if (unityEvent.name === UnityFlipEndEvent) {
-      currentResult?.payout > 0 &&
-        sendMessage("WebGLHandler", "ReceiveMessage", "CF_Win");
+    if (currentResult) {
+      if (unityEvent.name === UnityFlipEndEvent) {
+        currentResult?.payout > 0 &&
+          sendMessage("WebGLHandler", "ReceiveMessage", "CF_Win");
 
-      updatePlayedNotifications({
-        order: count + 1,
-        payoutInUsd: liveResult?.result?.gameResult?.[count]?.payoutInUsd || 0,
-        won: (liveResult?.result?.gameResult?.[count]?.payout || 0) > 0,
-        wagerInUsd: liveResult?.result?.wagerInUsd || 0,
-        component: <LastBet result={liveResult?.result?.gameResult?.[count]} />,
-        duration: 5000,
-      });
+        onAnimationStep && onAnimationStep(count);
 
-      addLastBet({
-        coinSide: liveResult?.result?.gameResult?.[count]?.coinSide || 0,
-        payout: liveResult?.result?.gameResult?.[count]?.payout || 0,
-        payoutInUsd: liveResult?.result?.gameResult?.[count]?.payoutInUsd || 0,
-      });
+        const side =
+          (coinFlipGameResults[count]?.coinSide.toString() as COIN_SIDE) || "0";
 
-      setCount(count + 1);
-    }
+        const payout = coinFlipGameResults[count]?.payout || 0;
 
-    if (unityEvent.name === UnitySequenceFlipEndEvent) {
-      currentResult?.payout > 0 &&
-        sendMessage("WebGLHandler", "ReceiveMessage", "CF_Win");
+        const payoutInUsd = coinFlipGameResults[count]?.payoutInUsd || 0;
 
-      setCount(0);
+        addLastBet({
+          coinSide: side,
+          payout,
+          payoutInUsd,
+        });
 
-      updateIsFinished(true);
+        setCount(count + 1);
+      }
 
-      refreshUserData();
+      if (unityEvent.name === UnitySequenceFlipEndEvent) {
+        currentResult?.payout > 0 &&
+          sendMessage("WebGLHandler", "ReceiveMessage", "CF_Win");
 
-      const totalProfit = liveResult?.result?.profitInUsd || 0;
+        setCount(0);
 
-      const totalWager = liveResult?.result?.wagerInUsd || 0;
+        updateCoinFlipGameResults([]);
 
-      const payoutInUsd = totalProfit + totalWager;
+        onAnimationCompleted && onAnimationCompleted(coinFlipGameResults);
 
-      showWinAnimation({
-        profit: totalProfit,
-        wager: totalWager,
-        payout: payoutInUsd,
-      });
+        setTimeout(() => updateGameStatus("ENDED"), 1000);
+
+        onAnimationStep && onAnimationStep(0);
+      }
     }
   }, [unityEvent]);
 

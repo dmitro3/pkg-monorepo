@@ -22,6 +22,7 @@ type TemplateProps = CoinFlipGameProps & {
   maxWager?: number;
   winMultiplier?: number;
   onSubmitGameForm: (data: CoinFlipFormFields) => void;
+  buildedGameUrl: string;
 };
 
 export const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
@@ -70,7 +71,7 @@ export const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
           />
           <CoinFlip3D.Game {...props}>
             <CoinFlip3D.LastBets />
-            <CoinFlip3D.Scene />
+            <CoinFlip3D.Scene {...props} />
             <div className="wr-hidden lg:wr-block">
               <CoinFlip3D.Controller />
             </div>

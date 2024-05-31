@@ -7,7 +7,6 @@ export type CoinFlipGameProps = React.ComponentProps<"div"> & {
   gameResults: CoinFlipGameResult[];
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
-  onAnimationSkipped?: (result: CoinFlipGameResult[]) => void;
 };
 
 export const CoinFlipGame = ({ gameResults, children }: CoinFlipGameProps) => {
@@ -16,11 +15,8 @@ export const CoinFlipGame = ({ gameResults, children }: CoinFlipGameProps) => {
     "updateGameStatus",
   ]);
 
-  const { updateSkipAnimation } = useGameSkip();
-
   React.useEffect(() => {
     if (gameResults.length) {
-      updateSkipAnimation(false);
       updateCoinFlipGameResults(gameResults);
       updateGameStatus("PLAYING");
     }
