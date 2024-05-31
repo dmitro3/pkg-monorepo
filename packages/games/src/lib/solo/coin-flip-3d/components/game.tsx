@@ -1,7 +1,6 @@
-import { useGameSkip } from "../../../game-provider";
+import React from "react";
 import useCoinFlipGameStore from "../store";
 import { CoinFlip3dGameResult } from "../types";
-import React from "react";
 
 export type CoinFlip3dGameProps = React.ComponentProps<"div"> & {
   gameResults: CoinFlip3dGameResult[];

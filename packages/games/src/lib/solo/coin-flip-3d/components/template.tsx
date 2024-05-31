@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { Form } from "../../../ui/form";
-import { COIN_SIDE, MAX_BET_COUNT, MIN_BET_COUNT } from "../constants";
+import { COIN_SIDE, MAX_BET_COUNT_3D, MIN_BET_COUNT_3D } from "../constants";
 import { CoinFlip3dFormFields } from "../types";
 import { CoinFlip3dGameProps } from "./game";
 import { UnityGameContainer } from "../../../common/containers";
@@ -36,8 +36,8 @@ export const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       }),
     betCount: z
       .number()
-      .min(MIN_BET_COUNT, { message: "Minimum bet count is 1" })
-      .max(MAX_BET_COUNT, {
+      .min(MIN_BET_COUNT_3D, { message: "Minimum bet count is 1" })
+      .max(MAX_BET_COUNT_3D, {
         message: "Maximum bet count is 100",
       }),
     stopGain: z.number(),

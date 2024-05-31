@@ -15,3 +15,5 @@ export { CoinFlipTemplate as CoinFlip3DTemplate } from "./components/template";
 export * from "./store";
 
 export * from "./types";
+
+export * from "./constants";
