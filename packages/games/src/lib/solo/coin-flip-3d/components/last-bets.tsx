@@ -1,3 +1,4 @@
+import { CDN_URL } from "../../../constants";
 import { cn } from "../../../utils/style";
 import { COIN_SIDE } from "../constants";
 import useCoinFlipGameStore from "../store";
@@ -15,14 +16,14 @@ const LastBet = ({ result }: { result: CoinFlip3dGameResult }) => {
     >
       {result.coinSide === COIN_SIDE.ETH ? (
         <img
-          src="/images/tokens/weth.png"
+          src={`${CDN_URL}/coin-flip-2d/eth.png`}
           width={20}
           height={20}
           alt="eth_icon"
         />
       ) : (
         <img
-          src="/images/tokens/wbtc.png"
+          src={`${CDN_URL}/coin-flip-2d/btc.png`}
           width={20}
           height={20}
           alt="btc_icon"
