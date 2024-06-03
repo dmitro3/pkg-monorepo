@@ -19,6 +19,7 @@ import { toDecimals } from "../../../utils/web3";
 import { CoinFlip3dForm } from "../types";
 import * as Slider from "@radix-ui/react-slider";
 import { CoinFlipController } from "./controller";
+import useCoinFlip3dGameStore from "../store";
 
 interface Props {
   minWager: number;
@@ -35,6 +36,8 @@ export const BetController: React.FC<Props> = ({
 }) => {
   const form = useFormContext() as CoinFlip3dForm;
 
+  const { gameStatus } = useCoinFlip3dGameStore(["gameStatus"]);
+
   const maxPayout = React.useMemo(() => {
     const { wager, betCount } = form.getValues();
 
@@ -50,7 +53,15 @@ export const BetController: React.FC<Props> = ({
           </BetControllerTitle>
         </div>
 
-        <UnityWagerFormField minWager={minWager} maxWager={maxWager} />
+        <UnityWagerFormField
+          minWager={minWager}
+          maxWager={maxWager}
+          isDisabled={
+            form.formState.isSubmitting ||
+            form.formState.isLoading ||
+            gameStatus == "PLAYING"
+          }
+        />
         <div className="wr-mb-[38px] lg:wr-hidden">
           <FormLabel className="wr-text-unity-white-50">Choose Side</FormLabel>
           <CoinFlipController />
@@ -67,6 +78,11 @@ export const BetController: React.FC<Props> = ({
             onValueChange={(e) => {
               form.setValue("betCount", e[0] || 1, { shouldValidate: true });
             }}
+            disabled={
+              form.formState.isSubmitting ||
+              form.formState.isLoading ||
+              gameStatus == "PLAYING"
+            }
           >
             <Slider.Track className="wr-relative wr-h-1 wr-w-full wr-grow wr-cursor-pointer wr-overflow-hidden wr-rounded-full  wr-bg-zinc-600">
               <Slider.Range className="wr-absolute wr-h-full wr-bg-unity-coinflip-purple-400" />
@@ -109,12 +125,22 @@ export const BetController: React.FC<Props> = ({
                 inputContainerClassName={cn(
                   "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
                 )}
+                isDisabled={
+                  form.formState.isSubmitting ||
+                  form.formState.isLoading ||
+                  gameStatus == "PLAYING"
+                }
               />
               <StopLossFormField
                 labelClassName="wr-text-unity-white-50"
                 inputContainerClassName={cn(
                   "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
                 )}
+                isDisabled={
+                  form.formState.isSubmitting ||
+                  form.formState.isLoading ||
+                  gameStatus == "PLAYING"
+                }
               />
             </div>
           </Advanced>

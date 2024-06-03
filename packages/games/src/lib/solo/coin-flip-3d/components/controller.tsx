@@ -4,17 +4,18 @@ import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { COIN_SIDE } from "../constants";
 import { CoinFlip3dForm } from "../types";
+import { CDN_URL } from "../../../constants";
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlip3dForm;
 
   return (
-    <div className="wr-flex wr-items-center lg:wr-absolute lg:wr-bottom-8 lg:wr-left-1/2 lg:-wr-translate-x-1/2">
+    <div className="wr-flex  wr-items-center lg:wr-absolute lg:wr-bottom-8 lg:wr-left-1/2 lg:-wr-translate-x-1/2">
       <FormField
         control={form.control}
         name="coinSide"
         render={({ field }) => (
-          <FormItem className="wr-mb-0 wr-h-10 max-lg:wr-w-full">
+          <FormItem className="wr-mb-0 wr-h-12n max-lg:wr-w-full">
             <FormControl>
               <RadioGroupPrimitive.Root
                 onValueChange={field.onChange}
@@ -29,7 +30,7 @@ export const CoinFlipController = () => {
                         className="wr-relative wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-text-unity-white-50"
                       >
                         <img
-                          src="/images/tokens/weth.png"
+                          src={`${CDN_URL}/coin-flip-2d/eth.png`}
                           width={20}
                           height={20}
                           alt="eth_icon"
@@ -37,7 +38,7 @@ export const CoinFlipController = () => {
                         ETH
                         <RadioGroupPrimitive.Indicator className="wr-absolute wr-left-0 wr-top-0 wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md wr-bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400 wr-text-zinc-100">
                           <img
-                            src="/images/tokens/weth.png"
+                            src={`${CDN_URL}/coin-flip-2d/eth.png`}
                             width={20}
                             height={20}
                             alt="eth_icon"
@@ -55,8 +56,7 @@ export const CoinFlipController = () => {
                       >
                         {field.value === COIN_SIDE.ETH ? "+0.95" : "1"}
                         <img
-                          alt="usdc_icon"
-                          src={"/images/tokens/usdc.png"}
+                          src={`${CDN_URL}/coin-flip-2d/eth.png`}
                           width={20}
                           height={20}
                         />
@@ -72,7 +72,7 @@ export const CoinFlipController = () => {
                         className="wr-relative wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-text-unity-white-50"
                       >
                         <img
-                          src="/images/tokens/wbtc.png"
+                          src={`${CDN_URL}/coin-flip-2d/btc.png`}
                           width={20}
                           height={20}
                           alt="btc_icon"
@@ -80,7 +80,7 @@ export const CoinFlipController = () => {
                         BTC
                         <RadioGroupPrimitive.Indicator className="wr-absolute wr-left-0 wr-top-0 wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400 wr-text-zinc-100">
                           <img
-                            src="/images/tokens/wbtc.png"
+                            src={`${CDN_URL}/coin-flip-2d/btc.png`}
                             width={20}
                             height={20}
                             alt="btc_icon"
@@ -100,7 +100,7 @@ export const CoinFlipController = () => {
                       {field.value === COIN_SIDE.BTC ? "+0.95" : "1"}
                       <img
                         alt="usdc_icon"
-                        src={"/images/tokens/usdc.png"}
+                        src={`${CDN_URL}/coin-flip-2d/btc.png`}
                         width={20}
                         height={20}
                       />
