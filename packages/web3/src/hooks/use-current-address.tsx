@@ -55,8 +55,13 @@ export const CurrentAccountProvider: React.FC<{
 
   const { data: currentUserAddress, isFetching: isGettingAddress } = useQuery({
     queryKey: ["currentUserAddress", address, isSmartWallet],
-    queryFn: () => fetchCurrentUserAddress(client, address, true),
-    enabled: !!client && !!address && isSmartWallet,
+    queryFn: () =>
+      fetchCurrentUserAddress(
+        client,
+        address,
+        connector?.type === SmartWalletConnectorWagmiType
+      ),
+    enabled: !!address && !!client && !!connector?.type,
   });
 
   return (

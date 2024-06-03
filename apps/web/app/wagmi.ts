@@ -5,7 +5,15 @@ import { coinbaseWallet, injected } from "wagmi/connectors";
 
 export const smartWalletConnectors = new SmartWalletConnectors({
   chains: [arbitrumSepolia],
-  loginProviders: ["google", "weibo", "twitter"],
+  loginProviders: [
+    "google",
+    "weibo",
+    "twitter",
+    "facebook",
+    "twitch",
+    "line",
+    "discord",
+  ],
   web3AuthOptions: {
     clientId:
       "BOnGGGODOCSliYrz-EcFgQE2vzu-XZzkSQNuonHhDfwjzA2sufZKQ9sULLp3Of9qJPKF6NlSiTM5pWMMm3ftMqU",

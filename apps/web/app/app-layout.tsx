@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Layout,
   SidebarAccordions,
@@ -9,6 +11,11 @@ import {
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Layout
+      header={{
+        chat: {
+          show: false,
+        },
+      }}
       sidebar={{
         sidebarFooter: <></>,
         sidebarItems: (

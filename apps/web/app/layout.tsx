@@ -5,8 +5,8 @@ import "@winrlabs/ui/dist/index.css";
 import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";
 import { Providers } from "./providers";
-import { Layout } from "@winrlabs/ui";
 import { AppLayout } from "./app-layout";
+import { WinrWeb3Modals } from "@winrlabs/ui";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -48,6 +48,7 @@ export default function RootLayout({
           }}
         >
           <AppLayout>{children}</AppLayout>
+          <WinrWeb3Modals />
         </body>
       </html>
     </Providers>

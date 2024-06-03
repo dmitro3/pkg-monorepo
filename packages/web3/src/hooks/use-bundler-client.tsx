@@ -49,7 +49,11 @@ const fetchBundlerClient = async ({
   rpcUrl,
   walletAddress,
 }: JSONPCClientRequestParams): Promise<TypedJSONRPCClient<BundlerMethods>> => {
+  console.log("fetching");
+
   if (!walletAddress) {
+    console.log("Wallet address is required");
+
     throw new Error("Wallet address is required");
   }
 
@@ -64,11 +68,20 @@ const fetchBundlerClient = async ({
         body: JSON.stringify(jsonRPCRequest),
       })
         .then((response) => {
+          console.log("response", response);
+
           if (response.status === 200) {
-            return response
-              .json()
-              .then((jsonRPCResponse) => client?.receive(jsonRPCResponse));
+            return response.json().then((jsonRPCResponse) => {
+              console.log("jsonRPCResponse", jsonRPCResponse);
+
+              return client?.receive(jsonRPCResponse);
+            });
           } else if (jsonRPCRequest.id !== undefined) {
+            console.log(
+              "Error fetching JSON-RPC response",
+              response.statusText
+            );
+
             return Promise.reject(new Error(response.statusText));
           }
         })
@@ -77,6 +90,17 @@ const fetchBundlerClient = async ({
           throw e;
         })
     );
+
+  console.log("resolved client", client);
+
+  const smartWalletAddress = await client?.request(
+    "accountAbstraction.address",
+    {
+      owner: walletAddress,
+    }
+  );
+
+  console.log("smartWalletAddress", smartWalletAddress);
 
   return client;
 };
@@ -98,7 +122,7 @@ export const BundlerClientProvider: React.FC<{
         rpcUrl,
         walletAddress: address,
       }),
-    enabled: !!address,
+    enabled: !!address && !!rpcUrl,
   });
 
   return (
