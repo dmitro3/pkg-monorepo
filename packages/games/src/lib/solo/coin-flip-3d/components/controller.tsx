@@ -54,12 +54,7 @@ export const CoinFlipController = () => {
                           }
                         )}
                       >
-                        {field.value === COIN_SIDE.ETH ? "+0.95" : "1"}
-                        <img
-                          src={`${CDN_URL}/coin-flip-2d/eth.png`}
-                          width={20}
-                          height={20}
-                        />
+                        {field.value === COIN_SIDE.ETH ? "+$0.95" : "$1"}
                       </span>
                     </>
                   </FormControl>
@@ -97,13 +92,7 @@ export const CoinFlipController = () => {
                         }
                       )}
                     >
-                      {field.value === COIN_SIDE.BTC ? "+0.95" : "1"}
-                      <img
-                        alt="usdc_icon"
-                        src={`${CDN_URL}/coin-flip-2d/btc.png`}
-                        width={20}
-                        height={20}
-                      />
+                      {field.value === COIN_SIDE.BTC ? "+$0.95" : "$1"}
                     </span>
                   </>
                 </FormItem>
