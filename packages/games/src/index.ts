@@ -19,6 +19,9 @@ export * from "./lib/solo/limbo";
 export * from "./lib/solo/blackjack";
 
 export * from "./lib/hooks/use-web3";
+
 export * from "./lib/solo/single-blackjack";
 export * from "./lib/utils/number";
 export * from "./lib/utils/web3";
+
+export * from "./lib/solo/roulette";

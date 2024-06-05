@@ -15,6 +15,8 @@ import { BetController } from "./bet-controller";
 import { CoinFlip, CoinFlipFormFields } from "..";
 import { cn } from "../../../utils/style";
 import { Form } from "../../../ui/form";
+import debounce from "debounce";
+import React from "react";
 
 type TemplateOptions = {
   scene?: {
@@ -27,6 +29,7 @@ type TemplateProps = CoinFlipGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: CoinFlipFormFields) => void;
+  onFormChange?: (fields: CoinFlipFormFields) => void;
 };
 
 const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
@@ -65,6 +68,16 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       coinSide: CoinSide.HEADS,
     },
   });
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>

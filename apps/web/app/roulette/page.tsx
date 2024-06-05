@@ -1,26 +1,15 @@
 "use client";
 
-import {
-  AudioContextProvider,
-  CoinFlipGameResult,
-  CoinFlipTemplate,
-  CoinSide,
-} from "@winrlabs/games";
+import { RouletteGameResult, RouletteTemplate } from "@winrlabs/games";
 import { useState } from "react";
-import { useAccount, useConnect } from "wagmi";
 
-export default function CoinFlipPage() {
-  const [results, setResults] = useState<CoinFlipGameResult[]>([]);
+export default function RoulettePage() {
+  const [results, setResults] = useState<RouletteGameResult[]>([]);
 
   return (
-    <CoinFlipTemplate
+    <RouletteTemplate
       maxWager={100}
       minWager={1}
-      options={{
-        scene: {
-          backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
-        },
-      }}
       onSubmitGameForm={(data) => {
         console.log(data, "data");
         // send request
@@ -29,24 +18,28 @@ export default function CoinFlipPage() {
 
         setResults([
           {
+            won: true,
             payout: 1,
             payoutInUsd: 1,
-            coinSide: 1,
+            outcome: 2,
           },
           {
+            won: true,
             payout: 1,
             payoutInUsd: 1,
-            coinSide: 0,
+            outcome: 23,
           },
           {
+            won: true,
             payout: 1,
             payoutInUsd: 1,
-            coinSide: 0,
+            outcome: 12,
           },
           {
+            won: true,
             payout: 1,
             payoutInUsd: 1,
-            coinSide: 1,
+            outcome: 0,
           },
         ]);
       }}
@@ -61,9 +54,6 @@ export default function CoinFlipPage() {
         console.log("game skipped");
       }}
       gameResults={results}
-      onFormChange={(val) => {
-        console.log("form val updated");
-      }}
     />
   );
 }

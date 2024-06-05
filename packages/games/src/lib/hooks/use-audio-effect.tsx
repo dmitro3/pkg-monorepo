@@ -15,6 +15,7 @@ export enum SoundEffects {
   FLIP_CARD,
   THICK,
   BALL_BUMP,
+  ROULETTE,
 }
 
 export interface AudioContextType {
@@ -90,6 +91,7 @@ effects.set(SoundEffects.FLIP_CARD, "flip.mp3");
 effects.set(SoundEffects.THICK, "thick.wav");
 effects.set(SoundEffects.FALLING, "bucket.wav");
 effects.set(SoundEffects.BALL_BUMP, "ball_bump.mp3");
+effects.set(SoundEffects.ROULETTE, "roulette.mp3");
 
 type PlayOptions = {
   playbackRate?: number;
