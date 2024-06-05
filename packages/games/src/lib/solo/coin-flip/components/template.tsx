@@ -72,7 +72,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     const debouncedCb = debounce(
       (formFields) => props.onFormChange(formFields),
-      600
+      300
     );
 
     const subscription = form.watch(debouncedCb);
