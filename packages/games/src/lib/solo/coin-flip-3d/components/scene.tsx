@@ -111,17 +111,19 @@ export const CoinFlipScene = ({
       if (unityEvent.name === UnitySequenceFlipEndEvent) {
         currentResult?.payout > 0 &&
           sendMessage("WebGLHandler", "ReceiveMessage", "CF_Win");
-
-        setCount(0);
-
-        updateCoinFlip3dGameResults([]);
-
-        onAnimationCompleted && onAnimationCompleted(coinFlipGameResults);
-
-        setTimeout(() => updateGameStatus("ENDED"), 1000);
-
-        onAnimationStep && onAnimationStep(0);
       }
+    }
+
+    if (unityEvent.name === UnitySequenceFlipEndEvent) {
+      setCount(0);
+
+      updateCoinFlip3dGameResults([]);
+
+      onAnimationCompleted && onAnimationCompleted(coinFlipGameResults);
+
+      setTimeout(() => updateGameStatus("ENDED"), 1000);
+
+      onAnimationStep && onAnimationStep(0);
     }
   }, [unityEvent]);
 

@@ -73,7 +73,7 @@ export const CoinFlipController = () => {
                           alt="btc_icon"
                         />
                         BTC
-                        <RadioGroupPrimitive.Indicator className="wr-absolute wr-left-0 wr-top-0 wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400 wr-text-zinc-100">
+                        <RadioGroupPrimitive.Indicator className="wr-absolute wr-left-0 wr-top-0 wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md wr-bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400 wr-text-zinc-100">
                           <img
                             src={`${CDN_URL}/coin-flip-2d/btc.png`}
                             width={20}

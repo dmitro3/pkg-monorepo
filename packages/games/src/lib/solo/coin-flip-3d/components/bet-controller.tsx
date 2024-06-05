@@ -44,6 +44,8 @@ export const BetController: React.FC<Props> = ({
     return toDecimals(wager * betCount * winMultiplier, 2);
   }, [form.getValues().wager, form.getValues().betCount, winMultiplier]);
 
+  console.log(gameStatus);
+
   return (
     <UnityBetControllerContainer className="wr-no-scrollbar wr-relative wr-flex wr-h-full wr-max-h-full wr-w-full wr-flex-col wr-justify-between wr-overflow-auto lg:wr-absolute lg:wr-left-0 lg:wr-top-0 lg:wr-w-[264px]">
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
@@ -154,7 +156,8 @@ export const BetController: React.FC<Props> = ({
             disabled={
               !form.formState.isValid ||
               form.formState.isSubmitting ||
-              form.formState.isLoading
+              form.formState.isLoading ||
+              gameStatus == "PLAYING"
             }
             isLoading={form.formState.isSubmitting || form.formState.isLoading}
           >

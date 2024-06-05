@@ -64,7 +64,7 @@ export const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
-        <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[640px]">
+        <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[640px]">
           <BetController
             maxWager={props?.maxWager || 10}
             minWager={props?.minWager || 2}
