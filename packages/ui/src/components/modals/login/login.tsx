@@ -12,11 +12,7 @@ import Link from "next/link";
 import useModalsStore from "../modals.store";
 import { Google, IconWallet } from "../../../svgs";
 import { Connector, useConnect } from "wagmi";
-import { Spinner } from "../../spinner";
-import {
-  SmartWalletConnectorWagmiType,
-  useCurrentAccount,
-} from "@winrlabs/web3";
+import { SmartWalletConnectorWagmiType } from "@winrlabs/web3";
 import { Button } from "../../button";
 import { useState } from "react";
 import React from "react";
@@ -26,9 +22,7 @@ export const LoginModal = () => {
 
   const [isSmartWallet, setIsSmartWallet] = useState(true);
 
-  const { connectors, connect, status, error, isPending } = useConnect();
-
-  const currentAA = useCurrentAccount();
+  const { connectors, connect } = useConnect();
 
   const smartWalletConnectors = connectors.filter(
     (connector) =>

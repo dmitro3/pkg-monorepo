@@ -45,13 +45,13 @@ export const Header = ({
               <div key={index}>{component}</div>
             ))}
         </section>
-        {account.signerAddress ? (
+        {account.address ? (
           <Button
             onClick={() => {
               disconnect();
             }}
           >
-            disconnect
+            {account.address}
           </Button>
         ) : (
           <section className="wr-ml-6 wr-flex wr-gap-2">

@@ -1,24 +1,26 @@
 "use client";
 
 import { useAccount } from "wagmi";
-import { BundlerMethods, useBundlerClient } from "./use-bundler-client";
+import { useBundlerClient } from "./use-bundler-client";
 import { Address } from "viem";
 import { useQuery } from "@tanstack/react-query";
-import { TypedJSONRPCClient } from "json-rpc-2.0";
 import { SmartWalletConnectorWagmiType } from "../config/smart-wallet-connectors";
 import { createContext, useContext, useMemo } from "react";
+import { SimpleAccountAPI } from "../smart-wallet";
+import { useSmartAccountApi } from "./use-smart-account-api";
 
 interface UseCurrentAccount {
-  signerAddress?: Address;
-  readerAddress?: Address;
+  rootAddress?: Address;
+  address?: Address;
   isGettingAddress?: boolean;
   isSmartWallet?: boolean;
 }
 
 const CurrentAccountContext = createContext<UseCurrentAccount>({
-  signerAddress: undefined,
-  readerAddress: undefined,
+  rootAddress: undefined,
+  address: undefined,
   isGettingAddress: false,
+  isSmartWallet: false,
 });
 
 export const useCurrentAccount = () => {
@@ -27,19 +29,16 @@ export const useCurrentAccount = () => {
 };
 
 const fetchCurrentUserAddress = async (
-  client?: TypedJSONRPCClient<BundlerMethods>,
+  accountApi?: SimpleAccountAPI,
   address?: `0x${string}` | undefined,
   isSmartWallet?: boolean
 ) => {
-  if (!client || !address) return undefined;
+  if (!accountApi || !address) return "0x0";
 
-  const smartWalletAddress = await client?.request(
-    "accountAbstraction.address",
-    {
-      owner: address,
-    }
-  );
-  return isSmartWallet ? smartWalletAddress.account : address;
+  const smartWalletAddress = await accountApi.getAccountAddress();
+  console.log(smartWalletAddress, "SMART WALLET ADDRESS");
+
+  return isSmartWallet ? smartWalletAddress : address;
 };
 
 export const CurrentAccountProvider: React.FC<{
@@ -47,17 +46,17 @@ export const CurrentAccountProvider: React.FC<{
 }> = ({ children }) => {
   const { address, connector, isConnecting } = useAccount();
   const { client, isLoading: isClientLoading } = useBundlerClient();
-
-  const isSmartWallet = useMemo(
-    () => connector?.type === SmartWalletConnectorWagmiType,
-    [connector]
-  );
+  const { accountApi } = useSmartAccountApi();
 
   const { data: currentUserAddress, isFetching: isGettingAddress } = useQuery({
-    queryKey: ["currentUserAddress", address, isSmartWallet],
+    queryKey: [
+      "currentUserAddress",
+      address,
+      connector?.type === SmartWalletConnectorWagmiType,
+    ],
     queryFn: () =>
       fetchCurrentUserAddress(
-        client,
+        accountApi,
         address,
         connector?.type === SmartWalletConnectorWagmiType
       ),
@@ -67,10 +66,10 @@ export const CurrentAccountProvider: React.FC<{
   return (
     <CurrentAccountContext.Provider
       value={{
-        readerAddress: currentUserAddress,
-        signerAddress: address,
+        address: currentUserAddress,
+        rootAddress: address,
         isGettingAddress: isGettingAddress || isClientLoading || isConnecting,
-        isSmartWallet,
+        isSmartWallet: connector?.type === SmartWalletConnectorWagmiType,
       }}
     >
       {children}
