@@ -61,6 +61,9 @@ export default function CoinFlipPage() {
         console.log("game skipped");
       }}
       gameResults={results}
+      onFormChange={(val) => {
+        console.log("form val updated");
+      }}
     />
   );
 }

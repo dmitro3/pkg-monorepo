@@ -29,7 +29,7 @@ type TemplateProps = CoinFlipGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: CoinFlipFormFields) => void;
-  onFormChange: (fields: CoinFlipFormFields) => void;
+  onFormChange?: (fields: CoinFlipFormFields) => void;
 };
 
 const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
@@ -70,10 +70,9 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
   });
 
   React.useEffect(() => {
-    const debouncedCb = debounce(
-      (formFields) => props.onFormChange(formFields),
-      300
-    );
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
 
     const subscription = form.watch(debouncedCb);
 
