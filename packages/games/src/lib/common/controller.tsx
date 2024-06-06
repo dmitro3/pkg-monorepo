@@ -240,7 +240,8 @@ export const UnityWagerFormField: React.FC<WagerFormFieldProps> = ({
 
 export const UnityBetCountFormField: React.FC<{
   children?: React.ReactNode;
-}> = ({ children }) => {
+  isDisabled?: boolean;
+}> = ({ children, isDisabled = false }) => {
   const form = useFormContext();
 
   return (
@@ -256,6 +257,7 @@ export const UnityBetCountFormField: React.FC<{
           <FormControl>
             <BetCount
               containerClassName="wr-relative wr-border wr-border-solid wr-rounded-[10px]  wr-border-unity-white-15 wr-bg-unity-white-15 wr-px-2 wr-py-[10px] wr-backdrop-blur-md"
+              isDisabled={isDisabled}
               {...field}
             />
           </FormControl>

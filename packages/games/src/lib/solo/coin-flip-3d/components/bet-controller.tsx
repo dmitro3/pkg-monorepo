@@ -44,10 +44,8 @@ export const BetController: React.FC<Props> = ({
     return toDecimals(wager * betCount * winMultiplier, 2);
   }, [form.getValues().wager, form.getValues().betCount, winMultiplier]);
 
-  console.log(gameStatus);
-
   return (
-    <UnityBetControllerContainer className="wr-no-scrollbar wr-relative wr-flex wr-h-full wr-max-h-full wr-w-full wr-flex-col wr-justify-between wr-overflow-auto lg:wr-absolute lg:wr-left-0 lg:wr-top-0 lg:wr-w-[264px]">
+    <UnityBetControllerContainer className="wr-z-10 wr-no-scrollbar wr-relative wr-flex wr-h-full wr-max-h-full wr-w-full wr-flex-col wr-justify-between wr-overflow-auto lg:wr-absolute lg:wr-left-0 lg:wr-top-0 lg:wr-w-[264px]">
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
         <div className="wr-mb-3 max-lg:wr-hidden">
           <BetControllerTitle>
@@ -69,7 +67,15 @@ export const BetController: React.FC<Props> = ({
           <CoinFlipController />
         </div>
         <div className="wr-relative">
-          <UnityBetCountFormField>(1 - 100)</UnityBetCountFormField>
+          <UnityBetCountFormField
+            isDisabled={
+              form.formState.isSubmitting ||
+              form.formState.isLoading ||
+              gameStatus == "PLAYING"
+            }
+          >
+            (1 - 100)
+          </UnityBetCountFormField>
           <Slider.Root
             className={cn(
               "wr-absolute wr-left-0 wr-top-[65px] wr-flex wr-w-full wr-touch-none wr-select-none wr-items-center wr-px-1.5"
