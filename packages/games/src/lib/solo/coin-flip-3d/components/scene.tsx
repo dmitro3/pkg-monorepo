@@ -115,13 +115,15 @@ export const CoinFlipScene = ({
     }
 
     if (unityEvent.name === UnitySequenceFlipEndEvent) {
-      setCount(0);
-
       updateCoinFlip3dGameResults([]);
 
       onAnimationCompleted && onAnimationCompleted(coinFlipGameResults);
 
-      setTimeout(() => updateGameStatus("ENDED"), 1000);
+      setTimeout(() => {
+        setCount(0);
+
+        updateGameStatus("ENDED");
+      }, 1000);
 
       onAnimationStep && onAnimationStep(0);
     }
