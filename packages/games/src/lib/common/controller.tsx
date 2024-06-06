@@ -189,3 +189,81 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
     />
   );
 };
+
+export const UnityWagerFormField: React.FC<WagerFormFieldProps> = ({
+  minWager,
+  maxWager,
+  isDisabled,
+  className,
+}) => {
+  const form = useFormContext();
+
+  return (
+    <FormField
+      control={form.control}
+      name="wager"
+      render={({ field }) => (
+        <FormItem className={cn(className)}>
+          <FormLabel className="wr-text-unity-white-50">
+            Wager
+            <div>
+              <WagerBalance className="wr-text-zinc-100" />
+              <WagerCurrency />
+            </div>
+          </FormLabel>
+
+          <FormControl>
+            <>
+              <WagerInput
+                {...field}
+                isDisabled={isDisabled || field.disabled}
+                hasError={!!form.formState.errors.wager}
+                containerClassName={cn(
+                  "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
+                )}
+              />
+              <WagerSetterButtons
+                form={form}
+                minWager={minWager}
+                maxWager={maxWager}
+                currentWager={field.value}
+                className={cn("wr-bg-unity-white-15 wr-backdrop-blur-md")}
+              />
+            </>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+export const UnityBetCountFormField: React.FC<{
+  children?: React.ReactNode;
+  isDisabled?: boolean;
+}> = ({ children, isDisabled = false }) => {
+  const form = useFormContext();
+
+  return (
+    <FormField
+      control={form.control}
+      name="betCount"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="wr-text-unity-white-50">
+            Bet Count {children}
+          </FormLabel>
+
+          <FormControl>
+            <BetCount
+              containerClassName="wr-relative wr-border wr-border-solid wr-rounded-[10px]  wr-border-unity-white-15 wr-bg-unity-white-15 wr-px-2 wr-py-[10px] wr-backdrop-blur-md"
+              isDisabled={isDisabled}
+              {...field}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
