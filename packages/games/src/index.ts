@@ -25,3 +25,5 @@ export * from "./lib/solo/single-blackjack";
 export * from "./lib/solo/coin-flip-3d";
 
 export * from "./lib/solo/roulette";
+
+export * from "./lib/solo/plinko-3d";
