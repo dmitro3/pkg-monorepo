@@ -18,7 +18,7 @@ export function Providers(props: { children: ReactNode }) {
           smartAccountConfig={{
             bundlerUrl:
               "https://game-hub-production-ssmnd.ondigitalocean.app/rpc",
-            entryPointAddress: "0x0000000071727de22e5e9d8baf0edac6f37da032",
+            entryPointAddress: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
             factoryAddress: "0x12a4F339F74c08F23D8033dF4457eC253DC9AdC0",
           }}
         >

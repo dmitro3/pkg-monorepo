@@ -22,29 +22,12 @@ class Paymaster implements PaymasterAPI {
     userOp: Partial<UserOperation>
   ): Promise<PaymasterParams> {
     try {
-      console.log(userOp, "call data");
-
       const paymasterParams = await this.client.request(
         "preparePaymasterAndData",
         {
           callData: userOp.callData,
         }
       );
-
-      console.log(
-        {
-          ...paymasterParams,
-          paymasterVerificationGasLimit: BigInt(
-            paymasterParams.paymasterVerificationGasLimit
-          ),
-          paymasterPostOpGasLimit: BigInt(
-            paymasterParams.paymasterPostOpGasLimit
-          ),
-        },
-        "PAYMASTER PARAMS"
-      );
-
-      console.log("API");
 
       return {
         ...paymasterParams,

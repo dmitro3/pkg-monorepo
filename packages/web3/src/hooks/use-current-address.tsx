@@ -33,10 +33,9 @@ const fetchCurrentUserAddress = async (
   address?: `0x${string}` | undefined,
   isSmartWallet?: boolean
 ) => {
-  if (!accountApi || !address) return "0x0";
+  if (!address) return undefined;
 
-  const smartWalletAddress = await accountApi.getAccountAddress();
-  console.log(smartWalletAddress, "SMART WALLET ADDRESS");
+  const smartWalletAddress = await accountApi?.getAccountAddress();
 
   return isSmartWallet ? smartWalletAddress : address;
 };
@@ -45,7 +44,7 @@ export const CurrentAccountProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const { address, connector, isConnecting } = useAccount();
-  const { client, isLoading: isClientLoading } = useBundlerClient();
+  const { isLoading: isClientLoading } = useBundlerClient();
   const { accountApi } = useSmartAccountApi();
 
   const { data: currentUserAddress, isFetching: isGettingAddress } = useQuery({
@@ -60,7 +59,7 @@ export const CurrentAccountProvider: React.FC<{
         address,
         connector?.type === SmartWalletConnectorWagmiType
       ),
-    enabled: !!address && !!client && !!connector?.type,
+    enabled: !!address && !!connector?.type && !!accountApi,
   });
 
   return (

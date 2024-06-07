@@ -7,12 +7,6 @@ import { useAccount } from "wagmi";
 import { UserOperation } from "../smart-wallet";
 import { Hex } from "viem";
 
-interface UseBundlerClient {
-  client?: TypedJSONRPCClient<BundlerMethods>;
-  isLoading: boolean;
-  error?: Error;
-}
-
 const BundlerClientContext = createContext<UseBundlerClient>({
   client: undefined,
   isLoading: false,
@@ -44,15 +38,17 @@ interface JSONPCClientRequestParams {
 
 export type WinrBundlerClient = TypedJSONRPCClient<BundlerMethods>;
 
+interface UseBundlerClient {
+  client?: WinrBundlerClient;
+  isLoading: boolean;
+  error?: Error;
+}
+
 const fetchBundlerClient = async ({
   rpcUrl,
   walletAddress,
 }: JSONPCClientRequestParams): Promise<WinrBundlerClient> => {
-  console.log("fetching");
-
   if (!walletAddress) {
-    console.log("Wallet address is required");
-
     throw new Error("Wallet address is required");
   }
 
@@ -67,12 +63,8 @@ const fetchBundlerClient = async ({
         body: JSON.stringify(jsonRPCRequest),
       })
         .then((response) => {
-          console.log("response", response);
-
           if (response.status === 200) {
             return response.json().then((jsonRPCResponse) => {
-              console.log("jsonRPCResponse", jsonRPCResponse);
-
               return client?.receive(jsonRPCResponse);
             });
           } else if (jsonRPCRequest.id !== undefined) {

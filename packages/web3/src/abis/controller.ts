@@ -109,6 +109,22 @@ export default [
   {
     inputs: [
       {
+        internalType: "uint8",
+        name: "bits",
+        type: "uint8",
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "SafeCastOverflowedUintDowncast",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes32",
         name: "key",
         type: "bytes32",
@@ -301,6 +317,11 @@ export default [
             type: "uint64",
           },
           {
+            internalType: "uint64",
+            name: "lastSeen",
+            type: "uint64",
+          },
+          {
             internalType: "address",
             name: "operator",
             type: "address",
@@ -396,6 +417,11 @@ export default [
           {
             internalType: "uint64",
             name: "endBlock",
+            type: "uint64",
+          },
+          {
+            internalType: "uint64",
+            name: "lastSeen",
             type: "uint64",
           },
           {
@@ -591,7 +617,7 @@ export default [
   },
   {
     inputs: [],
-    name: "reIterationBlock",
+    name: "reIterationCooldown",
     outputs: [
       {
         internalType: "uint256",
@@ -622,7 +648,7 @@ export default [
   },
   {
     inputs: [],
-    name: "refundBlock",
+    name: "refundCooldown",
     outputs: [
       {
         internalType: "uint256",
@@ -723,6 +749,11 @@ export default [
         type: "uint64",
       },
       {
+        internalType: "uint64",
+        name: "lastSeen",
+        type: "uint64",
+      },
+      {
         internalType: "address",
         name: "operator",
         type: "address",
@@ -774,16 +805,16 @@ export default [
     inputs: [
       {
         internalType: "uint256",
-        name: "_refundBlock",
+        name: "_refundCooldown",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "_reIterationBlock",
+        name: "_reIterationCooldown",
         type: "uint256",
       },
     ],
-    name: "updateBlocks",
+    name: "updateCooldowns",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

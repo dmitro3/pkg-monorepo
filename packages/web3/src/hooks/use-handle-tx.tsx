@@ -13,10 +13,11 @@ import {
 } from "viem";
 import { errorFactoryAbi } from "../abis";
 import { WriteContractVariables } from "wagmi/query";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSmartAccountApi } from "./use-smart-account-api";
 import { useCurrentAccount } from "./use-current-address";
 import { useBundlerClient } from "./use-bundler-client";
+import { SimpleAccountAPI } from "../smart-wallet";
 
 export interface UseHandleTxOptions {
   successMessage?: string;
@@ -29,103 +30,122 @@ export interface UseHandleTxOptions {
 interface UseHandleTxParams<
   abi extends Abi | readonly unknown[],
   functionName extends ContractFunctionName<abi, "nonpayable" | "payable">,
-  args extends ContractFunctionArgs<
-    abi,
-    "nonpayable" | "payable",
-    functionName
-  >,
-  config extends Config,
-  chainId extends config["chains"][number]["id"],
-  ///
-  allFunctionNames = ContractFunctionName<abi, "nonpayable" | "payable">,
 > {
   writeContractVariables: WriteContractVariables<
     abi,
-    functionName,
-    args,
-    config,
-    chainId,
-    allFunctionNames
+    ContractFunctionName<abi, "nonpayable" | "payable">,
+    ContractFunctionArgs<abi, "nonpayable" | "payable", functionName>,
+    Config,
+    Config["chains"][number]["id"]
   >;
   options: UseHandleTxOptions;
+  encodedTxData: `0x${string}`;
 }
+
+const getCachedSignature = async <
+  abi extends Abi | readonly unknown[],
+  functionName extends ContractFunctionName<abi, "nonpayable" | "payable">,
+>(
+  writeContractVariables: UseHandleTxParams<
+    abi,
+    functionName
+  >["writeContractVariables"],
+  encodedData: `0x${string}`,
+  accountApi?: SimpleAccountAPI,
+  isSmartWallet?: boolean
+) => {
+  if (!accountApi) return;
+  if (!isSmartWallet) return;
+
+  const userOp = await accountApi?.createSignedUserOp({
+    target: writeContractVariables.address as Address,
+    data: encodedData,
+  });
+
+  return userOp;
+};
 
 export const useHandleTx = <
   abi extends Abi | readonly unknown[],
   functionName extends ContractFunctionName<abi, "nonpayable" | "payable">,
-  args extends ContractFunctionArgs<
-    abi,
-    "nonpayable" | "payable",
-    functionName
-  >,
-  config extends Config,
-  chainId extends config["chains"][number]["id"],
-  ///
-  allFunctionNames = ContractFunctionName<abi, "nonpayable" | "payable">,
 >(
-  params: UseHandleTxParams<
-    abi,
-    functionName,
-    args,
-    config,
-    chainId,
-    allFunctionNames
-  >
+  params: UseHandleTxParams<abi, functionName>
 ) => {
-  const { writeContractVariables, options } = params;
+  const { writeContractVariables, options, encodedTxData } = params;
   const { accountApi } = useSmartAccountApi();
   const { isSmartWallet } = useCurrentAccount();
   const { client } = useBundlerClient();
+  const queryClient = useQueryClient();
 
-  const cachedUserOp = useQuery({
+  const { data: cachedUserOp, refetch: refetchCachedUserOp } = useQuery({
     queryKey: [
       "cachedSignature",
       writeContractVariables.functionName,
-      writeContractVariables.args,
-      writeContractVariables.account,
-      writeContractVariables.address,
       isSmartWallet,
+      encodedTxData,
     ],
-    queryFn: async () => {
-      if (!isSmartWallet) return;
-      const encodedData = encodeFunctionData<abi, functionName>({
-        abi: writeContractVariables.abi,
-        functionName: writeContractVariables.functionName,
-        args: writeContractVariables.args,
-      } as EncodeFunctionDataParameters<abi, functionName>);
-
-      const userOp = await accountApi?.createSignedUserOp({
-        target: writeContractVariables.address as Address,
-        data: encodedData,
-      });
-      return userOp;
-    },
-    enabled:
-      !!accountApi ||
-      !!writeContractVariables.address ||
-      !!writeContractVariables.args ||
-      !!writeContractVariables.functionName ||
-      !!isSmartWallet,
-
-    refetchInterval: 10000,
+    queryFn: () =>
+      getCachedSignature(
+        writeContractVariables,
+        encodedTxData,
+        accountApi,
+        isSmartWallet
+      ),
+    enabled: !!accountApi && isSmartWallet && !!encodedTxData,
+    staleTime: 10000, // Adjust stale time as needed
   });
 
-  const { writeContractAsync } = useWriteContract<config>();
+  const { writeContractAsync } = useWriteContract();
 
   const handleTxMutation = useMutation({
     mutationFn: async () => {
+      if (!client) return;
+
+      let userOp = cachedUserOp;
+
       if (isSmartWallet) {
-        if (!cachedUserOp.data) throw new Error("No cached signature");
-        if (!client) return;
-        const { status } = await client.request("sendUserOperation", {
-          ...cachedUserOp.data,
+        if (!userOp) {
+          userOp = await getCachedSignature(
+            writeContractVariables,
+            encodedTxData,
+            accountApi,
+            isSmartWallet
+          );
+        }
+
+        if (!userOp) {
+          throw new Error("No cached signature found");
+        }
+
+        const { status, hash } = await client.request("sendUserOperation", {
+          sender: userOp.sender,
+          nonce: userOp.nonce.toString(),
+          factory: userOp.factory,
+          factoryData: userOp.factoryData,
+          callData: userOp.callData,
+          callGasLimit: userOp.callGasLimit.toString(),
+          verificationGasLimit: userOp.verificationGasLimit.toString(),
+          preVerificationGas: userOp.preVerificationGas.toString(),
+          maxFeePerGas: userOp.maxFeePerGas.toString(),
+          maxPriorityFeePerGas: userOp.maxPriorityFeePerGas.toString(),
+          paymaster: userOp.paymaster,
+          paymasterVerificationGasLimit: userOp.paymasterVerificationGasLimit
+            ? userOp.paymasterVerificationGasLimit.toString()
+            : "",
+          paymasterPostOpGasLimit: userOp.paymasterPostOpGasLimit
+            ? userOp.paymasterPostOpGasLimit.toString()
+            : "",
+          paymasterData: userOp.paymasterData,
+          signature: userOp.signature,
         });
 
         if (status !== "success") {
           throw new Error(status);
         }
+
+        return { status, hash };
       } else {
-        return await writeContractAsync<abi, functionName, args, chainId>({
+        return await writeContractAsync({
           abi: writeContractVariables.abi,
           address: writeContractVariables.address,
           functionName: writeContractVariables.functionName,
@@ -136,8 +156,31 @@ export const useHandleTx = <
           dataSuffix: writeContractVariables.dataSuffix,
           value: writeContractVariables.value,
           __mode: writeContractVariables.__mode,
-        } as WriteContractVariables<abi, functionName, args, config, chainId>);
+        } as WriteContractVariables<
+          Abi,
+          string,
+          readonly unknown[],
+          Config,
+          Config["chains"][number]["id"]
+        >);
       }
+    },
+    onSuccess: (data) => {
+      if (options.successCb) {
+        options.successCb();
+      }
+      if (options.successMessage) {
+        // Display success message
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["cachedSignature"],
+      }); // Invalidate the cached signature after successful transaction
+    },
+    onError: (error) => {
+      if (options.errorCb) {
+        options.errorCb(error);
+      }
+      // Handle error (display error message)
     },
   });
 

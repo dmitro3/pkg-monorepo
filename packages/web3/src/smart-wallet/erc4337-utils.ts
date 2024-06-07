@@ -55,18 +55,18 @@ export type NotPromise<T> = {
 
 export interface UserOperation {
   sender: Address;
-  nonce: bigint;
+  nonce: string;
   factory?: Address;
   factoryData?: Hex;
   callData: Hex;
-  callGasLimit: bigint;
-  verificationGasLimit: bigint;
-  preVerificationGas: bigint;
+  callGasLimit: string;
+  verificationGasLimit: string;
+  preVerificationGas: string;
   maxFeePerGas: any;
   maxPriorityFeePerGas: any;
   paymaster?: Address;
-  paymasterVerificationGasLimit?: bigint;
-  paymasterPostOpGasLimit?: bigint;
+  paymasterVerificationGasLimit?: string;
+  paymasterPostOpGasLimit?: string;
   paymasterData?: Hex;
   signature: Hex;
 }
