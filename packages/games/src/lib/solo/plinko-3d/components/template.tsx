@@ -56,7 +56,7 @@ export function PlinkoGame({ ...props }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmit)}>
-        <UnityGameContainer className="flex overflow-hidden rounded-xl border border-zinc-800 max-lg:flex-col-reverse lg:h-[640px]">
+        <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[640px]">
           <Plinko3d.Game>
             <Plinko3d.BetController
               count={count}
@@ -72,7 +72,7 @@ export function PlinkoGame({ ...props }) {
               status={status}
               setStatus={setStatus}
             />
-            <div className="absolute top-0 z-10 h-full w-full" />
+            <div className="wr-absolute wr-top-0 wr-z-10 wr-h-full wr-w-full" />
           </Plinko3d.Game>
         </UnityGameContainer>
       </form>

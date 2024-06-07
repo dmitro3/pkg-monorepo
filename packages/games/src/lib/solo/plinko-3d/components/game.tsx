@@ -1,5 +1,6 @@
 import React from "react";
 import { useGameSkip } from "../../../game-provider";
+import usePlinkoGameStore from "../../plinko/store";
 
 export type Plinko3dGameProps = React.ComponentProps<"div"> & {
   gameResults: PlinkoGameResult[];
