@@ -7,6 +7,8 @@ import { Unity } from "react-unity-webgl";
 import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
 import { toFormatted } from "../../../utils/web3";
 import { Plinko3dForm } from "../types";
+import usePlinkoLastBetsStore from "../store";
+import { useUnityPlinko } from "../hooks/use-unity-plinko";
 
 const UnityScoreEvent = "Score";
 
@@ -33,7 +35,7 @@ export const PlinkoScene = ({
     handleSpawnBalls,
     unityProvider,
     loadingProgression,
-  } = useUnityPlinko();
+  } = useUnityPlinko({ buildedGameUrl: "ads" });
 
   const { unityEvent } = useListenUnityEvent();
 

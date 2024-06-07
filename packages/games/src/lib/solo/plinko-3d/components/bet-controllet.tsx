@@ -19,8 +19,8 @@ import { Button } from "../../../ui/button";
 import { FormLabel } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { toDecimals } from "../../../utils/web3";
-import PlinkoRow from "./plinko-row";
 import { Plinko3dForm } from "../types";
+import PlinkoRow from "./plinko-row";
 
 type Props = {
   minWager: number;
