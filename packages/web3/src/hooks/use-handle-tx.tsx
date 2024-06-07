@@ -1,17 +1,7 @@
 "use client";
 
-import { Config, useAccount, useConfig, useWriteContract } from "wagmi";
-import React, { useState } from "react";
-import {
-  Abi,
-  Address,
-  ContractFunctionArgs,
-  ContractFunctionName,
-  EncodeFunctionDataParameters,
-  decodeErrorResult,
-  encodeFunctionData,
-} from "viem";
-import { errorFactoryAbi } from "../abis";
+import { Config, useWriteContract } from "wagmi";
+import { Abi, Address, ContractFunctionArgs, ContractFunctionName } from "viem";
 import { WriteContractVariables } from "wagmi/query";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSmartAccountApi } from "./use-smart-account-api";
@@ -77,7 +67,7 @@ export const useHandleTx = <
   const { client } = useBundlerClient();
   const queryClient = useQueryClient();
 
-  const { data: cachedUserOp, refetch: refetchCachedUserOp } = useQuery({
+  const { data: cachedUserOp } = useQuery({
     queryKey: [
       "cachedSignature",
       writeContractVariables.functionName,
@@ -169,18 +159,15 @@ export const useHandleTx = <
       if (options.successCb) {
         options.successCb();
       }
-      if (options.successMessage) {
-        // Display success message
-      }
+
       queryClient.invalidateQueries({
         queryKey: ["cachedSignature"],
-      }); // Invalidate the cached signature after successful transaction
+      });
     },
     onError: (error) => {
       if (options.errorCb) {
         options.errorCb(error);
       }
-      // Handle error (display error message)
     },
   });
 
