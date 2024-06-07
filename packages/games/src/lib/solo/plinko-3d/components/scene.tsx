@@ -25,8 +25,6 @@ export const PlinkoScene = ({
     React.SetStateAction<"idle" | "playing" | "success">
   >;
 }) => {
-  // const { useListenUnityEvent }
-
   const form = useFormContext() as Plinko3dForm;
 
   const {
