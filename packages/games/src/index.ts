@@ -24,4 +24,6 @@ export * from "./lib/solo/single-blackjack";
 export * from "./lib/utils/number";
 export * from "./lib/utils/web3";
 
+export * from "./lib/solo/coin-flip-3d";
+
 export * from "./lib/solo/roulette";
