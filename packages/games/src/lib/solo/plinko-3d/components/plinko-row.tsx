@@ -1,6 +1,5 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
 import * as Slider from "@radix-ui/react-slider";
+import { useFormContext } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -10,9 +9,10 @@ import {
 } from "../../../ui/form";
 import { NumberInput } from "../../../ui/number-input";
 import { cn } from "../../../utils/style";
+import { Plinko3dForm } from "../types";
 
 const PlinkoRow = () => {
-  const form = useFormContext() as PlinkoForm;
+  const form = useFormContext() as Plinko3dForm;
 
   return (
     <FormField
@@ -39,7 +39,7 @@ const PlinkoRow = () => {
                     min={6}
                     value={[form.getValues("plinkoSize")]}
                     max={12}
-                    onValueChange={(e) => {
+                    onValueChange={(e: any) => {
                       form.setValue("plinkoSize", e[0], {
                         shouldValidate: true,
                       });

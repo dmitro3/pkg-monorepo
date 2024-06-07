@@ -21,6 +21,7 @@ import { cn } from "../../../utils/style";
 import { toDecimals } from "../../../utils/web3";
 import { Plinko3dForm } from "../types";
 import PlinkoRow from "./plinko-row";
+import { rowMultipliers } from "../constants";
 
 type Props = {
   minWager: number;
@@ -44,7 +45,7 @@ export const BetController: React.FC<Props> = ({
   const rowSize = form.watch("plinkoSize");
 
   const maxPayout = React.useMemo(() => {
-    const maxMultiplier = isNaN(rowMultipliers?.[rowSize]?.[0])
+    const maxMultiplier = isNaN(rowMultipliers?.[rowSize]?.[0] || 0)
       ? 0
       : rowMultipliers?.[rowSize]?.[0];
 

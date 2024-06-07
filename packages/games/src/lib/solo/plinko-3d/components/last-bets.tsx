@@ -1,4 +1,6 @@
 import { LastBetsContainer } from "../../../common/last-bets-container";
+import { cn } from "../../../utils/style";
+import usePlinkoLastBetsStore from "../store";
 
 export const Plinko3dLastBets = () => {
   const { lastBets } = usePlinkoLastBetsStore(["lastBets"]);
