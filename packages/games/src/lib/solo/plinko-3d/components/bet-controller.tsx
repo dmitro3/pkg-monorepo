@@ -53,9 +53,9 @@ export const BetController: React.FC<Props> = ({
   }, [betCount, wager, rowSize]);
 
   return (
-    <UnityBetControllerContainer className="no-scrollbar relative z-[20] flex h-full max-h-full w-full flex-col justify-between overflow-auto lg:absolute lg:left-0 lg:top-0 lg:w-[264px]">
-      <div className="max-lg:flex max-lg:flex-col">
-        <div className="mb-6 max-lg:hidden">
+    <UnityBetControllerContainer className="wr-no-scrollbar wr-relative wr-z-[20] wr-flex wr-h-full wr-max-h-full wr-w-full wr-flex-col wr-justify-between wr-overflow-auto lg:wr-absolute lg:wr-left-0 lg:wr-top-0 lg:wr-w-[264px]">
+      <div className="max-lg:wr-flex max-lg:wr-flex-col">
+        <div className="wr-mb-6 max-lg:wr-hidden">
           <BetControllerTitle>
             <img
               src={"/images/games/plinko/plinko.png"}
@@ -67,11 +67,11 @@ export const BetController: React.FC<Props> = ({
         </div>
 
         <UnityWagerFormField minWager={minWager} maxWager={maxWager} />
-        <div className="relative">
+        <div className="wr-relative">
           <UnityBetCountFormField>(1 - 100)</UnityBetCountFormField>
           <Slider.Root
             className={cn(
-              "absolute left-0 top-[65px] flex w-full touch-none select-none items-center px-1.5"
+              "wr-absolute wr-left-0 wr-top-[65px] wr-flex wr-w-full wr-touch-none wr-select-none wr-items-center wr-px-1.5"
             )}
             min={1}
             value={[form.getValues("betCount")]}
@@ -80,52 +80,54 @@ export const BetController: React.FC<Props> = ({
               form.setValue("betCount", e[0], { shouldValidate: true });
             }}
           >
-            <Slider.Track className="relative h-1 w-full grow cursor-pointer overflow-hidden rounded-full  bg-zinc-600">
-              <Slider.Range className="absolute h-full bg-sky-400" />
+            <Slider.Track className="wr-relative wr-h-1 wr-w-full wr-grow wr-cursor-pointer wr-overflow-hidden wr-rounded-full  wr-bg-zinc-600">
+              <Slider.Range className="wr-absolute wr-h-full wr-bg-sky-400" />
             </Slider.Track>
-            <Slider.Thumb className="border-primary ring-offset-background focus-visible:ring-ring flex  h-4 w-4 cursor-pointer items-center justify-center rounded-full border-2 bg-white text-[12px] font-medium text-zinc-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50" />
+            <Slider.Thumb className="wr-border-primary wr-ring-offset-background focus-visible:wr-ring-ring wr-flex  wr-h-4 wr-w-4 wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-border-2 wr-bg-white wr-text-[12px] wr-font-medium wr-text-zinc-900 wr-transition-colors focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-pointer-events-none disabled:wr-opacity-50" />
           </Slider.Root>
         </div>
 
         <PlinkoRow />
-        <div className="mb-6 grid grid-cols-2 gap-2">
+        <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
           <div>
-            <FormLabel className="text-unity-white-50">Max Payout</FormLabel>
+            <FormLabel className="wr-text-unity-white-50">Max Payout</FormLabel>
             <div
               className={cn(
-                "flex w-full items-center gap-1 rounded-lg bg-zinc-800 px-2 py-[10px] ",
-                "border border-solid border-unity-white-15 bg-unity-white-15 backdrop-blur-md"
+                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] ",
+                "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("font-semibold text-zinc-100")}>
+              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
                 ${maxPayout}
               </span>
             </div>
           </div>
           <div>
-            <FormLabel className="text-unity-white-50">Total Wager</FormLabel>
+            <FormLabel className="wr-text-unity-white-50">
+              Total Wager
+            </FormLabel>
             <TotalWager
               betCount={form.getValues().betCount}
               wager={form.getValues().wager}
-              containerClassName="border border-solid border-unity-white-15 bg-unity-white-15 backdrop-blur-md"
+              containerClassName="wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
             />
           </div>
         </div>
 
         <div>
           <Advanced>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="wr-grid wr-grid-cols-2 wr-gap-2">
               <StopGainFormField
-                labelClassName="text-unity-white-50"
+                labelClassName="wr-text-unity-white-50"
                 inputContainerClassName={cn(
-                  "border border-solid border-unity-white-15 bg-unity-white-15 backdrop-blur-md"
+                  "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
                 )}
               />
               <StopLossFormField
-                labelClassName="text-unity-white-50"
+                labelClassName="wr-text-unity-white-50"
                 inputContainerClassName={cn(
-                  "border border-solid border-unity-white-15 bg-unity-white-15 backdrop-blur-md"
+                  "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
                 )}
               />
             </div>
@@ -135,7 +137,7 @@ export const BetController: React.FC<Props> = ({
           <Button
             type="submit"
             variant="plinko"
-            className="w-full !rounded-none max-lg:-order-2 max-lg:mb-3.5"
+            className="wr-w-full !wr-rounded-none max-lg:-wr-order-2 max-lg:wr-mb-3.5"
             size={"xl"}
             disabled={
               !form.formState.isValid ||
@@ -150,7 +152,7 @@ export const BetController: React.FC<Props> = ({
           </Button>
         </PreBetButton>
       </div>
-      <footer className="mt-auto flex items-center justify-between">
+      <footer className="wr-mt-auto wr-flex wr-items-center wr-justify-between">
         <UnityAudioController />
       </footer>
     </UnityBetControllerContainer>
