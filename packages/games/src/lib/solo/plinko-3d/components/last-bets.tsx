@@ -7,7 +7,7 @@ export const Plinko3dLastBets = () => {
 
   return (
     <LastBetsContainer
-      className="absolute right-5 top-5 flex-col"
+      className="wr-absolute wr-right-5 wr-top-5 wr-flex-col"
       dir="vertical"
     >
       {lastBets?.map((result, index) => {
@@ -15,17 +15,17 @@ export const Plinko3dLastBets = () => {
           <div
             key={index}
             className={cn(
-              "flex h-7 w-[53px] flex-shrink-0 items-center justify-center rounded-[1000px] bg-zinc-700 font-semibold text-zinc-100",
+              "wr-flex wr-h-7 wr-w-[53px] wr-flex-shrink-0 wr-items-center wr-justify-center wr-rounded-[1000px] wr-bg-zinc-700 wr-font-semibold wr-text-zinc-100",
               {
-                "bg-green-500": Number(result.multiplier) > 1,
-                "bg-sky-500":
+                "wr-bg-green-500": Number(result.multiplier) > 1,
+                "wr-bg-sky-500":
                   Number(result.multiplier) > 0.4 &&
                   Number(result.multiplier) < 1,
-                "bg-pink-500": Number(result.multiplier) === 0.4,
+                "wr-bg-pink-500": Number(result.multiplier) === 0.4,
               }
             )}
           >
-            <div className="text-zinc-100">X{result.multiplier}</div>
+            <div className="wr-text-zinc-100">X{result.multiplier}</div>
           </div>
         );
       })}

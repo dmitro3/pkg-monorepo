@@ -1,4 +1,4 @@
-import { BetController } from "./components/bet-controllet";
+import { BetController } from "./components/bet-controller";
 import { Plinko3dGame } from "./components/game";
 import { Plinko3dLastBets } from "./components/last-bets";
 import { PlinkoScene } from "./components/scene";

@@ -19,22 +19,22 @@ const PlinkoRow = () => {
       control={form.control}
       name="plinkoSize"
       render={({ field }) => (
-        <FormItem className="mt-3">
-          <FormLabel className="text-unity-white-50">Plinko Row</FormLabel>
+        <FormItem className="wr-mt-3">
+          <FormLabel className="wr-text-unity-white-50">Plinko Row</FormLabel>
 
           <FormControl>
             <>
               <NumberInput.Root minValue={6} maxValue={12} {...field}>
                 <NumberInput.Container
                   className={cn(
-                    "relative border border-solid  border-unity-white-15 bg-unity-white-15 px-2 py-[10px] backdrop-blur-md "
+                    "wr-relative wr-border wr-border-solid  wr-border-unity-white-15 wr-bg-unity-white-15 wr-px-2 wr-py-[10px] wr-backdrop-blur-md "
                   )}
                 >
                   <NumberInput.Input className={cn()} />
 
                   <Slider.Root
                     className={cn(
-                      "absolute bottom-0 left-0 -mt-8 flex w-full touch-none select-none items-center px-1.5"
+                      "wr-absolute wr-bottom-0 wr-left-0 -wr-mt-8 wr-flex wr-w-full wr-touch-none wr-select-none wr-items-center wr-px-1.5"
                     )}
                     min={6}
                     value={[form.getValues("plinkoSize")]}
@@ -45,10 +45,10 @@ const PlinkoRow = () => {
                       });
                     }}
                   >
-                    <Slider.Track className="relative h-1 w-full grow cursor-pointer overflow-hidden rounded-full  bg-zinc-600">
-                      <Slider.Range className="absolute h-full bg-sky-400" />
+                    <Slider.Track className="wr-relative wr-h-1 wr-w-full wr-grow wr-cursor-pointer wr-overflow-hidden wr-rounded-full  wr-bg-zinc-600">
+                      <Slider.Range className="wr-absolute wr-h-full wr-bg-sky-400" />
                     </Slider.Track>
-                    <Slider.Thumb className="border-primary ring-offset-background focus-visible:ring-ring flex  h-4 w-4 cursor-pointer items-center justify-center rounded-full border-2 bg-white text-[12px] font-medium text-zinc-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50" />
+                    <Slider.Thumb className="wr-border-primary wr-ring-offset-background focus-visible:wr-ring-ring wr-flex  wr-h-4 wr-w-4 wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-border-2 wr-bg-white wr-text-[12px] wr-font-medium wr-text-zinc-900 wr-transition-colors focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-pointer-events-none disabled:wr-opacity-50" />
                   </Slider.Root>
                 </NumberInput.Container>
               </NumberInput.Root>
