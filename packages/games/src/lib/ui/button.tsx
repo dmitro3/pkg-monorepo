@@ -5,6 +5,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Spinner } from "./spinner";
 import { cn } from "../utils/style";
+import { CDN_URL } from "../constants";
 
 const buttonVariants = cva(
   "focus-visible:wr-ring-ring wr-inline-flex wr-h-2 wr-items-center wr-justify-center wr-rounded-md wr-px-3 wr-py-0 wr-text-[15px] wr-font-semibold wr-leading-4 wr-transition wr-duration-300 wr-ease-out hover:wr-ease-in focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-pointer-events-none disabled:wr-cursor-not-allowed",
@@ -29,8 +30,7 @@ const buttonVariants = cva(
           "wr-bg-horse-race-bet-button-bg bg-[size:wr-100%] wr-bg-no-repeat wr-font-barlowCondensed wr-text-[22px] wr-font-[900] wr-uppercase wr-italic wr-leading-8 wr-tracking-wider wr-transition-all wr-duration-300 [text-shadow:wr-_0px_2px_0px_#054352] hover:wr-scale-110 hover:wr-ease-in disabled:wr-bg-horse-race-bet-button-bg-disabled md:wr-bg-contain",
         crash:
           "bg-[#5B6CFF] transition-all duration-300 hover:bg-[#3C4DE1] disabled:bg-zinc-700",
-        plinko:
-          "!wr-rounded-none wr-bg-plinko-button bg-[size:wr-100%] wr-bg-no-repeat wr-font-furore wr-text-2xl wr-leading-6 wr-transition-all wr-duration-300 [text-shadow:wr-_0px_2px_0px_#054352] [box-shadow:wr-0px_2.7px_0px_0px_#004265] hover:wr-scale-110 hover:wr-ease-in disabled:wr-bg-plinko-button-disabled lg:wr-bg-contain",
+        plinko: `!wr-rounded-none wr-bg-[url(/plinko/plinko-button.png)] bg-[size:wr-100%] wr-bg-no-repeat wr-font-furore wr-text-2xl wr-leading-6 wr-transition-all wr-duration-300 [text-shadow:wr-_0px_2px_0px_#054352] [box-shadow:wr-0px_2.7px_0px_0px_#004265] hover:wr-scale-110 hover:wr-ease-in disabled:wr-bg-[url(/plinko/plinko-button-disabled.png)] lg:wr-bg-contain`,
       },
       size: {
         sm: "wr-h-7 wr-rounded-sm",

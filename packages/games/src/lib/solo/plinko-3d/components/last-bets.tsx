@@ -7,7 +7,7 @@ export const Plinko3dLastBets = () => {
 
   return (
     <LastBetsContainer
-      className="wr-absolute wr-right-5 wr-top-5 wr-flex-col"
+      className="wr-absolute wr-right-5 wr-left-[unset] wr-top-5 wr-flex-col wr-max-w-[unset] "
       dir="vertical"
     >
       {lastBets?.map((result, index) => {

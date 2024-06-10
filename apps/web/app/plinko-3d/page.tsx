@@ -12,7 +12,10 @@ const Plinko3d = () => {
         buildedGameUrl={process.env.NEXT_PUBLIC_BASE_CDN_URL || ""}
         options={{
           scene: {
-            backgroundImage: "url(/plinko.png)",
+            loader: "/plinko-3d/loader.png",
+          },
+          betController: {
+            logo: "/plinko-3d/plinko.png",
           },
         }}
         onSubmitGameForm={(data) => {

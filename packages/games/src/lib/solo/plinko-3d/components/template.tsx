@@ -2,11 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Plinko3d, Plinko3dFormFields } from "..";
 import { UnityGameContainer } from "../../../common/containers";
 import { Plinko3dGameProps } from "./game";
+import { Form } from "../../../ui/form";
 
 const MIN_BET_COUNT = 1 as const;
 
@@ -14,7 +15,10 @@ const MAX_BET_COUNT = 100 as const;
 
 type TemplateOptions = {
   scene?: {
-    backgroundImage?: string;
+    loader: string;
+  };
+  betController: {
+    logo: string;
   };
 };
 
@@ -67,15 +71,20 @@ export function PlinkoGame({ ...props }: TemplateProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
-        <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[640px]">
+        <UnityGameContainer className="wr-flex wr-overflow-hidden wr-relative  wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[640px]">
           <Plinko3d.Game {...props}>
             <Plinko3d.BetController
               count={count}
               maxWager={props?.maxWager || 10}
               minWager={props?.minWager || 2}
+              logo={props.options.betController.logo}
             />
-            {/* <Plinko3d.LastBets /> */}
-            {/* <Plinko3d.Scene {...props} count={count} setCount={setCount} /> */}
+            <Plinko3d.Scene
+              {...props}
+              loader={props.options.scene?.loader}
+              count={count}
+              setCount={setCount}
+            />
             <div className="wr-absolute wr-top-0 wr-z-10 wr-h-full wr-w-full" />
           </Plinko3d.Game>
         </UnityGameContainer>

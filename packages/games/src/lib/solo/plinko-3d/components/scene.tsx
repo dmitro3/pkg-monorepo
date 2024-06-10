@@ -10,6 +10,7 @@ import { useUnityPlinko } from "../hooks/use-unity-plinko";
 import usePlinko3dGameStore from "../store";
 import { Plinko3dForm } from "../types";
 import { Plinko3dGameProps } from "./game";
+import { Plinko3d } from "..";
 
 const UnityScoreEvent = "Score";
 
@@ -17,6 +18,7 @@ type PlinkoSceneProps = Plinko3dGameProps & {
   count: number;
   setCount: React.Dispatch<React.SetStateAction<number>>;
   buildedGameUrl: string;
+  loader?: string;
 };
 
 export const PlinkoScene = ({
@@ -25,12 +27,11 @@ export const PlinkoScene = ({
   buildedGameUrl,
   onAnimationStep,
   onAnimationCompleted,
+  loader,
 }: PlinkoSceneProps) => {
   const form = useFormContext() as Plinko3dForm;
 
   const percentageRef = React.useRef(0);
-
-  const { unityEvent } = useListenUnityEvent();
 
   const plinkoSize = form.watch("plinkoSize");
 
@@ -46,42 +47,34 @@ export const PlinkoScene = ({
     "updatePlinkoGameResults",
   ]);
 
-  // const {
-  //   detachAndUnloadImmediate,
-  //   handlePlinkoSize,
-  //   handleSpawnBalls,
-  //   unityProvider,
-  //   loadingProgression,
-  // } = useUnityPlinko({ buildedGameUrl });
+  const {
+    detachAndUnloadImmediate,
+    handlePlinkoSize,
+    handleSpawnBalls,
+    unityProvider,
+    loadingProgression,
+  } = useUnityPlinko({ buildedGameUrl });
+
+  const { unityEvent } = useListenUnityEvent();
 
   React.useEffect(() => {
     if (plinkoSize >= 6 && plinkoSize <= 12) {
       setTimeout(() => {
-        // handlePlinkoSize(plinkoSize);
+        handlePlinkoSize(plinkoSize);
       }, 300);
     }
   }, [plinkoSize]);
 
   React.useEffect(() => {
-    if (!gameResults) return;
+    if (!gameResults || gameResults.length === 0) return;
 
-    // handleSpawnBalls(gameResults as any);
+    const setGameResult = gameResults.map((result) => result.outcomes);
+
+    handleSpawnBalls(setGameResult);
   }, [gameResults]);
 
   React.useEffect(() => {
-    if (!gameResults) return;
-
-    const currentResult = gameResults?.[count];
-
-    const currentPayout = gameResults?.[count]?.payoutInUsd || 0;
-
-    const currentWagerPerGame =
-      gameResults?.[count]?.outcomes.reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        0
-      ) || 0;
-
-    const isWon = currentPayout > currentWagerPerGame;
+    if (!gameResults || gameResults.length === 0) return;
 
     onAnimationStep && onAnimationStep(count);
 
@@ -98,6 +91,8 @@ export const PlinkoScene = ({
   }, [unityEvent]);
 
   React.useEffect(() => {
+    if (!gameResults || gameResults.length === 0) return;
+
     if (count === gameResults?.length) {
       updatePlinkoGameResults([]);
 
@@ -113,22 +108,22 @@ export const PlinkoScene = ({
     }
   }, [count, gameResults]);
 
-  // React.useEffect(() => {
-  //   return () => {
-  //     detachAndUnloadImmediate();
-  //   };
-  // }, [detachAndUnloadImmediate]);
+  React.useEffect(() => {
+    return () => {
+      detachAndUnloadImmediate();
+    };
+  }, [detachAndUnloadImmediate]);
 
-  // React.useEffect(() => {
-  //   percentageRef.current = loadingProgression * 100;
-  // }, [loadingProgression]);
+  React.useEffect(() => {
+    percentageRef.current = loadingProgression * 100;
+  }, [loadingProgression]);
 
   return (
     <>
       {percentageRef.current !== 100 && (
         <div className="wr-absolute wr-left-0 wr-top-0 wr-z-[100] wr-flex wr-h-full wr-w-full wr-flex-col wr-items-center wr-justify-center wr-gap-4  wr-bg-zinc-900">
           <img
-            src={"/images/games/plinko/loader.png"}
+            src={loader}
             alt="loader"
             className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-h-full wr-w-full wr-rounded-md"
           />
@@ -166,11 +161,12 @@ export const PlinkoScene = ({
         </div>
       )}
       <div className="wr-w-full max-lg:wr-border-b  max-lg:wr-border-zinc-800 ">
-        {/* <Unity
+        <Unity
           unityProvider={unityProvider}
           devicePixelRatio={devicePixelRatio}
           className="wr-h-full wr-w-full wr-rounded-t-md wr-bg-zinc-900 max-md:wr-h-[360px] lg:wr-rounded-md"
-        /> */}
+        />
+        <Plinko3d.LastBets />
       </div>
     </>
   );
