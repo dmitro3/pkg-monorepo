@@ -46,18 +46,18 @@ export const PlinkoScene = ({
     "updatePlinkoGameResults",
   ]);
 
-  const {
-    detachAndUnloadImmediate,
-    handlePlinkoSize,
-    handleSpawnBalls,
-    unityProvider,
-    loadingProgression,
-  } = useUnityPlinko({ buildedGameUrl });
+  // const {
+  //   detachAndUnloadImmediate,
+  //   handlePlinkoSize,
+  //   handleSpawnBalls,
+  //   unityProvider,
+  //   loadingProgression,
+  // } = useUnityPlinko({ buildedGameUrl });
 
   React.useEffect(() => {
     if (plinkoSize >= 6 && plinkoSize <= 12) {
       setTimeout(() => {
-        handlePlinkoSize(plinkoSize);
+        // handlePlinkoSize(plinkoSize);
       }, 300);
     }
   }, [plinkoSize]);
@@ -65,7 +65,7 @@ export const PlinkoScene = ({
   React.useEffect(() => {
     if (!gameResults) return;
 
-    handleSpawnBalls(gameResults as any);
+    // handleSpawnBalls(gameResults as any);
   }, [gameResults]);
 
   React.useEffect(() => {
@@ -113,15 +113,15 @@ export const PlinkoScene = ({
     }
   }, [count, gameResults]);
 
-  React.useEffect(() => {
-    return () => {
-      detachAndUnloadImmediate();
-    };
-  }, [detachAndUnloadImmediate]);
+  // React.useEffect(() => {
+  //   return () => {
+  //     detachAndUnloadImmediate();
+  //   };
+  // }, [detachAndUnloadImmediate]);
 
-  React.useEffect(() => {
-    percentageRef.current = loadingProgression * 100;
-  }, [loadingProgression]);
+  // React.useEffect(() => {
+  //   percentageRef.current = loadingProgression * 100;
+  // }, [loadingProgression]);
 
   return (
     <>
@@ -166,11 +166,11 @@ export const PlinkoScene = ({
         </div>
       )}
       <div className="wr-w-full max-lg:wr-border-b  max-lg:wr-border-zinc-800 ">
-        <Unity
+        {/* <Unity
           unityProvider={unityProvider}
           devicePixelRatio={devicePixelRatio}
           className="wr-h-full wr-w-full wr-rounded-t-md wr-bg-zinc-900 max-md:wr-h-[360px] lg:wr-rounded-md"
-        />
+        /> */}
       </div>
     </>
   );

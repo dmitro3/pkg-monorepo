@@ -74,8 +74,8 @@ export function PlinkoGame({ ...props }: TemplateProps) {
               maxWager={props?.maxWager || 10}
               minWager={props?.minWager || 2}
             />
-            <Plinko3d.LastBets />
-            <Plinko3d.Scene {...props} count={count} setCount={setCount} />
+            {/* <Plinko3d.LastBets /> */}
+            {/* <Plinko3d.Scene {...props} count={count} setCount={setCount} /> */}
             <div className="wr-absolute wr-top-0 wr-z-10 wr-h-full wr-w-full" />
           </Plinko3d.Game>
         </UnityGameContainer>
