@@ -1,8 +1,7 @@
 import { SmartWalletConnectors } from "@winrlabs/web3";
 import { defineChain } from "viem";
 import { http, createConfig, Config } from "wagmi";
-import { arbitrumSepolia } from "wagmi/chains";
-import { coinbaseWallet, injected, metaMask } from "wagmi/connectors";
+import { coinbaseWallet, injected } from "wagmi/connectors";
 
 const winrChain = defineChain({
   id: 777777,
@@ -67,7 +66,7 @@ export const config = createConfig({
   chains: [winrChain],
   connectors: [
     injected({
-      shimDisconnect: true,
+      shimDisconnect: false,
     }),
 
     coinbaseWallet({ appName: "Create Wagmi" }),

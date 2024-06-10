@@ -6,7 +6,7 @@ import { cn } from "../../utils";
 import { Button } from "../button";
 import { Chat } from "../chat";
 import useModalsStore from "../modals/modals.store";
-import { useCurrentAccount } from "@winrlabs/web3";
+import { delay, useCurrentAccount } from "@winrlabs/web3";
 import { useWagmiConfig } from "../../providers/wagmi-config";
 import { Spinner } from "../spinner";
 import { Skeleton } from "../skeleton";
@@ -39,9 +39,10 @@ export const Header = ({
   const modalStore = useModalsStore();
   const account = useCurrentAccount();
   const { wagmiConfig } = useWagmiConfig();
-  const { disconnect, isPending, data } = useDisconnect({
-    config: wagmiConfig,
-  });
+  const { disconnect, disconnectAsync, isPending, data, connectors } =
+    useDisconnect({
+      config: wagmiConfig,
+    });
 
   console.log("data", data);
 
@@ -69,14 +70,12 @@ export const Header = ({
               <BalanceBox />
             </div>
             <Button
-              onClick={() => {
-                const timer = setTimeout(() => {
-                  disconnect();
-
-                  account.resetCurrentAccount?.();
-                }, 100);
-
-                return () => clearTimeout(timer);
+              disabled={isPending}
+              onClick={async () => {
+                connectors.forEach(async (connector) => {
+                  await delay(100);
+                  await disconnectAsync({ connector });
+                });
               }}
               isLoading={isPending}
             >
