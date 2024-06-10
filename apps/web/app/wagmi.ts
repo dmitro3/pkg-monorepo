@@ -42,12 +42,12 @@ export const smartWalletConnectors = new SmartWalletConnectors({
   ],
   web3AuthOptions: {
     clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "",
-    web3AuthNetwork: "cyan",
+    web3AuthNetwork: (process.env.NEXT_PUBLIC_WEB3AUTH_NETWORK || "") as any,
   },
   openLoginOptions: {
     adapterSettings: {
       uxMode: "popup",
-      network: "cyan",
+      network: (process.env.NEXT_PUBLIC_WEB3AUTH_NETWORK || "") as any,
       clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "",
       whiteLabel: {
         appName: "JIB",
