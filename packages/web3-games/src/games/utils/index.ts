@@ -147,7 +147,7 @@ export type DecodedEvent<T, K> = {
 export interface PrepareGameTransactionParams {
   wager: number;
   lastPrice: number;
-  selectedCurrency: string;
+  selectedCurrency: `0x${string}`;
   stopGain?: number;
   stopLoss?: number;
 }
@@ -195,7 +195,7 @@ export const prepareGameTransaction = (
 
   const stopLossInWei = parseUnits(stopLossInGameCurrency, decimal);
 
-  const tokenAddress = selectedCurrency as Address;
+  const tokenAddress = selectedCurrency;
 
   return {
     wagerInWei,

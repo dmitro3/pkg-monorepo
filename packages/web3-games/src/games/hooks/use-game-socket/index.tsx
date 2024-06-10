@@ -6,15 +6,15 @@ import SuperJSON from "superjson";
 import { useCurrentAccount } from "@winrlabs/web3";
 import { DecodedEvent, Event } from "../../utils";
 
-interface GameSocket {
-  gameEvent: DecodedEvent<any, any> | null;
+interface GameSocket<T, K> {
+  gameEvent: DecodedEvent<T, K> | null;
 }
-const GameSocketContext = React.createContext<GameSocket>({
+const GameSocketContext = React.createContext<GameSocket<any, any>>({
   gameEvent: null,
 });
 
-export const useGameSocketContext = () => {
-  return React.useContext(GameSocketContext);
+export const useGameSocketContext = <T, K,>() => {
+  return React.useContext<GameSocket<T, K>>(GameSocketContext);
 };
 
 export const GameSocketProvider: React.FC<{

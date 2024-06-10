@@ -22,11 +22,11 @@ import {
 } from "../utils";
 import { useGameSocketContext } from "../hooks";
 
-const selectedTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS || "";
-const gameAddress = process.env.NEXT_PUBLIC_COIN_FLIP_ADDRESS || "";
-const cashierAddress = process.env.NEXT_PUBLIC_CASHIER_ADDRESS || "";
-const controllerAddress = process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS || "";
-const uiOperatorAddress = process.env.NEXT_PUBLIC_UI_OPERATOR_ADDRESS || "";
+const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS || "0x0") as `0x${string}`;
+const gameAddress = (process.env.NEXT_PUBLIC_COIN_FLIP_ADDRESS || "0x0") as `0x${string}`;
+const controllerAddress = (process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS || "0x0") as `0x${string}`;
+const cashierAddress = (process.env.NEXT_PUBLIC_CASHIER_ADDRESS || "0x0") as `0x${string}`;
+const uiOperatorAddress = (process.env.NEXT_PUBLIC_UI_OPERATOR_ADDRESS || "0x0") as `0x${string}`;
 
 export default function CoinFlipTemplateWithWeb3() {
   const [formValues, setFormValues] = useState<CoinFlipFormFields>({
@@ -37,7 +37,7 @@ export default function CoinFlipTemplateWithWeb3() {
     wager: 1,
   });
 
-  const { gameEvent } = useGameSocketContext();
+  const { gameEvent } = useGameSocketContext<any, CoinFlipSettledEvent>();
 
   const [coinFlipResult, setCoinFlipResult] =
     useState<DecodedEvent<any, CoinFlipSettledEvent>>();
@@ -47,7 +47,7 @@ export default function CoinFlipTemplateWithWeb3() {
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress as Address,
+    tokenAddress: selectedTokenAddress,
     showDefaultToasts: false,
   });
 
@@ -58,7 +58,7 @@ export default function CoinFlipTemplateWithWeb3() {
       coinSide: s.outcome,
       payout: s.payout,
       payoutInUsd: s.payout,
-    })) as CoinFlipGameResult[];
+    }));
   }, [coinFlipResult]);
 
   const encodedParams = useMemo(() => {
@@ -67,7 +67,7 @@ export default function CoinFlipTemplateWithWeb3() {
         wager: formValues.wager,
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
-        selectedCurrency: selectedTokenAddress as Address,
+        selectedCurrency: selectedTokenAddress,
         lastPrice: 1,
       });
 
@@ -159,9 +159,7 @@ export default function CoinFlipTemplateWithWeb3() {
   };
 
   React.useEffect(() => {
-    console.log(gameEvent, "gamevent");
-
-    const finalResult = gameEvent as DecodedEvent<any, CoinFlipSettledEvent>;
+    const finalResult = gameEvent;
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
       setCoinFlipResult(finalResult);
@@ -186,7 +184,7 @@ export default function CoinFlipTemplateWithWeb3() {
       onAnimationSkipped={() => {
         console.log("game skipped");
       }}
-      gameResults={coinFlipSteps}
+      gameResults={coinFlipSteps || []}
       onFormChange={(val) => {
         setFormValues(val);
       }}
