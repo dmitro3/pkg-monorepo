@@ -74,6 +74,25 @@ export interface CoinFlipSettledEvent {
   };
 }
 
+export interface LimboSettledEvent {
+  payout: bigint;
+  payback: bigint;
+  steps: {
+    win: boolean;
+    outcome: number;
+    payout: bigint;
+  }[];
+  converted: {
+    payout: number;
+    payback: number;
+    steps: {
+      win: boolean;
+      payout: number;
+      outcome: number;
+    }[];
+  };
+}
+
 export type UnitySendMessage = (
   gameObjectName: string,
   methodName: string,

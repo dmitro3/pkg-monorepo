@@ -7,6 +7,7 @@ import z from "zod";
 import { BetController } from "./bet-controller";
 import { Limbo, LimboFormField } from "..";
 import { LimboGameProps } from "./game";
+import debounce from "debounce";
 
 type TemplateOptions = {
   scene?: {
@@ -19,6 +20,7 @@ type TemplateProps = LimboGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (props: LimboFormField) => void;
+  onFormChange?: (fields: LimboFormField) => void;
 };
 
 const LimboTemplate = ({ ...props }: TemplateProps) => {
@@ -59,6 +61,16 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
   });
 
   const multiplier = form.watch("limboMultiplier");
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>
