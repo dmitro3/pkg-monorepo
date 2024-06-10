@@ -30,7 +30,7 @@ const winrChain = defineChain({
 });
 
 export const smartWalletConnectors = new SmartWalletConnectors({
-  chains: [arbitrumSepolia],
+  chains: [winrChain],
   loginProviders: [
     "google",
     "weibo",
@@ -41,16 +41,14 @@ export const smartWalletConnectors = new SmartWalletConnectors({
     "discord",
   ],
   web3AuthOptions: {
-    clientId:
-      "BOnGGGODOCSliYrz-EcFgQE2vzu-XZzkSQNuonHhDfwjzA2sufZKQ9sULLp3Of9qJPKF6NlSiTM5pWMMm3ftMqU",
-    web3AuthNetwork: "testnet",
+    clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "",
+    web3AuthNetwork: "cyan",
   },
   openLoginOptions: {
     adapterSettings: {
       uxMode: "popup",
-      network: "testnet",
-      clientId:
-        "BOnGGGODOCSliYrz-EcFgQE2vzu-XZzkSQNuonHhDfwjzA2sufZKQ9sULLp3Of9qJPKF6NlSiTM5pWMMm3ftMqU",
+      network: "cyan",
+      clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "",
       whiteLabel: {
         appName: "JIB",
         appUrl: "https://justbet-aa.vercel.app/",
@@ -77,7 +75,7 @@ export const config = createConfig({
   ],
 
   ssr: true,
-  
+
   transports: {
     [winrChain.id]: http(),
   },
