@@ -10,7 +10,7 @@ export interface Plinko3dFormFields {
 
 export type Plinko3dForm = UseFormReturn<Plinko3dFormFields, any, undefined>;
 
-export interface PlinkoGameResult {
+export interface Plinko3dGameResult {
   outcomes: number[];
   payout: number;
   payoutInUsd: number;

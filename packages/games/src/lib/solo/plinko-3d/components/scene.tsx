@@ -6,26 +6,45 @@ import { useFormContext } from "react-hook-form";
 import { Unity } from "react-unity-webgl";
 import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
 import { toFormatted } from "../../../utils/web3";
-import { Plinko3dForm } from "../types";
-import usePlinkoLastBetsStore from "../store";
 import { useUnityPlinko } from "../hooks/use-unity-plinko";
+import usePlinko3dGameStore from "../store";
+import { Plinko3dForm } from "../types";
+import { Plinko3dGameProps } from "./game";
 
 const UnityScoreEvent = "Score";
+
+type PlinkoSceneProps = Plinko3dGameProps & {
+  count: number;
+  setCount: React.Dispatch<React.SetStateAction<number>>;
+  buildedGameUrl: string;
+};
 
 export const PlinkoScene = ({
   count,
   setCount,
-  status,
-  setStatus,
-}: {
-  count: number;
-  setCount: React.Dispatch<React.SetStateAction<number>>;
-  status: "idle" | "playing" | "success";
-  setStatus: React.Dispatch<
-    React.SetStateAction<"idle" | "playing" | "success">
-  >;
-}) => {
+  buildedGameUrl,
+  onAnimationStep,
+  onAnimationCompleted,
+}: PlinkoSceneProps) => {
   const form = useFormContext() as Plinko3dForm;
+
+  const percentageRef = React.useRef(0);
+
+  const { unityEvent } = useListenUnityEvent();
+
+  const plinkoSize = form.watch("plinkoSize");
+
+  const {
+    updateGameStatus,
+    addLastBet,
+    plinkoGameResults: gameResults,
+    updatePlinkoGameResults,
+  } = usePlinko3dGameStore([
+    "updateGameStatus",
+    "addLastBet",
+    "plinkoGameResults",
+    "updatePlinkoGameResults",
+  ]);
 
   const {
     detachAndUnloadImmediate,
@@ -33,13 +52,7 @@ export const PlinkoScene = ({
     handleSpawnBalls,
     unityProvider,
     loadingProgression,
-  } = useUnityPlinko({ buildedGameUrl: "ads" });
-
-  const { unityEvent } = useListenUnityEvent();
-
-  // const { showWinAnimation } = useShowWinAnimation();
-
-  const plinkoSize = form.watch("plinkoSize");
+  } = useUnityPlinko({ buildedGameUrl });
 
   React.useEffect(() => {
     if (plinkoSize >= 6 && plinkoSize <= 12) {
@@ -49,26 +62,28 @@ export const PlinkoScene = ({
     }
   }, [plinkoSize]);
 
-  const { addLastBet } = usePlinkoLastBetsStore(["addLastBet"]);
+  React.useEffect(() => {
+    if (!gameResults) return;
+
+    handleSpawnBalls(gameResults as any);
+  }, [gameResults]);
 
   React.useEffect(() => {
-    if (!liveResult) return;
+    if (!gameResults) return;
 
-    const gameResult = liveResult?.result?.gameResult;
+    const currentResult = gameResults?.[count];
 
-    handleSpawnBalls(gameResult);
-  }, [liveResult]);
+    const currentPayout = gameResults?.[count]?.payoutInUsd || 0;
 
-  React.useEffect(() => {
-    if (!liveResult) return;
-
-    if (!liveResult?.result?.gameResult) return;
-
-    const currentPayout = liveResult?.result?.payoutsInUsd?.[count] || 0;
-
-    const currentWagerPerGame = liveResult?.result?.wagerInUsd || 0;
+    const currentWagerPerGame =
+      gameResults?.[count]?.outcomes.reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        0
+      ) || 0;
 
     const isWon = currentPayout > currentWagerPerGame;
+
+    onAnimationStep && onAnimationStep(count);
 
     if (unityEvent.name === UnityScoreEvent) {
       console.log("multiplier", unityEvent.strParam);
@@ -83,18 +98,20 @@ export const PlinkoScene = ({
   }, [unityEvent]);
 
   React.useEffect(() => {
-    if (count === liveResult?.result?.gameResult?.length) {
+    if (count === gameResults?.length) {
+      updatePlinkoGameResults([]);
+
+      onAnimationCompleted && onAnimationCompleted(gameResults);
+
       setTimeout(() => {
-        setStatus("idle");
+        updateGameStatus("ENDED");
 
         setCount(0);
 
-        updateIsFinished(true);
+        onAnimationStep && onAnimationStep(0);
       }, 500);
     }
-  }, [count, liveResult]);
-
-  const percentageRef = React.useRef(0);
+  }, [count, gameResults]);
 
   React.useEffect(() => {
     return () => {

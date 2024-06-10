@@ -19,22 +19,21 @@ import { Button } from "../../../ui/button";
 import { FormLabel } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { toDecimals } from "../../../utils/web3";
+import { rowMultipliers } from "../constants";
 import { Plinko3dForm } from "../types";
 import PlinkoRow from "./plinko-row";
-import { rowMultipliers } from "../constants";
+import usePlinko3dGameStore from "../store";
 
 type Props = {
   minWager: number;
   maxWager: number;
   count: number;
-  status: "idle" | "playing" | "success";
 };
 
 export const BetController: React.FC<Props> = ({
   minWager,
   maxWager,
   count,
-  status,
 }) => {
   const form = useFormContext() as Plinko3dForm;
 
@@ -42,12 +41,14 @@ export const BetController: React.FC<Props> = ({
 
   const betCount = form.watch("betCount");
 
+  const { gameStatus } = usePlinko3dGameStore(["gameStatus"]);
+
   const rowSize = form.watch("plinkoSize");
 
   const maxPayout = React.useMemo(() => {
     const maxMultiplier = isNaN(rowMultipliers?.[rowSize]?.[0] || 0)
       ? 0
-      : rowMultipliers?.[rowSize]?.[0];
+      : rowMultipliers?.[rowSize]?.[0] || 0;
 
     return toDecimals(wager * betCount * maxMultiplier, 2);
   }, [betCount, wager, rowSize]);
@@ -144,7 +145,7 @@ export const BetController: React.FC<Props> = ({
               form.formState.isSubmitting ||
               form.formState.isLoading ||
               count !== 0 ||
-              status !== "idle"
+              gameStatus !== "IDLE"
             }
             isLoading={form.formState.isSubmitting || form.formState.isLoading}
           >

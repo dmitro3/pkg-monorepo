@@ -1,15 +1,15 @@
 import { create } from "zustand";
 import { shallow } from "zustand/shallow";
-import { PlinkoGameResult } from "../types";
+import { Plinko3dGameResult } from "../types";
 
-interface PlinkoLastBets {
+export interface PlinkoLastBets {
   multiplier: string;
   isWon: boolean;
 }
 
 interface PlinkoLastBetsState {
   lastBets: PlinkoLastBets[];
-  plinkoGameResults: PlinkoGameResult[];
+  plinkoGameResults: Plinko3dGameResult[];
   gameStatus: "IDLE" | "PLAYING" | "ENDED";
   currentAnimationCount: number;
 }
@@ -19,7 +19,7 @@ interface PlinkoLastBetsActions {
   updateLastBets: (item: PlinkoLastBets[]) => void;
   removeLastBet: (index: number) => void;
   clearStore: () => void;
-  updatePlinkoGameResults: (item: PlinkoGameResult[]) => void;
+  updatePlinkoGameResults: (item: Plinko3dGameResult[]) => void;
   updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
   updateCurrentAnimationCount: (count: number) => void;
 }
@@ -55,9 +55,7 @@ export const plinkoLastBetsStore = create<PlinkoLastBetsStore>()((set) => ({
     set(() => ({ currentAnimationCount: count })),
 }));
 
-export const usePlinkoLastBetsStore = <T extends keyof PlinkoLastBetsStore>(
-  keys: T[]
-) =>
+const usePlinko3dGameStore = <T extends keyof PlinkoLastBetsStore>(keys: T[]) =>
   plinkoLastBetsStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];
@@ -68,4 +66,4 @@ export const usePlinkoLastBetsStore = <T extends keyof PlinkoLastBetsStore>(
     return x as Pick<PlinkoLastBetsStore, T>;
   }, shallow);
 
-export default usePlinkoLastBetsStore;
+export default usePlinko3dGameStore;

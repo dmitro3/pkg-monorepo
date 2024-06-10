@@ -1,27 +1,22 @@
 import React from "react";
-import { useGameSkip } from "../../../game-provider";
-import usePlinkoGameStore from "../../plinko/store";
+import { Plinko3dGameResult } from "../types";
+import usePlinko3dGameStore from "../store";
 
 export type Plinko3dGameProps = React.ComponentProps<"div"> & {
-  gameResults: PlinkoGameResult[];
-  onAnimationStep?: (step: number, multiplier: number) => void;
-  onAnimationCompleted?: (result: PlinkoLastBet[]) => void;
-  onAnimationSkipped?: (result: PlinkoLastBet[]) => void;
+  gameResults: Plinko3dGameResult[];
+  onAnimationStep?: (step: number) => void;
+  onAnimationCompleted?: (result: Plinko3dGameResult[]) => void;
+  onAnimationSkipped?: (result: Plinko3dGameResult[]) => void;
 };
 
-export const Plinko3dGame = ({ gameResults, children }: PlinkoGameProps) => {
-  const { updatePlinkoGameResults, updateGameStatus, gameStatus } =
-    usePlinkoGameStore([
-      "updatePlinkoGameResults",
-      "updateGameStatus",
-      "gameStatus",
-    ]);
-
-  const { updateSkipAnimation } = useGameSkip();
+export const Plinko3dGame = ({ gameResults, children }: Plinko3dGameProps) => {
+  const { updatePlinkoGameResults, updateGameStatus } = usePlinko3dGameStore([
+    "updatePlinkoGameResults",
+    "updateGameStatus",
+  ]);
 
   React.useEffect(() => {
     if (gameResults.length) {
-      updateSkipAnimation(false);
       updatePlinkoGameResults(gameResults);
       updateGameStatus("PLAYING");
     }

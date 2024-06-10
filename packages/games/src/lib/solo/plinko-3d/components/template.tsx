@@ -4,19 +4,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Form, useForm } from "react-hook-form";
 import * as z from "zod";
-import { Plinko3d } from "..";
+import { Plinko3d, Plinko3dFormFields } from "..";
 import { UnityGameContainer } from "../../../common/containers";
+import { Plinko3dGameProps } from "./game";
 
 const MIN_BET_COUNT = 1 as const;
 
 const MAX_BET_COUNT = 100 as const;
 
-export function PlinkoGame({ ...props }) {
-  const [count, setCount] = React.useState(0);
+type TemplateOptions = {
+  scene?: {
+    backgroundImage?: string;
+  };
+};
 
-  const [status, setStatus] = React.useState<"idle" | "playing" | "success">(
-    "idle"
-  );
+type TemplateProps = Plinko3dGameProps & {
+  options: TemplateOptions;
+  minWager?: number;
+  maxWager?: number;
+  buildedGameUrl: string;
+  onSubmitGameForm: (data: Plinko3dFormFields) => void;
+};
+
+export function PlinkoGame({ ...props }: TemplateProps) {
+  const [count, setCount] = React.useState(0);
 
   const formSchema = z.object({
     wager: z
@@ -55,23 +66,16 @@ export function PlinkoGame({ ...props }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmit)}>
+      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[640px]">
-          <Plinko3d.Game>
+          <Plinko3d.Game {...props}>
             <Plinko3d.BetController
               count={count}
               maxWager={props?.maxWager || 10}
               minWager={props?.minWager || 2}
-              status={status}
-              // winMultiplier={winMultiplier || 1}
             />
             <Plinko3d.LastBets />
-            <Plinko3d.Scene
-              count={count}
-              setCount={setCount}
-              status={status}
-              setStatus={setStatus}
-            />
+            <Plinko3d.Scene {...props} count={count} setCount={setCount} />
             <div className="wr-absolute wr-top-0 wr-z-10 wr-h-full wr-w-full" />
           </Plinko3d.Game>
         </UnityGameContainer>
