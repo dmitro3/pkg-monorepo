@@ -10,6 +10,7 @@ import { Rps } from "..";
 import { BetController } from "./bet-controller";
 import { RockPaperScissors, RpsFormFields } from "../types";
 import { RpsGameProps } from "./game";
+import debounce from "debounce";
 
 type TemplateOptions = {
   scene?: {
@@ -22,6 +23,7 @@ type TemplateProps = RpsGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: RpsFormFields) => void;
+  onFormChange?: (fields: RpsFormFields) => void;
 };
 
 const RpsTemplate = ({ ...props }: TemplateProps) => {
@@ -60,6 +62,16 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
       rpsChoice: RockPaperScissors.ROCK,
     },
   });
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>
