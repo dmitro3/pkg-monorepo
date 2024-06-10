@@ -91,9 +91,9 @@ export const useHandleTx = <
     mutationFn: async () => {
       if (!client) return;
 
-      let userOp = cachedUserOp;
-
       if (isSmartWallet) {
+        let userOp = cachedUserOp;
+
         if (!userOp) {
           userOp = await getCachedSignature(
             writeContractVariables,
@@ -159,10 +159,11 @@ export const useHandleTx = <
       if (options.successCb) {
         options.successCb();
       }
-
-      queryClient.invalidateQueries({
-        queryKey: ["cachedSignature"],
-      });
+      if (isSmartWallet) {
+        queryClient.invalidateQueries({
+          queryKey: ["cachedSignature"],
+        });
+      }
     },
     onError: (error) => {
       if (options.errorCb) {

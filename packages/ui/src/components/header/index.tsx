@@ -76,6 +76,7 @@ export const Header = ({
                   await delay(100);
                   await disconnectAsync({ connector });
                 });
+                localStorage.clear();
               }}
               isLoading={isPending}
             >

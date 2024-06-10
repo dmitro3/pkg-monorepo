@@ -68,7 +68,6 @@ export const config = createConfig({
     injected({
       shimDisconnect: false,
     }),
-
     coinbaseWallet({ appName: "Create Wagmi" }),
     ...smartWalletConnectors.connectors.map(({ connector }) => connector),
   ],

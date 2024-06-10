@@ -10,6 +10,7 @@ import {
   UserOperation,
 } from "../smart-wallet";
 import { useBundlerClient } from "./use-bundler-client";
+import { SmartWalletConnectorWagmiType } from "../config/smart-wallet-connectors";
 
 class Paymaster implements PaymasterAPI {
   client: JSONRPCClient;
@@ -65,7 +66,7 @@ export const SmartAccountApiProvider: React.FC<{
   entryPointAddress: `0x${string}`;
   factoryAddress: `0x${string}`;
 }> = ({ children, entryPointAddress, factoryAddress }) => {
-  const { address } = useAccount();
+  const { address, connector } = useAccount();
 
   const { client } = useBundlerClient();
 
@@ -80,6 +81,8 @@ export const SmartAccountApiProvider: React.FC<{
   React.useEffect(() => {
     const createSmartAccountApi = () => {
       if (!client || !address || !signer || !publicClient) return;
+
+      if (connector?.type !== SmartWalletConnectorWagmiType) return;
 
       const _accountApi = new SimpleAccountAPI({
         provider: publicClient,
@@ -98,7 +101,7 @@ export const SmartAccountApiProvider: React.FC<{
     };
 
     createSmartAccountApi();
-  }, [client, address, signer, publicClient]);
+  }, [client, address, signer, publicClient, connector?.type]);
 
   return (
     <SmartAccountApiContext.Provider value={{ accountApi }}>
