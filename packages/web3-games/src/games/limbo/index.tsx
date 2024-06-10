@@ -4,6 +4,7 @@ import {
   LimboFormField,
   LimboGameResult,
   LimboTemplate,
+  toDecimals,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -54,7 +55,7 @@ export default function LimboTemplateWithWeb3() {
     if (!limboResult) return [];
 
     return limboResult?.program?.[0]?.data.converted.steps.map((s) => ({
-      number: s.outcome,
+      number: toDecimals(s.outcome / 100, 2),
       payout: s.payout,
       payoutInUsd: s.payout,
     })) as LimboGameResult[];
@@ -77,7 +78,7 @@ export default function LimboTemplateWithWeb3() {
           type: "uint8",
         },
       ],
-      [Number(formValues.limboMultiplier * 100)]
+      [Number(toDecimals(formValues.limboMultiplier * 100, 2))]
     );
 
     const encodedGameData = encodeAbiParameters(
