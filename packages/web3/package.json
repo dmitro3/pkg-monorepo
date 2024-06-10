@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@turbo/gen": "^1.11.3",
+    "@types/debug": "^4.1.12",
     "@types/eslint": "^8.56.1",
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.46",
@@ -28,6 +29,7 @@
     "@winrlabs/typescript-config": "workspace:*",
     "eslint": "^8.56.0",
     "react": "^18.2.0",
+    "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3"
   },

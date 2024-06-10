@@ -4,12 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { JSONRPCClient, TypedJSONRPCClient } from "json-rpc-2.0";
 import { createContext, useContext, ReactNode } from "react";
 import { useAccount } from "wagmi";
-
-interface UseBundlerClient {
-  client?: TypedJSONRPCClient<BundlerMethods>;
-  isLoading: boolean;
-  error?: Error;
-}
+import { UserOperation } from "../smart-wallet";
+import { Hex } from "viem";
 
 const BundlerClientContext = createContext<UseBundlerClient>({
   client: undefined,
@@ -22,22 +18,17 @@ export const useBundlerClient = () => {
 };
 
 export type BundlerMethods = {
-  "accountAbstraction.address"(params: { owner: `0x${string}` }): {
-    account: `0x${string}`;
+  "preparePaymasterAndData"(params: { callData?: Hex }): {
+    paymaster: string;
+    paymasterData?: Hex;
+    paymasterVerificationGasLimit: number;
+    paymasterPostOpGasLimit: number;
   };
-  "accountAbstraction.create"(params: {
-    details: {
-      from: `0x${string}`;
-      target: `0x${string}`;
-      data: `0x${string}`;
-      value?: bigint;
-    };
-  }): any;
-  "accountAbstraction.send"(params: {
-    from: `0x${string}`;
-    signature: `0x${string}`;
-  }): any;
-  "accountAbstraction.refreshAccount"(params: { owner: `0x${string}` }): any;
+
+  "sendUserOperation"(params: Partial<UserOperation>): {
+    hash: Hex;
+    status: string;
+  };
 };
 
 interface JSONPCClientRequestParams {
@@ -45,16 +36,24 @@ interface JSONPCClientRequestParams {
   rpcUrl: string;
 }
 
+export type WinrBundlerClient = TypedJSONRPCClient<BundlerMethods>;
+
+interface UseBundlerClient {
+  client?: WinrBundlerClient;
+  isLoading: boolean;
+  error?: Error;
+}
+
 const fetchBundlerClient = async ({
   rpcUrl,
   walletAddress,
-}: JSONPCClientRequestParams): Promise<TypedJSONRPCClient<BundlerMethods>> => {
+}: JSONPCClientRequestParams): Promise<WinrBundlerClient> => {
   if (!walletAddress) {
     throw new Error("Wallet address is required");
   }
 
-  const client: TypedJSONRPCClient<BundlerMethods> | undefined =
-    new JSONRPCClient((jsonRPCRequest) =>
+  const client: WinrBundlerClient | undefined = new JSONRPCClient(
+    (jsonRPCRequest) =>
       fetch(rpcUrl, {
         method: "POST",
         headers: {
@@ -65,10 +64,15 @@ const fetchBundlerClient = async ({
       })
         .then((response) => {
           if (response.status === 200) {
-            return response
-              .json()
-              .then((jsonRPCResponse) => client?.receive(jsonRPCResponse));
+            return response.json().then((jsonRPCResponse) => {
+              return client?.receive(jsonRPCResponse);
+            });
           } else if (jsonRPCRequest.id !== undefined) {
+            console.log(
+              "Error fetching JSON-RPC response",
+              response.statusText
+            );
+
             return Promise.reject(new Error(response.statusText));
           }
         })
@@ -76,7 +80,7 @@ const fetchBundlerClient = async ({
           console.log("Error fetching JSON-RPC response", e);
           throw e;
         })
-    );
+  );
 
   return client;
 };
@@ -91,14 +95,14 @@ export const BundlerClientProvider: React.FC<{
     data: client,
     error,
     isLoading,
-  } = useQuery<TypedJSONRPCClient<BundlerMethods>>({
+  } = useQuery<WinrBundlerClient>({
     queryKey: ["bundler-client", address],
     queryFn: () =>
       fetchBundlerClient({
         rpcUrl,
         walletAddress: address,
       }),
-    enabled: !!address,
+    enabled: !!address && !!rpcUrl,
   });
 
   return (

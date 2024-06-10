@@ -396,6 +396,7 @@ const config: Omit<Config, "content"> = {
       },
     },
   },
+
   corePlugins: {
     // preflight: false,
   },

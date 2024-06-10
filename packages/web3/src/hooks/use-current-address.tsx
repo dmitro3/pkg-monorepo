@@ -1,25 +1,30 @@
 "use client";
 
 import { useAccount } from "wagmi";
-import { BundlerMethods, useBundlerClient } from "./use-bundler-client";
 import { Address } from "viem";
 import { useQuery } from "@tanstack/react-query";
-import { TypedJSONRPCClient } from "json-rpc-2.0";
 import { SmartWalletConnectorWagmiType } from "../config/smart-wallet-connectors";
-import { createContext, useContext, useMemo } from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
+import { SimpleAccountAPI } from "../smart-wallet";
+import { useSmartAccountApi } from "./use-smart-account-api";
 
 interface UseCurrentAccount {
-  signerAddress?: Address;
-  readerAddress?: Address;
+  rootAddress?: Address;
+  address?: Address;
   isGettingAddress?: boolean;
   isSmartWallet?: boolean;
+  resetCurrentAccount?: () => void;
 }
 
-const CurrentAccountContext = createContext<UseCurrentAccount>({
-  signerAddress: undefined,
-  readerAddress: undefined,
+const initalState: UseCurrentAccount = {
+  rootAddress: undefined,
+  address: undefined,
   isGettingAddress: false,
-});
+  isSmartWallet: false,
+  resetCurrentAccount: () => {},
+};
+
+const CurrentAccountContext = createContext<UseCurrentAccount>(initalState);
 
 export const useCurrentAccount = () => {
   const currentAccount = useContext(CurrentAccountContext);
@@ -27,46 +32,67 @@ export const useCurrentAccount = () => {
 };
 
 const fetchCurrentUserAddress = async (
-  client?: TypedJSONRPCClient<BundlerMethods>,
+  accountApi?: SimpleAccountAPI,
   address?: `0x${string}` | undefined,
   isSmartWallet?: boolean
 ) => {
-  if (!client || !address) return undefined;
+  if (!address) return undefined;
 
-  const smartWalletAddress = await client?.request(
-    "accountAbstraction.address",
-    {
-      owner: address,
-    }
-  );
-  return isSmartWallet ? smartWalletAddress.account : address;
+  if (!isSmartWallet) return address;
+
+  const smartWalletAddress = await accountApi?.getAccountAddress();
+
+  return smartWalletAddress;
 };
 
 export const CurrentAccountProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const { address, connector, isConnecting } = useAccount();
-  const { client, isLoading: isClientLoading } = useBundlerClient();
-
-  const isSmartWallet = useMemo(
-    () => connector?.type === SmartWalletConnectorWagmiType,
-    [connector]
-  );
+  const { address, connector, isConnecting, status } = useAccount();
+  const { accountApi } = useSmartAccountApi();
+  const [currentAccount, setCurrentAccount] =
+    useState<UseCurrentAccount>(initalState);
 
   const { data: currentUserAddress, isFetching: isGettingAddress } = useQuery({
-    queryKey: ["currentUserAddress", address, isSmartWallet],
-    queryFn: () => fetchCurrentUserAddress(client, address, true),
-    enabled: !!client && !!address && isSmartWallet,
+    queryKey: [
+      "currentUserAddress",
+      address,
+      connector?.type === SmartWalletConnectorWagmiType,
+    ],
+    queryFn: () =>
+      fetchCurrentUserAddress(
+        accountApi,
+        address,
+        connector?.type === SmartWalletConnectorWagmiType
+      ),
+    enabled: !!address && !!connector?.type && !!accountApi,
   });
+
+  React.useEffect(() => {
+    console.log("Status", status);
+
+    setCurrentAccount({
+      rootAddress: address,
+      address: currentUserAddress,
+      isGettingAddress,
+      isSmartWallet: connector?.type === SmartWalletConnectorWagmiType,
+    });
+  }, [
+    address,
+    currentUserAddress,
+    isGettingAddress,
+    connector?.type,
+    isConnecting,
+    status,
+  ]);
+
+  const resetCurrentAccount = () => {
+    setCurrentAccount(initalState);
+  };
 
   return (
     <CurrentAccountContext.Provider
-      value={{
-        readerAddress: currentUserAddress,
-        signerAddress: address,
-        isGettingAddress: isGettingAddress || isClientLoading || isConnecting,
-        isSmartWallet,
-      }}
+      value={{ ...currentAccount, resetCurrentAccount }}
     >
       {children}
     </CurrentAccountContext.Provider>

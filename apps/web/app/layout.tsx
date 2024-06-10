@@ -1,9 +1,12 @@
 import "./globals.css";
 import "@winrlabs/games/dist/index.css";
+import "@winrlabs/ui/dist/index.css";
 
 import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";
 import { Providers } from "./providers";
+import { AppLayout } from "./app-layout";
+import { WinrWeb3Modals } from "@winrlabs/ui";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -22,13 +25,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }): JSX.Element {
   return (
-    <html lang="en">
-      <body
-        className={notoSans.className}
-        style={{ background: "#000", color: "#fff" }}
+    <Providers>
+      <html
+        lang="en"
+        style={{
+          width: "100%",
+          overflow: "hidden",
+        }}
       >
-        <Providers>{children}</Providers>
-      </body>
-    </html>
+        <body
+          className={`${notoSans.className} no-scrollbar`}
+          style={{
+            background: "#000",
+            color: "#fff",
+            overflowX: "hidden",
+            position: "relative",
+            height: "100%",
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
+            maxWidth: "100%",
+            fontSize: "14px",
+          }}
+        >
+          <AppLayout>{children}</AppLayout>
+          <WinrWeb3Modals />
+        </body>
+      </html>
+    </Providers>
   );
 }

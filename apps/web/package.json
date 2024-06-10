@@ -9,16 +9,18 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.24.1",
+    "@wagmi/core": "^2.10.2",
     "@winrlabs/games": "workspace:*",
+    "@winrlabs/ui": "workspace:*",
     "@winrlabs/web3": "workspace:*",
+    "json-rpc-2.0": "^1.7.0",
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "superjson": "^2.2.1",
     "viem": "2.x",
     "wagmi": "^2.5.7",
-    "@wagmi/core": "^2.10.2",
-    "zustand": "^4.4.1",
-    "json-rpc-2.0": "^1.7.0"
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.4",
