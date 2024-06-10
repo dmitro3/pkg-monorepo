@@ -14,13 +14,24 @@ import {
   useTokenAllowance,
 } from "@winrlabs/web3";
 import { useMemo, useState } from "react";
-import { encodeAbiParameters, encodeFunctionData, parseUnits } from "viem";
+import {
+  Address,
+  encodeAbiParameters,
+  encodeFunctionData,
+  parseUnits,
+} from "viem";
 import {
   CoinFlipSettledEvent,
   DecodedEvent,
   GAME_HUB_EVENT_TYPES,
   getGameHubEventV2,
 } from "../utils";
+
+const selectedTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS || "";
+const gameAddress = process.env.NEXT_PUBLIC_COIN_FLIP_ADDRESS || "";
+const cashierAddress = process.env.NEXT_PUBLIC_CASHIER_ADDRESS || "";
+const controllerAddress = process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS || "";
+const uiOperatorAddress = process.env.NEXT_PUBLIC_UI_OPERATOR_ADDRESS || "";
 
 interface PrepareGameTransactionResult {
   wagerInWei: bigint;
@@ -83,7 +94,7 @@ export const prepareGameTransaction = (
   };
 };
 
-export default function CoinFlipPage() {
+export default function CoinFlipTemplateWithWeb3() {
   const [formValues, setFormValues] = useState<CoinFlipFormFields>({
     betCount: 1,
     coinSide: CoinSide.HEADS,
@@ -98,8 +109,8 @@ export default function CoinFlipPage() {
   const allowance = useTokenAllowance({
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
-    spender: "0xF27540d1f6AEe429A22bD3f6f1a048896CE44460",
-    tokenAddress: "0x031C21aC79baac1E6AD074ea63ED9e9a318cab26",
+    spender: cashierAddress,
+    tokenAddress: selectedTokenAddress as Address,
     showDefaultToasts: false,
   });
 
@@ -119,7 +130,7 @@ export default function CoinFlipPage() {
         wager: formValues.wager,
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
-        selectedCurrency: "0x031C21aC79baac1E6AD074ea63ED9e9a318cab26",
+        selectedCurrency: selectedTokenAddress as Address,
         lastPrice: 1,
       });
 
@@ -154,9 +165,9 @@ export default function CoinFlipPage() {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        "0xf9CfEf01CfF8dAE3eFDABa425C6B1D42EA6Bcc2D",
+        gameAddress as Address,
         tokenAddress,
-        "0xE328a0B1e0bE7043c9141c2073e408D1086E1175",
+        uiOperatorAddress as Address,
         "bet",
         encodedGameData,
       ],
@@ -180,13 +191,13 @@ export default function CoinFlipPage() {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        "0xf9CfEf01CfF8dAE3eFDABa425C6B1D42EA6Bcc2D",
+        gameAddress as Address,
         encodedParams.tokenAddress,
-        "0xE328a0B1e0bE7043c9141c2073e408D1086E1175",
+        uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,
       ],
-      address: "0x8C502dCD4eA50208Cd6A62f3619811D774557302",
+      address: controllerAddress as Address,
     },
     options: {},
     encodedTxData: encodedParams.encodedTxData,

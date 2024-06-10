@@ -63,6 +63,9 @@ importers:
       '@winrlabs/web3':
         specifier: workspace:*
         version: link:../../packages/web3
+      '@winrlabs/web3-games':
+        specifier: workspace:*
+        version: link:../../packages/web3-games
       json-rpc-2.0:
         specifier: ^1.7.0
         version: 1.7.0

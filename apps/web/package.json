@@ -13,6 +13,7 @@
     "@winrlabs/games": "workspace:*",
     "@winrlabs/ui": "workspace:*",
     "@winrlabs/web3": "workspace:*",
+    "@winrlabs/web3-games": "workspace:*",
     "json-rpc-2.0": "^1.7.0",
     "next": "^14.0.4",
     "react": "^18.2.0",
