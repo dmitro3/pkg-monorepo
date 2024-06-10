@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  CoinFlipFormFields,
-  CoinFlipGameResult,
-  CoinFlipTemplate,
-  CoinSide,
-} from "@winrlabs/games";
+import { DiceFormFields, DiceTemplate } from "@winrlabs/games";
 import {
   controllerAbi,
   useCurrentAccount,
@@ -24,7 +19,7 @@ import { useGameSocketContext } from "../hooks";
 
 const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
   "0x0") as `0x${string}`;
-const gameAddress = (process.env.NEXT_PUBLIC_COIN_FLIP_ADDRESS ||
+const gameAddress = (process.env.NEXT_PUBLIC_DICE_ADDRESS ||
   "0x0") as `0x${string}`;
 const controllerAddress = (process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS ||
   "0x0") as `0x${string}`;
@@ -33,18 +28,20 @@ const cashierAddress = (process.env.NEXT_PUBLIC_CASHIER_ADDRESS ||
 const uiOperatorAddress = (process.env.NEXT_PUBLIC_UI_OPERATOR_ADDRESS ||
   "0x0") as `0x${string}`;
 
-export default function CoinFlipTemplateWithWeb3() {
-  const [formValues, setFormValues] = useState<CoinFlipFormFields>({
+export default function DiceTemplateWithWeb3() {
+  const [formValues, setFormValues] = useState<DiceFormFields>({
     betCount: 1,
-    coinSide: CoinSide.HEADS,
     stopGain: 0,
     stopLoss: 0,
     wager: 1,
+    rollValue: 50,
+    rollType: "OVER",
+    winChance: 50,
   });
 
   const { gameEvent } = useGameSocketContext<any, SingleStepSettledEvent>();
 
-  const [coinFlipResult, setCoinFlipResult] =
+  const [diceResult, setDiceResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
 
@@ -56,15 +53,15 @@ export default function CoinFlipTemplateWithWeb3() {
     showDefaultToasts: false,
   });
 
-  const coinFlipSteps = useMemo(() => {
-    if (!coinFlipResult) return [];
+  const diceSteps = useMemo(() => {
+    if (!diceResult) return [];
 
-    return coinFlipResult?.program?.[0]?.data.converted.steps.map((s) => ({
-      coinSide: s.outcome,
+    return diceResult?.program?.[0]?.data.converted.steps.map((s) => ({
+      resultNumber: s.outcome / 100,
       payout: s.payout,
       payoutInUsd: s.payout,
     }));
-  }, [coinFlipResult]);
+  }, [diceResult]);
 
   const encodedParams = useMemo(() => {
     const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
@@ -79,11 +76,18 @@ export default function CoinFlipTemplateWithWeb3() {
     const encodedChoice = encodeAbiParameters(
       [
         {
-          name: "data",
-          type: "uint8",
+          name: "choice",
+          type: "uint16",
+        },
+        {
+          name: "over",
+          type: "bool",
         },
       ],
-      [Number(formValues.coinSide)]
+      [
+        Number(formValues.rollValue * 100),
+        formValues.rollType == "OVER" ? true : false,
+      ]
     );
 
     const encodedGameData = encodeAbiParameters(
@@ -120,13 +124,7 @@ export default function CoinFlipTemplateWithWeb3() {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [
-    formValues.betCount,
-    formValues.coinSide,
-    formValues.stopGain,
-    formValues.stopLoss,
-    formValues.wager,
-  ]);
+  }, [formValues]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
@@ -167,11 +165,11 @@ export default function CoinFlipTemplateWithWeb3() {
     const finalResult = gameEvent;
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
-      setCoinFlipResult(finalResult);
+      setDiceResult(finalResult);
   }, [gameEvent]);
 
   return (
-    <CoinFlipTemplate
+    <DiceTemplate
       maxWager={100}
       minWager={1}
       options={{
@@ -189,7 +187,7 @@ export default function CoinFlipTemplateWithWeb3() {
       onAnimationSkipped={() => {
         console.log("game skipped");
       }}
-      gameResults={coinFlipSteps || []}
+      gameResults={diceSteps}
       onFormChange={(val) => {
         setFormValues(val);
       }}

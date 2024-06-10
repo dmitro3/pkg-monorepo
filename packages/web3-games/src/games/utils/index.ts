@@ -55,26 +55,7 @@ export enum GAME_HUB_EVENT_TYPES {
   GameCreated = "GameCreated",
 }
 
-export interface CoinFlipSettledEvent {
-  payout: bigint;
-  payback: bigint;
-  steps: {
-    win: boolean;
-    outcome: number;
-    payout: bigint;
-  }[];
-  converted: {
-    payout: number;
-    payback: number;
-    steps: {
-      win: boolean;
-      payout: number;
-      outcome: number;
-    }[];
-  };
-}
-
-export interface LimboSettledEvent {
+export interface SingleStepSettledEvent {
   payout: bigint;
   payback: bigint;
   steps: {

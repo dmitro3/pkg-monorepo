@@ -17,7 +17,7 @@ import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import {
   DecodedEvent,
   GAME_HUB_EVENT_TYPES,
-  LimboSettledEvent,
+  SingleStepSettledEvent,
   prepareGameTransaction,
 } from "../utils";
 import { useGameSocketContext } from "../hooks";
@@ -37,10 +37,10 @@ export default function LimboTemplateWithWeb3() {
     wager: 1,
   });
 
-  const { gameEvent } = useGameSocketContext();
+  const { gameEvent } = useGameSocketContext<any, SingleStepSettledEvent>();
 
   const [limboResult, setLimboResult] =
-    useState<DecodedEvent<any, LimboSettledEvent>>();
+    useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
 
   const allowance = useTokenAllowance({
@@ -161,7 +161,7 @@ export default function LimboTemplateWithWeb3() {
   React.useEffect(() => {
     console.log(gameEvent, "gamevent");
 
-    const finalResult = gameEvent as DecodedEvent<any, LimboSettledEvent>;
+    const finalResult = gameEvent;
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
       setLimboResult(finalResult);

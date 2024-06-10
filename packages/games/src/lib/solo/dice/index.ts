@@ -17,3 +17,5 @@ export const Dice = {
 export { default as DiceTemplate } from "./components/template";
 
 export * from "./store";
+
+export * from "./types";

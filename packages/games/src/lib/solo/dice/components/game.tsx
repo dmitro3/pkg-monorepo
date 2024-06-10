@@ -7,7 +7,7 @@ import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { useGameSkip } from "../../../game-provider";
 
 export type RangeGameProps = React.ComponentProps<"div"> & {
-  results?: DiceGameResult[];
+  gameResults?: DiceGameResult[];
   /**
    * Runs on each animation step
    */
@@ -23,7 +23,7 @@ export const RangeGame = ({
   onAnimationStep = () => {},
   onAnimationCompleted = () => {},
   onAnimationSkipped = () => {},
-  results,
+  gameResults,
   children,
 }: RangeGameProps) => {
   const sliderEffect = useAudioEffect(SoundEffects.SLIDER);
@@ -51,15 +51,15 @@ export const RangeGame = ({
   ]);
 
   React.useEffect(() => {
-    if (results) {
-      updateDiceGameResults(results);
+    if (gameResults) {
+      updateDiceGameResults(gameResults);
     }
 
-    if (results?.length) {
+    if (gameResults?.length) {
       updateSkipAnimation(false);
       updateGameStatus("PLAYING");
     }
-  }, [results]);
+  }, [gameResults]);
 
   const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
 

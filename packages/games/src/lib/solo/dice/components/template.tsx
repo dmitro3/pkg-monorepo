@@ -10,10 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LUCK_MULTIPLIER, MAX_BET_COUNT, MIN_BET_COUNT } from "../constant";
 import { BetController } from "./bet-controller";
 import { toDecimals } from "../../../utils/web3";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { cn } from "../../../../lib/utils/style";
 import { Form } from "../../../ui/form";
 import { DiceFormFields } from "../types";
+import debounce from "debounce";
 
 type TemplateOptions = {
   slider?: {
@@ -30,6 +31,7 @@ type TemplateProps = RangeGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: DiceFormFields) => void;
+  onFormChange: (fields: DiceFormFields) => void;
 };
 
 const defaultOptions: TemplateOptions = {
@@ -87,6 +89,16 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
   const winMultiplier = useMemo(() => {
     return toDecimals((100 / winChance) * LUCK_MULTIPLIER, 2);
   }, [winChance]);
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>
