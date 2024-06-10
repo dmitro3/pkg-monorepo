@@ -1,7 +1,8 @@
+"use client";
+
 import Container from "../container";
 import { Footer } from "../footer";
 import { Header, HeaderProps } from "../header";
-import { WinrWeb3Modals } from "../modals";
 import { Sidebar, SidebarProps } from "../sidebar";
 
 interface LayoutProps {

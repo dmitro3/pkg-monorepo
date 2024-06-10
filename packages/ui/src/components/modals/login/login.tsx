@@ -14,15 +14,36 @@ import { Google, IconWallet } from "../../../svgs";
 import { Connector, useConnect } from "wagmi";
 import { SmartWalletConnectorWagmiType } from "@winrlabs/web3";
 import { Button } from "../../button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
+import { useWagmiConfig } from "../../../providers/wagmi-config";
+import { Spinner } from "../../spinner";
+
+const Connecting = () => {
+  return (
+    <div className="wr-flex wr-items-center wr-justify-center wr-h-64 wr-gap-2">
+      <Spinner />
+      <span className="wr-text-primary">Connecting...</span>
+    </div>
+  );
+};
 
 export const LoginModal = () => {
-  const { modal } = useModalsStore();
+  const { modal, closeModal } = useModalsStore();
+
+  const { wagmiConfig } = useWagmiConfig();
 
   const [isSmartWallet, setIsSmartWallet] = useState(true);
 
-  const { connectors, connect } = useConnect();
+  const { connectors, connect, isPending, isSuccess } = useConnect({
+    config: wagmiConfig,
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      closeModal();
+    }
+  }, [isSuccess]);
 
   const smartWalletConnectors = connectors.filter(
     (connector) =>
@@ -53,7 +74,8 @@ export const LoginModal = () => {
           </DialogTitle>
         </DialogHeader>
         <DialogBody>
-          {isSmartWallet ? (
+          {isPending && <Connecting />}
+          {isSmartWallet && !isPending && (
             <React.Fragment>
               {" "}
               <section>
@@ -99,7 +121,8 @@ export const LoginModal = () => {
                 </Button>
               </section>
             </React.Fragment>
-          ) : (
+          )}
+          {!isSmartWallet && !isPending && (
             <React.Fragment>
               <section className="wr-grid wr-grid-cols-2 wr-gap-2 wr-my-3">
                 {web3Connectors.map((connector) => {

@@ -1,21 +1,34 @@
 "use client";
 
-import { useDisconnect } from "wagmi";
+import { Config, useConfig, useDisconnect } from "wagmi";
 import { LogoMain, Wallet } from "../../svgs";
 import { cn } from "../../utils";
 import { Button } from "../button";
 import { Chat } from "../chat";
 import useModalsStore from "../modals/modals.store";
 import { useCurrentAccount } from "@winrlabs/web3";
+import { useWagmiConfig } from "../../providers/wagmi-config";
+import { Spinner } from "../spinner";
+import { Skeleton } from "../skeleton";
+import { BalanceBox } from "../balance-box";
 
 export interface HeaderProps {
   appLogo?: React.ReactNode;
   leftSideComponents?: React.ReactNode[];
+  wagmiConfig?: Config;
   chat: {
     show?: boolean;
   };
   containerClassName?: string;
 }
+
+const Connecting = () => {
+  return (
+    <div className="wr-flex wr-items-center wr-justify-center wr-h-64 wr-gap-2">
+      <Spinner />
+    </div>
+  );
+};
 
 export const Header = ({
   appLogo,
@@ -25,8 +38,12 @@ export const Header = ({
 }: HeaderProps) => {
   const modalStore = useModalsStore();
   const account = useCurrentAccount();
-  const { disconnect } = useDisconnect();
-  console.log(account, "account");
+  const { wagmiConfig } = useWagmiConfig();
+  const { disconnect, isPending, data } = useDisconnect({
+    config: wagmiConfig,
+  });
+
+  console.log("data", data);
 
   return (
     <header
@@ -45,15 +62,29 @@ export const Header = ({
               <div key={index}>{component}</div>
             ))}
         </section>
-        {account.address ? (
-          <Button
-            onClick={() => {
-              disconnect();
-            }}
-          >
-            {account.address}
-          </Button>
-        ) : (
+        {account.isGettingAddress && <Skeleton className="wr-h-10 wr-w-24" />}
+        {account.address && !account.isGettingAddress && (
+          <>
+            <div className="wr-mx-4 wr-flex wr-items-center lg:wr-absolute lg:wr-left-[50%] lg:wr-top-[50%] lg:wr-mx-0 lg:wr-translate-x-[-50%] lg:wr-translate-y-[-50%]">
+              <BalanceBox />
+            </div>
+            <Button
+              onClick={() => {
+                const timer = setTimeout(() => {
+                  disconnect();
+
+                  account.resetCurrentAccount?.();
+                }, 100);
+
+                return () => clearTimeout(timer);
+              }}
+              isLoading={isPending}
+            >
+              {account.address}
+            </Button>
+          </>
+        )}
+        {!account.isGettingAddress && !account.address && (
           <section className="wr-ml-6 wr-flex wr-gap-2">
             <Button
               onClick={() => {

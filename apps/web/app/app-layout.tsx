@@ -7,6 +7,7 @@ import {
   accordionSections,
   sections,
 } from "@winrlabs/ui";
+import { config } from "./wagmi";
 
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -15,6 +16,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
         chat: {
           show: false,
         },
+        wagmiConfig: config,
       }}
       sidebar={{
         sidebarFooter: <></>,

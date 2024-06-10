@@ -1,11 +1,10 @@
 "use client";
 
 import { useAccount } from "wagmi";
-import { useBundlerClient } from "./use-bundler-client";
 import { Address } from "viem";
 import { useQuery } from "@tanstack/react-query";
 import { SmartWalletConnectorWagmiType } from "../config/smart-wallet-connectors";
-import { createContext, useContext, useMemo } from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import { SimpleAccountAPI } from "../smart-wallet";
 import { useSmartAccountApi } from "./use-smart-account-api";
 
@@ -14,14 +13,18 @@ interface UseCurrentAccount {
   address?: Address;
   isGettingAddress?: boolean;
   isSmartWallet?: boolean;
+  resetCurrentAccount?: () => void;
 }
 
-const CurrentAccountContext = createContext<UseCurrentAccount>({
+const initalState: UseCurrentAccount = {
   rootAddress: undefined,
   address: undefined,
   isGettingAddress: false,
   isSmartWallet: false,
-});
+  resetCurrentAccount: () => {},
+};
+
+const CurrentAccountContext = createContext<UseCurrentAccount>(initalState);
 
 export const useCurrentAccount = () => {
   const currentAccount = useContext(CurrentAccountContext);
@@ -35,17 +38,20 @@ const fetchCurrentUserAddress = async (
 ) => {
   if (!address) return undefined;
 
+  if (!isSmartWallet) return address;
+
   const smartWalletAddress = await accountApi?.getAccountAddress();
 
-  return isSmartWallet ? smartWalletAddress : address;
+  return smartWalletAddress;
 };
 
 export const CurrentAccountProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const { address, connector, isConnecting } = useAccount();
-  const { isLoading: isClientLoading } = useBundlerClient();
+  const { address, connector, isConnecting, status } = useAccount();
   const { accountApi } = useSmartAccountApi();
+  const [currentAccount, setCurrentAccount] =
+    useState<UseCurrentAccount>(initalState);
 
   const { data: currentUserAddress, isFetching: isGettingAddress } = useQuery({
     queryKey: [
@@ -62,14 +68,31 @@ export const CurrentAccountProvider: React.FC<{
     enabled: !!address && !!connector?.type && !!accountApi,
   });
 
+  React.useEffect(() => {
+    console.log("Status", status);
+
+    setCurrentAccount({
+      rootAddress: address,
+      address: currentUserAddress,
+      isGettingAddress,
+      isSmartWallet: connector?.type === SmartWalletConnectorWagmiType,
+    });
+  }, [
+    address,
+    currentUserAddress,
+    isGettingAddress,
+    connector?.type,
+    isConnecting,
+    status,
+  ]);
+
+  const resetCurrentAccount = () => {
+    setCurrentAccount(initalState);
+  };
+
   return (
     <CurrentAccountContext.Provider
-      value={{
-        address: currentUserAddress,
-        rootAddress: address,
-        isGettingAddress: isGettingAddress || isClientLoading || isConnecting,
-        isSmartWallet: connector?.type === SmartWalletConnectorWagmiType,
-      }}
+      value={{ ...currentAccount, resetCurrentAccount }}
     >
       {children}
     </CurrentAccountContext.Provider>

@@ -7,6 +7,7 @@ import { WagmiProvider } from "wagmi";
 import { config } from "./wagmi";
 import { WinrLabsWeb3Provider } from "@winrlabs/web3";
 import { AudioContextProvider, GameProvider } from "@winrlabs/games";
+import { AppUiProviders } from "@winrlabs/ui";
 
 export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -22,21 +23,34 @@ export function Providers(props: { children: ReactNode }) {
             factoryAddress: "0x12a4F339F74c08F23D8033dF4457eC253DC9AdC0",
           }}
         >
-          <GameProvider
-            options={{
-              currency: {
-                icon: "https://assets.coingecko.com/coins/images/325/standard/Tether.png?1696501661",
-                name: "Winr",
-                symbol: "WINR",
+          <AppUiProviders
+            wagmiConfig={config}
+            appTokens={[
+              {
+                tokenAddress: "0x031C21aC79baac1E6AD074ea63ED9e9a318cab26",
+                displayDecimals: 6,
+                tokenDecimals: 18,
+                icon: "https://assets.coingecko.com/coins/images/325/standard/wETH.png?1696501661",
+                tokenSymbol: "wETH",
               },
-              account: {
-                isLoggedIn: true,
-                balance: 25,
-              },
-            }}
+            ]}
           >
-            <AudioContextProvider>{props.children}</AudioContextProvider>
-          </GameProvider>
+            <GameProvider
+              options={{
+                currency: {
+                  icon: "https://assets.coingecko.com/coins/images/325/standard/Tether.png?1696501661",
+                  name: "Winr",
+                  symbol: "WINR",
+                },
+                account: {
+                  isLoggedIn: true,
+                  balance: 25,
+                },
+              }}
+            >
+              <AudioContextProvider>{props.children}</AudioContextProvider>
+            </GameProvider>
+          </AppUiProviders>
         </WinrLabsWeb3Provider>
       </QueryClientProvider>
     </WagmiProvider>
