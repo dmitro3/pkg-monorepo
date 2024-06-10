@@ -8,6 +8,15 @@ import { config } from "./wagmi";
 import { WinrLabsWeb3Provider } from "@winrlabs/web3";
 import { AudioContextProvider, GameProvider } from "@winrlabs/games";
 import { AppUiProviders } from "@winrlabs/ui";
+import { GameSocketProvider } from "@winrlabs/web3-games";
+import { Address } from "viem";
+
+const bundlerUrl = process.env.NEXT_PUBLIC_BUNDLER_URL || "";
+const bundlerWsUrl = process.env.NEXT_PUBLIC_BUNDLER_WS_URL || "";
+const entryPointAddress = (process.env.NEXT_PUBLIC_ENTRYPOINT_ADDRESS ||
+  "") as Address;
+const factoryAddress = (process.env.NEXT_PUBLIC_FACTORY_ADDRESS ||
+  "") as Address;
 
 export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -17,10 +26,9 @@ export function Providers(props: { children: ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <WinrLabsWeb3Provider
           smartAccountConfig={{
-            bundlerUrl:
-              "https://game-hub-production-ssmnd.ondigitalocean.app/rpc",
-            entryPointAddress: "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
-            factoryAddress: "0x12a4F339F74c08F23D8033dF4457eC253DC9AdC0",
+            bundlerUrl,
+            entryPointAddress,
+            factoryAddress,
           }}
         >
           <AppUiProviders
@@ -48,7 +56,9 @@ export function Providers(props: { children: ReactNode }) {
                 },
               }}
             >
-              <AudioContextProvider>{props.children}</AudioContextProvider>
+              <GameSocketProvider bundlerWsUrl={bundlerWsUrl}>
+                <AudioContextProvider>{props.children}</AudioContextProvider>
+              </GameSocketProvider>
             </GameProvider>
           </AppUiProviders>
         </WinrLabsWeb3Provider>

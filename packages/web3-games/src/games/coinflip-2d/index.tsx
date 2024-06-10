@@ -5,7 +5,6 @@ import {
   CoinFlipGameResult,
   CoinFlipTemplate,
   CoinSide,
-  toDecimals,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -13,86 +12,21 @@ import {
   useHandleTx,
   useTokenAllowance,
 } from "@winrlabs/web3";
-import { useMemo, useState } from "react";
-import {
-  Address,
-  encodeAbiParameters,
-  encodeFunctionData,
-  parseUnits,
-} from "viem";
+import React, { useMemo, useState } from "react";
+import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import {
   CoinFlipSettledEvent,
   DecodedEvent,
   GAME_HUB_EVENT_TYPES,
-  getGameHubEventV2,
+  prepareGameTransaction,
 } from "../utils";
+import { useGameSocketContext } from "../hooks";
 
 const selectedTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS || "";
 const gameAddress = process.env.NEXT_PUBLIC_COIN_FLIP_ADDRESS || "";
 const cashierAddress = process.env.NEXT_PUBLIC_CASHIER_ADDRESS || "";
 const controllerAddress = process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS || "";
 const uiOperatorAddress = process.env.NEXT_PUBLIC_UI_OPERATOR_ADDRESS || "";
-
-interface PrepareGameTransactionResult {
-  wagerInWei: bigint;
-  tokenAddress: `0x${string}`;
-  stopGainInWei?: bigint;
-  stopLossInWei?: bigint;
-}
-
-interface PrepareGameTransactionParams {
-  wager: number;
-  lastPrice: number;
-  selectedCurrency: `0x${string}`;
-  stopGain?: number;
-  stopLoss?: number;
-}
-
-export const prepareGameTransaction = (
-  params: PrepareGameTransactionParams
-): PrepareGameTransactionResult => {
-  const {
-    lastPrice,
-    wager,
-    selectedCurrency,
-    stopGain = 0,
-    stopLoss = 0,
-  } = params;
-
-  const wagerInGameCurrency = toDecimals(
-    (wager / lastPrice).toString(),
-    6
-  ).toString();
-
-  const stopGainInGameCurrency = toDecimals(
-    (stopGain / lastPrice).toString(),
-    6
-  ).toString();
-
-  const stopLossInGameCurrency = toDecimals(
-    (stopLoss / lastPrice).toString(),
-    6
-  ).toString();
-
-  console.log(wagerInGameCurrency, "wager in currency");
-
-  const decimal = 18;
-
-  const wagerInWei = parseUnits(wagerInGameCurrency, decimal);
-
-  const stopGainInWei = parseUnits(stopGainInGameCurrency, decimal);
-
-  const stopLossInWei = parseUnits(stopLossInGameCurrency, decimal);
-
-  const tokenAddress = selectedCurrency;
-
-  return {
-    wagerInWei,
-    tokenAddress,
-    stopGainInWei,
-    stopLossInWei,
-  };
-};
 
 export default function CoinFlipTemplateWithWeb3() {
   const [formValues, setFormValues] = useState<CoinFlipFormFields>({
@@ -102,6 +36,9 @@ export default function CoinFlipTemplateWithWeb3() {
     stopLoss: 0,
     wager: 1,
   });
+
+  const { gameEvent } = useGameSocketContext();
+
   const [coinFlipResult, setCoinFlipResult] =
     useState<DecodedEvent<any, CoinFlipSettledEvent>>();
   const currentAccount = useCurrentAccount();
@@ -215,20 +152,20 @@ export default function CoinFlipTemplateWithWeb3() {
     }
 
     try {
-      const finalResult = getGameHubEventV2<any, CoinFlipSettledEvent>({
-        eventType: GAME_HUB_EVENT_TYPES.Settled,
-        account: currentAccount.address || "0x0",
-      });
-
       await handleTx.mutateAsync();
-
-      finalResult.then((res) => {
-        setCoinFlipResult(res);
-      });
     } catch (e: any) {
       console.log("error", e);
     }
   };
+
+  React.useEffect(() => {
+    console.log(gameEvent, "gamevent");
+
+    const finalResult = gameEvent as DecodedEvent<any, CoinFlipSettledEvent>;
+
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+      setCoinFlipResult(finalResult);
+  }, [gameEvent]);
 
   return (
     <CoinFlipTemplate

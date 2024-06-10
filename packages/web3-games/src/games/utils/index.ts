@@ -1,5 +1,4 @@
 import { parseUnits } from "viem";
-import SuperJSON from "superjson";
 import { Address, Hex } from "viem";
 import { toDecimals } from "@winrlabs/games";
 
@@ -21,13 +20,6 @@ export enum GAME_HUB_GAMES {
   moon = "moon",
   horse_race = "horse_race",
 }
-
-export type GameHubCurrency = {
-  name: string;
-  decimal: number;
-  address: Address;
-  lastPrice: number;
-};
 
 export enum GAME_HUB_EVENT_TYPES {
   Dealt = "Dealt",
@@ -63,15 +55,6 @@ export enum GAME_HUB_EVENT_TYPES {
   GameCreated = "GameCreated",
 }
 
-export type GameHubEvent<T> = {
-  id?: string;
-  address: Address;
-  type: GAME_HUB_EVENT_TYPES;
-  gameType?: GAME_HUB_GAMES;
-  result: T;
-  currency?: GameHubCurrency;
-};
-
 export interface CoinFlipSettledEvent {
   payout: bigint;
   payback: bigint;
@@ -91,13 +74,6 @@ export interface CoinFlipSettledEvent {
   };
 }
 
-export enum GAMES {
-  RPS = "rps",
-  DICE = "dice",
-  RANGE = "range",
-  ROULETTE = "roulette",
-}
-
 export type UnitySendMessage = (
   gameObjectName: string,
   methodName: string,
@@ -111,14 +87,6 @@ export enum PUBLIC_MULTIPLAYER_GAME_EVENTS {
 }
 
 // V2 GAMEHUB
-
-export type Item<T> = {
-  type: string;
-  data: T;
-};
-
-export type EventContext<T, K> = { context: Item<T>[]; program: Item<K>[] };
-
 export enum DecoderType {
   Context = "context",
   Moon = "moon",
@@ -134,13 +102,9 @@ export enum DecoderType {
   RockPaperScissors = "rock-paper-scissors",
 }
 
-export type EventMap = {
-  list: {
-    items: ReadonlyArray<{
-      key: string;
-      value: Hex;
-    }>;
-  };
+export type Item<T> = {
+  type: string;
+  data: T;
 };
 
 export type Event = {
@@ -161,94 +125,7 @@ export type DecodedEvent<T, K> = {
   program: Item<K>[];
 };
 
-interface GetGameHubEventParams {
-  eventType: GAME_HUB_EVENT_TYPES;
-  account: string;
-}
-
-const BUNDLER_WS_URL = "wss://game-hub-production-ssmnd.ondigitalocean.app/rpc";
-
-// const BUNDLER_WS_URL = "ws://localhost:3002" || "";
-
-export const getGameHubEvent = <T>({
-  eventType,
-  account,
-}: GetGameHubEventParams): Promise<GameHubEvent<T>> => {
-  return new Promise((resolve, reject) => {
-    const ws = new WebSocket(`${BUNDLER_WS_URL}?owner=${account}`);
-
-    ws.onmessage = (message: any) => {
-      // Handle message event here
-
-      const data = SuperJSON.parse(message.data) as GameHubEvent<T>;
-
-      if (data?.id) {
-        const _ack = {
-          jsonrpc: "2.0",
-          method: "acknowledge",
-          id: data?.id,
-          params: {
-            id: data?.id,
-          },
-        };
-
-        ws.send(JSON.stringify(_ack));
-      }
-
-      if (data?.type !== eventType) return;
-
-      resolve(data);
-
-      ws.close();
-    };
-
-    ws.onerror = () => {
-      reject("Error on receiving event");
-    };
-  });
-};
-
-export const getGameHubEventV2 = <T, K>({
-  eventType,
-  account,
-}: GetGameHubEventParams): Promise<DecodedEvent<T, K>> => {
-  return new Promise((resolve, reject) => {
-    const ws = new WebSocket(`${BUNDLER_WS_URL}?owner=${account}`);
-
-    ws.onmessage = (message: any) => {
-      // Handle message event here
-
-      const data = SuperJSON.parse(message.data) as Event;
-
-      if (data?.id) {
-        const _ack = {
-          jsonrpc: "2.0",
-          method: "acknowledge",
-          id: data.id,
-          params: {
-            id: data?.id,
-          },
-        };
-
-        ws.send(JSON.stringify(_ack));
-      }
-
-      const context = data?.context as DecodedEvent<T, K>;
-
-      if (context?.program?.[0]?.type !== eventType) return;
-
-      resolve(context);
-
-      ws.close();
-    };
-
-    ws.onerror = () => {
-      reject("Error on receiving event");
-    };
-  });
-};
-
-interface PrepareGameTransactionParams {
+export interface PrepareGameTransactionParams {
   wager: number;
   lastPrice: number;
   selectedCurrency: string;
@@ -256,7 +133,7 @@ interface PrepareGameTransactionParams {
   stopLoss?: number;
 }
 
-interface PrepareGameTransactionResult {
+export interface PrepareGameTransactionResult {
   wagerInWei: bigint;
   tokenAddress: `0x${string}`;
   stopGainInWei?: bigint;
@@ -299,7 +176,7 @@ export const prepareGameTransaction = (
 
   const stopLossInWei = parseUnits(stopLossInGameCurrency, decimal);
 
-  const tokenAddress = "0x031C21aC79baac1E6AD074ea63ED9e9a318cab26";
+  const tokenAddress = selectedCurrency as Address;
 
   return {
     wagerInWei,
