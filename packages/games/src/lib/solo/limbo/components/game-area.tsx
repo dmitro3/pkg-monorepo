@@ -29,6 +29,7 @@ const GameArea: React.FC<GameAreaProps> = ({
     limboGameResults,
     updateGameStatus,
     updateLimboGameResults,
+    updateCurrentAnimationCount,
   } = useLimboGameStore([
     "addLastBet",
     "removeLastBet",
@@ -36,6 +37,7 @@ const GameArea: React.FC<GameAreaProps> = ({
     "limboGameResults",
     "updateGameStatus",
     "updateLimboGameResults",
+    "updateCurrentAnimationCount",
   ]);
 
   React.useEffect(() => {
@@ -51,6 +53,7 @@ const GameArea: React.FC<GameAreaProps> = ({
           clearTimeout(t);
           return;
         }
+
         const curr = i + 1;
 
         onAnimationStep && onAnimationStep(curr);
@@ -61,6 +64,8 @@ const GameArea: React.FC<GameAreaProps> = ({
           payoutInUsd,
         });
 
+        updateCurrentAnimationCount(curr);
+
         if (payout > 0) {
           effect.play();
         }
@@ -69,8 +74,12 @@ const GameArea: React.FC<GameAreaProps> = ({
           onSkip();
         } else if (limboGameResults.length === curr) {
           updateLimboGameResults([]);
+
           onAnimationCompleted && onAnimationCompleted(limboGameResults);
-          setTimeout(() => updateGameStatus("ENDED"), 1000);
+          setTimeout(() => {
+            updateCurrentAnimationCount(0);
+            updateGameStatus("ENDED");
+          }, 1000);
         } else {
           setTimeout(() => turn(curr), 350);
         }
@@ -81,9 +90,12 @@ const GameArea: React.FC<GameAreaProps> = ({
 
   const onSkip = () => {
     updateLastBets(limboGameResults);
-    updateLimboGameResults([]);
     onAnimationSkipped(limboGameResults);
-    setTimeout(() => updateGameStatus("ENDED"), 50);
+    setTimeout(() => {
+      updateCurrentAnimationCount(0);
+      updateLimboGameResults([]);
+      updateGameStatus("ENDED");
+    }, 50);
   };
 
   React.useEffect(() => {

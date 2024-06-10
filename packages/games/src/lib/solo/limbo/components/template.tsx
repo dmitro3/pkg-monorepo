@@ -1,13 +1,13 @@
-import React from "react";
-import { Form } from "../../../ui/form";
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
-import { BetController } from "./bet-controller";
-import { Limbo, LimboFormField } from "..";
-import { LimboGameProps } from "./game";
 import debounce from "debounce";
+import React from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Limbo, LimboFormField } from "..";
+import { GameContainer, SceneContainer } from "../../../common/containers";
+import { Form } from "../../../ui/form";
+import { BetController } from "./bet-controller";
+import { LimboGameProps } from "./game";
 
 type TemplateOptions = {
   scene?: {
@@ -90,7 +90,6 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
             <Limbo.Game {...props}>
               <Limbo.GameArea {...props}>
                 <Limbo.LastBets />
-                <Limbo.ResultAnimation />
                 <Limbo.Slider />
               </Limbo.GameArea>
             </Limbo.Game>

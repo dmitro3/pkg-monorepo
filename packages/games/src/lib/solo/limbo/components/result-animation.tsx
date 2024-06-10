@@ -1,17 +1,35 @@
 import React from "react";
 import { cn } from "../../../utils/style";
 import useLimboGameStore from "../store";
+import { useFormContext } from "react-hook-form";
+import { LimboForm } from "../types";
 
 const ResultAnimation = () => {
-  const { lastBets } = useLimboGameStore(["lastBets"]);
+  const form = useFormContext() as LimboForm;
 
-  const won = lastBets[lastBets.length - 1]?.payout || 0 > 0 ? true : false;
+  const { gameStatus, limboGameResults, currentAnimationCount } =
+    useLimboGameStore([
+      "limboGameResults",
+      "currentAnimationCount",
+      "gameStatus",
+    ]);
+
+  const won =
+    limboGameResults[currentAnimationCount]?.number ||
+    0 < form.getValues("limboMultiplier")
+      ? true
+      : false;
+
+  console.log(
+    limboGameResults[currentAnimationCount],
+    form.getValues("limboMultiplier")
+  );
   return (
     <div
       className={cn(
         "wr-absolute wr-left-0 wr-top-28 wr-h-[600%] wr-w-full  wr-overflow-hidden  wr-transition-all wr-ease-in",
         {
-          "wr-opacity-0": lastBets[lastBets.length - 1]?.number === 0,
+          "wr-opacity-0": gameStatus === "IDLE",
         }
       )}
     >
