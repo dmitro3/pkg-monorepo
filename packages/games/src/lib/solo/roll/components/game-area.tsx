@@ -42,6 +42,8 @@ export const GameArea: React.FC<GameAreaProps> = ({
     addLastBet,
     updateLastBets,
     lastBets,
+    updateCurrentAnimationCount,
+    currentAnimationCount,
   } = useRollGameStore([
     "gameStatus",
     "rollGameResults",
@@ -50,6 +52,8 @@ export const GameArea: React.FC<GameAreaProps> = ({
     "addLastBet",
     "updateLastBets",
     "lastBets",
+    "updateCurrentAnimationCount",
+    "currentAnimationCount",
   ]);
 
   React.useEffect(() => {
@@ -70,7 +74,9 @@ export const GameArea: React.FC<GameAreaProps> = ({
         }
         const curr = i + 1;
 
-        onAnimationStep && onAnimationStep(curr);
+        onAnimationStep && onAnimationStep(i);
+
+        updateCurrentAnimationCount(curr);
 
         addLastBet({
           dice: dice,
@@ -87,7 +93,11 @@ export const GameArea: React.FC<GameAreaProps> = ({
         } else if (rollGameResults.length === curr) {
           updateRollGameResults([]);
           onAnimationCompleted && onAnimationCompleted(rollGameResults);
-          setTimeout(() => updateGameStatus("ENDED"), 1000);
+          setTimeout(() => {
+            updateCurrentAnimationCount(0);
+            updateRollGameResults([]);
+            updateGameStatus("ENDED");
+          }, 1000);
         } else {
           setTimeout(() => turn(curr), 350);
         }
@@ -100,9 +110,12 @@ export const GameArea: React.FC<GameAreaProps> = ({
 
   const onSkip = () => {
     updateLastBets(rollGameResults);
-    updateRollGameResults([]);
     onAnimationSkipped(rollGameResults);
-    setTimeout(() => updateGameStatus("ENDED"), 50);
+    setTimeout(() => {
+      updateRollGameResults([]);
+      updateCurrentAnimationCount(0);
+      updateGameStatus("ENDED");
+    }, 50);
   };
 
   React.useEffect(() => {
@@ -131,7 +144,13 @@ export const GameArea: React.FC<GameAreaProps> = ({
               <Dice
                 key={item}
                 item={item}
-                winner={lastBets[lastBets.length - 1]?.dice}
+                winner={
+                  gameStatus === "IDLE" ||
+                  gameStatus === "ENDED" ||
+                  currentAnimationCount === 0
+                    ? undefined
+                    : lastBets[lastBets.length - 1]?.dice
+                }
                 isBetting={gameStatus === "PLAYING" ? true : false}
                 isDisabled={
                   form.formState.isLoading || form.formState.isSubmitting
