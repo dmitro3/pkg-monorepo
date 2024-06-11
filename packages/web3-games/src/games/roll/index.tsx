@@ -1,6 +1,6 @@
 "use client";
 
-import { RollFormFields, RollTemplate } from "@winrlabs/games";
+import { RollFormFields, RollGameResult, RollTemplate } from "@winrlabs/games";
 import {
   controllerAbi,
   useCurrentAccount,
@@ -16,19 +16,35 @@ import {
   prepareGameTransaction,
 } from "../utils";
 import { useGameSocketContext } from "../hooks";
+import { useContractConfigContext } from "../hooks/use-contract-config";
 
 const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
   "0x0") as `0x${string}`;
-const gameAddress = (process.env.NEXT_PUBLIC_ROLL_ADDRESS ||
-  "0x0") as `0x${string}`;
-const controllerAddress = (process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS ||
-  "0x0") as `0x${string}`;
-const cashierAddress = (process.env.NEXT_PUBLIC_CASHIER_ADDRESS ||
-  "0x0") as `0x${string}`;
-const uiOperatorAddress = (process.env.NEXT_PUBLIC_UI_OPERATOR_ADDRESS ||
-  "0x0") as `0x${string}`;
 
-export default function CoinFlipTemplateWithWeb3() {
+type TemplateOptions = {
+  scene?: {
+    backgroundImage?: string;
+  };
+};
+
+interface TemplateWithWeb3Props {
+  options: TemplateOptions;
+  minWager?: number;
+  maxWager?: number;
+
+  onAnimationStep?: (step: number) => void;
+  onAnimationCompleted?: (result: RollGameResult[]) => void;
+  onAnimationSkipped?: (result: RollGameResult[]) => void;
+}
+
+export default function RollTemplateWithWeb3(props: TemplateWithWeb3Props) {
+  const {
+    gameAddresses,
+    controllerAddress,
+    cashierAddress,
+    uiOperatorAddress,
+  } = useContractConfigContext();
+
   const [formValues, setFormValues] = useState<RollFormFields>({
     betCount: 1,
     dices: [],
@@ -102,7 +118,7 @@ export default function CoinFlipTemplateWithWeb3() {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddress as Address,
+        gameAddresses.roll as Address,
         tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -128,7 +144,7 @@ export default function CoinFlipTemplateWithWeb3() {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddress as Address,
+        gameAddresses.roll as Address,
         encodedParams.tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -170,23 +186,8 @@ export default function CoinFlipTemplateWithWeb3() {
 
   return (
     <RollTemplate
-      maxWager={100}
-      minWager={1}
-      options={{
-        scene: {
-          backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
-        },
-      }}
+      {...props}
       onSubmitGameForm={onGameSubmit}
-      onAnimationStep={(e) => {
-        console.log("STEP", e);
-      }}
-      onAnimationCompleted={() => {
-        console.log("game completed");
-      }}
-      onAnimationSkipped={() => {
-        console.log("game skipped");
-      }}
       gameResults={rollSteps || []}
       onFormChange={(val) => {
         setFormValues(val);

@@ -21,14 +21,34 @@ import {
   prepareGameTransaction,
 } from "../utils";
 import { useGameSocketContext } from "../hooks";
+import { useContractConfigContext } from "../hooks/use-contract-config";
 
 const selectedTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS || "";
-const gameAddress = process.env.NEXT_PUBLIC_LIMBO_ADDRESS || "";
-const cashierAddress = process.env.NEXT_PUBLIC_CASHIER_ADDRESS || "";
-const controllerAddress = process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS || "";
-const uiOperatorAddress = process.env.NEXT_PUBLIC_UI_OPERATOR_ADDRESS || "";
 
-export default function LimboTemplateWithWeb3() {
+type TemplateOptions = {
+  scene?: {
+    backgroundImage?: string;
+  };
+};
+
+interface TemplateWithWeb3Props {
+  options: TemplateOptions;
+  minWager?: number;
+  maxWager?: number;
+
+  onAnimationStep?: (step: number) => void;
+  onAnimationCompleted?: (result: LimboGameResult[]) => void;
+  onAnimationSkipped?: (result: LimboGameResult[]) => void;
+}
+
+export default function LimboTemplateWithWeb3(props: TemplateWithWeb3Props) {
+  const {
+    gameAddresses,
+    controllerAddress,
+    cashierAddress,
+    uiOperatorAddress,
+  } = useContractConfigContext();
+
   const [formValues, setFormValues] = useState<LimboFormField>({
     betCount: 1,
     limboMultiplier: 1,
@@ -102,7 +122,7 @@ export default function LimboTemplateWithWeb3() {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddress as Address,
+        gameAddresses.limbo as Address,
         tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -128,7 +148,7 @@ export default function LimboTemplateWithWeb3() {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddress as Address,
+        gameAddresses.limbo as Address,
         encodedParams.tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -159,8 +179,6 @@ export default function LimboTemplateWithWeb3() {
   };
 
   React.useEffect(() => {
-    console.log(gameEvent, "gamevent");
-
     const finalResult = gameEvent;
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
@@ -169,23 +187,8 @@ export default function LimboTemplateWithWeb3() {
 
   return (
     <LimboTemplate
-      maxWager={100}
-      minWager={1}
-      options={{
-        scene: {
-          backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
-        },
-      }}
+      {...props}
       onSubmitGameForm={onGameSubmit}
-      onAnimationStep={(e) => {
-        console.log("STEP", e);
-      }}
-      onAnimationCompleted={() => {
-        console.log("game completed");
-      }}
-      onAnimationSkipped={() => {
-        console.log("game skipped");
-      }}
       gameResults={limboSteps}
       onFormChange={(val) => {
         setFormValues(val);

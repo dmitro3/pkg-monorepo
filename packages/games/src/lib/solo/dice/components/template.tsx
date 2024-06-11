@@ -49,7 +49,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 2, {
+      .min(props?.minWager || 1, {
         message: `Minimum wager is ${props?.minWager}`,
       })
       .max(props?.maxWager || 2000, {
@@ -74,7 +74,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: "onSubmit",
     defaultValues: {
-      wager: props?.minWager || 2,
+      wager: props?.minWager || 1,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
@@ -105,8 +105,8 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
-            minWager={props.minWager || 2}
-            maxWager={props.maxWager || 10}
+            minWager={props.minWager || 1}
+            maxWager={props.maxWager || 2000}
             winMultiplier={winMultiplier}
           />
           <SceneContainer

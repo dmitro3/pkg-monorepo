@@ -84,8 +84,8 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
-            minWager={props.minWager || 2}
-            maxWager={props.maxWager || 10}
+            minWager={props.minWager || 1}
+            maxWager={props.maxWager || 2000}
             winMultiplier={WIN_MULTIPLIER}
           />
           <SceneContainer

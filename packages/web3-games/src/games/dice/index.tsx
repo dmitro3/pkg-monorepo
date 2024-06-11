@@ -1,6 +1,6 @@
 "use client";
 
-import { DiceFormFields, DiceTemplate } from "@winrlabs/games";
+import { DiceFormFields, DiceGameResult, DiceTemplate } from "@winrlabs/games";
 import {
   controllerAbi,
   useCurrentAccount,
@@ -16,19 +16,35 @@ import {
   prepareGameTransaction,
 } from "../utils";
 import { useGameSocketContext } from "../hooks";
+import { useContractConfigContext } from "../hooks/use-contract-config";
 
 const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
   "0x0") as `0x${string}`;
-const gameAddress = (process.env.NEXT_PUBLIC_DICE_ADDRESS ||
-  "0x0") as `0x${string}`;
-const controllerAddress = (process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS ||
-  "0x0") as `0x${string}`;
-const cashierAddress = (process.env.NEXT_PUBLIC_CASHIER_ADDRESS ||
-  "0x0") as `0x${string}`;
-const uiOperatorAddress = (process.env.NEXT_PUBLIC_UI_OPERATOR_ADDRESS ||
-  "0x0") as `0x${string}`;
 
-export default function DiceTemplateWithWeb3() {
+type TemplateOptions = {
+  scene?: {
+    backgroundImage?: string;
+  };
+};
+
+interface TemplateWithWeb3Props {
+  options: TemplateOptions;
+  minWager?: number;
+  maxWager?: number;
+
+  onAnimationStep?: (step: number) => void;
+  onAnimationCompleted?: (result: DiceGameResult[]) => void;
+  onAnimationSkipped?: (result: DiceGameResult[]) => void;
+}
+
+export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
+  const {
+    gameAddresses,
+    controllerAddress,
+    cashierAddress,
+    uiOperatorAddress,
+  } = useContractConfigContext();
+
   const [formValues, setFormValues] = useState<DiceFormFields>({
     betCount: 1,
     stopGain: 0,
@@ -111,7 +127,7 @@ export default function DiceTemplateWithWeb3() {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddress as Address,
+        gameAddresses.dice as Address,
         tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -131,7 +147,7 @@ export default function DiceTemplateWithWeb3() {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddress as Address,
+        gameAddresses.dice as Address,
         encodedParams.tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -170,23 +186,8 @@ export default function DiceTemplateWithWeb3() {
 
   return (
     <DiceTemplate
-      maxWager={100}
-      minWager={1}
-      options={{
-        scene: {
-          backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
-        },
-      }}
+      {...props}
       onSubmitGameForm={onGameSubmit}
-      onAnimationStep={(e) => {
-        console.log("STEP", e);
-      }}
-      onAnimationCompleted={() => {
-        console.log("game completed");
-      }}
-      onAnimationSkipped={() => {
-        console.log("game skipped");
-      }}
       gameResults={diceSteps}
       onFormChange={(val) => {
         setFormValues(val);
