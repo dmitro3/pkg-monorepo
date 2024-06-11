@@ -56,7 +56,7 @@ const GameArea: React.FC<GameAreaProps> = ({
 
         const curr = i + 1;
 
-        onAnimationStep && onAnimationStep(curr);
+        onAnimationStep && onAnimationStep(i);
 
         updateCurrentAnimationCount(curr);
 
