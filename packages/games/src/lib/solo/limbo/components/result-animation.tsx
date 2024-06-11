@@ -20,10 +20,6 @@ const ResultAnimation = () => {
       ? true
       : false;
 
-  console.log(
-    limboGameResults[currentAnimationCount],
-    form.getValues("limboMultiplier")
-  );
   return (
     <div
       className={cn(

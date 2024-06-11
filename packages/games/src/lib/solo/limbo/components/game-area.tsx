@@ -56,15 +56,13 @@ const GameArea: React.FC<GameAreaProps> = ({
 
         const curr = i + 1;
 
-        onAnimationStep && onAnimationStep(curr);
-
+        onAnimationStep && onAnimationStep(i);
+        updateCurrentAnimationCount(curr);
         addLastBet({
           number: resultNumber,
           payout,
           payoutInUsd,
         });
-
-        updateCurrentAnimationCount(curr);
 
         if (payout > 0) {
           effect.play();
@@ -73,11 +71,10 @@ const GameArea: React.FC<GameAreaProps> = ({
         if (skipRef.current) {
           onSkip();
         } else if (limboGameResults.length === curr) {
-          updateLimboGameResults([]);
-
           onAnimationCompleted && onAnimationCompleted(limboGameResults);
           setTimeout(() => {
             updateCurrentAnimationCount(0);
+            updateLimboGameResults([]);
             updateGameStatus("ENDED");
           }, 1000);
         } else {
@@ -92,7 +89,6 @@ const GameArea: React.FC<GameAreaProps> = ({
     updateLastBets(limboGameResults);
     onAnimationSkipped(limboGameResults);
     setTimeout(() => {
-      updateCurrentAnimationCount(0);
       updateLimboGameResults([]);
       updateGameStatus("ENDED");
     }, 50);
