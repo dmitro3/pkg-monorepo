@@ -393,6 +393,10 @@ const config: Omit<Config, "content"> = {
           "linear-gradient(180deg, rgba(9, 9, 11, 0.50) 0%, rgba(9, 9, 11, 0.00) 100%)",
         "rotated-footer":
           "linear-gradient(180deg, rgba(9, 9, 11, 0.00) 0%, rgba(9, 9, 11, 0.50) 100%);",
+        "plinko-button":
+          "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/plinko/plinko-button.png)",
+        "plinko-button-disabled":
+          "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/plinko/plinko-button-disabled.png)",
       },
     },
   },
