@@ -8,6 +8,8 @@ import { CoinFlip3dGameProps } from "./game";
 import { UnityGameContainer } from "../../../common/containers";
 import { BetController } from "./bet-controller";
 import { CoinFlip3D } from "..";
+import debounce from "debounce";
+import React from "react";
 
 type TemplateOptions = {
   scene?: {
@@ -23,6 +25,7 @@ type TemplateProps = CoinFlip3dGameProps & {
   maxWager?: number;
   winMultiplier?: number;
   onSubmitGameForm: (data: CoinFlip3dFormFields) => void;
+  onFormChange?: (fields: CoinFlip3dFormFields) => void;
   buildedGameUrl: string;
 };
 
@@ -60,6 +63,16 @@ export const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       coinSide: COIN_SIDE.ETH,
     },
   });
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>

@@ -8,4 +8,6 @@ export { default as RpsTemplateWithWeb3 } from "./games/rps";
 
 export { default as RollTemplateWithWeb3 } from "./games/roll";
 
+export { default as CoinFlip3DTemplateWithWeb3 } from "./games/coinflip-3d";
+
 export * from "./games/hooks";
