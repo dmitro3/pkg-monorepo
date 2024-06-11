@@ -56,8 +56,10 @@ const GameArea: React.FC<GameAreaProps> = ({
 
         const curr = i + 1;
 
-        onAnimationStep && onAnimationStep(i);
+        onAnimationStep && onAnimationStep(curr);
+
         updateCurrentAnimationCount(curr);
+
         addLastBet({
           number: resultNumber,
           payout,
