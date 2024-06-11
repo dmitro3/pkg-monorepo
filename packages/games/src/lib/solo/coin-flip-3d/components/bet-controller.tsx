@@ -45,7 +45,7 @@ export const BetController: React.FC<Props> = ({
   }, [form.getValues().wager, form.getValues().betCount, winMultiplier]);
 
   return (
-    <UnityBetControllerContainer className="wr-z-10 wr-no-scrollbar wr-relative wr-flex wr-h-full wr-max-h-full wr-w-full wr-flex-col wr-justify-between wr-overflow-auto lg:wr-absolute lg:wr-left-0 lg:wr-top-0 lg:wr-w-[264px]">
+    <UnityBetControllerContainer className="wr-z-10 wr-no-scrollbar wr-relative wr-flex wr-h-full wr-max-h-full max-lg:wr-w-full  wr-flex-col wr-justify-between wr-overflow-auto lg:wr-absolute lg:wr-left-0 lg:wr-top-0 ">
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
         <div className="wr-mb-3 max-lg:wr-hidden">
           <BetControllerTitle>
