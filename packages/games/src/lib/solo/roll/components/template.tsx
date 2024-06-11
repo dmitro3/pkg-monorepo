@@ -18,6 +18,7 @@ import { BetController } from "./bet-controller";
 import { Roll } from "..";
 import { cn } from "../../../utils/style";
 import { RollGameProps } from "./game";
+import debounce from "debounce";
 
 type TemplateOptions = {
   scene?: {
@@ -30,6 +31,7 @@ type TemplateProps = RollGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: RollFormFields) => void;
+  onFormChange?: (fields: RollFormFields) => void;
 };
 
 const RollTemplate = ({ ...props }: TemplateProps) => {
@@ -94,6 +96,16 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
       winChance: toDecimals((dices.length * 100) / ALL_DICES.length, 2),
     };
   }, [dices]);
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>
