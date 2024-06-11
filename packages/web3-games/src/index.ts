@@ -13,3 +13,5 @@ export { default as PlinkoTemplateWithWeb3 } from "./games/plinko";
 export { default as CoinFlip3DTemplateWithWeb3 } from "./games/coinflip-3d";
 
 export * from "./games/hooks";
+
+export * from "./providers";
