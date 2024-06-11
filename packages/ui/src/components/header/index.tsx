@@ -1,6 +1,6 @@
 "use client";
 
-import { Config, useConfig, useDisconnect } from "wagmi";
+import { Config, useConfig, useConnectors, useDisconnect } from "wagmi";
 import { LogoMain, Wallet } from "../../svgs";
 import { cn } from "../../utils";
 import { Button } from "../button";
@@ -39,10 +39,13 @@ export const Header = ({
   const modalStore = useModalsStore();
   const account = useCurrentAccount();
   const { wagmiConfig } = useWagmiConfig();
-  const { disconnect, disconnectAsync, isPending, data, connectors } =
-    useDisconnect({
-      config: wagmiConfig,
-    });
+  const connectors = useConnectors({
+    config: wagmiConfig,
+  });
+  const { disconnect, disconnectAsync, isPending, data } = useDisconnect({
+    config: wagmiConfig,
+  });
+  console.log("connectors", connectors);
 
   console.log("data", data);
 
@@ -72,11 +75,18 @@ export const Header = ({
             <Button
               disabled={isPending}
               onClick={async () => {
-                connectors.forEach(async (connector) => {
-                  await delay(100);
-                  await disconnectAsync({ connector });
-                });
                 localStorage.clear();
+                account?.resetCurrentAccount?.();
+                try {
+                  await Promise.all(
+                    connectors.map(async (connector, index) => {
+                      await delay(index * 100); // Ensures the delay between each call
+                      await disconnectAsync({ connector });
+                    })
+                  );
+                } catch (error) {
+                  console.error("Error during disconnect:", error);
+                }
               }}
               isLoading={isPending}
             >

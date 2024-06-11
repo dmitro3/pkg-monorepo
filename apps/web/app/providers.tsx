@@ -22,7 +22,7 @@ export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider reconnectOnMount config={config}>
       <QueryClientProvider client={queryClient}>
         <WinrLabsWeb3Provider
           smartAccountConfig={{

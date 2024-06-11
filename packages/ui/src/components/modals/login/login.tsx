@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import useModalsStore from "../modals.store";
 import { Google, IconWallet } from "../../../svgs";
-import { Connector, useConnect } from "wagmi";
+import { Connector, useConnect, useConnectors } from "wagmi";
 import { SmartWalletConnectorWagmiType } from "@winrlabs/web3";
 import { Button } from "../../button";
 import { useEffect, useState } from "react";
@@ -35,7 +35,11 @@ export const LoginModal = () => {
 
   const [isSmartWallet, setIsSmartWallet] = useState(true);
 
-  const { connectors, connect, isPending, isSuccess } = useConnect({
+  const connectors = useConnectors({
+    config: wagmiConfig,
+  });
+
+  const { connect, isPending, isSuccess } = useConnect({
     config: wagmiConfig,
   });
 

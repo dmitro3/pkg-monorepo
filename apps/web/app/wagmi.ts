@@ -68,11 +68,11 @@ export const config = createConfig({
     injected({
       shimDisconnect: false,
     }),
-    coinbaseWallet({ appName: "Create Wagmi" }),
     ...smartWalletConnectors.connectors.map(({ connector }) => connector),
+    coinbaseWallet({ appName: "Create Wagmi" }),
   ],
 
-  ssr: true,
+  ssr: false,
 
   transports: {
     [winrChain.id]: http(),
