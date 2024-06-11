@@ -1,7 +1,6 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { DICE } from "../types";
-import { RollForm } from "../constant";
+import { DICE, RollForm } from "../types";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
@@ -119,7 +118,7 @@ const Dice: React.FC<Props> = ({
                   return checked
                     ? field.onChange([...field.value, item])
                     : field.onChange(
-                        field.value?.filter((value) => value !== item)
+                        field.value?.filter((value: any) => value !== item)
                       );
                 }}
                 style={{

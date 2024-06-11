@@ -27,3 +27,5 @@ export * from "./lib/utils/web3";
 export * from "./lib/solo/coin-flip-3d";
 
 export * from "./lib/solo/roulette";
+
+export * from "./lib/solo/plinko-3d";

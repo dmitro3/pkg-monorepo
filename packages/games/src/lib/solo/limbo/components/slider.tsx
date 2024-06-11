@@ -125,10 +125,13 @@ function interpolate(value: number, points: ScalePoint[]): number {
 }
 
 const LimboSlider = () => {
-  const { gameStatus, lastBets } = useLimboGameStore([
-    "gameStatus",
-    "lastBets",
-  ]);
+  const { gameStatus, lastBets, limboGameResults, currentAnimationCount } =
+    useLimboGameStore([
+      "gameStatus",
+      "lastBets",
+      "limboGameResults",
+      "currentAnimationCount",
+    ]);
 
   const won = lastBets[lastBets.length - 1]?.payout || 0 > 0 ? true : false;
 
@@ -147,7 +150,13 @@ const LimboSlider = () => {
   const limboMultiplier = form.watch("limboMultiplier");
 
   const showNumber =
-    gameStatus === "IDLE" || gameStatus === "ENDED" ? limboMultiplier : result;
+    gameStatus === "IDLE" ||
+    gameStatus === "ENDED" ||
+    result === 0 ||
+    limboGameResults.length === 0 ||
+    currentAnimationCount === 0
+      ? limboMultiplier
+      : result;
 
   const divRef = useRef<HTMLDivElement>(null);
 

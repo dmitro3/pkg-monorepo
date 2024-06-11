@@ -6,4 +6,14 @@ export { default as DiceTemplateWithWeb3 } from "./games/dice";
 
 export { default as RpsTemplateWithWeb3 } from "./games/rps";
 
+export { default as RollTemplateWithWeb3 } from "./games/roll";
+
+export { default as PlinkoTemplateWithWeb3 } from "./games/plinko";
+
+export { default as CoinFlip3DTemplateWithWeb3 } from "./games/coinflip-3d";
+
+export { default as Plinko3DTemplateWithWeb3 } from "./games/plinko-3d";
+
 export * from "./games/hooks";
+
+export * from "./providers";

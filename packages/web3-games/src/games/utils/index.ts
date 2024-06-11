@@ -55,7 +55,7 @@ export enum GAME_HUB_EVENT_TYPES {
   GameCreated = "GameCreated",
 }
 
-export interface SingleStepSettledEvent {
+export interface SingleStepSettledEvent<T = number> {
   payout: bigint;
   payback: bigint;
   steps: {
@@ -69,7 +69,7 @@ export interface SingleStepSettledEvent {
     steps: {
       win: boolean;
       payout: number;
-      outcome: number;
+      outcome: T;
     }[];
   };
 }

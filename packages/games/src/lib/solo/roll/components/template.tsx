@@ -18,6 +18,7 @@ import { BetController } from "./bet-controller";
 import { Roll } from "..";
 import { cn } from "../../../utils/style";
 import { RollGameProps } from "./game";
+import debounce from "debounce";
 
 type TemplateOptions = {
   scene?: {
@@ -30,6 +31,7 @@ type TemplateProps = RollGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: RollFormFields) => void;
+  onFormChange?: (fields: RollFormFields) => void;
 };
 
 const RollTemplate = ({ ...props }: TemplateProps) => {
@@ -38,7 +40,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 2, {
+      .min(props?.minWager || 1, {
         message: `Minimum wager is ${props?.minWager}`,
       })
       .max(props?.maxWager || 2000, {
@@ -69,7 +71,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: "all",
     defaultValues: {
-      wager: 2,
+      wager: props?.minWager || 1,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
@@ -95,13 +97,23 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
     };
   }, [dices]);
 
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
-            maxWager={props?.maxWager || 10}
-            minWager={props?.minWager || 2}
+            maxWager={props?.maxWager || 2000}
+            minWager={props?.minWager || 1}
             winMultiplier={winMultiplier}
           />
 

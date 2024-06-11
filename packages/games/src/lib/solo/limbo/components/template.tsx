@@ -1,13 +1,13 @@
-import React from "react";
-import { Form } from "../../../ui/form";
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
-import { BetController } from "./bet-controller";
-import { Limbo, LimboFormField } from "..";
-import { LimboGameProps } from "./game";
 import debounce from "debounce";
+import React from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Limbo, LimboFormField } from "..";
+import { GameContainer, SceneContainer } from "../../../common/containers";
+import { Form } from "../../../ui/form";
+import { BetController } from "./bet-controller";
+import { LimboGameProps } from "./game";
 
 type TemplateOptions = {
   scene?: {
@@ -29,7 +29,7 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 2, {
+      .min(props?.minWager || 1, {
         message: `Minimum wager is ${props?.minWager}`,
       })
       .max(props?.maxWager || 2000, {
@@ -52,7 +52,7 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: "all",
     defaultValues: {
-      wager: 2,
+      wager: props?.minWager || 1,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
@@ -77,8 +77,8 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
-            maxWager={props?.maxWager || 10}
-            minWager={props?.minWager || 2}
+            maxWager={props?.maxWager || 2000}
+            minWager={props?.minWager || 1}
             winMultiplier={multiplier}
           />
           <SceneContainer
@@ -90,7 +90,6 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
             <Limbo.Game {...props}>
               <Limbo.GameArea {...props}>
                 <Limbo.LastBets />
-                <Limbo.ResultAnimation />
                 <Limbo.Slider />
               </Limbo.GameArea>
             </Limbo.Game>

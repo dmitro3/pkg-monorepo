@@ -9,6 +9,8 @@ import { cn } from "../../../utils/style";
 import { BetController } from "./bet-controller";
 import { Form } from "../../../ui/form";
 import { Plinko } from "..";
+import debounce from "debounce";
+import React from "react";
 
 type TemplateOptions = {
   scene?: {
@@ -21,6 +23,7 @@ type TemplateProps = PlinkoGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: PlinkoFormFields) => void;
+  onFormChange?: (fields: PlinkoFormFields) => void;
 };
 
 const PlinkoTemplate = ({ ...props }: TemplateProps) => {
@@ -29,7 +32,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 2, {
+      .min(props?.minWager || 1, {
         message: `Minimum wager is ${props?.minWager}`,
       })
 
@@ -53,7 +56,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: "onSubmit",
     defaultValues: {
-      wager: 2,
+      wager: props?.minWager || 1,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
@@ -61,13 +64,23 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
     },
   });
 
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <BetController
-            minWager={props.minWager || 2}
-            maxWager={props.maxWager || 10}
+            minWager={props.minWager || 1}
+            maxWager={props.maxWager || 2000}
           />
           <SceneContainer
             className={cn(

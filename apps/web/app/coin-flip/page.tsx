@@ -7,10 +7,15 @@ import { config } from "../wagmi";
 import { useEffect } from "react";
 
 export default function CoinFlipPage() {
-  /*   const clientConfig = useClient();
-  const { connectAsync, connectors } = useConnect();
-  useEffect(() => {
-    reconnect(config);
-  }, [clientConfig, connectAsync, connectors]); */
-  return <CoinFlipTemplateWithWeb3 />;
+  return (
+    <CoinFlipTemplateWithWeb3
+      options={{
+        scene: {
+          backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
+        },
+      }}
+      minWager={0.1}
+      maxWager={2000}
+    />
+  );
 }
