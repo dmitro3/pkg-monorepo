@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  COIN_SIDE,
-  CoinFlip3DTemplate,
-  CoinFlip3dFormFields,
-  CoinFlip3dGameResult,
+  Plinko3dFormFields,
+  Plinko3dGameResult,
+  Plinko3dTemplate,
+  PlinkoTemplate,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -28,25 +28,24 @@ const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
 
 type TemplateOptions = {
   scene?: {
-    backgroundImage?: string;
-    loader?: string;
-    logo?: string;
+    loader: string;
+  };
+  betController: {
+    logo: string;
   };
 };
 
 interface TemplateWithWeb3Props {
   options: TemplateOptions;
+  buildedGameUrl: string;
   minWager?: number;
   maxWager?: number;
-  buildedGameUrl: string;
 
   onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: (result: CoinFlip3dGameResult[]) => void;
+  onAnimationCompleted?: (result: Plinko3dGameResult[]) => void;
 }
 
-export default function CoinFlip3DTemplateWithWeb3(
-  props: TemplateWithWeb3Props
-) {
+export default function Plinko3DTemplateWithWeb3(props: TemplateWithWeb3Props) {
   const {
     gameAddresses,
     controllerAddress,
@@ -54,18 +53,21 @@ export default function CoinFlip3DTemplateWithWeb3(
     uiOperatorAddress,
   } = useContractConfigContext();
 
-  const [formValues, setFormValues] = useState<CoinFlip3dFormFields>({
+  const [formValues, setFormValues] = useState<Plinko3dFormFields>({
     betCount: 1,
-    coinSide: COIN_SIDE.ETH,
     stopGain: 0,
     stopLoss: 0,
     wager: 1,
+    plinkoSize: 10,
   });
 
-  const { gameEvent } = useGameSocketContext<any, SingleStepSettledEvent>();
+  const { gameEvent } = useGameSocketContext<
+    any,
+    SingleStepSettledEvent<number[]>
+  >();
 
-  const [coinFlipResult, setCoinFlipResult] =
-    useState<DecodedEvent<any, SingleStepSettledEvent>>();
+  const [plinkoResult, setPlinkoResult] =
+    useState<DecodedEvent<any, SingleStepSettledEvent<number[]>>>();
   const currentAccount = useCurrentAccount();
 
   const allowance = useTokenAllowance({
@@ -76,15 +78,15 @@ export default function CoinFlip3DTemplateWithWeb3(
     showDefaultToasts: false,
   });
 
-  const coinFlipSteps = useMemo(() => {
-    if (!coinFlipResult) return [];
+  const plinkoSteps = useMemo(() => {
+    if (!plinkoResult) return [];
 
-    return coinFlipResult?.program?.[0]?.data.converted.steps.map((s) => ({
-      coinSide: s.outcome.toString() as COIN_SIDE,
+    return plinkoResult?.program?.[0]?.data.converted.steps.map((s) => ({
+      outcomes: s.outcome,
       payout: s.payout,
       payoutInUsd: s.payout,
     }));
-  }, [coinFlipResult]);
+  }, [plinkoResult]);
 
   const encodedParams = useMemo(() => {
     const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
@@ -103,7 +105,7 @@ export default function CoinFlip3DTemplateWithWeb3(
           type: "uint8",
         },
       ],
-      [Number(formValues.coinSide)]
+      [Number(formValues.plinkoSize)]
     );
 
     const encodedGameData = encodeAbiParameters(
@@ -127,7 +129,7 @@ export default function CoinFlip3DTemplateWithWeb3(
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.coinFlip as Address,
+        gameAddresses.plinko as Address,
         tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -142,7 +144,7 @@ export default function CoinFlip3DTemplateWithWeb3(
     };
   }, [
     formValues.betCount,
-    formValues.coinSide,
+    formValues.plinkoSize,
     formValues.stopGain,
     formValues.stopLoss,
     formValues.wager,
@@ -153,7 +155,7 @@ export default function CoinFlip3DTemplateWithWeb3(
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.coinFlip as Address,
+        gameAddresses.plinko as Address,
         encodedParams.tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -187,14 +189,14 @@ export default function CoinFlip3DTemplateWithWeb3(
     const finalResult = gameEvent;
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
-      setCoinFlipResult(finalResult);
+      setPlinkoResult(finalResult);
   }, [gameEvent]);
 
   return (
-    <CoinFlip3DTemplate
+    <Plinko3dTemplate
       {...props}
       onSubmitGameForm={onGameSubmit}
-      gameResults={coinFlipSteps || []}
+      gameResults={plinkoSteps || []}
       onFormChange={(val) => {
         setFormValues(val);
       }}

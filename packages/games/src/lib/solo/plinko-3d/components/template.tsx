@@ -8,6 +8,7 @@ import { Plinko3d, Plinko3dFormFields } from "..";
 import { UnityGameContainer } from "../../../common/containers";
 import { Plinko3dGameProps } from "./game";
 import { Form } from "../../../ui/form";
+import debounce from "debounce";
 
 const MIN_BET_COUNT = 1 as const;
 
@@ -28,6 +29,7 @@ type TemplateProps = Plinko3dGameProps & {
   maxWager?: number;
   buildedGameUrl: string;
   onSubmitGameForm: (data: Plinko3dFormFields) => void;
+  onFormChange?: (fields: Plinko3dFormFields) => void;
 };
 
 export function PlinkoGame({ ...props }: TemplateProps) {
@@ -36,7 +38,7 @@ export function PlinkoGame({ ...props }: TemplateProps) {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 2, {
+      .min(props?.minWager || 1, {
         message: `Minimum wager is ${props?.minWager}`,
       })
 
@@ -60,13 +62,23 @@ export function PlinkoGame({ ...props }: TemplateProps) {
     }),
     mode: "onSubmit",
     defaultValues: {
-      wager: 2,
+      wager: props?.minWager || 1,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
       plinkoSize: 10,
     },
   });
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>
@@ -75,8 +87,8 @@ export function PlinkoGame({ ...props }: TemplateProps) {
           <Plinko3d.Game {...props}>
             <Plinko3d.BetController
               count={count}
-              maxWager={props?.maxWager || 10}
-              minWager={props?.minWager || 2}
+              maxWager={props?.maxWager || 2000}
+              minWager={props?.minWager || 1}
               logo={props.options.betController.logo}
             />
             <Plinko3d.Scene
