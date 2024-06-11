@@ -9,6 +9,8 @@ import { cn } from "../../../utils/style";
 import { BetController } from "./bet-controller";
 import { Form } from "../../../ui/form";
 import { Plinko } from "..";
+import debounce from "debounce";
+import React from "react";
 
 type TemplateOptions = {
   scene?: {
@@ -21,6 +23,7 @@ type TemplateProps = PlinkoGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: PlinkoFormFields) => void;
+  onFormChange?: (fields: PlinkoFormFields) => void;
 };
 
 const PlinkoTemplate = ({ ...props }: TemplateProps) => {
@@ -60,6 +63,16 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
       plinkoSize: 10,
     },
   });
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>
