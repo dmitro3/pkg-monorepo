@@ -29,8 +29,7 @@ const buttonVariants = cva(
           "wr-bg-horse-race-bet-button-bg bg-[size:wr-100%] wr-bg-no-repeat wr-font-barlowCondensed wr-text-[22px] wr-font-[900] wr-uppercase wr-italic wr-leading-8 wr-tracking-wider wr-transition-all wr-duration-300 [text-shadow:wr-_0px_2px_0px_#054352] hover:wr-scale-110 hover:wr-ease-in disabled:wr-bg-horse-race-bet-button-bg-disabled md:wr-bg-contain",
         crash:
           "bg-[#5B6CFF] transition-all duration-300 hover:bg-[#3C4DE1] disabled:bg-zinc-700",
-        plinko:
-          "!rounded-none bg-plinko-button bg-[size:100%] bg-no-repeat font-furore text-2xl leading-6 transition-all duration-300 [text-shadow:_0px_2px_0px_#054352] [box-shadow:0px_2.7px_0px_0px_#004265] hover:scale-110 hover:ease-in disabled:bg-plinko-button-disabled lg:bg-contain",
+        plinko: `!wr-rounded-none wr-bg-plinko-button bg-[size:wr-100%] wr-bg-no-repeat wr-font-furore wr-text-2xl wr-leading-6 wr-transition-all wr-duration-300 [text-shadow:wr-_0px_2px_0px_#054352] [box-shadow:wr-0px_2.7px_0px_0px_#004265] hover:wr-scale-110 hover:wr-ease-in disabled:wr-bg-plinko-button-disabled lg:wr-bg-contain`,
       },
       size: {
         sm: "wr-h-7 wr-rounded-sm",

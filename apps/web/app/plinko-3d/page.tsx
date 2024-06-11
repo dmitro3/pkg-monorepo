@@ -9,7 +9,7 @@ const Plinko3d = () => {
   return (
     <div>
       <Plinko3dTemplate
-        buildedGameUrl={process.env.NEXT_PUBLIC_BASE_CDN_URL || ""}
+        buildedGameUrl={"https://jbassets.fra1.digitaloceanspaces.com"}
         options={{
           scene: {
             loader: "/plinko-3d/loader.png",
