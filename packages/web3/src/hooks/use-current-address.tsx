@@ -31,14 +31,12 @@ export const useCurrentAccount = () => {
   return currentAccount;
 };
 
-const fetchCurrentUserAddress = async (
+const fetchSmartAccountAddress = async (
   accountApi?: SimpleAccountAPI,
-  address?: `0x${string}` | undefined,
   isSmartWallet?: boolean
 ) => {
-  if (!address) return undefined;
-
-  if (!isSmartWallet) return address;
+  if (!isSmartWallet) return;
+  if (!accountApi) return;
 
   const smartWalletAddress = await accountApi?.getAccountAddress();
 
@@ -49,6 +47,7 @@ export const CurrentAccountProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const { address, connector, isConnecting, status } = useAccount();
+
   const { accountApi } = useSmartAccountApi();
   const [currentAccount, setCurrentAccount] =
     useState<UseCurrentAccount>(initalState);
@@ -60,9 +59,8 @@ export const CurrentAccountProvider: React.FC<{
       connector?.type === SmartWalletConnectorWagmiType,
     ],
     queryFn: () =>
-      fetchCurrentUserAddress(
+      fetchSmartAccountAddress(
         accountApi,
-        address,
         connector?.type === SmartWalletConnectorWagmiType
       ),
     enabled: !!address && !!connector?.type && !!accountApi,
@@ -71,9 +69,11 @@ export const CurrentAccountProvider: React.FC<{
   React.useEffect(() => {
     console.log("Status", status);
 
+    const isSmartWallet = connector?.type === SmartWalletConnectorWagmiType;
+
     setCurrentAccount({
       rootAddress: address,
-      address: currentUserAddress,
+      address: isSmartWallet ? currentUserAddress : address,
       isGettingAddress,
       isSmartWallet: connector?.type === SmartWalletConnectorWagmiType,
     });
@@ -85,6 +85,7 @@ export const CurrentAccountProvider: React.FC<{
     isConnecting,
     status,
   ]);
+
 
   const resetCurrentAccount = () => {
     setCurrentAccount(initalState);
