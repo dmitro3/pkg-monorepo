@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import useModalsStore from "../modals.store";
 import { Google, IconWallet } from "../../../svgs";
-import { Connector, useConnect } from "wagmi";
+import { Connector, useConnect, useConnectors } from "wagmi";
 import { SmartWalletConnectorWagmiType } from "@winrlabs/web3";
 import { Button } from "../../button";
 import { useEffect, useState } from "react";
@@ -35,7 +35,11 @@ export const LoginModal = () => {
 
   const [isSmartWallet, setIsSmartWallet] = useState(true);
 
-  const { connectors, connect, isPending, isSuccess } = useConnect({
+  const connectors = useConnectors({
+    config: wagmiConfig,
+  });
+
+  const { connect, isPending, isSuccess, connectAsync } = useConnect({
     config: wagmiConfig,
   });
 
@@ -81,9 +85,12 @@ export const LoginModal = () => {
               <section>
                 <button
                   className="wr-rounded-md wr-px-3 wr-py-0 wr-text-[15px] wr-font-semibold wr-leading-4 wr-transition wr-duration-300 wr-ease-out hover:wr-ease-in focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-pointer-events-none disabled:wr-cursor-not-allowed wr-bg-zinc-100 wr-flex wr-items-center wr-justify-center wr-gap-1 wr-w-full wr-h-10 wr-text-black"
-                  onClick={() =>
-                    connect({ connector: googleConnector as Connector })
-                  }
+                  onClick={async () => {
+                    await connectAsync({
+                      connector: googleConnector as Connector,
+                    });
+                    localStorage["isConnected"] = true;
+                  }}
                 >
                   <Google />
                   <span>Continue with Google</span>
@@ -99,7 +106,10 @@ export const LoginModal = () => {
                       <Button
                         variant={"outline"}
                         size={"lg"}
-                        onClick={() => connect({ connector })}
+                        onClick={async () => {
+                          await connectAsync({ connector });
+                          localStorage["isConnected"] = true;
+                        }}
                         type="button"
                       >
                         {connector.name}
@@ -134,7 +144,10 @@ export const LoginModal = () => {
                       <Button
                         variant={"outline"}
                         size={"lg"}
-                        onClick={() => connect({ connector })}
+                        onClick={async () => {
+                          await connectAsync({ connector });
+                          localStorage["isConnected"] = true;
+                        }}
                         type="button"
                       >
                         {connector.name}
