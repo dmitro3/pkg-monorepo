@@ -42,12 +42,10 @@ export const Header = ({
   const connectors = useConnectors({
     config: wagmiConfig,
   });
+
   const { disconnect, disconnectAsync, isPending, data } = useDisconnect({
     config: wagmiConfig,
   });
-  console.log("connectors", connectors);
-
-  console.log("data", data);
 
   return (
     <header
@@ -75,8 +73,6 @@ export const Header = ({
             <Button
               disabled={isPending}
               onClick={async () => {
-                localStorage.clear();
-                account?.resetCurrentAccount?.();
                 try {
                   await Promise.all(
                     connectors.map(async (connector, index) => {
@@ -84,6 +80,8 @@ export const Header = ({
                       await disconnectAsync({ connector });
                     })
                   );
+                  localStorage.clear();
+                  account?.resetCurrentAccount?.();
                 } catch (error) {
                   console.error("Error during disconnect:", error);
                 }

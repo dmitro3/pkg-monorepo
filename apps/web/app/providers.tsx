@@ -1,7 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { WagmiProvider } from "wagmi";
 
 import { config } from "./wagmi";
@@ -33,9 +33,15 @@ const gameAddresses = {
 
 export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
+  const [isPreviouslyConnected, setIsPreviouslyConnected] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage) return;
+    setIsPreviouslyConnected(localStorage["isConnected"]);
+  }, []);
 
   return (
-    <WagmiProvider reconnectOnMount config={config}>
+    <WagmiProvider reconnectOnMount={isPreviouslyConnected} config={config}>
       <QueryClientProvider client={queryClient}>
         <WinrLabsWeb3Provider
           smartAccountConfig={{
