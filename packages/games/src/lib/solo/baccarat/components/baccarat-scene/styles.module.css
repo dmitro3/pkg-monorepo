@@ -1,0 +1,115 @@
+.betArea {
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  border-radius: 100%;
+  clip: rect(0px, 900px, 900px, 450px);
+  transform: rotate(30deg);
+  z-index: 3;
+  overflow: hidden;
+}
+
+.pie {
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  border-radius: 100%;
+  clip: rect(0px, 450px, 900px, 0px);
+  transform: rotate(-60deg);
+  color: #77c188;
+  left: -3px;
+  top: -1px;
+  border: 2px solid #396c4c;
+}
+
+.zone {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(30deg);
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+  user-select: none;
+}
+
+.zone:hover {
+  background-color: #205335;
+}
+
+.zone-content {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.zone-content-pickeds {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.zone-content-pickeds > span {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  color: white;
+}
+
+.zone-content-pickeds > img {
+  width: 36px;
+  height: 36px;
+}
+
+.winner {
+  animation: zoneHighlight 2000ms ease-in-out;
+}
+
+.tieWinner {
+  animation: tieZoneHighlight 2000ms ease-in-out;
+}
+
+@media screen and (max-width: 1024px) {
+  .baccaratScene {
+    zoom: 0.75;
+    -ms-zoom: 0.75;
+    -webkit-zoom: 0.75;
+    -moz-transform: scale(0.75, 0.75);
+  }
+}
+
+@keyframes zoneHighlight {
+  25% {
+    background: #65a30d;
+  }
+  50% {
+    background: #65a30d;
+  }
+  75% {
+    background: #65a30d;
+  }
+}
+
+@keyframes tieZoneHighlight {
+  25% {
+    background: #f97316;
+  }
+  50% {
+    background: #f97316;
+  }
+  75% {
+    background: #f97316;
+  }
+}

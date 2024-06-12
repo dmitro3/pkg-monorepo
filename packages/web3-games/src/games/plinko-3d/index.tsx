@@ -4,7 +4,6 @@ import {
   Plinko3dFormFields,
   Plinko3dGameResult,
   Plinko3dTemplate,
-  PlinkoTemplate,
 } from "@winrlabs/games";
 import {
   controllerAbi,

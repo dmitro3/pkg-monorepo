@@ -1,0 +1,221 @@
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 150px;
+  perspective: 1000px;
+  border-radius: 15px;
+  z-index: 4;
+  transition: 0.5s ease-in-out;
+}
+
+.innerWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s;
+  transform-style: preserve-3d;
+  border-radius: 15px;
+}
+
+.card[data-state="unflipped"] .innerWrapper {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.card[data-state="flipped"] .innerWrapper {
+  transform: rotateY(180deg);
+}
+
+.front {
+  background-color: white;
+  color: black;
+  border-radius: 15px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  transition: 500ms ease-in-out;
+}
+
+.winner {
+  animation: highlightAnimation 5s linear infinite;
+}
+
+.mainIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 40px);
+  height: calc(100% - 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("/images/baccarat/card-bg-black.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 0;
+}
+
+.back {
+  background-image: url("/images/baccarat/jb-card-bg.svg");
+  transform: rotateY(180deg);
+  transition: all 0.5s ease-in-out;
+  position: relative;
+  z-index: 5;
+}
+
+.back,
+.front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+}
+
+.cardSuitArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 4px 9px;
+}
+
+.cardSuitArea:first-child {
+  align-items: flex-start;
+}
+
+.logo {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.cardValue {
+  display: flex;
+  flex-direction: column;
+  z-index: 3;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardValue .value {
+  font-size: 21px;
+  line-height: 32px;
+  font-weight: 700;
+  font-family: "Oswald", var(--default-font-family);
+}
+
+.cardValue.upsideDown {
+  transform: rotate(180deg);
+}
+
+.fixed-1 {
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+}
+
+.fixed-2 {
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+}
+
+.fixed-3 {
+  top: 30px;
+  left: 30px;
+  z-index: 1;
+}
+
+.playerFirstCard {
+  top: 205px;
+  left: -250px;
+}
+
+.playerFirstCard.withThird {
+  top: 200px;
+  left: -260px;
+}
+
+.playerSecondCard {
+  top: 215px;
+  left: -220px;
+}
+
+.playerSecondCard.withThird {
+  top: 210px;
+  left: -235px;
+}
+
+.playerThirdCard {
+  top: 220px;
+  left: -210px;
+}
+
+.bankerFirstCard {
+  top: 205px;
+  left: 295px;
+}
+
+.bankerFirstCard.withThird {
+  top: 200px;
+  left: 285px;
+}
+
+.bankerSecondCard {
+  top: 215px;
+  left: 325px;
+}
+
+.bankerSecondCard.withThird {
+  top: 210px;
+  left: 310px;
+}
+
+.bankerThirdCard {
+  top: 220px;
+  left: 335px;
+}
+
+.playerZoneConfetti {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+.bankerZoneConfetti {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+@keyframes highlightAnimation {
+  0% {
+    border: 2px solid var(--warning);
+    filter: drop-shadow(0px 0px 5px #ffd000);
+  }
+  25% {
+    border: 2px solid var(--warning);
+    filter: unset;
+  }
+  50% {
+    border: 2px solid var(--warning);
+    filter: drop-shadow(0px 0px 5px #ffd000);
+  }
+  75% {
+    border: 2px solid var(--warning);
+    filter: unset;
+  }
+  100% {
+    border: 2px solid var(--warning);
+    filter: drop-shadow(0px 0px 5px #ffd000);
+  }
+}

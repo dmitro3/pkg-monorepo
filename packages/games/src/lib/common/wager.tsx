@@ -165,6 +165,33 @@ export const TotalWager = ({
   );
 };
 
+interface MaxPayoutProps extends Props {
+  maxPayout: number;
+  containerClassName?: string;
+}
+
+export const MaxPayout = ({
+  className,
+  maxPayout,
+  containerClassName,
+}: MaxPayoutProps) => {
+  const _maxPayout = toFormatted(maxPayout, 2);
+
+  return (
+    <div
+      className={cn(
+        "flex w-full items-center gap-1 rounded-lg bg-zinc-800 px-2 py-[10px]",
+        containerClassName
+      )}
+    >
+      <WagerCurrencyIcon />
+      <span className={cn("font-semibold text-zinc-100", className)}>
+        ${_maxPayout}
+      </span>
+    </div>
+  );
+};
+
 export const WagerCurrencyIcon = ({ className }: Props) => {
   const { currency } = useGameOptions();
 
