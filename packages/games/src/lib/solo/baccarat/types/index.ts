@@ -54,3 +54,10 @@ export interface BaccaratGameHand {
   secondCard: number;
   thirdCard: number;
 }
+
+export interface BaccaratGameProps {
+  baccaratResults: BaccaratGameResult | null;
+  baccaratSettledResults: BaccaratGameSettledResult | null;
+
+  onAnimationCompleted?: (r: BaccaratGameSettledResult) => void;
+}

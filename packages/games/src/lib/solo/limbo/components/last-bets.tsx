@@ -7,7 +7,7 @@ const LastBets = () => {
   const { lastBets } = useLimboGameStore(["lastBets"]);
 
   return (
-    <LastBetsContainer className="mx-auto pt-3.5">
+    <LastBetsContainer className="wr-mx-auto wr-pt-3.5">
       {lastBets?.map((result, index) => {
         return (
           <div

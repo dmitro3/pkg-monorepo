@@ -6,7 +6,7 @@ import {
   getBaccaratIcon,
 } from "./card";
 import { AnimatePresence, motion } from "framer-motion";
-import styles from "./card.module.css";
+import styles from "./baccarat-card.module.css";
 import {
   BaccaratGameResult,
   BaccaratGameSettledResult,
@@ -102,7 +102,10 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
     const suits = generateBaccaratSuits();
 
-    const _playerFirstCard = new BaccaratCard(playerHand.firstCard, suits[0]);
+    const _playerFirstCard = new BaccaratCard(
+      playerHand.firstCard,
+      suits[0] as BaccaratSuit
+    );
 
     flipEffect.play();
 
@@ -112,7 +115,10 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
     await wait(TIMEOUT);
 
-    const _bankerFirstCard = new BaccaratCard(bankerHand.firstCard, suits[1]);
+    const _bankerFirstCard = new BaccaratCard(
+      bankerHand.firstCard,
+      suits[1] as BaccaratSuit
+    );
 
     flipEffect.play();
 
@@ -122,7 +128,10 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
     await wait(TIMEOUT);
 
-    const _playerSecondCard = new BaccaratCard(playerHand.secondCard, suits[2]);
+    const _playerSecondCard = new BaccaratCard(
+      playerHand.secondCard,
+      suits[2] as BaccaratSuit
+    );
 
     flipEffect.play();
 
@@ -138,7 +147,10 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
     await wait(TIMEOUT);
 
-    const _bankerSecondCard = new BaccaratCard(bankerHand.secondCard, suits[3]);
+    const _bankerSecondCard = new BaccaratCard(
+      bankerHand.secondCard,
+      suits[3] as BaccaratSuit
+    );
 
     flipEffect.play();
 
@@ -155,7 +167,10 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
     if (playerHand.hasThirdCard) {
       await wait(TIMEOUT);
 
-      const _playerThirdCard = new BaccaratCard(playerHand.thirdCard, suits[4]);
+      const _playerThirdCard = new BaccaratCard(
+        playerHand.thirdCard,
+        suits[4] as BaccaratSuit
+      );
 
       flipEffect.play();
 
@@ -173,7 +188,10 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
     if (bankerHand.hasThirdCard) {
       await wait(TIMEOUT);
 
-      const _bankerThirdCard = new BaccaratCard(bankerHand.thirdCard, suits[5]);
+      const _bankerThirdCard = new BaccaratCard(
+        bankerHand.thirdCard,
+        suits[5] as BaccaratSuit
+      );
 
       flipEffect.play();
 
@@ -238,27 +256,27 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
   }, [isAnimationCompleted, baccaratSettled]);
 
   React.useEffect(() => {
-    if (isPlayerWinner) playerLottieRef.current.play();
+    if (isPlayerWinner) setTimeout(() => playerLottieRef.current.play(), 100);
   }, [isPlayerWinner]);
 
   React.useEffect(() => {
-    if (isBankerWinner) bankerLottieRef.current.play();
+    if (isBankerWinner) setTimeout(() => bankerLottieRef.current.play(), 100);
   }, [isBankerWinner]);
 
   return (
-    <div className="absolute left-[47%] top-[45%] z-[5] flex -translate-x-1/2 -translate-y-1/2 items-start justify-center">
-      <div className="absolute left-[-325px] top-[110px] h-[200px] w-[160px]">
-        <div className="absolute bottom-[-55px] left-1/2 -translate-x-1/2 gap-1 text-center text-md font-bold ">
+    <div className="wr-absolute wr-left-[47%] wr-top-[45%] wr-z-[5] wr-flex -wr-translate-x-1/2 -wr-translate-y-1/2 wr-items-start wr-justify-center">
+      <div className="wr-absolute wr-left-[-325px] wr-top-[110px] wr-h-[200px] wr-w-[160px]">
+        <div className="wr-absolute wr-bottom-[-55px] wr-left-1/2 -wr-translate-x-1/2 wr-gap-1 wr-text-center wr-text-md wr-font-bold ">
           <AnimatePresence>
             {playerCount !== null && (
               <motion.div
                 initial={initialCountAnimation}
                 animate={countAnimation}
                 exit={initialCountAnimation}
-                className="flex flex-col items-center justify-center gap-2"
+                className="wr-flex wr-flex-col wr-items-center wr-justify-center wr-gap-2"
               >
                 <span>Player</span>
-                <div className="flex h-[28px] w-[36px] items-center justify-center overflow-hidden rounded-xl bg-[#396C4C] text-[#8FCDA8]">
+                <div className="wr-flex wr-h-[28px] wr-w-[36px] wr-items-center wr-justify-center wr-overflow-hidden wr-rounded-xl wr-bg-[#396C4C] wr-text-[#8FCDA8]">
                   <motion.div
                     key={playerCount}
                     initial={initialCountAnimation}
@@ -273,30 +291,32 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
           </AnimatePresence>
         </div>
         <div className={styles.playerZoneConfetti}>
-          <Player
-            ref={playerLottieRef}
-            src={Confetti}
-            style={{
-              width: "200px",
-              height: "200px",
-            }}
-            loop={false}
-            speed={1.5}
-          />
+          {isPlayerWinner && (
+            <Player
+              ref={playerLottieRef}
+              src={Confetti}
+              style={{
+                width: "200px",
+                height: "200px",
+              }}
+              loop={false}
+              speed={1.5}
+            />
+          )}
         </div>
       </div>
-      <div className="absolute left-[220px] top-[110px] h-[200px] w-[160px]">
-        <div className="absolute bottom-[-55px] left-1/2 flex -translate-x-1/2 flex-col gap-1 text-center text-md font-bold">
+      <div className="wr-absolute wr-left-[220px] wr-top-[110px] wr-h-[200px] wr-w-[160px]">
+        <div className="wr-absolute wr-bottom-[-55px] wr-left-1/2 wr-flex -wr-translate-x-1/2 wr-flex-col wr-gap-1 wr-text-center wr-text-md wr-font-bold">
           <AnimatePresence>
             {bankerCount !== null && (
               <motion.div
                 initial={initialCountAnimation}
                 animate={countAnimation}
                 exit={initialCountAnimation}
-                className="flex flex-col items-center justify-center gap-2"
+                className="wr-flex wr-flex-col wr-items-center wr-justify-center wr-gap-2"
               >
                 <span>Banker</span>
-                <div className="flex h-[28px] w-[36px] items-center justify-center overflow-hidden rounded-xl bg-[#396C4C] text-[#8FCDA8]">
+                <div className="wr-flex wr-h-[28px] wr-w-[36px] wr-items-center wr-justify-center wr-overflow-hidden wr-rounded-xl wr-bg-[#396C4C] wr-text-[#8FCDA8]">
                   <motion.div
                     key={bankerCount}
                     initial={initialCountAnimation}
@@ -311,16 +331,18 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
           </AnimatePresence>
         </div>
         <div className={styles.bankerZoneConfetti}>
-          <Player
-            ref={bankerLottieRef}
-            src={Confetti}
-            style={{
-              width: "200px",
-              height: "200px",
-            }}
-            loop={false}
-            speed={1.5}
-          />
+          {isBankerWinner && (
+            <Player
+              ref={bankerLottieRef}
+              src={Confetti}
+              style={{
+                width: "200px",
+                height: "200px",
+              }}
+              loop={false}
+              speed={1.5}
+            />
+          )}
         </div>
       </div>
 
@@ -329,7 +351,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
           width={100}
           height={150}
           className={cn(
-            "absolute z-[0] max-h-[150px] max-w-[100px] -translate-x-1/2 -translate-y-1/2",
+            "wr-absolute wr-z-[0] wr-max-h-[150px] wr-max-w-[100px] -wr-translate-x-1/2 -wr-translate-y-1/2",
             styles.playerFirstCard
           )}
           src={`${CDN_URL}/baccarat/stack.svg`}
@@ -340,7 +362,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
           width={100}
           height={150}
           className={cn(
-            "absolute z-[0] max-h-[150px] max-w-[100px] -translate-x-1/2 -translate-y-1/2",
+            "wr-absolute wr-z-[0] wr-max-h-[150px] wr-max-w-[100px] -wr-translate-x-1/2 -wr-translate-y-1/2",
             styles.bankerFirstCard
           )}
           src={`${CDN_URL}/baccarat/stack.svg`}
@@ -445,7 +467,12 @@ const Card: React.FC<{
               />
             </div>
           </div>
-          <div className={styles.mainIcon}>
+          <div
+            className={styles.mainIcon}
+            style={{
+              backgroundImage: `url(${CDN_URL}/baccarat/card-bg-black.png)`,
+            }}
+          >
             {getBaccaratIcon(card?.suit || BaccaratSuit.CLUBS)?.main}
           </div>
           <div className={styles.cardSuitArea}>
@@ -462,7 +489,12 @@ const Card: React.FC<{
             />
           </div>
         </div>
-        <div className={styles.back} />
+        <div
+          className={styles.back}
+          style={{
+            backgroundImage: `url(${CDN_URL}/baccarat/jb-card-bg.svg)`,
+          }}
+        />
       </div>
     </div>
   );

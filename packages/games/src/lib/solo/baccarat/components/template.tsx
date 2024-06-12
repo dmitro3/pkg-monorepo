@@ -1,3 +1,5 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -9,37 +11,31 @@ import { MULTIPLIER_BANKER, MULTIPLIER_TIE } from "../constants";
 import {
   BaccaratBetType,
   BaccaratFormFields,
+  BaccaratGameProps,
   BaccaratGameResult,
   BaccaratGameSettledResult,
 } from "../types";
 import { Chip } from "../../../common/chip-controller/types";
-import { RouletteFormFields } from "../../roulette";
 import debounce from "debounce";
 import { CDN_URL } from "../../../constants";
 import { BaccaratScene } from "./baccarat-scene";
 
-type TemplateOptions = {
-  scene?: {
-    backgroundImage?: string;
-  };
-};
-
-type TemplateProps = {
-  options: TemplateOptions;
+type TemplateProps = BaccaratGameProps & {
   minWager?: number;
   maxWager?: number;
 
-  onAnimationCompleted: (r: BaccaratGameSettledResult) => void;
   onSubmitGameForm: (data: BaccaratFormFields) => void;
   onFormChange?: (fields: BaccaratFormFields) => void;
 };
 
 const BaccaratTemplate: React.FC<TemplateProps> = ({
-  options,
   minWager,
   maxWager,
 
-  onAnimationCompleted,
+  baccaratResults,
+  baccaratSettledResults,
+
+  onAnimationCompleted = () => {},
   onSubmitGameForm,
   onFormChange,
 }) => {
@@ -55,9 +51,8 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   >([]);
 
   const [selectedChip, setSelectedChip] = React.useState<Chip>(Chip.ONE);
-  const [baccaratResults, setBaccaratResults] =
-    React.useState<BaccaratGameResult | null>(null);
-  const [baccaratSettled, setBaccaratSettled] =
+  const [results, setResults] = React.useState<BaccaratGameResult | null>(null);
+  const [settled, setSettled] =
     React.useState<BaccaratGameSettledResult | null>(null);
 
   const formSchema = z.object({
@@ -194,12 +189,20 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   }, [bankerWager, playerWager, tieWager]);
 
   const prepareSubmit = (data: BaccaratFormFields) => {
-    setBaccaratResults(null);
-    setBaccaratSettled(null);
+    setResults(null);
+    setSettled(null);
     setIsGamePlaying(true);
 
     onSubmitGameForm(data);
   };
+
+  React.useEffect(() => {
+    baccaratResults && setResults(baccaratResults);
+  }, [baccaratResults]);
+
+  React.useEffect(() => {
+    baccaratSettledResults && setSettled(baccaratSettledResults);
+  }, [baccaratSettledResults]);
 
   React.useEffect(() => {
     const debouncedCb = debounce((formFields) => {
@@ -214,16 +217,16 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(prepareSubmit)}>
-        <GameContainer className="relative overflow-hidden pt-0">
+        <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0">
           <SceneContainer
-            className="relative flex h-[600px]"
+            className="wr-relative wr-flex wr-h-[600px]"
             style={{
               backgroundImage: `url(${CDN_URL}/baccarat/baccarat-bg.png)`,
             }}
           >
             <BaccaratScene
-              baccaratResults={baccaratResults}
-              baccaratSettled={baccaratSettled}
+              baccaratResults={results}
+              baccaratSettled={settled}
               isDisabled={isGamePlaying}
               setIsDisabled={setIsGamePlaying}
               addWager={addWager}
@@ -245,3 +248,5 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     </Form>
   );
 };
+
+export default BaccaratTemplate;

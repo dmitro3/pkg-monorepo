@@ -53,14 +53,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url("/images/baccarat/card-bg-black.png");
   background-repeat: no-repeat;
   background-size: contain;
   z-index: 0;
 }
 
 .back {
-  background-image: url("/images/baccarat/jb-card-bg.svg");
   transform: rotateY(180deg);
   transition: all 0.5s ease-in-out;
   position: relative;

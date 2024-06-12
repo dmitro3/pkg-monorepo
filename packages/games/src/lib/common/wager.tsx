@@ -180,12 +180,12 @@ export const MaxPayout = ({
   return (
     <div
       className={cn(
-        "flex w-full items-center gap-1 rounded-lg bg-zinc-800 px-2 py-[10px]",
+        "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]",
         containerClassName
       )}
     >
       <WagerCurrencyIcon />
-      <span className={cn("font-semibold text-zinc-100", className)}>
+      <span className={cn("wr-font-semibold wr-text-zinc-100", className)}>
         ${_maxPayout}
       </span>
     </div>

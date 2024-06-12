@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./styles.module.css";
+import styles from "./baccarat-scene.module.css";
 import { useFormContext } from "react-hook-form";
 import { CardArea } from "../baccarat-card-area";
 import { renderChipIcon } from "../../../../common/chip-controller/utils";
@@ -68,47 +68,47 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
   return (
     <div
       className={cn(
-        "absolute left-1/2 top-[-450px] mx-auto h-[900px] w-[900px] -translate-x-1/2",
+        "wr-absolute wr-left-1/2 wr-top-[-450px] wr-mx-auto wr-h-[900px] wr-w-[900px] -wr-translate-x-1/2",
         styles.baccaratScene
       )}
     >
-      <div className="absolute h-full w-full rounded-full border-2 border-[#396c4c] bg-[#1c5032]">
+      <div className="wr-absolute wr-h-full wr-w-full wr-rounded-full wr-border-2 wr-border-[#396c4c] wr-bg-[#1c5032]">
         {/* tie background */}
-        <div className="absolute left-1/2 top-1/2 z-[3] h-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full bg-[#11331E]">
+        <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-z-[3] wr-h-1/2 wr-w-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-overflow-hidden wr-rounded-full wr-bg-[#11331E]">
           <img
             width={1400}
             height={600}
-            className="absolute bottom-0 left-0 max-h-[600px] max-w-[1400px] select-none object-cover object-center"
+            className="wr-absolute wr-bottom-0 wr-left-0 wr-max-h-[600px] wr-max-w-[1400px] wr-select-none wr-object-cover wr-object-center"
             src={`${CDN_URL}/baccarat/table-effect.png`}
             alt="JustBet Baccarat"
           />
         </div>
         {/* banker background */}
-        <div className="absolute left-1/2 top-1/2 z-[2] h-3/4 w-3/4 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full bg-[#174128]">
+        <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-z-[2] wr-h-3/4 wr-w-3/4 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-overflow-hidden wr-rounded-full wr-bg-[#174128]">
           <img
             width={1400}
             height={600}
-            className="absolute bottom-0 left-0 max-h-[600px] max-w-[1400px] select-none object-cover object-center"
+            className="wr-absolute wr-bottom-0 wr-left-0 wr-max-h-[600px] wr-max-w-[1400px] wr-select-none wr-object-cover wr-object-center"
             src={`${CDN_URL}/baccarat/table-effect.png`}
             alt="JustBet Baccarat"
           />
         </div>
         {/* player background */}
-        <div className="absolute left-1/2 top-1/2 z-[1] h-full w-full -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full bg-[#11331E]">
+        <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-z-[1] wr-h-full wr-w-full -wr-translate-x-1/2 -wr-translate-y-1/2 wr-overflow-hidden wr-rounded-full wr-bg-[#11331E]">
           <img
             width={1400}
             height={600}
-            className="absolute bottom-0 left-0 max-h-[600px] max-w-[1400px] select-none object-cover object-center"
+            className="wr-absolute wr-bottom-0 wr-left-0 wr-max-h-[600px] wr-max-w-[1400px] wr-select-none wr-object-cover wr-object-center"
             src={`${CDN_URL}/baccarat/table-effect.png`}
             alt="JustBet Baccarat"
           />
         </div>
         {/* center circle background */}
-        <div className="absolute left-1/2 top-1/2 z-[4] h-1/4 w-1/4 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full bg-[#174128]">
+        <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-z-[4] wr-h-1/4 wr-w-1/4 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-overflow-hidden wr-rounded-full wr-bg-[#174128]">
           <img
             width={1400}
             height={600}
-            className="absolute bottom-0 left-0 max-h-[600px] max-w-[1400px] select-none object-cover object-center"
+            className="wr-absolute wr-bottom-0 wr-left-0 wr-max-h-[600px] wr-max-w-[1400px] wr-select-none wr-object-cover wr-object-center"
             src={`${CDN_URL}/baccarat/table-effect.png`}
             alt="JustBet Baccarat"
           />
@@ -123,18 +123,18 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
                 styles.zone,
                 isTieWon && styles.tieWinner,
                 isDisabled &&
-                  "pointer-events-none cursor-default overflow-hidden",
-                "!z-[3] bg-[#11331E]"
+                  "wr-pointer-events-none wr-cursor-default wr-overflow-hidden",
+                "!wr-z-[3] wr-bg-[#11331E]"
               )}
             >
-              <div className="absolute bottom-[8%] left-1/2 flex -translate-x-1/2 flex-col text-center text-xl font-bold">
-                <span className="text-white">Tie</span>
-                <span className="text-sm font-normal">Pays 8 to 1</span>
+              <div className="wr-absolute wr-bottom-[8%] wr-left-1/2 wr-flex -wr-translate-x-1/2 wr-flex-col wr-text-center wr-text-xl wr-font-bold">
+                <span className="wr-text-white">Tie</span>
+                <span className="wr-text-sm wr-font-normal">Pays 8 to 1</span>
               </div>
 
-              <div className="absolute bottom-[8%] left-1/2 z-[1] flex -translate-x-1/2">
+              <div className="wr-absolute wr-bottom-[8%] wr-left-1/2 wr-z-[1] wr-flex -wr-translate-x-1/2">
                 {renderChipIcon(tieWager)}
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-white">
+                <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-font-bold wr-text-white">
                   {tieWager ? tieWager : ""}
                 </span>
               </div>
@@ -142,7 +142,7 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               <img
                 width={1400}
                 height={600}
-                className="absolute left-0 top-0 z-0 h-full max-h-full w-full max-w-full select-none rounded-full"
+                className="wr-absolute wr-left-0 wr-top-0 wr-z-0 wr-h-full wr-max-h-full wr-w-full wr-max-w-full wr-select-none wr-rounded-full"
                 src={`${CDN_URL}/baccarat/table-effect.png`}
                 alt="JustBet Baccarat"
               />
@@ -153,17 +153,17 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               className={cn(
                 styles.zone,
                 isBankerWon && styles.winner,
-                isDisabled && "pointer-events-none cursor-default",
-                "!z-[2] !h-3/4 !w-3/4 bg-[#174128]"
+                isDisabled && "wr-pointer-events-none wr-cursor-default",
+                "!wr-z-[2] !wr-h-3/4 !wr-w-3/4 wr-bg-[#174128]"
               )}
             >
-              <div className="absolute bottom-[7%] left-1/2 flex -translate-x-1/2 flex-col text-center text-xl font-bold">
-                <span className="text-white">Banker</span>
+              <div className="wr-absolute wr-bottom-[7%] wr-left-1/2 wr-flex -wr-translate-x-1/2 wr-flex-col wr-text-center wr-text-xl wr-font-bold">
+                <span className="wr-text-white">Banker</span>
               </div>
 
-              <div className="absolute bottom-[7%] left-1/2 z-[1] flex -translate-x-1/2">
+              <div className="wr-absolute wr-bottom-[7%] wr-left-1/2 wr-z-[1] wr-flex -wr-translate-x-1/2">
                 {renderChipIcon(bankerWager)}
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-white">
+                <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-font-bold wr-text-white">
                   {bankerWager ? bankerWager : ""}
                 </span>
               </div>
@@ -171,7 +171,7 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               <img
                 width={1400}
                 height={600}
-                className="absolute left-0 top-0 h-full max-h-full w-full max-w-full select-none rounded-full"
+                className="wr-absolute wr-left-0 wr-top-0 wr-h-full wr-max-h-full wr-w-full wr-max-w-full wr-select-none wr-rounded-full"
                 src={`${CDN_URL}/baccarat/table-effect.png`}
                 alt="JustBet Baccarat"
               />
@@ -182,17 +182,17 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               className={cn(
                 styles.zone,
                 isPlayerWon && styles.winner,
-                isDisabled && "pointer-events-none cursor-default",
-                "!z-[1] !h-full !w-full bg-[#11331E]"
+                isDisabled && "wr-pointer-events-none wr-cursor-default",
+                "!wr-z-[1] !wr-h-full !wr-w-full wr-bg-[#11331E]"
               )}
             >
-              <div className="absolute bottom-[5%] left-1/2 flex -translate-x-1/2 flex-col text-center text-xl font-bold">
-                <span className="text-white">Player</span>
+              <div className="wr-absolute wr-bottom-[5%] wr-left-1/2 wr-flex -wr-translate-x-1/2 wr-flex-col wr-text-center wr-text-xl wr-font-bold">
+                <span className="wr-text-white">Player</span>
               </div>
 
-              <div className="absolute bottom-[5%] left-1/2 z-[1] flex -translate-x-1/2">
+              <div className="wr-absolute wr-bottom-[5%] wr-left-1/2 wr-z-[1] wr-flex -wr-translate-x-1/2">
                 {renderChipIcon(playerWager)}
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-white">
+                <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-font-bold wr-text-white">
                   {playerWager ? playerWager : ""}
                 </span>
               </div>
@@ -200,14 +200,14 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               <img
                 width={1400}
                 height={600}
-                className="absolute left-0 top-0 h-full max-h-full w-full max-w-full select-none rounded-full"
+                className="wr-absolute wr-left-0 wr-top-0 wr-h-full wr-max-h-full wr-w-full wr-max-w-full wr-select-none wr-rounded-full"
                 src={`${CDN_URL}/baccarat/table-effect.png`}
                 alt="JustBet Baccarat"
               />
             </div>
 
-            <div className="absolute left-1/2 top-3/4 z-[3] h-1/2 w-[5px] -translate-x-1/2 -translate-y-1/2 bg-[#396C4C]" />
-            <div className="absolute left-[24%] top-[65%] z-[3] h-[9.5px] w-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-30deg] bg-[#396C4C]" />
+            <div className="wr-absolute wr-left-1/2 wr-top-3/4 wr-z-[3] wr-h-1/2 wr-w-[5px] -wr-translate-x-1/2 -wr-translate-y-1/2 wr-bg-[#396C4C]" />
+            <div className="wr-absolute wr-left-[24%] wr-top-[65%] wr-z-[3] wr-h-[9.5px] wr-w-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-rotate-[-30deg] wr-bg-[#396C4C]" />
           </div>
         </div>
         {/* bet area end */}
