@@ -56,12 +56,20 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     React.useState<BaccaratGameSettledResult | null>(null);
 
   const formSchema = z.object({
+    // wager: z
+    //   .number()
+    //   .min(minWager || 1, {
+    //     message: `Minimum wager is ${minWager || 1}`,
+    //   })
+    //   .max(maxWager || 2000, {
+    //     message: `Maximum wager is ${maxWager || 2000}`,
+    //   }),
     playerWager: z
       .number()
       .min(0, {
         message: `Minimum wager is ${minWager || 1}`,
       })
-      .max(2000, {
+      .max(maxWager || 2000, {
         message: `Maximum wager is ${maxWager || 2000}`,
       }),
     bankerWager: z
@@ -69,7 +77,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
       .min(0, {
         message: `Minimum wager is ${minWager || 1}`,
       })
-      .max(2000, {
+      .max(maxWager || 2000, {
         message: `Maximum wager is ${maxWager || 2000}`,
       }),
     tieWager: z
@@ -77,7 +85,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
       .min(0, {
         message: `Minimum wager is ${minWager || 1}`,
       })
-      .max(2000, {
+      .max(maxWager || 2000, {
         message: `Maximum wager is ${maxWager || 2000}`,
       }),
   });
@@ -87,6 +95,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
       async: true,
     }),
     defaultValues: {
+      // wager: 0,
       playerWager: 0,
       bankerWager: 0,
       tieWager: 0,
@@ -192,6 +201,8 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     setResults(null);
     setSettled(null);
     setIsGamePlaying(true);
+
+    console.log("SUBMITTING!!!!!!");
 
     onSubmitGameForm(data);
   };

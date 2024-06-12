@@ -5,6 +5,7 @@ import {
   BaccaratGameSettledResult,
   BaccaratTemplate,
 } from "@winrlabs/games";
+import { BaccaratTemplateWithWeb3 } from "@winrlabs/web3-games";
 import React from "react";
 
 const baccaratResult = {
@@ -29,25 +30,25 @@ const baccaratSettled = {
 };
 
 export default function BaccaratPage() {
-  const [result, setResult] = React.useState<BaccaratGameResult | null>(null);
-  const [settled, setSettled] =
-    React.useState<BaccaratGameSettledResult | null>(null);
+  // const [result, setResult] = React.useState<BaccaratGameResult | null>(null);
+  // const [settled, setSettled] =
+  //   React.useState<BaccaratGameSettledResult | null>(null);
 
-  React.useEffect(() => {
-    setTimeout(() => {
-      setResult(baccaratResult);
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     setResult(baccaratResult);
 
-      setSettled(baccaratSettled);
-    }, 3000);
-  }, []);
+  //     setSettled(baccaratSettled);
+  //   }, 3000);
+  // }, []);
 
   return (
-    <BaccaratTemplate
+    <BaccaratTemplateWithWeb3
       minWager={0.1}
       maxWager={2000}
-      baccaratResults={result}
-      baccaratSettledResults={settled}
-      onSubmitGameForm={() => {}}
+      onAnimationCompleted={() => {
+        console.log("animation comp!");
+      }}
     />
   );
 }
