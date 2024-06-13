@@ -28,6 +28,7 @@ export const PlinkoScene = ({
   onAnimationStep,
   onAnimationCompleted,
   loader,
+  devicePixelRatio = 1,
 }: PlinkoSceneProps) => {
   const form = useFormContext() as Plinko3dForm;
 
