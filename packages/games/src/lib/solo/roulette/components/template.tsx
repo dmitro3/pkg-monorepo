@@ -9,7 +9,13 @@ import {
 } from "../types";
 import { Chip } from "../../../common/chip-controller/types";
 import * as z from "zod";
-import { MAX_BET_COUNT, MIN_BET_COUNT, NUMBER_INDEX_COUNT } from "../constants";
+import {
+  MAX_BET_COUNT,
+  MIN_BET_COUNT,
+  NUMBER_INDEX_COUNT,
+  chunkMinWagerIndexes,
+  minWagerMultiplierForSideBets,
+} from "../constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { GameContainer, SceneContainer } from "../../../common/containers";
@@ -77,7 +83,17 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
   const addWager = (n: number, wager: Chip) => {
     const _selectedNumbers = selectedNumbers;
 
-    const newWager = (_selectedNumbers[n] as number) + wager;
+    console.log(n, "index", chunkMinWagerIndexes.includes(n));
+
+    let newWager = 0;
+
+    // min wager for side bets
+    if (chunkMinWagerIndexes.includes(n)) {
+      newWager =
+        (_selectedNumbers[n] as number) + wager * minWagerMultiplierForSideBets;
+    } else {
+      newWager = (_selectedNumbers[n] as number) + wager;
+    }
 
     const totalWager = _selectedNumbers.reduce((acc, cur) => acc + cur, 0);
 
