@@ -19,8 +19,8 @@ import {
   SingleStepSettledEvent,
   prepareGameTransaction,
 } from "../utils";
-import { useGameSocketContext } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
+import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
 const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
   "0x0") as `0x${string}`;
@@ -57,10 +57,7 @@ export default function PlinkoTemplateWithWeb3(props: TemplateWithWeb3Props) {
     plinkoSize: 10,
   });
 
-  const { gameEvent } = useGameSocketContext<
-    any,
-    SingleStepSettledEvent<number[]>
-  >();
+  const gameEvent = useListenGameEvent();
 
   const [plinkoResult, setPlinkoResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent<number[]>>>();

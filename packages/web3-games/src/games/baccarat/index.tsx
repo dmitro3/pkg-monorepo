@@ -16,11 +16,10 @@ import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import {
   DecodedEvent,
   GAME_HUB_EVENT_TYPES,
-  SingleStepSettledEvent,
   prepareGameTransaction,
 } from "../utils";
-import { useGameSocketContext } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
+import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
 const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
   "0x0") as `0x${string}`;
@@ -46,7 +45,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
     tieWager: 0,
   });
 
-  const { gameEvent } = useGameSocketContext<any, SingleStepSettledEvent>();
+  const gameEvent = useListenGameEvent();
 
   const [baccaratResults, setBaccaratResults] =
     useState<DecodedEvent<any, any>>();
@@ -170,7 +169,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
       console.log(finalResult, "settled");
     }
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.HandFinalized) {
+    if (finalResult?.program[1]?.type === GAME_HUB_EVENT_TYPES.BaccaratHands) {
       console.log(finalResult, "hand finalized");
     }
   }, [gameEvent]);

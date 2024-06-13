@@ -4,27 +4,23 @@ import React from "react";
 import { Socket, io } from "socket.io-client";
 import SuperJSON from "superjson";
 import { useCurrentAccount } from "@winrlabs/web3";
-import { DecodedEvent, Event } from "../../utils";
 
-interface GameSocket<T, K> {
-  gameEvent: DecodedEvent<T, K> | null;
+interface GameSocket {
+  // gameEvent: DecodedEvent<T, K> | null;
+  socket: Socket | null;
 }
-const GameSocketContext = React.createContext<GameSocket<any, any>>({
-  gameEvent: null,
+const GameSocketContext = React.createContext<GameSocket>({
+  socket: null,
 });
 
 export const useGameSocketContext = <T, K>() => {
-  return React.useContext<GameSocket<T, K>>(GameSocketContext);
+  return React.useContext(GameSocketContext);
 };
 
 export const GameSocketProvider: React.FC<{
   bundlerWsUrl: string;
   children: React.ReactNode;
 }> = ({ bundlerWsUrl, children }) => {
-  const [gameEvent, setGameEvent] = React.useState<DecodedEvent<
-    any,
-    any
-  > | null>(null);
   const { address } = useCurrentAccount();
 
   const [socket, setSocket] = React.useState<Socket | null>(null);
@@ -64,40 +60,34 @@ export const GameSocketProvider: React.FC<{
     };
   }, [socket]);
 
-  React.useEffect(() => {
-    if (!socket) return;
+  // React.useEffect(() => {
+  //   if (!socket) return;
 
-    socket.on("message", onListenEvent);
+  //   socket.on("message", onListenEvent);
 
-    return () => {
-      socket.off("message", onListenEvent);
-    };
-  }, [socket]);
+  //   return () => {
+  //     socket.off("message", onListenEvent);
+  //   };
+  // }, [socket]);
 
-  const onListenEvent = (e: string) => {
-    const _e = SuperJSON.parse(e) as Event;
+  // const onListenEvent = (e: string) => {
+  //   const _e = SuperJSON.parse(e) as Event;
 
-    const context = _e.context as DecodedEvent<any, any>;
+  //   const context = _e.context as DecodedEvent<any, any>;
 
-    console.log(context, "CONTEXT!");
+  //   console.log(context, "CONTEXT!");
 
-    setGameEvent(context);
-  };
+  //   setGameEvent(context);
+  // };
 
   React.useEffect(() => {
     console.log(socket, "SOCKET!");
   }, [socket]);
 
-  React.useEffect(() => {
-    return () => {
-      setGameEvent(null);
-    };
-  }, []);
-
   return (
     <GameSocketContext.Provider
       value={{
-        gameEvent,
+        socket,
       }}
     >
       {children}
