@@ -16,6 +16,8 @@ import { Button } from "../../../ui/button";
 import { IconMagicStick, IconTrash } from "../../../svgs";
 import { AudioController } from "../../../common/audio-controller";
 import { KenoForm } from "../types";
+import { SkipButton } from "../../../common/skip-button";
+import useKenoGameStore from "../store";
 
 type Props = {
   minWager: number;
@@ -26,6 +28,11 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   const form = useFormContext() as KenoForm;
 
   const selections = form.watch("selections");
+
+  const { kenoGameResults, gameStatus } = useKenoGameStore([
+    "kenoGameResults",
+    "gameStatus",
+  ]);
 
   const maxPayout = 10;
 
@@ -55,6 +62,11 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
     form.setValue("selections", randomNumbers);
   };
 
+  const isFormInProgress =
+    form.formState.isSubmitting ||
+    form.formState.isLoading ||
+    gameStatus == "PLAYING";
+
   return (
     <BetControllerContainer>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
@@ -65,12 +77,9 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
         <WagerFormField
           minWager={minWager}
           maxWager={maxWager}
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading}
+          isDisabled={isFormInProgress}
         />
-        <BetCountFormField
-          maxValue={3}
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading}
-        />
+        <BetCountFormField maxValue={3} isDisabled={isFormInProgress} />
         <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
           <div>
             <FormLabel>Max Payout</FormLabel>
@@ -97,41 +106,38 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
         <div>
           <Advanced>
             <div className="wr-grid grid-cols-2 gap-2">
-              <StopGainFormField
-                isDisabled={
-                  form.formState.isSubmitting || form.formState.isLoading
-                }
-              />
-              <StopLossFormField
-                isDisabled={
-                  form.formState.isSubmitting || form.formState.isLoading
-                }
-              />
+              <StopGainFormField isDisabled={isFormInProgress} />
+              <StopLossFormField isDisabled={isFormInProgress} />
             </div>
           </Advanced>
         </div>
-        <PreBetButton>
-          <Button
-            type="submit"
-            variant={"success"}
-            className="wr-w-full max-lg:-wr-order-2 max-lg:wr-mb-3.5"
-            size={"xl"}
-            isLoading={form.formState.isSubmitting || form.formState.isLoading}
-            disabled={
-              !form.formState.isValid ||
-              form.formState.isSubmitting ||
-              form.formState.isLoading ||
-              selections.length === 0
-            }
-          >
-            Bet
-          </Button>
-        </PreBetButton>
+        {!(kenoGameResults.length > 2) && gameStatus !== "PLAYING" ? (
+          <PreBetButton>
+            <Button
+              type="submit"
+              variant={"success"}
+              className="wr-w-full max-lg:-wr-order-2 max-lg:wr-mb-3.5"
+              size={"xl"}
+              isLoading={isFormInProgress}
+              disabled={
+                !form.formState.isValid ||
+                form.formState.isSubmitting ||
+                form.formState.isLoading ||
+                selections.length === 0
+              }
+            >
+              Bet
+            </Button>
+          </PreBetButton>
+        ) : (
+          <SkipButton />
+        )}
         <div className="wr-mt-2 wr-grid wr-grid-cols-2 wr-gap-2 max-lg:-wr-order-1 ">
           <Button
             size={"xl"}
             variant={"secondary"}
             type="button"
+            disabled={isFormInProgress}
             onClick={autoPickHandler}
           >
             <IconMagicStick className="wr-mr-1 wr-h-5 wr-w-5" />
@@ -142,6 +148,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             variant={"secondary"}
             type="button"
             onClick={clearBetHandler}
+            disabled={isFormInProgress}
           >
             <IconTrash className="wr-mr-1 wr-h-5 wr-w-5" />
             Clear

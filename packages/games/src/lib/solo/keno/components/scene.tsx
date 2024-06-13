@@ -181,7 +181,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
           </FormItem>
         )}
       />
-      <Keno.MultiplierCarousel currentNumbers={currentNumbers} />
+      {/* <Keno.MultiplierCarousel currentNumbers={currentNumbers} /> */}
     </>
   );
 };
