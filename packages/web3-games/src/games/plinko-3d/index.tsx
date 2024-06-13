@@ -39,6 +39,7 @@ interface TemplateWithWeb3Props {
   buildedGameUrl: string;
   minWager?: number;
   maxWager?: number;
+  devicePixelRatio?: number;
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: Plinko3dGameResult[]) => void;

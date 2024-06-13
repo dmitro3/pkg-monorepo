@@ -38,6 +38,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  devicePixelRatio?: number;
   buildedGameUrl: string;
 
   onAnimationStep?: (step: number) => void;
