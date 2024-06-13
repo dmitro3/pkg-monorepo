@@ -13,7 +13,7 @@ const GameSocketContext = React.createContext<GameSocket<any, any>>({
   gameEvent: null,
 });
 
-export const useGameSocketContext = <T, K,>() => {
+export const useGameSocketContext = <T, K>() => {
   return React.useContext<GameSocket<T, K>>(GameSocketContext);
 };
 
@@ -87,6 +87,12 @@ export const GameSocketProvider: React.FC<{
   React.useEffect(() => {
     console.log(socket, "SOCKET!");
   }, [socket]);
+
+  React.useEffect(() => {
+    return () => {
+      setGameEvent(null);
+    };
+  }, []);
 
   return (
     <GameSocketContext.Provider
