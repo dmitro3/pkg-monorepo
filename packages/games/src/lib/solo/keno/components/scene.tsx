@@ -1,124 +1,87 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import React from "react";
 import { useFormContext } from "react-hook-form";
+import { Keno, useKenoGameStore } from "..";
+import { useGameSkip } from "../../../game-provider";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
-import { KenoForm, KenoGameResult } from "../types";
-import { Keno } from "..";
 import { initialKenoCells } from "../constants";
+import { KenoForm, KenoGameResult } from "../types";
 
-const BUNDLER_WS_URL = process.env.NEXT_PUBLIC_BUNDLER_WS_URL || "";
+export type KenoSceneProps = {
+  onAnimationStep?: (step: number) => void;
+  onAnimationCompleted?: (result: KenoGameResult[]) => void;
+  onAnimationSkipped?: (result: KenoGameResult[]) => void;
+};
 
-export const KenoScene = () => {
+export const KenoScene: React.FC<KenoSceneProps> = ({
+  onAnimationStep,
+  onAnimationCompleted,
+  onAnimationSkipped = () => {},
+}) => {
   const form = useFormContext() as KenoForm;
 
   const pickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
 
   const outComeEffect = useAudioEffect(SoundEffects.KENO_OUTCOME_NUMBER);
 
-  const [kenoResult, setKenoResult] = React.useState<KenoGameResult[]>([]);
-
-  const [kenoSettled, setKenoSettled] = React.useState<any>({});
-
   const [currentNumbers, setCurrentNumbers] = React.useState<number[][]>([]);
 
-  const intervalRef = React.useRef<NodeJS.Timeout>();
+  const skipRef = React.useRef<boolean>(false);
 
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const { isAnimationSkipped } = useGameSkip();
+
+  const { kenoGameResults, updateKenoGameResults, updateGameStatus } =
+    useKenoGameStore([
+      "kenoGameResults",
+      "updateKenoGameResults",
+      "updateGameStatus",
+    ]);
 
   React.useEffect(() => {
-    if (!kenoResult) return;
+    if (kenoGameResults.length == 0) return;
 
-    const totalNotifications = kenoResult.length;
+    const turn = (i = 0) => {
+      const resultNumbers = Number(kenoGameResults[i]?.resultNumbers) || [];
+      const roundIndex = kenoGameResults[i]?.roundIndex || 0;
 
-    if (kenoResult.length > 0) {
-      clearPlayedNotifications();
+      const curr = i + 1;
 
-      updateIsFinished(false);
+      onAnimationStep && onAnimationStep(curr);
 
-      let count = 0;
+      // const isWon = kenoSettled?.result?.payoutsInUsd?.[curr] > 0;
 
-      clearTimeout(timeoutRef.current);
+      // setCurrentNumbers(
+      //   currentNumbers.concat(kenoResult?.[count]?.result.resultNumbers)
+      // );
 
-      const handleNotification = () => {
-        console.log(
-          "live result",
-          kenoSettled?.result?.payoutsInUsd?.[count] || 0
-        );
+      // if (isWon) {
+      //   outComeEffect.play();
+      // }
 
-        const isWon = kenoSettled?.result?.payoutsInUsd?.[count] > 0;
-
-        setCurrentNumbers(
-          currentNumbers.concat(kenoResult?.[count]?.result.resultNumbers)
-        );
-
-        updatePlayedNotifications({
-          order: count + 1,
-          payoutInUsd: kenoSettled?.result?.payoutsInUsd?.[count] || 0,
-          won: isWon,
-          wagerInUsd: kenoSettled?.result?.wagerInUsd || 0,
-          component: <></>,
-          duration: 4700,
-        });
-
-        updateResultSummary({ currentOrder: count + 1 });
-
-        if (isWon) {
-          outComeEffect.play();
-        }
-
-        count += 1;
-      };
-
-      handleNotification();
-
-      intervalRef.current = setInterval(() => {
-        if (count < totalNotifications) {
-          handleNotification();
-        } else {
-          clearInterval(intervalRef.current);
-
-          setCurrentNumbers([]);
-
-          setKenoResult([]);
-
-          refreshUserData();
-
-          const profit = liveResult?.result?.profitInUsd || 0;
-
-          const wager = liveResult?.result?.wagerInUsd || 0;
-
-          const payout = profit + wager;
-
-          showWinAnimation({
-            profit,
-            wager,
-            payout,
-          });
-
-          timeoutRef.current = setTimeout(() => {
-            clearPlayedNotifications();
-
-            updateIsFinished(true);
-
-            clearGameResults();
-          }, 5000);
-        }
-      }, 3000);
-    }
-
-    console.log("kenoResult", kenoResult);
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      if (skipRef.current) {
+        onSkip();
+      } else if (kenoGameResults.length === curr) {
+        updateKenoGameResults([]);
+        onAnimationCompleted && onAnimationCompleted(kenoGameResults);
+        setTimeout(() => updateGameStatus("ENDED"), 1000);
+      } else {
+        setTimeout(() => turn(curr), 350);
       }
     };
-  }, [kenoResult, liveResult]);
+
+    turn();
+  }, [kenoGameResults]);
+
+  const onSkip = () => {
+    updateKenoGameResults([]);
+    onAnimationSkipped(kenoGameResults);
+    setTimeout(() => updateGameStatus("ENDED"), 50);
+  };
+
+  React.useEffect(() => {
+    skipRef.current = isAnimationSkipped;
+  }, [isAnimationSkipped]);
 
   const renderCell = (cell: number, win: boolean, loss: boolean) => {
     if (win) {

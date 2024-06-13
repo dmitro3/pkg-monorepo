@@ -1,16 +1,28 @@
 "use client";
 
-import z from "zod";
-import useMediaQuery from "../../../hooks/use-media-query";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "../../../ui/form";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { Keno, KenoFormField } from "..";
 import { GameContainer, SceneContainer } from "../../../common/containers";
-import { Keno } from "..";
+import { Form } from "../../../ui/form";
+import { KenoGameProps } from "./game";
 
-export function KenoTemplate({ ...props }) {
-  const isMobile = useMediaQuery("(max-width: 1024px)");
+type TemplateOptions = {
+  scene?: {
+    backgroundImage?: string;
+  };
+};
 
+type TemplateProps = KenoGameProps & {
+  options: TemplateOptions;
+  minWager?: number;
+  maxWager?: number;
+  onSubmitGameForm: (data: KenoFormField) => void;
+  onFormChange?: (fields: KenoFormField) => void;
+};
+
+const KenoTemplate = ({ ...props }: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
@@ -45,17 +57,21 @@ export function KenoTemplate({ ...props }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.gamesubmit)}>
+      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
-          <Keno.Controller
-            maxWager={props?.maxWager || 10}
-            minWager={props?.minWager || 2}
-          />
-          <SceneContainer className="wr-relative sm:wr-h-[790px] lg:wr-px-[14px] lg:wr-pb-[14px]">
-            <Keno.Scene />
-          </SceneContainer>
+          <Keno.Game {...props}>
+            <Keno.Controller
+              maxWager={props?.maxWager || 10}
+              minWager={props?.minWager || 2}
+            />
+            <SceneContainer className="wr-relative sm:wr-h-[790px] lg:wr-px-[14px] lg:wr-pb-[14px]">
+              <Keno.Scene {...props} />
+            </SceneContainer>
+          </Keno.Game>
         </GameContainer>
       </form>
     </Form>
   );
-}
+};
+
+export default KenoTemplate;

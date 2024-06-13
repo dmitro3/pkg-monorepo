@@ -17,10 +17,10 @@ import { IconMagicStick, IconTrash } from "../../../svgs";
 import { AudioController } from "../../../common/audio-controller";
 import { KenoForm } from "../types";
 
-interface Props {
+type Props = {
   minWager: number;
   maxWager: number;
-}
+};
 
 export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   const form = useFormContext() as KenoForm;
