@@ -56,14 +56,14 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     React.useState<BaccaratGameSettledResult | null>(null);
 
   const formSchema = z.object({
-    // wager: z
-    //   .number()
-    //   .min(minWager || 1, {
-    //     message: `Minimum wager is ${minWager || 1}`,
-    //   })
-    //   .max(maxWager || 2000, {
-    //     message: `Maximum wager is ${maxWager || 2000}`,
-    //   }),
+    wager: z
+      .number()
+      .min(minWager || 1, {
+        message: `Minimum wager is ${minWager || 1}`,
+      })
+      .max(maxWager || 2000, {
+        message: `Maximum wager is ${maxWager || 2000}`,
+      }),
     playerWager: z
       .number()
       .min(0, {
@@ -95,12 +95,14 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
       async: true,
     }),
     defaultValues: {
-      // wager: 0,
+      wager: minWager || 1,
       playerWager: 0,
       bankerWager: 0,
       tieWager: 0,
     },
   });
+
+  const wager = form.watch("wager");
 
   const tieWager = form.watch("tieWager");
 
@@ -109,22 +111,6 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   const playerWager = form.watch("playerWager");
 
   const addWager = (wager: Chip, betType: BaccaratBetType) => {
-    const totalWager = tieWager + bankerWager + playerWager;
-
-    const newWager = wager + totalWager;
-
-    const _maxWager = maxWager || 2000;
-
-    // if (newWager > _maxWager) {
-    //   toast({
-    //     variant: "error",
-    //     title: "OOPS!",
-    //     description: `You can bet up to $${toDecimals(_maxWager, 0)}`,
-    //   });
-
-    //   return;
-    // }
-
     const _lastSelections = lastSelections;
 
     switch (betType) {
@@ -181,11 +167,11 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   };
 
   React.useEffect(() => {
-    const tieMaxPayout = tieWager * MULTIPLIER_TIE;
+    const tieMaxPayout = tieWager * MULTIPLIER_TIE * wager;
 
-    const bankerMaxPayout = bankerWager * MULTIPLIER_BANKER;
+    const bankerMaxPayout = bankerWager * MULTIPLIER_BANKER * wager;
 
-    const playerMaxPayout = playerWager * MULTIPLIER_BANKER;
+    const playerMaxPayout = playerWager * MULTIPLIER_BANKER * wager;
 
     if (tieMaxPayout > bankerMaxPayout && tieMaxPayout > playerMaxPayout)
       setMaxPayout(tieMaxPayout);
@@ -195,7 +181,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     )
       setMaxPayout(bankerMaxPayout);
     else setMaxPayout(playerMaxPayout);
-  }, [bankerWager, playerWager, tieWager]);
+  }, [bankerWager, playerWager, tieWager, wager]);
 
   const prepareSubmit = (data: BaccaratFormFields) => {
     setResults(null);
@@ -247,11 +233,13 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
 
             <BaccaratBetController
               isDisabled={isGamePlaying}
-              totalWager={bankerWager + tieWager + playerWager}
+              totalWager={(bankerWager + tieWager + playerWager) * wager}
               maxPayout={maxPayout}
               undoBet={undoBet}
               selectedChip={selectedChip}
               onSelectedChipChange={setSelectedChip}
+              minWager={minWager || 1}
+              maxWager={maxWager || 2000}
             />
           </SceneContainer>
         </GameContainer>

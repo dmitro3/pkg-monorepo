@@ -41,6 +41,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = useState<BaccaratFormFields>({
+    wager: props?.minWager || 1,
     playerWager: 0,
     bankerWager: 0,
     tieWager: 0,
@@ -66,7 +67,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
   const encodedParams = useMemo(() => {
     const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
       prepareGameTransaction({
-        wager: 1,
+        wager: formValues.wager,
         stopGain: 0,
         stopLoss: 0,
         selectedCurrency: selectedTokenAddress,
@@ -125,7 +126,12 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.bankerWager, formValues.playerWager, formValues.tieWager]);
+  }, [
+    formValues.bankerWager,
+    formValues.playerWager,
+    formValues.tieWager,
+    formValues.wager,
+  ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
