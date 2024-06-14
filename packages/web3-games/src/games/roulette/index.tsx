@@ -91,8 +91,6 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
         lastPrice: 1,
       });
 
-    console.log(formValues, "form val");
-
     const encodedChoice = encodeAbiParameters(
       [
         {
@@ -131,8 +129,6 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
         encodedGameData,
       ],
     });
-
-    console.log(encodedData, "encodedData");
 
     return {
       tokenAddress,
