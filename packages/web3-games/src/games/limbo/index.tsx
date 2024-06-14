@@ -20,8 +20,8 @@ import {
   SingleStepSettledEvent,
   prepareGameTransaction,
 } from "../utils";
-import { useGameSocketContext } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
+import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
 const selectedTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS || "";
 
@@ -57,7 +57,7 @@ export default function LimboTemplateWithWeb3(props: TemplateWithWeb3Props) {
     wager: 1,
   });
 
-  const { gameEvent } = useGameSocketContext<any, SingleStepSettledEvent>();
+  const gameEvent = useListenGameEvent();
 
   const [limboResult, setLimboResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();

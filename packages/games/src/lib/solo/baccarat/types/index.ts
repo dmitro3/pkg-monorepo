@@ -1,6 +1,7 @@
 import { UseFormReturn } from "react-hook-form";
 
 export interface BaccaratFormFields {
+  wager: number;
   playerWager: number;
   bankerWager: number;
   tieWager: number;

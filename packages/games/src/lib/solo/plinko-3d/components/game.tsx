@@ -3,6 +3,7 @@ import { Plinko3dGameResult } from "../types";
 import usePlinko3dGameStore from "../store";
 
 export type Plinko3dGameProps = React.ComponentProps<"div"> & {
+  devicePixelRatio?: number;
   gameResults: Plinko3dGameResult[];
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: Plinko3dGameResult[]) => void;

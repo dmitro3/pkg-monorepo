@@ -2,6 +2,7 @@
 
 import {
   BaccaratFormFields,
+  BaccaratGameResult,
   BaccaratGameSettledResult,
   BaccaratTemplate,
 } from "@winrlabs/games";
@@ -14,13 +15,12 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import {
-  DecodedEvent,
+  BaccaratSettledEvent,
   GAME_HUB_EVENT_TYPES,
-  SingleStepSettledEvent,
   prepareGameTransaction,
 } from "../utils";
-import { useGameSocketContext } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
+import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
 const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
   "0x0") as `0x${string}`;
@@ -41,17 +41,18 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = useState<BaccaratFormFields>({
+    wager: props?.minWager || 1,
     playerWager: 0,
     bankerWager: 0,
     tieWager: 0,
   });
 
-  const { gameEvent } = useGameSocketContext<any, SingleStepSettledEvent>();
+  const gameEvent = useListenGameEvent();
 
   const [baccaratResults, setBaccaratResults] =
-    useState<DecodedEvent<any, any>>();
+    useState<BaccaratGameResult | null>(null);
   const [baccaratSettledResult, setBaccaratSettledResult] =
-    React.useState<DecodedEvent<any, any>>();
+    React.useState<BaccaratGameSettledResult | null>(null);
 
   const currentAccount = useCurrentAccount();
 
@@ -66,7 +67,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
   const encodedParams = useMemo(() => {
     const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
       prepareGameTransaction({
-        wager: 1,
+        wager: formValues.wager,
         stopGain: 0,
         stopLoss: 0,
         selectedCurrency: selectedTokenAddress,
@@ -125,7 +126,12 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.bankerWager, formValues.playerWager, formValues.tieWager]);
+  }, [
+    formValues.bankerWager,
+    formValues.playerWager,
+    formValues.tieWager,
+    formValues.wager,
+  ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
@@ -164,14 +170,21 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
   };
 
   React.useEffect(() => {
-    const finalResult = gameEvent;
+    if (gameEvent?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
+      console.log(gameEvent, "settled");
+      const { hands, win, converted } = gameEvent.program[0]
+        .data as BaccaratSettledEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
-      console.log(finalResult, "settled");
-    }
+      setBaccaratResults({
+        playerHand: hands.player,
+        bankerHand: hands.banker,
+      });
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.HandFinalized) {
-      console.log(finalResult, "hand finalized");
+      setBaccaratSettledResult({
+        won: win,
+        payout: converted.payout,
+        wager: 0,
+      });
     }
   }, [gameEvent]);
 
@@ -179,8 +192,8 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
     <BaccaratTemplate
       {...props}
       onSubmitGameForm={onGameSubmit}
-      baccaratResults={null}
-      baccaratSettledResults={null}
+      baccaratResults={baccaratResults}
+      baccaratSettledResults={baccaratSettledResult}
       onFormChange={(val) => {
         setFormValues(val);
       }}
