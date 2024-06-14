@@ -4,6 +4,7 @@ export interface RouletteFormFields {
   totalWager: number;
   betCount: number;
   selectedNumbers: number[];
+  wager: number;
 }
 
 export type RouletteForm = UseFormReturn<RouletteFormFields, any, undefined>;
