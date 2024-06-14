@@ -22,11 +22,13 @@ import { GameContainer, SceneContainer } from "../../../common/containers";
 import { AudioController } from "../../../common/audio-controller";
 import { Roulette } from "..";
 import { CDN_URL } from "../../../constants";
+import debounce from "debounce";
 
 type TemplateProps = RouletteGameProps & {
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: RouletteFormFields) => void;
+  onFormChange?: (fields: RouletteFormFields) => void;
 };
 
 const RouletteTemplate: React.FC<TemplateProps> = ({
@@ -34,6 +36,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
   minWager,
   maxWager,
   onSubmitGameForm,
+  onFormChange,
   onAnimationCompleted,
   onAnimationSkipped,
   onAnimationStep,
@@ -50,6 +53,14 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
   >([]);
 
   const formSchema = z.object({
+    wager: z
+      .number()
+      .min(minWager || 1, {
+        message: `Minimum wager is ${minWager || 1}`,
+      })
+      .max(maxWager || 2000, {
+        message: `Maximum wager is ${maxWager || 2000}`,
+      }),
     selectedNumbers: z.array(z.number()),
     totalWager: z
       .number()
@@ -72,6 +83,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
       async: true,
     }),
     defaultValues: {
+      wager: minWager || 1,
       totalWager: 0,
       betCount: 1,
       selectedNumbers: new Array(NUMBER_INDEX_COUNT).fill(0),
@@ -140,6 +152,16 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
     onSubmitGameForm(data);
   };
 
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      onFormChange && onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(prepareSubmit)}>
@@ -171,6 +193,8 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
                 selectedChip={selectedChip}
                 onSelectedChipChange={setSelectedChip}
                 undoBet={undoBet}
+                minWager={minWager || 1}
+                maxWager={maxWager || 2000}
               />
               <Roulette.LastBets />
             </Roulette.Game>

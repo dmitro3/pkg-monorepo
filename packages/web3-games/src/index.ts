@@ -16,6 +16,8 @@ export { default as Plinko3DTemplateWithWeb3 } from "./games/plinko-3d";
 
 export { default as BaccaratTemplateWithWeb3 } from "./games/baccarat";
 
+export { default as RouletteTemplateWithWeb3 } from "./games/roulette";
+
 export * from "./games/hooks";
 
 export * from "./providers";
