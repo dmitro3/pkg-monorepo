@@ -1,6 +1,6 @@
 import { parseUnits } from "viem";
 import { Address, Hex } from "viem";
-import { toDecimals } from "@winrlabs/games";
+import { BaccaratGameHand, toDecimals } from "@winrlabs/games";
 
 export enum GAME_HUB_GAMES {
   rps = "rps",
@@ -44,6 +44,18 @@ export interface SingleStepSettledEvent<T = number> {
       outcome: T;
     }[];
   };
+}
+
+export interface BaccaratSettledEvent {
+  converted: {
+    payout: number;
+  };
+  hands: {
+    banker: BaccaratGameHand;
+    player: BaccaratGameHand;
+  };
+  payout: bigint;
+  win: boolean;
 }
 
 export type UnitySendMessage = (

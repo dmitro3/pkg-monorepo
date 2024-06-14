@@ -2,6 +2,7 @@
 
 import {
   BaccaratFormFields,
+  BaccaratGameResult,
   BaccaratGameSettledResult,
   BaccaratTemplate,
 } from "@winrlabs/games";
@@ -14,7 +15,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import {
-  DecodedEvent,
+  BaccaratSettledEvent,
   GAME_HUB_EVENT_TYPES,
   prepareGameTransaction,
 } from "../utils";
@@ -48,9 +49,9 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
   const gameEvent = useListenGameEvent();
 
   const [baccaratResults, setBaccaratResults] =
-    useState<DecodedEvent<any, any>>();
+    useState<BaccaratGameResult | null>(null);
   const [baccaratSettledResult, setBaccaratSettledResult] =
-    React.useState<DecodedEvent<any, any>>();
+    React.useState<BaccaratGameSettledResult | null>(null);
 
   const currentAccount = useCurrentAccount();
 
@@ -163,14 +164,21 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
   };
 
   React.useEffect(() => {
-    const finalResult = gameEvent;
+    if (gameEvent?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
+      console.log(gameEvent, "settled");
+      const { hands, win, converted } = gameEvent.program[0]
+        .data as BaccaratSettledEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
-      console.log(finalResult, "settled");
-    }
+      setBaccaratResults({
+        playerHand: hands.player,
+        bankerHand: hands.banker,
+      });
 
-    if (finalResult?.program[1]?.type === GAME_HUB_EVENT_TYPES.BaccaratHands) {
-      console.log(finalResult, "hand finalized");
+      setBaccaratSettledResult({
+        won: win,
+        payout: converted.payout,
+        wager: 0,
+      });
     }
   }, [gameEvent]);
 
@@ -178,8 +186,8 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
     <BaccaratTemplate
       {...props}
       onSubmitGameForm={onGameSubmit}
-      baccaratResults={null}
-      baccaratSettledResults={null}
+      baccaratResults={baccaratResults}
+      baccaratSettledResults={baccaratSettledResult}
       onFormChange={(val) => {
         setFormValues(val);
       }}
