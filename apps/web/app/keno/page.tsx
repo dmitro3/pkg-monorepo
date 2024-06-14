@@ -21,19 +21,16 @@ const KenoPage = () => {
         setGameResults([
           {
             resultNumbers: [11, 1, 23, 31, 4, 15, 21, 29, 5, 28],
-            roundIndex: 0,
             settled: { payoutsInUsd: 2, profitInUsd: 1.5, won: true },
           },
 
           {
             resultNumbers: [1, 2, 3, 31, 4, 15, 21, 29, 5, 28],
-            roundIndex: 1,
             settled: { payoutsInUsd: 2, profitInUsd: 1.5, won: false },
           },
 
           {
             resultNumbers: [10, 12, 3, 1, 4, 15, 21, 29, 5, 28],
-            roundIndex: 1,
             settled: { payoutsInUsd: 2, profitInUsd: 1.5, won: true },
           },
         ]);
