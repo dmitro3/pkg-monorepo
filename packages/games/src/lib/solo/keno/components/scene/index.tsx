@@ -1,6 +1,8 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import React from "react";
 import { useFormContext } from "react-hook-form";
+import { Keno } from "../..";
+import { CDN_URL } from "../../../../constants";
 import { useGameSkip } from "../../../../game-provider";
 import {
   SoundEffects,
@@ -12,7 +14,6 @@ import { initialKenoCells } from "../../constants";
 import useKenoGameStore from "../../store";
 import { KenoForm, KenoGameResult } from "../../types";
 import styles from "./scene.module.css";
-import { CDN_URL } from "../../../../constants";
 
 export type KenoSceneProps = {
   onAnimationStep?: (step: number) => void;
@@ -67,9 +68,12 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
       } else if (kenoGameResults.length === curr) {
         updateKenoGameResults([]);
         onAnimationCompleted && onAnimationCompleted(kenoGameResults);
-        setTimeout(() => updateGameStatus("ENDED"), 1000);
+        setTimeout(() => {
+          setCurrentNumbers([]);
+          updateGameStatus("ENDED");
+        }, 1000);
       } else {
-        setTimeout(() => turn(curr), 350);
+        setTimeout(() => turn(curr), 1500);
       }
     };
 
@@ -79,7 +83,11 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
   const onSkip = () => {
     updateKenoGameResults([]);
     onAnimationSkipped(kenoGameResults);
-    setTimeout(() => updateGameStatus("ENDED"), 50);
+    setTimeout(() => {
+      updateKenoGameResults([]);
+      updateGameStatus("ENDED");
+      setCurrentNumbers([]);
+    }, 50);
   };
 
   React.useEffect(() => {
@@ -204,7 +212,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
           </FormItem>
         )}
       />
-      {/* <Keno.MultiplierCarousel currentNumbers={currentNumbers} /> */}
+      <Keno.MultiplierCarousel currentNumbers={currentNumbers} />
     </>
   );
 };

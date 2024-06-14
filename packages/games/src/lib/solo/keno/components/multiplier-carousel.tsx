@@ -3,6 +3,14 @@ import { KenoForm } from "../types";
 import { cn } from "../../../utils/style";
 import { Card, CardContent } from "../../../ui/card";
 import { IconChevronLeft } from "../../../svgs";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../../../ui/carousel";
+import { kenoMultipliers } from "../constants";
 
 const MultiplierCarousel: React.FC<{ currentNumbers: number[][] }> = ({
   currentNumbers,
@@ -39,7 +47,7 @@ const MultiplierCarousel: React.FC<{ currentNumbers: number[][] }> = ({
         className="wr-w-full"
       >
         <CarouselContent className="wr-mx-2">
-          {kenoMultipliers[selectionsLength].map((m, idx) => {
+          {kenoMultipliers[selectionsLength]?.map((m, idx) => {
             if (
               (selectionsLength === 10 && idx === 0) ||
               selectionsLength === 0 ||
