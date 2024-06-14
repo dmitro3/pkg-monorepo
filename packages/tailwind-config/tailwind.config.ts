@@ -397,6 +397,8 @@ const config: Omit<Config, "content"> = {
           "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/plinko/plinko-button.png)",
         "plinko-button-disabled":
           "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/plinko/plinko-button-disabled.png)",
+        "keno-cell-bg":
+          "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/keno/keno-cell-bg.png)",
       },
     },
   },

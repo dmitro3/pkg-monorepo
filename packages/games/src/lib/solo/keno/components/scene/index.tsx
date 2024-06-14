@@ -12,6 +12,7 @@ import { initialKenoCells } from "../../constants";
 import useKenoGameStore from "../../store";
 import { KenoForm, KenoGameResult } from "../../types";
 import styles from "./scene.module.css";
+import { CDN_URL } from "../../../../constants";
 
 export type KenoSceneProps = {
   onAnimationStep?: (step: number) => void;
@@ -97,11 +98,11 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
           <div
             className={cn(
               styles["wr-rotateY-180"],
-              " wr-relative  wr-col-start-2 wr-w-full wr-pt-[100%]"
+              " wr-relative  wr-col-start-2 wr-w-full "
             )}
           >
             <img
-              src="/imgs/gems/blue-gem-1.png"
+              src={`${CDN_URL}/keno/blue-gem-1.png`}
               alt="win"
               className="wr-left-0 wr-top-0 wr-h-full wr-w-full  wr-object-cover"
             />
@@ -119,11 +120,11 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
           <div
             className={cn(
               styles["wr-rotateY-180"],
-              "wr-relative wr-col-start-2 wr-w-full wr-pt-[100%]"
+              "wr-relative wr-col-start-2 wr-w-full "
             )}
           >
             <img
-              src="/imgs/gems/black-gem.png"
+              src={`${CDN_URL}/keno/black-gem.png`}
               alt="loss"
               className="wr-left-0 wr-top-0 wr-h-full wr-w-full  wr-object-cover"
             />
@@ -175,12 +176,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
                                   );
                                 }
                               }}
-                              className={cn(
-                                "wr-h-[34px] wr-w-full wr-rounded-lg wr-bg-keno-cell-bg wr-bg-[size:200%]  wr-bg-no-repeat wr-transition-all wr-duration-300 hover:wr-scale-105 sm:wr-h-[70px]",
-                                {
-                                  "wr-bg-red-600": field.value.includes(cell),
-                                }
-                              )}
+                              className="wr-h-[34px] wr-w-full wr-rounded-lg wr-bg-keno-cell-bg wr-bg-[size:200%]  wr-bg-no-repeat wr-transition-all wr-duration-300 hover:wr-scale-105 sm:wr-h-[70px]"
                               style={{
                                 backgroundPosition: field.value.includes(cell)
                                   ? "100% 90%"
