@@ -114,12 +114,12 @@ export const BetController: React.FC<Props> = ({
             </div>
           </Advanced>
         </div>
-        {!(diceGameResults.length > 2) && gameStatus !== "PLAYING" ? (
+        {!(diceGameResults.length > 3) && (
           <PreBetButton>
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full wr-max-lg:-order-1 wr-max-lg:mb-3.5"
+              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
               size={"xl"}
               isLoading={
                 form.formState.isSubmitting || form.formState.isLoading
@@ -127,13 +127,15 @@ export const BetController: React.FC<Props> = ({
               disabled={
                 !form.formState.isValid ||
                 form.formState.isSubmitting ||
-                form.formState.isLoading
+                form.formState.isLoading ||
+                gameStatus == "PLAYING"
               }
             >
               Bet
             </Button>
           </PreBetButton>
-        ) : (
+        )}
+        {diceGameResults.length > 3 && gameStatus == "PLAYING" && (
           <SkipButton />
         )}
       </div>

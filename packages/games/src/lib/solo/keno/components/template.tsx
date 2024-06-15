@@ -26,7 +26,7 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 2, {
+      .min(props?.minWager || 1, {
         message: `Minimum wager is ${props?.minWager}`,
       })
       .max(props?.maxWager || 2000, {
@@ -47,7 +47,7 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: "onSubmit",
     defaultValues: {
-      wager: 2,
+      wager: props.minWager || 1,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
@@ -61,8 +61,8 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
         <GameContainer>
           <Keno.Game {...props}>
             <Keno.Controller
-              maxWager={props?.maxWager || 10}
-              minWager={props?.minWager || 2}
+              maxWager={props?.maxWager || 2000}
+              minWager={props?.minWager || 1}
             />
             <SceneContainer className="wr-relative sm:wr-h-[790px] lg:wr-px-[14px] lg:wr-pb-[14px]">
               <Keno.Scene {...props} />

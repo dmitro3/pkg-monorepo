@@ -1,5 +1,4 @@
 import React from "react";
-import { useGameSkip } from "../../../game-provider";
 import useKenoGameStore from "../store";
 import { KenoGameResult } from "../types";
 
@@ -16,11 +15,8 @@ export const KenoGame = ({ gameResults, children }: KenoGameProps) => {
     "updateGameStatus",
   ]);
 
-  const { updateSkipAnimation } = useGameSkip();
-
   React.useEffect(() => {
     if (gameResults.length) {
-      updateSkipAnimation(false);
       updateKenoGameResults(gameResults);
       updateGameStatus("PLAYING");
     }

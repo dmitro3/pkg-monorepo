@@ -16,7 +16,6 @@ import { Button } from "../../../ui/button";
 import { IconMagicStick, IconTrash } from "../../../svgs";
 import { AudioController } from "../../../common/audio-controller";
 import { KenoForm } from "../types";
-import { SkipButton } from "../../../common/skip-button";
 import useKenoGameStore from "../store";
 
 type Props = {
@@ -63,9 +62,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   };
 
   const isFormInProgress =
-    form.formState.isSubmitting ||
-    form.formState.isLoading ||
-    gameStatus == "PLAYING";
+    form.formState.isSubmitting || form.formState.isLoading;
 
   return (
     <BetControllerContainer>
@@ -111,27 +108,24 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             </div>
           </Advanced>
         </div>
-        {!(kenoGameResults.length > 2) && gameStatus !== "PLAYING" ? (
-          <PreBetButton>
-            <Button
-              type="submit"
-              variant={"success"}
-              className="wr-w-full max-lg:-wr-order-2 max-lg:wr-mb-3.5"
-              size={"xl"}
-              isLoading={isFormInProgress}
-              disabled={
-                !form.formState.isValid ||
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                selections.length === 0
-              }
-            >
-              Bet
-            </Button>
-          </PreBetButton>
-        ) : (
-          <SkipButton />
-        )}
+        <PreBetButton>
+          <Button
+            type="submit"
+            variant={"success"}
+            className="wr-w-full max-lg:-wr-order-2 max-lg:wr-mb-3.5"
+            size={"xl"}
+            isLoading={isFormInProgress}
+            disabled={
+              !form.formState.isValid ||
+              form.formState.isSubmitting ||
+              form.formState.isLoading ||
+              selections.length === 0 ||
+              gameStatus == "PLAYING"
+            }
+          >
+            Bet
+          </Button>
+        </PreBetButton>
         <div className="wr-mt-2 wr-grid wr-grid-cols-2 wr-gap-2 max-lg:-wr-order-1 ">
           <Button
             size={"xl"}

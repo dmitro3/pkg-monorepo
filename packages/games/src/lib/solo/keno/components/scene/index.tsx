@@ -3,7 +3,6 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { Keno } from "../..";
 import { CDN_URL } from "../../../../constants";
-import { useGameSkip } from "../../../../game-provider";
 import {
   SoundEffects,
   useAudioEffect,
@@ -18,13 +17,11 @@ import styles from "./scene.module.css";
 export type KenoSceneProps = {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: KenoGameResult[]) => void;
-  onAnimationSkipped?: (result: KenoGameResult[]) => void;
 };
 
 export const KenoScene: React.FC<KenoSceneProps> = ({
   onAnimationStep,
   onAnimationCompleted,
-  onAnimationSkipped = () => {},
 }) => {
   const form = useFormContext() as KenoForm;
 
@@ -33,10 +30,6 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
   const outComeEffect = useAudioEffect(SoundEffects.KENO_OUTCOME_NUMBER);
 
   const [currentNumbers, setCurrentNumbers] = React.useState<number[][]>([]);
-
-  const skipRef = React.useRef<boolean>(false);
-
-  const { isAnimationSkipped } = useGameSkip();
 
   const { kenoGameResults, updateKenoGameResults, updateGameStatus } =
     useKenoGameStore([
@@ -63,9 +56,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
         outComeEffect.play();
       }
 
-      if (skipRef.current) {
-        onSkip();
-      } else if (kenoGameResults.length === curr) {
+      if (kenoGameResults.length === curr) {
         updateKenoGameResults([]);
         onAnimationCompleted && onAnimationCompleted(kenoGameResults);
         setTimeout(() => {
@@ -79,20 +70,6 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
 
     turn();
   }, [kenoGameResults]);
-
-  const onSkip = () => {
-    updateKenoGameResults([]);
-    onAnimationSkipped(kenoGameResults);
-    setTimeout(() => {
-      updateKenoGameResults([]);
-      updateGameStatus("ENDED");
-      setCurrentNumbers([]);
-    }, 50);
-  };
-
-  React.useEffect(() => {
-    skipRef.current = isAnimationSkipped;
-  }, [isAnimationSkipped]);
 
   const renderCell = (cell: number, win: boolean, loss: boolean) => {
     if (win) {

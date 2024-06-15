@@ -68,7 +68,7 @@ export const RouletteBetController: React.FC<{
       />
 
       <div className="wr-flex wr-w-full wr-max-w-[220px] wr-flex-col wr-items-end wr-gap-2 max-lg:wr-max-w-[200px] max-lg:wr-flex-row-reverse">
-        {!(rouletteGameResults.length > 2) && gameStatus !== "PLAYING" ? (
+        {!(rouletteGameResults.length > 3) && (
           <PreBetButton>
             <Button
               type="submit"
@@ -88,7 +88,8 @@ export const RouletteBetController: React.FC<{
               Bet
             </Button>
           </PreBetButton>
-        ) : (
+        )}
+        {rouletteGameResults.length > 3 && gameStatus == "PLAYING" && (
           <SkipButton />
         )}
         <div className="wr-flex wr-w-full wr-items-center wr-gap-2">
