@@ -83,7 +83,14 @@ export const Coin: React.FC<CoinProps> = ({
         } else if (coinFlipGameResults.length === curr) {
           updateCoinFlipGameResults([]);
           onAnimationCompleted && onAnimationCompleted(coinFlipGameResults);
-          setTimeout(() => updateGameStatus("ENDED"), 1000);
+
+          const delay =
+            coinFlipGameResults[coinFlipGameResults.length - 1]?.coinSide ==
+            coinSide
+              ? 500
+              : 0;
+
+          setTimeout(() => updateGameStatus("ENDED"), delay);
         } else {
           setTimeout(() => turn(curr), 350);
         }
@@ -114,6 +121,7 @@ export const Coin: React.FC<CoinProps> = ({
         <Player
           ref={lottieRef}
           src={CoinConfetti}
+          speed={2}
           style={{
             width: "700px",
             height: "700px",

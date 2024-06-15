@@ -16,6 +16,8 @@ export enum SoundEffects {
   THICK,
   BALL_BUMP,
   ROULETTE,
+  LIMBO_TICK,
+  KENO_OUTCOME_NUMBER,
 }
 
 export interface AudioContextType {
@@ -92,6 +94,8 @@ effects.set(SoundEffects.THICK, "thick.wav");
 effects.set(SoundEffects.FALLING, "bucket.wav");
 effects.set(SoundEffects.BALL_BUMP, "ball_bump.mp3");
 effects.set(SoundEffects.ROULETTE, "roulette.mp3");
+effects.set(SoundEffects.LIMBO_TICK, "limbo-tick.mp3");
+effects.set(SoundEffects.KENO_OUTCOME_NUMBER, "outcome-number.wav");
 
 type PlayOptions = {
   playbackRate?: number;

@@ -73,6 +73,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "debounce": "^2.1.0",
+    "embla-carousel-react": "^8.1.5",
     "esbuild-plugin-svgr": "^2.1.0",
     "framer-motion": "^10.12.4",
     "react-cool-dimensions": "^3.0.1",

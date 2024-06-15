@@ -34,7 +34,6 @@ type Props = {
 export const BetController: React.FC<Props> = ({
   minWager,
   maxWager,
-  count,
   logo,
 }) => {
   const form = useFormContext() as Plinko3dForm;
@@ -56,7 +55,7 @@ export const BetController: React.FC<Props> = ({
   }, [betCount, wager, rowSize]);
 
   return (
-    <UnityBetControllerContainer className="wr-no-scrollbar wr-relative wr-z-[20] wr-flex wr-h-full wr-max-h-full wr-w-full wr-flex-col wr-justify-between wr-overflow-auto lg:wr-absolute lg:wr-left-0 lg:wr-top-0 lg:wr-w-[264px]">
+    <UnityBetControllerContainer className="wr-no-scrollbar wr-relative wr-z-[20]  wr-flex wr-h-full wr-max-h-full max-lg:wr-w-full wr-flex-col wr-justify-between wr-overflow-auto lg:wr-absolute lg:wr-left-0 lg:wr-top-0 lg:wr-w-[264px]">
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
         <div className="wr-mb-6 max-lg:wr-hidden">
           <BetControllerTitle>
