@@ -7,6 +7,8 @@ import { Keno, KenoFormField } from "..";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { Form } from "../../../ui/form";
 import { KenoGameProps } from "./game";
+import debounce from "debounce";
+import React from "react";
 
 type TemplateOptions = {
   scene?: {
@@ -54,6 +56,16 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
       selections: [],
     },
   });
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      props?.onFormChange && props.onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>

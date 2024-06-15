@@ -30,6 +30,7 @@ const gameAddresses = {
   dice: process.env.NEXT_PUBLIC_DICE_ADDRESS as Address,
   roulette: process.env.NEXT_PUBLIC_ROULETTE_ADDRESS as Address,
   baccarat: process.env.NEXT_PUBLIC_BACCARAT_ADDRESS as Address,
+  keno: process.env.NEXT_PUBLIC_KENO_ADDRESS as Address,
 };
 
 export function Providers(props: { children: ReactNode }) {
