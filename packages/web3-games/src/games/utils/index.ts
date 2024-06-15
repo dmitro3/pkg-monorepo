@@ -1,6 +1,6 @@
 import { parseUnits } from "viem";
 import { Address, Hex } from "viem";
-import { toDecimals } from "@winrlabs/games";
+import { BaccaratGameHand, toDecimals } from "@winrlabs/games";
 
 export enum GAME_HUB_GAMES {
   rps = "rps",
@@ -22,37 +22,9 @@ export enum GAME_HUB_GAMES {
 }
 
 export enum GAME_HUB_EVENT_TYPES {
-  Dealt = "Dealt",
-  Reveal = "Reveal",
-  Resolve = "Resolve",
   Settled = "Settled",
   Created = "Created",
-  Finalized = "Finalized",
-  Finishing = "Finishing",
-  HandFinalized = "HandFinalized",
-  RevealAndCashout = "RevealAndCashout",
-
-  // Wheel
-  Participated = "Participated",
-  ClaimedBatch = "ClaimedBatch",
-
-  KenoResult = "KenoResult",
-
-  // BJ
-  HandSplit = "HandSplit",
-  HandCreated = "HandCreated",
-  HandInsured = "HandInsured",
-  HandStandOff = "HandStandOff",
-  PlayerHandInfo = "PlayerHandInfo",
-  DealerHandInfo = "DealerHandInfo",
-  HandDoubleDown = "HandDoubleDown",
-  BJFinalized = "BjFinalized",
-  BJSettled = "BjSettled",
-
-  Historical = "Historical",
-  Process = "Process",
-  ReelSpinSettled = "ReelSpinSettled",
-  GameCreated = "GameCreated",
+  BaccaratHands = "Hands",
 }
 
 export interface SingleStepSettledEvent<T = number> {
@@ -72,6 +44,18 @@ export interface SingleStepSettledEvent<T = number> {
       outcome: T;
     }[];
   };
+}
+
+export interface BaccaratSettledEvent {
+  converted: {
+    payout: number;
+  };
+  hands: {
+    banker: BaccaratGameHand;
+    player: BaccaratGameHand;
+  };
+  payout: bigint;
+  win: boolean;
 }
 
 export type UnitySendMessage = (

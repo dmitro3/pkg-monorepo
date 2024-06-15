@@ -1,17 +1,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { RouletteForm } from "../../types";
-// import { Trash, Undo } from "@/components/ui/svgs";
 import { PreBetButton } from "../../../../common/pre-bet-button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../../../ui/form";
-import { BetCountSlider } from "../../../../common/containers";
-import { BetCount } from "../../../../common/bet-count";
 import { NUMBER_INDEX_COUNT } from "../../constants";
 import { Button } from "../../../../ui/button";
 import { Chip } from "../../../../common/chip-controller/types";
@@ -19,13 +9,26 @@ import { ChipController } from "../../../../common/chip-controller";
 import { CDN_URL } from "../../../../constants";
 import useRouletteGameStore from "../../store";
 import { SkipButton } from "../../../../common/skip-button";
+import {
+  UnityBetCountFormField,
+  UnityWagerFormField,
+} from "../../../../common/controller";
 
 export const RouletteBetController: React.FC<{
   isPrepared: boolean;
   selectedChip: Chip;
+  minWager: number;
+  maxWager: number;
   onSelectedChipChange: (c: Chip) => void;
   undoBet: () => void;
-}> = ({ isPrepared, selectedChip, onSelectedChipChange, undoBet }) => {
+}> = ({
+  isPrepared,
+  selectedChip,
+  minWager,
+  maxWager,
+  onSelectedChipChange,
+  undoBet,
+}) => {
   const form = useFormContext() as RouletteForm;
 
   const { rouletteGameResults, gameStatus } = useRouletteGameStore([
@@ -33,32 +36,15 @@ export const RouletteBetController: React.FC<{
     "gameStatus",
   ]);
 
-  React.useEffect(() => {
-    console.log(gameStatus, "status");
-  }, [gameStatus]);
-
   return (
     <div className="max-md:wr-bg-rotated-bg-blur wr-absolute wr-bottom-0 wr-left-0 wr-z-[5] wr-flex wr-w-full wr-items-end wr-justify-between wr-p-4 max-lg:wr-fixed max-lg:wr-z-10 max-lg:wr-bg-rotated-footer max-lg:wr-p-3 max-lg:wr-pt-0">
       <div className="wr-w-full wr-max-w-[230px] max-md:wr-max-w-[140px]">
-        <FormField
-          control={form.control}
-          name="betCount"
-          disabled={isPrepared}
-          render={({ field }) => (
-            <FormItem className="wr-mb-0">
-              <FormLabel className="wr-text-unity-white-50">
-                Bet Count
-              </FormLabel>
-              <FormControl>
-                <>
-                  <BetCount {...field} />
-                  <BetCountSlider maxValue={50} {...field} />
-                </>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+        <UnityWagerFormField
+          className="wr-mb-3"
+          minWager={minWager}
+          maxWager={maxWager}
         />
+        <UnityBetCountFormField className="wr-mb-0 wr-p-0" />
       </div>
 
       <ChipController

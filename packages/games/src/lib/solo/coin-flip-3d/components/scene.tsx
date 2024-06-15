@@ -1,7 +1,6 @@
 import * as Progress from "@radix-ui/react-progress";
 import React from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
-import { useDevicePixelRatio } from "../../../hooks/use-device-pixel-ratio";
 import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
 import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
 import { toFormatted } from "../../../utils/web3";
@@ -23,10 +22,9 @@ export const CoinFlipScene = ({
   onAnimationCompleted,
   buildedGameUrl,
   loader,
+  devicePixelRatio = 1,
 }: ExtendedCoinFlipGameProps) => {
   const percentageRef = React.useRef(0);
-
-  const devicePixelRatio = useDevicePixelRatio();
 
   const BUILDED_GAME_URL = `${buildedGameUrl}/builded-games/coin-flip`;
 

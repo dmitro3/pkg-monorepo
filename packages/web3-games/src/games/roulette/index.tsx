@@ -1,10 +1,9 @@
 "use client";
 
 import {
-  RPSGameResult,
-  RockPaperScissors,
-  RpsFormFields,
-  RpsTemplate,
+  RouletteFormFields,
+  RouletteGameResult,
+  RouletteTemplate,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -38,11 +37,11 @@ interface TemplateWithWeb3Props {
   maxWager?: number;
 
   onAnimationStep?: (step: number) => void;
-  onAnimationCompleted?: (result: RPSGameResult[]) => void;
-  onAnimationSkipped?: (result: RPSGameResult[]) => void;
+  onAnimationCompleted?: (result: RouletteGameResult[]) => void;
+  onAnimationSkipped?: (result: RouletteGameResult[]) => void;
 }
 
-export default function RpsTemplateWithWeb3(props: TemplateWithWeb3Props) {
+export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
   const {
     gameAddresses,
     controllerAddress,
@@ -50,17 +49,16 @@ export default function RpsTemplateWithWeb3(props: TemplateWithWeb3Props) {
     uiOperatorAddress,
   } = useContractConfigContext();
 
-  const [formValues, setFormValues] = useState<RpsFormFields>({
+  const [formValues, setFormValues] = useState<RouletteFormFields>({
+    wager: props.minWager || 1,
+    totalWager: 0,
     betCount: 1,
-    rpsChoice: RockPaperScissors.ROCK,
-    stopGain: 0,
-    stopLoss: 0,
-    wager: 1,
+    selectedNumbers: new Array(145).fill(0),
   });
 
   const gameEvent = useListenGameEvent();
 
-  const [rpsResult, setRpsResult] =
+  const [rouletteResult, setRouletteResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
 
@@ -72,22 +70,23 @@ export default function RpsTemplateWithWeb3(props: TemplateWithWeb3Props) {
     showDefaultToasts: false,
   });
 
-  const rpsSteps = useMemo(() => {
-    if (!rpsResult) return [];
+  const rouletteSteps = useMemo(() => {
+    if (!rouletteResult) return [];
 
-    return rpsResult?.program?.[0]?.data.converted.steps.map((s) => ({
-      rps: s.outcome as unknown as RockPaperScissors,
+    return rouletteResult?.program?.[0]?.data.converted.steps.map((s) => ({
+      won: s.win,
+      outcome: s.outcome,
       payout: s.payout,
       payoutInUsd: s.payout,
     }));
-  }, [rpsResult]);
+  }, [rouletteResult]);
 
   const encodedParams = useMemo(() => {
     const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
       prepareGameTransaction({
         wager: formValues.wager,
-        stopGain: formValues.stopGain,
-        stopLoss: formValues.stopLoss,
+        stopGain: 0,
+        stopLoss: 0,
         selectedCurrency: selectedTokenAddress,
         lastPrice: 1,
       });
@@ -96,10 +95,10 @@ export default function RpsTemplateWithWeb3(props: TemplateWithWeb3Props) {
       [
         {
           name: "data",
-          type: "uint8",
+          type: "uint8[145]",
         },
       ],
-      [Number(formValues.rpsChoice)]
+      [formValues.selectedNumbers]
     );
 
     const encodedGameData = encodeAbiParameters(
@@ -123,7 +122,7 @@ export default function RpsTemplateWithWeb3(props: TemplateWithWeb3Props) {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.rps as Address,
+        gameAddresses.roulette as Address,
         tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -136,20 +135,14 @@ export default function RpsTemplateWithWeb3(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [
-    formValues.betCount,
-    formValues.rpsChoice,
-    formValues.stopGain,
-    formValues.stopLoss,
-    formValues.wager,
-  ]);
+  }, [formValues.betCount, formValues.selectedNumbers, formValues.wager]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.rps as Address,
+        gameAddresses.roulette,
         encodedParams.tokenAddress,
         uiOperatorAddress as Address,
         "bet",
@@ -183,14 +176,14 @@ export default function RpsTemplateWithWeb3(props: TemplateWithWeb3Props) {
     const finalResult = gameEvent;
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
-      setRpsResult(finalResult);
+      setRouletteResult(finalResult);
   }, [gameEvent]);
 
   return (
-    <RpsTemplate
+    <RouletteTemplate
       {...props}
       onSubmitGameForm={onGameSubmit}
-      gameResults={rpsSteps || []}
+      gameResults={rouletteSteps || []}
       onFormChange={(val) => {
         setFormValues(val);
       }}
