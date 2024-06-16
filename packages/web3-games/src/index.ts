@@ -20,6 +20,8 @@ export { default as RouletteTemplateWithWeb3 } from "./games/roulette";
 
 export { default as KenoTemplateWithWeb3 } from "./games/keno";
 
+export { default as WheelTemplateWithWeb3 } from "./games/wheel";
+
 export * from "./games/hooks";
 
 export * from "./providers";

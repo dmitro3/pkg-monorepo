@@ -18,5 +18,6 @@ export * from "./lib/solo/roll";
 export * from "./lib/solo/roulette";
 export * from "./lib/solo/rps";
 export * from "./lib/solo/single-blackjack";
+export * from "./lib/multiplayer/wheel";
 export * from "./lib/utils/number";
 export * from "./lib/utils/web3";
