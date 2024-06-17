@@ -1,6 +1,6 @@
 "use client";
 
-import { DiceFormFields, DiceGameResult, DiceTemplate } from "@winrlabs/games";
+import { DiceFormFields, DiceGameResult, DiceTemplate, toDecimals } from "@winrlabs/games";
 import {
   controllerAbi,
   useCurrentAccount,
@@ -101,7 +101,7 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
         },
       ],
       [
-        Number(formValues.rollValue * 100),
+        toDecimals(Number(formValues.rollValue * 100), 2),
         formValues.rollType == "OVER" ? true : false,
       ]
     );
