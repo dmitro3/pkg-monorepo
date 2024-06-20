@@ -48,6 +48,8 @@ export default function CoinFlipTemplateWithWeb3(props: TemplateWithWeb3Props) {
     selectedTokenAddress,
   } = useContractConfigContext();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formValues, setFormValues] = useState<CoinFlipFormFields>({
     betCount: 1,
     coinSide: CoinSide.HEADS,
@@ -169,24 +171,29 @@ export default function CoinFlipTemplateWithWeb3(props: TemplateWithWeb3Props) {
 
       if (!handledAllowance) return;
     }
+    setIsLoading(true); // Set loading state to true
 
     try {
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      setIsLoading(false); // Set loading state to false
     }
   };
 
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setCoinFlipResult(finalResult);
+      setIsLoading(false);
+    }
   }, [gameEvent]);
 
   return (
     <CoinFlipTemplate
       {...props}
+      isGettingResult={isLoading}
       onSubmitGameForm={onGameSubmit}
       gameResults={coinFlipSteps || []}
       onFormChange={(val) => {
