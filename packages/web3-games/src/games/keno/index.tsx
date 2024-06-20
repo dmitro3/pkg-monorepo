@@ -18,9 +18,6 @@ import {
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
-const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
-  "0x0") as `0x${string}`;
-
 type TemplateOptions = {
   scene?: {
     backgroundImage?: string;
@@ -42,6 +39,7 @@ export default function KenoTemplateWithWeb3(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    selectedTokenAddress,
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = useState<KenoFormField>({
