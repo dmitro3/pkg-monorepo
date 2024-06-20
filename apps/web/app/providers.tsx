@@ -56,10 +56,10 @@ export function Providers(props: { children: ReactNode }) {
             wagmiConfig={config}
             appTokens={[
               {
-                tokenAddress: "0x031C21aC79baac1E6AD074ea63ED9e9a318cab26",
+                tokenAddress: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
                 displayDecimals: 6,
                 tokenDecimals: 18,
-                icon: "https://assets.coingecko.com/coins/images/325/standard/wETH.png?1696501661",
+                icon: "/tokens/weth.png",
                 tokenSymbol: "wETH",
               },
             ]}
