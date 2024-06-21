@@ -23,8 +23,6 @@ import {
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
-const selectedTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS || "";
-
 type TemplateOptions = {
   scene?: {
     backgroundImage?: string;
@@ -47,6 +45,7 @@ export default function LimboTemplateWithWeb3(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    selectedTokenAddress,
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = useState<LimboFormField>({
