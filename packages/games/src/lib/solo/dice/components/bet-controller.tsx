@@ -50,8 +50,6 @@ export const BetController: React.FC<Props> = ({
     "diceGameResults",
   ]);
 
-  console.log("diceGameResults", diceGameResults.length);
-
   return (
     <BetControllerContainer>
       <div className="wr-max-lg:flex wr-max-lg:flex-col">

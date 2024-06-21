@@ -187,11 +187,8 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     const finalResult = gameEvent;
-    console.log("finalResult", finalResult);
-    
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
-      
       setDiceResult(finalResult);
       setIsGettingResults(false);
     }
