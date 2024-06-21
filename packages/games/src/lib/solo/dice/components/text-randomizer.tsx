@@ -10,12 +10,15 @@ import {
 } from "../../../ui/tooltip";
 
 export const TextRandomizer = () => {
-  const { diceGameResults, currentAnimationCount } = useDiceGameStore([
-    "diceGameResults",
-    "currentAnimationCount",
-  ]);
+  const { diceGameResults, currentAnimationCount, gameStatus } =
+    useDiceGameStore([
+      "diceGameResults",
+      "currentAnimationCount",
+      "gameStatus",
+    ]);
 
-  const currentResult = diceGameResults[currentAnimationCount];
+  const currentResult =
+    gameStatus === "PLAYING" ? diceGameResults[currentAnimationCount] : null;
 
   const [resetAnimation, setResetAnimation] = React.useState(false);
 
@@ -42,7 +45,8 @@ export const TextRandomizer = () => {
           <div
             className={cn("wr-transition-all", {
               "wr-opacity-0 delay-1000":
-                currentAnimationCount + 1 === diceGameResults.length,
+                currentAnimationCount + 1 === diceGameResults.length &&
+                gameStatus !== "PLAYING",
               "wr-opacity-0": resetAnimation,
               "wr-opacity-100 wr-delay-100": diceGameResults.length === 1,
             })}

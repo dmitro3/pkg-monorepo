@@ -93,6 +93,7 @@ export const RangeGame = ({
         animCallback(curr);
         diceGameResults[curr] &&
           addLastBet(diceGameResults[curr] as DiceGameResult);
+        updateCurrentAnimationCount(curr);
         curr += 1;
       }, 1000);
     } else {
@@ -105,9 +106,10 @@ export const RangeGame = ({
     clearInterval(intervalRef.current as NodeJS.Timeout);
     setTimeout(() => {
       updateGameStatus("ENDED");
-      updateDiceGameResults([]);
       onAnimationSkipped(diceGameResults);
-    }, 50);
+      updateDiceGameResults([]);
+      updateCurrentAnimationCount(0);
+    }, 1000);
   };
 
   return <>{children}</>;
