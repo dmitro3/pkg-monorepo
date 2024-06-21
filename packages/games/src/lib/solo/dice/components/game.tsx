@@ -71,6 +71,7 @@ export const RangeGame = ({
         updateCurrentAnimationCount(0);
         onAnimationCompleted(diceGameResults);
       }, 1000);
+      updateDiceGameResults([]);
 
       updateGameStatus("ENDED");
       clearInterval(intervalRef.current!);
