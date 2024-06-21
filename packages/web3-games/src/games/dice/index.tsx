@@ -48,6 +48,8 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
     selectedTokenAddress,
   } = useContractConfigContext();
 
+  const [isGettingResults, setIsGettingResults] = useState(false);
+
   const [formValues, setFormValues] = useState<DiceFormFields>({
     betCount: 1,
     stopGain: 0,
@@ -173,23 +175,32 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
       if (!handledAllowance) return;
     }
 
+    setIsGettingResults(true);
+
     try {
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      setIsGettingResults(false);
     }
   };
 
   React.useEffect(() => {
     const finalResult = gameEvent;
+    console.log("finalResult", finalResult);
+    
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
+      
       setDiceResult(finalResult);
+      setIsGettingResults(false);
+    }
   }, [gameEvent]);
 
   return (
     <DiceTemplate
       {...props}
+      isGettingResult={isGettingResults}
       onSubmitGameForm={onGameSubmit}
       gameResults={diceSteps}
       onFormChange={(val) => {
