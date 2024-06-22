@@ -31,12 +31,12 @@ const gameAddresses = {
   roulette: process.env.NEXT_PUBLIC_ROULETTE_ADDRESS as Address,
   baccarat: process.env.NEXT_PUBLIC_BACCARAT_ADDRESS as Address,
   keno: process.env.NEXT_PUBLIC_KENO_ADDRESS as Address,
+  winrBonanza: process.env.NEXT_PUBLIC_WINR_BONANZA_ADDRESS as Address,
 };
 
 export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
   const [isPreviouslyConnected, setIsPreviouslyConnected] = useState(false);
-  
 
   useEffect(() => {
     if (!localStorage) return;
