@@ -21,6 +21,7 @@ interface TemplateProps {
   onError?: (e: any) => void;
   onFormChange: (fields: WinrBonanzaFormFields) => void;
 
+  previousFreeSpinCount: number;
   currentBalanceInDollar: number;
   gameEvent: ReelSpinSettled;
   buildedGameUrl: string;
@@ -53,6 +54,7 @@ export const WinrBonanzaTemplate = ({
 
   gameEvent,
   currentBalanceInDollar,
+  previousFreeSpinCount,
   buildedGameUrl,
   buildedGameUrlMobile,
 }: TemplateProps) => {
@@ -92,7 +94,6 @@ export const WinrBonanzaTemplate = ({
 
   const [freeSpinWinAmount, setFreeSpinWinAmount] = React.useState(0);
   const [isInAutoPlay, setIsInAutoPlay] = React.useState(false);
-  const [hadPreviousFreeSpins, setHadPreviousFreeSpins] = React.useState(false);
   const [initialBuyEvent, setInitialBuyEvent] = React.useState<any>(undefined);
   const [wonFreeSpins, setWonFreeSpins] = React.useState(false);
 
@@ -285,7 +286,7 @@ export const WinrBonanzaTemplate = ({
       setIsDoubleChance,
       isDoubleChance,
       wonFreeSpins,
-      hadPreviousFreeSpins,
+      previousFreeSpinCount,
     ]
   );
 
@@ -569,7 +570,7 @@ export const WinrBonanzaTemplate = ({
     if (!isLoggedIn) return;
     if (!freeSpins) return;
     if (wonFreeSpins) return;
-    if (!hadPreviousFreeSpins) return;
+    if (!previousFreeSpinCount) return;
 
     setIsDoubleChance(false);
     handleEnterFreespinWithoutScatter();
@@ -584,8 +585,21 @@ export const WinrBonanzaTemplate = ({
     currentPayoutAmount,
     sendMessage,
     wonFreeSpins,
-    hadPreviousFreeSpins,
+    previousFreeSpinCount,
   ]);
+
+  // IMPORTANT
+  React.useEffect(() => {
+    if (previousFreeSpinCount > 0) {
+      setFreeSpins(previousFreeSpinCount || 0);
+
+      sendMessage(
+        "WebGLHandler",
+        "ReceiveMessage",
+        `M3_SetFreeSpinCount|${freeSpins}`
+      );
+    }
+  }, [previousFreeSpinCount]);
 
   React.useEffect(() => {
     if (!sendMessage) return;
