@@ -47,6 +47,14 @@ export const useUnityBonanza = ({
     };
   }, [prevWidth]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.innerWidth < 768
+        ? setGameUrl(buildedGameUrl)
+        : setGameUrl(buildedGameUrlMobile);
+    }
+  }, []);
+
   const {
     sendMessage,
     isLoaded,
@@ -56,10 +64,10 @@ export const useUnityBonanza = ({
     addEventListener,
     removeEventListener,
   } = useUnityContext({
-    loaderUrl: `${gameUrl}/SweetBonanza.loader.js`,
-    dataUrl: `${gameUrl}/SweetBonanza.data.unityweb`,
-    frameworkUrl: `${gameUrl}/SweetBonanza.framework.js.unityweb`,
-    codeUrl: `${gameUrl}/SweetBonanza.wasm.unityweb`,
+    loaderUrl: `${buildedGameUrl}/WinrBonanza.loader.js`,
+    dataUrl: `${buildedGameUrl}/WinrBonanza.data.unityweb`,
+    frameworkUrl: `${buildedGameUrl}/WinrBonanza.framework.js.unityweb`,
+    codeUrl: `${buildedGameUrl}/WinrBonanza.wasm.unityweb`,
   });
 
   useEqualizeUnitySound({

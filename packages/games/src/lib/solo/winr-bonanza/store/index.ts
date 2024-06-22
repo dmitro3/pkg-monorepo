@@ -1,9 +1,5 @@
 import { create } from "zustand";
 
-const BUILDED_GAME_URL = `${process.env.NEXT_PUBLIC_BASE_CDN_URL}/builded-games/sweet-bonanza-dev`;
-
-const BUILDED_GAME_URL_MOBILE = `${process.env.NEXT_PUBLIC_BASE_CDN_URL}/builded-games/sweet-bonanza-dev-mobile`;
-
 interface State {
   freeSpins: number;
   isDoubleChance: boolean;
@@ -35,10 +31,7 @@ export const useBonanzaGameStore = create<BonanzaGameStore>((set) => ({
   currentPayoutAmount: 0,
   isLoggedIn: false,
   isInFreeSpinMode: false,
-  gameUrl:
-    typeof window !== "undefined" && window.innerWidth > 768
-      ? BUILDED_GAME_URL
-      : BUILDED_GAME_URL_MOBILE,
+  gameUrl: "",
 
   prevWidth: typeof window !== "undefined" ? window.innerWidth : 0,
 

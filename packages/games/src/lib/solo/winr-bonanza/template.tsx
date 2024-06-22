@@ -12,17 +12,17 @@ import {
 import { toDecimals, toFormatted } from "../../utils/web3";
 import { wait } from "../../utils/promise";
 import { useDebounce } from "use-debounce";
+import { useGameOptions } from "../../game-provider";
 
 interface TemplateProps {
   onRefresh: () => void;
-  bet: (betAmount: number, isDoubleChance: boolean) => Promise<void>;
-  buyFreeSpins: (betAmount: number) => Promise<void>;
+  bet: () => Promise<void>;
+  buyFreeSpins: () => Promise<void>;
   freeSpin: () => Promise<void>;
   onError?: (e: any) => void;
   onFormChange: (fields: WinrBonanzaFormFields) => void;
 
   previousFreeSpinCount: number;
-  currentBalanceInDollar: number;
   gameEvent: ReelSpinSettled;
   buildedGameUrl: string;
   buildedGameUrlMobile: string;
@@ -53,7 +53,6 @@ export const WinrBonanzaTemplate = ({
   onFormChange,
 
   gameEvent,
-  currentBalanceInDollar,
   previousFreeSpinCount,
   buildedGameUrl,
   buildedGameUrlMobile,
@@ -92,6 +91,8 @@ export const WinrBonanzaTemplate = ({
     setIsLoggedIn,
   } = useBonanzaGameStore();
 
+  const { account } = useGameOptions();
+
   const [freeSpinWinAmount, setFreeSpinWinAmount] = React.useState(0);
   const [isInAutoPlay, setIsInAutoPlay] = React.useState(false);
   const [initialBuyEvent, setInitialBuyEvent] = React.useState<any>(undefined);
@@ -100,6 +101,11 @@ export const WinrBonanzaTemplate = ({
   const [currentAction, setCurrentAction] = React.useState<
     "submit" | "initialAutoplay" | "buyFeature" | "freeSpin" | "autoPlay"
   >();
+
+  const currentBalanceInDollar = React.useMemo(
+    () => (account?.balance || 0) * 1,
+    [account?.balance]
+  );
 
   const actualBetAmount = isDoubleChance
     ? betAmount + betAmount * 0.5
@@ -315,7 +321,8 @@ export const WinrBonanzaTemplate = ({
     setCurrentAction("buyFeature");
 
     try {
-      await buyFreeSpins(betAmount);
+      await buyFreeSpins();
+
       handleEnterFreespin();
     } catch (e: any) {
       setInitialBuyEvent(undefined);
@@ -342,7 +349,7 @@ export const WinrBonanzaTemplate = ({
     setCurrentAction("submit");
 
     try {
-      await bet(actualBetAmount, isDoubleChance);
+      await bet();
     } catch (e: any) {
       handleUnlockUi();
       onError && onError(e);
@@ -362,7 +369,7 @@ export const WinrBonanzaTemplate = ({
     setCurrentAction("autoPlay");
 
     try {
-      await bet(actualBetAmount, isDoubleChance);
+      await bet();
     } catch (e: any) {
       handleUnlockUi();
       onError && onError(e);
@@ -384,7 +391,7 @@ export const WinrBonanzaTemplate = ({
     setCurrentAction("initialAutoplay");
 
     try {
-      await bet(actualBetAmount, isDoubleChance);
+      await bet();
     } catch (e: any) {
       handleUnlockUi();
       onError && onError(e);
@@ -392,7 +399,7 @@ export const WinrBonanzaTemplate = ({
   };
 
   React.useEffect(() => {
-    if (currentAction == "submit" && gameEvent.type == "ReelSpinSettled") {
+    if (currentAction == "submit" && gameEvent?.type == "ReelSpinSettled") {
       handleSendGrid(gameEvent.grid);
 
       console.log("SUBMIT gameEvent", gameEvent);
@@ -424,7 +431,7 @@ export const WinrBonanzaTemplate = ({
       onRefresh();
     }
 
-    if (currentAction == "buyFeature" && gameEvent.type == "ReelSpinSettled") {
+    if (currentAction == "buyFeature" && gameEvent?.type == "ReelSpinSettled") {
       console.log("free spin event", gameEvent);
 
       console.log("grid", JSON.stringify(gameEvent.grid).replace(/,/g, ", "));
@@ -432,7 +439,7 @@ export const WinrBonanzaTemplate = ({
       setInitialBuyEvent(gameEvent);
     }
 
-    if (currentAction == "freeSpin" && gameEvent.type == "ReelSpinSettled") {
+    if (currentAction == "freeSpin" && gameEvent?.type == "ReelSpinSettled") {
       const _betAmount = toDecimals(gameEvent.betAmount * 1, 2);
 
       sendMessage(
@@ -463,7 +470,7 @@ export const WinrBonanzaTemplate = ({
       }
     }
 
-    if (currentAction == "autoPlay" && gameEvent.type == "ReelSpinSettled") {
+    if (currentAction == "autoPlay" && gameEvent?.type == "ReelSpinSettled") {
       console.log("AUTOPLAY SUCCESS");
 
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
@@ -499,7 +506,7 @@ export const WinrBonanzaTemplate = ({
 
     if (
       currentAction == "initialAutoplay" &&
-      gameEvent.type == "ReelSpinSettled"
+      gameEvent?.type == "ReelSpinSettled"
     ) {
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
