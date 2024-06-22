@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LUCK_MULTIPLIER, MAX_BET_COUNT, MIN_BET_COUNT } from "../constant";
 import { BetController } from "./bet-controller";
 import { toDecimals } from "../../../utils/web3";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { cn } from "../../../../lib/utils/style";
 import { Form } from "../../../ui/form";
 import { DiceFormFields } from "../types";
@@ -32,6 +32,7 @@ type TemplateProps = RangeGameProps & {
   maxWager?: number;
   onSubmitGameForm: (data: DiceFormFields) => void;
   onFormChange: (fields: DiceFormFields) => void;
+  isGettingResult?: boolean;
 };
 
 const defaultOptions: TemplateOptions = {
@@ -108,6 +109,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
             minWager={props.minWager || 1}
             maxWager={props.maxWager || 2000}
             winMultiplier={winMultiplier}
+            isGettingResults={props.isGettingResult}
           />
           <SceneContainer
             className={cn("wr-h-[640px]  max-md:wr-h-[425px] lg:wr-py-12")}
