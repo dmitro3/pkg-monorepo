@@ -106,6 +106,8 @@ export const useUnityBonanza = ({
 
       const _grid = JSON.stringify(grid).replace(/,/g, ", ");
 
+      console.log(_grid, "replaced grid");
+
       sendMessage(
         "WebGLHandler",
         "ReceiveMessage",

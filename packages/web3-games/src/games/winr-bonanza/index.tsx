@@ -1,4 +1,10 @@
-import { WinrBonanzaFormFields, WinrBonanzaTemplate } from "@winrlabs/games";
+"use client";
+
+import {
+  ReelSpinSettled,
+  WinrBonanzaFormFields,
+  WinrBonanzaTemplate,
+} from "@winrlabs/games";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
   DecodedEvent,
@@ -13,7 +19,12 @@ import {
   useHandleTx,
   useTokenAllowance,
 } from "@winrlabs/web3";
-import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+import {
+  Address,
+  encodeAbiParameters,
+  encodeFunctionData,
+  formatUnits,
+} from "viem";
 
 interface TemplateWithWeb3Props {
   buildedGameUrl: string;
@@ -33,26 +44,30 @@ export default function WinrBonanzaTemplateWithWeb3({
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = React.useState<WinrBonanzaFormFields>({
-    betAmount: 0,
-    actualBetAmount: 0,
+    betAmount: 1,
+    actualBetAmount: 1,
     isDoubleChance: false,
   });
 
   const gameEvent = useListenGameEvent();
 
-  const [settledResult, setSettledResult] =
-    React.useState<DecodedEvent<any, SingleStepSettledEvent>>();
+  const [settledResult, setSettledResult] = React.useState<ReelSpinSettled>();
   const currentAccount = useCurrentAccount();
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || "0x",
     spender: cashierAddress,
     tokenAddress: selectedTokenAddress,
     showDefaultToasts: false,
   });
 
   const encodedParams = React.useMemo(() => {
+    console.log(
+      formValues.actualBetAmount,
+      formValues.isDoubleChance,
+      "form fields"
+    );
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.actualBetAmount,
       selectedCurrency: selectedTokenAddress,
@@ -86,64 +101,64 @@ export default function WinrBonanzaTemplateWithWeb3({
     };
   }, [formValues.isDoubleChance, formValues.actualBetAmount]);
 
-  const encodedBuyFreeSpinParams = React.useMemo(() => {
-    const { tokenAddress, wagerInWei } = prepareGameTransaction({
-      wager: formValues.betAmount,
-      selectedCurrency: selectedTokenAddress,
-      lastPrice: 1,
-    });
+  // const encodedBuyFreeSpinParams = React.useMemo(() => {
+  //   const { tokenAddress, wagerInWei } = prepareGameTransaction({
+  //     wager: formValues.betAmount,
+  //     selectedCurrency: selectedTokenAddress,
+  //     lastPrice: 1,
+  //   });
 
-    const encodedGameData = encodeAbiParameters(
-      [
-        { name: "wager", type: "uint128" },
-        { name: "isDoubleChance", type: "bool" },
-      ],
-      [wagerInWei, formValues.isDoubleChance]
-    );
+  //   const encodedGameData = encodeAbiParameters(
+  //     [
+  //       { name: "wager", type: "uint128" },
+  //       { name: "isDoubleChance", type: "bool" },
+  //     ],
+  //     [wagerInWei, formValues.isDoubleChance]
+  //   );
 
-    const encodedData: `0x${string}` = encodeFunctionData({
-      abi: controllerAbi,
-      functionName: "perform",
-      args: [
-        gameAddresses.winrBonanza as Address,
-        tokenAddress,
-        uiOperatorAddress as Address,
-        "bet",
-        encodedGameData,
-      ],
-    });
+  //   const encodedData: `0x${string}` = encodeFunctionData({
+  //     abi: controllerAbi,
+  //     functionName: "perform",
+  //     args: [
+  //       gameAddresses.winrBonanza as Address,
+  //       tokenAddress,
+  //       uiOperatorAddress as Address,
+  //       "bet",
+  //       encodedGameData,
+  //     ],
+  //   });
 
-    return {
-      tokenAddress,
-      encodedGameData,
-      encodedTxData: encodedData,
-    };
-  }, [formValues.betAmount, selectedTokenAddress]);
+  //   return {
+  //     tokenAddress,
+  //     encodedGameData,
+  //     encodedTxData: encodedData,
+  //   };
+  // }, [formValues.betAmount, selectedTokenAddress]);
 
-  const encodedFreeSpinParams = React.useMemo(() => {
-    const { tokenAddress } = prepareGameTransaction({
-      wager: formValues.betAmount,
-      selectedCurrency: selectedTokenAddress,
-      lastPrice: 1,
-    });
+  // const encodedFreeSpinParams = React.useMemo(() => {
+  //   const { tokenAddress } = prepareGameTransaction({
+  //     wager: formValues.betAmount,
+  //     selectedCurrency: selectedTokenAddress,
+  //     lastPrice: 1,
+  //   });
 
-    const encodedData: `0x${string}` = encodeFunctionData({
-      abi: controllerAbi,
-      functionName: "perform",
-      args: [
-        gameAddresses.winrBonanza as Address,
-        tokenAddress,
-        uiOperatorAddress as Address,
-        "freeSpin",
-        "0x",
-      ],
-    });
+  //   const encodedData: `0x${string}` = encodeFunctionData({
+  //     abi: controllerAbi,
+  //     functionName: "perform",
+  //     args: [
+  //       gameAddresses.winrBonanza as Address,
+  //       tokenAddress,
+  //       uiOperatorAddress as Address,
+  //       "freeSpin",
+  //       "0x",
+  //     ],
+  //   });
 
-    return {
-      tokenAddress,
-      encodedTxData: encodedData,
-    };
-  }, [formValues.betAmount, selectedTokenAddress]);
+  //   return {
+  //     tokenAddress,
+  //     encodedTxData: encodedData,
+  //   };
+  // }, [formValues.betAmount, selectedTokenAddress]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
@@ -162,86 +177,104 @@ export default function WinrBonanzaTemplateWithWeb3({
     encodedTxData: encodedParams.encodedTxData,
   });
 
-  const handleBuyFeatureTx = useHandleTx<typeof controllerAbi, "perform">({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: "perform",
-      args: [
-        gameAddresses.winrBonanza as Address,
-        encodedBuyFreeSpinParams.tokenAddress,
-        uiOperatorAddress as Address,
-        "buyFreeSpins",
-        encodedBuyFreeSpinParams.encodedGameData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {},
-    encodedTxData: encodedBuyFreeSpinParams.encodedTxData,
-  });
+  // const handleBuyFeatureTx = useHandleTx<typeof controllerAbi, "perform">({
+  //   writeContractVariables: {
+  //     abi: controllerAbi,
+  //     functionName: "perform",
+  //     args: [
+  //       gameAddresses.winrBonanza as Address,
+  //       encodedBuyFreeSpinParams.tokenAddress,
+  //       uiOperatorAddress as Address,
+  //       "buyFreeSpins",
+  //       encodedBuyFreeSpinParams.encodedGameData,
+  //     ],
+  //     address: controllerAddress as Address,
+  //   },
+  //   options: {},
+  //   encodedTxData: encodedBuyFreeSpinParams.encodedTxData,
+  // });
 
-  const handleFreeSpinTx = useHandleTx<typeof controllerAbi, "perform">({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: "perform",
-      args: [
-        gameAddresses.winrBonanza as Address,
-        encodedFreeSpinParams.tokenAddress,
-        uiOperatorAddress as Address,
-        "freeSpin",
-        "0x",
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {},
-    encodedTxData: encodedFreeSpinParams.encodedTxData,
-  });
+  // const handleFreeSpinTx = useHandleTx<typeof controllerAbi, "perform">({
+  //   writeContractVariables: {
+  //     abi: controllerAbi,
+  //     functionName: "perform",
+  //     args: [
+  //       gameAddresses.winrBonanza as Address,
+  //       encodedFreeSpinParams.tokenAddress,
+  //       uiOperatorAddress as Address,
+  //       "freeSpin",
+  //       "0x",
+  //     ],
+  //     address: controllerAddress as Address,
+  //   },
+  //   options: {},
+  //   encodedTxData: encodedFreeSpinParams.encodedTxData,
+  // });
 
   const handleBet = async () => {
-    if (!allowance.hasAllowance) {
-      const handledAllowance = await allowance.handleAllowance({
-        errorCb: (e: any) => {
-          console.log("error", e);
-        },
-      });
+    console.log("spin button called!");
 
-      if (!handledAllowance) return;
-    }
+    // if (!allowance.hasAllowance) {
+    //   const handledAllowance = await allowance.handleAllowance({
+    //     errorCb: (e: any) => {
+    //       console.log("error", e);
+    //     },
+    //   });
+
+    //   if (!handledAllowance) return;
+    // }
+
+    // console.log("allowance available");
 
     await handleTx.mutateAsync();
   };
 
   const handleBuyFreeSpins = async () => {
-    if (!allowance.hasAllowance) {
-      const handledAllowance = await allowance.handleAllowance({
-        errorCb: (e: any) => {
-          console.log("error", e);
-        },
-      });
-
-      if (!handledAllowance) return;
-    }
-
-    await handleBuyFeatureTx.mutateAsync();
+    // if (!allowance.hasAllowance) {
+    //   const handledAllowance = await allowance.handleAllowance({
+    //     errorCb: (e: any) => {
+    //       console.log("error", e);
+    //     },
+    //   });
+    //   if (!handledAllowance) return;
+    // }
+    // await handleBuyFeatureTx.mutateAsync();
   };
 
-  const handleFreeSpin = async () => {};
-
-  const handleRefresh = async () => {
-    if (!allowance.hasAllowance) {
-      const handledAllowance = await allowance.handleAllowance({
-        errorCb: (e: any) => {
-          console.log("error", e);
-        },
-      });
-
-      if (!handledAllowance) return;
-    }
-
-    await handleFreeSpinTx.mutateAsync();
+  const handleFreeSpin = async () => {
+    // if (!allowance.hasAllowance) {
+    //   const handledAllowance = await allowance.handleAllowance({
+    //     errorCb: (e: any) => {
+    //       console.log("error", e);
+    //     },
+    //   });
+    //   if (!handledAllowance) return;
+    // }
+    // await handleFreeSpinTx.mutateAsync();
   };
+
+  const handleRefresh = async () => {};
 
   React.useEffect(() => {
     console.log(gameEvent, "GAME EVENT!!");
+
+    if (
+      gameEvent?.program[0]?.type == "Game" &&
+      gameEvent?.program[0].data?.state == 2
+    ) {
+      const data = gameEvent.program[0].data;
+
+      setSettledResult({
+        betAmount: Number(formatUnits(data.wager, 18)),
+        scatterCount: data.result.scatter,
+        tumbleCount: data.result.tumble,
+        freeSpinsLeft: data.freeSpinCount,
+        payoutMultiplier: data.result.payoutMultiplier / 100,
+        grid: data.result.outcomes,
+        type: "Game",
+        spinType: data.spinType,
+      });
+    }
   }, [gameEvent]);
 
   return (
@@ -253,7 +286,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       bet={handleBet}
       buyFreeSpins={handleBuyFreeSpins}
       freeSpin={handleFreeSpin}
-      gameEvent={null as any}
+      gameEvent={settledResult as ReelSpinSettled}
       previousFreeSpinCount={0}
     />
   );

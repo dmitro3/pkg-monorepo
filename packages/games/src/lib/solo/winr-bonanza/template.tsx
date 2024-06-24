@@ -1,3 +1,5 @@
+"use client";
+
 import { Unity } from "react-unity-webgl";
 import { UnityGameContainer } from "../../common/containers";
 import { useUnityBonanza } from "./hooks/use-bonanza-unity";
@@ -399,7 +401,7 @@ export const WinrBonanzaTemplate = ({
   };
 
   React.useEffect(() => {
-    if (currentAction == "submit" && gameEvent?.type == "ReelSpinSettled") {
+    if (currentAction == "submit" && gameEvent?.type == "Game") {
       handleSendGrid(gameEvent.grid);
 
       console.log("SUBMIT gameEvent", gameEvent);
@@ -431,7 +433,7 @@ export const WinrBonanzaTemplate = ({
       onRefresh();
     }
 
-    if (currentAction == "buyFeature" && gameEvent?.type == "ReelSpinSettled") {
+    if (currentAction == "buyFeature" && gameEvent?.type == "Game") {
       console.log("free spin event", gameEvent);
 
       console.log("grid", JSON.stringify(gameEvent.grid).replace(/,/g, ", "));
@@ -439,7 +441,7 @@ export const WinrBonanzaTemplate = ({
       setInitialBuyEvent(gameEvent);
     }
 
-    if (currentAction == "freeSpin" && gameEvent?.type == "ReelSpinSettled") {
+    if (currentAction == "freeSpin" && gameEvent?.type == "Game") {
       const _betAmount = toDecimals(gameEvent.betAmount * 1, 2);
 
       sendMessage(
@@ -470,7 +472,7 @@ export const WinrBonanzaTemplate = ({
       }
     }
 
-    if (currentAction == "autoPlay" && gameEvent?.type == "ReelSpinSettled") {
+    if (currentAction == "autoPlay" && gameEvent?.type == "Game") {
       console.log("AUTOPLAY SUCCESS");
 
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
@@ -504,10 +506,7 @@ export const WinrBonanzaTemplate = ({
       onRefresh();
     }
 
-    if (
-      currentAction == "initialAutoplay" &&
-      gameEvent?.type == "ReelSpinSettled"
-    ) {
+    if (currentAction == "initialAutoplay" && gameEvent?.type == "Game") {
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
       console.log("INITIAL AUTOPLAY RESULT");
