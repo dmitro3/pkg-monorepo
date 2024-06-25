@@ -71,11 +71,11 @@ export const WinrBonanzaTemplate = ({
     handleUnlockUi,
     handleSendGrid,
     handleEnterFreespin,
+    handleEnterFreespinWithoutScatter,
     handleExitFreespin,
     handleFreespinAmount,
     hideFreeSpinText,
     handleSpinStatus,
-    handleEnterFreespinWithoutScatter,
   } = useUnityBonanza({ buildedGameUrl, buildedGameUrlMobile });
 
   const {
@@ -247,7 +247,7 @@ export const WinrBonanzaTemplate = ({
           ) {
             const event = initialBuyEvent;
 
-            sendMessage("WebGLbet''r", "ReceiveMessage", `M3_SpinClickAction`);
+            sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
             handleSendGrid(event.grid);
 
@@ -404,6 +404,7 @@ export const WinrBonanzaTemplate = ({
     if (currentAction == "submit" && gameEvent?.type == "Game") {
       handleSendGrid(gameEvent.grid);
 
+      onFormChange({ betAmount, actualBetAmount, isDoubleChance });
       console.log("SUBMIT gameEvent", gameEvent);
 
       if (gameEvent.freeSpinsLeft > 0) {

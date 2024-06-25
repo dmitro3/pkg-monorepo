@@ -1,4 +1,5 @@
 import React from "react";
+import { Config } from "wagmi";
 
 export interface ContractConfig {
   gameAddresses: GameAddresses;
@@ -21,7 +22,12 @@ export interface GameAddresses {
   winrBonanza: `0x${string}`;
 }
 
-const ContractConfigContext = React.createContext<ContractConfig>({
+interface ContractConfigContext extends ContractConfig {
+  wagmiConfig: Config;
+}
+
+const ContractConfigContext = React.createContext<ContractConfigContext>({
+  wagmiConfig: {} as Config,
   gameAddresses: {
     coinFlip: "0x",
     plinko: "0x",
@@ -46,12 +52,14 @@ export const useContractConfigContext = () => {
 
 export const ContractConfigProvider: React.FC<{
   children: React.ReactNode;
+  wagmiConfig: Config;
   config: ContractConfig;
-}> = ({ children, config }) => {
+}> = ({ children, config, wagmiConfig }) => {
   return (
     <ContractConfigContext.Provider
       value={{
         ...config,
+        wagmiConfig: wagmiConfig,
       }}
     >
       {children}

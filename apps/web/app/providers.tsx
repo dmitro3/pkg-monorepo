@@ -67,6 +67,7 @@ export function Providers(props: { children: ReactNode }) {
           >
             <WinrLabsWeb3GamesProvider
               config={{
+                wagmiConfig: config,
                 bundlerWsUrl,
                 contracts: {
                   gameAddresses,
