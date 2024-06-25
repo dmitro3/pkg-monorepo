@@ -553,7 +553,7 @@ importers:
         specifier: workspace:*
         version: link:../games
       '@winrlabs/web3':
-        specifier: workspace:*
+        specifier: ^0.0.5
         version: link:../web3
       '@winrlabs/web3-games':
         specifier: workspace:*
