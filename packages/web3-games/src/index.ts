@@ -22,6 +22,8 @@ export { default as KenoTemplateWithWeb3 } from "./games/keno";
 
 export { default as WheelTemplateWithWeb3 } from "./games/wheel";
 
+export { default as WinrBonanzaWithWeb3 } from "./games/winr-bonanza";
+
 export * from "./games/hooks";
 
 export * from "./providers";

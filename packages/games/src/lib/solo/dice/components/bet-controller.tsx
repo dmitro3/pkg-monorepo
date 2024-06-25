@@ -28,12 +28,14 @@ interface Props {
   minWager: number;
   maxWager: number;
   winMultiplier: number;
+  isGettingResults?: boolean;
 }
 
 export const BetController: React.FC<Props> = ({
   minWager,
   maxWager,
   winMultiplier,
+  isGettingResults,
 }) => {
   const form = useFormContext() as DiceForm;
 
@@ -61,14 +63,16 @@ export const BetController: React.FC<Props> = ({
           isDisabled={
             form.formState.isSubmitting ||
             form.formState.isLoading ||
-            gameStatus == "PLAYING"
+            gameStatus == "PLAYING" ||
+            isGettingResults
           }
         />
         <BetCountFormField
           isDisabled={
             form.formState.isSubmitting ||
             form.formState.isLoading ||
-            gameStatus == "PLAYING"
+            gameStatus == "PLAYING" ||
+            isGettingResults
           }
         />
         <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
@@ -101,14 +105,16 @@ export const BetController: React.FC<Props> = ({
                 isDisabled={
                   form.formState.isSubmitting ||
                   form.formState.isLoading ||
-                  gameStatus == "PLAYING"
+                  gameStatus == "PLAYING" ||
+                  isGettingResults
                 }
               />
               <StopLossFormField
                 isDisabled={
                   form.formState.isSubmitting ||
                   form.formState.isLoading ||
-                  gameStatus == "PLAYING"
+                  gameStatus == "PLAYING" ||
+                  isGettingResults
                 }
               />
             </div>
@@ -122,13 +128,16 @@ export const BetController: React.FC<Props> = ({
               className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
               size={"xl"}
               isLoading={
-                form.formState.isSubmitting || form.formState.isLoading
+                form.formState.isSubmitting ||
+                form.formState.isLoading ||
+                isGettingResults
               }
               disabled={
                 !form.formState.isValid ||
                 form.formState.isSubmitting ||
                 form.formState.isLoading ||
-                gameStatus == "PLAYING"
+                gameStatus == "PLAYING" ||
+                isGettingResults
               }
             >
               Bet

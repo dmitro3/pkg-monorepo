@@ -23,9 +23,6 @@ import {
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
-const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
-  "0x0") as `0x${string}`;
-
 type TemplateOptions = {
   scene?: {
     backgroundImage?: string;
@@ -48,7 +45,10 @@ export default function CoinFlipTemplateWithWeb3(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    selectedTokenAddress,
   } = useContractConfigContext();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formValues, setFormValues] = useState<CoinFlipFormFields>({
     betCount: 1,
@@ -171,24 +171,29 @@ export default function CoinFlipTemplateWithWeb3(props: TemplateWithWeb3Props) {
 
       if (!handledAllowance) return;
     }
+    setIsLoading(true); // Set loading state to true
 
     try {
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      setIsLoading(false); // Set loading state to false
     }
   };
 
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setCoinFlipResult(finalResult);
+      setIsLoading(false);
+    }
   }, [gameEvent]);
 
   return (
     <CoinFlipTemplate
       {...props}
+      isGettingResult={isLoading}
       onSubmitGameForm={onGameSubmit}
       gameResults={coinFlipSteps || []}
       onFormChange={(val) => {

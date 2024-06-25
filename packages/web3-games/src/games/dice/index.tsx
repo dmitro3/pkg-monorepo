@@ -1,6 +1,11 @@
 "use client";
 
-import { DiceFormFields, DiceGameResult, DiceTemplate } from "@winrlabs/games";
+import {
+  DiceFormFields,
+  DiceGameResult,
+  DiceTemplate,
+  toDecimals,
+} from "@winrlabs/games";
 import {
   controllerAbi,
   useCurrentAccount,
@@ -17,9 +22,6 @@ import {
 } from "../utils";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
-
-const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
-  "0x0") as `0x${string}`;
 
 type TemplateOptions = {
   scene?: {
@@ -43,7 +45,10 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    selectedTokenAddress,
   } = useContractConfigContext();
+
+  const [isGettingResults, setIsGettingResults] = useState(false);
 
   const [formValues, setFormValues] = useState<DiceFormFields>({
     betCount: 1,
@@ -101,7 +106,7 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
         },
       ],
       [
-        Number(formValues.rollValue * 100),
+        toDecimals(Number(formValues.rollValue * 100), 2),
         formValues.rollType == "OVER" ? true : false,
       ]
     );
@@ -170,23 +175,29 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
       if (!handledAllowance) return;
     }
 
+    setIsGettingResults(true);
+
     try {
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      setIsGettingResults(false);
     }
   };
 
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setDiceResult(finalResult);
+      setIsGettingResults(false);
+    }
   }, [gameEvent]);
 
   return (
     <DiceTemplate
       {...props}
+      isGettingResult={isGettingResults}
       onSubmitGameForm={onGameSubmit}
       gameResults={diceSteps}
       onFormChange={(val) => {

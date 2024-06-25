@@ -2,7 +2,7 @@
   "name": "@winrlabs/games",
   "description": "Games",
   "license": "MIT",
-  "version": "2.8.45",
+  "version": "2.8.46",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -82,6 +82,7 @@
     "react-unity-webgl": "9.4.0",
     "tailwind-merge": "^2.2.2",
     "three": "^0.151.3",
+    "use-debounce": "^10.0.1",
     "zod": "^3.22.4",
     "zustand": "^4.4.1"
   }
