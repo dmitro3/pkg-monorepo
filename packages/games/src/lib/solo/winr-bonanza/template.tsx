@@ -261,8 +261,7 @@ export const WinrBonanzaTemplate = ({
 
             if (event.payoutMultiplier > 0) {
               const payout = toDecimals(
-                event.payoutMultiplier *
-                  (event.currency.lastPrice * event.betAmount),
+                event.payoutMultiplier * (1 * event.betAmount),
                 2
               );
 
