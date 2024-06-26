@@ -399,6 +399,14 @@ const config: Omit<Config, "content"> = {
           "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/plinko/plinko-button-disabled.png)",
         "keno-cell-bg":
           "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/keno/keno-cell-bg.png)",
+        "card-bg": "url(/images/baccarat/jb-card-bg.svg)",
+        "card-bg-black": "url(/images/baccarat/card-bg-black.png)",
+        "royal-flush":
+          "linear-gradient(96.9deg, #FACC15 6.45%, #FFE26D 31.6%, #FACC15 51.59%)",
+        "jacks-or-better":
+          "radial-gradient(122.01% 129.55% at 85.62% -11.36%, #FFA05E 24.51%, #F97316 73.05%)",
+        "videopoker-result":
+          "radial-gradient(122.01% 129.55% at 85.62% -11.36%, #A3E635 24.51%, #65A30D 73.05%)",
       },
     },
   },
