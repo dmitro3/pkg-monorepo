@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 
 const WinrBonanzaTemplateWithWeb3 = dynamic(
-  () => import("./_components/web3/winr-bonanza"),
+  () => import("@winrlabs/web3-games").then((mod) => mod.WinrBonanzaWithWeb3),
   {
     ssr: false,
   }

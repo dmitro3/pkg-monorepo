@@ -444,6 +444,14 @@ export const WinrBonanzaTemplate = ({
     if (currentAction == "freeSpin" && gameEvent?.type == "Game") {
       const _betAmount = toDecimals(gameEvent.betAmount * 1, 2);
 
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
+
       sendMessage(
         "WebGLHandler",
         "ReceiveMessage",
@@ -474,6 +482,14 @@ export const WinrBonanzaTemplate = ({
 
     if (currentAction == "autoPlay" && gameEvent?.type == "Game") {
       console.log("AUTOPLAY SUCCESS");
+
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
 
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
@@ -507,6 +523,14 @@ export const WinrBonanzaTemplate = ({
     }
 
     if (currentAction == "initialAutoplay" && gameEvent?.type == "Game") {
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
+
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
       console.log("INITIAL AUTOPLAY RESULT");
