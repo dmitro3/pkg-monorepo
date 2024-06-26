@@ -2,12 +2,15 @@ import { useForm } from "react-hook-form";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { Form } from "../../../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { WheelColor } from "../constants";
+import { WheelColor, WheelStatus } from "../constants";
 import { WheelFormFields } from "../types";
 import * as z from "zod";
 import React from "react";
 import debounce from "debounce";
 import BetController from "./bet-controller";
+import LastBets from "./last-bet";
+import { WheelScene } from "./wheel-scene";
+import WheelParticipants from "./wheel-participants";
 
 type TemplateOptions = {
   scene?: {
@@ -21,6 +24,8 @@ type TemplateProps = {
   maxWager?: number;
   onSubmitGameForm: (data: WheelFormFields) => void;
   onFormChange?: (fields: WheelFormFields) => void;
+
+  status: WheelStatus;
 };
 
 const WheelTemplate = (props: TemplateProps) => {
@@ -66,10 +71,10 @@ const WheelTemplate = (props: TemplateProps) => {
             minWager={props?.minWager || 1}
             isGamblerParticipant={false}
           />
-          <SceneContainer className="h-[640px] max-md:h-[480px] lg:p-[14px]">
-            {/* <LastBets isFinished={isFinished} />
-            <WheelScene onComplete={onComplete} />
-            <WheelParticipants /> */}
+          <SceneContainer className="wr-h-[640px] max-md:wr-h-[480px] lg:wr-p-[14px]">
+            <LastBets />
+            <WheelScene />
+            <WheelParticipants />
           </SceneContainer>
         </GameContainer>
       </form>

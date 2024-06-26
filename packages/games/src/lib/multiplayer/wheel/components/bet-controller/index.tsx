@@ -36,32 +36,6 @@ const BetController: React.FC<Props> = ({
 }) => {
   const form = useFormContext() as WheelForm;
 
-  // const {
-  //   finishTime,
-  //   status,
-  //   startTime,
-  //   updateState,
-  //   resetState,
-  //   resetWheelParticipant,
-  // } = useWheelGameStore([
-  //   "finishTime",
-  //   "status",
-  //   "startTime",
-  //   "updateState",
-  //   "resetState",
-  //   "resetWheelParticipant",
-  // ]);
-
-  // const timeLeft = useCountdown(finishTime, () => {
-  //   resetState();
-
-  //   resetWheelParticipant();
-  // });
-
-  // useCountdown(startTime, () => {
-  //   updateState({ status: WheelStatus.Spin });
-  // });
-
   const chosenColor = form.watch("color");
 
   const currentWager = form.watch("wager");
@@ -101,7 +75,7 @@ const BetController: React.FC<Props> = ({
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-white wr-bg-opacity-25 wr-text-zinc-200 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-opacity-100  data-[state=checked]:wr-text-zinc-600"
+                            "wr-h-full wr-w-full wr-rounded-md wr-bg-white/25 wr-text-zinc-200 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-white  data-[state=checked]:wr-text-zinc-600"
                           )}
                           value={WheelColor.GREY}
                         >
@@ -113,7 +87,7 @@ const BetController: React.FC<Props> = ({
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-blue-500 wr-bg-opacity-25 wr-text-blue-400 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-opacity-100 data-[state=checked]:wr-text-zinc-100"
+                            "wr-h-full wr-w-full wr-rounded-md wr-bg-blue-500/25 wr-text-blue-400 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-blue-500 data-[state=checked]:wr-text-zinc-100"
                           )}
                           value={WheelColor.BLUE}
                         >
@@ -125,7 +99,7 @@ const BetController: React.FC<Props> = ({
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md  wr-bg-green-500 wr-bg-opacity-25 wr-text-green-500 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-opacity-100 data-[state=checked]:wr-text-zinc-100"
+                            "wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/25  wr-text-green-500 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-green-500 data-[state=checked]:wr-text-zinc-100"
                           )}
                           value={WheelColor.GREEN}
                         >
@@ -137,7 +111,7 @@ const BetController: React.FC<Props> = ({
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-red-600 wr-bg-opacity-25 wr-text-red-600  wr-transition-all wr-ease-in data-[state=checked]:wr-bg-opacity-100 data-[state=checked]:wr-text-zinc-100"
+                            "wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/25 wr-text-red-600  wr-transition-all wr-ease-in data-[state=checked]:wr-bg-red-600 data-[state=checked]:wr-text-zinc-100"
                           )}
                           value={WheelColor.RED}
                         >
@@ -152,7 +126,7 @@ const BetController: React.FC<Props> = ({
           />
         </div>
 
-        <div className="mb-6">
+        <div className="wr-mb-6">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
@@ -188,6 +162,7 @@ const BetController: React.FC<Props> = ({
               : chosenColor !== WheelColor.IDLE
                 ? "BET"
                 : "CHOOSE COLOR"} */}
+            {!chosenColor ? "CHOOSE COLOR" : "BET"}
           </Button>
         </PreBetButton>
       </div>
