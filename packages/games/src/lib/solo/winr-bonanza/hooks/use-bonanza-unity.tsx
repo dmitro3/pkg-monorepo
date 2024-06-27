@@ -215,12 +215,12 @@ export const useUnityBonanza = ({
     handleUnlockUi,
     handleSendGrid,
     handleEnterFreespin,
+    handleEnterFreespinWithoutScatter,
     handleExitFreespin,
     handleSpinStatus,
     handleFreespinAmount,
     hideFreeSpinText,
     addEventListener,
     removeEventListener,
-    handleEnterFreespinWithoutScatter,
   };
 };

@@ -27,3 +27,5 @@ export { default as WinrBonanzaWithWeb3 } from "./games/winr-bonanza";
 export * from "./games/hooks";
 
 export * from "./providers";
+
+export * from "./games/utils";

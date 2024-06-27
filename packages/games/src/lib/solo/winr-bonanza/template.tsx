@@ -71,11 +71,11 @@ export const WinrBonanzaTemplate = ({
     handleUnlockUi,
     handleSendGrid,
     handleEnterFreespin,
+    handleEnterFreespinWithoutScatter,
     handleExitFreespin,
     handleFreespinAmount,
     hideFreeSpinText,
     handleSpinStatus,
-    handleEnterFreespinWithoutScatter,
   } = useUnityBonanza({ buildedGameUrl, buildedGameUrlMobile });
 
   const {
@@ -247,7 +247,7 @@ export const WinrBonanzaTemplate = ({
           ) {
             const event = initialBuyEvent;
 
-            sendMessage("WebGLbet''r", "ReceiveMessage", `M3_SpinClickAction`);
+            sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
             handleSendGrid(event.grid);
 
@@ -261,8 +261,7 @@ export const WinrBonanzaTemplate = ({
 
             if (event.payoutMultiplier > 0) {
               const payout = toDecimals(
-                event.payoutMultiplier *
-                  (event.currency.lastPrice * event.betAmount),
+                event.payoutMultiplier * (1 * event.betAmount),
                 2
               );
 
@@ -404,6 +403,7 @@ export const WinrBonanzaTemplate = ({
     if (currentAction == "submit" && gameEvent?.type == "Game") {
       handleSendGrid(gameEvent.grid);
 
+      onFormChange({ betAmount, actualBetAmount, isDoubleChance });
       console.log("SUBMIT gameEvent", gameEvent);
 
       if (gameEvent.freeSpinsLeft > 0) {
@@ -444,6 +444,14 @@ export const WinrBonanzaTemplate = ({
     if (currentAction == "freeSpin" && gameEvent?.type == "Game") {
       const _betAmount = toDecimals(gameEvent.betAmount * 1, 2);
 
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
+
       sendMessage(
         "WebGLHandler",
         "ReceiveMessage",
@@ -474,6 +482,14 @@ export const WinrBonanzaTemplate = ({
 
     if (currentAction == "autoPlay" && gameEvent?.type == "Game") {
       console.log("AUTOPLAY SUCCESS");
+
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
 
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
@@ -507,6 +523,14 @@ export const WinrBonanzaTemplate = ({
     }
 
     if (currentAction == "initialAutoplay" && gameEvent?.type == "Game") {
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
+
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
       console.log("INITIAL AUTOPLAY RESULT");
