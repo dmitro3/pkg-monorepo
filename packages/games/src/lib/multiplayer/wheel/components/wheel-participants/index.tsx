@@ -5,7 +5,6 @@ import { Button } from "../../../../ui/button";
 import { AlignLeft } from "../../../../svgs";
 import { cn } from "../../../../utils/style";
 import { useWheelGameStore } from "../../store";
-// import useWheelGameStore from "../../_store/game-info-store";
 
 const WheelParticipants = () => {
   const { isParticipantsOpen, setIsParticipantsOpen } = useWheelGameStore([
