@@ -20,7 +20,7 @@ import {
 } from "../../../../common/controller";
 import { PreBetButton } from "../../../../common/pre-bet-button";
 import { AudioController } from "../../../../common/audio-controller";
-import { WheelColor, WheelStatus, colorMultipliers } from "../../constants";
+import { WheelColor, colorMultipliers } from "../../constants";
 import { WagerCurrencyIcon } from "../../../../common/wager";
 
 interface Props {

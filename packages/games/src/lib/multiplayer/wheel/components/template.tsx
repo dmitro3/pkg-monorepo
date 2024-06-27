@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { Form } from "../../../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { WheelColor, WheelStatus } from "../constants";
+import { WheelColor } from "../constants";
 import { WheelFormFields } from "../types";
 import * as z from "zod";
 import React from "react";
