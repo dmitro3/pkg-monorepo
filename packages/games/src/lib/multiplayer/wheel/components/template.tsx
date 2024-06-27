@@ -24,8 +24,6 @@ type TemplateProps = {
   maxWager?: number;
   onSubmitGameForm: (data: WheelFormFields) => void;
   onFormChange?: (fields: WheelFormFields) => void;
-
-  status: WheelStatus;
 };
 
 const WheelTemplate = (props: TemplateProps) => {

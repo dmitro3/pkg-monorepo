@@ -4,7 +4,7 @@ module.exports = {
   extends: ["@winrlabs/eslint-config/react-internal.js"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: "./tsconfig.lint.json",
+    project: "./packages/ui/tsconfig.lint.json",
   },
   globals: {
     NodeJS: true,
@@ -14,7 +14,7 @@ module.exports = {
       files: ["jest.config.js", "jest.config.cjs"],
       parserOptions: {
         sourceType: "script", // CommonJS files should use 'script' as the source type
-        project: "./tsconfig.lint.json", // Specify your tsconfig for linting
+        project: "./packages/ui/tsconfig.lint.json",
       },
     },
   ],
