@@ -4,18 +4,18 @@ module.exports = {
   extends: ["@winrlabs/eslint-config/react-internal.js"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: "./packages/ui/tsconfig.lint.json",
+    project: "./tsconfig.lint.json",
   },
   globals: {
     NodeJS: true,
   },
-  overrides: [
-    {
-      files: ["jest.config.js", "jest.config.cjs"],
-      parserOptions: {
-        sourceType: "script", // CommonJS files should use 'script' as the source type
-        project: "./packages/ui/tsconfig.lint.json",
-      },
-    },
-  ],
+  // overrides: [
+  //   {
+  //     files: ["jest.config.js", "jest.config.cjs"],
+  //     parserOptions: {
+  //       sourceType: "script", // CommonJS files should use 'script' as the source type
+  //       project: "./packages/ui/tsconfig.lint.json",
+  //     },
+  //   },
+  // ],
 };
