@@ -70,7 +70,6 @@ export const WinrBonanzaTemplate = ({
     handleUpdateWinText,
     handleUnlockUi,
     handleSendGrid,
-    handleEnterFreespin,
     handleEnterFreespinWithoutScatter,
     handleExitFreespin,
     handleFreespinAmount,
@@ -445,10 +444,10 @@ export const WinrBonanzaTemplate = ({
         window.GetMessageFromUnity = handleMessageFromUnity;
       }
 
-      sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
-
       console.log("buy feature event", gameEvent.grid);
       console.log("grid", JSON.stringify(gameEvent.grid).replace(/,/g, ", "));
+
+      sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
       handleSendGrid(gameEvent.grid);
 
@@ -612,7 +611,6 @@ export const WinrBonanzaTemplate = ({
   ]);
 
   React.useEffect(() => {
-    if (!handleEnterFreespin) return;
     if (!sendMessage) return;
     if (isInFreeSpinMode) return;
     if (!isLoggedIn) return;
@@ -629,7 +627,6 @@ export const WinrBonanzaTemplate = ({
     freeSpins,
     isLoggedIn,
     isInFreeSpinMode,
-    handleEnterFreespin,
     currentPayoutAmount,
     sendMessage,
     wonFreeSpins,

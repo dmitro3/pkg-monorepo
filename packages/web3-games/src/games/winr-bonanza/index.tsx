@@ -229,7 +229,6 @@ export default function WinrBonanzaTemplateWithWeb3({
     console.log("allowance available");
 
     // await handleTx.mutateAsync();
-    console.log("handleFreeSpintx called");
 
     try {
       await handleTx.mutateAsync();
