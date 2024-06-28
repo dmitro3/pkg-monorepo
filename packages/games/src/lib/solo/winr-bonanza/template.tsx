@@ -141,6 +141,10 @@ export const WinrBonanzaTemplate = ({
         if (obj.name === "M3_ScatterMatch") {
           console.log("SCATTER MATCH");
 
+          if (currentAction == "buyFeature") {
+            handleEnterFreespinWithoutScatter();
+          }
+
           if (!isInFreeSpinMode) {
             setIsDoubleChance(false);
 
@@ -294,6 +298,7 @@ export const WinrBonanzaTemplate = ({
       isDoubleChance,
       wonFreeSpins,
       previousFreeSpinCount,
+      currentAction,
     ]
   );
 
@@ -323,8 +328,6 @@ export const WinrBonanzaTemplate = ({
 
     try {
       await buyFreeSpins();
-
-      handleEnterFreespin();
     } catch (e: any) {
       setInitialBuyEvent(undefined);
       handleExitFreespin();
@@ -434,15 +437,38 @@ export const WinrBonanzaTemplate = ({
     }
 
     if (currentAction == "buyFeature" && gameEvent?.type == "Game") {
-      console.log("free spin event", gameEvent);
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
 
+      sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
+
+      console.log("buy feature event", gameEvent.grid);
       console.log("grid", JSON.stringify(gameEvent.grid).replace(/,/g, ", "));
 
-      setInitialBuyEvent(gameEvent);
+      handleSendGrid(gameEvent.grid);
+
+      if (gameEvent.freeSpinsLeft > 0) {
+        setWonFreeSpins(true);
+      }
+
+      setFreeSpins(gameEvent.freeSpinsLeft);
     }
 
     if (currentAction == "freeSpin" && gameEvent?.type == "Game") {
       const _betAmount = toDecimals(gameEvent.betAmount * 1, 2);
+
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
 
       sendMessage(
         "WebGLHandler",
@@ -474,6 +500,14 @@ export const WinrBonanzaTemplate = ({
 
     if (currentAction == "autoPlay" && gameEvent?.type == "Game") {
       console.log("AUTOPLAY SUCCESS");
+
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
 
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
@@ -507,6 +541,14 @@ export const WinrBonanzaTemplate = ({
     }
 
     if (currentAction == "initialAutoplay" && gameEvent?.type == "Game") {
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
+
       sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
 
       console.log("INITIAL AUTOPLAY RESULT");
@@ -539,7 +581,7 @@ export const WinrBonanzaTemplate = ({
 
       onRefresh();
     }
-  }, [gameEvent, currentAction]);
+  }, [gameEvent]);
 
   React.useEffect(() => {
     // Check if GetMessageFromUnity is not already defined to avoid overwriting
