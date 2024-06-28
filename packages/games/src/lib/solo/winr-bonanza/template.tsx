@@ -581,7 +581,7 @@ export const WinrBonanzaTemplate = ({
 
       onRefresh();
     }
-  }, [gameEvent, currentAction]);
+  }, [gameEvent]);
 
   React.useEffect(() => {
     // Check if GetMessageFromUnity is not already defined to avoid overwriting
