@@ -1,27 +1,28 @@
 import { useState } from "react";
-import {
-  colorMultipliers,
-  WheelColor,
-  WheelStatus,
-  WheelUnits,
-} from "../../constants";
+import { colorMultipliers, WheelUnits } from "../../constants";
 import styles from "./wheel-scene.module.css";
 import { cn } from "../../../../utils/style";
 import { CountdownProvider, Minutes, Seconds } from "../../../../ui/countdown";
 import { Wheel } from "./wheel";
+import { useWheelGameStore } from "../../store";
+import { MultiplayerGameStatus } from "../../../core/type";
 
-export const WheelScene = () => {
+export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
+  const { startTime, status, winnerAngle, winnerColor } = useWheelGameStore([
+    "startTime",
+    "finishTime",
+    "status",
+    "winnerAngle",
+    "winnerColor",
+  ]);
   const [showResult, setShowResult] = useState(false);
-  const multiplier = colorMultipliers[WheelColor.BLUE];
-  const startTime = 0;
-  const status: WheelStatus = WheelStatus.Idle;
-  const winnerAngle = 0;
+  const multiplier = colorMultipliers[winnerColor];
 
   return (
     <div className={styles.container}>
       <div className={styles.wheelContent}>
         <div className={styles.status}>
-          {status === WheelStatus.Idle && (
+          {status === MultiplayerGameStatus.None && (
             <div className="wr-text-xl wr-leading-5 wr-text-zinc-100">
               Bet to Start <br />
               <span className="wr-text-base wr-leading-5 wr-text-zinc-500">
@@ -30,10 +31,10 @@ export const WheelScene = () => {
             </div>
           )}
 
-          {status === WheelStatus.Idle && startTime > 0 && (
+          {status == MultiplayerGameStatus.Start && startTime > 0 && (
             <section className="wr-text-center">
               <div className="wr-mb-3 wr-text-xl wr-leading-5 wr-text-zinc-100">
-                Remainingdsadsa time:
+                Remaining time:
               </div>
               <CountdownProvider
                 targetDate={new Date(startTime * 1000)?.toISOString()}
@@ -53,7 +54,7 @@ export const WheelScene = () => {
             </section>
           )}
 
-          {status === WheelStatus.Finished && showResult && (
+          {status === MultiplayerGameStatus.Finish && showResult && (
             <div className={cn(styles.multiplier, styles[`m${multiplier}x`])}>
               <div className="wr-text-[32px]">{multiplier}x</div>
             </div>
@@ -61,8 +62,10 @@ export const WheelScene = () => {
         </div>
         <Wheel
           units={WheelUnits}
-          spin={status === WheelStatus.Spin}
-          degree={status === WheelStatus.Finished ? winnerAngle : undefined}
+          spin={status === MultiplayerGameStatus.Start}
+          degree={
+            status === MultiplayerGameStatus.Finish ? winnerAngle : undefined
+          }
           onComplete={() => {
             setShowResult(true);
 

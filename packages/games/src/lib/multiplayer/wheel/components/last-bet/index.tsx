@@ -21,7 +21,6 @@ const LastBets = () => {
   //   ? data.getWheelGameHistory
   //   : [];
 
-  // TODO: for test purposes
   const history = [
     {
       color: WheelColor.BLUE,

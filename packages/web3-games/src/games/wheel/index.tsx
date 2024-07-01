@@ -1,10 +1,8 @@
 "use client";
 
 import {
-  CoinFlipFormFields,
   CoinFlipGameResult,
-  CoinFlipTemplate,
-  CoinSide,
+  useWheelGameStore,
   WheelColor,
   WheelFormFields,
   WheelTemplate,
@@ -19,7 +17,6 @@ import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
 import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import { useListenMultiplayerGameEvent } from "../hooks";
 
 const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
@@ -46,6 +43,7 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
     cashierAddress,
     uiOperatorAddress,
   } = useContractConfigContext();
+  const { updateState } = useWheelGameStore(["updateState"]);
 
   const [formValues, setFormValues] = useState<WheelFormFields>({
     color: WheelColor.IDLE,
@@ -65,32 +63,20 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
   });
 
   const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
-      prepareGameTransaction({
-        wager: formValues.wager,
-        stopGain: 0,
-        stopLoss: 0,
-        selectedCurrency: selectedTokenAddress,
-        lastPrice: 1,
-      });
-
-    console.log(formValues.color, "formvalue clor");
-    const encodedChoice = encodeAbiParameters(
-      [
-        {
-          name: "data",
-          type: "uint8",
-        },
-      ],
-      [formValues.color as unknown as number]
-    );
+    const { tokenAddress, wagerInWei } = prepareGameTransaction({
+      wager: formValues.wager,
+      stopGain: 0,
+      stopLoss: 0,
+      selectedCurrency: selectedTokenAddress,
+      lastPrice: 1,
+    });
 
     const encodedGameData = encodeAbiParameters(
       [
         { name: "wager", type: "uint128" },
-        { name: "data", type: "bytes" },
+        { name: "color", type: "uint8" },
       ],
-      [wagerInWei, encodedChoice]
+      [wagerInWei, formValues.color as unknown as number]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
@@ -104,8 +90,6 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
         encodedGameData,
       ],
     });
-
-    console.log(encodedData, "data encode");
 
     return {
       tokenAddress,
@@ -122,13 +106,79 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
         gameAddresses.wheel,
         encodedParams.tokenAddress,
         uiOperatorAddress as Address,
-        "bet",
+        "claim",
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
     },
     options: {},
     encodedTxData: encodedParams.encodedTxData,
+  });
+
+  const encodedClaimParams = useMemo(() => {
+    // const { tokenAddress } = prepareGameTransaction({
+    //   wager: formValues.wager,
+    //   stopGain: 0,
+    //   stopLoss: 0,
+    //   selectedCurrency: selectedTokenAddress,
+    //   lastPrice: 1,
+    // });
+
+    const encodedChoice = encodeAbiParameters([], []);
+
+    const encodedParams = encodeAbiParameters(
+      [
+        { name: "address", type: "address" },
+        {
+          name: "data",
+          type: "address",
+        },
+        {
+          name: "bytes",
+          type: "bytes",
+        },
+      ],
+      [
+        currentAccount.address || "0x0000000000000000000000000000000000000000",
+        "0x0000000000000000000000000000000000000000",
+        encodedChoice,
+      ]
+    );
+
+    const encodedClaimData: `0x${string}` = encodeFunctionData({
+      abi: controllerAbi,
+      functionName: "perform",
+      args: [
+        gameAddresses.wheel as Address,
+        selectedTokenAddress,
+        uiOperatorAddress as Address,
+        "claim",
+        encodedParams,
+      ],
+    });
+
+    return {
+      encodedClaimData,
+      encodedClaimTxData: encodedClaimData,
+      currentAccount,
+    };
+  }, [formValues.color, formValues.wager]);
+
+  const handleClaimTx = useHandleTx<typeof controllerAbi, "perform">({
+    writeContractVariables: {
+      abi: controllerAbi,
+      functionName: "perform",
+      args: [
+        gameAddresses.wheel,
+        encodedParams.tokenAddress,
+        uiOperatorAddress as Address,
+        "claim",
+        encodedClaimParams.encodedClaimData,
+      ],
+      address: controllerAddress as Address,
+    },
+    options: {},
+    encodedTxData: encodedClaimParams.encodedClaimTxData,
   });
 
   const onGameSubmit = async () => {
@@ -143,6 +193,10 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
     }
 
     try {
+      await handleClaimTx.mutateAsync();
+    } catch (error) {}
+
+    try {
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
@@ -150,9 +204,28 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
   };
 
   React.useEffect(() => {
-    const res = gameEvent;
+    if (!gameEvent) return;
 
-    console.log(res, "finalRes");
+    const gameProgram = gameEvent.program.find((p) => p.type == "Game");
+
+    updateState({
+      finishTime: gameProgram?.data.joinningStart,
+      startTime: gameProgram?.data.joinningFinish,
+    });
+
+    const session = gameEvent.context.find((c) => c.type == "Session");
+
+    if (session) {
+      updateState({
+        status: session.data.status,
+      });
+    }
+
+    // const random = gameEvent.context.find((c) => c.type == "Randoms");
+
+    // updateState({
+    //   winnerAngle: random?.data ? random.data[0] : 0,
+    // });
   }, [gameEvent]);
 
   return (

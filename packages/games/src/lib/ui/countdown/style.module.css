@@ -7,7 +7,8 @@
 
 .countdown * {
   height: 1em;
-  @apply inline-block overflow-y-hidden;
+  display: inline-block;
+  overflow-y: hidden;
 }
 
 .countdown *:before {

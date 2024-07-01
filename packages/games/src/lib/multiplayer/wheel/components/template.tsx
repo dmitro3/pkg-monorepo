@@ -24,6 +24,7 @@ type TemplateProps = {
   maxWager?: number;
   onSubmitGameForm: (data: WheelFormFields) => void;
   onFormChange?: (fields: WheelFormFields) => void;
+  onComplete?: () => void;
 };
 
 const WheelTemplate = (props: TemplateProps) => {
@@ -71,7 +72,7 @@ const WheelTemplate = (props: TemplateProps) => {
           />
           <SceneContainer className="wr-h-[640px] max-md:wr-h-[480px] lg:wr-p-[14px]">
             <LastBets />
-            <WheelScene />
+            <WheelScene onComplete={props.onComplete} />
             <WheelParticipants />
           </SceneContainer>
         </GameContainer>

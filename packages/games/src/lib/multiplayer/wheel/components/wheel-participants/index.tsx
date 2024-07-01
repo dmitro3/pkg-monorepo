@@ -12,20 +12,6 @@ const WheelParticipants = () => {
     "setIsParticipantsOpen",
   ]);
 
-  // const {
-  //   wheelParticipants,
-  //   setWheelParticipant,
-  //   resetWheelParticipant,
-  //   isParticipantsOpen,
-  //   setIsParticipantsOpen,
-  // } = useWheelGameStore([
-  //   "setWheelParticipant",
-  //   "wheelParticipants",
-  //   "resetWheelParticipant",
-  //   "isParticipantsOpen",
-  //   "setIsParticipantsOpen",
-  // ]);
-
   return (
     <div className="wr-relative wr-h-[640px] wr-w-full  ">
       <Button

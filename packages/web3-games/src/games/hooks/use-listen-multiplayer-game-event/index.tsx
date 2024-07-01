@@ -1,12 +1,13 @@
 import React from "react";
-import { useGameSocketContext } from "../use-game-socket";
 import { DecodedEvent, Event, GAME_HUB_GAMES } from "../../utils";
 import SuperJSON from "superjson";
 import { Socket, io } from "socket.io-client";
+import { useCurrentAccount } from "@winrlabs/web3";
+
+const bundlerWsUrl = process.env.NEXT_PUBLIC_BUNDLER_WS_URL || "";
 
 export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
-  const { bundlerWsUrl } = useGameSocketContext();
-
+  const { address } = useCurrentAccount();
   const [socket, setSocket] = React.useState<Socket | null>(null);
 
   const [gameEvent, setGameEvent] = React.useState<DecodedEvent<
@@ -19,32 +20,31 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
 
     setSocket(
       io(bundlerWsUrl, {
+        autoConnect: false,
         extraHeaders: {
+          "x-address": address!,
           "x-multiplayer-game": game,
         },
       })
     );
-  }, [bundlerWsUrl]);
+  }, []);
 
   // socket connection
   React.useEffect(() => {
     if (!socket) return;
-
     socket.connect();
 
     socket.on("connect", () => {
-      console.log("multiplayer socket connected!");
+      console.log("[MULTIPLAYER] socket connected!");
     });
 
-    socket.on("disconnect", () => {
-      console.log("multiplayer socket disconnected");
+    socket.on("disconnect", (er) => {
+      console.log("[MULTIPLAYER] socket disconnected");
     });
 
     return () => {
       socket.off("connect");
-
       socket.off("disconnect");
-
       socket.disconnect();
     };
   }, [socket]);
@@ -52,19 +52,27 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
   React.useEffect(() => {
     if (!socket) return;
 
-    socket.on("message", onListenEvent);
+    socket.on("message", onGameEvent);
+    socket.on("connect_info", onConnectEvent);
+
+    socket.onAny((e) => {
+      console.log("[MULTIPLAYER] ANY", e);
+    });
 
     return () => {
-      socket.off("message", onListenEvent);
+      socket.off("message", onGameEvent);
     };
   }, [socket]);
 
-  const onListenEvent = (e: string) => {
+  const onConnectEvent = (e: string) => {
+    console.log("[MULTIPLAYER] CONNECT", e);
+  };
+
+  const onGameEvent = (e: string) => {
     const _e = SuperJSON.parse(e) as Event;
 
     const context = _e.context as DecodedEvent<any, any>;
-
-    console.log(context, "mp CONTEXT!");
+    console.log("[MULTIPLAYER] CONTEXT", context);
 
     setGameEvent(context);
   };

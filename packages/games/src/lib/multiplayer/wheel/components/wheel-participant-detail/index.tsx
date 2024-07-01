@@ -29,31 +29,10 @@ const WheelParticipantDetail: React.FC<WheelParticipantDetailProps> = ({
   variant,
   multiplier,
 }) => {
-  const { isParticipantsOpen } = useWheelGameStore(["isParticipantsOpen"]);
-
-  const wheelParticipants: any = {
-    "2x": [
-      {
-        name: "0x1",
-        bet: 10,
-      },
-      {
-        name: "0x2",
-        bet: 20,
-      },
-      {
-        name: "0x3",
-        bet: 30,
-      },
-      {
-        name: "0x4",
-        bet: 40,
-      },
-    ],
-    "3x": [],
-    "6x": [],
-    "48x": [],
-  };
+  const { isParticipantsOpen, wheelParticipants } = useWheelGameStore([
+    "isParticipantsOpen",
+    "wheelParticipants",
+  ]);
 
   const getWheelParticipantDetail = (multiplier: Multiplier, index: number) => {
     if (Array.isArray(wheelParticipants[multiplier])) {

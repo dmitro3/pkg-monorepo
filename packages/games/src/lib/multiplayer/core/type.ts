@@ -1,7 +1,7 @@
 /**
  * Multiplayer game status across all games
  */
-export enum Status {
+export enum MultiplayerGameStatus {
   None,
   Start,
   Wait,
