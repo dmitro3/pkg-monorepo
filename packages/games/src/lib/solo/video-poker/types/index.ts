@@ -33,16 +33,28 @@ export enum Value {
 }
 
 export enum Suit {
-  hearts = "hearts",
-  diamonds = "diamonds",
-  clubs = "clubs",
-  spades = "spades",
+  hearts = 0b000000,
+  diamonds = 0b010000,
+  clubs = 0b100000,
+  spades = 0b110000,
 }
+
+export const VideoPokerResultNames = [
+  "Jacks or better",
+  "Two pair",
+  "Three of a kind",
+  "Straight",
+  "Flush",
+  "Full house",
+  "Four of a kind",
+  "Straight flush",
+  "Royal flush",
+] as const;
 
 export class Card {
   constructor(
     private _value: number,
-    private _suit: string
+    private _suit: number
   ) {}
 
   get value(): string {
@@ -82,4 +94,32 @@ export class Card {
         return "";
     }
   }
+}
+
+export function parseCards(cards: number | number[]): Card[] {
+  return (Array.isArray(cards) ? cards : parseImpl(cards)).map(
+    (encoded) => new Card(encoded & 0b001111, encoded & 0b110000)
+  );
+}
+
+function parseImpl(cards: number): number[] {
+  const ret = Array(5);
+
+  for (let i = 0; i < ret.length; i++) {
+    const offset = i * 6;
+
+    ret[i] = (cards & (0b111111 << offset)) >> offset;
+  }
+
+  return ret;
+}
+
+export function changedToFlipped(changed: number) {
+  return [
+    (changed & 16) !== 0,
+    (changed & 8) !== 0,
+    (changed & 4) !== 0,
+    (changed & 2) !== 0,
+    (changed & 1) !== 0,
+  ];
 }

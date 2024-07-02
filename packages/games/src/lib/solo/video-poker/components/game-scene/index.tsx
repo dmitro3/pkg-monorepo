@@ -6,6 +6,7 @@ import { cn } from "../../../../utils/style";
 import { VideoPokerForm } from "../../types";
 import useVideoPokerGameStore from "../../store";
 import { VideoPokerResult, videoPokerHands } from "../../constants";
+import { toFormatted } from "../../../../utils/web3";
 const ResultBox: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   children,
   className,
@@ -57,7 +58,7 @@ export const VideoPokerResults = () => {
               }
             )}
           >
-            100x ${100 * wager}
+            100x ${toFormatted(100 * wager, 2)}
           </div>
         </ResultBox>
         <div className="wr-grid wr-w-full wr-grid-cols-4 wr-grid-rows-2 wr-gap-3 wr-transition-all wr-duration-500">
@@ -90,7 +91,7 @@ export const VideoPokerResults = () => {
                 >
                   {hand.multiplier}x{" "}
                   <span className="wr-ml-[10px]">
-                    ${hand.multiplier * wager}
+                    ${toFormatted(hand.multiplier * wager, 2)}
                   </span>
                 </div>
               </ResultBox>

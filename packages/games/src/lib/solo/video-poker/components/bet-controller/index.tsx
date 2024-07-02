@@ -78,7 +78,7 @@ export const VideoPokerBetController: React.FC<Props> = ({
               form.formState.isLoading
             }
           >
-            {status === VideoPokerStatus.Active ? "Finish game" : "Start game"}
+            {status === VideoPokerStatus.Dealt ? "Finish game" : "Start game"}
           </Button>
         </PreBetButton>
       </div>

@@ -1,11 +1,13 @@
 import { create } from "zustand";
 import { shallow } from "zustand/shallow";
-import { VideoPokerResult } from "../_constants";
+import { VideoPokerResult } from "../constants";
 
 export enum VideoPokerStatus {
-  Idle = "Idle",
-  Active = "Active",
-  Finished = "Finished",
+  None,
+  Start,
+  Dealt,
+  Finalizing,
+  Final,
 }
 
 export type VideoPokerGameState = {
@@ -21,17 +23,17 @@ export type VideoPokerGameActions = {
 export type VideoPokerGameStore = VideoPokerGameState & VideoPokerGameActions;
 
 export const videoPokerGameStore = create<VideoPokerGameStore>((set) => ({
-  status: VideoPokerStatus.Idle,
+  status: VideoPokerStatus.None,
   gameResult: VideoPokerResult.LOST,
   updateState: (state) => set((s) => ({ ...s, ...state })),
   resetState: () =>
     set({
-      status: VideoPokerStatus.Idle,
+      status: VideoPokerStatus.None,
     }),
 }));
 
 export const useVideoPokerGameStore = <T extends keyof VideoPokerGameStore>(
-  keys: T[],
+  keys: T[]
 ) =>
   videoPokerGameStore((state) => {
     const x = keys.reduce((acc, cur) => {

@@ -1,8 +1,10 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { CardStatus, VideoPokerFormFields } from "../types";
+import { CardStatus, VideoPokerFormFields, parseCards } from "../types";
 import useVideoPokerGameStore, { VideoPokerStatus } from "../store";
 import { VideoPokerResult } from "../constants";
 import { Form, FormField } from "../../../ui/form";
@@ -10,22 +12,40 @@ import { GameContainer, SceneContainer } from "../../../common/containers";
 import { VideoPokerBetController } from "./bet-controller";
 import { VideoPokerResults } from "./game-scene";
 import { CardComponent } from "./game-scene/card";
+import { CDN_URL } from "../../../constants";
+import debounce from "debounce";
 
 interface TemplateProps {
   minWager?: number;
   maxWager?: number;
   isLoading: boolean;
+  activeGame: {
+    status: VideoPokerStatus;
+    cards: number;
+    hasActiveGame: boolean;
+  };
+  settledCards?: {
+    status: VideoPokerStatus;
+    cards: number;
+    result: VideoPokerResult;
+    payout: number;
+  };
   handleFinishGame: (data: VideoPokerFormFields) => Promise<void>;
   handleStartGame: (data: VideoPokerFormFields) => Promise<void>;
   onFormChange?: (fields: VideoPokerFormFields) => void;
+  onAnimationCompleted?: (payout: number) => void;
 }
 
 const VideoPokerTemplate = ({
   minWager,
   maxWager,
   isLoading,
+  activeGame,
+  settledCards,
+  onFormChange,
   handleFinishGame,
   handleStartGame,
+  onAnimationCompleted,
 }: TemplateProps) => {
   const [currentCards, setCurrentCards] = React.useState<any[]>(
     new Array(5).fill(0)
@@ -54,7 +74,7 @@ const VideoPokerTemplate = ({
     }),
     mode: "onSubmit",
     defaultValues: {
-      wager: 2,
+      wager: minWager || 1,
       cardsToSend: [
         CardStatus.CLOSED,
         CardStatus.CLOSED,
@@ -73,18 +93,11 @@ const VideoPokerTemplate = ({
 
   const handleSubmit = async (values: VideoPokerFormFields) => {
     updateState({
-      status: VideoPokerStatus.Idle,
+      status: VideoPokerStatus.None,
       gameResult: VideoPokerResult.LOST,
     });
 
-    if (status === VideoPokerStatus.Active) {
-      const mappedCards = values.cardsToSend
-        .map((item) => (item === 0 ? 1 : 0))
-        .reverse()
-        .join("");
-
-      const _cardsToSend = parseInt(mappedCards, 2);
-
+    if (status === VideoPokerStatus.Dealt) {
       console.log("values", values.cardsToSend);
 
       await handleFinishGame(values);
@@ -92,6 +105,79 @@ const VideoPokerTemplate = ({
       await handleStartGame(values);
     }
   };
+
+  React.useEffect(() => {
+    if (!activeGame.hasActiveGame) return;
+
+    form.setValue("cardsToSend", [
+      CardStatus.OPEN,
+      CardStatus.OPEN,
+      CardStatus.OPEN,
+      CardStatus.OPEN,
+      CardStatus.OPEN,
+    ]);
+
+    const cards =
+      activeGame.cards == 0
+        ? new Array(5).fill(0)
+        : parseCards(activeGame.cards);
+
+    setCurrentCards(cards);
+
+    updateState({
+      status: VideoPokerStatus.Dealt,
+    });
+  }, [activeGame]);
+
+  React.useEffect(() => {
+    if (!settledCards) return;
+
+    form.setValue("cardsToSend", [
+      CardStatus.OPEN,
+      CardStatus.OPEN,
+      CardStatus.OPEN,
+      CardStatus.OPEN,
+      CardStatus.OPEN,
+    ]);
+
+    if (settledCards.status == VideoPokerStatus.Final) {
+      const parsedCards = parseCards(settledCards.cards);
+
+      setCurrentCards(parsedCards);
+
+      updateState({
+        status: VideoPokerStatus.Final,
+      });
+
+      setTimeout(() => {
+        updateState({
+          gameResult: Number(0),
+        });
+
+        onAnimationCompleted && onAnimationCompleted(settledCards.payout);
+      }, 1000);
+    }
+
+    if (settledCards.status == VideoPokerStatus.Dealt) {
+      const parsedCards = parseCards(settledCards.cards);
+
+      setCurrentCards(parsedCards);
+
+      updateState({
+        status: VideoPokerStatus.Dealt,
+      });
+    }
+  }, [settledCards]);
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      onFormChange && onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <>
@@ -111,7 +197,7 @@ const VideoPokerTemplate = ({
               }}
             >
               <img
-                src={"/images/video-poker/card-stack.png"}
+                src={`${CDN_URL}/video-poker/card-stack.png`}
                 width={170}
                 height={234}
                 alt={"card_stack"}

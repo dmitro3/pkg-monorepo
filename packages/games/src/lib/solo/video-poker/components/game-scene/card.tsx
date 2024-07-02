@@ -7,20 +7,36 @@ import {
   SoundEffects,
   useAudioEffect,
 } from "../../../../hooks/use-audio-effect";
+import { Card, CardStatus, VideoPokerForm } from "../../types";
+import { CDN_URL } from "../../../../constants";
+import useVideoPokerGameStore, { VideoPokerStatus } from "../../store";
+import { cn } from "../../../../utils/style";
+
+const BigDiamonds = <img src={`${CDN_URL}/blackjack/suits/big-diamonds.svg`} />;
+const BigClubs = <img src={`${CDN_URL}/blackjack/suits/big-clubs.svg`} />;
+const BigHearts = <img src={`${CDN_URL}/blackjack/suits/big-hearts.svg`} />;
+const BigSpades = <img src={`${CDN_URL}/blackjack/suits/big-spades.svg`} />;
+
+const SmallClubs = <img src={`${CDN_URL}/blackjack/suits/small-clubs.svg`} />;
+const SmallDiamonds = (
+  <img src={`${CDN_URL}/blackjack/suits/small-diamonds.svg`} />
+);
+const SmallHearts = <img src={`${CDN_URL}/blackjack/suits/small-hearts.svg`} />;
+const SmallSpades = <img src={`${CDN_URL}/blackjack/suits/small-spades.svg`} />;
 
 const getIcon = (className: Card["className"]) => {
   switch (className) {
     case "spades":
-      return { main: <BigSpades />, suite: <SmallSpades /> };
+      return { main: BigSpades, suite: SmallSpades };
 
     case "hearts":
-      return { main: <BigHearts />, suite: <SmallHearts /> };
+      return { main: BigHearts, suite: SmallHearts };
 
     case "diamonds":
-      return { main: <BigDiamonds />, suite: <SmallDiamonds /> };
+      return { main: BigDiamonds, suite: SmallDiamonds };
 
     case "clubs":
-      return { main: <BigClubs />, suite: <SmallClubs /> };
+      return { main: BigClubs, suite: SmallClubs };
   }
 };
 
@@ -84,14 +100,14 @@ export const CardComponent: React.FC<{
   });
 
   React.useEffect(() => {
-    if (status === VideoPokerStatus.Active && isFirstAnimationFinished) {
+    if (status === VideoPokerStatus.Dealt && isFirstAnimationFinished) {
       if (cardsToSend[index] === CardStatus.CLOSED) setFlipped(true);
       else setFlipped(false);
     }
   }, [isFirstAnimationFinished, status, cardsToSend]);
 
   React.useEffect(() => {
-    if (status === VideoPokerStatus.Idle) {
+    if (status === VideoPokerStatus.None) {
       setIsFirstAnimationFinished(false);
 
       flipCardEffect.play();
@@ -101,7 +117,7 @@ export const CardComponent: React.FC<{
       setTransformDegree(0);
 
       setAnimatedObj({
-        "mr-0 ml-0 p-0": true,
+        "wr-mr-0 wr-ml-0 wr-p-0": true,
       });
     } else {
       flipCardEffect.play();
@@ -114,11 +130,11 @@ export const CardComponent: React.FC<{
         setTransformDegree(angles[index] as number);
 
         setAnimatedObj({
-          "mr-40 pt-10": index === 0,
-          "mr-20 pt-3": index === 1,
+          "wr-mr-40 wr-pt-10": index === 0,
+          "wr-mr-20 wr-pt-3": index === 1,
           "": index === 2,
-          "ml-20 pt-3": index === 3,
-          "ml-40 pt-10": index === 4,
+          "wr-ml-20 wr-pt-3": index === 3,
+          "wr-ml-40 wr-pt-10": index === 4,
         });
 
         setIsFirstAnimationFinished(true);
@@ -134,12 +150,12 @@ export const CardComponent: React.FC<{
           animatedObj,
 
           {
-            "wr-bottom-full wr-opacity-0": status === VideoPokerStatus.Idle,
+            "wr-bottom-full wr-opacity-0": status === VideoPokerStatus.None,
           },
           {
             "-wr-bottom-10 wr-block wr-opacity-100":
-              status === VideoPokerStatus.Active ||
-              status === VideoPokerStatus.Finished,
+              status === VideoPokerStatus.Dealt ||
+              status === VideoPokerStatus.Final,
           }
         )}
         data-state={flipped ? "flipped" : "unflipped"}
@@ -163,7 +179,7 @@ export const CardComponent: React.FC<{
 
             form.setValue("cardsToSend", newCards);
           }}
-          disabled={status !== VideoPokerStatus.Active}
+          disabled={status !== VideoPokerStatus.Dealt}
         >
           <div
             className={cn(
@@ -188,7 +204,10 @@ export const CardComponent: React.FC<{
               <div
                 className={"wr-relative wr-z-20 wr-h-8 wr-w-8 wr-rounded-full"}
               >
-                <JbPokerLogo />
+                <img
+                  src={`${CDN_URL}/baccarat/card-front-logo.svg`}
+                  alt="Justbet Video Poker"
+                />
               </div>
             </div>
             <div
@@ -206,7 +225,10 @@ export const CardComponent: React.FC<{
               <div
                 className={"wr-relative wr-z-20 wr-h-8 wr-w-8 wr-rounded-full"}
               >
-                <JbPokerLogo />
+                <img
+                  src={`${CDN_URL}/baccarat/card-front-logo.svg`}
+                  alt="Justbet Video Poker"
+                />
               </div>
               <CardValue
                 value={card.value}
