@@ -1,7 +1,9 @@
 "use client";
 
 import {
+  ANGLE_SCALE,
   CoinFlipGameResult,
+  MultiplayerGameStatus,
   useWheelGameStore,
   WheelColor,
   WheelFormFields,
@@ -18,9 +20,6 @@ import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenMultiplayerGameEvent } from "../hooks";
-
-const selectedTokenAddress = (process.env.NEXT_PUBLIC_WETH_ADDRESS ||
-  "0x0") as `0x${string}`;
 
 type TemplateOptions = {
   scene?: {
@@ -42,6 +41,7 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    selectedTokenAddress,
   } = useContractConfigContext();
   const { updateState } = useWheelGameStore(["updateState"]);
 
@@ -209,23 +209,34 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
     const gameProgram = gameEvent.program.find((p) => p.type == "Game");
 
     updateState({
-      finishTime: gameProgram?.data.joinningStart,
-      startTime: gameProgram?.data.joinningFinish,
+      joiningFinish: gameProgram?.data.joinningFinish,
+      joiningStart: gameProgram?.data.joinningStart,
+      cooldownFinish: gameProgram?.data.cooldownFinish,
+      winnerColor: gameProgram?.data.result,
     });
 
-    const session = gameEvent.context.find((c) => c.type == "Session");
+    const currentTime = Math.floor(Date.now() / 1000);
+    const { joinningFinish: joiningFinish, joinningStart: joiningStart } =
+      gameProgram?.data || {};
 
-    if (session) {
+    if (currentTime >= joiningFinish && joiningFinish > 0) {
+      const random = gameEvent.context.find((c) => c.type == "Randoms");
+
+      console.log(random?.data);
+
       updateState({
-        status: session.data.status,
+        status: MultiplayerGameStatus.Finish,
+        winnerAngle: random?.data ? Number(4640098) / 100000 / ANGLE_SCALE : 0,
+      });
+    } else if (currentTime <= joiningFinish && currentTime >= joiningStart) {
+      updateState({
+        status: MultiplayerGameStatus.Cooldown,
+      });
+    } else {
+      updateState({
+        status: MultiplayerGameStatus.None,
       });
     }
-
-    // const random = gameEvent.context.find((c) => c.type == "Randoms");
-
-    // updateState({
-    //   winnerAngle: random?.data ? random.data[0] : 0,
-    // });
   }, [gameEvent]);
 
   return (

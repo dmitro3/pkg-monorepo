@@ -22,6 +22,9 @@ import { PreBetButton } from "../../../../common/pre-bet-button";
 import { AudioController } from "../../../../common/audio-controller";
 import { WheelColor, colorMultipliers } from "../../constants";
 import { WagerCurrencyIcon } from "../../../../common/wager";
+import { useWheelGameStore } from "../../store";
+import useCountdown from "../../../../hooks/use-time-left";
+import { MultiplayerGameStatus } from "../../../core/type";
 
 interface Props {
   minWager: number;
@@ -34,6 +37,11 @@ const BetController: React.FC<Props> = ({
   maxWager,
   isGamblerParticipant,
 }) => {
+  const { cooldownFinish, status, resetState } = useWheelGameStore([
+    "cooldownFinish",
+    "status",
+    "resetState",
+  ]);
   const form = useFormContext() as WheelForm;
 
   const chosenColor = form.watch("color");
@@ -45,6 +53,11 @@ const BetController: React.FC<Props> = ({
       colorMultipliers[chosenColor as WheelColor] * currentWager
     );
   }, [chosenColor, currentWager]);
+
+  const timeLeft = useCountdown(cooldownFinish, () => {
+    resetState();
+    // resetWheelParticipant();
+  });
 
   return (
     <BetControllerContainer>
@@ -152,17 +165,17 @@ const BetController: React.FC<Props> = ({
               !form.formState.isValid ||
               form.formState.isSubmitting ||
               form.formState.isLoading ||
-              // (timeLeft > 0 && status !== WheelStatus.Started) ||
+              (timeLeft > 0 && status !== MultiplayerGameStatus.Start) ||
               isGamblerParticipant ||
+              status === MultiplayerGameStatus.Start ||
               chosenColor === WheelColor.IDLE
             }
           >
-            {/* {timeLeft > 0 && status === WheelStatus.Finished
+            {timeLeft > 0 && status === MultiplayerGameStatus.Finish
               ? `Next game in ${timeLeft} seconds`
               : chosenColor !== WheelColor.IDLE
                 ? "BET"
-                : "CHOOSE COLOR"} */}
-            {!chosenColor ? "CHOOSE COLOR" : "BET"}
+                : "CHOOSE COLOR"}
           </Button>
         </PreBetButton>
       </div>

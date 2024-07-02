@@ -56,16 +56,19 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     socket.on("connect_info", onConnectEvent);
 
     socket.onAny((e) => {
-      console.log("[MULTIPLAYER] ANY", e);
+      console.log("[MULTIPLAYER] EVENT RECIEVED:", e);
     });
 
     return () => {
       socket.off("message", onGameEvent);
+      socket.off("connect_info", onConnectEvent);
     };
   }, [socket]);
 
   const onConnectEvent = (e: string) => {
-    console.log("[MULTIPLAYER] CONNECT", e);
+    const _e = SuperJSON.parse(e) as Event;
+
+    console.log("[MULTIPLAYER] CONNECT", _e);
   };
 
   const onGameEvent = (e: string) => {

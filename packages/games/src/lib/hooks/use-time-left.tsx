@@ -1,6 +1,6 @@
 import React from "react";
-import { seconds } from "@/utils";
 
+const seconds = () => Math.floor(Date.now() / 1000);
 const useCountdown = (endTime: number, onFinish?: () => void) => {
   const [timeLeft, setTimeLeft] = React.useState<number>(endTime - seconds());
 

@@ -4,22 +4,19 @@ import styles from "./wheel-scene.module.css";
 import { cn } from "../../../../utils/style";
 import { CountdownProvider, Minutes, Seconds } from "../../../../ui/countdown";
 import { Wheel } from "./wheel";
-import { useWheelGameStore } from "../../store";
+import { useWheelGameStatus, useWheelGameStore } from "../../store";
 import { MultiplayerGameStatus } from "../../../core/type";
 
 export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
-  const { startTime, status, winnerAngle, winnerColor } = useWheelGameStore([
-    "startTime",
-    "finishTime",
-    "status",
-    "winnerAngle",
-    "winnerColor",
-  ]);
+  const { winnerAngle, winnerColor, joiningFinish, status } = useWheelGameStore(
+    ["winnerAngle", "winnerColor", "joiningFinish", "status"]
+  );
   const [showResult, setShowResult] = useState(false);
   const multiplier = colorMultipliers[winnerColor];
 
   return (
     <div className={styles.container}>
+      {status}
       <div className={styles.wheelContent}>
         <div className={styles.status}>
           {status === MultiplayerGameStatus.None && (
@@ -31,13 +28,13 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
             </div>
           )}
 
-          {status == MultiplayerGameStatus.Start && startTime > 0 && (
+          {status == MultiplayerGameStatus.Cooldown && (
             <section className="wr-text-center">
               <div className="wr-mb-3 wr-text-xl wr-leading-5 wr-text-zinc-100">
                 Remaining time:
               </div>
               <CountdownProvider
-                targetDate={new Date(startTime * 1000)?.toISOString()}
+                targetDate={new Date(joiningFinish * 1000)?.toISOString()}
               >
                 <section className="wr-mt-2 wr-flex wr-items-center wr-justify-center wr-gap-2">
                   <div className="wr-text-[32px] wr-font-bold wr-leading-[32px] wr-text-white">
@@ -60,9 +57,10 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
             </div>
           )}
         </div>
+        {winnerAngle}
         <Wheel
           units={WheelUnits}
-          spin={status === MultiplayerGameStatus.Start}
+          spin={status === MultiplayerGameStatus.Finish}
           degree={
             status === MultiplayerGameStatus.Finish ? winnerAngle : undefined
           }

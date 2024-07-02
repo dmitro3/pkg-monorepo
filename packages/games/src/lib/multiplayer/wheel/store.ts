@@ -15,10 +15,11 @@ export type MultiplierArray = {
 };
 
 interface WheelGameState {
-  startTime: number;
-  finishTime: number;
-  lastBets: number[];
+  joiningStart: number;
+  joiningFinish: number;
+  cooldownFinish: number;
   status: MultiplayerGameStatus;
+  lastBets: number[];
   isParticipantsOpen: boolean;
   wheelParticipants: MultiplierArray;
   winnerAngle: number;
@@ -30,8 +31,9 @@ interface WheelGameStateActions {
   setIsParticipantsOpen: (isParticipantsOpen: boolean) => void;
   setWheelParticipant: (multiplier: Multiplier, data: BetData) => void;
   resetWheelParticipant: () => void;
-  updateTime: (startTime: number, finishTime: number) => void;
+  updateTime: (joiningStart: number, joiningFinish: number) => void;
   updateState: (state: Partial<WheelGameState>) => void;
+  resetState: () => void;
 }
 
 const defaultWheelParticipant: MultiplierArray = {
@@ -45,11 +47,12 @@ export type WheelGameStore = WheelGameState & WheelGameStateActions;
 
 export const wheelGameStore = create<WheelGameStore>()((set, get) => ({
   lastBets: [],
-  startTime: 0,
-  finishTime: 0,
-  status: MultiplayerGameStatus.None,
+  joiningStart: 0,
+  joiningFinish: 0,
+  cooldownFinish: 0,
   winnerColor: WheelColor.IDLE,
   winnerAngle: 0,
+  status: MultiplayerGameStatus.None,
 
   isParticipantsOpen: false,
   setIsParticipantsOpen: (isParticipantsOpen: boolean) =>
@@ -72,10 +75,46 @@ export const wheelGameStore = create<WheelGameStore>()((set, get) => ({
     ),
   updateState: (newState: Partial<WheelGameState>) =>
     set((state) => ({ ...state, ...newState })),
-  updateTime: (startTime: number, finishTime: number) =>
-    set((state) => ({ ...state, startTime, finishTime })),
+  updateTime: (joiningStart: number, joiningFinish: number) =>
+    set((state) => ({ ...state, joiningStart, joiningFinish })),
+  resetState: () =>
+    set(() => ({
+      joiningStart: 0,
+      joiningFinish: 0,
+      cooldownFinish: 0,
+      status: MultiplayerGameStatus.None,
+      winnerColor: WheelColor.IDLE,
+    })),
 }));
 
 export const useWheelGameStore = createSelectors<WheelGameStore>(
   wheelGameStore,
 );
+
+export const useWheelGameStatus = () => {
+  const {
+    cooldownFinish,
+    joiningFinish,
+    joiningStart,
+  } = useWheelGameStore(["cooldownFinish", "joiningFinish", "joiningStart"]);
+
+  const currentTime = Math.floor(Date.now() / 1000);
+
+  if (currentTime > cooldownFinish && currentTime < joiningStart) {
+    return MultiplayerGameStatus.Finish;
+  } else if (
+    joiningFinish > 0 &&
+    currentTime < joiningFinish &&
+    currentTime > joiningStart
+  ) {
+    return MultiplayerGameStatus.Cooldown;
+  } else if (
+    joiningStart > 0 &&
+    currentTime > joiningStart &&
+    currentTime > joiningFinish
+  ) {
+    return MultiplayerGameStatus.Start;
+  }
+
+  return MultiplayerGameStatus.None;
+};
