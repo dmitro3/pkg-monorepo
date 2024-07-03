@@ -238,7 +238,7 @@ export default function VideoPokerTemplateWithWeb3(
         cards: data.game.cards,
         status: data.game.status,
         result: data.detail.win,
-        payout: data.detail.win,
+        payout: data.detail.payout,
       });
     }
   }, [gameEvent]);
