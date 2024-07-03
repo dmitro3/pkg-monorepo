@@ -58,18 +58,7 @@ export function Providers(props: { children: ReactNode }) {
             factoryAddress,
           }}
         >
-          <AppUiProviders
-            wagmiConfig={config}
-            appTokens={[
-              {
-                tokenAddress: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
-                displayDecimals: 6,
-                tokenDecimals: 18,
-                icon: "/tokens/weth.png",
-                tokenSymbol: "wETH",
-              },
-            ]}
-          >
+          <AppUiProviders wagmiConfig={config}>
             <WinrLabsWeb3GamesProvider
               config={{
                 wagmiConfig: config,
@@ -83,6 +72,17 @@ export function Providers(props: { children: ReactNode }) {
                     "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
                 },
               }}
+              tokens={[
+                {
+                  address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
+                  displayDecimals: 6,
+                  decimals: 18,
+                  icon: "/tokens/weth.png",
+                  symbol: "wETH",
+                  playable: true,
+                },
+              ]}
+              defaultSelectedTokenAddress="0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125"
             >
               <AudioContextProvider>{props.children}</AudioContextProvider>
             </WinrLabsWeb3GamesProvider>

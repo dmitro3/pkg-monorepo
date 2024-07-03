@@ -1,13 +1,15 @@
 import { useMemo } from "react";
 import { erc20Abi } from "../abis";
 import { useReadContracts } from "wagmi";
+import { useTokenStore } from "../providers/token";
+import { Address } from "viem";
 
 const getContractsToRead = ({
   balancesToRead,
   account,
 }: {
-  balancesToRead: `0x${string}`[];
-  account: `0x${string}`;
+  balancesToRead: Address[];
+  account: Address;
 }) => {
   return balancesToRead.map((tokenAddress) => {
     return {
@@ -19,22 +21,56 @@ const getContractsToRead = ({
   });
 };
 
+/**
+ *
+ * @param account
+ * @param balancesToRead
+ * @returns
+ *
+ * If no balancesToRead is provided, it will return the balances of all the tokens in the token store
+ */
 export const useTokenBalances = ({
   account,
   balancesToRead,
 }: {
-  account: `0x${string}`;
-  balancesToRead: `0x${string}`[];
+  account: Address;
+  balancesToRead?: Address[];
 }) => {
-  const contractsToRead = useMemo(() => {
-    if (!balancesToRead || !account) return [];
-    return getContractsToRead({ balancesToRead, account });
-  }, [balancesToRead, account]);
+  const { tokens } = useTokenStore();
+  const targetBalanceToRead =
+    balancesToRead && balancesToRead?.length > 0
+      ? balancesToRead
+      : tokens.map((token) => token.address);
 
-  return useReadContracts({
+  console.log(tokens, targetBalanceToRead, account);
+
+  const contractsToRead = useMemo(() => {
+    if (!targetBalanceToRead || !account) return [];
+    return getContractsToRead({ balancesToRead: targetBalanceToRead, account });
+  }, [targetBalanceToRead, account]);
+
+  const result = useReadContracts({
     contracts: contractsToRead,
     query: {
-        enabled: !!contractsToRead || !!account,
-    }
+      enabled: !!contractsToRead || !!account,
+    },
   });
+
+  const formattedResult = useMemo(() => {
+    let data: Record<Address, bigint> = {};
+    if (!result?.data) return {};
+
+    data = Object.fromEntries(
+      Object.entries(result.data).map(([key, value], index) => {
+        return [targetBalanceToRead[index], value.result];
+      })
+    );
+
+    return data;
+  }, [result]);
+
+  return {
+    ...result,
+    data: formattedResult,
+  };
 };
