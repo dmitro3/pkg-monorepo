@@ -27,12 +27,12 @@ const SelectCurrencyItem = ({
   balance,
   token,
 }: {
-  balance: number;
+  balance: bigint;
   token: Token;
 }) => {
   return (
     <SelectItem
-      value={token.address}
+      value={token}
       className="wr-flex wr-w-full wr-py-2 wr-font-semibold"
     >
       <Image
@@ -52,18 +52,17 @@ export const SelectGameCurrency: React.FC<{ triggerClassName?: string }> = ({
   triggerClassName,
 }) => {
   const account = useCurrentAccount();
-  const { tokens } = useTokenStore();
-  const selectedToken = useSelectedToken();
+  const { tokens, setSelectedToken, selectedToken } = useTokenStore();
   const { data: balances } = useTokenBalances({
     account: account?.address || "0x0",
   });
 
   return (
     <Select
-    // onValueChange={(val) => {
-    //   updateSelectedCurrency(val as GameCurrency);
-    // }}
-    // value={selectedCurrency}
+      onValueChange={(val: Token) => {
+        setSelectedToken(val);
+      }}
+      value={selectedToken?.address}
     >
       {selectedToken && balances && (
         <SelectTrigger className="wr-min-w-fit wr-items-center wr-justify-center wr-gap-2">

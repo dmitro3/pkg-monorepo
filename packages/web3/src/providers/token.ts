@@ -12,36 +12,25 @@ export interface Token {
 
 interface TokenProviderProps {
   tokens: Token[];
-  selectedTokenAddress?: Address;
+  // TODO: imo this should be a token address.
+  selectedToken?: Token;
 }
 
 interface TokenProviderActions {
-  setSelectedTokenAddress: (tokenAddress: Address) => void;
   updateState: (state: Partial<TokenProviderProps>) => void;
+  setSelectedToken: (token: Token) => void;
 }
 
 export type TokenProvider = TokenProviderProps & TokenProviderActions;
 
 export const useTokenStore = create<TokenProvider>((set) => ({
   tokens: [],
+  // TODO: should be a token address. how we can assure that the token is in the list and not has been changed?
   selectedToken: undefined,
-  setSelectedTokenAddress: (tokenAddress: Address) => {
-    return set((state) => ({
-      ...state,
-      selectedTokenAddress: tokenAddress,
-    }));
+  setSelectedToken: (token) => {
+    set((prevState) => ({ ...prevState, selectedToken: token }));
   },
   updateState: (state: Partial<TokenProviderProps>) => {
     return set((prevState) => ({ ...prevState, ...state }));
   },
 }));
-
-export const useSelectedToken = () => {
-  const { selectedTokenAddress, tokens } = useTokenStore();
-
-  const selectedToken = tokens.find(
-    (token) => token.address === selectedTokenAddress,
-  );
-
-  return selectedToken!;
-};

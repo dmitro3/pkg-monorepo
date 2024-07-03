@@ -81,6 +81,14 @@ export function Providers(props: { children: ReactNode }) {
                   symbol: "wETH",
                   playable: true,
                 },
+                {
+                  address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F312x",
+                  displayDecimals: 6,
+                  decimals: 18,
+                  icon: "/tokens/weth.png",
+                  symbol: "wETH",
+                  playable: true,
+                },
               ]}
               defaultSelectedTokenAddress="0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125"
             >
