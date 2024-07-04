@@ -5,34 +5,30 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectSeparator,
   SelectTrigger,
 } from "../select";
 import React from "react";
 
 import Image from "next/image";
-import * as Tooltip from "@radix-ui/react-tooltip";
-import { cn, toFormatted } from "../../utils";
 
 import {
   useTokenStore,
   Token,
-  useSelectedToken,
   useTokenBalances,
   useCurrentAccount,
+  useBalanceStore,
 } from "@winrlabs/web3";
-import { Address, formatUnits } from "viem";
 
 const SelectCurrencyItem = ({
   balance,
   token,
 }: {
-  balance: bigint;
+  balance: number;
   token: Token;
 }) => {
   return (
     <SelectItem
-      value={token}
+      value={token.address}
       className="wr-flex wr-w-full wr-py-2 wr-font-semibold"
     >
       <Image
@@ -42,7 +38,7 @@ const SelectCurrencyItem = ({
         width={20}
         height={20}
       />
-      {toFormatted(formatUnits(balance, token.decimals), token.displayDecimals)}
+      {balance}
       <span className="wr-ml-2 wr-text-zinc-500">{token.symbol}</span>
     </SelectItem>
   );
@@ -53,14 +49,18 @@ export const SelectGameCurrency: React.FC<{ triggerClassName?: string }> = ({
 }) => {
   const account = useCurrentAccount();
   const { tokens, setSelectedToken, selectedToken } = useTokenStore();
-  const { data: balances } = useTokenBalances({
+  const { refetch } = useTokenBalances({
     account: account?.address || "0x0",
   });
 
+  const balances = useBalanceStore((state) => state.balances);
+
   return (
     <Select
-      onValueChange={(val: Token) => {
-        setSelectedToken(val);
+      onValueChange={(val) => {
+        const token = tokens.find((token) => token.address === val);
+        if (!token) return;
+        setSelectedToken(token);
       }}
       value={selectedToken?.address}
     >
@@ -74,13 +74,7 @@ export const SelectGameCurrency: React.FC<{ triggerClassName?: string }> = ({
             className="max-md:mr-1 "
           />
           <span className="mt-[2px]">
-            {toFormatted(
-              formatUnits(
-                balances[selectedToken.address] ?? 0,
-                selectedToken.decimals
-              ),
-              2
-            )}
+            {balances[selectedToken.address] ?? 0}
           </span>
         </SelectTrigger>
       )}
@@ -92,7 +86,6 @@ export const SelectGameCurrency: React.FC<{ triggerClassName?: string }> = ({
         <SelectGroup className="wr-w-full">
           {tokens.map((token) => (
             <SelectCurrencyItem
-              lastPrice={1}
               balance={balances[token.address] ?? 0}
               token={token}
             />
