@@ -2,12 +2,18 @@ import { BlackjackGameStatus } from "..";
 import { ChipController } from "../../../common/chip-controller";
 import { Chip } from "../../../common/chip-controller/types";
 import { PreBetButton } from "../../../common/pre-bet-button";
-import { TotalWager } from "../../../common/wager";
+import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
 import { CDN_URL } from "../../../constants";
 import { Button } from "../../../ui/button";
+import { NumberInput } from "../../../ui/number-input";
+import { cn } from "../../../utils/style";
 
 interface BetControllerProps {
+  wager: number;
+  onWagerChange: (w: number) => void;
   totalWager: number;
+  minWager?: number;
+  maxWager?: number;
   selectedChip: Chip;
   isDisabled: boolean;
   isDistributionCompleted: boolean;
@@ -20,12 +26,16 @@ interface BetControllerProps {
 }
 
 export const BetController: React.FC<BetControllerProps> = ({
+  wager,
   totalWager,
   selectedChip,
   isDisabled,
   isDistributionCompleted,
   isLastDistributionCompleted,
   status,
+  maxWager,
+  minWager,
+  onWagerChange,
   onSelectedChipChange,
   onClear,
   onRebet,
@@ -35,12 +45,36 @@ export const BetController: React.FC<BetControllerProps> = ({
     <div className="max-md:wr-bg-rotated-bg-blur wr-absolute wr-bottom-0 wr-left-0 wr-z-[5] wr-flex wr-w-full wr-items-end wr-justify-between wr-p-4 max-lg:wr-fixed max-lg:wr-z-10 max-lg:wr-bg-rotated-footer max-lg:wr-p-3 max-lg:wr-pt-0">
       <div className="wr-flex wr-w-full wr-max-w-[230px] wr-items-center wr-justify-between wr-gap-2 max-md:wr-max-w-[140px]">
         <div className="wr-flex wr-w-full wr-flex-col wr-gap-2">
-          <span className="wr-text-unity-white-50">Total Wager</span>
-          <TotalWager
-            containerClassName="wr-bg-unity-white-15"
-            wager={totalWager}
-            betCount={1}
-          />
+          <span className="wr-text-unity-white-50">Wager</span>
+
+          <NumberInput.Root
+            value={wager}
+            onChange={onWagerChange}
+            isDisabled={
+              isDisabled ||
+              (status !== BlackjackGameStatus.NONE &&
+                status !== BlackjackGameStatus.FINISHED)
+            }
+          >
+            <NumberInput.Container
+              className={cn(
+                "wr-border wr-px-2 wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md wr-text-base wr-font-semibold wr-leading-4 wr-m-0",
+                {
+                  ["wr-border wr-border-solid wr-border-red-600"]: !!(
+                    wager > (maxWager || 2000) || wager < (minWager || 1)
+                  ),
+                }
+              )}
+            >
+              <span className="wr-mt-[1px] wr-text-lg">$</span>
+              <NumberInput.Input
+                className={cn(
+                  "wr-z-10 wr-border-none wr-bg-transparent wr-pl-1 wr-text-base wr-leading-4 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
+                )}
+              />
+              <WagerCurrencyIcon />
+            </NumberInput.Container>
+          </NumberInput.Root>
         </div>
       </div>
 

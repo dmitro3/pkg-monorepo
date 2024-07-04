@@ -23,6 +23,7 @@ import { wait } from "../../../utils/promise";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { useGameOptions } from "../../../game-provider";
 import { AudioController } from "../../../common/audio-controller";
+import { useDebounce } from "use-debounce";
 
 type TemplateOptions = {
   scene?: {
@@ -41,6 +42,8 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
   activeGameHands,
   isControllerDisabled = false,
   initialDataFetched,
+  minWager,
+  maxWager,
 
   onGameCompleted,
   onDeal,
@@ -50,7 +53,9 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
   onDoubleDown,
   onInsure,
   onStand,
+  onFormChange,
 }) => {
+  const [wager, setWager] = React.useState<number>(minWager || 1);
   const [selectedChip, setSelectedChip] = React.useState<Chip>(Chip.ONE);
 
   const [firstHandWager, setFirstHandWager] = React.useState<number>(0);
@@ -652,6 +657,29 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     if (isLastDistributionCompleted) onGameCompleted();
   }, [isLastDistributionCompleted]);
 
+  const formFields = React.useMemo(
+    () => ({
+      wager,
+      firstHandWager,
+      secondHandWager,
+      thirdHandWager,
+      handIndex: activeGameData.activeHandIndex,
+    }),
+    [
+      wager,
+      firstHandWager,
+      secondHandWager,
+      thirdHandWager,
+      activeGameData.activeHandIndex,
+    ]
+  );
+
+  const debouncedFormFields = useDebounce(formFields, 400);
+
+  React.useEffect(() => {
+    onFormChange && onFormChange(debouncedFormFields[0]);
+  }, [debouncedFormFields]);
+
   return (
     <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0 wr-max-w-[1140px]">
       <SceneContainer
@@ -871,6 +899,10 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
             )}
 
           <BetController
+            wager={wager}
+            onWagerChange={setWager}
+            maxWager={maxWager}
+            minWager={minWager}
             totalWager={totalWager}
             selectedChip={selectedChip}
             onSelectedChipChange={setSelectedChip}
