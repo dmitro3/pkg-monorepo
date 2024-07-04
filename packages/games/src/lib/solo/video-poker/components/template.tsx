@@ -151,7 +151,7 @@ const VideoPokerTemplate = ({
 
       setTimeout(() => {
         updateState({
-          gameResult: Number(0),
+          gameResult: Number(settledCards.result),
         });
 
         onAnimationCompleted && onAnimationCompleted(settledCards.payout);
