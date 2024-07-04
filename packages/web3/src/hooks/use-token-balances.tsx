@@ -1,8 +1,10 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { erc20Abi } from "../abis";
 import { useReadContracts } from "wagmi";
 import { useTokenStore } from "../providers/token";
-import { Address } from "viem";
+import { Address, formatUnits } from "viem";
+import { BalanceMap, useBalanceStore } from "../providers/balance";
+import { toDecimals } from "../utils/number";
 
 const getContractsToRead = ({
   balancesToRead,
@@ -36,13 +38,12 @@ export const useTokenBalances = ({
   account: Address;
   balancesToRead?: Address[];
 }) => {
+  const updateBalances = useBalanceStore((state) => state.updateBalances);
   const { tokens } = useTokenStore();
   const targetBalanceToRead =
     balancesToRead && balancesToRead?.length > 0
       ? balancesToRead
       : tokens.map((token) => token.address);
-
-  console.log(tokens, targetBalanceToRead, account);
 
   const contractsToRead = useMemo(() => {
     if (!targetBalanceToRead || !account) return [];
@@ -56,21 +57,26 @@ export const useTokenBalances = ({
     },
   });
 
-  const formattedResult = useMemo(() => {
-    let data: Record<Address, bigint> = {};
-    if (!result?.data) return {};
+  useEffect(() => {
+    let balances: BalanceMap = {};
+    if (!result || !result.data) return;
 
-    data = Object.fromEntries(
-      Object.entries(result.data).map(([key, value], index) => {
-        return [targetBalanceToRead[index], value.result];
-      })
-    );
+    Object.entries(result.data).forEach(([key, value]) => {
+      if (value.error) return;
 
-    return data;
-  }, [result]);
+      const token = tokens[Number(key)];
 
-  return {
-    ...result,
-    data: formattedResult,
-  };
+      if (!token) return;
+
+      const balance = Number(
+        formatUnits(value.result as bigint, token.decimals)
+      );
+
+      balances[token.address] = toDecimals(balance, token.displayDecimals);
+    });
+
+    updateBalances(balances);
+  }, [result.data, tokens]);
+
+  return result;
 };

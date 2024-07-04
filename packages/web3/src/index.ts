@@ -9,4 +9,6 @@ export * from "./hooks/use-smart-account-api";
 export * from "./hooks/use-token-allowance";
 export * from "./providers";
 export * from "./providers/token";
+export * from "./providers/balance";
+
 export * from "./abis";
