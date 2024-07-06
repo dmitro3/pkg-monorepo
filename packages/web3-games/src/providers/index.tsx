@@ -6,19 +6,46 @@ import {
 } from "../games/hooks/use-contract-config";
 import { Config } from "wagmi";
 
+import { Token, useTokenStore, useBalanceStore } from "@winrlabs/web3";
+import { useEffect } from "react";
+import { Address } from "viem";
+
+type WinrLabsWeb3GamesConfig = {
+  wagmiConfig: Config;
+  bundlerWsUrl: string;
+  contracts: ContractConfig;
+};
+
+type WinrLabsWeb3GamesProviderProps = {
+  children: React.ReactNode;
+  config: WinrLabsWeb3GamesConfig;
+  tokens: Token[];
+  defaultSelectedTokenAddress?: Address;
+};
+
 export const WinrLabsWeb3GamesProvider = ({
   children,
   config,
-}: {
-  children: React.ReactNode;
-  config: {
-    wagmiConfig: Config;
-    bundlerWsUrl: string;
-    contracts: ContractConfig;
-  };
-}) => {
-  // for example game provider dynamic currency:
-  // const selectedCurr = useAppUiTemplate() -> ...data  GameProvider;
+  tokens,
+  defaultSelectedTokenAddress,
+}: WinrLabsWeb3GamesProviderProps) => {
+  const { updateState } = useTokenStore();
+
+  useEffect(() => {
+    updateState({
+      tokens,
+    });
+  }, [tokens]);
+
+  useEffect(() => {
+    if (defaultSelectedTokenAddress && tokens) {
+      updateState({
+        selectedToken: tokens.find(
+          (token) => token.address === defaultSelectedTokenAddress
+        ),
+      });
+    }
+  }, [defaultSelectedTokenAddress, tokens]);
 
   return (
     <ContractConfigProvider
