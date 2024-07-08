@@ -11,6 +11,7 @@ import {
   useCurrentAccount,
   useHandleTx,
   useTokenAllowance,
+  useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
@@ -35,8 +36,9 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
-    selectedTokenAddress,
   } = useContractConfigContext();
+
+  const { selectedToken } = useTokenStore();
 
   const [formValues, setFormValues] = useState<BaccaratFormFields>({
     wager: props?.minWager || 1,
@@ -58,7 +60,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress,
+    tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
@@ -68,7 +70,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
         wager: formValues.wager,
         stopGain: 0,
         stopLoss: 0,
-        selectedCurrency: selectedTokenAddress,
+        selectedCurrency: selectedToken.address,
         lastPrice: 1,
       });
 

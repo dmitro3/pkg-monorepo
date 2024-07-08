@@ -18,6 +18,7 @@ import {
   useCurrentAccount,
   useHandleTx,
   useTokenAllowance,
+  useTokenStore,
   winrBonanzaAbi,
 } from "@winrlabs/web3";
 import {
@@ -42,9 +43,10 @@ export default function WinrBonanzaTemplateWithWeb3({
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
-    selectedTokenAddress,
     wagmiConfig,
   } = useContractConfigContext();
+
+  const { selectedToken } = useTokenStore();
 
   const [formValues, setFormValues] = React.useState<WinrBonanzaFormFields>({
     betAmount: 1,
@@ -63,7 +65,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     amountToApprove: 999,
     owner: currentAccount.address || "0x",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress,
+    tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
@@ -75,7 +77,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     );
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.actualBetAmount,
-      selectedCurrency: selectedTokenAddress,
+      selectedCurrency: selectedToken.address,
       lastPrice: 1,
     });
 
@@ -109,7 +111,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   const encodedBuyFreeSpinParams = React.useMemo(() => {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.betAmount,
-      selectedCurrency: selectedTokenAddress,
+      selectedCurrency: selectedToken.address,
       lastPrice: 1,
     });
 
@@ -135,12 +137,12 @@ export default function WinrBonanzaTemplateWithWeb3({
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.betAmount, selectedTokenAddress]);
+  }, [formValues.betAmount, selectedToken.address]);
 
   const encodedFreeSpinParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.betAmount,
-      selectedCurrency: selectedTokenAddress,
+      selectedCurrency: selectedToken.address,
       lastPrice: 1,
     });
 
@@ -160,7 +162,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       tokenAddress,
       encodedTxData: encodedData,
     };
-  }, [formValues.betAmount, selectedTokenAddress]);
+  }, [formValues.betAmount, selectedToken.address]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {

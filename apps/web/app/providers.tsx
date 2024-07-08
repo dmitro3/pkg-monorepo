@@ -68,8 +68,6 @@ export function Providers(props: { children: ReactNode }) {
                   controllerAddress,
                   cashierAddress,
                   uiOperatorAddress,
-                  selectedTokenAddress:
-                    "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
                 },
               }}
               tokens={[

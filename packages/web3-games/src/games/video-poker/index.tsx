@@ -14,6 +14,7 @@ import {
   useCurrentAccount,
   useHandleTx,
   useTokenAllowance,
+  useTokenStore,
   videoPokerAbi,
 } from "@winrlabs/web3";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
@@ -34,9 +35,10 @@ export default function VideoPokerTemplateWithWeb3(
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
-    selectedTokenAddress,
     wagmiConfig,
   } = useContractConfigContext();
+
+  const { selectedToken } = useTokenStore();
 
   const [formValues, setFormValues] = React.useState<VideoPokerFormFields>({
     wager: props.minWager || 1,
@@ -56,7 +58,7 @@ export default function VideoPokerTemplateWithWeb3(
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress,
+    tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
@@ -65,7 +67,7 @@ export default function VideoPokerTemplateWithWeb3(
       wager: formValues.wager,
       stopGain: 0,
       stopLoss: 0,
-      selectedCurrency: selectedTokenAddress,
+      selectedCurrency: selectedToken.address,
       lastPrice: 1,
     });
 
@@ -113,7 +115,7 @@ export default function VideoPokerTemplateWithWeb3(
   const encodedFinishParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
-      selectedCurrency: selectedTokenAddress,
+      selectedCurrency: selectedToken.address,
       lastPrice: 1,
     });
 

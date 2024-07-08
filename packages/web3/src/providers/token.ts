@@ -15,7 +15,7 @@ export interface Token {
 interface TokenProviderProps {
   tokens: Token[];
   // TODO: imo this should be a token address.
-  selectedToken?: Token;
+  selectedToken: Token;
 }
 
 interface TokenProviderActions {
@@ -23,22 +23,33 @@ interface TokenProviderActions {
   setSelectedToken: (token: Token) => void;
 }
 
+const defaultSelectedToken = {
+  address: "0x" as Address,
+  symbol: "",
+  icon: "",
+  decimals: 0,
+  displayDecimals: 0,
+  playable: false,
+};
+
 export type TokenProvider = TokenProviderProps & TokenProviderActions;
 
-export const useTokenStore = create(persist<TokenProvider>(
-  (set) => ({
-    tokens: [],
-    // TODO: should be a token address. how we can assure that the token is in the list and not has been changed?
-    selectedToken: undefined,
-    setSelectedToken: (token) => {
-      set((prevState) => ({ ...prevState, selectedToken: token }));
-    },
-    updateState: (state: Partial<TokenProviderProps>) => {
-      return set((prevState) => ({ ...prevState, ...state }));
-    },
-  }),
-  {
-    name: "token-store",
-    storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
-  },
-));
+export const useTokenStore = create(
+  persist<TokenProvider>(
+    (set) => ({
+      tokens: [],
+      // TODO: should be a token address. how we can assure that the token is in the list and not has been changed?
+      selectedToken: defaultSelectedToken,
+      setSelectedToken: (token) => {
+        set((prevState) => ({ ...prevState, selectedToken: token }));
+      },
+      updateState: (state: Partial<TokenProviderProps>) => {
+        return set((prevState) => ({ ...prevState, ...state }));
+      },
+    }),
+    {
+      name: "token-store",
+      storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
+    }
+  )
+);

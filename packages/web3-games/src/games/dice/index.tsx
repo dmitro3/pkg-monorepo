@@ -11,6 +11,7 @@ import {
   useCurrentAccount,
   useHandleTx,
   useTokenAllowance,
+  useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
@@ -45,8 +46,9 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
-    selectedTokenAddress,
   } = useContractConfigContext();
+
+  const { selectedToken } = useTokenStore();
 
   const [isGettingResults, setIsGettingResults] = useState(false);
 
@@ -70,7 +72,7 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress,
+    tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
@@ -90,7 +92,7 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
         wager: formValues.wager,
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
-        selectedCurrency: selectedTokenAddress,
+        selectedCurrency: selectedToken.address,
         lastPrice: 1,
       });
 

@@ -33,19 +33,12 @@ export const WinrLabsWeb3GamesProvider = ({
 
   useEffect(() => {
     updateState({
+      selectedToken: tokens.find(
+        (token) => token.address === defaultSelectedTokenAddress
+      ),
       tokens,
     });
-  }, [tokens]);
-
-  useEffect(() => {
-    if (defaultSelectedTokenAddress && tokens) {
-      updateState({
-        selectedToken: tokens.find(
-          (token) => token.address === defaultSelectedTokenAddress
-        ),
-      });
-    }
-  }, [defaultSelectedTokenAddress, tokens]);
+  }, []);
 
   return (
     <ContractConfigProvider
