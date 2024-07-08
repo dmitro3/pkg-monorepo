@@ -3,6 +3,7 @@ import { cn } from "../../../../utils/style";
 import { Avatar, Wheel } from "../../../../svgs";
 import { Separator } from "../../../../ui/separator";
 import { useWheelGameStore } from "../../store";
+import { useMemo } from "react";
 
 const color = {
   gray: " wr-bg-[#ffffff15] ",
@@ -34,19 +35,27 @@ const WheelParticipantDetail: React.FC<WheelParticipantDetailProps> = ({
     "wheelParticipants",
   ]);
 
-  const getWheelParticipantDetail = (multiplier: Multiplier, index: number) => {
-    if (Array.isArray(wheelParticipants[multiplier])) {
-      if (wheelParticipants[multiplier].length + 1 <= index) {
-        return null;
-      } else {
-        return wheelParticipants[multiplier][
-          wheelParticipants[multiplier].length - index
-        ];
-      }
-    } else {
-      return null;
+  const participants = useMemo(() => {
+    const result = Object.entries(wheelParticipants[multiplier]).map(
+      ([key, value]) => ({
+        player: key,
+        bet: value,
+      })
+    );
+
+    if (result.length < 4) {
+      const emptyParticipants = Array.from({ length: 4 - result.length }).map(
+        () => ({
+          player: "",
+          bet: 0,
+        })
+      );
+
+      return [...result, ...emptyParticipants];
     }
-  };
+
+    return result;
+  }, [multiplier, wheelParticipants]);
 
   return (
     <div className="wr-flex wr-flex-col">
@@ -58,81 +67,22 @@ const WheelParticipantDetail: React.FC<WheelParticipantDetailProps> = ({
           }
         )}
       >
-        <div
-          className={cn(
-            "wr-flex wr-h-[28px] wr-w-[184px] wr-items-center wr-justify-between wr-rounded wr-rounded-tl-md wr-rounded-tr-md  wr-px-2.5 wr-text-[13px] wr-font-semibold ",
-            color[variant]
-          )}
-        >
+        {participants.map((participant, index) => (
           <div
-            className="wr-w-[54px] wr-truncate"
-            title={getWheelParticipantDetail(multiplier, 1)?.name}
+            key={index}
+            className={cn(
+              "wr-flex wr-h-[28px] wr-w-[184px] wr-items-center wr-justify-between wr-rounded wr-rounded-tl-md wr-rounded-tr-md  wr-px-2.5 wr-text-[13px] wr-font-semibold ",
+              color[variant]
+            )}
           >
-            {getWheelParticipantDetail(multiplier, 1)?.name}
+            <div className="wr-w-[54px] wr-truncate" title={participant.player}>
+              {participant.player}
+            </div>
+            <div className="wr-flex">
+              {participant.bet ? <>{participant.bet} USDC</> : null}
+            </div>
           </div>
-          <div className="wr-flex">
-            {getWheelParticipantDetail(multiplier, 1)?.bet ? (
-              <>
-                {getWheelParticipantDetail(multiplier, 1)?.bet}
-                USDC
-              </>
-            ) : null}
-          </div>
-        </div>
-        <div
-          className={cn(
-            "wr-flex h-[28px]  wr-w-[184px] wr-items-center wr-justify-between wr-rounded   wr-px-2.5 wr-text-[13px] wr-font-semibold ",
-            color[variant]
-          )}
-        >
-          <div
-            className="wr-w-[54px] wr-truncate"
-            title={getWheelParticipantDetail(multiplier, 2)?.name}
-          >
-            {getWheelParticipantDetail(multiplier, 2)?.name}
-          </div>
-          <div className="wr-flex">
-            {getWheelParticipantDetail(multiplier, 2)?.bet ? (
-              <>{getWheelParticipantDetail(multiplier, 2)?.bet} USDC</>
-            ) : null}
-          </div>
-        </div>
-        <div
-          className={cn(
-            "wr-flex wr-h-[28px]  wr-w-[184px] wr-items-center wr-justify-between wr-rounded   wr-px-2.5 wr-text-[13px] wr-font-semibold ",
-            color[variant]
-          )}
-        >
-          <div
-            className="wr-w-[54px] wr-truncate"
-            title={getWheelParticipantDetail(multiplier, 3)?.name}
-          >
-            {getWheelParticipantDetail(multiplier, 3)?.name}
-          </div>
-          <div className="wr-flex">
-            {getWheelParticipantDetail(multiplier, 3)?.bet ? (
-              <>{getWheelParticipantDetail(multiplier, 3)?.bet} USDC</>
-            ) : null}
-          </div>
-        </div>
-        <div
-          className={cn(
-            "wr-flex wr-h-[28px]  wr-w-[184px] wr-items-center wr-justify-between wr-rounded  wr-px-2.5 wr-text-[13px] wr-font-semibold ",
-            color[variant]
-          )}
-        >
-          <div
-            className="wr-w-[54px] wr-truncate"
-            title={getWheelParticipantDetail(multiplier, 4)?.name}
-          >
-            {getWheelParticipantDetail(multiplier, 4)?.name}
-          </div>
-          <div className="wr-flex">
-            {getWheelParticipantDetail(multiplier, 4)?.bet ? (
-              <>{getWheelParticipantDetail(multiplier, 4)?.bet} USDC</>
-            ) : null}
-          </div>
-        </div>
+        ))}
       </div>
 
       <div
@@ -145,7 +95,7 @@ const WheelParticipantDetail: React.FC<WheelParticipantDetailProps> = ({
         <div>{multiplier}</div>
         <Separator className="wr-mx-2 " orientation="vertical" />
         <Avatar />
-        <div>{wheelParticipants[multiplier].length}</div>
+        <div>{Object.keys(wheelParticipants[multiplier]).length}</div>
       </div>
     </div>
   );

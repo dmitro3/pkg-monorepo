@@ -4,11 +4,11 @@ import { MultiplayerGameStatus } from "../core/type";
 import { Multiplier, WheelColor } from "./constants";
 
 type BetData = {
-  name: string;
   bet: number;
+  player: string;
 };
 
-type BetArray = BetData[];
+type BetArray = Record<string, number>;
 
 export type MultiplierArray = {
   [key in Multiplier]: BetArray;
@@ -24,6 +24,8 @@ interface WheelGameState {
   wheelParticipants: MultiplierArray;
   winnerAngle: number;
   winnerColor: WheelColor;
+  isGamblerParticipant: boolean;
+  showResult: boolean;
   allParticipantCount: () => number;
 }
 
@@ -33,14 +35,16 @@ interface WheelGameStateActions {
   resetWheelParticipant: () => void;
   updateTime: (joiningStart: number, joiningFinish: number) => void;
   updateState: (state: Partial<WheelGameState>) => void;
+  setIsGamblerParticipant: (isGamblerParticipant: boolean) => void;
+  setShowResult: (showResult: boolean) => void;
   resetState: () => void;
 }
 
 const defaultWheelParticipant: MultiplierArray = {
-  "2x": [],
-  "3x": [],
-  "6x": [],
-  "48x": [],
+  "2x": {},
+  "3x": {},
+  "6x": {},
+  "48x": {},
 };
 
 export type WheelGameStore = WheelGameState & WheelGameStateActions;
@@ -53,7 +57,11 @@ export const wheelGameStore = create<WheelGameStore>()((set, get) => ({
   winnerColor: WheelColor.IDLE,
   winnerAngle: 0,
   status: MultiplayerGameStatus.None,
-
+  isGamblerParticipant: false,
+  showResult: false,
+  setShowResult: (showResult: boolean) => set(() => ({ showResult })),
+  setIsGamblerParticipant: (isGamblerParticipant: boolean) =>
+    set(() => ({ isGamblerParticipant })),
   isParticipantsOpen: false,
   setIsParticipantsOpen: (isParticipantsOpen: boolean) =>
     set(() => ({ isParticipantsOpen })),
@@ -63,16 +71,15 @@ export const wheelGameStore = create<WheelGameStore>()((set, get) => ({
       ...state,
       wheelParticipants: {
         ...state.wheelParticipants,
-        [multiplier]: [...state.wheelParticipants[multiplier], data],
+        [multiplier]: {
+          ...state.wheelParticipants[multiplier],
+          [data.player]: data.bet,
+        },
       },
     })),
   resetWheelParticipant: () =>
     set((state) => ({ ...state, wheelParticipants: defaultWheelParticipant })),
-  allParticipantCount: () =>
-    Object.values(get().wheelParticipants).reduce(
-      (acc, cur) => acc + cur.length,
-      0,
-    ),
+  allParticipantCount: () => 0,
   updateState: (newState: Partial<WheelGameState>) =>
     set((state) => ({ ...state, ...newState })),
   updateTime: (joiningStart: number, joiningFinish: number) =>
@@ -84,37 +91,11 @@ export const wheelGameStore = create<WheelGameStore>()((set, get) => ({
       cooldownFinish: 0,
       status: MultiplayerGameStatus.None,
       winnerColor: WheelColor.IDLE,
+      isGamblerParticipant: false,
+      showResult: false,
     })),
 }));
 
 export const useWheelGameStore = createSelectors<WheelGameStore>(
   wheelGameStore,
 );
-
-export const useWheelGameStatus = () => {
-  const {
-    cooldownFinish,
-    joiningFinish,
-    joiningStart,
-  } = useWheelGameStore(["cooldownFinish", "joiningFinish", "joiningStart"]);
-
-  const currentTime = Math.floor(Date.now() / 1000);
-
-  if (currentTime > cooldownFinish && currentTime < joiningStart) {
-    return MultiplayerGameStatus.Finish;
-  } else if (
-    joiningFinish > 0 &&
-    currentTime < joiningFinish &&
-    currentTime > joiningStart
-  ) {
-    return MultiplayerGameStatus.Cooldown;
-  } else if (
-    joiningStart > 0 &&
-    currentTime > joiningStart &&
-    currentTime > joiningFinish
-  ) {
-    return MultiplayerGameStatus.Start;
-  }
-
-  return MultiplayerGameStatus.None;
-};

@@ -1,6 +1,6 @@
 import * as Radio from "@radix-ui/react-radio-group";
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { set, useFormContext } from "react-hook-form";
 import { WheelForm } from "../../types";
 // import useWheelGameStore from "../../_store/game-info-store";
 // import useCountdown from "@/hooks/use-time-left";
@@ -29,19 +29,25 @@ import { MultiplayerGameStatus } from "../../../core/type";
 interface Props {
   minWager: number;
   maxWager: number;
-  isGamblerParticipant: boolean;
 }
 
-const BetController: React.FC<Props> = ({
-  minWager,
-  maxWager,
-  isGamblerParticipant,
-}) => {
-  const { cooldownFinish, status, resetState } = useWheelGameStore([
+const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
+  const {
+    cooldownFinish,
+    status,
+    resetState,
+    resetWheelParticipant,
+    isGamblerParticipant,
+    setIsGamblerParticipant,
+  } = useWheelGameStore([
     "cooldownFinish",
     "status",
     "resetState",
+    "resetWheelParticipant",
+    "isGamblerParticipant",
+    "setIsGamblerParticipant",
   ]);
+
   const form = useFormContext() as WheelForm;
 
   const chosenColor = form.watch("color");
@@ -56,7 +62,8 @@ const BetController: React.FC<Props> = ({
 
   const timeLeft = useCountdown(cooldownFinish, () => {
     resetState();
-    // resetWheelParticipant();
+    resetWheelParticipant();
+    setIsGamblerParticipant(false);
   });
 
   return (
@@ -165,9 +172,10 @@ const BetController: React.FC<Props> = ({
               !form.formState.isValid ||
               form.formState.isSubmitting ||
               form.formState.isLoading ||
-              (timeLeft > 0 && status !== MultiplayerGameStatus.Start) ||
-              isGamblerParticipant ||
-              status === MultiplayerGameStatus.Start ||
+              (timeLeft > 0 &&
+                status === MultiplayerGameStatus.Wait &&
+                isGamblerParticipant) ||
+              (timeLeft > 0 && status === MultiplayerGameStatus.Finish) ||
               chosenColor === WheelColor.IDLE
             }
           >

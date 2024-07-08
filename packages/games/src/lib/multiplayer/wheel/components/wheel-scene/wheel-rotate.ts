@@ -4,6 +4,7 @@ import {
   SoundEffects,
 } from "../../../../hooks/use-audio-effect";
 import TWEEN, { Easing } from "@tweenjs/tween.js";
+import { ANGLE_SCALE } from "../../constants";
 
 export declare type EasingFunction = (amount: number) => number;
 
@@ -53,6 +54,11 @@ class WheelRotate {
   public async goToDegree(toDegree: number): Promise<void> {
     this.renderer();
 
+    // // const measurement_ = this.measurement;
+    // // const angle =  ;
+    // // const index = Math.floor(angle / measurement_.unitHeight);
+    // // return this.units[index];
+    // const angle = this.degree % 63504000;
     return this.animateByEffect(
       this.degree,
       this.calcMovementTo(toDegree),

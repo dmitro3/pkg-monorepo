@@ -43,7 +43,12 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
     uiOperatorAddress,
     selectedTokenAddress,
   } = useContractConfigContext();
-  const { updateState } = useWheelGameStore(["updateState"]);
+  const { updateState, setWheelParticipant, setIsGamblerParticipant } =
+    useWheelGameStore([
+      "updateState",
+      "setWheelParticipant",
+      "setIsGamblerParticipant",
+    ]);
 
   const [formValues, setFormValues] = useState<WheelFormFields>({
     color: WheelColor.IDLE,
@@ -201,40 +206,58 @@ export default function WheelTemplateWithWeb3(props: TemplateWithWeb3Props) {
     } catch (e: any) {
       console.log("error", e);
     }
+
+    setIsGamblerParticipant(true);
   };
 
   React.useEffect(() => {
     if (!gameEvent) return;
 
-    const gameProgram = gameEvent.program.find((p) => p.type == "Game");
+    const currentTime = new Date().getTime() / 1000;
+    let status: MultiplayerGameStatus = MultiplayerGameStatus.None;
+
+    const {
+      cooldownFinish,
+      joiningFinish,
+      joiningStart,
+      randoms,
+      result,
+      player,
+      bet,
+    } = gameEvent;
+
+    const isGameFinished =
+      currentTime >= joiningFinish && joiningFinish > 0 && randoms;
+    const shouldWait =
+      currentTime <= joiningFinish && currentTime >= joiningStart;
+
+    if (shouldWait) {
+      status = MultiplayerGameStatus.Wait;
+    }
+
+    if (isGameFinished) {
+      status = MultiplayerGameStatus.Finish;
+    }
 
     updateState({
-      joiningFinish: gameProgram?.data.joinningFinish,
-      joiningStart: gameProgram?.data.joinningStart,
-      cooldownFinish: gameProgram?.data.cooldownFinish,
-      winnerColor: gameProgram?.data.result,
+      status,
+      joiningFinish,
+      joiningStart,
+      cooldownFinish,
+      winnerColor: result as unknown as WheelColor,
     });
 
-    const currentTime = Math.floor(Date.now() / 1000);
-    const { joinningFinish: joiningFinish, joinningStart: joiningStart } =
-      gameProgram?.data || {};
+    if (bet && bet?.converted?.wager && player) {
+      const multiplers = {
+        1: "2x",
+        2: "3x",
+        3: "6x",
+        4: "48x",
+      };
 
-    if (currentTime >= joiningFinish && joiningFinish > 0) {
-      const random = gameEvent.context.find((c) => c.type == "Randoms");
-
-      console.log(random?.data);
-
-      updateState({
-        status: MultiplayerGameStatus.Finish,
-        winnerAngle: random?.data ? Number(4640098) / 100000 / ANGLE_SCALE : 0,
-      });
-    } else if (currentTime <= joiningFinish && currentTime >= joiningStart) {
-      updateState({
-        status: MultiplayerGameStatus.Cooldown,
-      });
-    } else {
-      updateState({
-        status: MultiplayerGameStatus.None,
+      setWheelParticipant(multiplers[bet.choice as number], {
+        player: player,
+        bet: bet.converted.wager,
       });
     }
   }, [gameEvent]);

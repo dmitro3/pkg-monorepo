@@ -61,6 +61,10 @@ const WheelTemplate = (props: TemplateProps) => {
     return () => subscription.unsubscribe();
   }, [form.watch]);
 
+  const onComplete = React.useCallback(() => {
+    props.onComplete && props.onComplete();
+  }, [props.onComplete]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
@@ -68,11 +72,10 @@ const WheelTemplate = (props: TemplateProps) => {
           <BetController
             maxWager={props?.maxWager || 2000}
             minWager={props?.minWager || 1}
-            isGamblerParticipant={false}
           />
           <SceneContainer className="wr-h-[640px] max-md:wr-h-[480px] lg:wr-p-[14px]">
             <LastBets />
-            <WheelScene onComplete={props.onComplete} />
+            <WheelScene onComplete={onComplete} />
             <WheelParticipants />
           </SceneContainer>
         </GameContainer>

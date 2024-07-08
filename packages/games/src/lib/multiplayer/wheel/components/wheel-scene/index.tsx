@@ -4,14 +4,25 @@ import styles from "./wheel-scene.module.css";
 import { cn } from "../../../../utils/style";
 import { CountdownProvider, Minutes, Seconds } from "../../../../ui/countdown";
 import { Wheel } from "./wheel";
-import { useWheelGameStatus, useWheelGameStore } from "../../store";
+import { useWheelGameStore } from "../../store";
 import { MultiplayerGameStatus } from "../../../core/type";
 
 export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
-  const { winnerAngle, winnerColor, joiningFinish, status } = useWheelGameStore(
-    ["winnerAngle", "winnerColor", "joiningFinish", "status"]
-  );
-  const [showResult, setShowResult] = useState(false);
+  const {
+    winnerAngle,
+    winnerColor,
+    joiningFinish,
+    status,
+    showResult,
+    setShowResult,
+  } = useWheelGameStore([
+    "winnerAngle",
+    "winnerColor",
+    "joiningFinish",
+    "status",
+    "showResult",
+    "setShowResult",
+  ]);
   const multiplier = colorMultipliers[winnerColor];
 
   return (
@@ -28,7 +39,7 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
             </div>
           )}
 
-          {status == MultiplayerGameStatus.Cooldown && (
+          {status == MultiplayerGameStatus.Wait && (
             <section className="wr-text-center">
               <div className="wr-mb-3 wr-text-xl wr-leading-5 wr-text-zinc-100">
                 Remaining time:
@@ -66,7 +77,6 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
           }
           onComplete={() => {
             setShowResult(true);
-
             onComplete && onComplete();
           }}
         />
