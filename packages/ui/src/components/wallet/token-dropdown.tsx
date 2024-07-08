@@ -48,7 +48,11 @@ export const SelectGameCurrency: React.FC<{ triggerClassName?: string }> = ({
   triggerClassName,
 }) => {
   const account = useCurrentAccount();
-  const { tokens, setSelectedToken, selectedToken } = useTokenStore();
+  const { tokens, setSelectedToken, selectedToken } = useTokenStore((s) => ({
+    tokens: s.tokens,
+    setSelectedToken: s.setSelectedToken,
+    selectedToken: s.selectedToken,
+  }));
   const { refetch } = useTokenBalances({
     account: account?.address || "0x0",
   });

@@ -29,7 +29,7 @@ export const WinrLabsWeb3GamesProvider = ({
   tokens,
   defaultSelectedTokenAddress,
 }: WinrLabsWeb3GamesProviderProps) => {
-  const { updateState } = useTokenStore();
+  /*   const { updateState } = useTokenStore();
 
   useEffect(() => {
     updateState({
@@ -46,7 +46,7 @@ export const WinrLabsWeb3GamesProvider = ({
       });
     }
   }, [defaultSelectedTokenAddress, tokens]);
-
+ */
   return (
     <ContractConfigProvider
       wagmiConfig={config.wagmiConfig}

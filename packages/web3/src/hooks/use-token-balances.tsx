@@ -39,7 +39,7 @@ export const useTokenBalances = ({
   balancesToRead?: Address[];
 }) => {
   const updateBalances = useBalanceStore((state) => state.updateBalances);
-  const { tokens } = useTokenStore();
+  const tokens = useTokenStore((s) => s.tokens);
   const targetBalanceToRead =
     balancesToRead && balancesToRead?.length > 0
       ? balancesToRead

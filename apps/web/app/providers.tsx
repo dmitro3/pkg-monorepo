@@ -57,6 +57,32 @@ export function Providers(props: { children: ReactNode }) {
             entryPointAddress,
             factoryAddress,
           }}
+          tokens={[
+            {
+              address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
+              displayDecimals: 6,
+              decimals: 18,
+              icon: "/tokens/weth.png",
+              symbol: "wETH",
+              playable: true,
+            },
+            {
+              address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
+              displayDecimals: 6,
+              decimals: 18,
+              icon: "/tokens/weth.png",
+              symbol: "wETH",
+              playable: true,
+            },
+          ]}
+          selectedToken={{
+            address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
+            displayDecimals: 6,
+            decimals: 18,
+            icon: "/tokens/weth.png",
+            symbol: "wETH",
+            playable: true,
+          }}
         >
           <AppUiProviders wagmiConfig={config}>
             <WinrLabsWeb3GamesProvider
