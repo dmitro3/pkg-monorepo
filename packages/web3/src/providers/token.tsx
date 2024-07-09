@@ -7,8 +7,6 @@ import { persist } from "zustand/middleware";
 
 import { createContext, useContext, useRef } from "react";
 
-interface TokenProps {}
-
 export interface Token {
   address: Address;
   symbol: string;
