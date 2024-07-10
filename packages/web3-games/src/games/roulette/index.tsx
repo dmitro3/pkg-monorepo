@@ -9,6 +9,7 @@ import {
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
   useTokenStore,
 } from "@winrlabs/web3";
@@ -59,6 +60,7 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
+  const { getPrice } = usePriceFeed();
 
   const [rouletteResult, setRouletteResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
@@ -90,7 +92,7 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
         stopGain: 0,
         stopLoss: 0,
         selectedCurrency: selectedToken.address,
-        lastPrice: 1,
+        lastPrice: getPrice(selectedToken.address),
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -137,7 +139,12 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.betCount, formValues.selectedNumbers, formValues.wager]);
+  }, [
+    formValues.betCount,
+    formValues.selectedNumbers,
+    formValues.wager,
+    selectedToken.address,
+  ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {

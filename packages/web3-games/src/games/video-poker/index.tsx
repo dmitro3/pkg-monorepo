@@ -13,6 +13,7 @@ import {
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
   useTokenStore,
   videoPokerAbi,
@@ -54,6 +55,7 @@ export default function VideoPokerTemplateWithWeb3(
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
+  const { getPrice } = usePriceFeed();
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -69,7 +71,7 @@ export default function VideoPokerTemplateWithWeb3(
       stopGain: 0,
       stopLoss: 0,
       selectedCurrency: selectedToken.address,
-      lastPrice: 1,
+      lastPrice: getPrice(selectedToken.address),
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -94,7 +96,7 @@ export default function VideoPokerTemplateWithWeb3(
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.wager]);
+  }, [formValues.wager, selectedToken.address]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
