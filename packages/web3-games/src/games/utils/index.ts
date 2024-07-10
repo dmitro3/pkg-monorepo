@@ -6,7 +6,6 @@ export enum GAME_HUB_GAMES {
   rps = "rps",
   dice = "dice",
   keno = "keno",
-  slot = "slot",
   limbo = "limbo",
   mines = "mines",
   range = "range",
@@ -61,7 +60,7 @@ export interface BaccaratSettledEvent {
 export type UnitySendMessage = (
   gameObjectName: string,
   methodName: string,
-  parameter?: any
+  parameter?: any,
 ) => void;
 
 export enum PUBLIC_MULTIPLAYER_GAME_EVENTS {
@@ -86,28 +85,28 @@ export enum DecoderType {
   RockPaperScissors = "rock-paper-scissors",
 }
 
-export type Item<T> = {
-  type: string;
-  data: T;
-};
+// export type Item<T> = {
+//   type: string;
+//   data: T;
+// };
 
-export type Event = {
-  context: any;
-  timestamp: bigint;
-  type: string;
-  id: string;
-  player: string;
-  program: string;
-};
+// export type Event = {
+//   context: any;
+//   timestamp: bigint;
+//   type: string;
+//   id: string;
+//   player: string;
+//   program: string;
+// };
 
-export type DecodedEvent<T, K> = {
-  key: Hex;
-  type: string;
-  version: number;
-  timestamp: number;
-  context: Item<T>[];
-  program: Item<K>[];
-};
+// export type DecodedEvent<T, K> = {
+//   key: Hex;
+//   type: string;
+//   version: number;
+//   timestamp: number;
+//   context: Item<T>[];
+//   program: Item<K>[];
+// };
 
 export interface PrepareGameTransactionParams {
   wager: number;
@@ -125,7 +124,7 @@ export interface PrepareGameTransactionResult {
 }
 
 export const prepareGameTransaction = (
-  params: PrepareGameTransactionParams
+  params: PrepareGameTransactionParams,
 ): PrepareGameTransactionResult => {
   const {
     lastPrice,
@@ -137,17 +136,17 @@ export const prepareGameTransaction = (
 
   const wagerInGameCurrency = toDecimals(
     (wager / lastPrice).toString(),
-    6
+    6,
   ).toString();
 
   const stopGainInGameCurrency = toDecimals(
     (stopGain / lastPrice).toString(),
-    6
+    6,
   ).toString();
 
   const stopLossInGameCurrency = toDecimals(
     (stopLoss / lastPrice).toString(),
-    6
+    6,
   ).toString();
 
   console.log(wagerInGameCurrency, "wager in currency");
