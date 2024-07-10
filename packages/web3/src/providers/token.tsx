@@ -18,7 +18,7 @@ export interface Token {
 
 interface TokenProps {
   tokens: Token[];
-  selectedToken?: Token;
+  selectedToken: Token;
 }
 
 interface TokenState extends TokenProps {
@@ -31,7 +31,14 @@ type TokenStore = StoreApi<TokenState>;
 export const createTokenStore = (initProps?: Partial<TokenProps>) => {
   const DEFAULT_PROPS: TokenProps = {
     tokens: [],
-    selectedToken: undefined,
+    selectedToken: {
+      address: "0x",
+      symbol: "",
+      icon: "",
+      decimals: 0,
+      displayDecimals: 0,
+      playable: false,
+    },
   };
   return createStore(
     persist<TokenState>(

@@ -6,9 +6,12 @@ import {
 } from "../games/hooks/use-contract-config";
 import { Config } from "wagmi";
 
-import { Token, useTokenStore, useBalanceStore } from "@winrlabs/web3";
-import { useEffect } from "react";
-import { Address } from "viem";
+import {
+  Token,
+  useTokenStore,
+  useBalanceStore,
+  useCurrentAccount,
+} from "@winrlabs/web3";
 
 type WinrLabsWeb3GamesConfig = {
   wagmiConfig: Config;
@@ -19,34 +22,19 @@ type WinrLabsWeb3GamesConfig = {
 type WinrLabsWeb3GamesProviderProps = {
   children: React.ReactNode;
   config: WinrLabsWeb3GamesConfig;
-  tokens: Token[];
-  defaultSelectedTokenAddress?: Address;
 };
 
 export const WinrLabsWeb3GamesProvider = ({
   children,
   config,
-  tokens,
-  defaultSelectedTokenAddress,
 }: WinrLabsWeb3GamesProviderProps) => {
-  /*   const { updateState } = useTokenStore();
+  const { address } = useCurrentAccount();
+  const { selectedToken } = useTokenStore((s) => ({
+    selectedToken: s.selectedToken,
+  }));
 
-  useEffect(() => {
-    updateState({
-      tokens,
-    });
-  }, [tokens]);
+  const { balances } = useBalanceStore();
 
-  useEffect(() => {
-    if (defaultSelectedTokenAddress && tokens) {
-      updateState({
-        selectedToken: tokens.find(
-          (token) => token.address === defaultSelectedTokenAddress
-        ),
-      });
-    }
-  }, [defaultSelectedTokenAddress, tokens]);
- */
   return (
     <ContractConfigProvider
       wagmiConfig={config.wagmiConfig}
@@ -55,13 +43,13 @@ export const WinrLabsWeb3GamesProvider = ({
       <GameProvider
         options={{
           currency: {
-            icon: "https://assets.coingecko.com/coins/images/325/standard/Tether.png?1696501661",
-            name: "Winr",
-            symbol: "WINR",
+            icon: selectedToken.icon,
+            name: selectedToken.symbol,
+            symbol: selectedToken.symbol,
           },
           account: {
-            isLoggedIn: true,
-            balance: 25,
+            isLoggedIn: !!address,
+            balance: balances[selectedToken.address] || 0,
           },
         }}
       >

@@ -94,29 +94,8 @@ export function Providers(props: { children: ReactNode }) {
                   controllerAddress,
                   cashierAddress,
                   uiOperatorAddress,
-                  selectedTokenAddress:
-                    "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
                 },
               }}
-              tokens={[
-                {
-                  address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
-                  displayDecimals: 6,
-                  decimals: 18,
-                  icon: "/tokens/weth.png",
-                  symbol: "wETH",
-                  playable: true,
-                },
-                {
-                  address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F312x",
-                  displayDecimals: 6,
-                  decimals: 18,
-                  icon: "/tokens/weth.png",
-                  symbol: "wETH",
-                  playable: true,
-                },
-              ]}
-              defaultSelectedTokenAddress="0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125"
             >
               <AudioContextProvider>{props.children}</AudioContextProvider>
             </WinrLabsWeb3GamesProvider>

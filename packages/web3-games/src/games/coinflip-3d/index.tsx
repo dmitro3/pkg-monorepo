@@ -11,6 +11,7 @@ import {
   useCurrentAccount,
   useHandleTx,
   useTokenAllowance,
+  useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
@@ -50,7 +51,6 @@ export default function CoinFlip3DTemplateWithWeb3(
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
-    selectedTokenAddress,
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = useState<CoinFlip3dFormFields>({
@@ -63,6 +63,10 @@ export default function CoinFlip3DTemplateWithWeb3(
 
   const gameEvent = useListenGameEvent();
 
+  const { selectedToken } = useTokenStore((s) => ({
+    selectedToken: s.selectedToken,
+  }));
+
   const [coinFlipResult, setCoinFlipResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
@@ -71,7 +75,7 @@ export default function CoinFlip3DTemplateWithWeb3(
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress,
+    tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
@@ -91,7 +95,7 @@ export default function CoinFlip3DTemplateWithWeb3(
         wager: formValues.wager,
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
-        selectedCurrency: selectedTokenAddress,
+        selectedCurrency: selectedToken.address,
         lastPrice: 1,
       });
 
