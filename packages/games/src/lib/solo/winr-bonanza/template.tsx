@@ -108,8 +108,6 @@ export const WinrBonanzaTemplate = ({
     [account?.balance]
   );
 
-  React.useEffect(() => {}, []);
-
   const actualBetAmount = isDoubleChance
     ? betAmount + betAmount * 0.5
     : betAmount;
