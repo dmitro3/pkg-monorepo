@@ -1,4 +1,4 @@
-export type Multiplier = "2x" | "3x" | "8x" | "15x" | "60x";
+export type HorseRaceMultiplier = "2x" | "3x" | "8x" | "15x" | "60x";
 
 export enum Horse {
   IDLE = "0",
@@ -24,12 +24,3 @@ export enum HorseRaceStatus {
   Race = "Race",
   Started = "Started",
 }
-
-export const participantMapWithStore: Record<Horse, Multiplier> = {
-  [Horse.IDLE]: "2x",
-  [Horse.ONE]: "2x",
-  [Horse.TWO]: "3x",
-  [Horse.THREE]: "8x",
-  [Horse.FOUR]: "15x",
-  [Horse.FIVE]: "60x",
-};

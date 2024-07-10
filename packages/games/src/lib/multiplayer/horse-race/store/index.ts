@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { shallow } from "zustand/shallow";
-import { HorseRaceStatus, Multiplier } from "../constants";
+import { HorseRaceStatus, HorseRaceMultiplier } from "../constants";
 
 type BetData = {
   name: string;
@@ -9,11 +9,11 @@ type BetData = {
 
 type BetArray = BetData[];
 
-export type MultiplierArray = {
-  [key in Multiplier]: BetArray;
+export type HorseRaceMultiplierArray = {
+  [key in HorseRaceMultiplier]: BetArray;
 };
 
-const defaultSelectedHorse: MultiplierArray = {
+const defaultSelectedHorse: HorseRaceMultiplierArray = {
   "2x": [],
   "3x": [],
   "8x": [],
@@ -26,18 +26,18 @@ export type HorseRaceGameState = {
   finishTime: number;
   startTime: number;
   winnerHorse: number;
-  selectedHorse: MultiplierArray;
+  selectedHorse: HorseRaceMultiplierArray;
   isParticipantsOpen: boolean;
-  lastBets: Multiplier[];
+  lastBets: HorseRaceMultiplier[];
 };
 
 export type HorseRaceGameActions = {
   updateState: (state: Partial<HorseRaceGameState>) => void;
   resetState: () => void;
-  setSelectedHorse: (multiplier: Multiplier, data: BetData) => void;
+  setSelectedHorse: (multiplier: HorseRaceMultiplier, data: BetData) => void;
   resetSelectedHorse: () => void;
   setIsParticipantsOpen: (isOpen: boolean) => void;
-  addLastBet: (multiplier: Multiplier) => void;
+  addLastBet: (multiplier: HorseRaceMultiplier) => void;
 };
 
 export type HorseRaceGameStore = HorseRaceGameState & HorseRaceGameActions;
@@ -59,7 +59,7 @@ export const horseRaceGameStore = create<HorseRaceGameStore>()((set) => ({
       startTime: 0,
       winnerHorse: 0,
     }),
-  setSelectedHorse: (multiplier: Multiplier, data: BetData) =>
+  setSelectedHorse: (multiplier: HorseRaceMultiplier, data: BetData) =>
     set((state) => ({
       ...state,
       selectedHorse: {

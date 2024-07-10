@@ -2,7 +2,7 @@ import React from "react";
 import { Avatar, Horse } from "../../../svgs";
 import { Separator } from "../../../ui/separator";
 import { cn } from "../../../utils/style";
-import { Multiplier } from "../constants";
+import { HorseRaceMultiplier } from "../constants";
 import useHorseRaceGameStore from "../store";
 
 const color = {
@@ -23,7 +23,7 @@ const iconColor = {
 
 interface HorseDetailProps {
   variant: "gray" | "yellow" | "blue" | "green" | "red";
-  multiplier: Multiplier;
+  multiplier: HorseRaceMultiplier;
 }
 
 const HorseDetail: React.FC<HorseDetailProps> = ({ variant, multiplier }) => {
@@ -32,7 +32,7 @@ const HorseDetail: React.FC<HorseDetailProps> = ({ variant, multiplier }) => {
     "isParticipantsOpen",
   ]);
 
-  const getHorseDetail = (multiplier: Multiplier, index: number) => {
+  const getHorseDetail = (multiplier: HorseRaceMultiplier, index: number) => {
     if (Array.isArray(selectedHorse[multiplier])) {
       if (selectedHorse[multiplier].length + 1 <= index) {
         return null;
