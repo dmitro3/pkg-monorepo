@@ -66,9 +66,9 @@ export default function WinrBonanzaTemplateWithWeb3({
   const [previousFreeSpinCount, setPreviousFreeSpinCount] =
     React.useState<number>(0);
   const currentAccount = useCurrentAccount();
-  // const { refetch } = useTokenBalances({
-  //   account: currentAccount.address || "0x",
-  // });
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -296,7 +296,9 @@ export default function WinrBonanzaTemplateWithWeb3({
     },
   });
 
-  const handleRefresh = async () => {};
+  const handleRefresh = async () => {
+    updateBalances();
+  };
 
   React.useEffect(() => {
     const gameData = gameDataRead.data as any;
