@@ -21,5 +21,6 @@ export * from "./lib/solo/single-blackjack";
 export * from "./lib/multiplayer/wheel";
 export * from "./lib/multiplayer/core/type";
 export * from "./lib/solo/winr-bonanza";
+export * from "./lib/solo/video-poker";
 export * from "./lib/utils/number";
 export * from "./lib/utils/web3";

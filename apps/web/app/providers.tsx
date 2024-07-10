@@ -13,11 +13,15 @@ import { Address } from "viem";
 
 const bundlerUrl = process.env.NEXT_PUBLIC_BUNDLER_URL || "";
 const bundlerWsUrl = process.env.NEXT_PUBLIC_BUNDLER_WS_URL || "";
-export const entryPointAddress = process.env.NEXT_PUBLIC_ENTRYPOINT_ADDRESS as Address;
-export const factoryAddress = process.env.NEXT_PUBLIC_FACTORY_ADDRESS as Address;
+export const entryPointAddress = process.env
+  .NEXT_PUBLIC_ENTRYPOINT_ADDRESS as Address;
+export const factoryAddress = process.env
+  .NEXT_PUBLIC_FACTORY_ADDRESS as Address;
 
-export const controllerAddress = process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS as Address;
-export const cashierAddress = process.env.NEXT_PUBLIC_CASHIER_ADDRESS as Address;
+export const controllerAddress = process.env
+  .NEXT_PUBLIC_CONTROLLER_ADDRESS as Address;
+export const cashierAddress = process.env
+  .NEXT_PUBLIC_CASHIER_ADDRESS as Address;
 export const uiOperatorAddress = process.env
   .NEXT_PUBLIC_UI_OPERATOR_ADDRESS as Address;
 
@@ -33,6 +37,7 @@ export const gameAddresses = {
   keno: process.env.NEXT_PUBLIC_KENO_ADDRESS as Address,
   wheel: process.env.NEXT_PUBLIC_WHEEL_ADDRESS as Address,
   winrBonanza: process.env.NEXT_PUBLIC_WINR_BONANZA_ADDRESS as Address,
+  videoPoker: process.env.NEXT_PUBLIC_VIDEO_POKER_ADDRESS as Address,
 };
 
 export function Providers(props: { children: ReactNode }) {
@@ -53,19 +58,34 @@ export function Providers(props: { children: ReactNode }) {
             entryPointAddress,
             factoryAddress,
           }}
+          tokens={[
+            {
+              address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
+              displayDecimals: 6,
+              decimals: 18,
+              icon: "/tokens/weth.png",
+              symbol: "wETH",
+              playable: true,
+            },
+            {
+              address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
+              displayDecimals: 6,
+              decimals: 18,
+              icon: "/tokens/weth.png",
+              symbol: "wETH",
+              playable: true,
+            },
+          ]}
+          selectedToken={{
+            address: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
+            displayDecimals: 6,
+            decimals: 18,
+            icon: "/tokens/weth.png",
+            symbol: "wETH",
+            playable: true,
+          }}
         >
-          <AppUiProviders
-            wagmiConfig={config}
-            appTokens={[
-              {
-                tokenAddress: "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
-                displayDecimals: 6,
-                tokenDecimals: 18,
-                icon: "/tokens/weth.png",
-                tokenSymbol: "wETH",
-              },
-            ]}
-          >
+          <AppUiProviders wagmiConfig={config}>
             <WinrLabsWeb3GamesProvider
               config={{
                 wagmiConfig: config,
@@ -75,8 +95,6 @@ export function Providers(props: { children: ReactNode }) {
                   controllerAddress,
                   cashierAddress,
                   uiOperatorAddress,
-                  selectedTokenAddress:
-                    "0x4b45108FfBb6d87aEAF59aCeeADb205C605F3125",
                 },
               }}
             >

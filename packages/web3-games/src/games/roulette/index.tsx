@@ -9,7 +9,9 @@ import {
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
+  useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
@@ -44,7 +46,6 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
-    selectedTokenAddress,
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = useState<RouletteFormFields>({
@@ -56,6 +57,11 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
 
   const gameEvent = useListenGameEvent();
 
+  const { selectedToken } = useTokenStore((s) => ({
+    selectedToken: s.selectedToken,
+  }));
+  const { getPrice } = usePriceFeed();
+
   const [rouletteResult, setRouletteResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
@@ -64,7 +70,7 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress,
+    tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
@@ -85,8 +91,8 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
         wager: formValues.wager,
         stopGain: 0,
         stopLoss: 0,
-        selectedCurrency: selectedTokenAddress,
-        lastPrice: 1,
+        selectedCurrency: selectedToken.address,
+        lastPrice: getPrice(selectedToken.address),
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -133,7 +139,12 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.betCount, formValues.selectedNumbers, formValues.wager]);
+  }, [
+    formValues.betCount,
+    formValues.selectedNumbers,
+    formValues.wager,
+    selectedToken.address,
+  ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {

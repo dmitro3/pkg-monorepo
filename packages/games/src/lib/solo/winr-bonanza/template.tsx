@@ -70,7 +70,6 @@ export const WinrBonanzaTemplate = ({
     handleUpdateWinText,
     handleUnlockUi,
     handleSendGrid,
-    handleEnterFreespin,
     handleEnterFreespinWithoutScatter,
     handleExitFreespin,
     handleFreespinAmount,
@@ -105,7 +104,7 @@ export const WinrBonanzaTemplate = ({
   >();
 
   const currentBalanceInDollar = React.useMemo(
-    () => (account?.balance || 0) * 1,
+    () => account?.balance || 0,
     [account?.balance]
   );
 
@@ -140,6 +139,10 @@ export const WinrBonanzaTemplate = ({
 
         if (obj.name === "M3_ScatterMatch") {
           console.log("SCATTER MATCH");
+
+          if (currentAction == "buyFeature") {
+            handleEnterFreespinWithoutScatter();
+          }
 
           if (!isInFreeSpinMode) {
             setIsDoubleChance(false);
@@ -261,7 +264,7 @@ export const WinrBonanzaTemplate = ({
 
             if (event.payoutMultiplier > 0) {
               const payout = toDecimals(
-                event.payoutMultiplier * (1 * event.betAmount),
+                event.payoutMultiplier * event.betAmount,
                 2
               );
 
@@ -294,6 +297,7 @@ export const WinrBonanzaTemplate = ({
       isDoubleChance,
       wonFreeSpins,
       previousFreeSpinCount,
+      currentAction,
     ]
   );
 
@@ -323,8 +327,6 @@ export const WinrBonanzaTemplate = ({
 
     try {
       await buyFreeSpins();
-
-      handleEnterFreespin();
     } catch (e: any) {
       setInitialBuyEvent(undefined);
       handleExitFreespin();
@@ -425,7 +427,7 @@ export const WinrBonanzaTemplate = ({
 
         console.log("WAGER", _wager);
 
-        const payout = toDecimals(gameEvent.payoutMultiplier * (1 * _wager), 2);
+        const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
         setCurrentPayoutAmount(payout);
       }
@@ -434,15 +436,30 @@ export const WinrBonanzaTemplate = ({
     }
 
     if (currentAction == "buyFeature" && gameEvent?.type == "Game") {
-      console.log("free spin event", gameEvent);
+      if (
+        !window.GetMessageFromUnity ||
+        typeof window.GetMessageFromUnity === "undefined" ||
+        typeof window.GetMessageFromUnity !== "function"
+      ) {
+        window.GetMessageFromUnity = handleMessageFromUnity;
+      }
 
+      console.log("buy feature event", gameEvent.grid);
       console.log("grid", JSON.stringify(gameEvent.grid).replace(/,/g, ", "));
 
-      setInitialBuyEvent(gameEvent);
+      sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
+
+      handleSendGrid(gameEvent.grid);
+
+      if (gameEvent.freeSpinsLeft > 0) {
+        setWonFreeSpins(true);
+      }
+
+      setFreeSpins(gameEvent.freeSpinsLeft);
     }
 
     if (currentAction == "freeSpin" && gameEvent?.type == "Game") {
-      const _betAmount = toDecimals(gameEvent.betAmount * 1, 2);
+      const _betAmount = toDecimals(gameEvent.betAmount, 2);
 
       if (
         !window.GetMessageFromUnity ||
@@ -470,7 +487,7 @@ export const WinrBonanzaTemplate = ({
 
       if (gameEvent.payoutMultiplier > 0) {
         const payout = toDecimals(
-          gameEvent.payoutMultiplier * (1 * gameEvent.betAmount),
+          gameEvent.payoutMultiplier * gameEvent.betAmount,
           2
         );
 
@@ -514,7 +531,7 @@ export const WinrBonanzaTemplate = ({
 
         console.log("WAGER", _wager);
 
-        const payout = toDecimals(gameEvent.payoutMultiplier * (1 * _wager), 2);
+        const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
         setCurrentPayoutAmount(payout);
       }
@@ -556,14 +573,14 @@ export const WinrBonanzaTemplate = ({
 
         console.log("WAGER", _wager);
 
-        const payout = toDecimals(gameEvent.payoutMultiplier * (1 * _wager), 2);
+        const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
         setCurrentPayoutAmount(payout);
       }
 
       onRefresh();
     }
-  }, [gameEvent, currentAction]);
+  }, [gameEvent]);
 
   React.useEffect(() => {
     // Check if GetMessageFromUnity is not already defined to avoid overwriting
@@ -594,7 +611,6 @@ export const WinrBonanzaTemplate = ({
   ]);
 
   React.useEffect(() => {
-    if (!handleEnterFreespin) return;
     if (!sendMessage) return;
     if (isInFreeSpinMode) return;
     if (!isLoggedIn) return;
@@ -611,7 +627,6 @@ export const WinrBonanzaTemplate = ({
     freeSpins,
     isLoggedIn,
     isInFreeSpinMode,
-    handleEnterFreespin,
     currentPayoutAmount,
     sendMessage,
     wonFreeSpins,
@@ -652,7 +667,8 @@ export const WinrBonanzaTemplate = ({
 
   React.useEffect(() => {
     onFormChange(debouncedFormFields[0]);
-  }, [debouncedFormFields]);
+    console.log(debouncedFormFields[0], "debounced fomr fields");
+  }, [debouncedFormFields[0]]);
 
   return (
     <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[672px]">
