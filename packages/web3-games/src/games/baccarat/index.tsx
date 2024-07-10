@@ -10,6 +10,7 @@ import {
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
   useTokenStore,
 } from "@winrlabs/web3";
@@ -50,6 +51,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
+  const { getPrice } = usePriceFeed();
 
   const [baccaratResults, setBaccaratResults] =
     useState<BaccaratGameResult | null>(null);
@@ -73,7 +75,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
         stopGain: 0,
         stopLoss: 0,
         selectedCurrency: selectedToken.address,
-        lastPrice: 1,
+        lastPrice: getPrice(selectedToken.address),
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -133,6 +135,7 @@ export default function BaccaratTemplateWithWeb3(props: TemplateWithWeb3Props) {
     formValues.playerWager,
     formValues.tieWager,
     formValues.wager,
+    selectedToken.address,
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({

@@ -104,9 +104,11 @@ export const WinrBonanzaTemplate = ({
   >();
 
   const currentBalanceInDollar = React.useMemo(
-    () => (account?.balance || 0) * 1,
+    () => account?.balance || 0,
     [account?.balance]
   );
+
+  React.useEffect(() => {}, []);
 
   const actualBetAmount = isDoubleChance
     ? betAmount + betAmount * 0.5
@@ -264,7 +266,7 @@ export const WinrBonanzaTemplate = ({
 
             if (event.payoutMultiplier > 0) {
               const payout = toDecimals(
-                event.payoutMultiplier * (1 * event.betAmount),
+                event.payoutMultiplier * event.betAmount,
                 2
               );
 
@@ -427,7 +429,7 @@ export const WinrBonanzaTemplate = ({
 
         console.log("WAGER", _wager);
 
-        const payout = toDecimals(gameEvent.payoutMultiplier * (1 * _wager), 2);
+        const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
         setCurrentPayoutAmount(payout);
       }
@@ -459,7 +461,7 @@ export const WinrBonanzaTemplate = ({
     }
 
     if (currentAction == "freeSpin" && gameEvent?.type == "Game") {
-      const _betAmount = toDecimals(gameEvent.betAmount * 1, 2);
+      const _betAmount = toDecimals(gameEvent.betAmount, 2);
 
       if (
         !window.GetMessageFromUnity ||
@@ -487,7 +489,7 @@ export const WinrBonanzaTemplate = ({
 
       if (gameEvent.payoutMultiplier > 0) {
         const payout = toDecimals(
-          gameEvent.payoutMultiplier * (1 * gameEvent.betAmount),
+          gameEvent.payoutMultiplier * gameEvent.betAmount,
           2
         );
 
@@ -531,7 +533,7 @@ export const WinrBonanzaTemplate = ({
 
         console.log("WAGER", _wager);
 
-        const payout = toDecimals(gameEvent.payoutMultiplier * (1 * _wager), 2);
+        const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
         setCurrentPayoutAmount(payout);
       }
@@ -573,7 +575,7 @@ export const WinrBonanzaTemplate = ({
 
         console.log("WAGER", _wager);
 
-        const payout = toDecimals(gameEvent.payoutMultiplier * (1 * _wager), 2);
+        const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
         setCurrentPayoutAmount(payout);
       }
@@ -667,7 +669,8 @@ export const WinrBonanzaTemplate = ({
 
   React.useEffect(() => {
     onFormChange(debouncedFormFields[0]);
-  }, [debouncedFormFields]);
+    console.log(debouncedFormFields[0], "debounced fomr fields");
+  }, [debouncedFormFields[0]]);
 
   return (
     <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[672px]">

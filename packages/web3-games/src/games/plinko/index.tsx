@@ -9,6 +9,7 @@ import {
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
   useTokenStore,
 } from "@winrlabs/web3";
@@ -60,6 +61,7 @@ export default function PlinkoTemplateWithWeb3(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
+  const { getPrice } = usePriceFeed();
 
   const [plinkoResult, setPlinkoResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent<number[]>>>();
@@ -90,7 +92,7 @@ export default function PlinkoTemplateWithWeb3(props: TemplateWithWeb3Props) {
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
         selectedCurrency: selectedToken.address,
-        lastPrice: 1,
+        lastPrice: getPrice(selectedToken.address),
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -143,6 +145,7 @@ export default function PlinkoTemplateWithWeb3(props: TemplateWithWeb3Props) {
     formValues.stopGain,
     formValues.stopLoss,
     formValues.wager,
+    selectedToken.address,
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({

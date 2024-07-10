@@ -10,6 +10,7 @@ import {
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
   useTokenStore,
 } from "@winrlabs/web3";
@@ -65,6 +66,7 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
+  const { getPrice } = usePriceFeed();
 
   const [diceResult, setDiceResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
@@ -95,7 +97,7 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
         selectedCurrency: selectedToken.address,
-        lastPrice: 1,
+        lastPrice: getPrice(selectedToken.address),
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -149,7 +151,7 @@ export default function DiceTemplateWithWeb3(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues]);
+  }, [formValues, selectedToken.address]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {

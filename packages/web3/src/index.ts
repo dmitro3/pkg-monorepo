@@ -7,6 +7,7 @@ export * from "./hooks/use-handle-tx";
 export * from "./hooks/use-token-balances";
 export * from "./hooks/use-smart-account-api";
 export * from "./hooks/use-token-allowance";
+export * from "./hooks/use-price-feed";
 export * from "./providers";
 export * from "./providers/token";
 export * from "./providers/balance";
