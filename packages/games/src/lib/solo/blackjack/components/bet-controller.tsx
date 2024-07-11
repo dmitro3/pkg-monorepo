@@ -1,4 +1,3 @@
-import { BlackjackGameStatus } from "..";
 import { ChipController } from "../../../common/chip-controller";
 import { Chip } from "../../../common/chip-controller/types";
 import { PreBetButton } from "../../../common/pre-bet-button";
@@ -7,6 +6,7 @@ import { CDN_URL } from "../../../constants";
 import { Button } from "../../../ui/button";
 import { NumberInput } from "../../../ui/number-input";
 import { cn } from "../../../utils/style";
+import { BlackjackGameStatus } from "..";
 
 interface BetControllerProps {
   wager: number;

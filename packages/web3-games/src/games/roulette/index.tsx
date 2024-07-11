@@ -9,18 +9,21 @@ import {
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
+  useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+
+import { useContractConfigContext } from "../hooks/use-contract-config";
+import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
   DecodedEvent,
   GAME_HUB_EVENT_TYPES,
-  SingleStepSettledEvent,
   prepareGameTransaction,
+  SingleStepSettledEvent,
 } from "../utils";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
 type TemplateOptions = {
   scene?: {
@@ -38,13 +41,12 @@ interface TemplateWithWeb3Props {
   onAnimationSkipped?: (result: RouletteGameResult[]) => void;
 }
 
-export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
+export default function RouletteGame(props: TemplateWithWeb3Props) {
   const {
     gameAddresses,
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
-    selectedTokenAddress,
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = useState<RouletteFormFields>({
@@ -56,6 +58,11 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
 
   const gameEvent = useListenGameEvent();
 
+  const { selectedToken } = useTokenStore((s) => ({
+    selectedToken: s.selectedToken,
+  }));
+  const { getPrice } = usePriceFeed();
+
   const [rouletteResult, setRouletteResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
@@ -64,7 +71,7 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress,
+    tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
@@ -85,8 +92,8 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
         wager: formValues.wager,
         stopGain: 0,
         stopLoss: 0,
-        selectedCurrency: selectedTokenAddress,
-        lastPrice: 1,
+        selectedCurrency: selectedToken.address,
+        lastPrice: getPrice(selectedToken.address),
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -121,7 +128,7 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.roulette as Address,
-        tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -133,7 +140,12 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.betCount, formValues.selectedNumbers, formValues.wager]);
+  }, [
+    formValues.betCount,
+    formValues.selectedNumbers,
+    formValues.wager,
+    selectedToken.address,
+  ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
@@ -141,7 +153,7 @@ export default function RouletteTemplateWithWeb3(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.roulette,
-        encodedParams.tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,

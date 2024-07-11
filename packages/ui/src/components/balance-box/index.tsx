@@ -1,8 +1,9 @@
 "use client";
 
-import { formatUnits } from "viem";
-import { useAppConfig } from "../../providers/app-config";
 import { useCurrentAccount, useTokenBalances } from "@winrlabs/web3";
+import { formatUnits } from "viem";
+
+import { useAppConfig } from "../../providers/app-config";
 
 export const BalanceBox = () => {
   // const {}
@@ -12,12 +13,11 @@ export const BalanceBox = () => {
     balancesToRead: appTokens.map((t) => t.tokenAddress),
     account: address || "0x0",
   });
-  console.log("balance", balance.data);
 
   return (
     <div>
       weth:{" "}
-      {formatUnits(balance.data?.[0]?.result || '0n', 18)?.toString() || "0"}
+      {formatUnits(balance.data?.[0]?.result || "0n", 18)?.toString() || "0"}
     </div>
   );
 };

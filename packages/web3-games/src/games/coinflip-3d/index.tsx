@@ -2,26 +2,29 @@
 
 import {
   COIN_SIDE,
-  CoinFlip3DTemplate,
   CoinFlip3dFormFields,
   CoinFlip3dGameResult,
+  CoinFlip3DTemplate,
 } from "@winrlabs/games";
 import {
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
+  useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+
+import { useContractConfigContext } from "../hooks/use-contract-config";
+import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
   DecodedEvent,
   GAME_HUB_EVENT_TYPES,
-  SingleStepSettledEvent,
   prepareGameTransaction,
+  SingleStepSettledEvent,
 } from "../utils";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
 type TemplateOptions = {
   scene?: {
@@ -42,15 +45,12 @@ interface TemplateWithWeb3Props {
   onAnimationCompleted?: (result: CoinFlip3dGameResult[]) => void;
 }
 
-export default function CoinFlip3DTemplateWithWeb3(
-  props: TemplateWithWeb3Props
-) {
+export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
   const {
     gameAddresses,
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
-    selectedTokenAddress,
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = useState<CoinFlip3dFormFields>({
@@ -63,6 +63,11 @@ export default function CoinFlip3DTemplateWithWeb3(
 
   const gameEvent = useListenGameEvent();
 
+  const { selectedToken } = useTokenStore((s) => ({
+    selectedToken: s.selectedToken,
+  }));
+  const { getPrice } = usePriceFeed();
+
   const [coinFlipResult, setCoinFlipResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
@@ -71,7 +76,7 @@ export default function CoinFlip3DTemplateWithWeb3(
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress,
+    tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
@@ -91,8 +96,8 @@ export default function CoinFlip3DTemplateWithWeb3(
         wager: formValues.wager,
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
-        selectedCurrency: selectedTokenAddress,
-        lastPrice: 1,
+        selectedCurrency: selectedToken.address,
+        lastPrice: getPrice(selectedToken.address),
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -127,7 +132,7 @@ export default function CoinFlip3DTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.coinFlip as Address,
-        tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -145,6 +150,7 @@ export default function CoinFlip3DTemplateWithWeb3(
     formValues.stopGain,
     formValues.stopLoss,
     formValues.wager,
+    selectedToken.address,
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
@@ -153,7 +159,7 @@ export default function CoinFlip3DTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.coinFlip as Address,
-        encodedParams.tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,
