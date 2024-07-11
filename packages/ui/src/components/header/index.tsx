@@ -1,15 +1,16 @@
 "use client";
 
-import { Config, useConfig, useConnectors, useDisconnect } from "wagmi";
+import { delay, useCurrentAccount } from "@winrlabs/web3";
+import { Config, useConnectors, useDisconnect } from "wagmi";
+
+import { useWagmiConfig } from "../../providers/wagmi-config";
 import { LogoMain, Wallet } from "../../svgs";
 import { cn } from "../../utils";
 import { Button } from "../button";
 import { Chat } from "../chat";
 import useModalsStore from "../modals/modals.store";
-import { delay, useCurrentAccount } from "@winrlabs/web3";
-import { useWagmiConfig } from "../../providers/wagmi-config";
-import { Spinner } from "../spinner";
 import { Skeleton } from "../skeleton";
+import { Spinner } from "../spinner";
 import { SelectGameCurrency } from "../wallet/token-dropdown";
 
 export interface HeaderProps {

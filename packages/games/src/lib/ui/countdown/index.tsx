@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useRef,useState } from "react";
+
 import styles from "./style.module.css";
 
 // Define a type for our context state

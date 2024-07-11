@@ -1,17 +1,16 @@
 import { GameProvider } from "@winrlabs/games";
+import {
+  useBalanceStore,
+  useCurrentAccount,
+  useTokenStore,
+} from "@winrlabs/web3";
+import { Config } from "wagmi";
+
 import { GameSocketProvider } from "../games/hooks";
 import {
   ContractConfig,
   ContractConfigProvider,
 } from "../games/hooks/use-contract-config";
-import { Config } from "wagmi";
-
-import {
-  Token,
-  useTokenStore,
-  useBalanceStore,
-  useCurrentAccount,
-} from "@winrlabs/web3";
 
 type WinrLabsWeb3GamesConfig = {
   wagmiConfig: Config;

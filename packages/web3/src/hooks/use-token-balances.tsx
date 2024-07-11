@@ -1,9 +1,10 @@
 import { useEffect, useMemo } from "react";
-import { erc20Abi } from "../abis";
-import { useReadContracts } from "wagmi";
-import { useTokenStore } from "../providers/token";
 import { Address, formatUnits } from "viem";
+import { useReadContracts } from "wagmi";
+
+import { erc20Abi } from "../abis";
 import { BalanceMap, useBalanceStore } from "../providers/balance";
+import { useTokenStore } from "../providers/token";
 import { toDecimals } from "../utils/number";
 
 const getContractsToRead = ({

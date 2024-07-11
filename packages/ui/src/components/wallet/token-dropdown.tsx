@@ -1,23 +1,22 @@
 "use client";
 
 import {
+  Token,
+  useBalanceStore,
+  useCurrentAccount,
+  useTokenBalances,
+  useTokenStore,
+} from "@winrlabs/web3";
+import Image from "next/image";
+import React from "react";
+
+import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
 } from "../select";
-import React from "react";
-
-import Image from "next/image";
-
-import {
-  useTokenStore,
-  Token,
-  useTokenBalances,
-  useCurrentAccount,
-  useBalanceStore,
-} from "@winrlabs/web3";
 
 const SelectCurrencyItem = ({
   balance,

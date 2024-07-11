@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { useTokenStore } from "../providers/token";
 import { Address } from "viem";
+
+import { useTokenStore } from "../providers/token";
 
 interface PriceFeed {
   [address: Address]: number;

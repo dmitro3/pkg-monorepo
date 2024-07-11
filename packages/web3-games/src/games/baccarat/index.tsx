@@ -16,13 +16,14 @@ import {
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+
+import { useContractConfigContext } from "../hooks/use-contract-config";
+import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
   BaccaratSettledEvent,
   GAME_HUB_EVENT_TYPES,
   prepareGameTransaction,
 } from "../utils";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
 
 interface TemplateWithWeb3Props {
   minWager?: number;

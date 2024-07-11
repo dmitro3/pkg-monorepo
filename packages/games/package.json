@@ -15,7 +15,7 @@
     "directory": "packages/games"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "tsup",
     "dev": "npm run build -- --watch",

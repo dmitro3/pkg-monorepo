@@ -1,10 +1,10 @@
+import TWEEN, { Easing } from "@tweenjs/tween.js";
+
 import {
   baseCdnUrl,
   effects,
   SoundEffects,
 } from "../../../../hooks/use-audio-effect";
-import TWEEN, { Easing } from "@tweenjs/tween.js";
-import { ANGLE_SCALE } from "../../constants";
 
 export declare type EasingFunction = (amount: number) => number;
 

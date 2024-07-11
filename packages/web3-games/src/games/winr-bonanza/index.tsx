@@ -5,17 +5,8 @@ import {
   WinrBonanzaFormFields,
   WinrBonanzaTemplate,
 } from "@winrlabs/games";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
-import {
-  DecodedEvent,
-  SingleStepSettledEvent,
-  prepareGameTransaction,
-} from "../utils";
-import React from "react";
-import { useContractConfigContext } from "../hooks/use-contract-config";
 import {
   controllerAbi,
-  useBalanceStore,
   useCurrentAccount,
   useHandleTx,
   usePriceFeed,
@@ -24,6 +15,7 @@ import {
   useTokenStore,
   winrBonanzaAbi,
 } from "@winrlabs/web3";
+import React from "react";
 import {
   Address,
   encodeAbiParameters,
@@ -31,6 +23,12 @@ import {
   formatUnits,
 } from "viem";
 import { useReadContract } from "wagmi";
+
+import { useContractConfigContext } from "../hooks/use-contract-config";
+import { useListenGameEvent } from "../hooks/use-listen-game-event";
+import {
+  prepareGameTransaction,
+} from "../utils";
 
 interface TemplateWithWeb3Props {
   buildedGameUrl: string;

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ANGLE_SCALE,
   CoinFlipGameResult,
   MultiplayerGameStatus,
   Multiplier,
@@ -19,9 +18,10 @@ import {
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
-import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
-import { useContractConfigContext } from "../hooks/use-contract-config";
+
 import { useListenMultiplayerGameEvent } from "../hooks";
+import { useContractConfigContext } from "../hooks/use-contract-config";
+import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
 
 type TemplateOptions = {
   scene?: {

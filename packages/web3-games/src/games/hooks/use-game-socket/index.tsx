@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
-import { Socket, io } from "socket.io-client";
 import { useCurrentAccount } from "@winrlabs/web3";
+import React from "react";
+import { io,Socket } from "socket.io-client";
 
 interface GameSocket {
   socket: Socket | null;

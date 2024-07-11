@@ -1,9 +1,9 @@
-import { defineConfig } from "tsup";
+import fsPromises from "fs/promises";
 // import esbuild from "esbuild";
 import path from "path";
 import postcss from "postcss";
 import postcssModules from "postcss-modules";
-import fsPromises from "fs/promises";
+import { defineConfig } from "tsup";
 
 // esbuild.build({
 //   plugins: [

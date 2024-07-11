@@ -1,11 +1,9 @@
 "use client";
 
-import { StoreApi, createStore, useStore } from "zustand";
-import { Address } from "viem";
-
-import { persist } from "zustand/middleware";
-
 import { createContext, useContext, useRef } from "react";
+import { Address } from "viem";
+import { createStore, StoreApi, useStore } from "zustand";
+import { persist } from "zustand/middleware";
 
 export interface Token {
   address: Address;

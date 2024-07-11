@@ -15,7 +15,7 @@ const project = resolve(process.cwd(), "tsconfig.json");
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   extends: ["eslint:recommended", "prettier", "eslint-config-turbo"],
-  plugins: ["only-warn", "eslint-plugin-unused-imports"],
+  plugins: ["only-warn", "eslint-plugin-unused-imports", "simple-import-sort"],
   globals: {
     JSX: true,
   },
@@ -41,7 +41,7 @@ module.exports = {
   ],
   rules: {
     "unused-imports/no-unused-imports": "error",
-    // "simple-import-sort/imports": "error",
-    // "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
   },
 };

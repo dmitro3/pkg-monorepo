@@ -1,6 +1,6 @@
-import { parseUnits } from "viem";
-import { Address, Hex } from "viem";
 import { BaccaratGameHand, toDecimals } from "@winrlabs/games";
+import { parseUnits } from "viem";
+import { Hex } from "viem";
 
 export enum GAME_HUB_GAMES {
   rps = "rps",

@@ -1,16 +1,17 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import debounce from "debounce";
+import React from "react";
 import { useForm } from "react-hook-form";
+import * as z from "zod";
+
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { Form } from "../../../ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { WheelColor } from "../constants";
 import { WheelFormFields } from "../types";
-import * as z from "zod";
-import React from "react";
-import debounce from "debounce";
 import BetController from "./bet-controller";
 import LastBets from "./last-bet";
-import { WheelScene } from "./wheel-scene";
 import WheelParticipants from "./wheel-participants";
+import { WheelScene } from "./wheel-scene";
 
 type TemplateOptions = {
   scene?: {

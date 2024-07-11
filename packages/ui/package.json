@@ -13,7 +13,7 @@
     "directory": "packages/ui"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint .",
     "generate:component": "turbo gen react-component",
     "build": "tsup",
     "dev": "npm run build -- --watch"

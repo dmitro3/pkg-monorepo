@@ -1,6 +1,7 @@
 import { Config } from "wagmi";
-import { WagmiConfigProvider } from "./wagmi-config";
+
 import { AppConfigProvider } from "./app-config";
+import { WagmiConfigProvider } from "./wagmi-config";
 
 export const AppUiProviders = ({
   children,

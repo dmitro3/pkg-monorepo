@@ -1,10 +1,10 @@
 "use client";
 
-import WheelParticipantDetail from "../wheel-participant-detail";
-import { Button } from "../../../../ui/button";
 import { AlignLeft } from "../../../../svgs";
+import { Button } from "../../../../ui/button";
 import { cn } from "../../../../utils/style";
 import { useWheelGameStore } from "../../store";
+import WheelParticipantDetail from "../wheel-participant-detail";
 
 const WheelParticipants = () => {
   const { isParticipantsOpen, setIsParticipantsOpen } = useWheelGameStore([

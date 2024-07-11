@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./wheel-scene.module.css";
-import WheelRotate from "./wheel-rotate";
+
+import { CDN_URL } from "../../../../constants";
+import { genNumberArray } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
 import { WheelColor } from "../../constants";
-import { genNumberArray } from "../../../../utils/number";
-import { CDN_URL } from "../../../../constants";
+import WheelRotate from "./wheel-rotate";
+import styles from "./wheel-scene.module.css";
 
 export interface WheelUnitProps {
   width: number;

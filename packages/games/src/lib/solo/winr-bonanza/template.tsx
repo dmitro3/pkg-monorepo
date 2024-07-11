@@ -1,20 +1,21 @@
 "use client";
 
+import React from "react";
 import { Unity } from "react-unity-webgl";
+import { useDebounce } from "use-debounce";
+
 import { UnityGameContainer } from "../../common/containers";
+import { useGameOptions } from "../../game-provider";
+import { wait } from "../../utils/promise";
+import { toDecimals, toFormatted } from "../../utils/web3";
 import { useUnityBonanza } from "./hooks/use-bonanza-unity";
 import { useBonanzaGameStore } from "./store";
-import React from "react";
 import {
   Bonanza_Unity_Events,
   ReelSpinSettled,
   SpinType,
   WinrBonanzaFormFields,
 } from "./types";
-import { toDecimals, toFormatted } from "../../utils/web3";
-import { wait } from "../../utils/promise";
-import { useDebounce } from "use-debounce";
-import { useGameOptions } from "../../game-provider";
 
 interface TemplateProps {
   onRefresh: () => void;

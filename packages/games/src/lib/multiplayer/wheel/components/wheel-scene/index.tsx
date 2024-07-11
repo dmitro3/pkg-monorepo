@@ -1,11 +1,10 @@
-import { useState } from "react";
-import { colorMultipliers, WheelUnits } from "../../constants";
-import styles from "./wheel-scene.module.css";
-import { cn } from "../../../../utils/style";
 import { CountdownProvider, Minutes, Seconds } from "../../../../ui/countdown";
-import { Wheel } from "./wheel";
-import { useWheelGameStore } from "../../store";
+import { cn } from "../../../../utils/style";
 import { MultiplayerGameStatus } from "../../../core/type";
+import { colorMultipliers, WheelUnits } from "../../constants";
+import { useWheelGameStore } from "../../store";
+import { Wheel } from "./wheel";
+import styles from "./wheel-scene.module.css";
 
 export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
   const {

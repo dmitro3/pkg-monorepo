@@ -1,9 +1,10 @@
-import { Multiplier } from "../../constants";
-import { cn } from "../../../../utils/style";
+import { useMemo } from "react";
+
 import { Avatar, Wheel } from "../../../../svgs";
 import { Separator } from "../../../../ui/separator";
+import { cn } from "../../../../utils/style";
+import { Multiplier } from "../../constants";
 import { useWheelGameStore } from "../../store";
-import { useMemo } from "react";
 
 const color = {
   gray: " wr-bg-[#ffffff15] ",
