@@ -544,6 +544,8 @@ export default function BlackjackTemplateWithWeb3(
     console.log(gameDataRead.data, "game data initial");
   }, [gameDataRead.data]);
 
+  const handleInitialData = () => {};
+
   const onRefresh = () => {
     props.onGameCompleted && props.onGameCompleted();
     updateBalances();
