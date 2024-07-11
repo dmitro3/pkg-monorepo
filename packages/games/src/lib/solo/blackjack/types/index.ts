@@ -77,6 +77,14 @@ export enum BlackjackHandStatus {
   BLACKJACK, // 5
 }
 
+export interface BlackjackFormFields {
+  wager: number;
+  firstHandWager: number;
+  secondHandWager: number;
+  thirdHandWager: number;
+  handIndex: number;
+}
+
 export interface BlackjackGameProps {
   activeGameData: GameStruct;
   activeGameHands: ActiveGameHands;
@@ -95,4 +103,5 @@ export interface BlackjackGameProps {
   onDoubleDown: (handIndex: number) => void;
   onInsure: (handIndex: number) => void;
   onStand: (handIndex: number) => void;
+  onFormChange?: (f: BlackjackFormFields) => void;
 }

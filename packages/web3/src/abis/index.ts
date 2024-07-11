@@ -4,3 +4,4 @@ export { default as errorFactoryAbi } from "./errors-factory";
 export { default as minesAbi } from "./mines";
 export { default as videoPokerAbi } from "./video-poker";
 export { default as winrBonanzaAbi } from "./winr-bonanza";
+export { default as blackjackReaderAbi } from "./blackjack-reader";

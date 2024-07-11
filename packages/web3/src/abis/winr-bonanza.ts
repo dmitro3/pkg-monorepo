@@ -242,7 +242,7 @@ export default [
       },
       {
         internalType: "address",
-        name: "token",
+        name: "bankroll",
         type: "address",
       },
       {
@@ -347,7 +347,7 @@ export default [
       },
       {
         internalType: "address",
-        name: "token",
+        name: "bankroll",
         type: "address",
       },
       {
@@ -935,52 +935,6 @@ export default [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "client",
-        type: "address",
-      },
-    ],
-    name: "getGame",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "uint8",
-            name: "freeSpinCount",
-            type: "uint8",
-          },
-          {
-            internalType: "uint128",
-            name: "wager",
-            type: "uint128",
-          },
-          {
-            internalType: "uint32",
-            name: "bufferedFreeSpinWinnings",
-            type: "uint32",
-          },
-          {
-            internalType: "enum IWinrBonanza.SpinType",
-            name: "spinType",
-            type: "uint8",
-          },
-          {
-            internalType: "enum IWinrBonanza.State",
-            name: "state",
-            type: "uint8",
-          },
-        ],
-        internalType: "struct IWinrBonanza.Game",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "getInitialFreeSpinWeights",
     outputs: [
@@ -1074,6 +1028,52 @@ export default [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "client",
+        type: "address",
+      },
+    ],
+    name: "getPlayerStatus",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "freeSpinCount",
+            type: "uint8",
+          },
+          {
+            internalType: "uint128",
+            name: "wager",
+            type: "uint128",
+          },
+          {
+            internalType: "uint32",
+            name: "bufferedFreeSpinWinnings",
+            type: "uint32",
+          },
+          {
+            internalType: "enum IWinrBonanza.SpinType",
+            name: "spinType",
+            type: "uint8",
+          },
+          {
+            internalType: "enum IWinrBonanza.State",
+            name: "state",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct IWinrBonanza.Game",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint16",
         name: "symbol",
         type: "uint16",
@@ -1122,11 +1122,6 @@ export default [
         internalType: "enum IWinrBonanza.SpinType",
         name: "spinType",
         type: "uint8",
-      },
-      {
-        internalType: "uint16",
-        name: "freeSpinCount",
-        type: "uint16",
       },
     ],
     name: "getWeights",

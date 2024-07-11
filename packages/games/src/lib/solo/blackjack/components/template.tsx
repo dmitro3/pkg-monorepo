@@ -20,6 +20,7 @@ import { BlackjackCard, distributeNewCards, getBlackjackSuit } from "../utils";
 import { BetArea } from "./bet-area";
 import { BetController } from "./bet-controller";
 import { CardArea } from "./card-area";
+import { useDebounce } from "use-debounce";
 import { DealerCardArea } from "./dealer-card-area";
 import { MoveController } from "./move-controller";
 import { SplittedCardArea } from "./splitted-card-area";
@@ -42,6 +43,8 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
   activeGameHands,
   isControllerDisabled = false,
   initialDataFetched,
+  minWager,
+  maxWager,
 
   onGameCompleted,
   onDeal,
@@ -51,7 +54,9 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
   onDoubleDown,
   onInsure,
   onStand,
+  onFormChange,
 }) => {
+  const [wager, setWager] = React.useState<number>(minWager || 1);
   const [selectedChip, setSelectedChip] = React.useState<Chip>(Chip.ONE);
 
   const [firstHandWager, setFirstHandWager] = React.useState<number>(0);
@@ -653,6 +658,29 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     if (isLastDistributionCompleted) onGameCompleted();
   }, [isLastDistributionCompleted]);
 
+  const formFields = React.useMemo(
+    () => ({
+      wager,
+      firstHandWager,
+      secondHandWager,
+      thirdHandWager,
+      handIndex: activeGameData.activeHandIndex,
+    }),
+    [
+      wager,
+      firstHandWager,
+      secondHandWager,
+      thirdHandWager,
+      activeGameData.activeHandIndex,
+    ]
+  );
+
+  const debouncedFormFields = useDebounce(formFields, 400);
+
+  React.useEffect(() => {
+    onFormChange && onFormChange(debouncedFormFields[0]);
+  }, [debouncedFormFields[0]]);
+
   return (
     <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0 wr-max-w-[1140px]">
       <SceneContainer
@@ -872,6 +900,10 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
             )}
 
           <BetController
+            wager={wager}
+            onWagerChange={setWager}
+            maxWager={maxWager}
+            minWager={minWager}
             totalWager={totalWager}
             selectedChip={selectedChip}
             onSelectedChipChange={setSelectedChip}
