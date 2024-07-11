@@ -679,7 +679,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
   React.useEffect(() => {
     onFormChange && onFormChange(debouncedFormFields[0]);
-  }, [debouncedFormFields]);
+  }, [debouncedFormFields[0]]);
 
   return (
     <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0 wr-max-w-[1140px]">

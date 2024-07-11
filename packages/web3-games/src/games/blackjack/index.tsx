@@ -143,11 +143,11 @@ export default function BlackjackTemplateWithWeb3(
 
     const betAmounts: any = [0, 0, 0];
 
-    if (firstHandWager > 0) betAmounts.push(firstHandWager);
+    if (firstHandWager > 0) betAmounts[0] = firstHandWager;
 
-    if (secondHandWager > 0) betAmounts.push(secondHandWager);
+    if (secondHandWager > 0) betAmounts[1] = secondHandWager;
 
-    if (thirdHandWager > 0) betAmounts.push(thirdHandWager);
+    if (thirdHandWager > 0) betAmounts[2] = thirdHandWager;
 
     const amountHands = betAmounts.length;
 
