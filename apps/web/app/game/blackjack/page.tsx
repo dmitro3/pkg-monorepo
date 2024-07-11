@@ -6,6 +6,7 @@ import {
   BlackjackTemplate,
   GameStruct,
 } from "@winrlabs/games";
+import { BlackjackGame } from "@winrlabs/web3-games";
 import React, { useState } from "react";
 
 const defaultActiveGameHands = {
@@ -134,36 +135,21 @@ const mockGameData = {
 };
 
 export default function BlackjackPage() {
-  const [activeGameData, setActiveGameData] =
-    React.useState<GameStruct>(defaultGameData);
-  const [activeGameHands, setActiveGameHands] = React.useState<ActiveGameHands>(
-    defaultActiveGameHands
-  );
-  const [initialDataFetched, setInitialDataFetched] = React.useState(false);
+  // const [activeGameData, setActiveGameData] =
+  //   React.useState<GameStruct>(defaultGameData);
+  // const [activeGameHands, setActiveGameHands] = React.useState<ActiveGameHands>(
+  //   defaultActiveGameHands
+  // );
+  // const [initialDataFetched, setInitialDataFetched] = React.useState(false);
 
-  React.useEffect(() => {
-    setTimeout(() => {
-      setActiveGameData(mockGameData);
-      setActiveGameHands(mockActiveGameHands);
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     setActiveGameData(mockGameData);
+  //     setActiveGameHands(mockActiveGameHands);
 
-      setInitialDataFetched(true);
-      setTimeout(() => setInitialDataFetched(false), 500);
-    }, 2000);
-  }, []);
-  return (
-    <BlackjackTemplate
-      activeGameData={activeGameData}
-      activeGameHands={activeGameHands}
-      onReset={() => {}}
-      onDeal={() => {}}
-      onDoubleDown={() => {}}
-      onHit={() => {}}
-      onInsure={() => {}}
-      onSplit={() => {}}
-      onStand={() => {}}
-      onGameCompleted={() => {}}
-      initialDataFetched={initialDataFetched}
-      options={{}}
-    />
-  );
+  //     setInitialDataFetched(true);
+  //     setTimeout(() => setInitialDataFetched(false), 500);
+  //   }, 2000);
+  // }, []);
+  return <BlackjackGame minWager={0.1} maxWager={2000} options={{}} />;
 }

@@ -369,6 +369,19 @@ export default [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getPayouts",
+    outputs: [
+      {
+        internalType: "uint8[9]",
+        name: "payouts_",
+        type: "uint8[9]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -376,7 +389,7 @@ export default [
         type: "address",
       },
     ],
-    name: "getGame",
+    name: "getPlayerStatus",
     outputs: [
       {
         components: [
@@ -404,19 +417,6 @@ export default [
         internalType: "struct VideoPoker.Game",
         name: "",
         type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getPayouts",
-    outputs: [
-      {
-        internalType: "uint8[9]",
-        name: "payouts_",
-        type: "uint8[9]",
       },
     ],
     stateMutability: "view",
@@ -489,7 +489,7 @@ export default [
       },
       {
         internalType: "address",
-        name: "token",
+        name: "bankroll",
         type: "address",
       },
       {

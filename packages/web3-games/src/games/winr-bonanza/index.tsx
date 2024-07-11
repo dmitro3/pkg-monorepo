@@ -26,9 +26,7 @@ import { useReadContract } from "wagmi";
 
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
-import {
-  prepareGameTransaction,
-} from "../utils";
+import { prepareGameTransaction } from "../utils";
 
 interface TemplateWithWeb3Props {
   buildedGameUrl: string;
@@ -287,7 +285,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     config: wagmiConfig,
     abi: winrBonanzaAbi,
     address: gameAddresses.winrBonanza as `0x${string}`,
-    functionName: "getGame",
+    functionName: "getPlayerStatus",
     args: [currentAccount.address || "0x0000000"],
     query: {
       enabled: !!currentAccount.address,

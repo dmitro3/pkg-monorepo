@@ -10,13 +10,18 @@ import {
 } from "@winrlabs/games";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import {
+  blackjackReaderAbi,
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
+  useTokenBalances,
+  useTokenStore,
 } from "@winrlabs/web3";
 import { prepareGameTransaction } from "../utils";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+import { useReadContract } from "wagmi";
 
 type TemplateOptions = {
   scene?: {
@@ -28,7 +33,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onGameCompleted: () => void;
+  onGameCompleted?: () => void;
 }
 
 const defaultActiveGameHands = {
@@ -76,8 +81,14 @@ export default function BlackjackTemplateWithWeb3(
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
-    selectedTokenAddress,
+    wagmiConfig,
   } = useContractConfigContext();
+
+  const { selectedToken } = useTokenStore((s) => ({
+    selectedToken: s.selectedToken,
+  }));
+
+  const { getPrice } = usePriceFeed();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState<BlackjackFormFields>({
@@ -110,24 +121,27 @@ export default function BlackjackTemplateWithWeb3(
 
   // TRANSACTIONS
   const currentAccount = useCurrentAccount();
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
   const allowance = useTokenAllowance({
     amountToApprove: 999,
     owner: currentAccount.address || "0x0000000",
     spender: cashierAddress,
-    tokenAddress: selectedTokenAddress,
+    tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
   const encodedBetParams = React.useMemo(() => {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
-      selectedCurrency: selectedTokenAddress,
-      lastPrice: 1,
+      selectedCurrency: selectedToken.address,
+      lastPrice: getPrice(selectedToken.address),
     });
 
     const { firstHandWager, secondHandWager, thirdHandWager } = formValues;
 
-    const betAmounts: any = [];
+    const betAmounts: any = [0, 0, 0];
 
     if (firstHandWager > 0) betAmounts.push(firstHandWager);
 
@@ -151,7 +165,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -168,13 +182,14 @@ export default function BlackjackTemplateWithWeb3(
     formValues.secondHandWager,
     formValues.thirdHandWager,
     formValues.wager,
+    selectedToken.address,
   ]);
 
   const encodedHitParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
-      selectedCurrency: selectedTokenAddress,
-      lastPrice: 1,
+      selectedCurrency: selectedToken.address,
+      lastPrice: getPrice(selectedToken.address),
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -187,7 +202,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "hitAnotherCard",
         encodedGameData,
@@ -199,13 +214,13 @@ export default function BlackjackTemplateWithWeb3(
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.handIndex]);
+  }, [formValues.handIndex, selectedToken.address]);
 
   const encodedStandParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
-      selectedCurrency: selectedTokenAddress,
-      lastPrice: 1,
+      selectedCurrency: selectedToken.address,
+      lastPrice: getPrice(selectedToken.address),
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -218,7 +233,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "standOff",
         encodedGameData,
@@ -230,13 +245,13 @@ export default function BlackjackTemplateWithWeb3(
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.handIndex]);
+  }, [formValues.handIndex, selectedToken.address]);
 
   const encodedDoubleParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
-      selectedCurrency: selectedTokenAddress,
-      lastPrice: 1,
+      selectedCurrency: selectedToken.address,
+      lastPrice: getPrice(selectedToken.address),
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -249,7 +264,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "doubleDown",
         encodedGameData,
@@ -261,13 +276,13 @@ export default function BlackjackTemplateWithWeb3(
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.handIndex]);
+  }, [formValues.handIndex, selectedToken.address]);
 
   const encodedSplitParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
-      selectedCurrency: selectedTokenAddress,
-      lastPrice: 1,
+      selectedCurrency: selectedToken.address,
+      lastPrice: getPrice(selectedToken.address),
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -280,7 +295,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "splitHand",
         encodedGameData,
@@ -292,13 +307,13 @@ export default function BlackjackTemplateWithWeb3(
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.handIndex]);
+  }, [formValues.handIndex, selectedToken.address]);
 
   const encodedBuyInsuranceParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
-      selectedCurrency: selectedTokenAddress,
-      lastPrice: 1,
+      selectedCurrency: selectedToken.address,
+      lastPrice: getPrice(selectedToken.address),
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -311,7 +326,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "buyInsurance",
         encodedGameData,
@@ -323,7 +338,7 @@ export default function BlackjackTemplateWithWeb3(
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.handIndex]);
+  }, [formValues.handIndex, selectedToken.address]);
 
   const handleBetTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
@@ -331,7 +346,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        encodedBetParams.tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "bet",
         encodedBetParams.encodedGameData,
@@ -348,7 +363,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        encodedHitParams.tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "hitAnotherCard",
         encodedHitParams.encodedGameData,
@@ -365,7 +380,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        encodedStandParams.tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "standOff",
         encodedStandParams.encodedGameData,
@@ -382,7 +397,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        encodedDoubleParams.tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "doubleDown",
         encodedDoubleParams.encodedGameData,
@@ -399,7 +414,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        encodedSplitParams.tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "splitHand",
         encodedSplitParams.encodedGameData,
@@ -416,7 +431,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        encodedBuyInsuranceParams.tokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "buyInsurance",
         encodedBuyInsuranceParams.encodedGameData,
@@ -514,6 +529,26 @@ export default function BlackjackTemplateWithWeb3(
     }
   };
 
+  const gameDataRead = useReadContract({
+    config: wagmiConfig,
+    abi: blackjackReaderAbi,
+    address: gameAddresses.blackjackReader,
+    functionName: "getPlayerStatus",
+    args: [currentAccount.address || "0x0000000"],
+    query: {
+      enabled: !!currentAccount.address,
+    },
+  });
+
+  React.useEffect(() => {
+    console.log(gameDataRead.data, "game data initial");
+  }, [gameDataRead.data]);
+
+  const onRefresh = () => {
+    props.onGameCompleted && props.onGameCompleted();
+    updateBalances();
+  };
+
   return (
     <BlackjackTemplate
       activeGameData={activeGameData}
@@ -522,7 +557,7 @@ export default function BlackjackTemplateWithWeb3(
       minWager={props.minWager}
       maxWager={props.maxWager}
       onFormChange={(v) => setFormValues(v)}
-      onGameCompleted={props.onGameCompleted}
+      onGameCompleted={onRefresh}
       isControllerDisabled={isLoading}
       onDeal={handleStart}
       onHit={handleHit}

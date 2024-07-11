@@ -39,6 +39,7 @@ export const gameAddresses = {
   winrBonanza: process.env.NEXT_PUBLIC_WINR_BONANZA_ADDRESS as Address,
   videoPoker: process.env.NEXT_PUBLIC_VIDEO_POKER_ADDRESS as Address,
   blackjack: process.env.NEXT_PUBLIC_BLACKJACK_ADDRESS as Address,
+  blackjackReader: process.env.NEXT_PUBLIC_BLACKJACK_READER_ADDRESS as Address,
 };
 
 export function Providers(props: { children: ReactNode }) {
