@@ -260,8 +260,6 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       winnerColor: result as unknown as WheelColor,
     });
 
-    console.log("MULTIPLAYER game status", status);
-
     if (participants?.length > 0 && isGameActive) {
       participants.forEach((p) => {
         if (p.player === currentAccount.address) {
