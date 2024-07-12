@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ANGLE_SCALE,
   CoinFlipGameResult,
   MultiplayerGameStatus,
   Multiplier,
@@ -237,6 +238,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       bet,
       participants,
       isGameActive,
+      angle,
     } = gameEvent;
 
     const isGameFinished =
@@ -258,6 +260,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       joiningStart,
       cooldownFinish,
       winnerColor: result as unknown as WheelColor,
+      winnerAngle: Number(angle) / 100000 / ANGLE_SCALE,
     });
 
     if (participants?.length > 0 && isGameActive) {
@@ -286,7 +289,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
         bet: bet.converted.wager,
       });
     }
-  }, [gameEvent]);
+  }, [gameEvent, currentAccount.address]);
 
   return (
     <WheelTemplate

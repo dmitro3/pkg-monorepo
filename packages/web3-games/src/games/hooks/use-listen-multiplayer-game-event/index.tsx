@@ -29,6 +29,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     bet: BetProgram | undefined;
     player: any;
     isGameActive: boolean;
+    angle: number;
   }>({
     joiningStart: 0,
     joiningFinish: 0,
@@ -39,6 +40,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     bet: undefined,
     player: {},
     isGameActive: false,
+    angle: 0,
   });
 
   React.useEffect(() => {
@@ -79,7 +81,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     if (!socket) return;
 
     socket.on("message", onGameEvent);
-    socket.on("connect_info", onConnectEvent);
+    // socket.on("connect_info", onConnectEvent);
 
     socket.onAny((e) => {
       console.log("MULTIPLAYER ANY EVENT", e);
@@ -87,18 +89,16 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
 
     return () => {
       socket.off("message", onGameEvent);
-      socket.off("connect_info", onConnectEvent);
+      // socket.off("connect_info", onConnectEvent);
     };
   }, [socket]);
-
-  const onConnectEvent = (e: string) => {
-    const _e = SuperJSON.parse(e) as Event;
-  };
 
   const onGameEvent = (e: string) => {
     const _e = SuperJSON.parse(e) as MultiplayerGameMessage &
       MultiplayerUpdateMessage;
     const isGameActive = _e?.is_active;
+
+    console.log("onGameEvent", _e);
 
     if (isGameActive) {
       setGameState((prev) => ({
@@ -112,7 +112,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
       return;
     }
 
-    if (!_e.context) return;
+    if (!_e?.context) return;
 
     // TODO: fix types here
     const gameProgram = _e?.context?.program.find((p) => p.type == "Game")
@@ -145,6 +145,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
       player: session.player,
       bet: bet,
       participants: [],
+      angle: gameProgram?.angle || 0,
     }));
   };
 

@@ -66,7 +66,6 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
             </div>
           )}
         </div>
-        {winnerAngle}
         <Wheel
           units={WheelUnits}
           spin={status === MultiplayerGameStatus.Finish}

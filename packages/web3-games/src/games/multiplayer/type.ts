@@ -10,6 +10,7 @@ export interface GameProgram {
   joinningFinish: number;
   joinningStart: number;
   result: number;
+  angle?: number;
 }
 
 export interface BetProgram {

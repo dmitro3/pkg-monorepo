@@ -176,6 +176,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
               (timeLeft > 0 &&
                 status === MultiplayerGameStatus.Wait &&
                 isGamblerParticipant) ||
+              isGamblerParticipant ||
               (timeLeft > 0 && status === MultiplayerGameStatus.Finish) ||
               chosenColor === WheelColor.IDLE
             }
