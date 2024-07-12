@@ -26,7 +26,6 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
 
   return (
     <div className={styles.container}>
-      {status}
       <div className={styles.wheelContent}>
         <div className={styles.status}>
           {status === MultiplayerGameStatus.None && (

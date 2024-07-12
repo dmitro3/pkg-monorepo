@@ -1,6 +1,6 @@
 import { useCurrentAccount } from "@winrlabs/web3";
 import React, { useState } from "react";
-import { io,Socket } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import SuperJSON from "superjson";
 
 import {
@@ -8,6 +8,7 @@ import {
   GameProgram,
   MultiplayerGameMessage,
   MultiplayerUpdateMessage,
+  Participant,
   RandomsContext,
   SessionContext,
 } from "../../multiplayer/type";
@@ -22,11 +23,12 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     joiningStart: number;
     joiningFinish: number;
     cooldownFinish: number;
-    randoms: bigint;
-    participants: [];
+    randoms: bigint | undefined;
+    participants: Participant[];
     result: number;
     bet: BetProgram | undefined;
     player: any;
+    isGameActive: boolean;
   }>({
     joiningStart: 0,
     joiningFinish: 0,
@@ -36,6 +38,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     result: 0,
     bet: undefined,
     player: {},
+    isGameActive: false,
   });
 
   React.useEffect(() => {
@@ -89,28 +92,30 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
   }, [socket]);
 
   const onConnectEvent = (e: string) => {
-    // const _e = SuperJSON.parse(e) as Event;
-    // console.log("MULTIPLAYER CONkNECT EVENT", _e);
-    // if (!_e?.context) return;
+    const _e = SuperJSON.parse(e) as Event;
   };
 
   const onGameEvent = (e: string) => {
     const _e = SuperJSON.parse(e) as MultiplayerGameMessage &
       MultiplayerUpdateMessage;
-    console.log("MULTIPLAYER", _e);
+    const isGameActive = _e?.is_active;
 
-    if (_e.is_active) {
+    if (isGameActive) {
       setGameState((prev) => ({
         ...prev,
         joiningFinish: _e?.result.joiningFinish,
         cooldownFinish: _e?.result.cooldownFinish,
         joiningStart: _e?.result.joiningStart,
+        participants: _e.participants,
+        isGameActive: true,
       }));
       return;
     }
 
+    if (!_e.context) return;
+
     // TODO: fix types here
-    const gameProgram = _e.context?.program.find((p) => p.type == "Game")
+    const gameProgram = _e?.context?.program.find((p) => p.type == "Game")
       ?.data as GameProgram;
     const randoms = _e.context?.context.find((c) => c.type == "Randoms")
       ?.data as RandomsContext;
@@ -136,7 +141,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
       joiningFinish,
       joiningStart,
       result: result,
-      randoms: randoms[0]!,
+      randoms: randoms?.length > 0 ? randoms[0]! : undefined,
       player: session.player,
       bet: bet,
       participants: [],
