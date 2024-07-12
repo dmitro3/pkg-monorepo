@@ -541,10 +541,19 @@ export default function BlackjackTemplateWithWeb3(
   });
 
   React.useEffect(() => {
-    console.log(gameDataRead.data, "game data initial");
-  }, [gameDataRead.data]);
+    if (!gameDataRead.data) return;
 
-  const handleInitialData = () => {};
+    const { activeHandIndex, status, canInsure } = gameDataRead.data.game;
+
+    if (!activeHandIndex) return;
+
+    setActiveGameData({
+      activeHandIndex:
+        status === BlackjackGameStatus.FINISHED ? 0 : Number(activeHandIndex),
+      canInsure: canInsure,
+      status: status,
+    });
+  }, [gameDataRead.data]);
 
   const onRefresh = () => {
     props.onGameCompleted && props.onGameCompleted();
