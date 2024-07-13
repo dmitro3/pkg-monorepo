@@ -12,7 +12,8 @@
     "tailwind.config.ts",
     "postcss.config.js",
     "jest.config.cjs",
-    "tsup.config.ts"
+    "tsup.config.ts",
+    "openapi-codegen.config.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }
