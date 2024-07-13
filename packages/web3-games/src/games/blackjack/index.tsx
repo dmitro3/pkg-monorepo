@@ -542,8 +542,8 @@ export default function BlackjackTemplateWithWeb3(
 
   React.useEffect(() => {
     if (!gameDataRead.data) return;
-
-    const { activeHandIndex, status, canInsure } = gameDataRead.data.game;
+    const { game, hands } = gameDataRead.data;
+    const { activeHandIndex, status, canInsure } = game;
 
     if (!activeHandIndex) return;
 
@@ -553,6 +553,9 @@ export default function BlackjackTemplateWithWeb3(
       canInsure: canInsure,
       status: status,
     });
+
+    console.log(hands, "hands");
+    // const _hands = hands.sort((a, b) => Number(a.handId) - Number(b.handId));
   }, [gameDataRead.data]);
 
   const onRefresh = () => {
