@@ -64,7 +64,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
 
   const [formValues, setFormValues] = useState<WheelFormFields>({
     color: WheelColor.IDLE,
-    wager: 1,
+    wager: props?.minWager || 2,
   });
 
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.wheel);
