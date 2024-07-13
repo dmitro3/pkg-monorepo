@@ -110,5 +110,6 @@ const resolveUrl = (
 ) => {
   let query = new URLSearchParams(queryParams).toString();
   if (query) query = `?${query}`;
+  // @ts-ignore
   return url.replace(/\{\w*\}/g, (key) => pathParams[key.slice(1, -1)]) + query;
 };
