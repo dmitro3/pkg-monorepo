@@ -123,7 +123,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
         gameAddresses.wheel,
         encodedParams.tokenAddress,
         uiOperatorAddress as Address,
-        "claim",
+        "bet",
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -209,15 +209,20 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       if (!handledAllowance) return;
     }
 
+    console.log("CLAIM TX!");
     try {
       await handleClaimTx.mutateAsync();
     } catch (error) {}
+
+    console.log("cLAIM TX SUCCESS, TRYING BET TX");
 
     try {
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
     }
+
+    console.log("BET TX COMPLETED");
 
     setIsGamblerParticipant(true);
   };
