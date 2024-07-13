@@ -574,10 +574,10 @@ importers:
         specifier: ^2.10.2
         version: 2.10.4(@types/react@18.3.1)(react@18.3.1)(typescript@5.4.5)(viem@2.10.2)(zod@3.23.7)
       '@winrlabs/games':
-        specifier: ^2.8.54
+        specifier: workspace:*
         version: link:../games
       '@winrlabs/web3':
-        specifier: ^0.0.12
+        specifier: workspace:*
         version: link:../web3
       '@winrlabs/web3-games':
         specifier: workspace:*
