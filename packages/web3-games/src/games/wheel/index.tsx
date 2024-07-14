@@ -1,5 +1,6 @@
 "use client";
 
+import { useGameControllerBetHistory } from "@winrlabs/api";
 import {
   ANGLE_SCALE,
   CoinFlipGameResult,
@@ -18,7 +19,6 @@ import {
   useTokenAllowance,
   useTokenStore,
 } from "@winrlabs/web3";
-import { useGameControllerBetHistory } from "@winrlabs/web3/api";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Address,

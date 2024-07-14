@@ -44,7 +44,7 @@ export default defineConfig({
       source: "url",
       url: "https://gateway-dev.winr.games/docs.json",
     },
-    outputDir: "./src/__generated__/",
+    outputDir: "./src/",
     to: async (context) => {
       const filenamePrefix = "api";
       const { schemasFiles } = await generateSchemaTypes(context, {

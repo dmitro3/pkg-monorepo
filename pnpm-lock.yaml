@@ -137,6 +137,46 @@ importers:
         specifier: ^5.3.3
         version: 5.4.5
 
+  packages/api:
+    dependencies:
+      '@openapi-codegen/cli':
+        specifier: ^2.0.2
+        version: 2.0.2(@types/react@18.3.1)(react@18.3.1)
+      '@openapi-codegen/typescript':
+        specifier: ^8.0.2
+        version: 8.0.2
+      '@tanstack/react-query':
+        specifier: ^5.24.1
+        version: 5.35.1(react@18.3.1)
+      '@types/node':
+        specifier: ^20.10.6
+        version: 20.12.10
+      '@types/react':
+        specifier: ^18.2.46
+        version: 18.3.1
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+    devDependencies:
+      '@winrlabs/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@winrlabs/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      eslint:
+        specifier: ^8.56.0
+        version: 8.57.0
+      eslint-plugin-unused-imports:
+        specifier: ^4.0.0
+        version: 4.0.0(eslint@8.57.0)
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(ts-node@10.9.2)(typescript@5.4.5)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.4.5
+
   packages/eslint-config:
     devDependencies:
       '@typescript-eslint/eslint-plugin':
@@ -485,12 +525,6 @@ importers:
 
   packages/web3:
     dependencies:
-      '@openapi-codegen/cli':
-        specifier: ^2.0.2
-        version: 2.0.2(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
-      '@openapi-codegen/typescript':
-        specifier: ^8.0.2
-        version: 8.0.2
       '@tanstack/react-query':
         specifier: ^5.24.1
         version: 5.35.1(react@18.3.1)
@@ -579,6 +613,9 @@ importers:
       '@wagmi/core':
         specifier: ^2.10.2
         version: 2.10.4(@types/react@18.3.1)(react@18.3.1)(typescript@5.4.5)(viem@2.10.2)(zod@3.23.7)
+      '@winrlabs/api':
+        specifier: workspace:*
+        version: link:../api
       '@winrlabs/games':
         specifier: workspace:*
         version: link:../games
@@ -706,7 +743,7 @@ packages:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  /@apollo/client@3.10.8(@types/react@18.3.1)(graphql@15.9.0)(react-dom@18.3.1)(react@18.3.1):
+  /@apollo/client@3.10.8(@types/react@18.3.1)(graphql@15.9.0)(react@18.3.1):
     resolution: {integrity: sha512-UaaFEitRrPRWV836wY2L7bd3HRCfbMie1jlYMcmazFAK23MVhz/Uq7VG1nwbotPb5xzFsw5RF4Wnp2G3dWPM3g==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
@@ -734,7 +771,6 @@ packages:
       optimism: 0.18.0
       prop-types: 15.8.1
       react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
       rehackt: 0.1.0(@types/react@18.3.1)(react@18.3.1)
       response-iterator: 0.2.6
       symbol-observable: 4.0.0
@@ -3896,11 +3932,11 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  /@openapi-codegen/cli@2.0.2(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1):
+  /@openapi-codegen/cli@2.0.2(@types/react@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-uBk6yOBSBIgGWA2ok/IjBS03UwVAIpnan0lKz2sk3tsSe8rVIjOnQPxGYvSuByfxzdIu+nrPom2meqtcjlMvDQ==}
     hasBin: true
     dependencies:
-      '@apollo/client': 3.10.8(@types/react@18.3.1)(graphql@15.9.0)(react-dom@18.3.1)(react@18.3.1)
+      '@apollo/client': 3.10.8(@types/react@18.3.1)(graphql@15.9.0)(react@18.3.1)
       '@swc/core': 1.6.13
       case: 1.6.3
       chalk: 5.3.0
