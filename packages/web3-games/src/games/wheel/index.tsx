@@ -1,9 +1,11 @@
 "use client";
 
 import {
+  ANGLE_SCALE,
   CoinFlipGameResult,
   MultiplayerGameStatus,
   Multiplier,
+  participantMapWithStore,
   useWheelGameStore,
   WheelColor,
   WheelFormFields,
@@ -17,7 +19,13 @@ import {
   useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
-import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+import {
+  Address,
+  encodeAbiParameters,
+  encodeFunctionData,
+  formatUnits,
+  fromHex,
+} from "viem";
 
 import { useListenMultiplayerGameEvent } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
@@ -56,7 +64,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
 
   const [formValues, setFormValues] = useState<WheelFormFields>({
     color: WheelColor.IDLE,
-    wager: 1,
+    wager: props?.minWager || 2,
   });
 
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.wheel);
@@ -76,7 +84,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       wager: formValues.wager,
       stopGain: 0,
       stopLoss: 0,
-      selectedCurrency: selectedTokenAddress,
+      selectedCurrency: "0x0000000000000000000000000000000000000001",
       lastPrice: 1,
     });
 
@@ -115,12 +123,15 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
         gameAddresses.wheel,
         encodedParams.tokenAddress,
         uiOperatorAddress as Address,
-        "claim",
+        "bet",
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      // TODO: consider it. it breaks he caching mechanism and refetch and ignroe the cached op
+      forceRefetch: true,
+    },
     encodedTxData: encodedParams.encodedTxData,
   });
 
@@ -159,7 +170,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.wheel as Address,
-        selectedTokenAddress,
+        "0x0000000000000000000000000000000000000001",
         uiOperatorAddress as Address,
         "claim",
         encodedParams,
@@ -201,15 +212,20 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       if (!handledAllowance) return;
     }
 
+    console.log("CLAIM TX!");
     try {
       await handleClaimTx.mutateAsync();
     } catch (error) {}
+
+    console.log("cLAIM TX SUCCESS, TRYING BET TX");
 
     try {
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
     }
+
+    console.log("BET TX COMPLETED");
 
     setIsGamblerParticipant(true);
   };
@@ -228,6 +244,9 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       result,
       player,
       bet,
+      participants,
+      isGameActive,
+      angle,
     } = gameEvent;
 
     const isGameFinished =
@@ -249,22 +268,36 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       joiningStart,
       cooldownFinish,
       winnerColor: result as unknown as WheelColor,
+      winnerAngle: Number(angle) / 100000 / ANGLE_SCALE,
     });
 
-    if (bet && bet?.converted?.wager && player) {
-      const multiplers = {
-        1: "2x",
-        2: "3x",
-        3: "6x",
-        4: "48x",
-      };
+    if (participants?.length > 0 && isGameActive) {
+      participants.forEach((p) => {
+        if (p.player === currentAccount.address) {
+          setIsGamblerParticipant(true);
+        }
 
-      setWheelParticipant(multiplers[bet.choice] as Multiplier, {
+        setWheelParticipant(
+          participantMapWithStore[
+            fromHex(p.choice, {
+              to: "number",
+            }) as unknown as WheelColor
+          ],
+          {
+            player: p.player,
+            bet: Number(formatUnits(p.wager, 18)),
+          }
+        );
+      });
+    }
+
+    if (bet && bet?.converted?.wager && player) {
+      setWheelParticipant(participantMapWithStore[bet.choice] as Multiplier, {
         player: player,
         bet: bet.converted.wager,
       });
     }
-  }, [gameEvent]);
+  }, [gameEvent, currentAccount.address]);
 
   return (
     <WheelTemplate

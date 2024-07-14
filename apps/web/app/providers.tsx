@@ -37,6 +37,7 @@ export const gameAddresses = {
   keno: process.env.NEXT_PUBLIC_KENO_ADDRESS as Address,
   wheel: process.env.NEXT_PUBLIC_WHEEL_ADDRESS as Address,
   winrBonanza: process.env.NEXT_PUBLIC_WINR_BONANZA_ADDRESS as Address,
+  mines: process.env.NEXT_PUBLIC_MINES_ADDRESS as Address,
   videoPoker: process.env.NEXT_PUBLIC_VIDEO_POKER_ADDRESS as Address,
   blackjack: process.env.NEXT_PUBLIC_BLACKJACK_ADDRESS as Address,
   blackjackReader: process.env.NEXT_PUBLIC_BLACKJACK_READER_ADDRESS as Address,
