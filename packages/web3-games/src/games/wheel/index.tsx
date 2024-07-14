@@ -58,6 +58,9 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   const { data: betHistory } = useGameControllerBetHistory({
     queryParams: {
       game: 3,
+      // TODO: swagger does not include the pagination params. ask be to fix it.
+      // @ts-ignore
+      limit: 5,
     },
   });
   const { updateState, setWheelParticipant, setIsGamblerParticipant } =
