@@ -1,5 +1,6 @@
 "use client";
 
+import { useGameControllerBetHistory } from "@winrlabs/api";
 import {
   ANGLE_SCALE,
   CoinFlipGameResult,
@@ -18,7 +19,7 @@ import {
   useTokenAllowance,
   useTokenStore,
 } from "@winrlabs/web3";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Address,
   encodeAbiParameters,
@@ -54,7 +55,14 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   } = useContractConfigContext();
   const selectedToken = useTokenStore((s) => s.selectedToken);
   const selectedTokenAddress = selectedToken.address;
-
+  const { data: betHistory } = useGameControllerBetHistory({
+    queryParams: {
+      game: 3,
+      // TODO: swagger does not include the pagination params. ask be to fix it.
+      // @ts-ignore
+      limit: 5,
+    },
+  });
   const { updateState, setWheelParticipant, setIsGamblerParticipant } =
     useWheelGameStore([
       "updateState",
@@ -298,6 +306,16 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       });
     }
   }, [gameEvent, currentAccount.address]);
+
+  useEffect(() => {
+    if (betHistory && betHistory?.length > 0) {
+      updateState({
+        lastBets: betHistory
+          .filter((bet) => bet.multiplier != 0)
+          .map((result) => result.multiplier),
+      });
+    }
+  }, [betHistory]);
 
   return (
     <WheelTemplate
