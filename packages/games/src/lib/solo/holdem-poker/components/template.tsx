@@ -3,39 +3,49 @@
 import React from "react";
 import { UnityGameContainer } from "../../../common/containers";
 import { cn } from "../../../utils/style";
+import { UnityAudioController } from "../../../common/audio-controller";
+import { UnityFullscreenButton } from "../../../common/controller";
+import { HoldemPokerGameProps } from "../types";
 
-type TemplateProps = {
+type TemplateProps = HoldemPokerGameProps & {
   minWager?: number;
   maxWager?: number;
   buildedGameUrl: string;
 };
 
-export const HoldemPokerTemplate = ({ ...props }: TemplateProps) => {
+export const HoldemPokerTemplate = ({
+  minWager,
+  maxWager,
+  buildedGameUrl,
+  activeGameData,
+  isInitialDataFetched,
+
+  handleDeal,
+  handleFinalizeGame,
+}: TemplateProps) => {
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
   return (
     <UnityGameContainer
-      className={cn("h-[640px] max-lg:h-full", {
-        "fixed -left-0 top-0 z-50 h-[100dvh] w-[100dvw]": isFullscreen,
+      className={cn("wr-h-[640px] max-lg:wr-h-full", {
+        "wr-fixed -wr-left-0 wr-top-0 wr-z-50 wr-h-[100dvh] wr-w-[100dvw]":
+          isFullscreen,
       })}
     >
-      <HoldemPokerScene
+      {/* <HoldemPokerScene
         activeGame={activeGame}
         setActiveGame={setActiveGame}
         handleDeal={handleDeal}
         handleFinalizeGame={handleFinalizeGame}
         isInitialDataFetched={isFetched}
-      />
+      /> */}
 
-      <UnityAudioController className="absolute left-2 top-2" />
+      <UnityAudioController className="wr-absolute wr-left-2 wr-top-2" />
       <UnityFullscreenButton
         isFullscreen={isFullscreen}
         onChange={setIsFullscreen}
-        className="absolute bottom-2 right-2"
+        className="wr-absolute wr-bottom-2 wr-right-2"
       />
-      {isFullscreen && (
-        <SelectGameCurrency triggerClassName="!rounded-lg !mr-0 absolute right-2 top-2" />
-      )}
     </UnityGameContainer>
   );
 };

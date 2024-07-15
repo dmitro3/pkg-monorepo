@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useDebounce } from "use-debounce";
 
 import { AudioController } from "../../../common/audio-controller";
 import { Chip } from "../../../common/chip-controller/types";
@@ -20,7 +21,6 @@ import { BlackjackCard, distributeNewCards, getBlackjackSuit } from "../utils";
 import { BetArea } from "./bet-area";
 import { BetController } from "./bet-controller";
 import { CardArea } from "./card-area";
-import { useDebounce } from "use-debounce";
 import { DealerCardArea } from "./dealer-card-area";
 import { MoveController } from "./move-controller";
 import { SplittedCardArea } from "./splitted-card-area";
