@@ -10,7 +10,7 @@ import { apiFetch } from "./apiFetcher";
 import type * as Schemas from "./apiSchemas";
 
 export type GameControllerBetHistoryQueryParams = {
-  game:
+  game?:
     | 1
     | 2
     | 3
@@ -31,6 +31,16 @@ export type GameControllerBetHistoryQueryParams = {
     | 18
     | 19
     | 20;
+  player?: string;
+  /**
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 };
 
 export type GameControllerBetHistoryError = Fetcher.ErrorWrapper<undefined>;
@@ -38,7 +48,7 @@ export type GameControllerBetHistoryError = Fetcher.ErrorWrapper<undefined>;
 export type GameControllerBetHistoryResponse = Schemas.GameResultDto[];
 
 export type GameControllerBetHistoryVariables = {
-  queryParams: GameControllerBetHistoryQueryParams;
+  queryParams?: GameControllerBetHistoryQueryParams;
 } & ApiContext["fetcherOptions"];
 
 export const fetchGameControllerBetHistory = (
@@ -552,41 +562,41 @@ export const useStatisticControllerGetMiningStats = <
   });
 };
 
-export type StatisticControllerGetReferralHistoryByPlayerError =
+export type ReferralControllerGetReferralHistoryByPlayerError =
   Fetcher.ErrorWrapper<undefined>;
 
-export type StatisticControllerGetReferralHistoryByPlayerResponse =
+export type ReferralControllerGetReferralHistoryByPlayerResponse =
   Schemas.ReferralRewardEntity[];
 
-export type StatisticControllerGetReferralHistoryByPlayerVariables =
+export type ReferralControllerGetReferralHistoryByPlayerVariables =
   ApiContext["fetcherOptions"];
 
-export const fetchStatisticControllerGetReferralHistoryByPlayer = (
-  variables: StatisticControllerGetReferralHistoryByPlayerVariables,
+export const fetchReferralControllerGetReferralHistoryByPlayer = (
+  variables: ReferralControllerGetReferralHistoryByPlayerVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
-    StatisticControllerGetReferralHistoryByPlayerResponse,
-    StatisticControllerGetReferralHistoryByPlayerError,
+    ReferralControllerGetReferralHistoryByPlayerResponse,
+    ReferralControllerGetReferralHistoryByPlayerError,
     undefined,
     {},
     {},
     {}
   >({
-    url: "/statistic/referral-history/{address}",
+    url: "/referral/referral-history/{address}",
     method: "get",
     ...variables,
     signal,
   });
 
-export const useStatisticControllerGetReferralHistoryByPlayer = <
-  TData = StatisticControllerGetReferralHistoryByPlayerResponse,
+export const useReferralControllerGetReferralHistoryByPlayer = <
+  TData = ReferralControllerGetReferralHistoryByPlayerResponse,
 >(
-  variables: StatisticControllerGetReferralHistoryByPlayerVariables,
+  variables: ReferralControllerGetReferralHistoryByPlayerVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<
-      StatisticControllerGetReferralHistoryByPlayerResponse,
-      StatisticControllerGetReferralHistoryByPlayerError,
+      ReferralControllerGetReferralHistoryByPlayerResponse,
+      ReferralControllerGetReferralHistoryByPlayerError,
       TData
     >,
     "queryKey" | "queryFn" | "initialData"
@@ -594,17 +604,17 @@ export const useStatisticControllerGetReferralHistoryByPlayer = <
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
   return reactQuery.useQuery<
-    StatisticControllerGetReferralHistoryByPlayerResponse,
-    StatisticControllerGetReferralHistoryByPlayerError,
+    ReferralControllerGetReferralHistoryByPlayerResponse,
+    ReferralControllerGetReferralHistoryByPlayerError,
     TData
   >({
     queryKey: queryKeyFn({
-      path: "/statistic/referral-history/{address}",
-      operationId: "statisticControllerGetReferralHistoryByPlayer",
+      path: "/referral/referral-history/{address}",
+      operationId: "referralControllerGetReferralHistoryByPlayer",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchStatisticControllerGetReferralHistoryByPlayer(
+      fetchReferralControllerGetReferralHistoryByPlayer(
         { ...fetcherOptions, ...variables },
         signal,
       ),
@@ -613,41 +623,41 @@ export const useStatisticControllerGetReferralHistoryByPlayer = <
   });
 };
 
-export type StatisticControllerRewardsDistributionHistoryError =
+export type ReferralControllerRewardsDistributionHistoryError =
   Fetcher.ErrorWrapper<undefined>;
 
-export type StatisticControllerRewardsDistributionHistoryResponse =
+export type ReferralControllerRewardsDistributionHistoryResponse =
   Schemas.ReferralClaimEntity[];
 
-export type StatisticControllerRewardsDistributionHistoryVariables =
+export type ReferralControllerRewardsDistributionHistoryVariables =
   ApiContext["fetcherOptions"];
 
-export const fetchStatisticControllerRewardsDistributionHistory = (
-  variables: StatisticControllerRewardsDistributionHistoryVariables,
+export const fetchReferralControllerRewardsDistributionHistory = (
+  variables: ReferralControllerRewardsDistributionHistoryVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
-    StatisticControllerRewardsDistributionHistoryResponse,
-    StatisticControllerRewardsDistributionHistoryError,
+    ReferralControllerRewardsDistributionHistoryResponse,
+    ReferralControllerRewardsDistributionHistoryError,
     undefined,
     {},
     {},
     {}
   >({
-    url: "/statistic/rewards-distribution-history/{address}",
+    url: "/referral/rewards-distribution-history/{address}",
     method: "get",
     ...variables,
     signal,
   });
 
-export const useStatisticControllerRewardsDistributionHistory = <
-  TData = StatisticControllerRewardsDistributionHistoryResponse,
+export const useReferralControllerRewardsDistributionHistory = <
+  TData = ReferralControllerRewardsDistributionHistoryResponse,
 >(
-  variables: StatisticControllerRewardsDistributionHistoryVariables,
+  variables: ReferralControllerRewardsDistributionHistoryVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<
-      StatisticControllerRewardsDistributionHistoryResponse,
-      StatisticControllerRewardsDistributionHistoryError,
+      ReferralControllerRewardsDistributionHistoryResponse,
+      ReferralControllerRewardsDistributionHistoryError,
       TData
     >,
     "queryKey" | "queryFn" | "initialData"
@@ -655,17 +665,17 @@ export const useStatisticControllerRewardsDistributionHistory = <
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
   return reactQuery.useQuery<
-    StatisticControllerRewardsDistributionHistoryResponse,
-    StatisticControllerRewardsDistributionHistoryError,
+    ReferralControllerRewardsDistributionHistoryResponse,
+    ReferralControllerRewardsDistributionHistoryError,
     TData
   >({
     queryKey: queryKeyFn({
-      path: "/statistic/rewards-distribution-history/{address}",
-      operationId: "statisticControllerRewardsDistributionHistory",
+      path: "/referral/rewards-distribution-history/{address}",
+      operationId: "referralControllerRewardsDistributionHistory",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchStatisticControllerRewardsDistributionHistory(
+      fetchReferralControllerRewardsDistributionHistory(
         { ...fetcherOptions, ...variables },
         signal,
       ),
@@ -674,46 +684,46 @@ export const useStatisticControllerRewardsDistributionHistory = <
   });
 };
 
-export type StatisticControllerCodesVolumeAndRewardAmountsQueryParams = {
+export type ReferralControllerCodesVolumeAndRewardAmountsQueryParams = {
   codes: string;
 };
 
-export type StatisticControllerCodesVolumeAndRewardAmountsError =
+export type ReferralControllerCodesVolumeAndRewardAmountsError =
   Fetcher.ErrorWrapper<undefined>;
 
-export type StatisticControllerCodesVolumeAndRewardAmountsResponse =
+export type ReferralControllerCodesVolumeAndRewardAmountsResponse =
   Schemas.CodesVolumeAndReward[];
 
-export type StatisticControllerCodesVolumeAndRewardAmountsVariables = {
-  queryParams: StatisticControllerCodesVolumeAndRewardAmountsQueryParams;
+export type ReferralControllerCodesVolumeAndRewardAmountsVariables = {
+  queryParams: ReferralControllerCodesVolumeAndRewardAmountsQueryParams;
 } & ApiContext["fetcherOptions"];
 
-export const fetchStatisticControllerCodesVolumeAndRewardAmounts = (
-  variables: StatisticControllerCodesVolumeAndRewardAmountsVariables,
+export const fetchReferralControllerCodesVolumeAndRewardAmounts = (
+  variables: ReferralControllerCodesVolumeAndRewardAmountsVariables,
   signal?: AbortSignal,
 ) =>
   apiFetch<
-    StatisticControllerCodesVolumeAndRewardAmountsResponse,
-    StatisticControllerCodesVolumeAndRewardAmountsError,
+    ReferralControllerCodesVolumeAndRewardAmountsResponse,
+    ReferralControllerCodesVolumeAndRewardAmountsError,
     undefined,
     {},
-    StatisticControllerCodesVolumeAndRewardAmountsQueryParams,
+    ReferralControllerCodesVolumeAndRewardAmountsQueryParams,
     {}
   >({
-    url: "/statistic/code-volume-and-rewards",
+    url: "/referral/code-volume-and-rewards",
     method: "get",
     ...variables,
     signal,
   });
 
-export const useStatisticControllerCodesVolumeAndRewardAmounts = <
-  TData = StatisticControllerCodesVolumeAndRewardAmountsResponse,
+export const useReferralControllerCodesVolumeAndRewardAmounts = <
+  TData = ReferralControllerCodesVolumeAndRewardAmountsResponse,
 >(
-  variables: StatisticControllerCodesVolumeAndRewardAmountsVariables,
+  variables: ReferralControllerCodesVolumeAndRewardAmountsVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<
-      StatisticControllerCodesVolumeAndRewardAmountsResponse,
-      StatisticControllerCodesVolumeAndRewardAmountsError,
+      ReferralControllerCodesVolumeAndRewardAmountsResponse,
+      ReferralControllerCodesVolumeAndRewardAmountsError,
       TData
     >,
     "queryKey" | "queryFn" | "initialData"
@@ -721,17 +731,17 @@ export const useStatisticControllerCodesVolumeAndRewardAmounts = <
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
   return reactQuery.useQuery<
-    StatisticControllerCodesVolumeAndRewardAmountsResponse,
-    StatisticControllerCodesVolumeAndRewardAmountsError,
+    ReferralControllerCodesVolumeAndRewardAmountsResponse,
+    ReferralControllerCodesVolumeAndRewardAmountsError,
     TData
   >({
     queryKey: queryKeyFn({
-      path: "/statistic/code-volume-and-rewards",
-      operationId: "statisticControllerCodesVolumeAndRewardAmounts",
+      path: "/referral/code-volume-and-rewards",
+      operationId: "referralControllerCodesVolumeAndRewardAmounts",
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchStatisticControllerCodesVolumeAndRewardAmounts(
+      fetchReferralControllerCodesVolumeAndRewardAmounts(
         { ...fetcherOptions, ...variables },
         signal,
       ),
@@ -777,17 +787,17 @@ export type QueryOperation =
       variables: StatisticControllerGetMiningStatsVariables;
     }
   | {
-      path: "/statistic/referral-history/{address}";
-      operationId: "statisticControllerGetReferralHistoryByPlayer";
-      variables: StatisticControllerGetReferralHistoryByPlayerVariables;
+      path: "/referral/referral-history/{address}";
+      operationId: "referralControllerGetReferralHistoryByPlayer";
+      variables: ReferralControllerGetReferralHistoryByPlayerVariables;
     }
   | {
-      path: "/statistic/rewards-distribution-history/{address}";
-      operationId: "statisticControllerRewardsDistributionHistory";
-      variables: StatisticControllerRewardsDistributionHistoryVariables;
+      path: "/referral/rewards-distribution-history/{address}";
+      operationId: "referralControllerRewardsDistributionHistory";
+      variables: ReferralControllerRewardsDistributionHistoryVariables;
     }
   | {
-      path: "/statistic/code-volume-and-rewards";
-      operationId: "statisticControllerCodesVolumeAndRewardAmounts";
-      variables: StatisticControllerCodesVolumeAndRewardAmountsVariables;
+      path: "/referral/code-volume-and-rewards";
+      operationId: "referralControllerCodesVolumeAndRewardAmounts";
+      variables: ReferralControllerCodesVolumeAndRewardAmountsVariables;
     };

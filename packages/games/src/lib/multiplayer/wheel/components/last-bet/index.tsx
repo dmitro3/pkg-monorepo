@@ -4,7 +4,6 @@ import { LastBetsContainer } from "../../../../common/last-bets-container";
 import { cn } from "../../../../utils/style";
 import {
   colorMultipliers,
-  Multiplier,
   multiplierColors,
   WheelColor,
 } from "../../constants";
@@ -15,7 +14,7 @@ const LastBets = () => {
   const history = useMemo(
     () =>
       lastBets.map((multiplier) => ({
-        color: multiplierColors[(multiplier + "x") as Multiplier],
+        color: multiplierColors[multiplier],
         multiplier,
       })),
     [lastBets]

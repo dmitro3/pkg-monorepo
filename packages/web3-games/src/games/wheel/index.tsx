@@ -1,6 +1,6 @@
 "use client";
 
-import { useGameControllerBetHistory } from "@winrlabs/api";
+import { useGameControllerGetMultiplayerGameHistory } from "@winrlabs/api";
 import {
   ANGLE_SCALE,
   CoinFlipGameResult,
@@ -55,14 +55,15 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   } = useContractConfigContext();
   const selectedToken = useTokenStore((s) => s.selectedToken);
   const selectedTokenAddress = selectedToken.address;
-  const { data: betHistory } = useGameControllerBetHistory({
-    queryParams: {
-      game: 3,
-      // TODO: swagger does not include the pagination params. ask be to fix it.
-      // @ts-ignore
-      limit: 5,
-    },
-  });
+  const { data: betHistory, refetch: refetchBetHistory } =
+    useGameControllerGetMultiplayerGameHistory({
+      queryParams: {
+        game: 3,
+        // TODO: swagger does not include the pagination params. ask be to fix it.
+        // @ts-ignore
+        limit: 2,
+      },
+    });
   const { updateState, setWheelParticipant, setIsGamblerParticipant } =
     useWheelGameStore([
       "updateState",
@@ -310,9 +311,10 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   useEffect(() => {
     if (betHistory && betHistory?.length > 0) {
       updateState({
-        lastBets: betHistory
-          .filter((bet) => bet.multiplier != 0)
-          .map((result) => result.multiplier),
+        lastBets: betHistory.map(
+          (data) =>
+            participantMapWithStore[data.result as unknown as WheelColor]
+        ),
       });
     }
   }, [betHistory]);
@@ -323,6 +325,9 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       onSubmitGameForm={onGameSubmit}
       onFormChange={(val) => {
         setFormValues(val);
+      }}
+      onComplete={() => {
+        refetchBetHistory();
       }}
     />
   );
