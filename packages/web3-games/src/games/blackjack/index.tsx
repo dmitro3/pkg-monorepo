@@ -2,8 +2,10 @@
 
 import {
   ActiveGameHands,
+  BlackjackCard,
   BlackjackFormFields,
   BlackjackGameStatus,
+  BlackjackHandStatus,
   BlackjackTemplate,
   GameStruct,
 } from "@winrlabs/games";
@@ -23,6 +25,7 @@ import { useReadContract } from "wagmi";
 
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { prepareGameTransaction } from "../utils";
+import { BlackjackContractHand } from "./types";
 
 type TemplateOptions = {
   scene?: {
@@ -444,6 +447,7 @@ export default function BlackjackTemplateWithWeb3(
   });
 
   const handleStart = async () => {
+    setIsLoading(true); // Set loading state to true
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -453,44 +457,47 @@ export default function BlackjackTemplateWithWeb3(
 
       if (!handledAllowance) return;
     }
-    setIsLoading(true); // Set loading state to true
 
     try {
       await handleBetTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
-      setIsLoading(false); // Set loading state to false
     }
+    setIsLoading(false); // Set loading state to false
   };
 
   const handleHit = async () => {
+    setIsLoading(true); // Set loading state to true
     try {
       await handleHitTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
-      setIsLoading(false); // Set loading state to false
     }
+    setIsLoading(false); // Set loading state to false
   };
 
   const handleStand = async () => {
+    setIsLoading(true); // Set loading state to true
     try {
       await handleStandTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
-      setIsLoading(false); // Set loading state to false
     }
+    setIsLoading(false); // Set loading state to false
   };
 
   const handleDoubleDown = async () => {
+    setIsLoading(true); // Set loading state to true
     try {
       await handleDoubleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
-      setIsLoading(false); // Set loading state to false
     }
+    setIsLoading(false); // Set loading state to false
   };
 
   const handleSplit = async () => {
+    setIsLoading(true); // Set loading state to true
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -500,17 +507,17 @@ export default function BlackjackTemplateWithWeb3(
 
       if (!handledAllowance) return;
     }
-    setIsLoading(true); // Set loading state to true
 
     try {
       await handleSplitTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
-      setIsLoading(false); // Set loading state to false
     }
+    setIsLoading(false); // Set loading state to false
   };
 
   const handleBuyInsurance = async () => {
+    setIsLoading(true); // Set loading state to true
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -520,14 +527,13 @@ export default function BlackjackTemplateWithWeb3(
 
       if (!handledAllowance) return;
     }
-    setIsLoading(true); // Set loading state to true
 
     try {
       await handleBuyInsuranceTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
-      setIsLoading(false); // Set loading state to false
     }
+    setIsLoading(false); // Set loading state to false
   };
 
   const gameDataRead = useReadContract({
@@ -538,6 +544,9 @@ export default function BlackjackTemplateWithWeb3(
     args: [currentAccount.address || "0x0000000"],
     query: {
       enabled: !!currentAccount.address,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      retry: false,
     },
   });
 
@@ -548,6 +557,8 @@ export default function BlackjackTemplateWithWeb3(
 
     if (!activeHandIndex) return;
 
+    console.log(gameDataRead.data, "initial");
+
     setActiveGameData({
       activeHandIndex:
         status === BlackjackGameStatus.FINISHED ? 0 : Number(activeHandIndex),
@@ -555,8 +566,109 @@ export default function BlackjackTemplateWithWeb3(
       status: status,
     });
 
-    console.log(hands, "hands");
-    // const _hands = hands.sort((a, b) => Number(a.handId) - Number(b.handId));
+    const _hands = hands as unknown as BlackjackContractHand[];
+
+    for (let i = 0; i < _hands.length; i++) {
+      const handId = Number(_hands[i]?.handIndex);
+      const hand = hands[i] as unknown as BlackjackContractHand;
+
+      if (i == 5) {
+        // DEALER HAND
+        const _amountCards = hand.cards.cards.filter((n) => n !== 0).length;
+
+        const _totalCount = hand.cards.cards.reduce((acc, cur) => acc + cur, 0);
+
+        setActiveGameHands((prev) => ({
+          ...prev,
+          dealer: {
+            cards: {
+              cards: hand.cards.cards,
+              amountCards: _amountCards,
+              totalCount: _totalCount,
+              isSoftHand: hand.cards.isSoftHand,
+              canSplit: false,
+            },
+            hand: null,
+          },
+        }));
+      } else {
+        // PLAYER HANDS
+        if (handId == 0) continue;
+
+        const _amountCards = hand.cards.cards.filter((n) => n !== 0).length;
+        const _totalCount = hand.cards.cards.reduce((acc, cur) => acc + cur, 0);
+        const _canSplit =
+          _amountCards === 2 &&
+          new BlackjackCard(hand.cards.cards[0] as number).value ===
+            new BlackjackCard(hand.cards.cards[1] as number).value &&
+          !hand.hand.isInsured;
+
+        const handObject = {
+          cards: {
+            cards: hand.cards.cards,
+            amountCards: _amountCards,
+            totalCount: _totalCount,
+            isSoftHand: hand.cards.isSoftHand,
+            canSplit: _canSplit,
+          },
+          hand: {
+            chipsAmount: Number(hand.hand.chipsAmount),
+            isInsured: hand.hand.isInsured,
+            status: hand.hand.status,
+            isDouble: hand.hand.isDouble,
+            isSplitted: false,
+            splittedHandIndex: Number(hand.splitHandIndex),
+          },
+          handId,
+          isCompleted:
+            hand.hand.status !== BlackjackHandStatus.AWAITING_HIT ||
+            hand.hand.status !== (BlackjackHandStatus.PLAYING as any),
+        };
+
+        if (i === 0)
+          setActiveGameHands((prev) => ({
+            ...prev,
+            firstHand: handObject,
+          }));
+
+        if (i === 1)
+          setActiveGameHands((prev) => ({
+            ...prev,
+            secondHand: handObject,
+          }));
+
+        if (i === 2)
+          setActiveGameHands((prev) => ({
+            ...prev,
+            thirdHand: handObject,
+          }));
+
+        // splitted hands
+        if (Number(_hands[0]?.splitHandIndex) === handId)
+          setActiveGameHands((prev) => ({
+            ...prev,
+            splittedFirstHand: handObject,
+          }));
+
+        if (Number(_hands[1]?.splitHandIndex) === handId)
+          setActiveGameHands((prev) => ({
+            ...prev,
+            splittedSecondHand: handObject,
+          }));
+
+        if (Number(_hands[2]?.splitHandIndex) === handId)
+          setActiveGameHands((prev) => ({
+            ...prev,
+            splittedThirdHand: handObject,
+          }));
+      }
+    }
+
+    setInitialDataFetched(true);
+
+    setTimeout(() => {
+      setInitialDataFetched(false);
+    }, 1000);
   }, [gameDataRead.data]);
 
   const onRefresh = () => {

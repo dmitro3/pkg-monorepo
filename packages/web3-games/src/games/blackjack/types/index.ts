@@ -1,0 +1,36 @@
+import { BlackjackHandStatus } from "@winrlabs/games";
+import { Address } from "viem";
+
+export interface BlackjackContractGameStruct {
+  wagerAmount: bigint;
+  activeHandIndex: bigint;
+  amountHands: number;
+  canInsure: boolean;
+  awaitingRandomness: boolean;
+}
+
+export interface BlackjackContractHand {
+  cards: BlackjackContractCardStruct;
+  hand: BlackjackContractHandStruct;
+  splitHandIndex: bigint;
+  handIndex: bigint;
+}
+
+export interface BlackjackContractCardStruct {
+  cards: number[];
+  amountCards: number;
+  totalCount: number;
+  isSoftHand: boolean;
+  canSplit: boolean;
+}
+
+export interface BlackjackContractHandStruct {
+  bankroll: Address;
+  betAmount: bigint;
+  chipsAmount: number;
+  gameIndex: bigint;
+  isDouble: boolean;
+  isInsured: boolean;
+  player: Address;
+  status: BlackjackHandStatus;
+}
