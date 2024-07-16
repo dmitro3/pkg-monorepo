@@ -34,3 +34,9 @@ export interface BlackjackContractHandStruct {
   player: Address;
   status: BlackjackHandStatus;
 }
+
+export enum BJ_EVENT_TYPES {
+  Settled = "Settled",
+  HitCard = "HitCard",
+  StandOff = "StandOff",
+}

@@ -24,8 +24,9 @@ import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import { useReadContract } from "wagmi";
 
 import { useContractConfigContext } from "../hooks/use-contract-config";
-import { prepareGameTransaction } from "../utils";
-import { BlackjackContractHand } from "./types";
+import { DecodedEvent, prepareGameTransaction } from "../utils";
+import { BJ_EVENT_TYPES, BlackjackContractHand } from "./types";
+import { useListenGameEvent } from "../hooks";
 
 type TemplateOptions = {
   scene?: {
@@ -91,6 +92,8 @@ export default function BlackjackTemplateWithWeb3(
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
+
+  const gameEvent = useListenGameEvent();
 
   const { getPrice } = usePriceFeed();
 
@@ -670,6 +673,28 @@ export default function BlackjackTemplateWithWeb3(
       setInitialDataFetched(false);
     }, 1000);
   }, [gameDataRead.data]);
+
+  React.useEffect(() => {
+    if (!gameEvent) return;
+
+    handleGameEvent(gameEvent);
+  }, [gameEvent]);
+
+  const handleGameEvent = (gameEvent: DecodedEvent<any, any>) => {
+    switch (gameEvent.program[0]?.type) {
+      case BJ_EVENT_TYPES.Settled: {
+        gameDataRead.refetch();
+        break;
+      }
+      case BJ_EVENT_TYPES.HitCard: {
+        break;
+      }
+      case BJ_EVENT_TYPES.StandOff: {
+        gameDataRead.refetch();
+        break;
+      }
+    }
+  };
 
   const onRefresh = () => {
     props.onGameCompleted && props.onGameCompleted();
