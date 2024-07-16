@@ -6,6 +6,7 @@ import { cn } from "../../../utils/style";
 import { UnityAudioController } from "../../../common/audio-controller";
 import { UnityFullscreenButton } from "../../../common/controller";
 import { HoldemPokerGameProps } from "../types";
+import { HoldemPokerScene } from "./scene";
 
 type TemplateProps = HoldemPokerGameProps & {
   minWager?: number;
@@ -13,16 +14,7 @@ type TemplateProps = HoldemPokerGameProps & {
   buildedGameUrl: string;
 };
 
-export const HoldemPokerTemplate = ({
-  minWager,
-  maxWager,
-  buildedGameUrl,
-  activeGameData,
-  isInitialDataFetched,
-
-  handleDeal,
-  handleFinalizeGame,
-}: TemplateProps) => {
+export const HoldemPokerTemplate = ({ ...props }: TemplateProps) => {
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
   return (
@@ -32,13 +24,7 @@ export const HoldemPokerTemplate = ({
           isFullscreen,
       })}
     >
-      {/* <HoldemPokerScene
-        activeGame={activeGame}
-        setActiveGame={setActiveGame}
-        handleDeal={handleDeal}
-        handleFinalizeGame={handleFinalizeGame}
-        isInitialDataFetched={isFetched}
-      /> */}
+      <HoldemPokerScene {...props} />
 
       <UnityAudioController className="wr-absolute wr-left-2 wr-top-2" />
       <UnityFullscreenButton

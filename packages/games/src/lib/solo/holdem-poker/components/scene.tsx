@@ -22,6 +22,7 @@ import {
   UnityPlayerHandWin,
   UnityWaitForResult,
 } from "../constants";
+import { useDebounce } from "use-debounce";
 
 type HoldemPokerSceneProps = HoldemPokerGameProps & {
   buildedGameUrl: string;
@@ -31,13 +32,19 @@ const UNITY_LOADER_DELAY = 2500;
 
 export const HoldemPokerScene = ({
   handleDeal,
-  handleFinalizeGame,
+  handleFinalize,
+  handleFinalizeFold,
   setActiveGame,
   onRefresh,
+  onFormChange,
   isInitialDataFetched,
   activeGameData,
   buildedGameUrl,
+  isLoggedIn,
 }: HoldemPokerSceneProps) => {
+  const [ante, setAnte] = React.useState<number>(0);
+  const [aaBonus, setAaBonus] = React.useState<number>(0);
+
   const percentageRef = React.useRef(0);
 
   const BUILDED_GAME_URL = `${buildedGameUrl}/builded-games/holdem-poker`;
@@ -86,14 +93,12 @@ export const HoldemPokerScene = ({
         aaBonusChipAmount: aaBonus as number,
       }));
 
-      handleDeal(ante, aaBonus, sendMessage);
+      handleDealEvent();
     }
 
-    if (unityEvent.name === UnityFoldEvent)
-      handleFinalizeGame(true, sendMessage);
+    if (unityEvent.name === UnityFoldEvent) handleFinalizeFoldEvent();
 
-    if (unityEvent.name === UnityCallEvent)
-      handleFinalizeGame(false, sendMessage);
+    if (unityEvent.name === UnityCallEvent) handleFinalizeEvent();
 
     if (unityEvent.name === UnityPlayerHandWin) {
       sendMessage(
@@ -119,6 +124,42 @@ export const HoldemPokerScene = ({
       sendMessage("WebGLHandler", "ReceiveMessage", "HP_HideResult");
     }
   }, [unityEvent]);
+
+  const handleDealEvent = async () => {
+    await handleDeal();
+
+    sendMessage(
+      "WebGLHandler",
+      "ReceiveMessage",
+      `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnIdle}`
+    );
+
+    onRefresh();
+  };
+
+  const handleFinalizeEvent = async () => {
+    await handleFinalize();
+
+    sendMessage(
+      "WebGLHandler",
+      "ReceiveMessage",
+      `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnPlay}`
+    );
+
+    onRefresh();
+  };
+
+  const handleFinalizeFoldEvent = async () => {
+    await handleFinalizeFold();
+
+    sendMessage(
+      "WebGLHandler",
+      "ReceiveMessage",
+      `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnPlay}`
+    );
+
+    onRefresh();
+  };
 
   React.useEffect(() => {
     console.log(
@@ -175,12 +216,12 @@ export const HoldemPokerScene = ({
   }, [isInitialDataFetched, isUnityLoaded]);
 
   React.useEffect(() => {
-    if (isUnityLoaded && currentAccount)
+    if (isUnityLoaded && isLoggedIn)
       setTimeout(
         () => sendMessage("WebGLHandler", "ReceiveMessage", "HP_Login"),
         UNITY_LOADER_DELAY
       );
-  }, [isUnityLoaded, currentAccount]);
+  }, [isUnityLoaded, isLoggedIn]);
 
   React.useEffect(() => {
     if (activeGameData?.cards?.length) {
@@ -221,6 +262,14 @@ export const HoldemPokerScene = ({
         );
     }
   }, [activeGameData?.cards]);
+
+  const formFields = React.useMemo(() => ({ ante, aaBonus }), [ante, aaBonus]);
+
+  const debouncedFormFields = useDebounce(formFields, 400);
+
+  React.useEffect(() => {
+    onFormChange && onFormChange(debouncedFormFields[0]);
+  }, [debouncedFormFields[0]]);
 
   return (
     <>

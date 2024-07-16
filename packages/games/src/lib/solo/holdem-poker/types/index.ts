@@ -3,10 +3,18 @@ import React from "react";
 export interface HoldemPokerGameProps {
   activeGameData: HoldemPokerActiveGame;
   isInitialDataFetched: boolean;
+  isLoggedIn: boolean;
   setActiveGame: React.Dispatch<React.SetStateAction<HoldemPokerActiveGame>>;
   handleDeal: () => Promise<void>;
-  handleFinalizeGame: (isFold: boolean) => Promise<void>;
+  handleFinalize: () => Promise<void>;
+  handleFinalizeFold: () => Promise<void>;
+  onFormChange: (fields: HoldemPokerFormFields) => void;
   onRefresh: () => void;
+}
+
+export interface HoldemPokerFormFields {
+  ante: number;
+  aaBonus: Number;
 }
 
 export interface HoldemPokerActiveGame {
