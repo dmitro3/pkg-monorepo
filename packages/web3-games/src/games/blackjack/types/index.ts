@@ -40,3 +40,25 @@ export enum BJ_EVENT_TYPES {
   HitCard = "HitCard",
   StandOff = "StandOff",
 }
+
+export interface BlackjacSettledEvent {
+  game: BlackjackContractGameStruct & {
+    status: bigint;
+  };
+  gameIndex: number;
+}
+
+export interface BlackjackPlayerHandEvent {
+  betAmount: bigint;
+  chipsAmount: number;
+  gameIndex: bigint;
+  handIndex: number;
+  isDouble: boolean;
+  isInsured: boolean;
+  status: BlackjackHandStatus;
+}
+
+export interface BlackjackPlayerCardsEvent {
+  cards: BlackjackContractCardStruct;
+  handIndex: number;
+}
