@@ -83,7 +83,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.videoPoker as Address,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "start",
         encodedGameData,
@@ -103,7 +103,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.videoPoker,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "start",
         encodedParams.encodedGameData,
@@ -138,7 +138,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.videoPoker as Address,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "finish",
         encodedGameData,
@@ -158,7 +158,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.videoPoker,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "finish",
         encodedFinishParams.encodedGameData,

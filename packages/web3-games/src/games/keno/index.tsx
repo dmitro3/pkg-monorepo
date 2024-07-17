@@ -126,7 +126,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.keno as Address,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -153,7 +153,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.keno,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,

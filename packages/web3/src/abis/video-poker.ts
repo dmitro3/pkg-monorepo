@@ -28,7 +28,23 @@ export default [
         type: "address",
       },
     ],
+    name: "GameOver",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "client",
+        type: "address",
+      },
+    ],
     name: "HasUncompletedGame",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidRandomNumber",
     type: "error",
   },
   {
@@ -61,6 +77,28 @@ export default [
       },
     ],
     name: "MinWagerNotMet",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "client",
+        type: "address",
+      },
+    ],
+    name: "NoGame",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint8",
+        name: "payout",
+        type: "uint8",
+      },
+    ],
+    name: "PayoutShouldGreaterThanOne",
     type: "error",
   },
   {

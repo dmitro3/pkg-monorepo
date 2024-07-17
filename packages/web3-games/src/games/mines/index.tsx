@@ -155,7 +155,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       functionName: "perform",
       args: [
         gameAddresses.mines as Address,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -167,7 +167,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       functionName: "perform",
       args: [
         gameAddresses.mines as Address,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "endGame",
         "0x",
@@ -190,7 +190,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       functionName: "perform",
       args: [
         gameAddresses.mines as Address,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "revealCells",
         encodedRevealCellData,
@@ -219,7 +219,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       functionName: "perform",
       args: [
         gameAddresses.mines,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,
@@ -236,7 +236,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       functionName: "perform",
       args: [
         gameAddresses.mines,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "endGame",
         "0x",
@@ -253,7 +253,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       functionName: "perform",
       args: [
         gameAddresses.mines,
-        "0x0000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000002",
         uiOperatorAddress as Address,
         "revealCells",
         encodedParams.encodedRevealCellData,
