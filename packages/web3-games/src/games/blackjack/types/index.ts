@@ -40,7 +40,9 @@ export enum BJ_EVENT_TYPES {
   Settled = "Settled",
   HitCard = "HitCard",
   StandOff = "StandOff",
+  DoubleDown = "DoubleDown",
   DealerCards = "DealerCards",
+  Split = "Split",
 }
 
 export interface BlackjackSettledEvent {

@@ -114,7 +114,7 @@ export default function BlackjackTemplateWithWeb3(
     thirdHandWager: 0,
   });
   const [activeMove, setActiveMove] = React.useState<
-    "Created" | "HitCard" | "StandOff"
+    "Created" | "HitCard" | "StandOff" | "DoubleDown" | "Split"
   >();
 
   const [activeGameData, setActiveGameData] =
@@ -718,6 +718,12 @@ export default function BlackjackTemplateWithWeb3(
         else if (activeMove == "HitCard") {
           console.log("player hit move!");
           handlePlayerEvent(gameEvent);
+        } else if (activeMove == "DoubleDown") {
+          console.log("player double move!");
+          handlePlayerEvent(gameEvent);
+        } else if (activeMove == "Split") {
+          console.log("player split move!");
+          handlePlayerSplitEvent(gameEvent);
         }
         break;
       }
@@ -734,6 +740,17 @@ export default function BlackjackTemplateWithWeb3(
         setActiveMove("StandOff");
         handlePlayerStandEvent(gameEvent);
         break;
+      }
+      case BJ_EVENT_TYPES.DoubleDown: {
+        setActiveMove("DoubleDown");
+        break;
+      }
+      case BJ_EVENT_TYPES.Split: {
+        setActiveMove("Split");
+        break;
+      }
+      default: {
+        return;
       }
     }
   };
@@ -829,6 +846,169 @@ export default function BlackjackTemplateWithWeb3(
     setActiveGameData((prev) => ({
       ...prev,
       activeHandIndex: Number(standOffEvent.game.activeHandIndex),
+    }));
+  };
+
+  const handlePlayerSplitEvent = (gameEvent: DecodedEvent<any, any>) => {
+    const playerCardsEvent = gameEvent.program[2]
+      ?.data as BlackjackPlayerCardsEvent;
+    const splittedPlayerCardsEvent = gameEvent.program[3]
+      ?.data as BlackjackPlayerCardsEvent;
+    const settledEvent = gameEvent.program[0]?.data as BlackjackSettledEvent;
+
+    const handId = Number(playerCardsEvent.handIndex);
+    const splittedHandId = Number(splittedPlayerCardsEvent.handIndex);
+
+    if (handId === activeGameHands.firstHand.handId) {
+      setActiveGameHands((prev) => ({
+        ...prev,
+        firstHand: {
+          ...prev.firstHand,
+          hand: {
+            ...(prev.firstHand.hand as any),
+            isSplitted: true,
+            splittedHandIndex: splittedHandId,
+          },
+        },
+        splittedFirstHand: {
+          ...prev.splittedFirstHand,
+          hand: {
+            ...(prev.splittedFirstHand as any),
+            chipsAmount: prev.firstHand.hand?.chipsAmount || 0,
+          },
+          handId: splittedHandId,
+        },
+      }));
+    }
+
+    if (handId === activeGameHands.secondHand.handId) {
+      setActiveGameHands((prev) => ({
+        ...prev,
+        secondHand: {
+          ...prev.secondHand,
+          hand: {
+            ...(prev.secondHand.hand as any),
+            isSplitted: true,
+            splittedHandIndex: splittedHandId,
+          },
+        },
+        splittedSecondHand: {
+          ...prev.splittedSecondHand,
+          hand: {
+            ...(prev.splittedSecondHand as any),
+            chipsAmount: prev.secondHand.hand?.chipsAmount || 0,
+          },
+          handId: splittedHandId,
+        },
+      }));
+    }
+
+    if (handId === activeGameHands.thirdHand.handId) {
+      setActiveGameHands((prev) => ({
+        ...prev,
+        thirdHand: {
+          ...prev.thirdHand,
+          hand: {
+            ...(prev.thirdHand.hand as any),
+            isSplitted: true,
+            splittedHandIndex: splittedHandId,
+          },
+        },
+        splittedThirdHand: {
+          ...prev.splittedThirdHand,
+          hand: {
+            ...(prev.splittedThirdHand as any),
+            chipsAmount: prev.thirdHand.hand?.chipsAmount || 0,
+          },
+          handId: splittedHandId,
+        },
+      }));
+    }
+
+    setTimeout(() => {
+      handleSplitEventCards(playerCardsEvent, settledEvent);
+      handleSplitEventCards(splittedPlayerCardsEvent, settledEvent);
+    }, 200);
+  };
+
+  const handleSplitEventCards = (
+    playerCardsEvent: BlackjackPlayerCardsEvent,
+    settledEvent: BlackjackSettledEvent
+  ) => {
+    const handId = Number(playerCardsEvent.handIndex);
+
+    let prevHand: ActiveGameHands["firstHand" | "secondHand" | "thirdHand"] =
+      defaultActiveGameHands.firstHand;
+
+    console.log("interested hand id:", handId);
+
+    console.log(activeGameHands, "inner active game hands");
+
+    if (activeGameHands.firstHand.handId === handId)
+      prevHand = activeGameHands.firstHand;
+
+    if (activeGameHands.secondHand.handId === handId)
+      prevHand = activeGameHands.secondHand;
+
+    if (activeGameHands.thirdHand.handId === handId)
+      prevHand = activeGameHands.thirdHand;
+
+    if (activeGameHands.splittedFirstHand.handId === handId)
+      prevHand = activeGameHands.splittedFirstHand;
+
+    if (activeGameHands.splittedSecondHand.handId === handId)
+      prevHand = activeGameHands.splittedSecondHand;
+
+    if (activeGameHands.splittedThirdHand.handId === handId)
+      prevHand = activeGameHands.splittedThirdHand;
+
+    console.log(prevHand, "previous hand", activeGameHands);
+
+    const newHand: ActiveGameHands["firstHand" | "secondHand" | "thirdHand"] = {
+      cards: {
+        cards: playerCardsEvent.cards.cards,
+        amountCards: playerCardsEvent.cards.cards.filter((n) => n !== 0).length,
+        totalCount: playerCardsEvent.cards.totalCount,
+        isSoftHand: playerCardsEvent.cards.isSoftHand,
+        canSplit: prevHand.cards?.canSplit || false,
+      },
+      hand: {
+        chipsAmount: prevHand.hand?.chipsAmount || 0,
+        isInsured: false,
+        status: BlackjackHandStatus.NONE,
+        isDouble: false,
+        isSplitted: prevHand.hand?.isSplitted || false,
+        splittedHandIndex: prevHand.hand?.splittedHandIndex || null,
+      },
+      handId,
+    };
+
+    console.log(newHand, "newHandObject with new fields");
+
+    // set new hand data
+    if (activeGameHands.firstHand.handId === handId)
+      setActiveGameHands((prev) => ({ ...prev, firstHand: newHand }));
+
+    if (activeGameHands.secondHand.handId === handId)
+      setActiveGameHands((prev) => ({ ...prev, secondHand: newHand }));
+
+    if (activeGameHands.thirdHand.handId === handId)
+      setActiveGameHands((prev) => ({ ...prev, thirdHand: newHand }));
+
+    if (activeGameHands.firstHand.hand?.splittedHandIndex === handId)
+      setActiveGameHands((prev) => ({ ...prev, splittedFirstHand: newHand }));
+
+    if (activeGameHands.secondHand.hand?.splittedHandIndex === handId)
+      setActiveGameHands((prev) => ({ ...prev, splittedSecondHand: newHand }));
+
+    if (activeGameHands.thirdHand.hand?.splittedHandIndex === handId)
+      setActiveGameHands((prev) => ({ ...prev, splittedThirdHand: newHand }));
+
+    // set new game data
+    setActiveGameData((prev) => ({
+      ...prev,
+      activeHandIndex: Number(settledEvent.game.activeHandIndex),
+      status: Number(settledEvent.game.status),
     }));
   };
 
