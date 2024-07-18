@@ -1,3 +1,4 @@
+export { default as BetHistory } from "./components/bet-history";
 export { default as BaccaratGame } from "./games/baccarat";
 export { default as BlackjackGame } from "./games/blackjack";
 export { default as CoinFlipGame } from "./games/coinflip-2d";
