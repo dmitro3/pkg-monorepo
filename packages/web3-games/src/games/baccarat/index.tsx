@@ -119,7 +119,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.baccarat as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -145,7 +145,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.baccarat,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,

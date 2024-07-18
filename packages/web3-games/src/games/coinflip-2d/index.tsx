@@ -132,7 +132,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.coinFlip as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -159,7 +159,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.coinFlip,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,
