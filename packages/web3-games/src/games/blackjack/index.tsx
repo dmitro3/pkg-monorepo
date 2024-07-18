@@ -172,7 +172,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -209,7 +209,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "hitAnotherCard",
         encodedGameData,
@@ -240,7 +240,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "standOff",
         encodedGameData,
@@ -271,7 +271,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "doubleDown",
         encodedGameData,
@@ -302,7 +302,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "splitHand",
         encodedGameData,
@@ -333,7 +333,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "buyInsurance",
         encodedGameData,
@@ -353,7 +353,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "bet",
         encodedBetParams.encodedGameData,
@@ -370,7 +370,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "hitAnotherCard",
         encodedHitParams.encodedGameData,
@@ -387,7 +387,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "standOff",
         encodedStandParams.encodedGameData,
@@ -404,7 +404,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "doubleDown",
         encodedDoubleParams.encodedGameData,
@@ -421,7 +421,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "splitHand",
         encodedSplitParams.encodedGameData,
@@ -438,7 +438,7 @@ export default function BlackjackTemplateWithWeb3(
       functionName: "perform",
       args: [
         gameAddresses.blackjack,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "buyInsurance",
         encodedBuyInsuranceParams.encodedGameData,

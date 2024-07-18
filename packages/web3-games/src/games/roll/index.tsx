@@ -124,7 +124,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.roll as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -151,7 +151,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.roll as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,

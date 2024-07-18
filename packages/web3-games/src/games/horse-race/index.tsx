@@ -78,7 +78,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       wager: formValues?.wager || 0,
       stopGain: 0,
       stopLoss: 0,
-      selectedCurrency: "0x0000000000000000000000000000000000000002",
+      selectedCurrency: "0x0000000000000000000000000000000000000004",
       lastPrice: 1,
     });
 
@@ -153,7 +153,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       functionName: "perform",
       args: [
         gameAddresses.horseRace as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "claim",
         encodedParams,

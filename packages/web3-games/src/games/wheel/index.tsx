@@ -93,7 +93,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       wager: formValues.wager,
       stopGain: 0,
       stopLoss: 0,
-      selectedCurrency: "0x0000000000000000000000000000000000000002",
+      selectedCurrency: "0x0000000000000000000000000000000000000004",
       lastPrice: 1,
     });
 
@@ -179,7 +179,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.wheel as Address,
-        "0x0000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000004",
         uiOperatorAddress as Address,
         "claim",
         encodedParams,
