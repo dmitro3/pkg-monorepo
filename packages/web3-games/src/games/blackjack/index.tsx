@@ -32,6 +32,7 @@ import {
   BlackjackPlayerCardsEvent,
   BlackjackPlayerHandEvent,
   BlackjackStandOffEvent,
+  BlackjackDealerCardsEvent,
 } from "./types";
 import { useListenGameEvent } from "../hooks";
 
@@ -112,6 +113,9 @@ export default function BlackjackTemplateWithWeb3(
     secondHandWager: 0,
     thirdHandWager: 0,
   });
+  const [activeMove, setActiveMove] = React.useState<
+    "Created" | "HitCard" | "StandOff"
+  >();
 
   const [activeGameData, setActiveGameData] =
     React.useState<GameStruct>(defaultGameData);
@@ -699,20 +703,35 @@ export default function BlackjackTemplateWithWeb3(
       case BJ_EVENT_TYPES.Settled: {
         const status = Number(gameEvent.program[0].data.game.status);
 
-        if (status == BlackjackGameStatus.TABLE_DEAL) {
-          gameDataRead.refetch();
-        } else if (status == BlackjackGameStatus.PLAYER_TURN) {
+        // handle events by game status
+        if (
+          status == BlackjackGameStatus.FINISHED &&
+          gameEvent.program[2]?.type == BJ_EVENT_TYPES.DealerCards
+        ) {
+          console.log("game finished");
+          handleGameFinalizeEvent(gameEvent);
+        }
+
+        console.log(activeMove, "ACTIVE MOVE!");
+        // handle events by active move
+        if (activeMove == "Created") gameDataRead.refetch();
+        else if (activeMove == "HitCard") {
           console.log("player hit move!");
           handlePlayerEvent(gameEvent);
         }
         break;
       }
+      case BJ_EVENT_TYPES.Created:
+        setActiveMove("Created");
+        break;
+
       case BJ_EVENT_TYPES.HitCard: {
+        setActiveMove("HitCard");
         break;
       }
       case BJ_EVENT_TYPES.StandOff: {
         console.log("player stand move!");
-
+        setActiveMove("StandOff");
         handlePlayerStandEvent(gameEvent);
         break;
       }
@@ -810,6 +829,31 @@ export default function BlackjackTemplateWithWeb3(
     setActiveGameData((prev) => ({
       ...prev,
       activeHandIndex: Number(standOffEvent.game.activeHandIndex),
+    }));
+  };
+
+  const handleGameFinalizeEvent = (gameEvent: DecodedEvent<any, any>) => {
+    const dealerCardsEvent = gameEvent.program[2]
+      ?.data as BlackjackDealerCardsEvent;
+
+    setActiveGameHands((prev) => ({
+      ...prev,
+      dealer: {
+        cards: {
+          cards: dealerCardsEvent.cards.cards,
+          amountCards: dealerCardsEvent.cards.cards.filter((n) => n !== 0)
+            .length,
+          totalCount: dealerCardsEvent.cards.totalCount,
+          isSoftHand: dealerCardsEvent.cards.isSoftHand,
+          canSplit: false,
+        },
+        hand: null,
+      },
+    }));
+
+    setActiveGameData((prev) => ({
+      ...prev,
+      status: BlackjackGameStatus.FINISHED,
     }));
   };
 
