@@ -56,7 +56,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { getPrice } = usePriceFeed();
+  const { priceFeed, getPrice } = usePriceFeed();
 
   const [settledResult, setSettledResult] = React.useState<ReelSpinSettled>();
   const [previousFreeSpinCount, setPreviousFreeSpinCount] =
@@ -75,14 +75,9 @@ export default function WinrBonanzaTemplateWithWeb3({
   });
 
   const encodedParams = React.useMemo(() => {
-    console.log(
-      formValues.actualBetAmount,
-      formValues.isDoubleChance,
-      "form fields"
-    );
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.actualBetAmount,
-      selectedCurrency: selectedToken.address,
+      selectedCurrency: selectedToken,
       lastPrice: getPrice(selectedToken.address),
     });
 
@@ -99,7 +94,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       functionName: "perform",
       args: [
         gameAddresses.winrBonanza as Address,
-        "0x0000000000000000000000000000000000000001",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -115,12 +110,13 @@ export default function WinrBonanzaTemplateWithWeb3({
     formValues.isDoubleChance,
     formValues.actualBetAmount,
     selectedToken.address,
+    priceFeed[selectedToken.address],
   ]);
 
   const encodedBuyFreeSpinParams = React.useMemo(() => {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.betAmount,
-      selectedCurrency: selectedToken.address,
+      selectedCurrency: selectedToken,
       lastPrice: getPrice(selectedToken.address),
     });
 
@@ -134,7 +130,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       functionName: "perform",
       args: [
         gameAddresses.winrBonanza as Address,
-        "0x0000000000000000000000000000000000000001",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "buyFreeSpins",
         encodedGameData,
@@ -146,12 +142,16 @@ export default function WinrBonanzaTemplateWithWeb3({
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.betAmount, selectedToken.address]);
+  }, [
+    formValues.betAmount,
+    selectedToken.address,
+    priceFeed[selectedToken.address],
+  ]);
 
   const encodedFreeSpinParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.betAmount,
-      selectedCurrency: selectedToken.address,
+      selectedCurrency: selectedToken,
       lastPrice: getPrice(selectedToken.address),
     });
 
@@ -160,7 +160,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       functionName: "perform",
       args: [
         gameAddresses.winrBonanza as Address,
-        "0x0000000000000000000000000000000000000001",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "freeSpin",
         "0x",
@@ -179,7 +179,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       functionName: "perform",
       args: [
         gameAddresses.winrBonanza as Address,
-        "0x0000000000000000000000000000000000000001",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,
@@ -196,7 +196,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       functionName: "perform",
       args: [
         gameAddresses.winrBonanza as Address,
-        "0x0000000000000000000000000000000000000001",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "buyFreeSpins",
         encodedBuyFreeSpinParams.encodedGameData,
@@ -213,7 +213,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       functionName: "perform",
       args: [
         gameAddresses.winrBonanza as Address,
-        "0x0000000000000000000000000000000000000001",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "freeSpin",
         encodedFreeSpinParams.encodedTxData,

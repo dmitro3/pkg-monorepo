@@ -158,6 +158,11 @@ export default [
                 name: "splitHandIndex",
                 type: "uint256",
               },
+              {
+                internalType: "uint256",
+                name: "handIndex",
+                type: "uint256",
+              },
             ],
             internalType: "struct IWINRBlackJackReader.HandData[]",
             name: "hands",

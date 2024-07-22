@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { ApiContext } from "./apiContext";
 
 const baseUrl = "https://gateway-dev.winr.games"; // TODO add your baseUrl
@@ -51,7 +54,7 @@ export async function apiFetch<
      */
     if (
       requestHeaders["Content-Type"]
-        .toLowerCase()
+        ?.toLowerCase()
         .includes("multipart/form-data")
     ) {
       delete requestHeaders["Content-Type"];
@@ -111,5 +114,6 @@ const resolveUrl = (
 ) => {
   let query = new URLSearchParams(queryParams).toString();
   if (query) query = `?${query}`;
+  // @ts-ignore
   return url.replace(/\{\w*\}/g, (key) => pathParams[key.slice(1, -1)]) + query;
 };

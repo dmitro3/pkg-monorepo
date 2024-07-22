@@ -21,6 +21,17 @@ export default [
     type: "constructor",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "client",
+        type: "address",
+      },
+    ],
+    name: "AlreadyRevealed",
+    type: "error",
+  },
+  {
     inputs: [],
     name: "ChoiceNotAllowed",
     type: "error",
@@ -33,7 +44,29 @@ export default [
         type: "address",
       },
     ],
+    name: "GameEndsAfterReveal",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "client",
+        type: "address",
+      },
+    ],
     name: "HasUncompletedGame",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "numberCellsToReveal",
+        type: "uint32",
+      },
+    ],
+    name: "InvalidNumberCellsToReveal",
     type: "error",
   },
   {
@@ -66,6 +99,17 @@ export default [
       },
     ],
     name: "MinWagerNotMet",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "client",
+        type: "address",
+      },
+    ],
+    name: "OnlyRevealAfterFill",
     type: "error",
   },
   {

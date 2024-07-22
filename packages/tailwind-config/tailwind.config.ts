@@ -439,6 +439,10 @@ const config: Omit<Config, "content"> = {
           "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/plinko/plinko-button-disabled.png)",
         "keno-cell-bg":
           "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/keno/keno-cell-bg.png)",
+        "horse-race-bet-button":
+          "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/horse-race/horse-race-bet-button.svg)",
+        "horse-race-bet-button-bg-disabled":
+          "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/horse-race/horse-race-bet-button-disabled.svg)",
         "card-bg":
           "url(https://jbassets.fra1.digitaloceanspaces.com/winrlabs-games/baccarat/jb-card-bg.svg)",
         "card-bg-black":
@@ -449,6 +453,8 @@ const config: Omit<Config, "content"> = {
           "radial-gradient(122.01% 129.55% at 85.62% -11.36%, #FFA05E 24.51%, #F97316 73.05%)",
         "videopoker-result":
           "radial-gradient(122.01% 129.55% at 85.62% -11.36%, #A3E635 24.51%, #65A30D 73.05%)",
+        "unity-overlay":
+          "linear-gradient(90deg, rgba(0, 0, 0, 0.7) 10%, rgba(0, 0, 0, 0.55) 25%, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 70%, rgba(0, 0, 0, 0.45) 80%, rgba(0, 0, 0, 0.6) 90%)",
       },
     },
   },

@@ -50,7 +50,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
     dices: [],
     stopGain: 0,
     stopLoss: 0,
-    wager: 1,
+    wager: props.minWager || 1,
   });
 
   const gameEvent = useListenGameEvent();
@@ -58,7 +58,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { getPrice } = usePriceFeed();
+  const { priceFeed, getPrice } = usePriceFeed();
 
   const [rollResult, setRollResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
@@ -88,7 +88,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
         wager: formValues.wager,
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
-        selectedCurrency: selectedToken.address,
+        selectedCurrency: selectedToken,
         lastPrice: getPrice(selectedToken.address),
       });
 
@@ -124,7 +124,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.roll as Address,
-        "0x0000000000000000000000000000000000000001",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -143,6 +143,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
     formValues.stopLoss,
     formValues.wager,
     selectedToken.address,
+    priceFeed[selectedToken.address],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
@@ -151,7 +152,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.roll as Address,
-        "0x0000000000000000000000000000000000000001",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,

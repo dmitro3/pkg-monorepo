@@ -15,6 +15,7 @@ import { Button } from "../../../ui/button";
 import { CountdownProvider, Minutes, Seconds } from "../../../ui/countdown";
 import { FormControl, FormField, FormItem, FormLabel } from "../../../ui/form";
 import { cn } from "../../../utils/style";
+import { toFormatted } from "../../../utils/web3";
 import { Horse, HorseRaceStatus } from "../constants";
 import useHorseRaceGameStore from "../store";
 import { HorseRaceForm } from "../types";
@@ -24,6 +25,7 @@ interface Props {
   maxWager: number;
   maxPayout: number;
   isGamblerParticipant: boolean;
+  logo?: string;
 }
 
 export const HorseRaceBetController: React.FC<Props> = ({
@@ -31,6 +33,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
   maxWager,
   maxPayout,
   isGamblerParticipant,
+  logo,
 }) => {
   const form = useFormContext() as HorseRaceForm;
 
@@ -54,16 +57,11 @@ export const HorseRaceBetController: React.FC<Props> = ({
   });
 
   return (
-    <UnityBetControllerContainer className="wr-top-[276px] wr-z-[15] wr-h-full wr-w-full md:wr-top-0 md:wr-w-[264px]">
+    <UnityBetControllerContainer className="wr-top-[276px] wr-z-[50] wr-h-full wr-w-full md:wr-top-0 md:!wr-w-[264px]">
       <div className="wr-mb-3 wr-flex wr-flex-col">
-        <div className="wr-mb-3 wr-hidden md:wr-block">
+        <div className="wr-mb-3 wr-hidden md:!wr-block">
           <BetControllerTitle>
-            <img
-              src={"/images/horse-race/horse-race-logo.png"}
-              width={140}
-              height={60}
-              alt="game_logo"
-            />
+            {logo && <img src={logo} width={140} height={60} alt="game_logo" />}
           </BetControllerTitle>
         </div>
         <div className="wr-mb-4 wr-flex wr-flex-col wr-gap-3 max-md:wr-mt-[40px]">
@@ -203,14 +201,14 @@ export const HorseRaceBetController: React.FC<Props> = ({
           >
             <WagerCurrencyIcon />
             <span className={cn("wr-font-semibold wr-text-zinc-100")}>
-              ${maxPayout}
+              ${toFormatted(maxPayout, 2)}
             </span>
           </div>
         </div>
-        <PreBetButton variant={"horse-race"} className="wr-mb-4 md:wr-mb-0">
+        <PreBetButton variant="horse-race" className="wr-mb-4 md:wr-mb-0">
           <Button
             type="submit"
-            variant={"horse-race"}
+            variant="horse-race"
             className={cn(
               "wr-order-1 wr-mb-4 wr-w-full md:wr-order-[unset] md:wr-mb-0",
               {

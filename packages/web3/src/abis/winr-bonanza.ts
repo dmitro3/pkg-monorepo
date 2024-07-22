@@ -34,6 +34,17 @@ export default [
   {
     inputs: [
       {
+        internalType: "uint16",
+        name: "index",
+        type: "uint16",
+      },
+    ],
+    name: "FirstIndexMustBeZero",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "client",
         type: "address",
@@ -51,6 +62,17 @@ export default [
       },
     ],
     name: "InFreeSpin",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "index",
+        type: "uint16",
+      },
+    ],
+    name: "IndexOutOfBound",
     type: "error",
   },
   {
@@ -81,6 +103,17 @@ export default [
     type: "error",
   },
   {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "payout",
+        type: "uint16",
+      },
+    ],
+    name: "PayoutShouldGreaterThanZero",
+    type: "error",
+  },
+  {
     inputs: [],
     name: "ReentrancyGuardReentrantCall",
     type: "error",
@@ -99,6 +132,17 @@ export default [
       },
     ],
     name: "Unauthorized",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "sum",
+        type: "uint32",
+      },
+    ],
+    name: "WeightSumIncorrect",
     type: "error",
   },
   {

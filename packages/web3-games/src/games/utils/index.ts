@@ -1,4 +1,5 @@
 import { BaccaratGameHand, toDecimals } from "@winrlabs/games";
+import { Token } from "@winrlabs/web3";
 import { parseUnits } from "viem";
 import { Hex } from "viem";
 
@@ -17,7 +18,7 @@ export enum GAME_HUB_GAMES {
   video_poker = "video_poker",
   wheel = "wheel",
   moon = "moon",
-  horse_race = "horse_race",
+  horse_race = "horse-race",
 }
 
 export enum GAME_HUB_EVENT_TYPES {
@@ -60,7 +61,7 @@ export interface BaccaratSettledEvent {
 export type UnitySendMessage = (
   gameObjectName: string,
   methodName: string,
-  parameter?: any,
+  parameter?: any
 ) => void;
 
 export enum PUBLIC_MULTIPLAYER_GAME_EVENTS {
@@ -111,7 +112,7 @@ export type DecodedEvent<T, K> = {
 export interface PrepareGameTransactionParams {
   wager: number;
   lastPrice: number;
-  selectedCurrency: `0x${string}`;
+  selectedCurrency: Token;
   stopGain?: number;
   stopLoss?: number;
 }
@@ -124,7 +125,7 @@ export interface PrepareGameTransactionResult {
 }
 
 export const prepareGameTransaction = (
-  params: PrepareGameTransactionParams,
+  params: PrepareGameTransactionParams
 ): PrepareGameTransactionResult => {
   const {
     lastPrice,
@@ -136,22 +137,22 @@ export const prepareGameTransaction = (
 
   const wagerInGameCurrency = toDecimals(
     (wager / lastPrice).toString(),
-    6,
+    6
   ).toString();
 
   const stopGainInGameCurrency = toDecimals(
     (stopGain / lastPrice).toString(),
-    6,
+    6
   ).toString();
 
   const stopLossInGameCurrency = toDecimals(
     (stopLoss / lastPrice).toString(),
-    6,
+    6
   ).toString();
 
-  console.log(wagerInGameCurrency, "wager in currency");
+  const decimal = selectedCurrency.decimals;
 
-  const decimal = 18;
+  console.log(wagerInGameCurrency, "wager in gamecurr");
 
   const wagerInWei = parseUnits(wagerInGameCurrency, decimal);
 
@@ -159,7 +160,7 @@ export const prepareGameTransaction = (
 
   const stopLossInWei = parseUnits(stopLossInGameCurrency, decimal);
 
-  const tokenAddress = selectedCurrency;
+  const tokenAddress = selectedCurrency.address;
 
   return {
     wagerInWei,
