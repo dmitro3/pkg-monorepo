@@ -16,6 +16,7 @@ import {
   controllerAbi,
   useCurrentAccount,
   useHandleTx,
+  usePriceFeed,
   useTokenAllowance,
   useTokenStore,
 } from "@winrlabs/web3";
@@ -73,12 +74,13 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
 
   const [formValues, setFormValues] = useState<WheelFormFields>({
     color: WheelColor.IDLE,
-    wager: props?.minWager || 2,
+    wager: props?.minWager || 1,
   });
 
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.wheel);
 
   const currentAccount = useCurrentAccount();
+  const { priceFeed, getPrice } = usePriceFeed();
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -93,8 +95,8 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       wager: formValues.wager,
       stopGain: 0,
       stopLoss: 0,
-      selectedCurrency: "0x0000000000000000000000000000000000000002",
-      lastPrice: 1,
+      selectedCurrency: selectedToken,
+      lastPrice: getPrice(selectedToken.address),
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -110,7 +112,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.wheel as Address,
-        tokenAddress,
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -122,7 +124,12 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.color, formValues.wager]);
+  }, [
+    formValues.color,
+    formValues.wager,
+    selectedToken.address,
+    priceFeed[selectedToken.address],
+  ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
@@ -130,7 +137,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.wheel,
-        encodedParams.tokenAddress,
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
         encodedParams.encodedGameData,
@@ -179,7 +186,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.wheel as Address,
-        "0x0000000000000000000000000000000000000002",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "claim",
         encodedParams,
@@ -191,7 +198,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       encodedClaimTxData: encodedClaimData,
       currentAccount,
     };
-  }, [formValues.color, formValues.wager]);
+  }, [formValues.color, formValues.wager, selectedToken.bankrollIndex]);
 
   const handleClaimTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
@@ -199,7 +206,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.wheel,
-        encodedParams.tokenAddress,
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "claim",
         encodedClaimParams.encodedClaimData,
@@ -286,6 +293,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
           setIsGamblerParticipant(true);
         }
 
+        // FIXME:Token decimal couldn't calc because player data doesn't include bankroll index
         setWheelParticipant(
           participantMapWithStore[
             fromHex(p.choice, {

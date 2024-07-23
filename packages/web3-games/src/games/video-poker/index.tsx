@@ -39,7 +39,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   } = useContractConfigContext();
 
   const [formValues, setFormValues] = React.useState<VideoPokerFormFields>({
-    wager: props.minWager || 1,
+    wager: props?.minWager || 1,
     cardsToSend: [0, 0, 0, 0, 0],
   });
   const [settledCards, setSettledCards] = React.useState<{
@@ -54,7 +54,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { getPrice } = usePriceFeed();
+  const { priceFeed, getPrice } = usePriceFeed();
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -69,7 +69,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       wager: formValues.wager,
       stopGain: 0,
       stopLoss: 0,
-      selectedCurrency: selectedToken.address,
+      selectedCurrency: selectedToken,
       lastPrice: getPrice(selectedToken.address),
     });
 
@@ -83,7 +83,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.videoPoker as Address,
-        "0x0000000000000000000000000000000000000002",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "start",
         encodedGameData,
@@ -95,7 +95,11 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues.wager, selectedToken.address]);
+  }, [
+    formValues.wager,
+    selectedToken.address,
+    priceFeed[selectedToken.address],
+  ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
@@ -103,7 +107,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.videoPoker,
-        "0x0000000000000000000000000000000000000002",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "start",
         encodedParams.encodedGameData,
@@ -117,7 +121,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   const encodedFinishParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
-      selectedCurrency: selectedToken.address,
+      selectedCurrency: selectedToken,
       lastPrice: 1,
     });
 
@@ -138,7 +142,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.videoPoker as Address,
-        "0x0000000000000000000000000000000000000002",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "finish",
         encodedGameData,
@@ -158,7 +162,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       functionName: "perform",
       args: [
         gameAddresses.videoPoker,
-        "0x0000000000000000000000000000000000000002",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "finish",
         encodedFinishParams.encodedGameData,
