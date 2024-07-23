@@ -273,6 +273,7 @@ export const HoldemPokerScene = ({
   }, [activeGameData?.cards]);
 
   React.useEffect(() => {
+    if (wager <= 0) return;
     sendMessage("WebGLHandler", "ReceiveMessage", `HP_SetWager|${wager}`);
   }, [wager]);
 
