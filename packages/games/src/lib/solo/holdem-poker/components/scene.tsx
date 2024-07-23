@@ -6,11 +6,7 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 
 import { CDN_URL } from "../../../constants";
 import { toDecimals, toFormatted } from "../../../utils/web3";
-import {
-  HOLDEM_POKER_GAME_STATUS,
-  HoldemPokerActiveGame,
-  HoldemPokerGameProps,
-} from "../types";
+import { HOLDEM_POKER_GAME_STATUS, HoldemPokerGameProps } from "../types";
 import { cn } from "../../../utils/style";
 import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
 import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
@@ -20,9 +16,11 @@ import {
   UnityFoldEvent,
   UnityNextGameAvailable,
   UnityPlayerHandWin,
+  UnitySlotBetValue,
   UnityWaitForResult,
 } from "../constants";
 import { useDebounce } from "use-debounce";
+import { WagerBetController } from "./bet-controller";
 
 type HoldemPokerSceneProps = HoldemPokerGameProps & {
   buildedGameUrl: string;
@@ -34,16 +32,22 @@ export const HoldemPokerScene = ({
   handleDeal,
   handleFinalize,
   handleFinalizeFold,
-  setActiveGame,
   onRefresh,
   onFormChange,
   isInitialDataFetched,
   activeGameData,
   buildedGameUrl,
   isLoggedIn,
+  minWager,
+  maxWager,
 }: HoldemPokerSceneProps) => {
   const [ante, setAnte] = React.useState<number>(0);
   const [aaBonus, setAaBonus] = React.useState<number>(0);
+  const [wager, setWager] = React.useState<number>(minWager || 1);
+
+  const [status, setStatus] = React.useState<HOLDEM_POKER_GAME_STATUS>(
+    HOLDEM_POKER_GAME_STATUS.OnIdle
+  );
 
   const percentageRef = React.useRef(0);
 
@@ -56,10 +60,10 @@ export const HoldemPokerScene = ({
     unityProvider,
     UNSAFE__detachAndUnloadImmediate: detachAndUnloadImmediate,
   } = useUnityContext({
-    loaderUrl: `${BUILDED_GAME_URL}/HoldemPoker.loader.js`,
-    dataUrl: `${BUILDED_GAME_URL}/HoldemPoker.data.unityweb`,
-    frameworkUrl: `${BUILDED_GAME_URL}/HoldemPoker.framework.js.unityweb`,
-    codeUrl: `${BUILDED_GAME_URL}/HoldemPoker.wasm.unityweb`,
+    loaderUrl: `${BUILDED_GAME_URL}/HoldemPokerV2.loader.js`,
+    dataUrl: `${BUILDED_GAME_URL}/HoldemPokerV2.data.unityweb`,
+    frameworkUrl: `${BUILDED_GAME_URL}/HoldemPokerV2.framework.js.unityweb`,
+    codeUrl: `${BUILDED_GAME_URL}/HoldemPokerV2.wasm.unityweb`,
   });
 
   const { unityEvent } = useListenUnityEvent();
@@ -83,15 +87,6 @@ export const HoldemPokerScene = ({
 
     if (unityEvent.name === UnityDealEvent) {
       console.log("Deal event");
-
-      // first item = ante, second item = aa bonus
-      const [ante, aaBonus] = unityEvent.strParam.split(",").map(Number);
-
-      setActiveGame((prev: HoldemPokerActiveGame) => ({
-        ...prev,
-        anteChipAmount: ante as number,
-        aaBonusChipAmount: aaBonus as number,
-      }));
 
       handleDealEvent();
     }
@@ -123,7 +118,21 @@ export const HoldemPokerScene = ({
 
       sendMessage("WebGLHandler", "ReceiveMessage", "HP_HideResult");
     }
+
+    if (unityEvent.name == UnitySlotBetValue) {
+      const param = JSON.parse(unityEvent.strParam);
+
+      handleUnityChipEvent(param);
+    }
   }, [unityEvent]);
+
+  const handleUnityChipEvent = (param: number[]) => {
+    const id = param[0];
+    const value = param[1] || 0;
+
+    if (id == 0) setAnte(value);
+    else setAaBonus(value);
+  };
 
   const handleDealEvent = async () => {
     await handleDeal();
@@ -263,7 +272,14 @@ export const HoldemPokerScene = ({
     }
   }, [activeGameData?.cards]);
 
-  const formFields = React.useMemo(() => ({ ante, aaBonus }), [ante, aaBonus]);
+  React.useEffect(() => {
+    sendMessage("WebGLHandler", "ReceiveMessage", `HP_SetWager|${wager}`);
+  }, [wager]);
+
+  const formFields = React.useMemo(
+    () => ({ ante, aaBonus, wager }),
+    [ante, aaBonus, wager]
+  );
 
   const debouncedFormFields = useDebounce(formFields, 400);
 
@@ -314,8 +330,16 @@ export const HoldemPokerScene = ({
       )}
       <Unity
         unityProvider={unityProvider}
-        devicePixelRatio={devicePixelRatio}
+        devicePixelRatio={1}
         className={cn("wr-h-full wr-w-full wr-rounded-md wr-bg-zinc-900")}
+      />
+      <WagerBetController
+        className="wr-absolute wr-bottom-2 wr-right-2"
+        wager={wager}
+        setWager={setWager}
+        minWager={minWager || 1}
+        maxWager={maxWager || 2000}
+        status={status}
       />
     </>
   );

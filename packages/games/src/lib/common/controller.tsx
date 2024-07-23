@@ -286,7 +286,11 @@ export const UnityFullscreenButton: React.FC<{
         className && className
       )}
     >
-      <img src={`${CDN_URL}/icons/icon-undo.svg`} width={24} height={24} />
+      <img
+        src={`${CDN_URL}/icons/icon-fullscreen.svg`}
+        width={24}
+        height={24}
+      />
     </Button>
   );
 };

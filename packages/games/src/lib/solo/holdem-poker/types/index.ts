@@ -4,7 +4,8 @@ export interface HoldemPokerGameProps {
   activeGameData: HoldemPokerActiveGame;
   isInitialDataFetched: boolean;
   isLoggedIn: boolean;
-  setActiveGame: React.Dispatch<React.SetStateAction<HoldemPokerActiveGame>>;
+  minWager?: number;
+  maxWager?: number;
   handleDeal: () => Promise<void>;
   handleFinalize: () => Promise<void>;
   handleFinalizeFold: () => Promise<void>;
@@ -14,7 +15,8 @@ export interface HoldemPokerGameProps {
 
 export interface HoldemPokerFormFields {
   ante: number;
-  aaBonus: Number;
+  aaBonus: number;
+  wager: number;
 }
 
 export interface HoldemPokerActiveGame {

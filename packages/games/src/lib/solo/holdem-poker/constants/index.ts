@@ -11,3 +11,5 @@ export const UnityDealerHandWin = "DealerHandWin";
 export const UnityNextGameAvailable = "NextGameAvailable";
 
 export const UnityWaitForResult = "WaitForResult";
+
+export const UnitySlotBetValue = "HP_SlotBetValue";
