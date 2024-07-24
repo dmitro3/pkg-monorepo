@@ -16,7 +16,7 @@ const CrashPage = () => {
   return (
     <>
       <CrashGame
-        minWager={2}
+        minWager={0.1}
         maxWager={2000}
         gameUrl={`${CDN_URL}/builded-games/crash`}
       />
