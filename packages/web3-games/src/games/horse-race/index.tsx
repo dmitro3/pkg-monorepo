@@ -50,6 +50,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     uiOperatorAddress,
   } = useContractConfigContext();
   const selectedToken = useTokenStore((s) => s.selectedToken);
+  const allTokens = useTokenStore((s) => s.tokens);
   const selectedTokenAddress = selectedToken.address;
 
   const [formValues, setFormValues] = useState<HorseRaceFormFields>({
@@ -232,6 +233,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       bet,
       participants,
       isGameActive,
+      session,
     } = gameEvent;
 
     const isGameFinished =
@@ -278,10 +280,14 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
 
         const names = selectedHorse[_participantHorse].map((item) => item.name);
 
-        // FIXME:Token decimal couldn't calc because player data doesn't include bankroll index
+        const token = allTokens.find(
+          (t) => t.bankrollIndex === session.bankrollIndex
+        );
+        const tokenDecimal = token?.decimals || 0;
+
         if (!names.includes(p.player)) {
           setSelectedHorse(_participantHorse, {
-            bet: Number(formatUnits(p.wager, 18)) as number,
+            bet: Number(formatUnits(p.wager, tokenDecimal)) as number,
             name: p.player as string,
           });
         }
