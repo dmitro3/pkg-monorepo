@@ -293,7 +293,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
           setIsGamblerParticipant(true);
         }
 
-        // FIXME:Token decimal couldn't calc because player data doesn't include bankroll index
+        // FIXME: Token decimal couldn't calc because player data doesn't include bankroll index
         setWheelParticipant(
           participantMapWithStore[
             fromHex(p.choice, {
