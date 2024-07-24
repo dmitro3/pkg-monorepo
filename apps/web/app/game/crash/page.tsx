@@ -22,7 +22,7 @@ const CrashPage = () => {
         options={{
           scene: {
             loader: "/crash/loader.png",
-            logo: "/crash/logo.png",
+            logo: "/crash/game-logo.svg",
           },
         }}
       />
