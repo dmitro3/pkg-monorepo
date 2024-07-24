@@ -4,6 +4,7 @@ import {
   ActiveGameHands,
   BlackjackCard,
   BlackjackFormFields,
+  BlackjackGameResult,
   BlackjackGameStatus,
   BlackjackHandStatus,
   BlackjackTemplate,
@@ -33,6 +34,7 @@ import {
   BlackjackPlayerHandEvent,
   BlackjackStandOffEvent,
   BlackjackDealerCardsEvent,
+  BlackjackResultEvent,
 } from "./types";
 import { useListenGameEvent } from "../hooks";
 
@@ -114,7 +116,7 @@ export default function BlackjackTemplateWithWeb3(
     thirdHandWager: 0,
   });
   const [activeMove, setActiveMove] = React.useState<
-    "Created" | "HitCard" | "StandOff" | "DoubleDown" | "Split"
+    "Created" | "HitCard" | "StandOff" | "DoubleDown" | "Split" | "Insurance"
   >();
 
   const [activeGameData, setActiveGameData] =
@@ -623,7 +625,8 @@ export default function BlackjackTemplateWithWeb3(
           _amountCards === 2 &&
           new BlackjackCard(hand.cards.cards[0] as number).value ===
             new BlackjackCard(hand.cards.cards[1] as number).value &&
-          !hand.hand.isInsured;
+          !hand.hand.isInsured &&
+          i < 3;
 
         const handObject = {
           cards: {
@@ -705,10 +708,7 @@ export default function BlackjackTemplateWithWeb3(
         const status = Number(gameEvent.program[0].data.game.status);
 
         // handle events by game status
-        if (
-          status == BlackjackGameStatus.FINISHED &&
-          gameEvent.program[2]?.type == BJ_EVENT_TYPES.DealerCards
-        ) {
+        if (status == BlackjackGameStatus.FINISHED) {
           console.log("game finished");
           handleGameFinalizeEvent(gameEvent);
         }
@@ -724,7 +724,26 @@ export default function BlackjackTemplateWithWeb3(
           handlePlayerEvent(gameEvent);
         } else if (activeMove == "Split") {
           console.log("player split move!");
-          handlePlayerSplitEvent(gameEvent);
+          const playerCardsEvent = gameEvent.program[2]
+            ?.data as BlackjackPlayerCardsEvent;
+          const playerHandEvent = gameEvent.program[3]
+            ?.data as BlackjackPlayerHandEvent;
+          const splittedPlayerCardsEvent = gameEvent.program[4]
+            ?.data as BlackjackPlayerCardsEvent;
+          const splittedPlayerHandEvent = gameEvent.program[5]
+            ?.data as BlackjackPlayerHandEvent;
+          const settledEvent = gameEvent.program[0]
+            ?.data as BlackjackSettledEvent;
+          handleSplitEventCards(
+            playerCardsEvent,
+            playerHandEvent,
+            settledEvent
+          );
+          handleSplitEventCards(
+            splittedPlayerCardsEvent,
+            splittedPlayerHandEvent,
+            settledEvent
+          );
         }
         break;
       }
@@ -748,7 +767,12 @@ export default function BlackjackTemplateWithWeb3(
       }
       case BJ_EVENT_TYPES.Split: {
         setActiveMove("Split");
+        handlePlayerSplitEvent(gameEvent);
         break;
+      }
+      case BJ_EVENT_TYPES.Insurance: {
+        setActiveMove("Insurance");
+        handleBuyInsuranceEvent(gameEvent);
       }
       default: {
         return;
@@ -759,10 +783,10 @@ export default function BlackjackTemplateWithWeb3(
   // event handlers
   const handlePlayerEvent = (results: DecodedEvent<any, any>) => {
     const hitCardEvent = results.program[0]?.data as BlackjackSettledEvent;
-    const playerHandEvent = results.program[1]
-      ?.data as BlackjackPlayerHandEvent;
     const playerCardsEvent = results.program[2]
       ?.data as BlackjackPlayerCardsEvent;
+    const playerHandEvent = results.program[3]
+      ?.data as BlackjackPlayerHandEvent;
 
     const handId = Number(playerCardsEvent.handIndex);
 
@@ -853,9 +877,8 @@ export default function BlackjackTemplateWithWeb3(
   const handlePlayerSplitEvent = (gameEvent: DecodedEvent<any, any>) => {
     const playerCardsEvent = gameEvent.program[2]
       ?.data as BlackjackPlayerCardsEvent;
-    const splittedPlayerCardsEvent = gameEvent.program[3]
+    const splittedPlayerCardsEvent = gameEvent.program[4]
       ?.data as BlackjackPlayerCardsEvent;
-    const settledEvent = gameEvent.program[0]?.data as BlackjackSettledEvent;
 
     const handId = Number(playerCardsEvent.handIndex);
     const splittedHandId = Number(splittedPlayerCardsEvent.handIndex);
@@ -876,6 +899,10 @@ export default function BlackjackTemplateWithWeb3(
           hand: {
             ...(prev.splittedFirstHand as any),
             chipsAmount: prev.firstHand.hand?.chipsAmount || 0,
+          },
+          cards: {
+            ...(prev.splittedFirstHand.cards as any),
+            canSplit: false,
           },
           handId: splittedHandId,
         },
@@ -899,6 +926,10 @@ export default function BlackjackTemplateWithWeb3(
             ...(prev.splittedSecondHand as any),
             chipsAmount: prev.secondHand.hand?.chipsAmount || 0,
           },
+          cards: {
+            ...(prev.splittedSecondHand.cards as any),
+            canSplit: false,
+          },
           handId: splittedHandId,
         },
       }));
@@ -921,19 +952,19 @@ export default function BlackjackTemplateWithWeb3(
             ...(prev.splittedThirdHand as any),
             chipsAmount: prev.thirdHand.hand?.chipsAmount || 0,
           },
+          cards: {
+            ...(prev.splittedThirdHand.cards as any),
+            canSplit: false,
+          },
           handId: splittedHandId,
         },
       }));
     }
-
-    setTimeout(() => {
-      handleSplitEventCards(playerCardsEvent, settledEvent);
-      handleSplitEventCards(splittedPlayerCardsEvent, settledEvent);
-    }, 200);
   };
 
   const handleSplitEventCards = (
     playerCardsEvent: BlackjackPlayerCardsEvent,
+    playerHandEvent: BlackjackPlayerHandEvent,
     settledEvent: BlackjackSettledEvent
   ) => {
     const handId = Number(playerCardsEvent.handIndex);
@@ -975,9 +1006,9 @@ export default function BlackjackTemplateWithWeb3(
       },
       hand: {
         chipsAmount: prevHand.hand?.chipsAmount || 0,
-        isInsured: false,
-        status: BlackjackHandStatus.NONE,
-        isDouble: false,
+        isInsured: playerHandEvent.isInsured,
+        status: playerHandEvent.status,
+        isDouble: playerHandEvent.isDouble,
         isSplitted: prevHand.hand?.isSplitted || false,
         splittedHandIndex: prevHand.hand?.splittedHandIndex || null,
       },
@@ -1013,9 +1044,69 @@ export default function BlackjackTemplateWithWeb3(
     }));
   };
 
+  const handleBuyInsuranceEvent = (gameEvent: DecodedEvent<any, any>) => {
+    const playerHandEvent = gameEvent.program[1]
+      ?.data as BlackjackPlayerHandEvent;
+    const handId = Number(playerHandEvent.handIndex);
+
+    if (handId === activeGameHands.firstHand.handId) {
+      setActiveGameHands((prev) => ({
+        ...prev,
+        firstHand: {
+          ...prev.firstHand,
+          cards: {
+            ...(prev.firstHand.cards as any),
+            canSplit: false,
+          },
+          hand: {
+            ...(prev.firstHand.hand as any),
+            isInsured: true,
+          },
+        },
+      }));
+    }
+
+    if (handId === activeGameHands.secondHand.handId) {
+      setActiveGameHands((prev) => ({
+        ...prev,
+        secondHand: {
+          ...prev.secondHand,
+          cards: {
+            ...(prev.secondHand.cards as any),
+            canSplit: false,
+          },
+          hand: {
+            ...(prev.secondHand.hand as any),
+            isInsured: true,
+          },
+        },
+      }));
+    }
+
+    if (handId === activeGameHands.thirdHand.handId) {
+      setActiveGameHands((prev) => ({
+        ...prev,
+        thirdHand: {
+          ...prev.thirdHand,
+          cards: {
+            ...(prev.thirdHand.cards as any),
+            canSplit: false,
+          },
+          hand: {
+            ...(prev.thirdHand.hand as any),
+            isInsured: true,
+          },
+        },
+      }));
+    }
+  };
+
   const handleGameFinalizeEvent = (gameEvent: DecodedEvent<any, any>) => {
-    const dealerCardsEvent = gameEvent.program[2]
-      ?.data as BlackjackDealerCardsEvent;
+    const results = gameEvent.program[1]?.data as BlackjackResultEvent;
+
+    const dealerCardsEvent = gameEvent.program.find(
+      (e) => e.type == BJ_EVENT_TYPES.DealerCards
+    )?.data as BlackjackDealerCardsEvent;
 
     setActiveGameHands((prev) => ({
       ...prev,
@@ -1029,6 +1120,24 @@ export default function BlackjackTemplateWithWeb3(
           canSplit: false,
         },
         hand: null,
+      },
+      firstHand: {
+        ...prev.firstHand,
+        settledResult: {
+          result: results.results[0],
+        },
+      },
+      secondHand: {
+        ...prev.secondHand,
+        settledResult: {
+          result: results.results[1],
+        },
+      },
+      thirdHand: {
+        ...prev.thirdHand,
+        settledResult: {
+          result: results.results[2],
+        },
       },
     }));
 

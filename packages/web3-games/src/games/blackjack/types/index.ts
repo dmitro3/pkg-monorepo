@@ -1,4 +1,4 @@
-import { BlackjackHandStatus } from "@winrlabs/games";
+import { BlackjackGameResult, BlackjackHandStatus } from "@winrlabs/games";
 import { Address } from "viem";
 
 export interface BlackjackContractGameStruct {
@@ -43,6 +43,7 @@ export enum BJ_EVENT_TYPES {
   DoubleDown = "DoubleDown",
   DealerCards = "DealerCards",
   Split = "Split",
+  Insurance = "Insurance",
 }
 
 export interface BlackjackSettledEvent {
@@ -77,4 +78,8 @@ export interface BlackjackPlayerCardsEvent {
 export interface BlackjackDealerCardsEvent {
   cards: BlackjackContractCardStruct;
   handIndex: number;
+}
+
+export interface BlackjackResultEvent {
+  results: BlackjackGameResult[];
 }
