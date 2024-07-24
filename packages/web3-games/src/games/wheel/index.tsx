@@ -80,6 +80,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.wheel);
 
   const currentAccount = useCurrentAccount();
+  const allTokens = useTokenStore((s) => s.tokens);
   const { priceFeed, getPrice } = usePriceFeed();
 
   const allowance = useTokenAllowance({
@@ -263,6 +264,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       participants,
       isGameActive,
       angle,
+      session,
     } = gameEvent;
 
     const isGameFinished =
@@ -293,7 +295,11 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
           setIsGamblerParticipant(true);
         }
 
-        // FIXME:Token decimal couldn't calc because player data doesn't include bankroll index
+        const token = allTokens.find(
+          (t) => t.bankrollIndex === session.bankrollIndex
+        );
+        const tokenDecimal = token?.decimals || 0;
+
         setWheelParticipant(
           participantMapWithStore[
             fromHex(p.choice, {
@@ -302,7 +308,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
           ],
           {
             player: p.player,
-            bet: Number(formatUnits(p.wager, 18)),
+            bet: Number(formatUnits(p.wager, tokenDecimal)),
           }
         );
       });
