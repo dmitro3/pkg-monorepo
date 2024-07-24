@@ -52,6 +52,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     uiOperatorAddress,
   } = useContractConfigContext();
   const currentAccount = useCurrentAccount();
+  const allTokens = useTokenStore((s) => s.tokens);
   const selectedToken = useTokenStore((s) => s.selectedToken);
   const selectedTokenAddress = selectedToken.address;
   const { data: betHistory, refetch: refetchBetHistory } =
@@ -244,6 +245,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       player,
       participants,
       result,
+      session,
       isGameActive,
     } = gameEvent;
 
@@ -270,6 +272,11 @@ const CrashGame = (props: CrashTemplateProps) => {
       finalMultiplier: result / 100,
     });
 
+    const token = allTokens.find(
+      (t) => t.bankrollIndex === session.bankrollIndex
+    );
+    const tokenDecimal = token?.decimals || 0;
+
     if (participants?.length > 0 && isGameActive) {
       participants?.forEach((p) => {
         addParticipant({
@@ -278,7 +285,7 @@ const CrashGame = (props: CrashTemplateProps) => {
           multiplier: fromHex(p.choice, {
             to: "number",
           }) as unknown as number,
-          bet: Number(formatUnits(p.wager, 18)),
+          bet: Number(formatUnits(p.wager, tokenDecimal)),
         });
       });
     }
@@ -288,7 +295,7 @@ const CrashGame = (props: CrashTemplateProps) => {
         avatar: "",
         name: player,
         multiplier: bet.choice as unknown as number,
-        bet: bet.converted.wager,
+        bet: Number(formatUnits(bet.wager, tokenDecimal)),
       });
     }
   }, [gameEvent, currentAccount.address]);
