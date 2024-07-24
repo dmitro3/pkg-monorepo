@@ -176,7 +176,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       functionName: "perform",
       args: [
         gameAddresses.crash as Address,
-        "0x0000000000000000000000000000000000000005",
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "claim",
         encodedParams,
@@ -196,7 +196,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       functionName: "perform",
       args: [
         gameAddresses.crash,
-        encodedParams.tokenAddress,
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "claim",
         encodedClaimParams.encodedClaimData,
