@@ -29,11 +29,18 @@ import { CrashForm } from "../types";
 interface CrashBetControllerProps {
   minWager: number;
   maxWager: number;
+  options?: {
+    scene?: {
+      loader?: string;
+      logo?: string;
+    };
+  };
 }
 
 export const CrashBetController: React.FC<CrashBetControllerProps> = ({
   minWager,
   maxWager,
+  options,
 }) => {
   const form: CrashForm = useFormContext();
   const wager = form.watch("wager");
@@ -66,7 +73,7 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
         <div className="wr-mb-3 wr-hidden md:!wr-block">
           <BetControllerTitle>
             <img
-              src={"/crash/game-logo.svg"}
+              src={options?.scene?.logo}
               width={140}
               height={60}
               alt="game_logo"

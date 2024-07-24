@@ -83,9 +83,14 @@ const CrashTemplate = (props: TemplateProps) => {
             <CrashBetController
               minWager={props?.minWager || 2}
               maxWager={props?.maxWager || 2000}
+              options={props.options}
             />
             <LastBets />
-            <CrashScene onComplete={onComplete} gameUrl={props.gameUrl} />
+            <CrashScene
+              onComplete={onComplete}
+              gameUrl={props.gameUrl}
+              options={props.options}
+            />
             <div className="wr-absolute wr-top-0 wr-z-10 wr-h-full wr-w-full md:wr-bg-unity-overlay" />
             <CrashParticipant />
           </UnityGameContainer>

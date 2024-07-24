@@ -14,9 +14,16 @@ import { CrashForm } from "../types";
 export const CrashScene = ({
   onComplete,
   gameUrl,
+  options,
 }: {
   onComplete?: (multiplier: number) => void;
   gameUrl?: string;
+  options: {
+    scene?: {
+      loader?: string;
+      logo?: string;
+    };
+  };
 }) => {
   const devicePixelRatio = useDevicePixelRatio();
 
@@ -97,7 +104,7 @@ export const CrashScene = ({
       {percentageRef.current !== 100 && (
         <div className="wr-absolute wr-left-0 wr-top-0 wr-z-[100] wr-flex wr-h-[600px] wr-w-full wr-flex-col wr-items-center wr-justify-center wr-gap-4 md:wr-h-full">
           <img
-            src={"/crash/loader.png"}
+            src={options.scene?.loader}
             alt="loader"
             className="wr-absolute wr-left-0 wr-top-0 wr-h-full wr-w-full wr-rounded-md"
           />

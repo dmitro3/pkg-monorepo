@@ -19,6 +19,12 @@ const CrashPage = () => {
         minWager={0.1}
         maxWager={2000}
         gameUrl={`${CDN_URL}/builded-games/crash`}
+        options={{
+          scene: {
+            loader: "/crash/loader.png",
+            logo: "/crash/logo.png",
+          },
+        }}
       />
       <BetHistory gameType={GameType.MOON} />
     </>

@@ -37,7 +37,7 @@ type TemplateOptions = {
 };
 
 interface CrashTemplateProps {
-  options?: TemplateOptions;
+  options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
   onAnimationCompleted?: (result: []) => void;
@@ -322,11 +322,6 @@ const CrashGame = (props: CrashTemplateProps) => {
     <div>
       <CrashTemplate
         {...props}
-        options={{
-          scene: {
-            logo: "/crash/game-logo.svg",
-          },
-        }}
         onComplete={onComplete}
         onSubmitGameForm={onGameSubmit}
         onFormChange={(val) => {
