@@ -129,7 +129,6 @@ const CrashGame = (props: CrashTemplateProps) => {
     };
   }, [formValues?.multiplier, formValues?.wager]);
 
-  console.log("CRASH", gameEvent);
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
       abi: controllerAbi,
