@@ -273,11 +273,14 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(esbuild@0.21.1)(typescript@5.4.5)
       framer-motion:
-        specifier: ^10.12.4
+        specifier: ^10.18.0
         version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
       react-cool-dimensions:
         specifier: ^3.0.1
         version: 3.0.1(react@18.3.1)
+      react-draggable:
+        specifier: ^4.4.6
+        version: 4.4.6(react-dom@18.3.1)(react@18.3.1)
       react-hook-form:
         specifier: ^7.51.2
         version: 7.51.4(react@18.3.1)
@@ -16311,6 +16314,18 @@ packages:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
+
+  /react-draggable@4.4.6(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-LtY5Xw1zTPqHkVmtM3X8MUOxNDOUhv/khTgBgrUvwaS064bwVvxT+q5El0uUFNx5IEPKXuRejr7UqLwBIg5pdw==}
+    peerDependencies:
+      react: '>= 16.3.0'
+      react-dom: '>= 16.3.0'
+    dependencies:
+      clsx: 1.2.1
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    dev: false
 
   /react-hook-form@7.51.4(react@18.3.1):
     resolution: {integrity: sha512-V14i8SEkh+V1gs6YtD0hdHYnoL4tp/HX/A45wWQN15CYr9bFRmmRdYStSO5L65lCCZRF+kYiSKhm9alqbcdiVA==}

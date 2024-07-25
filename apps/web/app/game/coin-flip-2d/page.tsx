@@ -1,7 +1,7 @@
 "use client";
 
 import { GameType } from "@winrlabs/games";
-import { BetHistory, CoinFlipGame } from "@winrlabs/web3-games";
+import { BetHistory, CoinFlipGame, LiveResults } from "@winrlabs/web3-games";
 
 export default function CoinFlipPage() {
   return (
@@ -16,6 +16,7 @@ export default function CoinFlipPage() {
         maxWager={2000}
       />
       <BetHistory gameType={GameType.COINFLIP} />
+      <LiveResults />
     </>
   );
 }
