@@ -13,6 +13,7 @@ import {
 import {
   blackjackReaderAbi,
   controllerAbi,
+  delay,
   useCurrentAccount,
   useHandleTx,
   usePriceFeed,
@@ -133,9 +134,7 @@ export default function BlackjackTemplateWithWeb3(
 
   const resetGame = () => {
     setActiveGameData(defaultGameData);
-
     setActiveGameHands(defaultActiveGameHands);
-
     setIsRpcRefetched(false);
   };
 
@@ -569,6 +568,7 @@ export default function BlackjackTemplateWithWeb3(
     query: {
       enabled: !!currentAccount.address,
       refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
       refetchOnMount: false,
       retry: false,
     },
@@ -576,6 +576,7 @@ export default function BlackjackTemplateWithWeb3(
 
   React.useEffect(() => {
     if (!gameDataRead.data) return;
+
     const { game, hands } = gameDataRead.data;
     const { activeHandIndex, status, canInsure } = game;
 
@@ -590,110 +591,118 @@ export default function BlackjackTemplateWithWeb3(
       status: status,
     });
 
-    const _hands = hands as unknown as BlackjackContractHand[];
+    setTimeout(() => {
+      const _hands = hands as unknown as BlackjackContractHand[];
 
-    for (let i = 0; i < _hands.length; i++) {
-      const handId = Number(_hands[i]?.handIndex);
-      const hand = hands[i] as unknown as BlackjackContractHand;
+      for (let i = 0; i < _hands.length; i++) {
+        const handId = Number(_hands[i]?.handIndex);
+        const hand = hands[i] as unknown as BlackjackContractHand;
 
-      if (i == 5) {
-        // DEALER HAND
-        const _amountCards = hand.cards.cards.filter((n) => n !== 0).length;
+        if (i == 5) {
+          // DEALER HAND
+          const _amountCards = hand.cards.cards.filter((n) => n !== 0).length;
 
-        const _totalCount = hand.cards.cards.reduce((acc, cur) => acc + cur, 0);
+          const _totalCount = hand.cards.cards.reduce(
+            (acc, cur) => acc + cur,
+            0
+          );
 
-        setActiveGameHands((prev) => ({
-          ...prev,
-          dealer: {
+          setActiveGameHands((prev) => ({
+            ...prev,
+            dealer: {
+              cards: {
+                cards: hand.cards.cards,
+                amountCards: _amountCards,
+                totalCount: _totalCount,
+                isSoftHand: hand.cards.isSoftHand,
+                canSplit: false,
+              },
+              hand: null,
+            },
+          }));
+        } else {
+          // PLAYER HANDS
+          if (handId == 0) continue;
+
+          const _amountCards = hand.cards.cards.filter((n) => n !== 0).length;
+          const _totalCount = hand.cards.cards.reduce(
+            (acc, cur) => acc + cur,
+            0
+          );
+          const _canSplit =
+            _amountCards === 2 &&
+            new BlackjackCard(hand.cards.cards[0] as number).value ===
+              new BlackjackCard(hand.cards.cards[1] as number).value &&
+            !hand.hand.isInsured &&
+            i < 3;
+
+          const handObject = {
             cards: {
               cards: hand.cards.cards,
               amountCards: _amountCards,
               totalCount: _totalCount,
               isSoftHand: hand.cards.isSoftHand,
-              canSplit: false,
+              canSplit: _canSplit,
             },
-            hand: null,
-          },
-        }));
-      } else {
-        // PLAYER HANDS
-        if (handId == 0) continue;
+            hand: {
+              chipsAmount: Number(hand.hand.chipsAmount),
+              isInsured: hand.hand.isInsured,
+              status: hand.hand.status,
+              isDouble: hand.hand.isDouble,
+              isSplitted: false,
+              splittedHandIndex: Number(hand.splitHandIndex),
+            },
+            handId,
+            isCompleted:
+              hand.hand.status !== BlackjackHandStatus.AWAITING_HIT ||
+              hand.hand.status !== (BlackjackHandStatus.PLAYING as any),
+          };
 
-        const _amountCards = hand.cards.cards.filter((n) => n !== 0).length;
-        const _totalCount = hand.cards.cards.reduce((acc, cur) => acc + cur, 0);
-        const _canSplit =
-          _amountCards === 2 &&
-          new BlackjackCard(hand.cards.cards[0] as number).value ===
-            new BlackjackCard(hand.cards.cards[1] as number).value &&
-          !hand.hand.isInsured &&
-          i < 3;
+          if (i === 0)
+            setActiveGameHands((prev) => ({
+              ...prev,
+              firstHand: handObject,
+            }));
 
-        const handObject = {
-          cards: {
-            cards: hand.cards.cards,
-            amountCards: _amountCards,
-            totalCount: _totalCount,
-            isSoftHand: hand.cards.isSoftHand,
-            canSplit: _canSplit,
-          },
-          hand: {
-            chipsAmount: Number(hand.hand.chipsAmount),
-            isInsured: hand.hand.isInsured,
-            status: hand.hand.status,
-            isDouble: hand.hand.isDouble,
-            isSplitted: false,
-            splittedHandIndex: Number(hand.splitHandIndex),
-          },
-          handId,
-          isCompleted:
-            hand.hand.status !== BlackjackHandStatus.AWAITING_HIT ||
-            hand.hand.status !== (BlackjackHandStatus.PLAYING as any),
-        };
+          if (i === 1)
+            setActiveGameHands((prev) => ({
+              ...prev,
+              secondHand: handObject,
+            }));
 
-        if (i === 0)
-          setActiveGameHands((prev) => ({
-            ...prev,
-            firstHand: handObject,
-          }));
+          if (i === 2)
+            setActiveGameHands((prev) => ({
+              ...prev,
+              thirdHand: handObject,
+            }));
 
-        if (i === 1)
-          setActiveGameHands((prev) => ({
-            ...prev,
-            secondHand: handObject,
-          }));
+          // splitted hands
+          if (Number(_hands[0]?.splitHandIndex) === handId)
+            setActiveGameHands((prev) => ({
+              ...prev,
+              splittedFirstHand: handObject,
+            }));
 
-        if (i === 2)
-          setActiveGameHands((prev) => ({
-            ...prev,
-            thirdHand: handObject,
-          }));
+          if (Number(_hands[1]?.splitHandIndex) === handId)
+            setActiveGameHands((prev) => ({
+              ...prev,
+              splittedSecondHand: handObject,
+            }));
 
-        // splitted hands
-        if (Number(_hands[0]?.splitHandIndex) === handId)
-          setActiveGameHands((prev) => ({
-            ...prev,
-            splittedFirstHand: handObject,
-          }));
-
-        if (Number(_hands[1]?.splitHandIndex) === handId)
-          setActiveGameHands((prev) => ({
-            ...prev,
-            splittedSecondHand: handObject,
-          }));
-
-        if (Number(_hands[2]?.splitHandIndex) === handId)
-          setActiveGameHands((prev) => ({
-            ...prev,
-            splittedThirdHand: handObject,
-          }));
+          if (Number(_hands[2]?.splitHandIndex) === handId)
+            setActiveGameHands((prev) => ({
+              ...prev,
+              splittedThirdHand: handObject,
+            }));
+        }
       }
-    }
 
-    setInitialDataFetched(true);
+      setInitialDataFetched(true);
 
-    setTimeout(() => {
-      setInitialDataFetched(false);
-    }, 1000);
+      setTimeout(() => {
+        setInitialDataFetched(false);
+      }, 1000);
+    }, 50);
   }, [gameDataRead.data]);
 
   React.useEffect(() => {
@@ -715,8 +724,12 @@ export default function BlackjackTemplateWithWeb3(
 
         console.log(activeMove, "ACTIVE MOVE!");
         // handle events by active move
-        if (activeMove == "Created") gameDataRead.refetch();
-        else if (activeMove == "HitCard") {
+        if (activeMove == "Created") {
+          setTimeout(() => {
+            gameDataRead.refetch();
+            setIsRpcRefetched(true);
+          }, 200);
+        } else if (activeMove == "HitCard") {
           console.log("player hit move!");
           handlePlayerEvent(gameEvent);
         } else if (activeMove == "DoubleDown") {
