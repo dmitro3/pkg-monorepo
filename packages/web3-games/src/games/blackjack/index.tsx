@@ -13,7 +13,6 @@ import {
 import {
   blackjackReaderAbi,
   controllerAbi,
-  delay,
   useCurrentAccount,
   useHandleTx,
   usePriceFeed,
