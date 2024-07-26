@@ -4,7 +4,6 @@ import {
   ActiveGameHands,
   BlackjackCard,
   BlackjackFormFields,
-  BlackjackGameResult,
   BlackjackGameStatus,
   BlackjackHandStatus,
   BlackjackTemplate,
@@ -21,22 +20,27 @@ import {
   useTokenStore,
 } from "@winrlabs/web3";
 import React from "react";
-import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+import {
+  Address,
+  encodeAbiParameters,
+  encodeFunctionData,
+  formatUnits,
+} from "viem";
 import { useReadContract } from "wagmi";
 
+import { useListenGameEvent } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { DecodedEvent, prepareGameTransaction } from "../utils";
 import {
   BJ_EVENT_TYPES,
   BlackjackContractHand,
-  BlackjackSettledEvent,
+  BlackjackDealerCardsEvent,
   BlackjackPlayerCardsEvent,
   BlackjackPlayerHandEvent,
-  BlackjackStandOffEvent,
-  BlackjackDealerCardsEvent,
   BlackjackResultEvent,
+  BlackjackSettledEvent,
+  BlackjackStandOffEvent,
 } from "./types";
-import { useListenGameEvent } from "../hooks";
 
 type TemplateOptions = {
   scene?: {
@@ -48,7 +52,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  onGameCompleted?: () => void;
+  onGameCompleted?: (payout: number) => void;
 }
 
 const defaultActiveGameHands = {
@@ -86,6 +90,7 @@ const defaultGameData = {
   activeHandIndex: 0,
   canInsure: false,
   status: BlackjackGameStatus.NONE,
+  payout: 0,
 };
 
 export default function BlackjackTemplateWithWeb3(
@@ -129,12 +134,9 @@ export default function BlackjackTemplateWithWeb3(
   const [initialDataFetched, setInitialDataFetched] =
     React.useState<boolean>(false);
 
-  const [isRpcRefetched, setIsRpcRefetched] = React.useState<boolean>(false);
-
   const resetGame = () => {
     setActiveGameData(defaultGameData);
     setActiveGameHands(defaultActiveGameHands);
-    setIsRpcRefetched(false);
   };
 
   // TRANSACTIONS
@@ -726,7 +728,6 @@ export default function BlackjackTemplateWithWeb3(
         if (activeMove == "Created") {
           setTimeout(() => {
             gameDataRead.refetch();
-            setIsRpcRefetched(true);
           }, 200);
         } else if (activeMove == "HitCard") {
           console.log("player hit move!");
@@ -1119,6 +1120,11 @@ export default function BlackjackTemplateWithWeb3(
     const dealerCardsEvent = gameEvent.program.find(
       (e) => e.type == BJ_EVENT_TYPES.DealerCards
     )?.data as BlackjackDealerCardsEvent;
+    const gameResults = results.results[0];
+    const gamePayout = Number(
+      formatUnits(BigInt(results.results[1]), selectedToken.decimals)
+    );
+    const gamePayoutAsDollar = gamePayout * getPrice(selectedToken.address);
 
     setActiveGameHands((prev) => ({
       ...prev,
@@ -1136,31 +1142,71 @@ export default function BlackjackTemplateWithWeb3(
       firstHand: {
         ...prev.firstHand,
         settledResult: {
-          result: results.results[0],
+          result: gameResults[0],
         },
       },
       secondHand: {
         ...prev.secondHand,
         settledResult: {
-          result: results.results[1],
+          result: gameResults[1],
         },
       },
       thirdHand: {
         ...prev.thirdHand,
         settledResult: {
-          result: results.results[2],
+          result: gameResults[2],
         },
       },
     }));
 
+    for (let i = 3; i < 5; i++) {
+      const result = gameResults[i];
+      const handId = results.results[3][i];
+
+      if (handId == activeGameHands.splittedFirstHand.handId) {
+        setActiveGameHands((prev) => ({
+          ...prev,
+          splittedFirstHand: {
+            ...prev.splittedFirstHand,
+            settledResult: {
+              result: result,
+            },
+          },
+        }));
+      }
+      if (handId == activeGameHands.splittedSecondHand.handId) {
+        setActiveGameHands((prev) => ({
+          ...prev,
+          splittedSecondHand: {
+            ...prev.splittedSecondHand,
+            settledResult: {
+              result: result,
+            },
+          },
+        }));
+      }
+      if (handId == activeGameHands.splittedThirdHand.handId) {
+        setActiveGameHands((prev) => ({
+          ...prev,
+          splittedThirdHand: {
+            ...prev.splittedThirdHand,
+            settledResult: {
+              result: result,
+            },
+          },
+        }));
+      }
+    }
+
     setActiveGameData((prev) => ({
       ...prev,
       status: BlackjackGameStatus.FINISHED,
+      payout: gamePayoutAsDollar,
     }));
   };
 
-  const onRefresh = () => {
-    props.onGameCompleted && props.onGameCompleted();
+  const onGameCompleted = () => {
+    props.onGameCompleted && props.onGameCompleted(activeGameData.payout || 0);
     updateBalances();
   };
 
@@ -1172,7 +1218,7 @@ export default function BlackjackTemplateWithWeb3(
       minWager={props.minWager}
       maxWager={props.maxWager}
       onFormChange={(v) => setFormValues(v)}
-      onGameCompleted={onRefresh}
+      onGameCompleted={onGameCompleted}
       isControllerDisabled={isLoading}
       onDeal={handleStart}
       onHit={handleHit}

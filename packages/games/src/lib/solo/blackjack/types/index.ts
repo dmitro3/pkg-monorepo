@@ -21,6 +21,7 @@ export type GameStruct = {
   activeHandIndex: number;
   canInsure: boolean;
   status: BlackjackGameStatus;
+  payout?: number;
 };
 
 export type Cards = {
@@ -44,7 +45,9 @@ export type ActiveGameHands = Record<
     hand: Hand | null;
     gameResult?: boolean;
     handId?: number;
-    settledResult?: any;
+    settledResult?: {
+      result?: BlackjackGameResult;
+    };
   }
 >;
 
