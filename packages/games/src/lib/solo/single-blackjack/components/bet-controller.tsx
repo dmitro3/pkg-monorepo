@@ -167,7 +167,8 @@ export const BetController: React.FC<Props> = ({
               form.formState.isLoading ||
               status == BlackjackGameStatus.PLAYER_TURN ||
               status == BlackjackGameStatus.DEALER_TURN ||
-              status == BlackjackGameStatus.TABLE_DEAL
+              status == BlackjackGameStatus.TABLE_DEAL ||
+              isControllerDisabled
             }
             size="xl"
             type="submit"

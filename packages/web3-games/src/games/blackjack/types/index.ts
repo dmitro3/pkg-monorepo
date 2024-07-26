@@ -81,5 +81,5 @@ export interface BlackjackDealerCardsEvent {
 }
 
 export interface BlackjackResultEvent {
-  results: BlackjackGameResult[];
+  results: [BlackjackGameResult[], number, number, number[]];
 }
