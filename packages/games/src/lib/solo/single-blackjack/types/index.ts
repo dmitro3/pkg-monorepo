@@ -35,4 +35,5 @@ export interface SingleBlackjackGameProps {
   onDoubleDown: (handIndex: number) => void;
   onInsure: (handIndex: number) => void;
   onStand: (handIndex: number) => void;
+  onFormChange?: (f: SingleBJDealFormFields) => void;
 }
