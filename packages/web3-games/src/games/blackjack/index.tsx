@@ -484,6 +484,7 @@ export default function BlackjackTemplateWithWeb3(
 
     try {
       await handleBetTx.mutateAsync();
+      updateBalances();
     } catch (e: any) {
       console.log("error", e);
     }
@@ -514,6 +515,7 @@ export default function BlackjackTemplateWithWeb3(
     setIsLoading(true); // Set loading state to true
     try {
       await handleDoubleTx.mutateAsync();
+      updateBalances();
     } catch (e: any) {
       console.log("error", e);
     }
@@ -534,6 +536,7 @@ export default function BlackjackTemplateWithWeb3(
 
     try {
       await handleSplitTx.mutateAsync();
+      updateBalances();
     } catch (e: any) {
       console.log("error", e);
     }
@@ -554,6 +557,7 @@ export default function BlackjackTemplateWithWeb3(
 
     try {
       await handleBuyInsuranceTx.mutateAsync();
+      updateBalances();
     } catch (e: any) {
       console.log("error", e);
     }

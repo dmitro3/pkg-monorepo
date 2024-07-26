@@ -12,6 +12,7 @@ import {
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
+  useTokenBalances,
   useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
@@ -67,6 +68,9 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
   const [rpsResult, setRpsResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -192,11 +196,17 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
       setRpsResult(finalResult);
   }, [gameEvent]);
 
+  const onGameCompleted = (result: RPSGameResult[]) => {
+    props.onAnimationCompleted && props.onAnimationCompleted(result);
+    updateBalances();
+  };
+
   return (
     <RpsTemplate
       {...props}
       onSubmitGameForm={onGameSubmit}
       gameResults={rpsSteps || []}
+      onAnimationCompleted={onGameCompleted}
       onFormChange={(val) => {
         setFormValues(val);
       }}

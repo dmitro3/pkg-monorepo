@@ -12,6 +12,7 @@ import {
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
+  useTokenBalances,
   useTokenStore,
 } from "@winrlabs/web3";
 import { useEffect, useMemo, useState } from "react";
@@ -66,6 +67,9 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
   console.log("gameEvent", gameEvent);
 
   const currentAccount = useCurrentAccount();
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -295,6 +299,11 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     }
   }, [gameEvent, currentAccount.address]);
 
+  const onGameCompleted = () => {
+    props.onAnimationCompleted && props.onAnimationCompleted([]);
+    updateBalances();
+  };
+
   return (
     <div>
       <HorseRaceTemplate
@@ -302,6 +311,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
         currentAccount={currentAccount.address as `0x${string}`}
         buildedGameUrl={props.buildedGameUrl}
         onSubmitGameForm={onGameSubmit}
+        onComplete={onGameCompleted}
         onFormChange={(val) => {
           setFormValues(val);
         }}

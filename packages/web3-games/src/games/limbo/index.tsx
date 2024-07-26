@@ -12,6 +12,7 @@ import {
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
+  useTokenBalances,
   useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
@@ -67,6 +68,9 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   const [limboResult, setLimboResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -192,11 +196,17 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
       setLimboResult(finalResult);
   }, [gameEvent]);
 
+  const onGameCompleted = (result: LimboGameResult[]) => {
+    props.onAnimationCompleted && props.onAnimationCompleted(result);
+    updateBalances();
+  };
+
   return (
     <LimboTemplate
       {...props}
       onSubmitGameForm={onGameSubmit}
       gameResults={limboSteps}
+      onAnimationCompleted={onGameCompleted}
       onFormChange={(val) => {
         setFormValues(val);
       }}

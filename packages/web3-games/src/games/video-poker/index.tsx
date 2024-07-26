@@ -12,6 +12,7 @@ import {
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
+  useTokenBalances,
   useTokenStore,
   videoPokerAbi,
 } from "@winrlabs/web3";
@@ -55,6 +56,9 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     selectedToken: s.selectedToken,
   }));
   const { priceFeed, getPrice } = usePriceFeed();
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -251,6 +255,11 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     }
   }, [gameEvent]);
 
+  const onGameCompleted = (payout: number) => {
+    props.onAnimationCompleted && props.onAnimationCompleted(payout);
+    updateBalances();
+  };
+
   return (
     <VideoPokerTemplate
       minWager={props.minWager || 1}
@@ -258,7 +267,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       handleStartGame={handleStartGame}
       handleFinishGame={handleFinishGame}
       onFormChange={(val) => setFormValues(val)}
-      onAnimationCompleted={props.onAnimationCompleted}
+      onAnimationCompleted={onGameCompleted}
       activeGame={activeGameData}
       settledCards={settledCards}
       isLoading={gameRead.isLoading}

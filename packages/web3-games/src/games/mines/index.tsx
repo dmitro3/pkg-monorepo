@@ -18,6 +18,7 @@ import {
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
+  useTokenBalances,
   useTokenStore,
 } from "@winrlabs/web3";
 import { useEffect, useMemo, useState } from "react";
@@ -74,6 +75,9 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   const gameEvent = useListenGameEvent();
 
   const currentAccount = useCurrentAccount();
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
 
   const { submitType, updateMinesGameState, board, gameStatus } =
     useMinesGameStateStore([
@@ -302,6 +306,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         updateMinesGameState({
           gameStatus: MINES_GAME_STATUS.IN_PROGRESS,
         });
+        updateBalances();
       } else if (submitType === MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT) {
         await handleTx.mutateAsync();
 
@@ -330,6 +335,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         updateMinesGameState({
           gameStatus: MINES_GAME_STATUS.IN_PROGRESS,
         });
+        updateBalances();
       } else if (submitType === MINES_SUBMIT_TYPE.CASHOUT) {
         await handleCashout.mutateAsync();
 
@@ -435,12 +441,18 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     submitType === MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT ? true : false
   );
 
+  const onGameCompleted = (result: MinesGameResult[]) => {
+    props.onAnimationCompleted && props.onAnimationCompleted(result);
+    updateBalances();
+  };
+
   return (
     <div>
       <MinesTemplate
         {...props}
         onSubmitGameForm={onGameSubmit}
         gameResults={[]}
+        onAnimationCompleted={onGameCompleted}
         formSetValue={formSetValue}
         onFormChange={(val) => {
           setFormValues(val);
