@@ -31,6 +31,7 @@ export interface SessionContext {
   startBlock: bigint;
   status: number;
   token: string;
+  bankroll: Address;
 }
 
 export interface ReceiptContext {

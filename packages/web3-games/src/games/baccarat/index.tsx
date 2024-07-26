@@ -12,6 +12,7 @@ import {
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
+  useTokenBalances,
   useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
@@ -60,6 +61,9 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     React.useState<BaccaratGameSettledResult | null>(null);
 
   const currentAccount = useCurrentAccount();
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -195,12 +199,18 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     }
   }, [gameEvent]);
 
+  const onGameCompleted = (result: BaccaratGameSettledResult) => {
+    props.onAnimationCompleted && props.onAnimationCompleted(result);
+    updateBalances();
+  };
+
   return (
     <BaccaratTemplate
       {...props}
       onSubmitGameForm={onGameSubmit}
       baccaratResults={baccaratResults}
       baccaratSettledResults={baccaratSettledResult}
+      onAnimationCompleted={onGameCompleted}
       onFormChange={(val) => {
         setFormValues(val);
       }}

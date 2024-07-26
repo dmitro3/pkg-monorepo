@@ -2,6 +2,7 @@ import { useCurrentAccount } from "@winrlabs/web3";
 import React, { useState } from "react";
 import { io, Socket } from "socket.io-client";
 import SuperJSON from "superjson";
+import { Address } from "viem";
 
 import {
   BetProgram,
@@ -15,22 +16,27 @@ import {
 import { GAME_HUB_GAMES } from "../../utils";
 const bundlerWsUrl = process.env.NEXT_PUBLIC_BUNDLER_WS_URL || "";
 
+interface MultiplayerGameState {
+  joiningStart: number;
+  joiningFinish: number;
+  cooldownFinish: number;
+  randoms: bigint | undefined;
+  participants: Participant[];
+  result: number;
+  bet: BetProgram | undefined;
+  player: any;
+  isGameActive: boolean;
+  angle: number;
+  session: {
+    bankrollIndex: Address;
+  };
+}
+
 export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
   const { address } = useCurrentAccount();
   const [socket, setSocket] = React.useState<Socket | null>(null);
 
-  const [gameState, setGameState] = useState<{
-    joiningStart: number;
-    joiningFinish: number;
-    cooldownFinish: number;
-    randoms: bigint | undefined;
-    participants: Participant[];
-    result: number;
-    bet: BetProgram | undefined;
-    player: any;
-    isGameActive: boolean;
-    angle: number;
-  }>({
+  const [gameState, setGameState] = useState<MultiplayerGameState>({
     joiningStart: 0,
     joiningFinish: 0,
     cooldownFinish: 0,
@@ -41,6 +47,9 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     player: {},
     isGameActive: false,
     angle: 0,
+    session: {
+      bankrollIndex: "0x0000000000000000000000000000000000000000",
+    },
   });
 
   React.useEffect(() => {
@@ -84,7 +93,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     // socket.on("connect_info", onConnectEvent);
 
     socket.onAny((e) => {
-      console.log("MULTIPLAYER ANY EVENT", e);
+      // console.log("MULTIPLAYER ANY EVENT", e);
     });
 
     return () => {
@@ -143,6 +152,9 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
       result: result,
       randoms: randoms?.length > 0 ? randoms[0]! : undefined,
       player: session.player,
+      session: {
+        bankrollIndex: session.bankroll,
+      },
       bet: bet,
       participants: [],
       angle: gameProgram?.angle || 0,

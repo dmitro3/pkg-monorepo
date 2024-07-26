@@ -11,6 +11,7 @@ import {
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
+  useTokenBalances,
   useTokenStore,
 } from "@winrlabs/web3";
 import React, { useMemo, useState } from "react";
@@ -67,6 +68,9 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
   const [plinkoResult, setPlinkoResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent<number[]>>>();
   const currentAccount = useCurrentAccount();
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -192,11 +196,17 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
       setPlinkoResult(finalResult);
   }, [gameEvent]);
 
+  const onGameCompleted = (result: PlinkoGameResult[]) => {
+    props.onAnimationCompleted && props.onAnimationCompleted(result);
+    updateBalances();
+  };
+
   return (
     <PlinkoTemplate
       {...props}
       onSubmitGameForm={onGameSubmit}
       gameResults={plinkoSteps || []}
+      onAnimationCompleted={onGameCompleted}
       onFormChange={(val) => {
         setFormValues(val);
       }}

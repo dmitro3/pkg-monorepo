@@ -1,11 +1,12 @@
+"use client";
+import { useGameControllerGetMultiplayerGameHistory } from "@winrlabs/api";
 import {
-  Horse,
-  HorseRaceFormFields,
-  horseRaceParticipantMapWithStore,
-  HorseRaceStatus,
-  HorseRaceTemplate,
-  useHorseRaceGameStore,
+  GameType,
+  MultiplayerGameStatus,
+  toDecimals,
+  useCrashGameStore,
 } from "@winrlabs/games";
+import { CrashFormFields, CrashTemplate } from "@winrlabs/games";
 import {
   controllerAbi,
   useCurrentAccount,
@@ -35,41 +36,52 @@ type TemplateOptions = {
   };
 };
 
-interface TemplateWithWeb3Props {
+interface CrashTemplateProps {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
-  buildedGameUrl: string;
   onAnimationCompleted?: (result: []) => void;
+  gameUrl?: string;
 }
 
-const HorseRaceGame = (props: TemplateWithWeb3Props) => {
+const CrashGame = (props: CrashTemplateProps) => {
   const {
     gameAddresses,
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
   } = useContractConfigContext();
-  const selectedToken = useTokenStore((s) => s.selectedToken);
-  const allTokens = useTokenStore((s) => s.tokens);
-  const selectedTokenAddress = selectedToken.address;
-
-  const [formValues, setFormValues] = useState<HorseRaceFormFields>({
-    horse: Horse.IDLE,
-    wager: props.minWager || 1,
-  });
-
-  const { updateState, setSelectedHorse, selectedHorse } =
-    useHorseRaceGameStore(["updateState", "setSelectedHorse", "selectedHorse"]);
-
-  const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.horse_race);
-
-  console.log("gameEvent", gameEvent);
-
   const currentAccount = useCurrentAccount();
-  const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+  const allTokens = useTokenStore((s) => s.tokens);
+  const selectedToken = useTokenStore((s) => s.selectedToken);
+  const selectedTokenAddress = selectedToken.address;
+  const { data: betHistory, refetch: refetchBetHistory } =
+    useGameControllerGetMultiplayerGameHistory({
+      queryParams: {
+        game: GameType.MOON,
+        // TODO: swagger does not include the pagination params. ask be to fix it.
+        // @ts-ignore
+        limit: 7,
+      },
+    });
+  const { refetch: refetchBalances } = useTokenBalances({
+    account: currentAccount.address || "0x0000000",
+    balancesToRead: [selectedTokenAddress],
   });
+
+  const [formValues, setFormValues] = useState<CrashFormFields>({
+    multiplier: 1,
+    wager: 1,
+  });
+
+  const { updateState, addParticipant, setIsGamblerParticipant } =
+    useCrashGameStore([
+      "updateState",
+      "addParticipant",
+      "setIsGamblerParticipant",
+    ]);
+
+  const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.crash);
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -79,11 +91,11 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     showDefaultToasts: false,
   });
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { getPrice } = usePriceFeed();
 
   const encodedParams = useMemo(() => {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
-      wager: formValues.wager,
+      wager: formValues?.wager || 0,
       stopGain: 0,
       stopLoss: 0,
       selectedCurrency: selectedToken,
@@ -93,17 +105,17 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     const encodedGameData = encodeAbiParameters(
       [
         { name: "wager", type: "uint128" },
-        { name: "horse", type: "uint8" },
+        { name: "multiplier", type: "uint16" },
       ],
-      [wagerInWei, formValues.horse as any]
+      [wagerInWei, toDecimals(formValues.multiplier * 100)]
     );
 
-    const encodedData: `0x${string}` = encodeFunctionData({
+    const encodedData = encodeFunctionData({
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.horseRace as Address,
-        selectedToken.address,
+        gameAddresses.crash as Address,
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
@@ -115,27 +127,24 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [
-    formValues?.horse,
-    formValues?.wager,
-    priceFeed[selectedToken.address],
-    selectedToken.address,
-  ]);
+  }, [formValues?.multiplier, formValues?.wager]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.horseRace,
+        gameAddresses.crash,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "claim",
+        "bet",
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      forceRefetch: true,
+    },
     encodedTxData: encodedParams.encodedTxData,
   });
 
@@ -165,7 +174,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.horseRace as Address,
+        gameAddresses.crash as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "claim",
@@ -178,14 +187,14 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       encodedClaimTxData: encodedClaimData,
       currentAccount,
     };
-  }, [formValues.horse, formValues.wager, selectedToken.bankrollIndex]);
+  }, [formValues.multiplier, formValues.wager]);
 
   const handleClaimTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.horseRace,
+        gameAddresses.crash,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "claim",
@@ -207,37 +216,36 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
 
       if (!handledAllowance) return;
     }
-
-    console.log("submit");
     try {
       await handleClaimTx.mutateAsync();
-    } catch (error) {}
+    } catch (error) {
+      console.log("handleClaimTx error", error);
+    }
 
     try {
+      console.log(encodedParams.encodedTxData);
       await handleTx.mutateAsync();
+      setIsGamblerParticipant(true);
     } catch (e: any) {
-      console.log("error", e);
+      console.log("handleTx error", e);
     }
   };
 
   useEffect(() => {
     if (!gameEvent) return;
-
-    console.log("gameEvent:", gameEvent);
-
     const currentTime = new Date().getTime() / 1000;
 
     const {
-      cooldownFinish,
       joiningFinish,
       joiningStart,
       randoms,
-      result,
-      player,
+      cooldownFinish,
       bet,
+      player,
       participants,
-      isGameActive,
+      result,
       session,
+      isGameActive,
     } = gameEvent;
 
     const isGameFinished =
@@ -245,79 +253,83 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     const shouldWait =
       currentTime <= joiningFinish && currentTime >= joiningStart;
 
+    let status: MultiplayerGameStatus = MultiplayerGameStatus.None;
+
     if (shouldWait) {
       updateState({
-        startTime: joiningFinish,
-        finishTime: cooldownFinish,
-        status: HorseRaceStatus.Started,
+        status: MultiplayerGameStatus.Wait,
       });
-    }
-    if (isGameFinished) {
-      updateState({
-        status: HorseRaceStatus.Finished,
-        winnerHorse: result,
-      });
+    } else if (isGameFinished) {
+      status = MultiplayerGameStatus.Finish;
     }
 
-    if (bet && bet?.converted.wager && player) {
-      const _participantHorse =
-        horseRaceParticipantMapWithStore[bet?.choice as unknown as Horse];
+    updateState({
+      status,
+      joiningFinish,
+      joiningStart,
+      cooldownFinish,
+      finalMultiplier: result / 100,
+    });
 
-      const names = selectedHorse[_participantHorse].map((item) => item.name);
-
-      if (!names.includes(player)) {
-        setSelectedHorse(_participantHorse, {
-          bet: bet?.converted.wager,
-          name: player,
-        });
-      }
-    }
+    const token = allTokens.find(
+      (t) => t.bankrollIndex === session.bankrollIndex
+    );
+    const tokenDecimal = token?.decimals || 0;
 
     if (participants?.length > 0 && isGameActive) {
       participants?.forEach((p) => {
-        const _participantHorse =
-          horseRaceParticipantMapWithStore[
-            fromHex(p.choice, {
-              to: "number",
-            }) as unknown as Horse
-          ];
+        addParticipant({
+          avatar: "",
+          name: p.player,
+          multiplier: fromHex(p.choice, {
+            to: "number",
+          }) as unknown as number,
+          bet: Number(formatUnits(p.wager, tokenDecimal)),
+        });
+      });
+    }
 
-        const names = selectedHorse[_participantHorse].map((item) => item.name);
-
-        const token = allTokens.find(
-          (t) => t.bankrollIndex === session.bankrollIndex
-        );
-        const tokenDecimal = token?.decimals || 0;
-
-        if (!names.includes(p.player)) {
-          setSelectedHorse(_participantHorse, {
-            bet: Number(formatUnits(p.wager, tokenDecimal)) as number,
-            name: p.player as string,
-          });
-        }
+    if (bet && bet?.converted?.wager && player) {
+      addParticipant({
+        avatar: "",
+        name: player,
+        multiplier: bet.choice as unknown as number,
+        bet: Number(formatUnits(bet.wager, tokenDecimal)),
       });
     }
   }, [gameEvent, currentAccount.address]);
 
-  const onGameCompleted = () => {
-    props.onAnimationCompleted && props.onAnimationCompleted([]);
-    updateBalances();
+  const onComplete = (multiplier: number) => {
+    const isWon = multiplier <= gameEvent.result / 100;
+
+    refetchBalances();
+
+    if (isWon) {
+      console.log("WON");
+    }
   };
+
+  useEffect(() => {
+    if (betHistory && betHistory?.length > 0) {
+      updateState({
+        lastBets: betHistory.map((data) => Number(data.result) / 100),
+      });
+    }
+  }, [betHistory]);
 
   return (
     <div>
-      <HorseRaceTemplate
+      <CrashTemplate
         {...props}
-        currentAccount={currentAccount.address as `0x${string}`}
-        buildedGameUrl={props.buildedGameUrl}
+        onComplete={onComplete}
         onSubmitGameForm={onGameSubmit}
-        onComplete={onGameCompleted}
         onFormChange={(val) => {
           setFormValues(val);
         }}
+        gameUrl={props.gameUrl}
       />
     </div>
   );
 };
 
-export default HorseRaceGame;
+export default CrashGame;

@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import debounce from "debounce";
 import React from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -61,6 +62,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
   onStand,
   onInsure,
   onGameCompleted,
+  onFormChange,
 }) => {
   // ui cards
   const [dealerCards, setDealerCards] = React.useState<
@@ -306,7 +308,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
   const formSchema = z.object({
     wager: z
       .number()
-      .min(minWager || 2, {
+      .min(minWager || 1, {
         message: `Minimum wager is ${minWager}`,
       })
       .max(maxWager || 2000, {
@@ -339,6 +341,16 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     resetUiCards();
     onDeal(values);
   };
+
+  React.useEffect(() => {
+    const debouncedCb = debounce((formFields) => {
+      onFormChange && onFormChange(formFields);
+    }, 400);
+
+    const subscription = form.watch(debouncedCb);
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>
