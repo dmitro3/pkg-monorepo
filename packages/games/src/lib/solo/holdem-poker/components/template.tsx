@@ -15,7 +15,7 @@ type TemplateProps = HoldemPokerGameProps & {
   buildedGameUrl: string;
 };
 
-const HoldemPokerTemplate = ({ ...props }: TemplateProps) => {
+const HoldemPokerTemplate = (props: TemplateProps) => {
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
   return (

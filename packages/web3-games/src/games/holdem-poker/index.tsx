@@ -1,6 +1,4 @@
 "use client";
-import React from "react";
-
 import {
   HoldemPokerActiveGame,
   HoldemPokerFormFields,
@@ -8,6 +6,7 @@ import {
 } from "@winrlabs/games";
 import {
   controllerAbi,
+  holdemPokerAbi,
   useCurrentAccount,
   useHandleTx,
   usePriceFeed,
@@ -15,9 +14,12 @@ import {
   useTokenBalances,
   useTokenStore,
 } from "@winrlabs/web3";
+import React from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
-import { prepareGameTransaction } from "../utils";
+
 import { useContractConfigContext } from "../hooks/use-contract-config";
+import { prepareGameTransaction } from "../utils";
+import { useReadContract } from "wagmi";
 
 interface TemplateWithWeb3Props {
   minWager?: number;
@@ -94,18 +96,18 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "anteChipAmount_", type: "uint128" },
-        { name: "sideBetChipAmount_", type: "uint128" },
-        { name: "chipAmount_", type: "uint128" },
+        { name: "anteChipAmount_", type: "uint16" },
+        { name: "sideBetChipAmount_", type: "uint16" },
+        { name: "wager_", type: "uint128" },
       ],
-      [ante as any, aaBonus as any, wagerInWei]
+      [ante, aaBonus, wagerInWei]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.blackjack as Address,
+        gameAddresses.holdemPoker as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
@@ -128,7 +130,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
   const encodedFinalizeParams = React.useMemo(() => {
     const encodedGameData = encodeAbiParameters(
-      [{ name: "fold", type: "boolean" }],
+      [{ name: "fold", type: "bool" }],
       [false]
     );
 
@@ -136,7 +138,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.blackjack as Address,
+        gameAddresses.holdemPoker as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "decide",
@@ -152,7 +154,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
   const encodedFinalizeFoldParams = React.useMemo(() => {
     const encodedGameData = encodeAbiParameters(
-      [{ name: "fold", type: "boolean" }],
+      [{ name: "fold", type: "bool" }],
       [true]
     );
 
@@ -160,7 +162,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.blackjack as Address,
+        gameAddresses.holdemPoker as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "decide",
@@ -179,7 +181,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.blackjack,
+        gameAddresses.holdemPoker,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
@@ -196,7 +198,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.blackjack,
+        gameAddresses.holdemPoker,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "decide",
@@ -213,7 +215,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       abi: controllerAbi,
       functionName: "perform",
       args: [
-        gameAddresses.blackjack,
+        gameAddresses.holdemPoker,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "decide",
@@ -279,6 +281,43 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       console.log("error", e);
     }
   };
+
+  const gameDataRead = useReadContract({
+    config: wagmiConfig,
+    abi: holdemPokerAbi,
+    address: gameAddresses.holdemPoker,
+    functionName: "getPlayerStatus",
+    args: [currentAccount.address || "0x"],
+    query: {
+      enabled: !!currentAccount.address,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+      retry: false,
+    },
+  });
+
+  React.useEffect(() => {
+    if (!gameDataRead.data) return;
+
+    console.log(gameDataRead.data, "initial");
+  }, [gameDataRead.data]);
+
+  // const _activeGame = {
+  //   cards: result.transformedInitialGameDealt.drawnCards,
+  //   gameIndex: activeGameIndex,
+  //   anteChipAmount: result.transformedCreated.anteChipsAmount,
+  //   aaBonusChipAmount: result.transformedCreated.chipsAmountSideBet,
+  //   player: {
+  //     // combination: result.transformedInitialGameDealt.combination,
+  //     combination: checkPairOfAcesOrBetter([
+  //       ...result.transformedInitialGameDealt.drawnCards,
+  //     ]),
+  //     cards: [],
+  //   },
+  // };
+
+  // setActiveGame((prev) => ({ ...prev, ..._activeGame }));
 
   const onRefresh = () => {
     props.onGameCompleted && props.onGameCompleted();

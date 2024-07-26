@@ -5,6 +5,7 @@ export { default as CoinFlipGame } from "./games/coinflip-2d";
 export { default as CoinFlip3DGame } from "./games/coinflip-3d";
 export { default as CrashGame } from "./games/crash";
 export { default as DiceGame } from "./games/dice";
+export { default as HoldemPokerGame } from "./games/holdem-poker";
 export * from "./games/hooks";
 export { default as HorseRaceGame } from "./games/horse-race";
 export { default as KenoGame } from "./games/keno";
