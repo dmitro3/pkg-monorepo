@@ -3,13 +3,13 @@
 import * as Progress from "@radix-ui/react-progress";
 import React from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
+import { useDebounce } from "use-debounce";
 
 import { CDN_URL } from "../../../constants";
-import { toDecimals, toFormatted } from "../../../utils/web3";
-import { HOLDEM_POKER_GAME_STATUS, HoldemPokerGameProps } from "../types";
-import { cn } from "../../../utils/style";
-import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
 import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
+import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
+import { cn } from "../../../utils/style";
+import { toDecimals, toFormatted } from "../../../utils/web3";
 import {
   UnityCallEvent,
   UnityDealEvent,
@@ -19,7 +19,7 @@ import {
   UnitySlotBetValue,
   UnityWaitForResult,
 } from "../constants";
-import { useDebounce } from "use-debounce";
+import { HOLDEM_POKER_GAME_STATUS, HoldemPokerGameProps } from "../types";
 import { WagerBetController } from "./bet-controller";
 
 type HoldemPokerSceneProps = HoldemPokerGameProps & {
@@ -137,12 +137,12 @@ export const HoldemPokerScene = ({
   const handleDealEvent = async () => {
     await handleDeal();
 
-    sendMessage(
-      "WebGLHandler",
-      "ReceiveMessage",
-      `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnIdle}`
-    );
-
+    // sendMessage(
+    //   "WebGLHandler",
+    //   "ReceiveMessage",
+    //   `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnIdle}`
+    // );
+    setStatus(HOLDEM_POKER_GAME_STATUS.OnPlay);
     onRefresh();
   };
 
@@ -154,35 +154,35 @@ export const HoldemPokerScene = ({
       "ReceiveMessage",
       `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnPlay}`
     );
-
+    setStatus(HOLDEM_POKER_GAME_STATUS.OnIdle);
     onRefresh();
   };
 
   const handleFinalizeFoldEvent = async () => {
     await handleFinalizeFold();
 
+    sendMessage("WebGLHandler", "ReceiveMessage", "FoldPermission|true");
     sendMessage(
       "WebGLHandler",
       "ReceiveMessage",
       `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnPlay}`
     );
-
+    setStatus(HOLDEM_POKER_GAME_STATUS.OnIdle);
     onRefresh();
   };
 
   React.useEffect(() => {
-    console.log(
-      isInitialDataFetched,
-      activeGameData?.cards?.length,
-      isUnityLoaded
-    );
+    console.log(isInitialDataFetched, activeGameData, isUnityLoaded, "effect");
 
     if (
       isInitialDataFetched &&
       activeGameData?.cards?.length &&
       isUnityLoaded
     ) {
-      const { cards, aaBonusChipAmount, anteChipAmount } = activeGameData;
+      const { cards, aaBonusChipAmount, anteChipAmount, initialWager } =
+        activeGameData;
+
+      if (initialWager) setWager(initialWager);
 
       console.log(cards, "cards");
 
@@ -217,6 +217,8 @@ export const HoldemPokerScene = ({
             "ReceiveMessage",
             `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnPlay}`
           );
+
+          setStatus(HOLDEM_POKER_GAME_STATUS.OnPlay);
         },
 
         UNITY_LOADER_DELAY
@@ -273,9 +275,9 @@ export const HoldemPokerScene = ({
   }, [activeGameData?.cards]);
 
   React.useEffect(() => {
-    if (wager <= 0) return;
+    if (wager <= 0 && !isUnityLoaded) return;
     sendMessage("WebGLHandler", "ReceiveMessage", `HP_SetWager|${wager}`);
-  }, [wager]);
+  }, [wager, isUnityLoaded]);
 
   const formFields = React.useMemo(
     () => ({ ante, aaBonus, wager }),

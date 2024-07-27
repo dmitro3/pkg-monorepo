@@ -325,9 +325,14 @@ export default [
         type: "address",
       },
       {
-        internalType: "bool",
-        name: "_fold",
-        type: "bool",
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "bytes",
+        name: "_data",
+        type: "bytes",
       },
     ],
     name: "decide",
@@ -564,6 +569,11 @@ export default [
         type: "uint16",
       },
       {
+        internalType: "uint16",
+        name: "sideBetChipsAmount",
+        type: "uint16",
+      },
+      {
         internalType: "uint128",
         name: "betAmountSideBet",
         type: "uint128",
@@ -624,33 +634,23 @@ export default [
             type: "address",
           },
           {
-            internalType: "uint128",
-            name: "anteAmount",
-            type: "uint128",
-          },
-          {
-            internalType: "uint32",
-            name: "gameIndex",
-            type: "uint32",
-          },
-          {
             internalType: "uint16",
-            name: "anteChipsAmount",
+            name: "anteChips",
             type: "uint16",
           },
           {
-            internalType: "uint128",
-            name: "betAmountSideBet",
-            type: "uint128",
+            internalType: "uint16",
+            name: "sideBetChips",
+            type: "uint16",
+          },
+          {
+            internalType: "uint16[9]",
+            name: "cards",
+            type: "uint16[9]",
           },
           {
             internalType: "uint128",
-            name: "callBetAmount",
-            type: "uint128",
-          },
-          {
-            internalType: "uint128",
-            name: "sideBetWonAmount",
+            name: "wager",
             type: "uint128",
           },
           {
@@ -659,7 +659,7 @@ export default [
             type: "uint8",
           },
         ],
-        internalType: "struct IWINRPoker.Game",
+        internalType: "struct IWINRPoker.PlayerStatus",
         name: "",
         type: "tuple",
       },

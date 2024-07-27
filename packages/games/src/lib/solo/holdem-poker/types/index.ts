@@ -31,6 +31,7 @@ export interface HoldemPokerActiveGame {
   payoutAmount: number;
   paybackAmount: number;
   result: HoldemPokerResult;
+  initialWager: number;
 }
 
 export interface HoldemPokerGamblerData {

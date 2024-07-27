@@ -5,6 +5,7 @@ import {
   HoldemPokerTemplate,
 } from "@winrlabs/games";
 import {
+  Token,
   controllerAbi,
   holdemPokerAbi,
   useCurrentAccount,
@@ -15,11 +16,25 @@ import {
   useTokenStore,
 } from "@winrlabs/web3";
 import React from "react";
-import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
-
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { prepareGameTransaction } from "../utils";
+import { useDebounce } from "use-debounce";
+import {
+  Address,
+  encodeAbiParameters,
+  encodeFunctionData,
+  formatUnits,
+} from "viem";
 import { useReadContract } from "wagmi";
+
+import { useListenGameEvent } from "../hooks";
+import { useContractConfigContext } from "../hooks/use-contract-config";
+import { DecodedEvent, prepareGameTransaction } from "../utils";
+import {
+  HOLDEM_POKER_EVENT_TYPES,
+  HoldemPokerContractStatus,
+  HoldemPokerGameDealtEvent,
+  HoldemPokerSideBetSettledEvent,
+} from "./types";
+import { checkPairOfAcesOrBetter } from "./utils";
 
 interface TemplateWithWeb3Props {
   minWager?: number;
@@ -46,6 +61,7 @@ const defaultActiveGame: HoldemPokerActiveGame = {
   payoutAmount: 0,
   paybackAmount: 0,
   result: 0,
+  initialWager: 0,
 };
 
 export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
@@ -74,8 +90,11 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
+  const tokens = useTokenStore((s) => s.tokens);
 
   const { priceFeed, getPrice } = usePriceFeed();
+
+  const gameEvent = useListenGameEvent();
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -299,44 +318,104 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     if (!gameDataRead.data) return;
-
     console.log(gameDataRead.data, "initial");
+    if (
+      gameDataRead.data.state == HoldemPokerContractStatus.NONE ||
+      gameDataRead.data.state == HoldemPokerContractStatus.RESOLVED
+    )
+      return;
+
+    const initialToken = tokens.find(
+      (t) => t.bankrollIndex == gameDataRead.data.bankroll
+    ) as Token;
+    const initialWagerAsDollar =
+      Number(formatUnits(gameDataRead.data.wager, initialToken.decimals)) *
+      getPrice(initialToken.address);
+
+    const _activeGame = {
+      cards: gameDataRead.data.cards as unknown as number[],
+      gameIndex: 1,
+      anteChipAmount: gameDataRead.data.anteChips,
+      aaBonusChipAmount: gameDataRead.data.sideBetChips,
+      player: {
+        combination: checkPairOfAcesOrBetter([...gameDataRead.data.cards]),
+        cards: [],
+      },
+      initialWager: initialWagerAsDollar,
+    };
+
+    setActiveGame((prev) => ({ ...prev, ..._activeGame }));
   }, [gameDataRead.data]);
-
-  // const _activeGame = {
-  //   cards: result.transformedInitialGameDealt.drawnCards,
-  //   gameIndex: activeGameIndex,
-  //   anteChipAmount: result.transformedCreated.anteChipsAmount,
-  //   aaBonusChipAmount: result.transformedCreated.chipsAmountSideBet,
-  //   player: {
-  //     // combination: result.transformedInitialGameDealt.combination,
-  //     combination: checkPairOfAcesOrBetter([
-  //       ...result.transformedInitialGameDealt.drawnCards,
-  //     ]),
-  //     cards: [],
-  //   },
-  // };
-
-  // setActiveGame((prev) => ({ ...prev, ..._activeGame }));
 
   const onRefresh = () => {
     props.onGameCompleted && props.onGameCompleted();
     updateBalances();
   };
 
+  const isFetchedWithDelay = useDebounce(gameDataRead.isFetched, 50);
+
+  React.useEffect(() => {
+    if (!gameEvent) return;
+    handleGameEvent(gameEvent);
+  }, [gameEvent]);
+
+  const handleGameEvent = (gameEvent: DecodedEvent<any, any>) => {
+    switch (gameEvent.program[0]?.type) {
+      case HOLDEM_POKER_EVENT_TYPES.InitialGameDealt: {
+        const result = gameEvent.program[0]?.data as HoldemPokerGameDealtEvent;
+
+        setActiveGame((prev) => ({
+          ...prev,
+          cards: result.cards,
+          player: {
+            ...prev.player,
+            combination: checkPairOfAcesOrBetter([...result.cards]),
+          },
+        }));
+        break;
+      }
+      case HOLDEM_POKER_EVENT_TYPES.SideBetSettled: {
+        const result = gameEvent.program[0]
+          ?.data as HoldemPokerSideBetSettledEvent;
+
+        setActiveGame((prev) => ({
+          ...prev,
+          cards: result.cards,
+          player: {
+            ...prev.player,
+            combination: checkPairOfAcesOrBetter([...result.cards]),
+          },
+        }));
+        break;
+      }
+      case HOLDEM_POKER_EVENT_TYPES.PlayerFolded: {
+        break;
+      }
+      case HOLDEM_POKER_EVENT_TYPES.Settled: {
+        break;
+      }
+      default: {
+        return;
+      }
+    }
+  };
+
   return (
-    <HoldemPokerTemplate
-      minWager={props.minWager}
-      maxWager={props.maxWager}
-      buildedGameUrl={props.buildedGameUrl}
-      activeGameData={activeGame}
-      isInitialDataFetched={false}
-      isLoggedIn={!!currentAccount.address}
-      handleDeal={handleDeal}
-      handleFinalize={handleFinalize}
-      handleFinalizeFold={handleFinalizeFold}
-      onRefresh={onRefresh}
-      onFormChange={(v) => setFormValues(v)}
-    />
+    <>
+      <HoldemPokerTemplate
+        minWager={props.minWager}
+        maxWager={props.maxWager}
+        buildedGameUrl={props.buildedGameUrl}
+        activeGameData={activeGame}
+        isInitialDataFetched={isFetchedWithDelay[0]}
+        isLoggedIn={!!currentAccount.address}
+        handleDeal={handleDeal}
+        handleFinalize={handleFinalize}
+        handleFinalizeFold={handleFinalizeFold}
+        onRefresh={onRefresh}
+        onFormChange={(v) => setFormValues(v)}
+      />
+      <div onClick={() => handleFinalizeFold()}>FINALIZE</div>
+    </>
   );
 }
