@@ -13,6 +13,7 @@ import { toDecimals, toFormatted } from "../../../utils/web3";
 import {
   UnityCallEvent,
   UnityDealEvent,
+  UnityDealerHandWin,
   UnityFoldEvent,
   UnityNextGameAvailable,
   UnityPlayerHandWin,
@@ -34,6 +35,7 @@ export const HoldemPokerScene = ({
   handleFinalizeFold,
   onRefresh,
   onFormChange,
+  onGameCompleted,
   isInitialDataFetched,
   activeGameData,
   buildedGameUrl,
@@ -104,7 +106,11 @@ export const HoldemPokerScene = ({
           2
         )}`
       );
+      onGameCompleted && onGameCompleted();
     }
+
+    if (unityEvent.name === UnityDealerHandWin)
+      onGameCompleted && onGameCompleted();
 
     if (unityEvent.name === UnityWaitForResult)
       sendMessage(

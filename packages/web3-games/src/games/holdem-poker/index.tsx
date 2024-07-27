@@ -388,9 +388,6 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
         }));
         break;
       }
-      case HOLDEM_POKER_EVENT_TYPES.PlayerFolded: {
-        break;
-      }
       case HOLDEM_POKER_EVENT_TYPES.Settled: {
         break;
       }
@@ -414,6 +411,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
         handleFinalizeFold={handleFinalizeFold}
         onRefresh={onRefresh}
         onFormChange={(v) => setFormValues(v)}
+        onGameCompleted={props.onGameCompleted}
       />
       <div onClick={() => handleFinalizeFold()}>FINALIZE</div>
     </>
