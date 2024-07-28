@@ -18,6 +18,7 @@ import {
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
+  useTokenBalances,
   useTokenStore,
 } from "@winrlabs/web3";
 import React, { useEffect, useMemo, useState } from "react";
@@ -82,6 +83,9 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   const currentAccount = useCurrentAccount();
   const allTokens = useTokenStore((s) => s.tokens);
   const { priceFeed, getPrice } = usePriceFeed();
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || "0x",
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -342,6 +346,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       }}
       onComplete={() => {
         refetchBetHistory();
+        updateBalances();
       }}
     />
   );

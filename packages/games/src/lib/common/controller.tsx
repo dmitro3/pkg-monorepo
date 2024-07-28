@@ -18,6 +18,8 @@ import {
   WagerInput,
   WagerSetterButtons,
 } from "./wager";
+import { Button } from "../ui/button";
+import { CDN_URL } from "../constants";
 
 interface WagerFormFieldProps {
   minWager: number;
@@ -266,5 +268,29 @@ export const UnityBetCountFormField: React.FC<{
         </FormItem>
       )}
     />
+  );
+};
+
+export const UnityFullscreenButton: React.FC<{
+  isFullscreen: boolean;
+  className?: string;
+  onChange: (state: boolean) => void;
+}> = ({ isFullscreen, className, onChange }) => {
+  return (
+    <Button
+      onClick={() => onChange(!isFullscreen)}
+      variant="secondary"
+      type="button"
+      className={cn(
+        "wr-h-9 wr-w-9 wr-p-0 max-lg:wr-hidden",
+        className && className
+      )}
+    >
+      <img
+        src={`${CDN_URL}/icons/icon-fullscreen.svg`}
+        width={24}
+        height={24}
+      />
+    </Button>
   );
 };

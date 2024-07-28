@@ -191,11 +191,16 @@ export default function RollGame(props: TemplateWithWeb3Props) {
     }
   }, [gameEvent]);
 
+  const onGameCompleted = (result: RollGameResult[]) => {
+    props.onAnimationCompleted && props.onAnimationCompleted(result);
+  };
+
   return (
     <RollTemplate
       {...props}
       onSubmitGameForm={onGameSubmit}
       gameResults={rollSteps || []}
+      onAnimationCompleted={onGameCompleted}
       onFormChange={(val) => {
         setFormValues(val);
       }}
