@@ -31,15 +31,7 @@ const Result = () => {
   ]);
   // const isSkippable = skippableGames.includes(resultSummary.game);
 
-  const {
-    currentOrder,
-    currentProfit,
-    lossCount,
-    wonCount,
-    currency,
-    playedGameCount,
-    wagerWithMultiplier,
-  } = resultSummary;
+  const { currentProfit, lossCount, wonCount, playedGameCount } = resultSummary;
 
   return (
     <>
@@ -65,7 +57,7 @@ const Result = () => {
                         payout={notification.payoutInUsd || 0}
                         won={notification.won || false}
                         duration={notification.duration || 5000}
-                        tokenImage={"/tokens/weth.png"}
+                        tokenImage={""}
                         playedGameCount={playedGameCount || 0}
                       >
                         {notification.component}
@@ -80,10 +72,6 @@ const Result = () => {
         <div className="wr-rounded-md wr-border wr-border-zinc-800 wr-p-[14px]">
           <p className="wr-mb-[14px] wr-font-bold">Live Stats</p>
           <ul className="wr-space-y-3">
-            {/* <li className="wr-flex wr-items-center wr-justify-between">
-              <span className="wr-text-zinc-500">Bets</span>
-              {currentOrder}/{playedGameCount || 0}
-            </li> */}
             <li className="wr-flex wr-items-center wr-justify-between">
               <span className="wr-text-zinc-500">Wins</span>
               {wonCount}
@@ -93,8 +81,7 @@ const Result = () => {
               {lossCount}
             </li>
             <li className="wr-flex wr-items-center wr-justify-between">
-              <span className="wr-text-zinc-500">Wager</span>
-              0
+              <span className="wr-text-zinc-500">Wager</span>0
             </li>
             <li className="wr-flex wr-items-center wr-justify-between">
               <span className="wr-text-zinc-500">Profit</span>
@@ -104,7 +91,9 @@ const Result = () => {
                 ) : currentProfit === 0 ? (
                   <span className="wr-text-zinc-100">$0</span>
                 ) : (
-                  <span className="wr-text-red-500">-${currentProfit * -1}</span>
+                  <span className="wr-text-red-500">
+                    -${currentProfit * -1}
+                  </span>
                 )}
                 {/* {"d" && ( */}
                 <img
@@ -116,23 +105,6 @@ const Result = () => {
                 {/* )} */}
               </div>
             </li>
-        
-       
-            {/* <li className="wr-flex wr-items-center wr-justify-between">
-              <span className="wr-text-zinc-500">vWINR Rewards</span>
-              {false ? (
-                <Spinner />
-              ) : (
-                <div className="wr-flex wr-items-center wr-gap-1 wr-text-green-500">
-                   {toDecimals(
-                    toDecimals(formatEther(data?.result || BigInt(0)), 2) *
-                      lastPriceFeed["WINR"],
-                    2
-                  )} 
-                  format ether $
-                </div>
-              )}
-            </li> */}
           </ul>
         </div>
       </CardContent>

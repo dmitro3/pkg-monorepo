@@ -25,46 +25,48 @@ export const DefaultNotificationWrapper: React.FC<NotificationWrapperProps> = ({
 }) => {
   const currentPayout = won
     ? `+$${toDecimals(payout, 2)}`
-    : `-$${toDecimals(Number(10) - payout, 2)}`;
-  //liveResult?.result?.wagerInUsd
+    : `-$${toDecimals(Number(0) - payout, 2)}`;
 
   return (
     <div
-      className={cn("relative w-full rounded-md bg-zinc-900 font-semibold", {
-        "bg-lime-800": won,
-      })}
+      className={cn(
+        "wr-relative wr-w-full wr-rounded-md wr-bg-zinc-900 wr-font-semibold",
+        {
+          "wr-bg-lime-800": won,
+        }
+      )}
     >
-      <div className="flex items-center justify-between p-[14px]">
-        <div className="flex items-center gap-2">
+      <div className="wr-flex wr-items-center wr-justify-between wr-p-[14px]">
+        <div className="wr-flex wr-items-center wr-gap-2">
           <span>
             {order}/{playedGameCount}
           </span>
           {children}
         </div>
         <div
-          className={cn("flex items-center", {
-            "text-red-600": won === false,
+          className={cn("wr-flex wr-items-center", {
+            "wr-text-red-600": won === false,
           })}
         >
           {currentPayout}
-          {/* {tokenImage && ( */}
-          <img
-            src={"/tokens/weth.png"}
-            width={20}
-            height={20}
-            alt="token_icon"
-            className="ml-1"
-          />
-          {/* )} */}
+          {tokenImage && (
+            <img
+              src={"/tokens/weth.png"}
+              width={20}
+              height={20}
+              alt="token_icon"
+              className="ml-1"
+            />
+          )}
         </div>
       </div>
       <ToastTimer
         duration={duration}
         className={cn(
-          "absolute bottom-0 w-full rounded-md [&>div]:w-0 [&>div]:animate-timer-progress"
+          "wr-absolute wr-bottom-0 wr-w-full wr-rounded-md [&>div]:wr-w-0 [&>div]:wr-animate-timer-progress"
         )}
-        thumbClassName={cn("h-[6px] bg-zinc-600", {
-          "bg-green-500": won,
+        thumbClassName={cn("wr-h-[6px] wr-bg-zinc-600", {
+          "wr-bg-green-500": won,
         })}
       />
     </div>

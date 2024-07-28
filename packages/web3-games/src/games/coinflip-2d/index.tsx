@@ -52,8 +52,9 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     uiOperatorAddress,
   } = useContractConfigContext();
   const { 
-    updateResultSummary
-  } = useGameNotifications(["updateResultSummary"])
+    updateResultSummary,
+    updatePlayedNotifications
+  } = useGameNotifications(["updateResultSummary", "updatePlayedNotifications"])
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -204,11 +205,12 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setCoinFlipResult(finalResult);
-      console.log("result", finalResult);
-      
-      // updateResultSummary({
-      //   currency: selectedToken,
-      // });
+      updateResultSummary({
+        wagerWithMultiplier: formValues.wager,
+        currency: selectedToken,
+        playedGameCount: formValues.betCount,
+
+      });
       setIsLoading(false);
     }
   }, [gameEvent]);
@@ -218,6 +220,27 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     updateBalances();
   };
 
+  const onAnimationStep = React.useCallback(
+    (step: number) => {
+      props.onAnimationStep && props.onAnimationStep(step);
+  
+      const currentStepResult = coinFlipResult?.program?.[0]?.data.converted.steps[step - 1];
+      console.log("step", step, coinFlipResult);
+  
+  
+      if (!currentStepResult) return;
+  
+      updatePlayedNotifications({
+        component: <></>,
+        duration: 5000,
+        order: step,
+        payoutInUsd: currentStepResult.payout,
+        won: currentStepResult.payout > 0,
+        wagerInUsd: currentStepResult.payout,
+      });
+    }
+  , [coinFlipResult]);
+
   return (
     <CoinFlipTemplate
       {...props}
@@ -225,6 +248,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       onSubmitGameForm={onGameSubmit}
       gameResults={coinFlipSteps || []}
       onAnimationCompleted={onGameCompleted}
+      onAnimationStep={onAnimationStep}
       onFormChange={(val) => {
         setFormValues(val);
       }}
