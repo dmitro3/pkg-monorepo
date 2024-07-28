@@ -5,9 +5,9 @@ import {
   HoldemPokerTemplate,
 } from "@winrlabs/games";
 import {
-  Token,
   controllerAbi,
   holdemPokerAbi,
+  Token,
   useCurrentAccount,
   useHandleTx,
   usePriceFeed,
@@ -32,6 +32,7 @@ import {
   HOLDEM_POKER_EVENT_TYPES,
   HoldemPokerContractStatus,
   HoldemPokerGameDealtEvent,
+  HoldemPokerSettledEvent,
   HoldemPokerSideBetSettledEvent,
 } from "./types";
 import { checkPairOfAcesOrBetter } from "./utils";
@@ -334,7 +335,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
     const _activeGame = {
       cards: gameDataRead.data.cards as unknown as number[],
-      gameIndex: 1,
+      gameIndex: gameDataRead.data.gameIndex,
       anteChipAmount: gameDataRead.data.anteChips,
       aaBonusChipAmount: gameDataRead.data.sideBetChips,
       player: {
@@ -389,6 +390,34 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
         break;
       }
       case HOLDEM_POKER_EVENT_TYPES.Settled: {
+        const result = gameEvent.program[0]?.data as HoldemPokerSettledEvent;
+
+        const token = tokens.find(
+          (t) => t.bankrollIndex == result.game.bankroll
+        ) as Token;
+
+        const paybackAmountAsDollar =
+          Number(formatUnits(result.payback, token.decimals)) *
+          getPrice(token.address);
+        const payoutAmountAsDollar =
+          Number(formatUnits(result.payout, token.decimals)) *
+          getPrice(token.address);
+
+        setActiveGame((prev) => ({
+          ...prev,
+          cards: result.cards,
+          player: {
+            cards: result.playerHand.cards,
+            combination: Number(result.playerHand.combination),
+          },
+          dealer: {
+            cards: result.dealerHand.cards,
+            combination: Number(result.dealerHand.combination),
+          },
+          paybackAmount: paybackAmountAsDollar,
+          payoutAmount: payoutAmountAsDollar,
+          result: Number(result.result),
+        }));
         break;
       }
       default: {
@@ -398,22 +427,19 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
   };
 
   return (
-    <>
-      <HoldemPokerTemplate
-        minWager={props.minWager}
-        maxWager={props.maxWager}
-        buildedGameUrl={props.buildedGameUrl}
-        activeGameData={activeGame}
-        isInitialDataFetched={isFetchedWithDelay[0]}
-        isLoggedIn={!!currentAccount.address}
-        handleDeal={handleDeal}
-        handleFinalize={handleFinalize}
-        handleFinalizeFold={handleFinalizeFold}
-        onRefresh={onRefresh}
-        onFormChange={(v) => setFormValues(v)}
-        onGameCompleted={props.onGameCompleted}
-      />
-      <div onClick={() => handleFinalizeFold()}>FINALIZE</div>
-    </>
+    <HoldemPokerTemplate
+      minWager={props.minWager}
+      maxWager={props.maxWager}
+      buildedGameUrl={props.buildedGameUrl}
+      activeGameData={activeGame}
+      isInitialDataFetched={isFetchedWithDelay[0]}
+      isLoggedIn={!!currentAccount.address}
+      handleDeal={handleDeal}
+      handleFinalize={handleFinalize}
+      handleFinalizeFold={handleFinalizeFold}
+      onRefresh={onRefresh}
+      onFormChange={(v) => setFormValues(v)}
+      onGameCompleted={props.onGameCompleted}
+    />
   );
 }

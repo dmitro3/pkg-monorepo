@@ -69,8 +69,8 @@ export function Providers(props: { children: ReactNode }) {
           }}
           tokens={[
             {
-              address: "0xAfBd36C63F824B60bAc808FA1fA4C2A1a130a772",
-              bankrollIndex: "0x0000000000000000000000000000000000000002",
+              address: "0x2e98C81df02278d82CD3E561025D8F1be3403256",
+              bankrollIndex: "0x0000000000000000000000000000000000000001",
               displayDecimals: 2,
               decimals: 6,
               icon: "/tokens/usdc.png",
@@ -78,8 +78,8 @@ export function Providers(props: { children: ReactNode }) {
               playable: true,
             },
             {
-              address: "0x32DF602bB33390CefB3cA9F9608ee100971ff1a9",
-              bankrollIndex: "0x0000000000000000000000000000000000000003",
+              address: "0xC8DbFdFc8882B8a33d11d1658e75E4858A1d338F",
+              bankrollIndex: "0x0000000000000000000000000000000000000002",
               displayDecimals: 2,
               decimals: 6,
               icon: "/tokens/usdt.png",
@@ -87,8 +87,8 @@ export function Providers(props: { children: ReactNode }) {
               playable: true,
             },
             {
-              address: "0x0Fc2838ad7247a883d96FEA4a4c7402BAf20D1be",
-              bankrollIndex: "0x0000000000000000000000000000000000000004",
+              address: "0xF73A655cae59E0E7e08DE3F4606EA97D88AcA32F",
+              bankrollIndex: "0x0000000000000000000000000000000000000003",
               displayDecimals: 6,
               decimals: 8,
               icon: "/tokens/wbtc.png",
@@ -96,8 +96,8 @@ export function Providers(props: { children: ReactNode }) {
               playable: true,
             },
             {
-              address: "0x7d259fdA68762D0DEB6EA5c8e4e949D97Da6caB9",
-              bankrollIndex: "0x0000000000000000000000000000000000000005",
+              address: "0xaa54Ca4f14B57777895f7342778919B8ee5B9D7B",
+              bankrollIndex: "0x0000000000000000000000000000000000000004",
               displayDecimals: 6,
               decimals: 18,
               icon: "/tokens/weth.png",
@@ -106,8 +106,8 @@ export function Providers(props: { children: ReactNode }) {
             },
           ]}
           selectedToken={{
-            address: "0x1beC7d3Bc7B898f764C98B26Dc8140463Ffe064E",
-            bankrollIndex: "0x0000000000000000000000000000000000000005",
+            address: "0xaa54Ca4f14B57777895f7342778919B8ee5B9D7B",
+            bankrollIndex: "0x0000000000000000000000000000000000000004",
             displayDecimals: 6,
             decimals: 18,
             icon: "/tokens/weth.png",

@@ -24,7 +24,7 @@ export interface HoldemPokerEventGameStatus {
   gameIndex: number;
   sideBetWonAmount: bigint;
   state: bigint;
-  wagerAsset: Address;
+  bankroll: Address;
 }
 
 export interface HoldemPokerGameDealtEvent {
@@ -43,7 +43,13 @@ export interface HoldemPokerSideBetSettledEvent {
 export interface HoldemPokerSettledEvent {
   cards: number[];
   game: HoldemPokerEventGameStatus;
-  hand: {
+  payback: bigint;
+  payout: bigint;
+  playerHand: {
+    combination: bigint;
+    cards: number[];
+  };
+  dealerHand: {
     combination: bigint;
     cards: number[];
   };

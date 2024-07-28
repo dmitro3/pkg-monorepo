@@ -654,6 +654,11 @@ export default [
             type: "uint128",
           },
           {
+            internalType: "uint32",
+            name: "gameIndex",
+            type: "uint32",
+          },
+          {
             internalType: "enum IWINRPoker.State",
             name: "state",
             type: "uint8",

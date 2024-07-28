@@ -101,10 +101,7 @@ export const HoldemPokerScene = ({
       sendMessage(
         "WebGLHandler",
         "ReceiveMessage",
-        `HP_SetResult|${toDecimals(
-          activeGameData.payoutAmount + activeGameData.paybackAmount,
-          2
-        )}`
+        `HP_SetResult|${toDecimals(activeGameData.payoutAmount, 2)}`
       );
       onGameCompleted && onGameCompleted();
     }
@@ -141,13 +138,18 @@ export const HoldemPokerScene = ({
   };
 
   const handleDealEvent = async () => {
-    await handleDeal();
+    try {
+      await handleDeal();
+    } catch {
+      console.log("DEAL ERROR template!");
+      sendMessage(
+        "WebGLHandler",
+        "ReceiveMessage",
+        `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnIdle}`
+      );
+      setStatus(HOLDEM_POKER_GAME_STATUS.OnIdle);
+    }
 
-    // sendMessage(
-    //   "WebGLHandler",
-    //   "ReceiveMessage",
-    //   `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnIdle}`
-    // );
     setStatus(HOLDEM_POKER_GAME_STATUS.OnPlay);
     onRefresh();
   };
