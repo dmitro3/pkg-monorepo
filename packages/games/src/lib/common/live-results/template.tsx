@@ -6,8 +6,9 @@ import { Close } from "../../svgs";
 import { Button } from "../../ui/button";
 import { Card, CardHeader } from "../../ui/card";
 import { cn } from "../../utils/style";
+import Result from "./result";
 
-export const LiveResultsTemplate = () => {
+const LiveResultsTemplate = () => {
   const [isHidden, setIsHidden] = useState(true);
   const dragRef = useRef<HTMLDivElement>(null);
 
@@ -108,7 +109,7 @@ export const LiveResultsTemplate = () => {
                   />
                 </motion.div>
               </CardHeader>
-              game result component
+            <Result />
             </Card>
           </motion.div>
         </Draggable>
@@ -116,3 +117,5 @@ export const LiveResultsTemplate = () => {
     </AnimatePresence>
   );
 };
+
+export default LiveResultsTemplate;

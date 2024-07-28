@@ -5,6 +5,7 @@ import {
   CoinFlipGameResult,
   CoinFlipTemplate,
   CoinSide,
+  useGameNotifications,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -49,6 +50,9 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     cashierAddress,
     uiOperatorAddress,
   } = useContractConfigContext();
+  const { 
+    updateResultSummary
+  } = useGameNotifications(["updateResultSummary"])
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -196,6 +200,11 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setCoinFlipResult(finalResult);
+      console.log("result", finalResult);
+      
+      // updateResultSummary({
+      //   currency: selectedToken,
+      // });
       setIsLoading(false);
     }
   }, [gameEvent]);
