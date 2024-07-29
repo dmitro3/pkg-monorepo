@@ -105,8 +105,8 @@ export const WinrBonanzaTemplate = ({
   >();
 
   const currentBalanceInDollar = React.useMemo(
-    () => account?.balance || 0,
-    [account?.balance]
+    () => account?.balanceAsDollar || 0,
+    [account?.balanceAsDollar]
   );
 
   const actualBetAmount = isDoubleChance
@@ -668,7 +668,6 @@ export const WinrBonanzaTemplate = ({
 
   React.useEffect(() => {
     onFormChange(debouncedFormFields[0]);
-    console.log(debouncedFormFields[0], "debounced fomr fields");
   }, [debouncedFormFields[0]]);
 
   return (
