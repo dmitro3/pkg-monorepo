@@ -96,7 +96,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
 
   const gameEvent = useListenGameEvent();
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState<SingleBJDealFormFields>({
@@ -137,7 +137,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -169,14 +169,14 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   }, [
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const encodedHitParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -207,7 +207,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -238,7 +238,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -269,7 +269,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -300,7 +300,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -949,7 +949,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const gamePayout = Number(
       formatUnits(BigInt(results.results[1]), selectedToken.decimals)
     );
-    const gamePayoutAsDollar = gamePayout * getPrice(selectedToken.address);
+    const gamePayoutAsDollar = gamePayout * priceFeed[selectedToken.priceKey];
 
     setActiveGameHands((prev) => ({
       ...prev,

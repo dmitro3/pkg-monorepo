@@ -61,7 +61,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [settledResult, setSettledResult] = React.useState<ReelSpinSettled>();
   const [previousFreeSpinCount, setPreviousFreeSpinCount] =
@@ -83,7 +83,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.actualBetAmount,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -115,14 +115,14 @@ export default function WinrBonanzaTemplateWithWeb3({
     formValues.isDoubleChance,
     formValues.actualBetAmount,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const encodedBuyFreeSpinParams = React.useMemo(() => {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.betAmount,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -150,14 +150,14 @@ export default function WinrBonanzaTemplateWithWeb3({
   }, [
     formValues.betAmount,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const encodedFreeSpinParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.betAmount,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedData: `0x${string}` = encodeFunctionData({

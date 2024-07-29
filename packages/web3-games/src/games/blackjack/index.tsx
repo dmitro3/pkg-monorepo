@@ -113,7 +113,7 @@ export default function BlackjackTemplateWithWeb3(
 
   const gameEvent = useListenGameEvent();
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState<BlackjackFormFields>({
@@ -159,7 +159,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const { firstHandWager, secondHandWager, thirdHandWager } = formValues;
@@ -213,14 +213,14 @@ export default function BlackjackTemplateWithWeb3(
     formValues.thirdHandWager,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const encodedHitParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -251,7 +251,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -282,7 +282,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -313,7 +313,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -344,7 +344,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -1131,7 +1131,7 @@ export default function BlackjackTemplateWithWeb3(
     const gamePayout = Number(
       formatUnits(BigInt(results.results[1]), selectedToken.decimals)
     );
-    const gamePayoutAsDollar = gamePayout * getPrice(selectedToken.address);
+    const gamePayoutAsDollar = gamePayout * priceFeed[selectedToken.priceKey];
 
     setActiveGameHands((prev) => ({
       ...prev,

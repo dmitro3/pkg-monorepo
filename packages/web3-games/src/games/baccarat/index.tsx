@@ -20,6 +20,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -27,7 +28,6 @@ import {
   GAME_HUB_EVENT_TYPES,
   prepareGameTransaction,
 } from "../utils";
-import { useBetHistory } from "../hooks";
 
 interface TemplateWithWeb3Props {
   minWager?: number;
@@ -57,7 +57,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [baccaratResults, setBaccaratResults] =
     useState<BaccaratGameResult | null>(null);
@@ -84,7 +84,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         stopGain: 0,
         stopLoss: 0,
         selectedCurrency: selectedToken,
-        lastPrice: getPrice(selectedToken.address),
+        lastPrice: priceFeed[selectedToken.priceKey],
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -145,7 +145,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     formValues.tieWager,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({

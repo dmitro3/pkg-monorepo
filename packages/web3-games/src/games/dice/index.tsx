@@ -72,7 +72,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [diceResult, setDiceResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
@@ -106,7 +106,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
         selectedCurrency: selectedToken,
-        lastPrice: getPrice(selectedToken.address),
+        lastPrice: priceFeed[selectedToken.priceKey],
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -160,7 +160,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues, selectedToken.address, priceFeed[selectedToken.address]]);
+  }, [formValues, selectedToken.address, priceFeed[selectedToken.priceKey]]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {

@@ -20,6 +20,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -28,7 +29,6 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from "../utils";
-import { useBetHistory } from "../hooks";
 
 type TemplateOptions = {
   scene?: {
@@ -71,7 +71,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     selectedToken: s.selectedToken,
   }));
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [coinFlipResult, setCoinFlipResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
@@ -105,7 +105,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
         selectedCurrency: selectedToken,
-        lastPrice: getPrice(selectedToken.address),
+        lastPrice: priceFeed[selectedToken.priceKey],
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -159,7 +159,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     formValues.stopLoss,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({

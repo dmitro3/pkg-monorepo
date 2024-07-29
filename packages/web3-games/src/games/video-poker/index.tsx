@@ -58,7 +58,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || "0x",
   });
@@ -77,7 +77,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       stopGain: 0,
       stopLoss: 0,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -105,7 +105,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   }, [
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({

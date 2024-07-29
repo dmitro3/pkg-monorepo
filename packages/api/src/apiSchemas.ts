@@ -3,29 +3,34 @@
  *
  * @version 2.0
  */
+export type PriceResponse = {
+  token: string;
+  price: number;
+};
+
 export type GameResultDto = {
   id: string;
   game:
-    | 1
-    | 2
-    | 3
-    | 4
-    | 5
-    | 6
-    | 7
-    | 8
-    | 9
-    | 10
-    | 11
-    | 12
-    | 13
-    | 14
-    | 15
-    | 16
-    | 17
-    | 18
-    | 19
-    | 20;
+    | "COINFLIP"
+    | "RANGE"
+    | "WHEEL"
+    | "PLINKO"
+    | "MOON"
+    | "LOTTERY"
+    | "RPS"
+    | "DICE"
+    | "LIMBO"
+    | "SLOT"
+    | "ROULETTE"
+    | "MINES"
+    | "VIDEO_POKER"
+    | "KENO"
+    | "BACCARAT"
+    | "HORSE_RACE"
+    | "BLACKJACK"
+    | "HOLDEM_POKER"
+    | "WINR_BONANZA"
+    | "ONE_HAND_BLACKJACK";
   /**
    * @default 0
    */
@@ -112,26 +117,26 @@ export type MultiplayerGameHistoryObject = {
 
 export type RefundInput = {
   game:
-    | 1
-    | 2
-    | 3
-    | 4
-    | 5
-    | 6
-    | 7
-    | 8
-    | 9
-    | 10
-    | 11
-    | 12
-    | 13
-    | 14
-    | 15
-    | 16
-    | 17
-    | 18
-    | 19
-    | 20;
+    | "COINFLIP"
+    | "RANGE"
+    | "WHEEL"
+    | "PLINKO"
+    | "MOON"
+    | "LOTTERY"
+    | "RPS"
+    | "DICE"
+    | "LIMBO"
+    | "SLOT"
+    | "ROULETTE"
+    | "MINES"
+    | "VIDEO_POKER"
+    | "KENO"
+    | "BACCARAT"
+    | "HORSE_RACE"
+    | "BLACKJACK"
+    | "HOLDEM_POKER"
+    | "WINR_BONANZA"
+    | "ONE_HAND_BLACKJACK";
   player: string;
 };
 
@@ -156,9 +161,59 @@ export type MiningStatistics = {
    * @default 0
    */
   totalSupply: number;
+  /**
+   * @default 0
+   */
+  circSupply: number;
+  /**
+   * @default 0
+   */
+  maxSupply: number;
+};
+
+export type VaultOutput = {
+  bankrollTokenAddress: string;
+  liquidityManagerAddress: string;
+  shareTokenAddress: string;
+  price: number;
+  wallet: number;
+  poolSupply: number;
+  weeklyProfit: number;
+  allTimeProfit: number;
+  apr: number;
+};
+
+export type VaultDetailOutput = {
+  vaultIndex: string;
+  bankrollBytesIdentifier: string;
+  vaultAddress: string;
+  bankrollTokenAddress: string;
+  shareTokenAddress: string;
+  controllerAddress: string;
+  liquidityManagerAddress: string;
+};
+
+export type VaultAmountOutput = {
+  bankrollAmount: string;
+  shareTokenAmount: string;
+  epochAmount: string;
+  totalAmount: string;
+  bankrollTokenPrice: string;
+  isProfitEpcoh: number;
+  isProfitTotal: number;
+};
+
+export type PoolOutput = {
+  detail: VaultDetailOutput;
+  amount: VaultAmountOutput;
 };
 
 export type ReferralRewardEntity = {
+  /**
+   * UUIDv4
+   */
+  id: string;
+  createdAt: number;
   bankroll: string;
   client: string;
   code: string;
@@ -170,9 +225,13 @@ export type ReferralRewardEntity = {
 };
 
 export type ReferralClaimEntity = {
+  /**
+   * UUIDv4
+   */
+  id: string;
+  createdAt: number;
   bankroll: string;
   token: string;
-  code: string;
   recipient: string;
   /**
    * @default 0
@@ -188,4 +247,134 @@ export type CodesVolumeAndReward = {
   code: string;
   totalVolume: number;
   totalReward: number;
+};
+
+export type AwardBadge = {
+  /**
+   * The type of the badge to award
+   *
+   * @example 7
+   */
+  type:
+    | 0
+    | 1
+    | 2
+    | 3
+    | 4
+    | 5
+    | 6
+    | 7
+    | 8
+    | 9
+    | 10
+    | 11
+    | 12
+    | 13
+    | 14
+    | 15
+    | 16
+    | 17
+    | 18
+    | 19
+    | 20
+    | 21
+    | 22
+    | 23;
+  /**
+   * The transaction hash of the game
+   *
+   * @example 0x1234567890123456789012345678901234567890
+   */
+  transactionHash: string | null;
+  /**
+   * The player address to award the badge to
+   *
+   * @example 0x1234567890123456789012345678901234567890
+   */
+  player: string | null;
+};
+
+export type AwardBadgeResponse = {
+  awarded: boolean;
+  player?: string;
+  badge?:
+    | 0
+    | 1
+    | 2
+    | 3
+    | 4
+    | 5
+    | 6
+    | 7
+    | 8
+    | 9
+    | 10
+    | 11
+    | 12
+    | 13
+    | 14
+    | 15
+    | 16
+    | 17
+    | 18
+    | 19
+    | 20
+    | 21
+    | 22
+    | 23;
+};
+
+export type WeeklyClaimer = {
+  /**
+   * The player address
+   *
+   * @example 0x1234567890123456789012345678901234567890
+   */
+  player: string;
+  /**
+   * The bankroll addresses which are claimed by the player
+   *
+   * @example [0x1234567890123456789012345678901234567890, 0x1234567890123456789012345678901234567890]
+   */
+  bankrolls: string[];
+};
+
+export type BadgeResponse = {
+  awarded: boolean;
+  player?: string;
+  badge?:
+    | 0
+    | 1
+    | 2
+    | 3
+    | 4
+    | 5
+    | 6
+    | 7
+    | 8
+    | 9
+    | 10
+    | 11
+    | 12
+    | 13
+    | 14
+    | 15
+    | 16
+    | 17
+    | 18
+    | 19
+    | 20
+    | 21
+    | 22
+    | 23;
+};
+
+export type SummaryResponse = {
+  totalEarnings: number;
+  totalWINRLocked: number;
+  totalvWINRLocked: number;
+};
+
+export type TakeLevelupSnapshotInput = {
+  player: string;
 };

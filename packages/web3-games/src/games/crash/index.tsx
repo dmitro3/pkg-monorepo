@@ -93,7 +93,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     showDefaultToasts: false,
   });
 
-  const { getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const encodedParams = useMemo(() => {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
@@ -101,7 +101,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       stopGain: 0,
       stopLoss: 0,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -129,7 +129,11 @@ const CrashGame = (props: CrashTemplateProps) => {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [formValues?.multiplier, formValues?.wager]);
+  }, [
+    formValues.multiplier,
+    formValues.wager,
+    priceFeed[selectedToken.priceKey],
+  ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {

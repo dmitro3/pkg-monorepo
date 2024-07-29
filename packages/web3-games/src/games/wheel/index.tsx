@@ -63,7 +63,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   const { data: betHistory, refetch: refetchBetHistory } =
     useGameControllerGetMultiplayerGameHistory({
       queryParams: {
-        game: 3,
+        game: GameType.WHEEL,
         // TODO: swagger does not include the pagination params. ask be to fix it.
         // @ts-ignore
         limit: 2,
@@ -85,7 +85,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
 
   const currentAccount = useCurrentAccount();
   const allTokens = useTokenStore((s) => s.tokens);
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || "0x",
   });
@@ -104,7 +104,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       stopGain: 0,
       stopLoss: 0,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -136,7 +136,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     formValues.color,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({

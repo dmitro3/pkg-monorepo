@@ -66,7 +66,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [rouletteResult, setRouletteResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
@@ -101,7 +101,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
         stopGain: 0,
         stopLoss: 0,
         selectedCurrency: selectedToken,
-        lastPrice: getPrice(selectedToken.address),
+        lastPrice: priceFeed[selectedToken.priceKey],
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -153,7 +153,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     formValues.selectedNumbers,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({

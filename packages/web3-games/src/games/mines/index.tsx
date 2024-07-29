@@ -61,7 +61,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     wagmiConfig,
   } = useContractConfigContext();
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const selectedTokenAddress = useTokenStore((s) => s.selectedToken);
   const tokens = useTokenStore((s) => s.tokens);
@@ -123,7 +123,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       );
 
       const wager =
-        Number(wagerInGameCurrency) * getPrice(initialToken.address);
+        Number(wagerInGameCurrency) * priceFeed[initialToken.priceKey];
 
       const _wager = wager < 1 ? Math.ceil(wager) : wager;
 
@@ -147,7 +147,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedTokenAddress,
-      lastPrice: getPrice(selectedTokenAddress.address),
+      lastPrice: priceFeed[selectedTokenAddress.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -229,7 +229,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     submitType,
     revealCells,
     selectedTokenAddress.address,
-    priceFeed[selectedTokenAddress.address],
+    priceFeed[selectedTokenAddress.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({

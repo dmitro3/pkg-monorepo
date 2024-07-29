@@ -71,7 +71,7 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [plinkoResult, setPlinkoResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent<number[]>>>();
@@ -105,7 +105,7 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
         selectedCurrency: selectedToken,
-        lastPrice: getPrice(selectedToken.address),
+        lastPrice: priceFeed[selectedToken.priceKey],
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -159,7 +159,7 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
     formValues.stopLoss,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
@@ -225,15 +225,17 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
 
   return (
     <>
-      <Plinko3dTemplate
-        {...props}
-        onSubmitGameForm={onGameSubmit}
-        gameResults={plinkoSteps || []}
-        onAnimationCompleted={onGameCompleted}
-        onFormChange={(val) => {
-          setFormValues(val);
-        }}
-      />
+      <div>
+        <Plinko3dTemplate
+          {...props}
+          onSubmitGameForm={onGameSubmit}
+          gameResults={plinkoSteps || []}
+          onAnimationCompleted={onGameCompleted}
+          onFormChange={(val) => {
+            setFormValues(val);
+          }}
+        />
+      </div>
       {!props.hideBetHistory && (
         <BetHistoryTemplate
           betHistory={betHistory || []}
