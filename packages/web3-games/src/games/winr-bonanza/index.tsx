@@ -26,10 +26,10 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import { prepareGameTransaction } from "../utils";
-import { useBetHistory } from "../hooks";
 
 interface TemplateWithWeb3Props {
   buildedGameUrl: string;
