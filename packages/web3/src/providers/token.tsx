@@ -53,7 +53,7 @@ export const createTokenStore = (initProps?: Partial<TokenProps>) => {
         },
       }),
       {
-        name: "token-store",
+        name: "token-store-v2",
       }
     )
   );
