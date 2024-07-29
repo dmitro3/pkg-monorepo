@@ -1,163 +1,101 @@
 import { create } from "zustand";
-import { shallow } from "zustand/shallow";
 
-import { GameType } from "../../constants";
+import { createSelectors } from "../../utils/store";
 import { toDecimals } from "../../utils/web3";
 
-export interface GameNotifications {
-  payoutInUsd: number;
+export interface Result {
   won: boolean;
-  order: number;
-  wagerInUsd: number;
-  duration: number;
-  component?: React.ReactNode;
+  payout: number;
 }
 
-export interface GameResultSummary {
+export interface LiveResultState {
+  wager: number;
+  betCount: number;
+  results: Result[];
   currentProfit: number;
-  currentOrder: number;
   wonCount: number;
   lossCount: number;
-  currency?: any;
-  playedGameCount?: number;
-  wagerWithMultiplier?: number;
-  game?: GameType;
 }
 
-interface GameNotificationsState {
-  isFinished: boolean;
-  isSkipped: boolean;
-  resultSummary: GameResultSummary;
-  playedNotifications: GameNotifications[];
+export interface LiveResultActions {
+  addResult: (item: Result) => void;
+  updateGame: ({
+    wager,
+    betCount,
+  }: {
+    wager: number;
+    betCount: number;
+  }) => void;
+  skipAll: (allResults: Result[]) => void;
+  clear: () => void;
 }
 
-interface GameNotificationsActions {
-  updatePlayedNotifications: (item: GameNotifications) => void;
-  updateResultSummary: (item: Partial<GameResultSummary>) => void;
-  updateIsFinished: (item: boolean) => void;
-  skipNotifications: (item: Partial<GameNotificationsState>) => void;
-  clearPlayedNotifications: () => void;
-  updateIsSkipped: (item: boolean) => void;
-  clearResultSummary: () => void;
-}
+export type LiveResultStore = LiveResultState & LiveResultActions;
 
-export type GameNotificationsStore = GameNotificationsState &
-  GameNotificationsActions;
+export const liveResultStore = create<LiveResultStore>()((set, get) => ({
+  wager: 0,
+  betCount: 0,
+  currentProfit: 0,
+  wonCount: 0,
+  lossCount: 0,
+  results: [],
+  updateGame: ({ wager, betCount }) => {
+    set((state) => ({
+      ...state,
+      wager,
+      betCount,
+    }));
+  },
+  addResult: (item) => {
+    set((state) => {
+      const currentProfit = get()?.currentProfit;
 
-export const gameNotificationStore = create<GameNotificationsStore>()(
-  (set, get) => ({
-    isFinished: true,
-    isSkipped: false,
-    resultSummary: {
+      const newProfit = item.won
+        ? currentProfit + item.payout
+        : currentProfit - get()?.wager;
+
+      return {
+        ...state,
+        currentProfit: toDecimals(newProfit, 2),
+        wonCount: item.won ? get()?.wonCount + 1 : get()?.wonCount,
+        lossCount: !item.won ? get()?.lossCount + 1 : get()?.lossCount,
+        results: [...state.results, item],
+      };
+    });
+  },
+  skipAll: (allResults) => {
+    set((state) => {
+      const newProfit = allResults.reduce((acc, cur) => {
+        return acc + cur.payout;
+      }, 0);
+
+      const wonCount = allResults.reduce((acc, cur) => {
+        return acc + (cur.won ? 1 : 0);
+      }, 0);
+
+      const lossCount = allResults.reduce((acc, cur) => {
+        return acc + (!cur.won ? 1 : 0);
+      }, 0);
+
+      return {
+        ...state,
+        currentProfit: toDecimals(newProfit, 2),
+        results: allResults,
+        lossCount,
+        wonCount,
+      };
+    });
+  },
+  clear: () => {
+    set({
+      wager: 0,
+      betCount: 0,
+      results: [],
       currentProfit: 0,
-      currentOrder: 0,
       wonCount: 0,
       lossCount: 0,
-    },
-    playedNotifications: [],
-    updateResultSummary: (item) =>
-      set((state) => {
-        return {
-          ...state,
-          resultSummary: {
-            ...state.resultSummary,
-            ...item,
-          },
-        };
-      }),
-    clearPlayedNotifications: () =>
-      set((state) => {
-        return {
-          ...state,
-          playedNotifications: [],
-        };
-      }),
-    clearResultSummary: () =>
-      set((state) => {
-        return {
-          ...state,
-          resultSummary: {
-            currency: undefined,
-            wagerWithMultiplier: undefined,
-            playedGameCount: 0,
-            currentProfit: 0,
-            currentOrder: 0,
-            wonCount: 0,
-            lossCount: 0,
-          },
-        };
-      }),
-    skipNotifications: (item) =>
-      set((state) => {
-        return {
-          ...state,
-          ...item,
-        };
-      }),
-    updatePlayedNotifications: (item) =>
-      set((state) => {
-        const currentProfit = get()?.resultSummary.currentProfit;
-        const game = get()?.resultSummary.game;
+    });
+  },
+}));
 
-        const newProfit = item.won
-          ? currentProfit + item.payoutInUsd
-          : currentProfit - item.wagerInUsd;
-
-        const newPlinkoProfit = item.won
-          ? currentProfit + item.payoutInUsd - item.wagerInUsd
-          : currentProfit - item.wagerInUsd + item.payoutInUsd;
-
-        return {
-          ...state,
-          isFinished: false,
-          resultSummary: {
-            ...get()?.resultSummary,
-            wonCount: item.won
-              ? get()?.resultSummary.wonCount + 1
-              : get()?.resultSummary.wonCount,
-            lossCount: !item.won
-              ? get()?.resultSummary.lossCount + 1
-              : get()?.resultSummary.lossCount,
-            currentProfit:
-              game === GameType.PLINKO
-                ? toDecimals(newPlinkoProfit, 2)
-                : toDecimals(newProfit, 2),
-
-            currentOrder: get()?.resultSummary.currentOrder + 1,
-          },
-
-          playedNotifications: [...state.playedNotifications, item],
-        };
-      }),
-
-    updateIsFinished: (item) =>
-      set((state) => {
-        return {
-          ...state,
-          isFinished: item,
-        };
-      }),
-    updateIsSkipped: (item) =>
-      set((state) => {
-        return {
-          ...state,
-          isSkipped: item,
-        };
-      }),
-  })
-);
-
-export const useGameNotifications = <T extends keyof GameNotificationsStore>(
-  keys: T[]
-) =>
-  gameNotificationStore((state) => {
-    const x = keys.reduce((acc, cur) => {
-      acc[cur] = state[cur];
-
-      return acc;
-    }, {} as GameNotificationsStore);
-
-    return x as Pick<GameNotificationsStore, T>;
-  }, shallow);
-
-export default useGameNotifications;
+export const useLiveResultStore = createSelectors(liveResultStore);
