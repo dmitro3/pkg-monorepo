@@ -1,7 +1,9 @@
 "use client";
 
 import {
+  BetHistoryTemplate,
   FormSetValue,
+  GameType,
   MINES_GAME_STATUS,
   MINES_SUBMIT_TYPE,
   MinesFormField,
@@ -11,9 +13,9 @@ import {
   useMinesGameStateStore,
 } from "@winrlabs/games";
 import {
-  Token,
   controllerAbi,
   minesAbi,
+  Token,
   useCurrentAccount,
   useHandleTx,
   usePriceFeed,
@@ -31,6 +33,7 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import { prepareGameTransaction } from "../utils";
@@ -45,6 +48,7 @@ enum Status {
 interface TemplateWithWeb3Props {
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
   onAnimationCompleted?: (result: MinesGameResult[]) => void;
 }
 
@@ -57,7 +61,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     wagmiConfig,
   } = useContractConfigContext();
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const selectedTokenAddress = useTokenStore((s) => s.selectedToken);
   const tokens = useTokenStore((s) => s.tokens);
@@ -119,7 +123,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       );
 
       const wager =
-        Number(wagerInGameCurrency) * getPrice(initialToken.address);
+        Number(wagerInGameCurrency) * priceFeed[initialToken.priceKey];
 
       const _wager = wager < 1 ? Math.ceil(wager) : wager;
 
@@ -143,7 +147,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedTokenAddress,
-      lastPrice: getPrice(selectedTokenAddress.address),
+      lastPrice: priceFeed[selectedTokenAddress.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -225,7 +229,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     submitType,
     revealCells,
     selectedTokenAddress.address,
-    priceFeed[selectedTokenAddress.address],
+    priceFeed[selectedTokenAddress.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
@@ -441,13 +445,27 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     submitType === MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT ? true : false
   );
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.MINES,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = (result: MinesGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
+    refetchHistory();
     updateBalances();
   };
 
   return (
-    <div>
+    <>
       <MinesTemplate
         {...props}
         onSubmitGameForm={onGameSubmit}
@@ -460,7 +478,15 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         minWager={props.minWager}
         maxWager={props.maxWager}
       />
-    </div>
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 };
 

@@ -1,7 +1,5 @@
 "use client";
 
-import { GameType } from "@winrlabs/games";
-import { BetHistory } from "@winrlabs/web3-games";
 import dynamic from "next/dynamic";
 
 const WinrBonanzaTemplateWithWeb3 = dynamic(
@@ -52,12 +50,9 @@ export default function WinrBonanzaPage() {
   // console.log(processReel, "PROCESS REEL");
 
   return (
-    <>
-      <WinrBonanzaTemplateWithWeb3
-        buildedGameUrl={`${CDN_URL}/winrlabs-games/winr-bonanza`}
-        buildedGameUrlMobile={`${CDN_URL}/winrlabs-games/winr-bonanza`}
-      />
-      <BetHistory gameType={GameType.WINR_BONANZA} />
-    </>
+    <WinrBonanzaTemplateWithWeb3
+      buildedGameUrl={`${CDN_URL}/winrlabs-games/winr-bonanza`}
+      buildedGameUrlMobile={`${CDN_URL}/winrlabs-games/winr-bonanza`}
+    />
   );
 }

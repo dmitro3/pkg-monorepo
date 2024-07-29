@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  BetHistoryTemplate,
+  GameType,
   RouletteFormFields,
   RouletteGameResult,
   RouletteTemplate,
@@ -17,6 +19,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -36,6 +39,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: RouletteGameResult[]) => void;
@@ -62,7 +66,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [rouletteResult, setRouletteResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
@@ -97,7 +101,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
         stopGain: 0,
         stopLoss: 0,
         selectedCurrency: selectedToken,
-        lastPrice: getPrice(selectedToken.address),
+        lastPrice: priceFeed[selectedToken.priceKey],
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -149,7 +153,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     formValues.selectedNumbers,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
@@ -194,20 +198,44 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
       setRouletteResult(finalResult);
   }, [gameEvent]);
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.ROULETTE,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = (result: RouletteGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
+    refetchHistory();
     updateBalances();
   };
 
   return (
-    <RouletteTemplate
-      {...props}
-      onSubmitGameForm={onGameSubmit}
-      gameResults={rouletteSteps || []}
-      onAnimationCompleted={onGameCompleted}
-      onFormChange={(val) => {
-        setFormValues(val);
-      }}
-    />
+    <>
+      <RouletteTemplate
+        {...props}
+        onSubmitGameForm={onGameSubmit}
+        gameResults={rouletteSteps || []}
+        onAnimationCompleted={onGameCompleted}
+        onFormChange={(val) => {
+          setFormValues(val);
+        }}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }

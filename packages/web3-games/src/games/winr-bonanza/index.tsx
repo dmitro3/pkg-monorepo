@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  BetHistoryTemplate,
+  GameType,
   ReelSpinSettled,
   WinrBonanzaFormFields,
   WinrBonanzaTemplate,
@@ -24,6 +26,7 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import { prepareGameTransaction } from "../utils";
@@ -31,11 +34,13 @@ import { prepareGameTransaction } from "../utils";
 interface TemplateWithWeb3Props {
   buildedGameUrl: string;
   buildedGameUrlMobile: string;
+  hideBetHistory?: boolean;
 }
 
 export default function WinrBonanzaTemplateWithWeb3({
   buildedGameUrl,
   buildedGameUrlMobile,
+  hideBetHistory,
 }: TemplateWithWeb3Props) {
   const {
     gameAddresses,
@@ -56,7 +61,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [settledResult, setSettledResult] = React.useState<ReelSpinSettled>();
   const [previousFreeSpinCount, setPreviousFreeSpinCount] =
@@ -78,7 +83,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.actualBetAmount,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -110,14 +115,14 @@ export default function WinrBonanzaTemplateWithWeb3({
     formValues.isDoubleChance,
     formValues.actualBetAmount,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const encodedBuyFreeSpinParams = React.useMemo(() => {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.betAmount,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -145,14 +150,14 @@ export default function WinrBonanzaTemplateWithWeb3({
   }, [
     formValues.betAmount,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const encodedFreeSpinParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.betAmount,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedData: `0x${string}` = encodeFunctionData({
@@ -292,10 +297,6 @@ export default function WinrBonanzaTemplateWithWeb3({
     },
   });
 
-  const handleRefresh = async () => {
-    updateBalances();
-  };
-
   React.useEffect(() => {
     const gameData = gameDataRead.data as any;
 
@@ -326,17 +327,45 @@ export default function WinrBonanzaTemplateWithWeb3({
     }
   }, [gameEvent]);
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.WINR_BONANZA,
+    options: {
+      enabled: !hideBetHistory,
+    },
+  });
+
+  const handleRefresh = async () => {
+    refetchHistory();
+    updateBalances();
+  };
+
   return (
-    <WinrBonanzaTemplate
-      onRefresh={handleRefresh}
-      onFormChange={(val) => setFormValues(val)}
-      buildedGameUrl={buildedGameUrl}
-      buildedGameUrlMobile={buildedGameUrlMobile}
-      bet={handleBet}
-      buyFreeSpins={handleBuyFreeSpins}
-      freeSpin={handleFreeSpin}
-      gameEvent={settledResult as ReelSpinSettled}
-      previousFreeSpinCount={previousFreeSpinCount}
-    />
+    <>
+      <WinrBonanzaTemplate
+        onRefresh={handleRefresh}
+        onFormChange={(val) => setFormValues(val)}
+        buildedGameUrl={buildedGameUrl}
+        buildedGameUrlMobile={buildedGameUrlMobile}
+        bet={handleBet}
+        buyFreeSpins={handleBuyFreeSpins}
+        freeSpin={handleFreeSpin}
+        gameEvent={settledResult as ReelSpinSettled}
+        previousFreeSpinCount={previousFreeSpinCount}
+      />
+      {!hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }

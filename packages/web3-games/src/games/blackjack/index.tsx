@@ -2,12 +2,14 @@
 
 import {
   ActiveGameHands,
+  BetHistoryTemplate,
   BlackjackCard,
   BlackjackFormFields,
   BlackjackGameStatus,
   BlackjackHandStatus,
   BlackjackTemplate,
   GameStruct,
+  GameType,
 } from "@winrlabs/games";
 import {
   blackjackReaderAbi,
@@ -28,7 +30,7 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useListenGameEvent } from "../hooks";
+import { useBetHistory, useListenGameEvent } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { DecodedEvent, prepareGameTransaction } from "../utils";
 import {
@@ -52,6 +54,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
   onGameCompleted?: (payout: number) => void;
 }
 
@@ -110,7 +113,7 @@ export default function BlackjackTemplateWithWeb3(
 
   const gameEvent = useListenGameEvent();
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState<BlackjackFormFields>({
@@ -156,7 +159,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const { firstHandWager, secondHandWager, thirdHandWager } = formValues;
@@ -210,14 +213,14 @@ export default function BlackjackTemplateWithWeb3(
     formValues.thirdHandWager,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const encodedHitParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -248,7 +251,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -279,7 +282,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -310,7 +313,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -341,7 +344,7 @@ export default function BlackjackTemplateWithWeb3(
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -1128,7 +1131,7 @@ export default function BlackjackTemplateWithWeb3(
     const gamePayout = Number(
       formatUnits(BigInt(results.results[1]), selectedToken.decimals)
     );
-    const gamePayoutAsDollar = gamePayout * getPrice(selectedToken.address);
+    const gamePayoutAsDollar = gamePayout * priceFeed[selectedToken.priceKey];
 
     setActiveGameHands((prev) => ({
       ...prev,
@@ -1209,29 +1212,53 @@ export default function BlackjackTemplateWithWeb3(
     }));
   };
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.BLACKJACK,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = () => {
     props.onGameCompleted && props.onGameCompleted(activeGameData.payout || 0);
+    refetchHistory();
     updateBalances();
   };
 
   return (
-    <BlackjackTemplate
-      activeGameData={activeGameData}
-      activeGameHands={activeGameHands}
-      initialDataFetched={initialDataFetched}
-      minWager={props.minWager}
-      maxWager={props.maxWager}
-      onFormChange={(v) => setFormValues(v)}
-      onGameCompleted={onGameCompleted}
-      isControllerDisabled={isLoading}
-      onDeal={handleStart}
-      onHit={handleHit}
-      onDoubleDown={handleDoubleDown}
-      onInsure={handleBuyInsurance}
-      onSplit={handleSplit}
-      onStand={handleStand}
-      onReset={resetGame}
-      options={{}}
-    />
+    <>
+      <BlackjackTemplate
+        activeGameData={activeGameData}
+        activeGameHands={activeGameHands}
+        initialDataFetched={initialDataFetched}
+        minWager={props.minWager}
+        maxWager={props.maxWager}
+        onFormChange={(v) => setFormValues(v)}
+        onGameCompleted={onGameCompleted}
+        isControllerDisabled={isLoading}
+        onDeal={handleStart}
+        onHit={handleHit}
+        onDoubleDown={handleDoubleDown}
+        onInsure={handleBuyInsurance}
+        onSplit={handleSplit}
+        onStand={handleStand}
+        onReset={resetGame}
+        options={{}}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }

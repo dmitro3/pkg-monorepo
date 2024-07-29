@@ -5,6 +5,8 @@ import { Address } from "viem";
 import { createStore, StoreApi, useStore } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { PriceFeedVariable } from "../hooks/use-price-feed";
+
 export interface Token {
   address: Address;
   bankrollIndex: Address;
@@ -13,6 +15,7 @@ export interface Token {
   decimals: number;
   displayDecimals: number;
   playable: boolean;
+  priceKey: PriceFeedVariable;
 }
 
 interface TokenProps {
@@ -38,6 +41,7 @@ export const createTokenStore = (initProps?: Partial<TokenProps>) => {
       decimals: 0,
       displayDecimals: 0,
       playable: false,
+      priceKey: "weth",
     },
   };
   return createStore(

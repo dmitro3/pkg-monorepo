@@ -5,6 +5,8 @@ import {
   BaccaratGameResult,
   BaccaratGameSettledResult,
   BaccaratTemplate,
+  BetHistoryTemplate,
+  GameType,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -18,6 +20,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -29,6 +32,7 @@ import {
 interface TemplateWithWeb3Props {
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
 
   onAnimationCompleted?: (result: BaccaratGameSettledResult) => void;
 }
@@ -53,7 +57,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [baccaratResults, setBaccaratResults] =
     useState<BaccaratGameResult | null>(null);
@@ -80,7 +84,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         stopGain: 0,
         stopLoss: 0,
         selectedCurrency: selectedToken,
-        lastPrice: getPrice(selectedToken.address),
+        lastPrice: priceFeed[selectedToken.priceKey],
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -141,7 +145,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     formValues.tieWager,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
@@ -199,21 +203,44 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     }
   }, [gameEvent]);
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.BACCARAT,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = (result: BaccaratGameSettledResult) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
+    refetchHistory();
     updateBalances();
   };
-
   return (
-    <BaccaratTemplate
-      {...props}
-      onSubmitGameForm={onGameSubmit}
-      baccaratResults={baccaratResults}
-      baccaratSettledResults={baccaratSettledResult}
-      onAnimationCompleted={onGameCompleted}
-      onFormChange={(val) => {
-        setFormValues(val);
-      }}
-    />
+    <>
+      <BaccaratTemplate
+        {...props}
+        onSubmitGameForm={onGameSubmit}
+        baccaratResults={baccaratResults}
+        baccaratSettledResults={baccaratSettledResult}
+        onAnimationCompleted={onGameCompleted}
+        onFormChange={(val) => {
+          setFormValues(val);
+        }}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }

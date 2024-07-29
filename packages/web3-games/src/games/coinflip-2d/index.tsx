@@ -1,10 +1,12 @@
 "use client";
 
 import {
+  BetHistoryTemplate,
   CoinFlipFormFields,
   CoinFlipGameResult,
   CoinFlipTemplate,
   CoinSide,
+  GameType,
   useLiveResultStore,
 } from "@winrlabs/games";
 import {
@@ -19,6 +21,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -38,6 +41,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
@@ -74,7 +78,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     selectedToken: s.selectedToken,
   }));
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [coinFlipResult, setCoinFlipResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
@@ -108,7 +112,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
         stopGain: formValues.stopGain,
         stopLoss: formValues.stopLoss,
         selectedCurrency: selectedToken,
-        lastPrice: getPrice(selectedToken.address),
+        lastPrice: priceFeed[selectedToken.priceKey],
       });
 
     const encodedChoice = encodeAbiParameters(
@@ -162,7 +166,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     formValues.stopLoss,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
@@ -217,8 +221,22 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     }
   }, [gameEvent]);
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.COINFLIP,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = (result: CoinFlipGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
+    refetchHistory();
     updateBalances();
   };
 
@@ -252,17 +270,26 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   );
 
   return (
-    <CoinFlipTemplate
-      {...props}
-      isGettingResult={isLoading}
-      onSubmitGameForm={onGameSubmit}
-      gameResults={coinFlipSteps || []}
-      onAnimationCompleted={onGameCompleted}
-      onAnimationStep={onAnimationStep}
-      onFormChange={(val) => {
-        setFormValues(val);
-      }}
-      onAnimationSkipped={onAnimationSkipped}
-    />
+    <>
+      <CoinFlipTemplate
+        {...props}
+        isGettingResult={isLoading}
+        onSubmitGameForm={onGameSubmit}
+        gameResults={coinFlipSteps || []}
+        onAnimationCompleted={onGameCompleted}
+        onFormChange={(val) => {
+          setFormValues(val);
+        }}
+        onAnimationSkipped={onAnimationSkipped}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }

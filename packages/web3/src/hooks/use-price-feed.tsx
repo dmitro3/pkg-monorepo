@@ -1,39 +1,57 @@
 "use client";
 
+import { useCurrencyControllerGetLastPriceFeed } from "@winrlabs/api";
 import React from "react";
-import { Address } from "viem";
 
-import { useTokenStore } from "../providers/token";
+export type PriceFeedVariable =
+  | "winr"
+  | "arb"
+  | "btc"
+  | "eth"
+  | "usdc"
+  | "weth"
+  | "sol"
+  | "usdt";
 
-interface PriceFeed {
-  [address: Address]: number;
-}
+type TPriceFeed = Record<PriceFeedVariable, number>;
+
+const defaultValues: TPriceFeed = {
+  winr: 1,
+  arb: 1,
+  btc: 1,
+  eth: 1,
+  usdc: 1,
+  weth: 1,
+  sol: 1,
+  usdt: 1,
+};
 
 export const usePriceFeed = () => {
-  const [priceFeed, setPriceFeed] = React.useState<PriceFeed>({});
-
-  const tokens = useTokenStore((s) => s.tokens);
+  const [priceFeed, setPriceFeed] = React.useState<TPriceFeed>(defaultValues);
+  const { data } = useCurrencyControllerGetLastPriceFeed(
+    {},
+    {
+      refetchInterval: 5000,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   React.useEffect(() => {
-    // FIXME: mock response
-    const payload: Record<Address, number> = {};
+    if (!data) return;
+    const payload: TPriceFeed = defaultValues;
 
-    tokens.forEach((t) => {
-      if (t.symbol == "USDC") payload[t.address] = 1;
-      if (t.symbol == "USDT") payload[t.address] = 1;
-      if (t.symbol == "wBTC") payload[t.address] = 65000;
-      if (t.symbol == "wETH") payload[t.address] = 3500;
+    data.forEach((t) => {
+      payload[t.token as PriceFeedVariable] = t.price;
     });
 
     setPriceFeed(payload);
-  }, []);
+  }, [data]);
 
-  const getPrice = (address: Address): number => {
-    return priceFeed[address] || 1;
-  };
+  React.useEffect(() => {
+    console.log(priceFeed, "pricefeed");
+  }, [priceFeed]);
 
   return {
     priceFeed,
-    getPrice,
   };
 };

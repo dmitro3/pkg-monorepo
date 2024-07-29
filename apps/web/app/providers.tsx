@@ -76,6 +76,7 @@ export function Providers(props: { children: ReactNode }) {
               icon: "/tokens/usdc.png",
               symbol: "USDC",
               playable: true,
+              priceKey: "usdc",
             },
             {
               address: "0xC8DbFdFc8882B8a33d11d1658e75E4858A1d338F",
@@ -85,6 +86,7 @@ export function Providers(props: { children: ReactNode }) {
               icon: "/tokens/usdt.png",
               symbol: "USDT",
               playable: true,
+              priceKey: "usdt",
             },
             {
               address: "0xF73A655cae59E0E7e08DE3F4606EA97D88AcA32F",
@@ -94,6 +96,7 @@ export function Providers(props: { children: ReactNode }) {
               icon: "/tokens/wbtc.png",
               symbol: "wBTC",
               playable: true,
+              priceKey: "btc",
             },
             {
               address: "0xaa54Ca4f14B57777895f7342778919B8ee5B9D7B",
@@ -103,6 +106,7 @@ export function Providers(props: { children: ReactNode }) {
               icon: "/tokens/weth.png",
               symbol: "wETH",
               playable: true,
+              priceKey: "weth",
             },
           ]}
           selectedToken={{
@@ -113,6 +117,7 @@ export function Providers(props: { children: ReactNode }) {
             icon: "/tokens/weth.png",
             symbol: "wETH",
             playable: true,
+            priceKey: "weth",
           }}
         >
           <AppUiProviders wagmiConfig={config}>

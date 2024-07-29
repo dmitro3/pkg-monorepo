@@ -1,5 +1,7 @@
 "use client";
 import {
+  BetHistoryTemplate,
+  GameType,
   HoldemPokerActiveGame,
   HoldemPokerFormFields,
   HoldemPokerTemplate,
@@ -25,7 +27,7 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useListenGameEvent } from "../hooks";
+import { useBetHistory, useListenGameEvent } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { DecodedEvent, prepareGameTransaction } from "../utils";
 import {
@@ -40,6 +42,7 @@ import { checkPairOfAcesOrBetter } from "./utils";
 interface TemplateWithWeb3Props {
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
   buildedGameUrl: string;
   onGameCompleted?: () => void;
 }
@@ -93,7 +96,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
   }));
   const tokens = useTokenStore((s) => s.tokens);
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const gameEvent = useListenGameEvent();
 
@@ -109,7 +112,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const { ante, aaBonus } = formValues;
@@ -145,7 +148,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     formValues.ante,
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const encodedFinalizeParams = React.useMemo(() => {
@@ -331,7 +334,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     ) as Token;
     const initialWagerAsDollar =
       Number(formatUnits(gameDataRead.data.wager, initialToken.decimals)) *
-      getPrice(initialToken.address);
+      priceFeed[initialToken.priceKey];
 
     const _activeGame = {
       cards: gameDataRead.data.cards as unknown as number[],
@@ -398,10 +401,10 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
         const paybackAmountAsDollar =
           Number(formatUnits(result.payback, token.decimals)) *
-          getPrice(token.address);
+          priceFeed[token.priceKey];
         const payoutAmountAsDollar =
           Number(formatUnits(result.payout, token.decimals)) *
-          getPrice(token.address);
+          priceFeed[token.priceKey];
 
         setActiveGame((prev) => ({
           ...prev,
@@ -426,20 +429,48 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     }
   };
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.HOLDEM_POKER,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
+  const onGameCompleted = () => {
+    props.onGameCompleted && props.onGameCompleted();
+    refetchHistory();
+  };
+
   return (
-    <HoldemPokerTemplate
-      minWager={props.minWager}
-      maxWager={props.maxWager}
-      buildedGameUrl={props.buildedGameUrl}
-      activeGameData={activeGame}
-      isInitialDataFetched={isFetchedWithDelay[0]}
-      isLoggedIn={!!currentAccount.address}
-      handleDeal={handleDeal}
-      handleFinalize={handleFinalize}
-      handleFinalizeFold={handleFinalizeFold}
-      onRefresh={onRefresh}
-      onFormChange={(v) => setFormValues(v)}
-      onGameCompleted={props.onGameCompleted}
-    />
+    <>
+      <HoldemPokerTemplate
+        minWager={props.minWager}
+        maxWager={props.maxWager}
+        buildedGameUrl={props.buildedGameUrl}
+        activeGameData={activeGame}
+        isInitialDataFetched={isFetchedWithDelay[0]}
+        isLoggedIn={!!currentAccount.address}
+        handleDeal={handleDeal}
+        handleFinalize={handleFinalize}
+        handleFinalizeFold={handleFinalizeFold}
+        onRefresh={onRefresh}
+        onFormChange={(v) => setFormValues(v)}
+        onGameCompleted={onGameCompleted}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }

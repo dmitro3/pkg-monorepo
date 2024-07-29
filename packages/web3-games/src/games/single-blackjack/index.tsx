@@ -2,10 +2,12 @@
 
 import {
   ActiveGameHands,
+  BetHistoryTemplate,
   BlackjackCard,
   BlackjackGameStatus,
   BlackjackHandStatus,
   GameStruct,
+  GameType,
   SingleBJActiveGameHands,
   SingleBJDealFormFields,
   SingleBlackjackTemplate,
@@ -39,7 +41,7 @@ import {
   BlackjackSettledEvent,
   BlackjackStandOffEvent,
 } from "../blackjack/types";
-import { useListenGameEvent } from "../hooks";
+import { useBetHistory, useListenGameEvent } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { DecodedEvent, prepareGameTransaction } from "../utils";
 
@@ -53,6 +55,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
   onGameCompleted?: (payout: number) => void;
 }
 
@@ -93,7 +96,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
 
   const gameEvent = useListenGameEvent();
 
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [formValues, setFormValues] = React.useState<SingleBJDealFormFields>({
@@ -134,7 +137,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress, wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -166,14 +169,14 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   }, [
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const encodedHitParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -204,7 +207,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -235,7 +238,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -266,7 +269,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -297,7 +300,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const { tokenAddress } = prepareGameTransaction({
       wager: formValues.wager,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -946,7 +949,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     const gamePayout = Number(
       formatUnits(BigInt(results.results[1]), selectedToken.decimals)
     );
-    const gamePayoutAsDollar = gamePayout * getPrice(selectedToken.address);
+    const gamePayoutAsDollar = gamePayout * priceFeed[selectedToken.priceKey];
 
     setActiveGameHands((prev) => ({
       ...prev,
@@ -982,29 +985,53 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     }));
   };
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.ONE_HAND_BLACKJACK,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = () => {
     props.onGameCompleted && props.onGameCompleted(activeGameData.payout || 0);
+    refetchHistory();
     updateBalances();
   };
 
   return (
-    <SingleBlackjackTemplate
-      activeGameData={activeGameData}
-      activeGameHands={activeGameHands}
-      initialDataFetched={initialDataFetched}
-      minWager={props.minWager}
-      maxWager={props.maxWager}
-      onFormChange={(v) => setFormValues(v)}
-      onGameCompleted={onGameCompleted}
-      isControllerDisabled={isLoading}
-      onDeal={handleStart}
-      onHit={handleHit}
-      onDoubleDown={handleDoubleDown}
-      onInsure={handleBuyInsurance}
-      onSplit={handleSplit}
-      onStand={handleStand}
-      onReset={resetGame}
-      options={{}}
-    />
+    <>
+      <SingleBlackjackTemplate
+        activeGameData={activeGameData}
+        activeGameHands={activeGameHands}
+        initialDataFetched={initialDataFetched}
+        minWager={props.minWager}
+        maxWager={props.maxWager}
+        onFormChange={(v) => setFormValues(v)}
+        onGameCompleted={onGameCompleted}
+        isControllerDisabled={isLoading}
+        onDeal={handleStart}
+        onHit={handleHit}
+        onDoubleDown={handleDoubleDown}
+        onInsure={handleBuyInsurance}
+        onSplit={handleSplit}
+        onStand={handleStand}
+        onReset={resetGame}
+        options={{}}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }

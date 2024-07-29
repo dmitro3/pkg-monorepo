@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  BetHistoryTemplate,
+  GameType,
   VideoPokerFormFields,
   VideoPokerResult,
   VideoPokerStatus,
@@ -20,13 +22,14 @@ import React from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useListenGameEvent } from "../hooks";
+import { useBetHistory, useListenGameEvent } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { prepareGameTransaction } from "../utils";
 
 interface TemplateWithWeb3Props {
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
   onAnimationCompleted?: (payout: number) => void;
 }
 
@@ -55,7 +58,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-  const { priceFeed, getPrice } = usePriceFeed();
+  const { priceFeed } = usePriceFeed();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || "0x",
   });
@@ -74,7 +77,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       stopGain: 0,
       stopLoss: 0,
       selectedCurrency: selectedToken,
-      lastPrice: getPrice(selectedToken.address),
+      lastPrice: priceFeed[selectedToken.priceKey],
     });
 
     const encodedGameData = encodeAbiParameters(
@@ -102,7 +105,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   }, [
     formValues.wager,
     selectedToken.address,
-    priceFeed[selectedToken.address],
+    priceFeed[selectedToken.priceKey],
   ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
@@ -255,22 +258,46 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     }
   }, [gameEvent]);
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.VIDEO_POKER,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = (payout: number) => {
     props.onAnimationCompleted && props.onAnimationCompleted(payout);
+    refetchHistory();
     updateBalances();
   };
 
   return (
-    <VideoPokerTemplate
-      minWager={props.minWager || 1}
-      maxWager={props.maxWager || 2000}
-      handleStartGame={handleStartGame}
-      handleFinishGame={handleFinishGame}
-      onFormChange={(val) => setFormValues(val)}
-      onAnimationCompleted={onGameCompleted}
-      activeGame={activeGameData}
-      settledCards={settledCards}
-      isLoading={gameRead.isLoading}
-    />
+    <>
+      <VideoPokerTemplate
+        minWager={props.minWager || 1}
+        maxWager={props.maxWager || 2000}
+        handleStartGame={handleStartGame}
+        handleFinishGame={handleFinishGame}
+        onFormChange={(val) => setFormValues(val)}
+        onAnimationCompleted={onGameCompleted}
+        activeGame={activeGameData}
+        settledCards={settledCards}
+        isLoading={gameRead.isLoading}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }
