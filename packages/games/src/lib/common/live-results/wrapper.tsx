@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import { useGameOptions } from "../../game-provider";
 import { ToastTimer } from "../../ui/toast";
 import { cn } from "../../utils/style";
 import { toDecimals } from "../../utils/web3";
@@ -10,8 +9,8 @@ interface NotificationWrapperProps {
   won: boolean;
   order: number;
   duration: number;
-  tokenImage: string;
   playedGameCount: number;
+  wagerInUsd: number;
 }
 
 export const DefaultNotificationWrapper: React.FC<NotificationWrapperProps> = ({
@@ -20,12 +19,13 @@ export const DefaultNotificationWrapper: React.FC<NotificationWrapperProps> = ({
   order,
   payout,
   duration,
-  tokenImage,
   playedGameCount,
+  wagerInUsd,
 }) => {
+  const { currency } = useGameOptions();
   const currentPayout = won
     ? `+$${toDecimals(payout, 2)}`
-    : `-$${toDecimals(Number(0) - payout, 2)}`;
+    : `-$${toDecimals(Number(wagerInUsd) - payout, 2)}`;
 
   return (
     <div
@@ -44,14 +44,14 @@ export const DefaultNotificationWrapper: React.FC<NotificationWrapperProps> = ({
           {children}
         </div>
         <div
-          className={cn("wr-flex wr-items-center", {
+          className={cn("wr-flex wr-items-center wr-gap-1", {
             "wr-text-red-600": won === false,
           })}
         >
           {currentPayout}
-          {tokenImage && (
+          {currency.icon && (
             <img
-              src={"/tokens/weth.png"}
+              src={currency.icon}
               width={20}
               height={20}
               alt="token_icon"

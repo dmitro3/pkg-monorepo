@@ -51,10 +51,19 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     cashierAddress,
     uiOperatorAddress,
   } = useContractConfigContext();
-  const { 
+  const {
     updateResultSummary,
-    updatePlayedNotifications
-  } = useGameNotifications(["updateResultSummary", "updatePlayedNotifications"])
+    updatePlayedNotifications,
+    clearResultSummary,
+    clearPlayedNotifications,
+    skipNotifications,
+  } = useGameNotifications([
+    "updateResultSummary",
+    "updatePlayedNotifications",
+    "clearResultSummary",
+    "skipNotifications",
+    "clearPlayedNotifications",
+  ]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -181,6 +190,9 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async () => {
+    clearResultSummary();
+    clearPlayedNotifications();
+
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -208,8 +220,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       updateResultSummary({
         wagerWithMultiplier: formValues.wager,
         currency: selectedToken,
-        playedGameCount: formValues.betCount,
-
+        playedGameCount: formValues.betCount || 0,
       });
       setIsLoading(false);
     }
@@ -223,23 +234,58 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   const onAnimationStep = React.useCallback(
     (step: number) => {
       props.onAnimationStep && props.onAnimationStep(step);
-  
-      const currentStepResult = coinFlipResult?.program?.[0]?.data.converted.steps[step - 1];
-      console.log("step", step, coinFlipResult);
-  
-  
+
+      const currentStepResult =
+        coinFlipResult?.program?.[0]?.data.converted.steps[step - 1];
+
       if (!currentStepResult) return;
-  
+
+      const isWon = currentStepResult.payout > 0;
+
       updatePlayedNotifications({
         component: <></>,
         duration: 5000,
         order: step,
         payoutInUsd: currentStepResult.payout,
-        won: currentStepResult.payout > 0,
-        wagerInUsd: currentStepResult.payout,
+        won: isWon,
+        wagerInUsd: formValues.wager,
       });
-    }
-  , [coinFlipResult]);
+    },
+    [coinFlipResult]
+  );
+
+  const onAnimationSkipped = React.useCallback(
+    (result: CoinFlipGameResult[]) => {
+      const steps = coinFlipResult?.program?.[0]?.data.converted.steps;
+
+      if (!steps) return;
+
+      const lastFiveResults = result.slice(Math.max(steps.length - 5, 0));
+
+      skipNotifications({
+        playedNotifications: lastFiveResults.map((result, idx) => ({
+          order: Math.max(formValues.betCount || 5, 5) - 5 + idx + 1,
+          payoutInUsd: result.payoutInUsd || 0,
+          won: (result.payout || 0) > 0,
+          wagerInUsd: formValues.wager || 0,
+          component: <></>,
+          duration: 4700,
+        })),
+        resultSummary: {
+          currentProfit:
+            Number(
+              coinFlipResult?.program?.[0]?.data.converted.payout?.toFixed(2)
+            ) || 0,
+          currentOrder: 0,
+          wonCount: steps.filter((result) => result.payout > 0).length,
+          lossCount: steps.filter((result) => result.payout === 0).length,
+          playedGameCount: formValues.betCount || 0,
+          wagerWithMultiplier: formValues.wager || 0,
+        },
+      });
+    },
+    [coinFlipResult]
+  );
 
   return (
     <CoinFlipTemplate
@@ -252,6 +298,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       onFormChange={(val) => {
         setFormValues(val);
       }}
+      onAnimationSkipped={onAnimationSkipped}
     />
   );
 }

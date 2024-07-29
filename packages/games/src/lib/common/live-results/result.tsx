@@ -1,5 +1,6 @@
 import React from "react";
 
+import { useGameOptions } from "../../game-provider";
 import { IconChevronDown } from "../../svgs";
 import { Button } from "../../ui/button";
 import { CardContent, CardFooter } from "../../ui/card";
@@ -9,9 +10,10 @@ import useGameNotifications from "./store";
 import { DefaultNotificationWrapper } from "./wrapper";
 
 // TODO: add to the provider as a config
-const skippableGames = ["dice", "rps", "roulette", "range", "limbo"];
+// const skippableGames = ["dice", "rps", "roulette", "range", "limbo"];
 
 const Result = () => {
+  const { currency } = useGameOptions();
   const {
     playedNotifications,
     isFinished,
@@ -29,7 +31,7 @@ const Result = () => {
     "isFinished",
     "skipNotifications",
   ]);
-  // const isSkippable = skippableGames.includes(resultSummary.game);
+  // const isSkippable = skippableGames.includes(skippableGames.game);
 
   const { currentProfit, lossCount, wonCount, playedGameCount } = resultSummary;
 
@@ -57,8 +59,8 @@ const Result = () => {
                         payout={notification.payoutInUsd || 0}
                         won={notification.won || false}
                         duration={notification.duration || 5000}
-                        tokenImage={""}
                         playedGameCount={playedGameCount || 0}
+                        wagerInUsd={notification.wagerInUsd || 0}
                       >
                         {notification.component}
                       </DefaultNotificationWrapper>
@@ -95,28 +97,26 @@ const Result = () => {
                     -${currentProfit * -1}
                   </span>
                 )}
-                {/* {"d" && ( */}
                 <img
                   alt="token_image"
-                  src={`${"/tokens/weth.png"}`}
+                  src={currency.icon}
                   width={16}
                   height={16}
                 />
-                {/* )} */}
               </div>
             </li>
           </ul>
         </div>
       </CardContent>
       <CardFooter className="wr-gap-2">
-        <Button
+        {/* <Button
           variant={"secondary"}
           className="wr-w-full"
           size={"lg"}
           disabled={true}
         >
           Share(coming soon)
-        </Button>
+        </Button> */}
         {false && (
           <Button
             variant={"default"}
