@@ -1,6 +1,12 @@
 "use client";
 
-import { KenoFormField, KenoGameResult, KenoTemplate } from "@winrlabs/games";
+import {
+  BetHistoryTemplate,
+  GameType,
+  KenoFormField,
+  KenoGameResult,
+  KenoTemplate,
+} from "@winrlabs/games";
 import {
   controllerAbi,
   useCurrentAccount,
@@ -13,6 +19,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -32,6 +39,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: KenoGameResult[]) => void;
@@ -194,20 +202,44 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       setKenoResult(finalResult);
   }, [gameEvent]);
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.KENO,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = (result: KenoGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
+    refetchHistory();
     updateBalances();
   };
 
   return (
-    <KenoTemplate
-      {...props}
-      onSubmitGameForm={onGameSubmit}
-      gameResults={kenoSteps || []}
-      onAnimationCompleted={onGameCompleted}
-      onFormChange={(val) => {
-        setFormValues(val);
-      }}
-    />
+    <>
+      <KenoTemplate
+        {...props}
+        onSubmitGameForm={onGameSubmit}
+        gameResults={kenoSteps || []}
+        onAnimationCompleted={onGameCompleted}
+        onFormChange={(val) => {
+          setFormValues(val);
+        }}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }

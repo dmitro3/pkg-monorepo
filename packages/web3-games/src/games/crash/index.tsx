@@ -1,6 +1,7 @@
 "use client";
 import { useGameControllerGetMultiplayerGameHistory } from "@winrlabs/api";
 import {
+  BetHistoryTemplate,
   GameType,
   MultiplayerGameStatus,
   toDecimals,
@@ -25,7 +26,7 @@ import {
   fromHex,
 } from "viem";
 
-import { useListenMultiplayerGameEvent } from "../hooks";
+import { useBetHistory, useListenMultiplayerGameEvent } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
 
@@ -40,6 +41,7 @@ interface CrashTemplateProps {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
   onAnimationCompleted?: (result: []) => void;
   gameUrl?: string;
 }
@@ -303,6 +305,8 @@ const CrashGame = (props: CrashTemplateProps) => {
     const isWon = multiplier <= gameEvent.result / 100;
 
     refetchBalances();
+    refetchBetHistory();
+    refetchHistory();
 
     if (isWon) {
       console.log("WON");
@@ -317,8 +321,21 @@ const CrashGame = (props: CrashTemplateProps) => {
     }
   }, [betHistory]);
 
+  const {
+    betHistory: allBetHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.MOON,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   return (
-    <div>
+    <>
       <CrashTemplate
         {...props}
         onComplete={onComplete}
@@ -328,7 +345,15 @@ const CrashGame = (props: CrashTemplateProps) => {
         }}
         gameUrl={props.gameUrl}
       />
-    </div>
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={allBetHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 };
 
