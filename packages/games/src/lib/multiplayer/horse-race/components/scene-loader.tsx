@@ -1,4 +1,5 @@
 import * as Progress from "@radix-ui/react-progress";
+import { toFormatted } from "../../../utils/web3";
 
 export const SceneLoader = ({
   percentage,
@@ -22,7 +23,7 @@ export const SceneLoader = ({
             }}
             className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
           >
-            {percentage} %
+            {toFormatted(percentage, 2)} %
           </span>
           <Progress.Root
             className="wr-radius-[1000px] wr-relative wr-z-50 wr-h-[25px] wr-w-[320px] wr-overflow-hidden wr-rounded-md wr-bg-black"
