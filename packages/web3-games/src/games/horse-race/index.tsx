@@ -103,7 +103,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       functionName: "perform",
       args: [
         gameAddresses.horseRace as Address,
-        selectedToken.address,
+        selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
         "bet",
         encodedGameData,
