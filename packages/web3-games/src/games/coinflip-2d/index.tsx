@@ -1,10 +1,12 @@
 "use client";
 
 import {
+  BetHistoryTemplate,
   CoinFlipFormFields,
   CoinFlipGameResult,
   CoinFlipTemplate,
   CoinSide,
+  GameType,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -26,6 +28,7 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from "../utils";
+import { useBetHistory } from "../hooks";
 
 type TemplateOptions = {
   scene?: {
@@ -37,6 +40,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
@@ -204,21 +208,45 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     }
   }, [gameEvent]);
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.COINFLIP,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = (result: CoinFlipGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
+    refetchHistory();
     updateBalances();
   };
 
   return (
-    <CoinFlipTemplate
-      {...props}
-      isGettingResult={isLoading}
-      onSubmitGameForm={onGameSubmit}
-      gameResults={coinFlipSteps || []}
-      onAnimationCompleted={onGameCompleted}
-      onFormChange={(val) => {
-        setFormValues(val);
-      }}
-    />
+    <>
+      <CoinFlipTemplate
+        {...props}
+        isGettingResult={isLoading}
+        onSubmitGameForm={onGameSubmit}
+        gameResults={coinFlipSteps || []}
+        onAnimationCompleted={onGameCompleted}
+        onFormChange={(val) => {
+          setFormValues(val);
+        }}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }

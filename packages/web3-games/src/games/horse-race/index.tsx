@@ -1,4 +1,6 @@
 import {
+  BetHistoryTemplate,
+  GameType,
   Horse,
   HorseRaceFormFields,
   horseRaceParticipantMapWithStore,
@@ -24,7 +26,7 @@ import {
   fromHex,
 } from "viem";
 
-import { useListenMultiplayerGameEvent } from "../hooks";
+import { useBetHistory, useListenMultiplayerGameEvent } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
 
@@ -39,6 +41,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
   buildedGameUrl: string;
   onAnimationCompleted?: (result: []) => void;
 }
@@ -299,13 +302,27 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     }
   }, [gameEvent, currentAccount.address]);
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.HORSE_RACE,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = () => {
     props.onAnimationCompleted && props.onAnimationCompleted([]);
+    refetchHistory();
     updateBalances();
   };
 
   return (
-    <div>
+    <>
       <HorseRaceTemplate
         {...props}
         currentAccount={currentAccount.address as `0x${string}`}
@@ -316,7 +333,15 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
           setFormValues(val);
         }}
       />
-    </div>
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 };
 

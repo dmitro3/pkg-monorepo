@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  BetHistoryTemplate,
+  GameType,
   Plinko3dFormFields,
   Plinko3dGameResult,
   Plinko3dTemplate,
@@ -25,6 +27,7 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from "../utils";
+import { useBetHistory } from "../hooks";
 
 type TemplateOptions = {
   scene?: {
@@ -41,6 +44,7 @@ interface TemplateWithWeb3Props {
   minWager?: number;
   maxWager?: number;
   devicePixelRatio?: number;
+  hideBetHistory?: boolean;
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: Plinko3dGameResult[]) => void;
@@ -200,20 +204,44 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
       setPlinkoResult(finalResult);
   }, [gameEvent]);
 
+  const {
+    betHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.PLINKO,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   const onGameCompleted = (result: Plinko3dGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
+    refetchHistory();
     updateBalances();
   };
 
   return (
-    <Plinko3dTemplate
-      {...props}
-      onSubmitGameForm={onGameSubmit}
-      gameResults={plinkoSteps || []}
-      onAnimationCompleted={onGameCompleted}
-      onFormChange={(val) => {
-        setFormValues(val);
-      }}
-    />
+    <>
+      <Plinko3dTemplate
+        {...props}
+        onSubmitGameForm={onGameSubmit}
+        gameResults={plinkoSteps || []}
+        onAnimationCompleted={onGameCompleted}
+        onFormChange={(val) => {
+          setFormValues(val);
+        }}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={betHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }
