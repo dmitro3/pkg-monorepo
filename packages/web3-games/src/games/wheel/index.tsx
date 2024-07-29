@@ -3,7 +3,9 @@
 import { useGameControllerGetMultiplayerGameHistory } from "@winrlabs/api";
 import {
   ANGLE_SCALE,
+  BetHistoryTemplate,
   CoinFlipGameResult,
+  GameType,
   MultiplayerGameStatus,
   Multiplier,
   participantMapWithStore,
@@ -30,7 +32,7 @@ import {
   fromHex,
 } from "viem";
 
-import { useListenMultiplayerGameEvent } from "../hooks";
+import { useBetHistory, useListenMultiplayerGameEvent } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
 
@@ -44,6 +46,7 @@ interface TemplateWithWeb3Props {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  hideBetHistory?: boolean;
 
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
 }
@@ -337,17 +340,41 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     }
   }, [betHistory]);
 
+  const {
+    betHistory: allBetHistory,
+    isHistoryLoading,
+    mapHistoryTokens,
+    setHistoryFilter,
+    refetchHistory,
+  } = useBetHistory({
+    gameType: GameType.WHEEL,
+    options: {
+      enabled: !props.hideBetHistory,
+    },
+  });
+
   return (
-    <WheelTemplate
-      {...props}
-      onSubmitGameForm={onGameSubmit}
-      onFormChange={(val) => {
-        setFormValues(val);
-      }}
-      onComplete={() => {
-        refetchBetHistory();
-        updateBalances();
-      }}
-    />
+    <>
+      <WheelTemplate
+        {...props}
+        onSubmitGameForm={onGameSubmit}
+        onFormChange={(val) => {
+          setFormValues(val);
+        }}
+        onComplete={() => {
+          refetchBetHistory();
+          refetchHistory();
+          updateBalances();
+        }}
+      />
+      {!props.hideBetHistory && (
+        <BetHistoryTemplate
+          betHistory={allBetHistory || []}
+          loading={isHistoryLoading}
+          onChangeFilter={(filter) => setHistoryFilter(filter)}
+          currencyList={mapHistoryTokens}
+        />
+      )}
+    </>
   );
 }
