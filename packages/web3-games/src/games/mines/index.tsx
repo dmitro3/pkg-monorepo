@@ -14,7 +14,6 @@ import {
 } from "@winrlabs/games";
 import {
   controllerAbi,
-  delay,
   minesAbi,
   Token,
   useCurrentAccount,
@@ -28,7 +27,6 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Address,
-  decodeAbiParameters,
   encodeAbiParameters,
   encodeFunctionData,
   formatUnits,
@@ -257,7 +255,10 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     });
   };
 
-  const handleReveal = async (values: MinesFormField) => {
+  const handleReveal = async (
+    values: MinesFormField,
+    revealCells: boolean[]
+  ) => {
     console.log(revealCells, "revealcells");
 
     const encodedRevealGameData = encodeAbiParameters(
@@ -338,7 +339,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
 
         setRevealCells(revealedCells as boolean[]);
 
-        await handleReveal(values);
+        await handleReveal(values, revealedCells as boolean[]);
 
         updateMinesGameState({
           gameStatus: MINES_GAME_STATUS.IN_PROGRESS,
