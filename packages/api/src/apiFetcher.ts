@@ -3,7 +3,9 @@
 
 import { ApiContext } from "./apiContext";
 
-const baseUrl = "https://gateway-dev.winr.games"; // TODO add your baseUrl
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  ? process.env.NEXT_PUBLIC_API_URL
+  : "https://gateway.winr.games";
 
 export type ErrorWrapper<TError> =
   | TError
