@@ -4,12 +4,14 @@ import { useLiveResultStore } from "./store";
 
 const Result = () => {
   const { currency } = useGameOptions();
-  const { currentProfit, lossCount, wonCount, wager } = useLiveResultStore([
-    "currentProfit",
-    "wonCount",
-    "lossCount",
-    "wager",
-  ]);
+  const { currentProfit, lossCount, wonCount, wager, isMultiplayer } =
+    useLiveResultStore([
+      "currentProfit",
+      "wonCount",
+      "lossCount",
+      "wager",
+      "isMultiplayer",
+    ]);
 
   return (
     <>
@@ -17,17 +19,22 @@ const Result = () => {
         <div className="wr-rounded-md wr-border wr-border-zinc-800 wr-p-[14px]">
           <p className="wr-mb-[14px] wr-font-bold">Live Stats</p>
           <ul className="wr-space-y-3">
-            <li className="wr-flex wr-items-center wr-justify-between">
-              <span className="wr-text-zinc-500">Wins</span>
-              {wonCount}
-            </li>
-            <li className="wr-flex wr-items-center wr-justify-between">
-              <span className="wr-text-zinc-500">Losses</span>
-              {lossCount}
-            </li>
-            <li className="wr-flex wr-items-center wr-justify-between">
-              <span className="wr-text-zinc-500">Wager</span>${wager}
-            </li>
+            {!isMultiplayer && (
+              <>
+                <li className="wr-flex wr-items-center wr-justify-between">
+                  <span className="wr-text-zinc-500">Wins</span>
+                  {wonCount}
+                </li>
+                <li className="wr-flex wr-items-center wr-justify-between">
+                  <span className="wr-text-zinc-500">Losses</span>
+                  {lossCount}
+                </li>
+                <li className="wr-flex wr-items-center wr-justify-between">
+                  <span className="wr-text-zinc-500">Wager</span>${wager}
+                </li>
+              </>
+            )}
+
             <li className="wr-flex wr-items-center wr-justify-between">
               <span className="wr-text-zinc-500">Profit</span>
               <div className="wr-flex wr-items-center wr-gap-1 wr-font-semibold">

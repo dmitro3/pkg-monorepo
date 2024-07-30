@@ -6,6 +6,7 @@ import {
   RouletteFormFields,
   RouletteGameResult,
   RouletteTemplate,
+  useLiveResultStore,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -60,6 +61,13 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     betCount: 1,
     selectedNumbers: new Array(145).fill(0),
   });
+
+  const {
+    addResult,
+    updateGame,
+    skipAll,
+    clear: clearLiveResults,
+  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
 
   const gameEvent = useListenGameEvent();
 
@@ -174,6 +182,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async () => {
+    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -194,9 +203,48 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setRouletteResult(finalResult);
+
+      updateGame({
+        wager: formValues.wager || 0,
+        betCount: formValues.betCount || 0,
+      });
+    }
   }, [gameEvent]);
+
+  const onAnimationStep = React.useCallback(
+    (step: number) => {
+      props.onAnimationStep && props.onAnimationStep(step);
+
+      const currentStepResult =
+        rouletteResult?.program?.[0]?.data.converted.steps[step - 1];
+
+      if (!currentStepResult) return;
+
+      console.log("step", rouletteResult?.program?.[0]?.data);
+
+      const isWon = currentStepResult.win;
+
+      addResult({
+        won: isWon,
+        payout: currentStepResult.payout,
+      });
+    },
+    [rouletteResult]
+  );
+
+  const onAnimationSkipped = React.useCallback(
+    (result: RouletteGameResult[]) => {
+      skipAll(
+        result.map((value) => ({
+          won: value.payout > 0,
+          payout: value.payoutInUsd,
+        }))
+      );
+    },
+    [rouletteResult]
+  );
 
   const {
     betHistory,
@@ -227,6 +275,8 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
         onFormChange={(val) => {
           setFormValues(val);
         }}
+        onAnimationStep={onAnimationStep}
+        onAnimationSkipped={onAnimationSkipped}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate
