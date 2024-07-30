@@ -30,7 +30,7 @@ interface TokenState extends TokenProps {
 
 type TokenStore = StoreApi<TokenState>;
 
-export const createTokenStore = (initProps?: Partial<TokenProps>) => {
+export const createTokenStore = (initProps?: TokenProps) => {
   const DEFAULT_PROPS: TokenProps = {
     tokens: [],
     selectedToken: {
@@ -44,6 +44,24 @@ export const createTokenStore = (initProps?: Partial<TokenProps>) => {
       priceKey: "weth",
     },
   };
+
+  if (!initProps?.tokens?.length) {
+    throw new Error("Tokens must be provided");
+  }
+
+  const version =
+    initProps?.tokens?.reduce(
+      (acc, token) =>
+        acc +
+        Number(
+          token.address
+            .split("")
+            .map((c) => c.charCodeAt(0))
+            .join("")
+        ),
+      0
+    ) % 1e9;
+
   return createStore(
     persist<TokenState>(
       (set) => ({
@@ -57,7 +75,8 @@ export const createTokenStore = (initProps?: Partial<TokenProps>) => {
         },
       }),
       {
-        name: "token-store-v2",
+        name: "token-store",
+        version: version,
       }
     )
   );
