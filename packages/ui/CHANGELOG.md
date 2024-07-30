@@ -1,5 +1,20 @@
 # @winrlabs/ui
 
+## 2.0.1
+
+### Patch Changes
+
+- 94adbd1: bump
+- Updated dependencies [94adbd1]
+  - @winrlabs/web3@0.3.1
+
+## 2.0.0
+
+### Patch Changes
+
+- Updated dependencies [af62052]
+  - @winrlabs/web3@0.3.0
+
 ## 1.0.0
 
 ### Patch Changes
