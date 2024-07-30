@@ -250,7 +250,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       if (!currentStepResult) return;
 
       addResult({
-        won: currentStepResult.payout > 0,
+        won: currentStepResult.win,
         payout: currentStepResult.payout,
       });
     },
@@ -280,6 +280,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
         onFormChange={(val) => {
           setFormValues(val);
         }}
+        onAnimationStep={onAnimationStep}
         onAnimationSkipped={onAnimationSkipped}
       />
       {!props.hideBetHistory && (

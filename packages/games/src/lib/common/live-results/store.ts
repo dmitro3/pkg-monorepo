@@ -54,6 +54,8 @@ export const liveResultStore = create<LiveResultStore>()((set, get) => ({
         ? currentProfit + item.payout
         : currentProfit - get()?.wager;
 
+      console.log("wager", get().wager);
+
       return {
         ...state,
         currentProfit: toDecimals(newProfit, 2),

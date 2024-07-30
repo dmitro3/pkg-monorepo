@@ -109,7 +109,7 @@ const LiveResultsTemplate = () => {
                   />
                 </motion.div>
               </CardHeader>
-            <Result />
+              <Result />
             </Card>
           </motion.div>
         </Draggable>

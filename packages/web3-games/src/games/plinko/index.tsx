@@ -6,6 +6,7 @@ import {
   PlinkoFormFields,
   PlinkoGameResult,
   PlinkoTemplate,
+  useLiveResultStore,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -19,6 +20,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
+import { useBetHistory } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -27,7 +29,6 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from "../utils";
-import { useBetHistory } from "../hooks";
 
 type TemplateOptions = {
   scene?: {
@@ -61,6 +62,13 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     wager: props.minWager || 1,
     plinkoSize: 10,
   });
+
+  const {
+    addResult,
+    updateGame,
+    skipAll,
+    clear: clearLiveResults,
+  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
 
   const gameEvent = useListenGameEvent();
 
@@ -176,6 +184,7 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async () => {
+    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -196,8 +205,14 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setPlinkoResult(finalResult);
+
+      updateGame({
+        wager: formValues.wager || 0,
+        betCount: formValues.betCount || 0,
+      });
+    }
   }, [gameEvent]);
 
   const {
@@ -219,6 +234,37 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     updateBalances();
   };
 
+  const onAnimationStep = React.useCallback(
+    (step: number) => {
+      props.onAnimationStep && props.onAnimationStep(step);
+
+      const currentStepResult =
+        plinkoResult?.program?.[0]?.data.converted.steps[step];
+
+      if (!currentStepResult) return;
+
+      const isWon = currentStepResult.payout > formValues.wager;
+
+      addResult({
+        won: isWon,
+        payout: currentStepResult.payout,
+      });
+    },
+    [plinkoResult]
+  );
+
+  const onAnimationSkipped = React.useCallback(
+    (result: PlinkoGameResult[]) => {
+      skipAll(
+        result.map((value) => ({
+          won: value.payout > 0,
+          payout: value.payoutInUsd,
+        }))
+      );
+    },
+    [plinkoResult]
+  );
+
   return (
     <>
       <PlinkoTemplate
@@ -229,6 +275,8 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
         onFormChange={(val) => {
           setFormValues(val);
         }}
+        onAnimationStep={onAnimationStep}
+        onAnimationSkipped={onAnimationSkipped}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate
