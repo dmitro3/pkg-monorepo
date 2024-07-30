@@ -9,6 +9,7 @@ export * from "./hooks/use-price-feed";
 export * from "./hooks/use-smart-account-api";
 export * from "./hooks/use-token-allowance";
 export * from "./hooks/use-token-balances";
+export * from "./hooks/use-handle-tx-uncached";
 export * from "./providers";
 export * from "./providers/balance";
 export * from "./providers/token";

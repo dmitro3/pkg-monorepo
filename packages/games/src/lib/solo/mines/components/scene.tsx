@@ -1,8 +1,9 @@
 import { useFormContext } from "react-hook-form";
 import { FormField, FormItem } from "../../../ui/form";
 import { useMinesGameStateStore } from "../store";
-import { MinesForm } from "../types";
+import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from "../types";
 import MineCell from "./cell";
+import React from "react";
 
 export const MinesScene = ({
   currentMultiplier,

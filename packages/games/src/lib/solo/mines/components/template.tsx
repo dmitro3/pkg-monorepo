@@ -1,17 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import debounce from "debounce";
 import React from "react";
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import z from "zod";
-import { Mines } from "..";
+
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { Form } from "../../../ui/form";
 import { toDecimals } from "../../../utils/web3";
+import { Mines } from "..";
 import { initialBoard } from "../constants";
 import mineMultipliers from "../constants/mines-multipliers.json";
 import { useMinesGameStateStore } from "../store";
 import { FormSetValue, MinesFormField } from "../types";
 import { MinesGameProps } from "./game";
-import debounce from "debounce";
 
 type TemplateProps = MinesGameProps & {
   minWager?: number;
@@ -99,6 +100,11 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
 
     form.setValue(props.formSetValue.key, props.formSetValue.value);
   }, [props.formSetValue]);
+
+  React.useEffect(() => {
+    const values = form.getValues();
+    props.onSubmitGameForm(values);
+  }, [form.getValues("selectedCells")]);
 
   return (
     <Form {...form}>

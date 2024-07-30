@@ -1,10 +1,12 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
+
 import { AudioController } from "../../../common/audio-controller";
 import { BetControllerContainer } from "../../../common/containers";
 import { BetControllerTitle, WagerFormField } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
+import { CDN_URL } from "../../../constants";
 import { Button } from "../../../ui/button";
 import { FormField, FormItem, FormLabel, FormMessage } from "../../../ui/form";
 import { NumberInput } from "../../../ui/number-input";
@@ -16,7 +18,6 @@ import { useMinesGameStateStore } from "../store";
 import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from "../types";
 import MinesCountButton from "./count-button";
 import MinesCountDisplay from "./count-display";
-import { CDN_URL } from "../../../constants";
 
 type Props = {
   minWager: number;
@@ -88,7 +89,7 @@ export const MinesBetController: React.FC<Props> = ({
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>Mines Count (1 -24)</FormLabel>
+                <FormLabel>Mines Count (1 - 24)</FormLabel>
                 <NumberInput.Root
                   {...field}
                   className="wr-relative wr-flex wr-items-center wr-gap-2"
@@ -208,31 +209,7 @@ export const MinesBetController: React.FC<Props> = ({
               >
                 Reveal
               </Button>
-              {gameStatus !== MINES_GAME_STATUS.IN_PROGRESS ? (
-                <Button
-                  type="submit"
-                  variant={"success"}
-                  className="wr-mt-6 wr-w-full"
-                  size={"xl"}
-                  isLoading={
-                    form.formState.isSubmitting || form.formState.isLoading
-                  }
-                  onClick={() => {
-                    updateMinesGameState({
-                      submitType: MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT,
-                    });
-                  }}
-                  disabled={
-                    !form.formState.isValid ||
-                    form.formState.isSubmitting ||
-                    form.formState.isLoading ||
-                    (gameStatus === MINES_GAME_STATUS.IDLE &&
-                      selectedCells.every((cell) => cell === false))
-                  }
-                >
-                  Reveal and Cashout
-                </Button>
-              ) : (
+              {gameStatus == MINES_GAME_STATUS.IN_PROGRESS && (
                 <Button
                   type="submit"
                   variant={"success"}

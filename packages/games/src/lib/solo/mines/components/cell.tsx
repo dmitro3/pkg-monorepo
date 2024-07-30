@@ -5,7 +5,7 @@ import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { boardsSchema, initialBoard } from "../constants";
 import { useMinesGameStateStore } from "../store";
-import { MinesForm } from "../types";
+import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from "../types";
 import { CDN_URL } from "../../../constants";
 
 const MineCell: React.FC<{
@@ -14,7 +14,12 @@ const MineCell: React.FC<{
 }> = ({ mineCell, idx }) => {
   const form = useFormContext() as MinesForm;
 
-  const { updateBoardItem } = useMinesGameStateStore(["updateBoardItem"]);
+  const { gameStatus, updateBoardItem, updateMinesGameState } =
+    useMinesGameStateStore([
+      "gameStatus",
+      "updateBoardItem",
+      "updateMinesGameState",
+    ]);
 
   return (
     <FormField
@@ -26,6 +31,16 @@ const MineCell: React.FC<{
             <FormControl>
               <CheckboxPrimitive.Root
                 className={cn("wr-h-full wr-w-full")}
+                onClick={() => {
+                  updateMinesGameState({
+                    submitType:
+                      gameStatus === MINES_GAME_STATUS.IDLE
+                        ? MINES_SUBMIT_TYPE.FIRST_REVEAL
+                        : MINES_SUBMIT_TYPE.REVEAL,
+                  });
+
+                  console.log("clicked checkbox!");
+                }}
                 checked={field.value[idx]}
                 onCheckedChange={(checked) => {
                   const currentSelectedCellAmount = field.value.filter(
