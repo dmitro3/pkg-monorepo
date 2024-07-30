@@ -5,10 +5,13 @@ import {
   ANGLE_SCALE,
   BetHistoryTemplate,
   CoinFlipGameResult,
+  colorMultipliers,
   GameType,
   MultiplayerGameStatus,
   Multiplier,
   participantMapWithStore,
+  useConfigureMultiplayerLiveResultStore,
+  useLiveResultStore,
   useWheelGameStore,
   WheelColor,
   WheelFormFields,
@@ -80,6 +83,13 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     color: WheelColor.IDLE,
     wager: props?.minWager || 1,
   });
+
+  useConfigureMultiplayerLiveResultStore();
+  const {
+    addResult,
+    updateGame,
+    clear: clearLiveResults,
+  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
 
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.wheel);
 
@@ -226,6 +236,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async () => {
+    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -291,9 +302,14 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       status,
       joiningFinish,
       joiningStart,
-      cooldownFinish,
+      // TODO: cooldownFinish is too early. need to fix it.
+      cooldownFinish: cooldownFinish + 5,
       winnerColor: result as unknown as WheelColor,
       winnerAngle: Number(angle) / 100000 / ANGLE_SCALE,
+    });
+
+    updateGame({
+      wager: formValues.wager || 0,
     });
 
     if (participants?.length > 0 && isGameActive) {
@@ -353,6 +369,22 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     },
   });
 
+  const onWheelCompleted = () => {
+    refetchBetHistory();
+    refetchHistory();
+    updateBalances();
+
+    const { result } = gameEvent;
+    const isWon = result === Number(formValues.color);
+
+    addResult({
+      won: isWon,
+      payout: isWon
+        ? formValues.wager * colorMultipliers[String(result) as WheelColor]
+        : 0,
+    });
+  };
+
   return (
     <>
       <WheelTemplate
@@ -361,11 +393,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
         onFormChange={(val) => {
           setFormValues(val);
         }}
-        onComplete={() => {
-          refetchBetHistory();
-          refetchHistory();
-          updateBalances();
-        }}
+        onComplete={onWheelCompleted}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

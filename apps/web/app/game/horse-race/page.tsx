@@ -1,5 +1,6 @@
 "use client";
 
+import { LiveResults } from "@winrlabs/web3-games";
 import dynamic from "next/dynamic";
 
 const HorseRaceGame = dynamic(
@@ -11,17 +12,20 @@ const HorseRaceGame = dynamic(
 
 const HorseRacePage = () => {
   return (
-    <HorseRaceGame
-      minWager={0.1}
-      maxWager={2000}
-      options={{
-        scene: {
-          loader: "/horse-race/loader.png",
-          logo: "/horse-race/horse-race-logo.png",
-        },
-      }}
-      buildedGameUrl={"https://jbassets.fra1.digitaloceanspaces.com"}
-    />
+    <>
+      <HorseRaceGame
+        minWager={0.1}
+        maxWager={2000}
+        options={{
+          scene: {
+            loader: "/horse-race/loader.png",
+            logo: "/horse-race/horse-race-logo.png",
+          },
+        }}
+        buildedGameUrl={"https://jbassets.fra1.digitaloceanspaces.com"}
+      />
+      <LiveResults />
+    </>
   );
 };
 

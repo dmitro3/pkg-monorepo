@@ -7,6 +7,7 @@ import {
   DiceTemplate,
   GameType,
   toDecimals,
+  useLiveResultStore,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -54,6 +55,13 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     cashierAddress,
     uiOperatorAddress,
   } = useContractConfigContext();
+
+  const {
+    addResult,
+    updateGame,
+    skipAll,
+    clear: clearLiveResults,
+  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
 
   const [isGettingResults, setIsGettingResults] = useState(false);
 
@@ -180,6 +188,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async () => {
+    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -205,6 +214,10 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
 
     if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setDiceResult(finalResult);
+      updateGame({
+        wager: formValues.wager || 0,
+        betCount: formValues.betCount || 0,
+      });
       setIsGettingResults(false);
     }
   }, [gameEvent]);
@@ -228,6 +241,35 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     updateBalances();
   };
 
+  const onAnimationStep = React.useCallback(
+    (step: number) => {
+      props.onAnimationStep && props.onAnimationStep(step);
+
+      const currentStepResult =
+        diceResult?.program?.[0]?.data.converted.steps[step];
+
+      if (!currentStepResult) return;
+
+      addResult({
+        won: currentStepResult.payout > 0,
+        payout: currentStepResult.payout,
+      });
+    },
+    [diceResult]
+  );
+
+  const onAnimationSkipped = React.useCallback(
+    (result: DiceGameResult[]) => {
+      skipAll(
+        result.map((value) => ({
+          won: value.payout > 0,
+          payout: value.payoutInUsd,
+        }))
+      );
+    },
+    [diceResult]
+  );
+
   return (
     <>
       <DiceTemplate
@@ -236,6 +278,8 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
         onSubmitGameForm={onGameSubmit}
         gameResults={diceSteps}
         onAnimationCompleted={onGameCompleted}
+        onAnimationStep={onAnimationStep}
+        onAnimationSkipped={onAnimationSkipped}
         onFormChange={(val) => {
           setFormValues(val);
         }}

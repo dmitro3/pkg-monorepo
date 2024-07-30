@@ -1,0 +1,19 @@
+@keyframes timer {
+  0% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0%;
+  }
+}
+
+.timer {
+  width: 100%;
+}
+
+.timer div {
+  animation-name: timer;
+  animation-timing-function: linear;
+  width: 0%;
+}

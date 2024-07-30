@@ -1,6 +1,7 @@
 import "./assets/main.css";
 
 export * from "./lib/common/bet-history";
+export * from "./lib/common/live-results";
 export { GameType } from "./lib/constants";
 export { GameProvider } from "./lib/game-provider";
 export { AudioContextProvider } from "./lib/hooks/use-audio-effect";

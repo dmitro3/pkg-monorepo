@@ -5,7 +5,9 @@ import {
   GameType,
   MultiplayerGameStatus,
   toDecimals,
+  useConfigureMultiplayerLiveResultStore,
   useCrashGameStore,
+  useLiveResultStore,
 } from "@winrlabs/games";
 import { CrashFormFields, CrashTemplate } from "@winrlabs/games";
 import {
@@ -70,6 +72,13 @@ const CrashGame = (props: CrashTemplateProps) => {
     account: currentAccount.address || "0x0000000",
     balancesToRead: [selectedTokenAddress],
   });
+
+  useConfigureMultiplayerLiveResultStore();
+  const {
+    addResult,
+    updateGame,
+    clear: clearLiveResults,
+  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
 
   const [formValues, setFormValues] = useState<CrashFormFields>({
     multiplier: 1,
@@ -213,6 +222,7 @@ const CrashGame = (props: CrashTemplateProps) => {
   });
 
   const onGameSubmit = async () => {
+    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -277,6 +287,10 @@ const CrashGame = (props: CrashTemplateProps) => {
       finalMultiplier: result / 100,
     });
 
+    updateGame({
+      wager: formValues.wager || 0,
+    });
+
     const token = allTokens.find(
       (t) => t.bankrollIndex === session.bankrollIndex
     );
@@ -306,15 +320,17 @@ const CrashGame = (props: CrashTemplateProps) => {
   }, [gameEvent, currentAccount.address]);
 
   const onComplete = (multiplier: number) => {
-    const isWon = multiplier <= gameEvent.result / 100;
+    const userMultiplier = formValues.multiplier;
+    const isWon = userMultiplier <= multiplier;
 
     refetchBalances();
     refetchBetHistory();
     refetchHistory();
 
-    if (isWon) {
-      console.log("WON");
-    }
+    addResult({
+      won: isWon,
+      payout: isWon ? formValues.wager * userMultiplier : 0,
+    });
   };
 
   useEffect(() => {
