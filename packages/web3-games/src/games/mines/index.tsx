@@ -17,14 +17,13 @@ import {
   minesAbi,
   Token,
   useCurrentAccount,
-  useHandleTx,
   useHandleTxUncached,
   usePriceFeed,
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
 } from "@winrlabs/web3";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Address,
   encodeAbiParameters,
@@ -146,14 +145,12 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     }
   }, [dataUpdatedAt]);
 
-  const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei } = prepareGameTransaction({
-      wager: formValues.wager,
-      selectedCurrency: selectedTokenAddress,
-      lastPrice: priceFeed[selectedTokenAddress.priceKey],
-    });
+  const handlePerformTx = useHandleTxUncached<typeof controllerAbi, "perform">({
+    options: {},
+  });
 
-    const encodedCashoutData: `0x${string}` = encodeFunctionData({
+  const handleCashout = async () => {
+    const encodedTxData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
       functionName: "perform",
       args: [
@@ -165,40 +162,22 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       ],
     });
 
-    return {
-      tokenAddress,
-      encodedCashoutData,
-    };
-  }, [
-    formValues.minesCount,
-    formValues.selectedCells,
-    formValues.wager,
-    submitType,
-    revealCells,
-    selectedTokenAddress.address,
-    priceFeed[selectedTokenAddress.priceKey],
-  ]);
-
-  const handleCashout = useHandleTx<typeof controllerAbi, "perform">({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: "perform",
-      args: [
-        gameAddresses.mines,
-        selectedTokenAddress.bankrollIndex,
-        uiOperatorAddress as Address,
-        "endGame",
-        "0x",
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {},
-    encodedTxData: encodedParams.encodedCashoutData,
-  });
-
-  const handlePerformTx = useHandleTxUncached<typeof controllerAbi, "perform">({
-    options: {},
-  });
+    await handlePerformTx.mutateAsync({
+      encodedTxData,
+      writeContractVariables: {
+        abi: controllerAbi,
+        functionName: "perform",
+        args: [
+          gameAddresses.mines,
+          selectedTokenAddress.bankrollIndex,
+          uiOperatorAddress as Address,
+          "endGame",
+          "0x",
+        ],
+        address: controllerAddress as Address,
+      },
+    });
+  };
 
   const handleFirstReveal = async (values: MinesFormField) => {
     const { wagerInWei } = prepareGameTransaction({
@@ -346,7 +325,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         });
         updateBalances();
       } else if (submitType === MINES_SUBMIT_TYPE.CASHOUT) {
-        await handleCashout.mutateAsync();
+        await handleCashout();
 
         updateMinesGameState({
           gameStatus: MINES_GAME_STATUS.ENDED,
@@ -486,6 +465,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         }}
         minWager={props.minWager}
         maxWager={props.maxWager}
+        isLoading={isWaitingResponse}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

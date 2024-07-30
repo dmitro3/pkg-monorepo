@@ -1,17 +1,19 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { useFormContext } from "react-hook-form";
-import { MineCellBg } from "../../../svgs";
+
+import { CDN_URL } from "../../../constants";
+import { MineCellBg } from "./mine-cell-bg";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { boardsSchema, initialBoard } from "../constants";
 import { useMinesGameStateStore } from "../store";
 import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from "../types";
-import { CDN_URL } from "../../../constants";
 
 const MineCell: React.FC<{
   mineCell: (typeof initialBoard)["0"];
   idx: number;
-}> = ({ mineCell, idx }) => {
+  isLoading?: boolean;
+}> = ({ mineCell, idx, isLoading }) => {
   const form = useFormContext() as MinesForm;
 
   const { gameStatus, updateBoardItem, updateMinesGameState } =
@@ -80,12 +82,13 @@ const MineCell: React.FC<{
 
                   return field.onChange(newSelectedCells);
                 }}
-                disabled={mineCell.isBomb || mineCell.isRevealed}
+                disabled={mineCell.isBomb || mineCell.isRevealed || isLoading}
               >
                 <div className="wr-relative wr-aspect-square lg:wr-aspect-auto lg:wr-h-[120px] lg:wr-w-[120px]">
                   <MineCellBg
+                    isLoading={isLoading}
                     className={cn(
-                      "wr-absolute wr-left-0 wr-top-0 wr-rounded-xl wr-text-zinc-700 wr-opacity-100 wr-transition-all wr-duration-300 wr-hover:scale-105",
+                      "wr-absolute wr-left-0 wr-top-0 wr-rounded-xl wr-text-zinc-700 wr-opacity-100 wr-transition-all wr-duration-300 hover:wr-scale-105",
                       {
                         "wr-text-red-600": mineCell.isSelected,
                         "wr-opacity-0": mineCell.isRevealed,

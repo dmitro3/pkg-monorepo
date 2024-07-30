@@ -1,14 +1,17 @@
+import React from "react";
 import { useFormContext } from "react-hook-form";
+
 import { FormField, FormItem } from "../../../ui/form";
 import { useMinesGameStateStore } from "../store";
-import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from "../types";
+import { MinesForm } from "../types";
 import MineCell from "./cell";
-import React from "react";
 
 export const MinesScene = ({
   currentMultiplier,
+  isLoading,
 }: {
   currentMultiplier: number;
+  isLoading?: boolean;
 }) => {
   const form = useFormContext() as MinesForm;
 
@@ -22,7 +25,14 @@ export const MinesScene = ({
         render={() => (
           <FormItem className="wr-mb-1 wr-grid wr-aspect-square wr-grid-cols-5 wr-grid-rows-5 wr-items-center wr-justify-center wr-gap-2 lg:wr-aspect-auto">
             {board.map((mine, idx) => {
-              return <MineCell idx={idx} mineCell={mine} key={idx} />;
+              return (
+                <MineCell
+                  isLoading={isLoading}
+                  idx={idx}
+                  mineCell={mine}
+                  key={idx}
+                />
+              );
             })}
           </FormItem>
         )}

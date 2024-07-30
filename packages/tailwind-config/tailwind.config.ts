@@ -382,6 +382,28 @@ const config: Omit<Config, "content"> = {
             borderColor: "transparent",
           },
         },
+        "mines-pulse": {
+          "0%": {
+            transform: "scale(1)",
+            opacity: "0.7",
+          },
+          "25%": {
+            transform: "scale(1.1)",
+            opacity: "1",
+          },
+          "50%": {
+            transform: "scale(1)",
+            opacity: "0.7",
+          },
+          "75%": {
+            transform: "scale(1.1)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "0.7",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -398,6 +420,7 @@ const config: Omit<Config, "content"> = {
         "story-duration-bar": "story-duration-bar 5s linear",
         "keno-gem-flip": "keno-gem-flip .5s linear forwards",
         "blackjack-highlight": "blackjack-highlight 2s linear infinite",
+        "mines-pulse": "mines-pulse 2s linear infinite",
       },
       fontSize: {
         small: "13px",

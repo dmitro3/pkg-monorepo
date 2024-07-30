@@ -181,7 +181,7 @@ export const MinesBetController: React.FC<Props> = ({
             </Button>
           ) : (
             <>
-              <Button
+              {/* <Button
                 type="submit"
                 variant={"success"}
                 className="wr-w-full"
@@ -208,7 +208,7 @@ export const MinesBetController: React.FC<Props> = ({
                 }
               >
                 Reveal
-              </Button>
+              </Button> */}
               {gameStatus == MINES_GAME_STATUS.IN_PROGRESS && (
                 <Button
                   type="submit"
