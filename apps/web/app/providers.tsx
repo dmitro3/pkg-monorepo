@@ -25,6 +25,9 @@ export const cashierAddress = process.env
 export const uiOperatorAddress = process.env
   .NEXT_PUBLIC_UI_OPERATOR_ADDRESS as Address;
 
+export const rankMiddlewareAddress = process.env
+  .NEXT_PUBLIC_RANK_MIDDLEWARE_ADDRESS as Address;
+
 export const gameAddresses = {
   coinFlip: process.env.NEXT_PUBLIC_COIN_FLIP_ADDRESS as Address,
   plinko: process.env.NEXT_PUBLIC_PLINKO_ADDRESS as Address,
@@ -130,6 +133,7 @@ export function Providers(props: { children: ReactNode }) {
                   controllerAddress,
                   cashierAddress,
                   uiOperatorAddress,
+                  rankMiddlewareAddress,
                 },
               }}
             >

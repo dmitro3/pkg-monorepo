@@ -20,7 +20,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
-import { useBetHistory } from "../hooks";
+import { useBetHistory, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -43,7 +43,13 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    wagmiConfig,
   } = useContractConfigContext();
+
+  usePlayerGameStatus({
+    gameAddress: gameAddresses.baccarat,
+    wagmiConfig,
+  });
 
   const [formValues, setFormValues] = useState<BaccaratFormFields>({
     wager: props?.minWager || 1,
