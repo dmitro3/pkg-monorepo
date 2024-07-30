@@ -80,7 +80,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,
-      rollType: "OVER",
+      rollType: "UNDER",
       rollValue: 50,
       winChance: 50,
     },

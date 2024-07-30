@@ -71,7 +71,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     stopLoss: 0,
     wager: props?.minWager || 1,
     rollValue: 50,
-    rollType: "OVER",
+    rollType: "UNDER",
     winChance: 50,
   });
 
@@ -130,7 +130,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       ],
       [
         toDecimals(Number(formValues.rollValue * 100), 2),
-        formValues.rollType == "OVER" ? true : false,
+        formValues.rollType == "UNDER" ? true : false,
       ]
     );
 

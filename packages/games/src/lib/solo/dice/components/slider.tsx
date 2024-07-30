@@ -5,6 +5,7 @@ import { cn } from "../../../../lib/utils/style";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { useDiceGameStore } from "..";
 import { DiceForm } from "../types";
+import { toDecimals } from "../../../utils/web3";
 
 export interface SliderTrackOptions {
   color?: string;
@@ -91,7 +92,10 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                   aria-label="Volume"
                 >
                   <div className="wr-absolute -wr-top-[50px] wr-text-4xl wr-font-bold">
-                    {rollValue <= MAX_VALUE ? rollValue : MIN_VALUE}
+                    {toDecimals(
+                      rollValue <= MAX_VALUE ? rollValue : MIN_VALUE,
+                      2
+                    )}
                   </div>
                   <div className="wr-flex wr-gap-[6px]">
                     <div className="wr-h-[34px] wr-w-[6px] wr-rounded-[2px] wr-bg-zinc-400" />

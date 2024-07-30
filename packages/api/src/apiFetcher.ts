@@ -3,7 +3,7 @@
 
 import { ApiContext } from "./apiContext";
 
-const baseUrl = "https://gateway-dev.winr.games"; // TODO add your baseUrl
+const baseUrl = "https://gateway.winr.games";
 
 export type ErrorWrapper<TError> =
   | TError

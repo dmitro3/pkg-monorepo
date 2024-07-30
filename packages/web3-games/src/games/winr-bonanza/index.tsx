@@ -176,7 +176,11 @@ export default function WinrBonanzaTemplateWithWeb3({
       tokenAddress,
       encodedTxData: encodedData,
     };
-  }, [formValues.betAmount, selectedToken.address]);
+  }, [
+    formValues.betAmount,
+    selectedToken.address,
+    priceFeed[selectedToken.priceKey],
+  ]);
 
   const handleTx = useHandleTx<typeof controllerAbi, "perform">({
     writeContractVariables: {
@@ -313,9 +317,12 @@ export default function WinrBonanzaTemplateWithWeb3({
       gameEvent?.program[0].data?.state == 2
     ) {
       const data = gameEvent.program[0].data;
+      const betAmount =
+        Number(formatUnits(data.wager, selectedToken.decimals)) *
+        priceFeed[selectedToken.priceKey];
 
       setSettledResult({
-        betAmount: Number(formatUnits(data.wager, selectedToken.decimals)),
+        betAmount: betAmount,
         scatterCount: data.result.scatter,
         tumbleCount: data.result.tumble,
         freeSpinsLeft: data.freeSpinCount,

@@ -28,7 +28,7 @@ const defaultValues: TPriceFeed = {
 
 export const usePriceFeed = () => {
   const [priceFeed, setPriceFeed] = React.useState<TPriceFeed>(defaultValues);
-  const { data } = useCurrencyControllerGetLastPriceFeed(
+  const { data, dataUpdatedAt } = useCurrencyControllerGetLastPriceFeed(
     {},
     {
       refetchInterval: 5000,
@@ -44,12 +44,8 @@ export const usePriceFeed = () => {
       payload[t.token as PriceFeedVariable] = t.price;
     });
 
-    setPriceFeed(payload);
-  }, [data]);
-
-  React.useEffect(() => {
-    console.log(priceFeed, "pricefeed");
-  }, [priceFeed]);
+    setPriceFeed({ ...payload });
+  }, [dataUpdatedAt]);
 
   return {
     priceFeed,
