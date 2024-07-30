@@ -2,7 +2,7 @@
   "name": "pkg-monorepo",
   "scripts": {
     "build": "turbo build",
-    "build:release": "turbo build --filter=./packages/*",
+    "build:release": "turbo build --filter=./packages/* && changset publish",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "clean": "turbo clean",
