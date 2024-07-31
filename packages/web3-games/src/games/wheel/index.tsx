@@ -10,6 +10,7 @@ import {
   MultiplayerGameStatus,
   Multiplier,
   participantMapWithStore,
+  toFormatted,
   useConfigureMultiplayerLiveResultStore,
   useLiveResultStore,
   useWheelGameStore,
@@ -331,7 +332,8 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
           ],
           {
             player: p.player,
-            bet: Number(formatUnits(p.wager, tokenDecimal)),
+            // TODO: be doesnt provide decimals / bankrollIndex / converted wager
+            bet: Number(toFormatted(formatUnits(p.wager, tokenDecimal), 3)),
           }
         );
       });
@@ -340,7 +342,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     if (bet && bet?.converted?.wager && player) {
       setWheelParticipant(participantMapWithStore[bet.choice] as Multiplier, {
         player: player,
-        bet: bet.converted.wager,
+        bet: Number(toFormatted(bet.converted.wager, 3)),
       });
     }
   }, [gameEvent, currentAccount.address]);
