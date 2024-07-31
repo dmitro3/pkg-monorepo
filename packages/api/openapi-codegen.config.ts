@@ -8,7 +8,7 @@ export default defineConfig({
   srcAppGeneratedApi: {
     from: {
       source: "url",
-      url: "https://gateway-dev.winr.games/docs.json",
+      url: "https://gateway.winr.games/docs.json",
     },
     outputDir: "./api-hooks",
     to: async (context) => {
@@ -25,7 +25,7 @@ export default defineConfig({
   apiHooks: {
     from: {
       source: "url",
-      url: "https://gateway-dev.winr.games/docs.json",
+      url: "https://gateway.winr.games/docs.json",
     },
     outputDir: "./src",
     to: async (context) => {
@@ -42,7 +42,7 @@ export default defineConfig({
   api: {
     from: {
       source: "url",
-      url: "https://gateway-dev.winr.games/docs.json",
+      url: "https://gateway.winr.games/docs.json",
     },
     outputDir: "./src/",
     to: async (context) => {

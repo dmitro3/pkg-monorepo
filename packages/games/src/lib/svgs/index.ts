@@ -72,6 +72,7 @@ export { default as IconRoulette } from "./IconRoulette";
 export { default as IconRps } from "./IconRps";
 export { default as IconScissors } from "./IconScissors";
 export { default as IconSlot } from "./IconSlot";
+export { default as IconSmile } from "./IconSmile";
 export { default as IconSound } from "./IconSound";
 export { default as IconSwitchHorizontal } from "./IconSwitchHorizontal";
 export { default as IconTap } from "./IconTap";

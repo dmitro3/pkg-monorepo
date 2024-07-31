@@ -4,6 +4,7 @@ import { useMinesGameStateStore } from "../store";
 
 export type MinesGameProps = React.ComponentProps<"div"> & {
   gameResults: MinesGameResult[];
+  isLoading?: boolean;
   onAnimationCompleted?: (result: MinesGameResult[]) => void;
 };
 

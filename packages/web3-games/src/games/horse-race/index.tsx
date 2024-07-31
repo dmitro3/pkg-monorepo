@@ -2,11 +2,14 @@ import {
   BetHistoryTemplate,
   GameType,
   Horse,
+  horseMultipliers,
   HorseRaceFormFields,
   horseRaceParticipantMapWithStore,
   HorseRaceStatus,
   HorseRaceTemplate,
+  useConfigureMultiplayerLiveResultStore,
   useHorseRaceGameStore,
+  useLiveResultStore,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -61,6 +64,13 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     horse: Horse.IDLE,
     wager: props.minWager || 1,
   });
+
+  useConfigureMultiplayerLiveResultStore();
+  const {
+    addResult,
+    updateGame,
+    clear: clearLiveResults,
+  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
 
   const { updateState, setSelectedHorse, selectedHorse } =
     useHorseRaceGameStore(["updateState", "setSelectedHorse", "selectedHorse"]);
@@ -201,6 +211,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
   });
 
   const onGameSubmit = async () => {
+    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -262,6 +273,10 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       });
     }
 
+    updateGame({
+      wager: formValues.wager || 0,
+    });
+
     if (bet && bet?.converted.wager && player) {
       const _participantHorse =
         horseRaceParticipantMapWithStore[bet?.choice as unknown as Horse];
@@ -319,6 +334,16 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     props.onAnimationCompleted && props.onAnimationCompleted([]);
     refetchHistory();
     updateBalances();
+
+    const { result } = gameEvent;
+    const isWon = result === Number(formValues.horse);
+
+    addResult({
+      won: isWon,
+      payout: isWon
+        ? formValues.wager * horseMultipliers[result as unknown as Horse]
+        : 0,
+    });
   };
 
   return (

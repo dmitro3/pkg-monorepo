@@ -152,8 +152,6 @@ export const prepareGameTransaction = (
 
   const decimal = selectedCurrency.decimals;
 
-  console.log(wagerInGameCurrency, "wager in gamecurr");
-
   const wagerInWei = parseUnits(wagerInGameCurrency, decimal);
 
   const stopGainInWei = parseUnits(stopGainInGameCurrency, decimal);

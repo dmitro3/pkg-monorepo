@@ -7,6 +7,7 @@ import {
   RpsFormFields,
   RPSGameResult,
   RpsTemplate,
+  useLiveResultStore,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -62,6 +63,13 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
     stopLoss: 0,
     wager: props?.minWager || 1,
   });
+
+  const {
+    addResult,
+    updateGame,
+    skipAll,
+    clear: clearLiveResults,
+  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
 
   const gameEvent = useListenGameEvent();
 
@@ -177,6 +185,8 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async () => {
+    clearLiveResults();
+
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -197,8 +207,13 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setRpsResult(finalResult);
+      updateGame({
+        wager: formValues.wager || 0,
+        betCount: formValues.betCount || 0,
+      });
+    }
   }, [gameEvent]);
 
   const {
@@ -220,6 +235,35 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
     updateBalances();
   };
 
+  const onAnimationStep = React.useCallback(
+    (step: number) => {
+      props.onAnimationStep && props.onAnimationStep(step);
+
+      const currentStepResult =
+        rpsResult?.program?.[0]?.data.converted.steps[step - 1];
+
+      if (!currentStepResult) return;
+
+      addResult({
+        won: currentStepResult.win,
+        payout: currentStepResult.payout,
+      });
+    },
+    [rpsResult]
+  );
+
+  const onAnimationSkipped = React.useCallback(
+    (result: RPSGameResult[]) => {
+      skipAll(
+        result.map((value) => ({
+          won: value.payout > 0,
+          payout: value.payoutInUsd,
+        }))
+      );
+    },
+    [rpsResult]
+  );
+
   return (
     <>
       <RpsTemplate
@@ -230,6 +274,8 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
         onFormChange={(val) => {
           setFormValues(val);
         }}
+        onAnimationStep={onAnimationStep}
+        onAnimationSkipped={onAnimationSkipped}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate
