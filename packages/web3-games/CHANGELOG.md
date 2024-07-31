@@ -1,5 +1,16 @@
 # @winrlabs/web3-games
 
+## 2.0.1
+
+### Patch Changes
+
+- 7089df1: format user's wheel wager
+- Updated dependencies [97d0ff3]
+- Updated dependencies [7089df1]
+- Updated dependencies [a531117]
+  - @winrlabs/games@2.11.1
+  - @winrlabs/web3-games@2.0.1
+
 ## 2.0.0
 
 ### Minor Changes

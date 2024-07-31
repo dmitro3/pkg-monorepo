@@ -1,5 +1,12 @@
 # @winrlabs/games
 
+## 2.11.1
+
+### Patch Changes
+
+- 97d0ff3: hide scrollbar on all games controller etc.
+- a531117: roll game result size issue
+
 ## 2.11.0
 
 ### Minor Changes
