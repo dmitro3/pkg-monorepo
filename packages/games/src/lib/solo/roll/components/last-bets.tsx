@@ -10,10 +10,11 @@ type DiceResultIndex = 0 | 1 | 2 | 3 | 4 | 5;
 
 export const LastBets = () => {
   const { lastBets } = useRollGameStore(["lastBets"]);
+  const lastFiveBets = lastBets?.slice(-5);
 
   return (
     <LastBetsContainer className="h-12">
-      {lastBets?.map((result, index) => {
+      {lastFiveBets?.map((result, index) => {
         return (
           <div
             className={cn(
