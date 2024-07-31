@@ -1,6 +1,6 @@
 "use client";
 
-import { LiveResults, RollGame } from "@winrlabs/web3-games";
+import { LiveResults, RollGame, Web3GamesModals } from "@winrlabs/web3-games";
 import React from "react";
 
 const RollPage = () => {
@@ -16,6 +16,7 @@ const RollPage = () => {
         maxWager={2000}
       />
       <LiveResults />
+      <Web3GamesModals />
     </>
   );
 };

@@ -20,7 +20,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
-import { useBetHistory } from "../hooks";
+import { useBetHistory, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -52,7 +52,20 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.keno,
+    gameType: GameType.KENO,
+    wagmiConfig,
+  });
 
   const [formValues, setFormValues] = useState<KenoFormField>({
     betCount: 1,
@@ -198,9 +211,13 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
   };
 
@@ -232,6 +249,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
   const onGameCompleted = (result: KenoGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
   };
 

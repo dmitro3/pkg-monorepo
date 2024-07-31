@@ -29,7 +29,11 @@ import {
   fromHex,
 } from "viem";
 
-import { useBetHistory, useListenMultiplayerGameEvent } from "../hooks";
+import {
+  useBetHistory,
+  useListenMultiplayerGameEvent,
+  usePlayerGameStatus,
+} from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
 
@@ -55,7 +59,21 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.horseRace,
+    gameType: GameType.HORSE_RACE,
+    wagmiConfig,
+  });
+
   const selectedToken = useTokenStore((s) => s.selectedToken);
   const allTokens = useTokenStore((s) => s.tokens);
   const selectedTokenAddress = selectedToken.address;
@@ -228,9 +246,13 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     } catch (error) {}
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
   };
 
@@ -333,6 +355,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
   const onGameCompleted = () => {
     props.onAnimationCompleted && props.onAnimationCompleted([]);
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
 
     const { result } = gameEvent;

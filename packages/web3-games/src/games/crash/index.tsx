@@ -28,7 +28,11 @@ import {
   fromHex,
 } from "viem";
 
-import { useBetHistory, useListenMultiplayerGameEvent } from "../hooks";
+import {
+  useBetHistory,
+  useListenMultiplayerGameEvent,
+  usePlayerGameStatus,
+} from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
 
@@ -54,7 +58,21 @@ const CrashGame = (props: CrashTemplateProps) => {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.crash,
+    gameType: GameType.MOON,
+    wagmiConfig,
+  });
+
   const currentAccount = useCurrentAccount();
   const allTokens = useTokenStore((s) => s.tokens);
   const selectedToken = useTokenStore((s) => s.selectedToken);
@@ -239,11 +257,14 @@ const CrashGame = (props: CrashTemplateProps) => {
     }
 
     try {
-      console.log(encodedParams.encodedTxData);
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
       setIsGamblerParticipant(true);
     } catch (e: any) {
       console.log("handleTx error", e);
+      refetchPlayerGameStatus();
     }
   };
 
@@ -326,6 +347,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     refetchBalances();
     refetchBetHistory();
     refetchHistory();
+    refetchPlayerGameStatus();
 
     addResult({
       won: isWon,

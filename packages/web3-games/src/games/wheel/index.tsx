@@ -36,7 +36,11 @@ import {
   fromHex,
 } from "viem";
 
-import { useBetHistory, useListenMultiplayerGameEvent } from "../hooks";
+import {
+  useBetHistory,
+  useListenMultiplayerGameEvent,
+  usePlayerGameStatus,
+} from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
 
@@ -61,7 +65,21 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.wheel,
+    gameType: GameType.WHEEL,
+    wagmiConfig,
+  });
+
   const selectedToken = useTokenStore((s) => s.selectedToken);
   const selectedTokenAddress = selectedToken.address;
   const { data: betHistory, refetch: refetchBetHistory } =
@@ -256,9 +274,13 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     console.log("cLAIM TX SUCCESS, TRYING BET TX");
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
 
     console.log("BET TX COMPLETED");
@@ -374,6 +396,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   const onWheelCompleted = () => {
     refetchBetHistory();
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
 
     const { result } = gameEvent;

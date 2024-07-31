@@ -1,6 +1,10 @@
 "use client";
 
-import { CoinFlipGame, LiveResults } from "@winrlabs/web3-games";
+import {
+  CoinFlipGame,
+  LiveResults,
+  Web3GamesModals,
+} from "@winrlabs/web3-games";
 
 export default function CoinFlipPage() {
   return (
@@ -15,6 +19,7 @@ export default function CoinFlipPage() {
         maxWager={2000}
       />
       <LiveResults />
+      <Web3GamesModals />
     </>
   );
 }

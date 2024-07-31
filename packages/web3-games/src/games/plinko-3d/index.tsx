@@ -19,6 +19,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
+import { useBetHistory, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -27,7 +28,6 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from "../utils";
-import { useBetHistory } from "../hooks";
 
 type TemplateOptions = {
   scene?: {
@@ -56,7 +56,20 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.plinko,
+    gameType: GameType.PLINKO,
+    wagmiConfig,
+  });
 
   const [formValues, setFormValues] = useState<Plinko3dFormFields>({
     betCount: 1,
@@ -191,9 +204,13 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
   };
 
@@ -220,6 +237,7 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
   const onGameCompleted = (result: Plinko3dGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
   };
 

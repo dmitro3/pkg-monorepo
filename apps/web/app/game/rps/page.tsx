@@ -1,6 +1,6 @@
 "use client";
 
-import { LiveResults, RpsGame } from "@winrlabs/web3-games";
+import { LiveResults, RpsGame, Web3GamesModals } from "@winrlabs/web3-games";
 
 const RpsPage = () => {
   return (
@@ -15,6 +15,7 @@ const RpsPage = () => {
         maxWager={2000}
       />
       <LiveResults />
+      <Web3GamesModals />
     </>
   );
 };
