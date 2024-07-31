@@ -21,7 +21,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
-import { useBetHistory } from "../hooks";
+import { useBetHistory, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -54,7 +54,21 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.coinFlip,
+    gameType: GameType.COINFLIP,
+    wagmiConfig,
+  });
+
   const {
     addResult,
     updateGame,
@@ -201,9 +215,13 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     setIsLoading(true); // Set loading state to true
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
       setIsLoading(false); // Set loading state to false
     }
   };
@@ -237,6 +255,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   const onGameCompleted = (result: CoinFlipGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
   };
 

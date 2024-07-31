@@ -26,7 +26,7 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useBetHistory } from "../hooks";
+import { useBetHistory, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import { prepareGameTransaction } from "../utils";
@@ -49,6 +49,18 @@ export default function WinrBonanzaTemplateWithWeb3({
     uiOperatorAddress,
     wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.winrBonanza,
+    gameType: GameType.WINR_BONANZA,
+    wagmiConfig,
+  });
 
   const [formValues, setFormValues] = React.useState<WinrBonanzaFormFields>({
     betAmount: 1,
@@ -251,8 +263,12 @@ export default function WinrBonanzaTemplateWithWeb3({
     // await handleTx.mutateAsync();
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
+      refetchPlayerGameStatus();
       if (errorCount < 10) handleBet(errorCount + 1);
       throw new Error(e);
     }
@@ -268,7 +284,14 @@ export default function WinrBonanzaTemplateWithWeb3({
       if (!handledAllowance) return;
     }
     console.log("buy feature");
-    await handleBuyFeatureTx.mutateAsync();
+    try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
+      await handleBuyFeatureTx.mutateAsync();
+    } catch {
+      refetchPlayerGameStatus();
+    }
   };
 
   const handleFreeSpin = async (errorCount = 0) => {
@@ -284,8 +307,12 @@ export default function WinrBonanzaTemplateWithWeb3({
     console.log("handleFreeSpintx called");
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleFreeSpinTx.mutateAsync();
     } catch (e: any) {
+      refetchPlayerGameStatus();
       if (errorCount < 10) handleFreeSpin(errorCount + 1);
     }
   };
@@ -349,6 +376,7 @@ export default function WinrBonanzaTemplateWithWeb3({
 
   const handleRefresh = async () => {
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
   };
 

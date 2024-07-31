@@ -1,6 +1,6 @@
 "use client";
 
-import { LiveResults } from "@winrlabs/web3-games";
+import { LiveResults, Web3GamesModals } from "@winrlabs/web3-games";
 import dynamic from "next/dynamic";
 const CDN_URL = process.env.NEXT_PUBLIC_BASE_CDN_URL || "";
 
@@ -26,6 +26,7 @@ const CrashPage = () => {
         }}
       />
       <LiveResults />
+      <Web3GamesModals />
     </>
   );
 };

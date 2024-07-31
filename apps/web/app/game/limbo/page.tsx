@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { LimboGame, LiveResults } from "@winrlabs/web3-games";
+import { LimboGame, LiveResults, Web3GamesModals } from "@winrlabs/web3-games";
 
 const LimboPage = () => {
   return (
@@ -16,6 +16,7 @@ const LimboPage = () => {
         maxWager={2000}
       />
       <LiveResults />
+      <Web3GamesModals />
     </>
   );
 };

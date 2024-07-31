@@ -32,7 +32,7 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useBetHistory } from "../hooks";
+import { useBetHistory, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import { prepareGameTransaction } from "../utils";
@@ -59,6 +59,18 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     uiOperatorAddress,
     wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.mines,
+    gameType: GameType.MINES,
+    wagmiConfig,
+  });
 
   const { priceFeed } = usePriceFeed();
 
@@ -303,6 +315,8 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         if (!handledAllowance) return;
       }
       console.log("submit Type:", submitType);
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
 
       if (submitType === MINES_SUBMIT_TYPE.FIRST_REVEAL) {
         await handleFirstReveal(values);
@@ -333,6 +347,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       }
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
       setIsWaitingResponse(false);
     }
   };
@@ -449,6 +464,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   const onGameCompleted = (result: MinesGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
   };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { LiveResults } from "@winrlabs/web3-games";
+import { LiveResults, Web3GamesModals } from "@winrlabs/web3-games";
 import dynamic from "next/dynamic";
 
 const HorseRaceGame = dynamic(
@@ -25,6 +25,7 @@ const HorseRacePage = () => {
         buildedGameUrl={"https://jbassets.fra1.digitaloceanspaces.com"}
       />
       <LiveResults />
+      <Web3GamesModals />
     </>
   );
 };

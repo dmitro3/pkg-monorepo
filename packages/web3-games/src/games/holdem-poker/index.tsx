@@ -27,7 +27,11 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useBetHistory, useListenGameEvent } from "../hooks";
+import {
+  useBetHistory,
+  useListenGameEvent,
+  usePlayerGameStatus,
+} from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { DecodedEvent, prepareGameTransaction } from "../utils";
 import {
@@ -84,6 +88,18 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     uiOperatorAddress,
     wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.holdemPoker,
+    gameType: GameType.HOLDEM_POKER,
+    wagmiConfig,
+  });
 
   const currentAccount = useCurrentAccount();
 
@@ -263,9 +279,13 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
   };
 
@@ -281,9 +301,13 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleFinalizeTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
   };
 
@@ -444,6 +468,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
   const onGameCompleted = () => {
     props.onGameCompleted && props.onGameCompleted();
+    refetchPlayerGameStatus();
     refetchHistory();
   };
 

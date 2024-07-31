@@ -1,6 +1,6 @@
 "use client";
 
-import { DiceGame, LiveResults } from "@winrlabs/web3-games";
+import { DiceGame, LiveResults, Web3GamesModals } from "@winrlabs/web3-games";
 
 export default function DicePage() {
   return (
@@ -15,6 +15,7 @@ export default function DicePage() {
         maxWager={2000}
       />
       <LiveResults />
+      <Web3GamesModals />
     </>
   );
 }

@@ -46,8 +46,15 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     wagmiConfig,
   } = useContractConfigContext();
 
-  usePlayerGameStatus({
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
     gameAddress: gameAddresses.baccarat,
+    gameType: GameType.BACCARAT,
     wagmiConfig,
   });
 
@@ -184,9 +191,13 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
   };
 
@@ -225,6 +236,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const onGameCompleted = (result: BaccaratGameSettledResult) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
   };
   return (

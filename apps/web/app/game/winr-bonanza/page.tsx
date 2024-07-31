@@ -1,5 +1,6 @@
 "use client";
 
+import { Web3GamesModals } from "@winrlabs/web3-games";
 import dynamic from "next/dynamic";
 
 const WinrBonanzaTemplateWithWeb3 = dynamic(
@@ -50,9 +51,12 @@ export default function WinrBonanzaPage() {
   // console.log(processReel, "PROCESS REEL");
 
   return (
-    <WinrBonanzaTemplateWithWeb3
-      buildedGameUrl={`${CDN_URL}/winrlabs-games/winr-bonanza`}
-      buildedGameUrlMobile={`${CDN_URL}/winrlabs-games/winr-bonanza`}
-    />
+    <>
+      <WinrBonanzaTemplateWithWeb3
+        buildedGameUrl={`${CDN_URL}/winrlabs-games/winr-bonanza`}
+        buildedGameUrlMobile={`${CDN_URL}/winrlabs-games/winr-bonanza`}
+      />
+      <Web3GamesModals />
+    </>
   );
 }

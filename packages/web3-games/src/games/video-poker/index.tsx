@@ -22,7 +22,11 @@ import React from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useBetHistory, useListenGameEvent } from "../hooks";
+import {
+  useBetHistory,
+  useListenGameEvent,
+  usePlayerGameStatus,
+} from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { prepareGameTransaction } from "../utils";
 
@@ -41,6 +45,18 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     uiOperatorAddress,
     wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.videoPoker,
+    gameType: GameType.VIDEO_POKER,
+    wagmiConfig,
+  });
 
   const [formValues, setFormValues] = React.useState<VideoPokerFormFields>({
     wager: props?.minWager || 1,
@@ -193,9 +209,13 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
   };
 
@@ -212,9 +232,13 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleFinishTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
   };
 
@@ -274,6 +298,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   const onGameCompleted = (payout: number) => {
     props.onAnimationCompleted && props.onAnimationCompleted(payout);
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
   };
 

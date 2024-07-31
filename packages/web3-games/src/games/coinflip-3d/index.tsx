@@ -5,6 +5,7 @@ import {
   CoinFlip3dFormFields,
   CoinFlip3dGameResult,
   CoinFlip3DTemplate,
+  GameType,
 } from "@winrlabs/games";
 import {
   controllerAbi,
@@ -25,6 +26,7 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from "../utils";
+import { usePlayerGameStatus } from "../hooks";
 
 type TemplateOptions = {
   scene?: {
@@ -51,7 +53,20 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
     controllerAddress,
     cashierAddress,
     uiOperatorAddress,
+    wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.coinFlip,
+    gameType: GameType.COINFLIP,
+    wagmiConfig,
+  });
 
   const [formValues, setFormValues] = useState<CoinFlip3dFormFields>({
     betCount: 1,
@@ -183,9 +198,13 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
   };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { KenoGame, LiveResults } from "@winrlabs/web3-games";
+import { KenoGame, LiveResults, Web3GamesModals } from "@winrlabs/web3-games";
 import React from "react";
 
 const KenoPage = () => {
@@ -8,6 +8,7 @@ const KenoPage = () => {
     <>
       <KenoGame minWager={0.1} maxWager={2000} options={{}} />;
       <LiveResults />
+      <Web3GamesModals />
     </>
   );
 };

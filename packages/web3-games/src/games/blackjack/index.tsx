@@ -30,7 +30,11 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useBetHistory, useListenGameEvent } from "../hooks";
+import {
+  useBetHistory,
+  useListenGameEvent,
+  usePlayerGameStatus,
+} from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { DecodedEvent, prepareGameTransaction } from "../utils";
 import {
@@ -106,6 +110,18 @@ export default function BlackjackTemplateWithWeb3(
     uiOperatorAddress,
     wagmiConfig,
   } = useContractConfigContext();
+
+  const {
+    isPlayerHalted,
+    isReIterable,
+    playerLevelUp,
+    playerReIterate,
+    refetchPlayerGameStatus,
+  } = usePlayerGameStatus({
+    gameAddress: gameAddresses.blackjack,
+    gameType: GameType.BLACKJACK,
+    wagmiConfig,
+  });
 
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
@@ -486,10 +502,14 @@ export default function BlackjackTemplateWithWeb3(
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleBetTx.mutateAsync();
       updateBalances();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
     setIsLoading(false); // Set loading state to false
   };
@@ -497,9 +517,13 @@ export default function BlackjackTemplateWithWeb3(
   const handleHit = async () => {
     setIsLoading(true); // Set loading state to true
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleHitTx.mutateAsync();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
     setIsLoading(false); // Set loading state to false
   };
@@ -517,10 +541,14 @@ export default function BlackjackTemplateWithWeb3(
   const handleDoubleDown = async () => {
     setIsLoading(true); // Set loading state to true
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleDoubleTx.mutateAsync();
       updateBalances();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
     setIsLoading(false); // Set loading state to false
   };
@@ -538,10 +566,14 @@ export default function BlackjackTemplateWithWeb3(
     }
 
     try {
+      if (isPlayerHalted) await playerLevelUp();
+      if (isReIterable) await playerReIterate();
+
       await handleSplitTx.mutateAsync();
       updateBalances();
     } catch (e: any) {
       console.log("error", e);
+      refetchPlayerGameStatus();
     }
     setIsLoading(false); // Set loading state to false
   };
@@ -1228,6 +1260,7 @@ export default function BlackjackTemplateWithWeb3(
   const onGameCompleted = () => {
     props.onGameCompleted && props.onGameCompleted(activeGameData.payout || 0);
     refetchHistory();
+    refetchPlayerGameStatus();
     updateBalances();
   };
 
