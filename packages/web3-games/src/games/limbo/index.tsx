@@ -58,7 +58,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
 
   const [formValues, setFormValues] = useState<LimboFormField>({
     betCount: 1,
-    limboMultiplier: 1,
+    limboMultiplier: 1.1,
     stopGain: 0,
     stopLoss: 0,
     wager: props?.minWager || 1,
