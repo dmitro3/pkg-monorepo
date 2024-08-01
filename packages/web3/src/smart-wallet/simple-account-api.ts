@@ -1,10 +1,14 @@
 // @ts-nocheck
-import { Address, encodeFunctionData, toBytes, WalletClient } from 'viem';
-import { Hex } from 'viem';
+import { Address, encodeFunctionData, toBytes, WalletClient } from "viem";
+import { Hex } from "viem";
 
-import simpleAccountAbi from './abis/simple-account-abi';
-import simpleAccountFactoryAbi from './abis/simple-account-factory-abi';
-import { BaseAccountAPI, BaseApiParams, FactoryParams } from './base-account-api';
+import simpleAccountAbi from "./abis/simple-account-abi";
+import simpleAccountFactoryAbi from "./abis/simple-account-factory-abi";
+import {
+  BaseAccountAPI,
+  BaseApiParams,
+  FactoryParams,
+} from "./base-account-api";
 
 /**
  * constructor params, added no top of base params:
@@ -41,12 +45,12 @@ export class SimpleAccountAPI extends BaseAccountAPI {
 
   constructor(params: SimpleAccountApiParams) {
     super(params);
-
     this.factoryAddress = params.factoryAddress;
-
     this.owner = params.owner;
-
     this.index = params.index ?? 0n;
+
+    this.getFactoryData();
+    this.getNonce();
   }
 
   //   async _getAccountContract (): Promise<SimpleAccount> {
@@ -61,14 +65,34 @@ export class SimpleAccountAPI extends BaseAccountAPI {
    * this value holds the "factory" address, followed by this account's information
    */
   async getFactoryData(): Promise<FactoryParams | null> {
+    if (!this.factoryAddress) {
+      return null;
+    }
+
     return {
       factory: this.factoryAddress,
       factoryData: encodeFunctionData({
         abi: simpleAccountFactoryAbi,
-        functionName: 'createAccount',
+        functionName: "createAccount",
         args: [this.owner.account.address, this.index],
       }),
     };
+  }
+
+  private async setNonce() {
+    return (this.cachedNonce = await this.provider.readContract({
+      address: await this.getAccountAddress(),
+      abi: simpleAccountAbi,
+      functionName: "getNonce",
+    }));
+  }
+
+  increaseNonce() {
+    this.cachedNonce++;
+  }
+
+  async refreshNonce() {
+    await this.setNonce();
   }
 
   async getNonce(): Promise<bigint> {
@@ -76,15 +100,11 @@ export class SimpleAccountAPI extends BaseAccountAPI {
       return 0n;
     }
 
-    // if (this.cachedNonce != 0n) {
-    //   return this.cachedNonce;
-    // }
+    if (this.cachedNonce != 0n) {
+      return this.cachedNonce;
+    }
 
-    return (this.cachedNonce = await this.provider.readContract({
-      address: await this.getAccountAddress(),
-      abi: simpleAccountAbi,
-      functionName: 'getNonce',
-    }));
+    return this.setNonce();
   }
 
   /**
@@ -96,7 +116,7 @@ export class SimpleAccountAPI extends BaseAccountAPI {
   encodeExecute(target: Address, value: bigint, data: Hex): Hex {
     return encodeFunctionData({
       abi: simpleAccountAbi,
-      functionName: 'execute',
+      functionName: "execute",
       args: [target, value, data],
     });
   }

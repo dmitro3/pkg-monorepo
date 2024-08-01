@@ -138,7 +138,7 @@ export const useHandleTx = <
           throw new Error(status);
         } else {
           console.log(accountApi?.cachedNonce, "cached nonce");
-          accountApi?.cachedNonce && accountApi.cachedNonce++;
+          accountApi?.cachedNonce && accountApi.increaseNonce();
           console.log(accountApi?.cachedNonce, "cached nonce updated");
         }
 
