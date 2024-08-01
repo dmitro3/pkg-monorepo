@@ -342,7 +342,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
         }
 
         const token = allTokens.find(
-          (t) => t.bankrollIndex === session.bankrollIndex
+          (t) => t.bankrollIndex === p.session.bankroll
         );
         const tokenDecimal = token?.decimals || 0;
 
@@ -354,7 +354,6 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
           ],
           {
             player: p.player,
-            // TODO: be doesnt provide decimals / bankrollIndex / converted wager
             bet: Number(toFormatted(formatUnits(p.wager, tokenDecimal), 3)),
           }
         );

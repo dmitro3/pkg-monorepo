@@ -69,6 +69,9 @@ export interface Participant {
   claimed: boolean;
   player: string;
   wager: bigint;
+  session: {
+    bankroll: Address;
+  };
 }
 
 /**
