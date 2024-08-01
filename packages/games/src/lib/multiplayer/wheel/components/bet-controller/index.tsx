@@ -96,7 +96,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-white/25 wr-text-zinc-200 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-white  data-[state=checked]:wr-text-zinc-600"
+                            "wr-h-full wr-w-full wr-rounded-md wr-bg-white/25 wr-text-zinc-200 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-white  data-[state=checked]:wr-text-zinc-600 wr-font-semibold"
                           )}
                           value={WheelColor.GREY}
                         >
@@ -108,7 +108,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-blue-500/25 wr-text-blue-400 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-blue-500 data-[state=checked]:wr-text-zinc-100"
+                            "wr-h-full wr-w-full wr-rounded-md wr-bg-blue-500/25 wr-text-blue-400 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-blue-500 data-[state=checked]:wr-text-zinc-100 wr-font-semibold"
                           )}
                           value={WheelColor.BLUE}
                         >
@@ -120,7 +120,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/25  wr-text-green-500 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-green-500 data-[state=checked]:wr-text-zinc-100"
+                            "wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/25  wr-text-green-500 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-green-500 data-[state=checked]:wr-text-zinc-100 wr-font-semibold"
                           )}
                           value={WheelColor.GREEN}
                         >
@@ -132,7 +132,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/25 wr-text-red-600  wr-transition-all wr-ease-in data-[state=checked]:wr-bg-red-600 data-[state=checked]:wr-text-zinc-100"
+                            "wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/25 wr-text-red-600  wr-transition-all wr-ease-in data-[state=checked]:wr-bg-red-600 data-[state=checked]:wr-text-zinc-100 wr-font-semibold"
                           )}
                           value={WheelColor.RED}
                         >

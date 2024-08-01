@@ -110,7 +110,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-white/80 wr-py-[10px] wr-text-center wr-text-white wr-transition-all wr-duration-150 wr-hover:text-white",
+                          "wr-h-full wr-w-full wr-rounded-md wr-bg-white/80 wr-py-[10px] wr-text-center wr-text-white wr-transition-all wr-duration-150 wr-hover:text-white wr-font-semibold",
                           {
                             "wr-bg-white/70 wr-text-white":
                               field.value === Horse.ONE,
@@ -126,7 +126,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-yellow-400/80 wr-py-[10px] wr-text-center wr-text-yellow-300 wr-transition-all wr-duration-150 wr-hover:text-white",
+                          "wr-h-full wr-w-full wr-rounded-md wr-bg-yellow-400/80 wr-py-[10px] wr-text-center wr-text-yellow-300 wr-transition-all wr-duration-150 wr-hover:text-white wr-font-semibold",
                           {
                             "wr-bg-yellow-600 wr-text-white":
                               field.value === Horse.TWO,
@@ -142,7 +142,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-blue-600/70 wr-py-[10px] wr-text-center wr-text-blue-300",
+                          "wr-h-full wr-w-full wr-rounded-md wr-bg-blue-600/70 wr-py-[10px] wr-text-center wr-text-blue-300 wr-font-semibold",
                           {
                             "wr-bg-blue-600 wr-text-white":
                               field.value === Horse.THREE,
@@ -158,7 +158,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/80 wr-py-[10px] wr-text-center wr-text-green-300",
+                          "wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/80 wr-py-[10px] wr-text-center wr-text-green-300 wr-font-semibold",
                           {
                             "wr-bg-green-500 wr-text-white":
                               field.value === Horse.FOUR,
@@ -174,7 +174,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/80 wr-py-[10px] wr-text-center wr-text-red-300",
+                          "wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/80 wr-py-[10px] wr-text-center wr-text-red-300 wr-font-semibold",
                           {
                             "wr-bg-red-600 wr-text-white":
                               field.value === Horse.FIVE,

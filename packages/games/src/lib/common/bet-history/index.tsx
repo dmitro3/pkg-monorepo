@@ -55,7 +55,7 @@ export const BetHistoryTemplate = ({
           });
         }}
       >
-        <Tabs.List className="wr-flex wr-w-full wr-items-center wr-border-b wr-border-zinc-800 wr-font-semibold">
+        <Tabs.List className="wr-flex wr-w-full wr-items-center wr-border-b wr-border-zinc-800 wr-font-semibold wr-mt-1">
           <Tabs.Trigger
             className="wr-flex wr-items-center wr-gap-2 wr-px-3 wr-py-3 wr-text-zinc-500 data-[state=active]:wr-border-b-2 data-[state=active]:wr-border-red-600 data-[state=active]:wr-text-white"
             value="bets"
@@ -70,13 +70,18 @@ export const BetHistoryTemplate = ({
           </Tabs.Trigger>
         </Tabs.List>
 
-        {loading && "Loading..."}
-        <AnimatedTabContent value="bets">
-          <BetTable betHistory={betHistory} currencyList={currencyList} />
-        </AnimatedTabContent>
-        <AnimatedTabContent value="player">
-          <BetTable betHistory={betHistory} currencyList={currencyList} />
-        </AnimatedTabContent>
+        {loading ? (
+          <p className="wr-font-semibold wr-my-3">Loading...</p>
+        ) : (
+          <>
+            <AnimatedTabContent value="bets">
+              <BetTable betHistory={betHistory} currencyList={currencyList} />
+            </AnimatedTabContent>
+            <AnimatedTabContent value="player">
+              <BetTable betHistory={betHistory} currencyList={currencyList} />
+            </AnimatedTabContent>
+          </>
+        )}
       </Tabs.Root>
     </div>
   );

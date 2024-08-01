@@ -43,14 +43,14 @@ export const WagerInput = ({
     <NumberInput.Root {...rest}>
       <NumberInput.Container
         className={cn(
-          "wr-border-none wr-bg-zinc-950 wr-px-2 wr-py-[10px] wr-text-base wr-font-semibold wr-leading-4",
+          "wr-border-none wr-bg-zinc-950 wr-px-2 wr-py-[10px] wr-text-md wr-font-semibold wr-leading-4",
           {
             ["wr-border wr-border-solid wr-border-red-600"]: !!hasError,
           },
           containerClassName
         )}
       >
-        <span className="wr-mt-[1px] wr-text-lg">$</span>
+        <span className="wr-mt-[1px] wr-text-md">$</span>
         <NumberInput.Input
           className={cn(
             "wr-z-10 wr-border-none wr-bg-transparent wr-pl-1 wr-text-base wr-leading-4 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0",
@@ -82,7 +82,7 @@ export const WagerSetterButtons = ({
   return (
     <div className="wr-flex wr-items-center wr-gap-1 wr-">
       <Button
-        className={cn("wr-w-full wr-font-[500]", className)}
+        className={cn("wr-w-full wr-font-[600] wr-text-base", className)}
         type="button"
         disabled={isDisabled}
         variant={"secondary"}
@@ -93,7 +93,7 @@ export const WagerSetterButtons = ({
         MIN
       </Button>
       <Button
-        className={cn("wr-w-full wr-font-[500]", className)}
+        className={cn("wr-w-full wr-font-[600] wr-text-base", className)}
         type="button"
         disabled={isDisabled}
         variant={"secondary"}
@@ -107,7 +107,7 @@ export const WagerSetterButtons = ({
         1/3
       </Button>
       <Button
-        className={cn("wr-w-full wr-font-[500]", className)}
+        className={cn("wr-w-full wr-font-[600] wr-text-base", className)}
         type="button"
         disabled={isDisabled}
         variant={"secondary"}
@@ -121,7 +121,7 @@ export const WagerSetterButtons = ({
         2x
       </Button>
       <Button
-        className={cn("wr-w-full wr-font-[500]", className)}
+        className={cn("wr-w-full wr-font-[600] wr-text-base", className)}
         type="button"
         disabled={isDisabled}
         variant={"secondary"}
