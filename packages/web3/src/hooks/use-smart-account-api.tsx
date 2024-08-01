@@ -24,21 +24,18 @@ class Paymaster implements PaymasterAPI {
     userOp: Partial<UserOperation>
   ): Promise<PaymasterParams> {
     try {
-      const paymasterParams = await this.client.request(
-        "preparePaymasterAndData",
-        {
-          callData: userOp.callData,
-        }
-      );
+      // const paymasterParams = await this.client.request(
+      //   "preparePaymasterAndData",
+      //   {
+      //     callData: userOp.callData,
+      //   }
+      // );
 
       return {
-        ...paymasterParams,
-        paymasterVerificationGasLimit: BigInt(
-          paymasterParams.paymasterVerificationGasLimit
-        ),
-        paymasterPostOpGasLimit: BigInt(
-          paymasterParams.paymasterPostOpGasLimit
-        ),
+        paymaster: "0x4B6C1BDC3AF5D3047BDDa97D35220E2Ff961Ef69",
+        paymasterData: "0x",
+        paymasterVerificationGasLimit: BigInt(200000),
+        paymasterPostOpGasLimit: BigInt(0),
       };
     } catch (err) {
       console.log("PAYMASTER ERROR", err);
