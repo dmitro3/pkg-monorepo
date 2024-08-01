@@ -31,7 +31,7 @@ export const StopGainLossInput = ({
       >
         <NumberInput.Input
           className={cn(
-            "wr-border-none wr-bg-transparent wr-px-0 wr-py-2 wr-text-xl wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0",
+            "wr-border-none wr-bg-transparent wr-px-0 wr-py-2 wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0 wr-text-base wr-font-semibold",
             className
           )}
         />

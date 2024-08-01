@@ -85,7 +85,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
           />
           <SceneContainer
             className={cn(
-              "wr-h-[640px] max-md:wr-h-[425px] lg:wr-py-12 wr-relative"
+              "wr-h-[640px] max-md:wr-h-[425px] lg:wr-py-12 wr-relative !wr-px-4"
             )}
             style={{
               backgroundImage: options?.scene?.backgroundImage,

@@ -140,7 +140,7 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
                     >
                       <NumberInput.Input
                         className={cn(
-                          "wr-rounded-none wr-border-none wr-bg-transparent wr-px-0px-0 py-2 text-base font-semibold leading-5 outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0"
+                          "wr-rounded-none wr-border-none wr-bg-transparent wr-px-0 py-2 wr-font-semibold leading-5 outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0"
                         )}
                       />
                     </NumberInput.Container>

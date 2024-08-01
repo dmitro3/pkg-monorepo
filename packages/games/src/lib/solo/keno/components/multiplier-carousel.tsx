@@ -28,10 +28,10 @@ const MultiplierCarousel: React.FC<{ currentNumbers: number[][] }> = ({
 
   if (selectionsLength === 0)
     return (
-      <div className="wr-flex w-full wr-items-center wr-justify-center wr-rounded-md wr-bg-zinc-900 wr-px-2 wr-py-5 wr-text-[14px] wr-text-zinc-500">
+      <div className="wr-flex w-full wr-items-center wr-font-semibold wr-justify-center wr-rounded-md wr-bg-zinc-900 wr-px-2 wr-py-5 wr-text-[14px] wr-text-zinc-500">
         <div>
           Choose from
-          <span className="wr-mx-1 wr-font-medium wr-text-zinc-300">
+          <span className="wr-mx-1 wr-font-bold wr-text-zinc-300">
             1 to 10 numbers{" "}
           </span>{" "}
           to see the odds

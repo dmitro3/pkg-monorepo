@@ -5,7 +5,7 @@ import { useFormContext } from "react-hook-form";
 
 import { cn } from "../../../../utils/style";
 import { toFormatted } from "../../../../utils/web3";
-import { videoPokerHands,VideoPokerResult } from "../../constants";
+import { videoPokerHands, VideoPokerResult } from "../../constants";
 import useVideoPokerGameStore from "../../store";
 import { VideoPokerForm } from "../../types";
 const ResultBox: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
@@ -15,7 +15,7 @@ const ResultBox: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   return (
     <div
       className={cn(
-        "wr-flex wr-h-20 wr-flex-col wr-items-center wr-justify-center wr-rounded-lg wr-border wr-border-zinc-800 wr-text-lg wr-font-bold wr-leading-[18px] max-md:wr-text-center max-md:wr-text-xs",
+        "wr-flex wr-h-20 wr-flex-col wr-items-center wr-justify-center wr-rounded-lg wr-border wr-border-zinc-800 wr-text-md wr-font-bold wr-leading-[18px] max-md:wr-text-center max-md:wr-text-xs",
         className
       )}
     >
@@ -52,7 +52,7 @@ export const VideoPokerResults = () => {
           Royal Flush
           <div
             className={cn(
-              "wr-mt-1 wr-text-base wr-font-normal wr-leading-5 wr-text-zinc-500",
+              "wr-mt-1 wr-text-base wr-font-semibold wr-leading-5 wr-text-zinc-500",
               {
                 "wr-text-yellow-700":
                   gameResult === VideoPokerResult.ROYAL_FLUSH,
@@ -79,7 +79,7 @@ export const VideoPokerResults = () => {
                 {hand.name}
                 <div
                   className={cn(
-                    "wr-mt-1 wr-text-base wr-font-normal wr-leading-5 wr-text-zinc-500 max-md:wr-text-xs",
+                    "wr-mt-1 wr-text-base wr-font-semibold wr-leading-5 wr-text-zinc-500 max-md:wr-text-xs",
                     {
                       "wr-text-orange-200":
                         hand.name === "Jacks or Better" &&

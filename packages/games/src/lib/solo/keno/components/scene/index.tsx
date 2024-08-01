@@ -169,7 +169,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
                                   : "top",
                               }}
                             >
-                              <div>
+                              <div className="wr-font-semibold">
                                 {renderCell(
                                   cell,
                                   currentNumbers.includes(cell) &&

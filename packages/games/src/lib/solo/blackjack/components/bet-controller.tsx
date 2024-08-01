@@ -66,7 +66,7 @@ export const BetController: React.FC<BetControllerProps> = ({
                 }
               )}
             >
-              <span className="wr-mt-[1px] wr-text-lg">$</span>
+              <span className="wr-mt-[1px] wr-text-md">$</span>
               <NumberInput.Input
                 className={cn(
                   "wr-z-10 wr-border-none wr-bg-transparent wr-pl-1 wr-text-base wr-leading-4 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"

@@ -3,11 +3,9 @@ import { useFormContext } from "react-hook-form";
 
 import { ChipController } from "../../../common/chip-controller";
 import { Chip } from "../../../common/chip-controller/types";
-import {
-  UnityWagerFormField,
-} from "../../../common/controller";
+import { UnityWagerFormField } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
-import { MaxPayout,TotalWager } from "../../../common/wager";
+import { MaxPayout, TotalWager } from "../../../common/wager";
 import { CDN_URL } from "../../../constants";
 import { Button } from "../../../ui/button";
 
@@ -108,7 +106,9 @@ export const BaccaratBetController: React.FC<BaccaratBetControllerProps> = ({
 
       <div className="wr-flex wr-w-full wr-max-w-[230px] wr-items-center wr-justify-between wr-gap-2 max-md:wr-max-w-[140px] wr-absolute wr-top-4 wr-left-4">
         <div className="wr-flex wr-w-full wr-flex-col wr-gap-2">
-          <span className="wr-text-unity-white-50">Total Wager</span>
+          <span className="wr-text-unity-white-50 wr-font-semibold">
+            Total Wager
+          </span>
           <TotalWager
             containerClassName="wr-bg-unity-white-15"
             wager={totalWager}
@@ -116,7 +116,9 @@ export const BaccaratBetController: React.FC<BaccaratBetControllerProps> = ({
           />
         </div>
         <div className="wr-flex wr-w-full wr-flex-col wr-gap-2 max-lg:wr-hidden">
-          <span className="wr-text-unity-white-50">Max Payout</span>
+          <span className="wr-text-unity-white-50 wr-font-semibold">
+            Max Payout
+          </span>
           <MaxPayout
             containerClassName="wr-bg-unity-white-15"
             maxPayout={maxPayout}

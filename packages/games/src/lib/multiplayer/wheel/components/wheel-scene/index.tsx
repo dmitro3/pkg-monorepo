@@ -29,17 +29,17 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
       <div className={styles.wheelContent}>
         <div className={styles.status}>
           {status === MultiplayerGameStatus.None && (
-            <div className="wr-text-xl wr-leading-5 wr-text-zinc-100">
+            <div className="wr-text-xl wr-leading-6 wr-text-zinc-100 wr-font-semibold">
               Bet to Start <br />
-              <span className="wr-text-base wr-leading-5 wr-text-zinc-500">
+              <p className="wr-text-base wr-leading-2 wr-text-zinc-500 wr-mt-1">
                 The game will start after someone places a bet
-              </span>
+              </p>
             </div>
           )}
 
           {status == MultiplayerGameStatus.Wait && (
             <section className="wr-text-center">
-              <div className="wr-mb-3 wr-text-xl wr-leading-5 wr-text-zinc-100">
+              <div className="wr-mb-3 wr-text-xl wr-font-semibold wr-leading-5 wr-text-zinc-100">
                 Remaining time:
               </div>
               <CountdownProvider

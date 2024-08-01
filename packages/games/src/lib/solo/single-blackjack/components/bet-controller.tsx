@@ -106,6 +106,7 @@ export const BetController: React.FC<Props> = ({
                 type="button"
                 variant="secondary"
                 size="xl"
+                className="wr-text-base"
               >
                 Hit
               </Button>
@@ -120,6 +121,7 @@ export const BetController: React.FC<Props> = ({
                 type="button"
                 variant="secondary"
                 size="xl"
+                className="wr-text-base"
               >
                 Stand
               </Button>
@@ -136,6 +138,7 @@ export const BetController: React.FC<Props> = ({
                 type="button"
                 variant="secondary"
                 size="xl"
+                className="wr-text-base"
               >
                 Split
               </Button>
@@ -152,6 +155,7 @@ export const BetController: React.FC<Props> = ({
                 type="button"
                 variant="secondary"
                 size="xl"
+                className="wr-text-base"
               >
                 Double
               </Button>
