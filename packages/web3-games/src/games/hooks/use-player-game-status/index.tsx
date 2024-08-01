@@ -199,17 +199,6 @@ export const usePlayerGameStatus = ({
     sessionRead.refetch();
   };
 
-  React.useEffect(() => {
-    console.log(
-      isReIterable,
-      "itearble",
-      isRefundable,
-      "isRefundable",
-      isHalted,
-      "isHalted"
-    );
-  }, [isRefundable, isHalted, isReIterable]);
-
   return {
     isPlayerHalted: isHalted,
     isReIterable,
