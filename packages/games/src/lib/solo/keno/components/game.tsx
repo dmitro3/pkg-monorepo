@@ -11,15 +11,11 @@ export type KenoGameProps = React.ComponentProps<"div"> & {
 };
 
 export const KenoGame = ({ gameResults, children }: KenoGameProps) => {
-  const { updateKenoGameResults, updateGameStatus } = useKenoGameStore([
-    "updateKenoGameResults",
-    "updateGameStatus",
-  ]);
+  const { updateKenoGameResults } = useKenoGameStore(["updateKenoGameResults"]);
 
   React.useEffect(() => {
     if (gameResults.length) {
       updateKenoGameResults(gameResults);
-      updateGameStatus("PLAYING");
     }
   }, [gameResults]);
 

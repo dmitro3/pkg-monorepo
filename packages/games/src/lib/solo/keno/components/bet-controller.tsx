@@ -29,10 +29,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
 
   const selections = form.watch("selections");
 
-  const { kenoGameResults, gameStatus } = useKenoGameStore([
-    "kenoGameResults",
-    "gameStatus",
-  ]);
+  const { gameStatus } = useKenoGameStore(["gameStatus"]);
 
   const maxPayout = 10;
 
@@ -120,7 +117,8 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
               !form.formState.isValid ||
               form.formState.isSubmitting ||
               form.formState.isLoading ||
-              selections.length === 0
+              selections.length === 0 ||
+              gameStatus == "PLAYING"
             }
           >
             Bet

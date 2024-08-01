@@ -6,6 +6,7 @@ import {
   KenoFormField,
   KenoGameResult,
   KenoTemplate,
+  useKenoGameStore,
   useLiveResultStore,
 } from "@winrlabs/games";
 import {
@@ -78,9 +79,10 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
   const {
     addResult,
     updateGame,
-    skipAll,
     clear: clearLiveResults,
   } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
+
+  const { updateGameStatus } = useKenoGameStore(["updateGameStatus"]);
 
   const gameEvent = useListenGameEvent();
 
@@ -202,6 +204,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
 
   const onGameSubmit = async () => {
     clearLiveResults();
+    updateGameStatus("PLAYING");
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
