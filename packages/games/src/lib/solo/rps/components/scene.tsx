@@ -136,8 +136,8 @@ const Scene: React.FC<GameAreaProps> = ({
         <div
           className={cn(
             "wr-absolute -wr-top-0 wr-h-full wr-w-[200%] -wr-translate-x-1/2  -wr-skew-x-[30deg] wr-transform wr-transition-all  wr-duration-500  wr-ease-linear ",
-            { "wr-top-0 ": winnerAnimation },
-            { "-wr-top-[120%]": !winnerAnimation }
+            { "wr-opacity-100 ": winnerAnimation },
+            { "wr-opacity-0": !winnerAnimation }
           )}
         >
           <div
@@ -179,8 +179,8 @@ const Scene: React.FC<GameAreaProps> = ({
         </div>
         <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-w-full  -wr-translate-x-1/2 -wr-translate-y-1/2  wr-transform">
           <div
-            className={cn("wr-relative  -wr-left-full -wr-translate-y-1/2  ", {
-              "wr-animate-right-to-left": winnerAnimation,
+            className={cn("wr-relative wr-opacity-0", {
+              "wr-opacity-100": winnerAnimation,
             })}
           >
             <img
@@ -229,8 +229,8 @@ const Scene: React.FC<GameAreaProps> = ({
         <div
           className={cn(
             "wr-absolute wr-left-0 wr-top-[100%] wr-h-full wr-w-[200%]  -wr-skew-x-[30deg] wr-transform wr-bg-rps-default   wr-transition-all wr-duration-500 wr-ease-linear",
-            { "wr-top-0": winnerAnimation },
-            { "wr-top-full": !winnerAnimation }
+            { "wr-opacity-100": winnerAnimation },
+            { "wr-opacity-0": !winnerAnimation }
           )}
         >
           <div
