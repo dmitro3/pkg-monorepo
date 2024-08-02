@@ -93,7 +93,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
           />
           <SceneContainer
             className={cn(
-              "wr-h-[640px] max-md:wr-h-[425px] lg:wr-py-12 wr-relative"
+              "wr-h-auto max-lg:wr-h-[500px] max-md:wr-h-[400px] lg:wr-py-12 wr-relative"
             )}
             style={{
               backgroundImage: options?.scene?.backgroundImage,
@@ -103,9 +103,6 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
               <CoinFlip.Game {...props}>
                 <CoinFlip.LastBets />
                 <CoinFlip.Coin {...props} />
-                <div className="wr-hidden lg:wr-flex">
-                  <CoinFlip.Controller />
-                </div>
               </CoinFlip.Game>
             </CoinFlip.Body>
           </SceneContainer>

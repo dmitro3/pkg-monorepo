@@ -21,6 +21,7 @@ import { cn } from "../../../../utils/style";
 import { toDecimals, toFormatted } from "../../../../utils/web3";
 import { useCoinFlipGameStore } from "../..";
 import { CoinFlipForm } from "../../types";
+import { CoinFlipController } from "./controller";
 
 interface Props {
   minWager: number;
@@ -50,7 +51,7 @@ export const BetController: React.FC<Props> = ({
 
   return (
     <BetControllerContainer>
-      <div className="wr-max-lg:flex wr-max-lg:flex-col">
+      <div className="wr-flex-col wr-flex lg:wr-block lg:wr-flex-row">
         <div className="wr-mb-3">
           <BetControllerTitle>Coin Flip</BetControllerTitle>
         </div>
@@ -65,6 +66,7 @@ export const BetController: React.FC<Props> = ({
             isGettingResults
           }
         />
+        <CoinFlipController />
         <BetCountFormField
           isDisabled={
             form.formState.isSubmitting ||
@@ -123,7 +125,7 @@ export const BetController: React.FC<Props> = ({
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
+              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5 wr-select-none"
               size={"xl"}
               isLoading={
                 form.formState.isSubmitting ||
@@ -134,7 +136,9 @@ export const BetController: React.FC<Props> = ({
                 !form.formState.isValid ||
                 form.formState.isSubmitting ||
                 form.formState.isLoading ||
-                gameStatus == "PLAYING" ||
+                (gameStatus == "PLAYING" &&
+                  coinFlipGameResults.length < 4 &&
+                  coinFlipGameResults.length > 1) ||
                 isGettingResults
               }
             >
