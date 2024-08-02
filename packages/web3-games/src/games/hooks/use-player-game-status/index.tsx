@@ -136,8 +136,10 @@ export const usePlayerGameStatus = ({
     if (!lastSeen || !refundCooldown) return false;
 
     const passedTime = getPassedTime(lastSeen);
+    console.log(sessionStatus, "session status");
+    console.log;
     return passedTime > refundCooldown && sessionStatus === SessionStatus.Wait;
-  }, [lastSeen, refundCooldown, sessionStatus]);
+  }, [lastSeen, refundCooldown, sessionStatus, sessionRead.dataUpdatedAt]);
 
   const isReIterable = React.useMemo(() => {
     if (!lastSeen) return false;
@@ -148,7 +150,7 @@ export const usePlayerGameStatus = ({
       passedTime > reIterateCooldown &&
       sessionStatus === SessionStatus.Wait
     );
-  }, [isRefundable, lastSeen, sessionStatus]);
+  }, [sessionRead.dataUpdatedAt, lastSeen, sessionStatus, isRefundable]);
 
   // Mutations
   const playerLevelUp = useRankControllerTakeLevelupSnapshot({});
@@ -205,7 +207,7 @@ export const usePlayerGameStatus = ({
 
   React.useEffect(() => {
     console.log("isReIterable", isReIterable, "isRefundable", isRefundable);
-  }, [sessionRead.dataUpdatedAt]);
+  }, [isReIterable, isRefundable]);
 
   return {
     isPlayerHalted: isHalted,
