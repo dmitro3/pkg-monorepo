@@ -32,7 +32,7 @@ export const CoinFlipController = () => {
             <FormControl>
               <RadioGroupPrimitive.Root
                 onValueChange={field.onChange}
-                className="wr-grid wr-h-full wr-w-full wr-grid-cols-2 wr-items-center wr-justify-center wr-gap-0 wr-rounded-md wr-bg-unity-white-15 wr-font-semibold lg:wr-w-[412px]"
+                className="wr-grid wr-h-full wr-w-full wr-grid-cols-2 wr-items-center wr-justify-center wr-gap-0 wr-rounded-md wr-bg-unity-white-15 wr-font-semibold"
                 defaultValue={field.value as unknown as string}
                 disabled={
                   form.formState.isSubmitting ||
