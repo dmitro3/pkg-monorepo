@@ -19,10 +19,10 @@
     "dev": "npm run build -- --watch"
   },
   "peerDependencies": {
-    "@wagmi/core": "^2.10.2",
+    "@wagmi/core": "2.11.2",
     "@winrlabs/web3-games": "workspace:*",
     "viem": "2.x",
-    "wagmi": "^2.5.7"
+    "wagmi": "2.10.2"
   },
   "devDependencies": {
     "@turbo/gen": "^1.11.3",
@@ -47,7 +47,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@wagmi/core": "^2.10.2",
+    "@wagmi/core": "2.11.2",
     "@winrlabs/api": "workspace:*",
     "@winrlabs/games": "workspace:*",
     "@winrlabs/web3": "workspace:*",
@@ -60,7 +60,7 @@
     "tailwind-merge": "^2.2.2",
     "use-debounce": "^10.0.1",
     "viem": "2.x",
-    "wagmi": "^2.5.7",
+    "wagmi": "2.10.2",
     "zod": "^3.22.4",
     "zustand": "^4.4.1"
   }
