@@ -27,10 +27,6 @@ type TemplateOptions = {
   slider?: {
     track?: SliderTrackOptions;
   };
-
-  scene?: {
-    backgroundImage?: string;
-  };
 };
 
 type TemplateProps = RangeGameProps & {
@@ -120,9 +116,6 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
           />
           <SceneContainer
             className={cn("wr-h-[640px]  max-md:wr-h-[425px] lg:wr-py-12")}
-            style={{
-              backgroundImage: options?.scene?.backgroundImage,
-            }}
           >
             <Dice.Game {...props}>
               {/* last bets */}
