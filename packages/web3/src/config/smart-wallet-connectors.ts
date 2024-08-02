@@ -24,7 +24,7 @@ interface Web3AuthConnectorInstanceParams {
   openLoginOptions: OpenloginAdapterOptions;
 }
 
-interface Connectors {
+export interface Connectors {
   connector: CreateConnectorFn<IProvider>;
   loginProvider: LOGIN_PROVIDER_TYPE | CUSTOM_LOGIN_PROVIDER_TYPE;
   web3AuthInstance: Web3AuthNoModal;

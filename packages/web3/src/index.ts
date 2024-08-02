@@ -13,3 +13,4 @@ export * from "./hooks/use-handle-tx-uncached";
 export * from "./providers";
 export * from "./providers/balance";
 export * from "./providers/token";
+export * from './hooks/use-web3-auth-account';

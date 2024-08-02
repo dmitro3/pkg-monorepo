@@ -1,7 +1,7 @@
 "use client";
 
 import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { useCurrentAccount } from "@winrlabs/web3";
+import { useCurrentAccount, useWeb3AuthAccount } from "@winrlabs/web3";
 import React from "react";
 import { smartWalletConnectors } from "./wagmi";
 
@@ -11,7 +11,14 @@ function App() {
   const { disconnect } = useDisconnect();
   const currentAA = useCurrentAccount();
 
-/*   const currentConnector = smartWalletConnectors.connectors.find(
+  const { data } = useWeb3AuthAccount({
+    currentConnectorName: account.connector?.name || "",
+    smartWalletConnectors: smartWalletConnectors.connectors,
+  });
+
+  console.log("data", data);
+
+  /*   const currentConnector = smartWalletConnectors.connectors.find(
     (c) => c.loginProvider === account.connector?.name
   );
 
