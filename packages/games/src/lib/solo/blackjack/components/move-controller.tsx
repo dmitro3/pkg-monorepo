@@ -6,6 +6,7 @@ import { useGameOptions } from "../../../game-provider";
 import { Button } from "../../../ui/button";
 import { cn } from "../../../utils/style";
 import { ActiveGameHands, GameStruct } from "..";
+import { useFormContext } from "react-hook-form";
 
 export interface MoveControllerProps {
   isDistributionCompleted: boolean;
@@ -13,6 +14,7 @@ export interface MoveControllerProps {
   activeHandByIndex: ActiveGameHands["firstHand"];
   activeGameData: GameStruct;
   activeHandChipAmount: number | undefined;
+  wager: number;
   onHit: (handIndex: number) => void;
   onStand: (handIndex: number) => void;
   onDoubleDown: (handIndex: number) => void;
@@ -26,6 +28,7 @@ export const MoveController: React.FC<MoveControllerProps> = ({
   activeHandByIndex,
   activeGameData,
   activeHandChipAmount,
+  wager,
   onHit,
   onDoubleDown,
   onSplit,
@@ -35,7 +38,7 @@ export const MoveController: React.FC<MoveControllerProps> = ({
   const { account } = useGameOptions();
 
   const hasBalanceForMove = (chipAmount: number): boolean => {
-    const _b = account?.balance || 0;
+    const _b = (account?.balanceAsDollar || 0) * wager;
     return _b >= chipAmount;
   };
 

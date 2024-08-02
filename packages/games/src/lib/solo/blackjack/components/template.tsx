@@ -899,6 +899,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
                   activeHandByIndex={activeHandByIndex}
                   activeGameData={activeGameData}
                   activeHandChipAmount={activeHandChipAmount}
+                  wager={wager}
                   onHit={onHit}
                   onSplit={onSplit}
                   onDoubleDown={onDoubleDown}

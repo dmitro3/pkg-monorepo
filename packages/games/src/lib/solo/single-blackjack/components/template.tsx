@@ -352,6 +352,8 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     return () => subscription.unsubscribe();
   }, [form.watch]);
 
+  const wager = form.watch("wager");
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -365,6 +367,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
             status={activeGameData.status}
             isControllerDisabled={isControllerDisabled}
             isDistributionCompleted={isDistributionCompleted}
+            wager={wager}
             onHit={onHit}
             onDoubleDown={onDoubleDown}
             onSplit={onSplit}
