@@ -41,7 +41,7 @@ export const PreBetButton = ({
 
   if (
     account.isLoggedIn &&
-    (account.balance <= 0 || account.balance < totalWager)
+    (account.balanceAsDollar <= 0 || account.balanceAsDollar < totalWager)
   )
     return (
       <Button

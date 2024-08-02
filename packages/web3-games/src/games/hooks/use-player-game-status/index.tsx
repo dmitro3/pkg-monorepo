@@ -199,6 +199,14 @@ export const usePlayerGameStatus = ({
     sessionRead.refetch();
   };
 
+  React.useEffect(() => {
+    console.log("ishalted", isHalted);
+  }, [isHalted]);
+
+  React.useEffect(() => {
+    console.log(playerLevelStatusRead.data, "data");
+  }, [playerLevelStatusRead.dataUpdatedAt]);
+
   return {
     isPlayerHalted: isHalted,
     isReIterable,

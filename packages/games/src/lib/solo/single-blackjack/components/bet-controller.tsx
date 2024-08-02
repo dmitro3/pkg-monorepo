@@ -20,6 +20,7 @@ interface Props {
   status: BlackjackGameStatus;
   isDistributionCompleted: boolean;
   isControllerDisabled: boolean;
+  wager: number;
 
   onHit: (handIndex: number) => void;
   onStand: (handIndex: number) => void;
@@ -37,6 +38,7 @@ export const BetController: React.FC<Props> = ({
   status,
   isDistributionCompleted,
   isControllerDisabled,
+  wager,
 
   onHit,
   onStand,
@@ -65,7 +67,7 @@ export const BetController: React.FC<Props> = ({
   const { account } = useGameOptions();
 
   const hasBalanceForMove = (chipAmount: number): boolean => {
-    const _b = account?.balance || 0;
+    const _b = (account?.balanceAsDollar || 0) * wager;
     return _b >= chipAmount;
   };
 
