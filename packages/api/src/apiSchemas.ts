@@ -8,6 +8,17 @@ export type PriceResponse = {
   price: number;
 };
 
+export type PaginatedResonse = {
+  totalCount: number;
+  totalPages: number;
+  limit: number | null;
+  currentPage: number | null;
+  /**
+   * @default false
+   */
+  hasMore: boolean;
+};
+
 export type GameResultDto = {
   id: string;
   game:
@@ -115,6 +126,131 @@ export type MultiplayerGameHistoryObject = {
   result: number;
 };
 
+export type LiveWinsDto = {
+  game:
+    | "COINFLIP"
+    | "RANGE"
+    | "WHEEL"
+    | "PLINKO"
+    | "MOON"
+    | "LOTTERY"
+    | "RPS"
+    | "DICE"
+    | "LIMBO"
+    | "SLOT"
+    | "ROULETTE"
+    | "MINES"
+    | "VIDEO_POKER"
+    | "KENO"
+    | "BACCARAT"
+    | "HORSE_RACE"
+    | "BLACKJACK"
+    | "HOLDEM_POKER"
+    | "WINR_BONANZA"
+    | "ONE_HAND_BLACKJACK";
+  player: string;
+  username: string | null;
+  /**
+   * @default 0
+   */
+  profitInDollar: number;
+};
+
+export type BigWinsDto = {
+  game:
+    | "COINFLIP"
+    | "RANGE"
+    | "WHEEL"
+    | "PLINKO"
+    | "MOON"
+    | "LOTTERY"
+    | "RPS"
+    | "DICE"
+    | "LIMBO"
+    | "SLOT"
+    | "ROULETTE"
+    | "MINES"
+    | "VIDEO_POKER"
+    | "KENO"
+    | "BACCARAT"
+    | "HORSE_RACE"
+    | "BLACKJACK"
+    | "HOLDEM_POKER"
+    | "WINR_BONANZA"
+    | "ONE_HAND_BLACKJACK";
+  player: string;
+  username: string | null;
+  /**
+   * @default 0
+   */
+  profitInDollar: number;
+};
+
+export type LuckyWinsDto = {
+  game:
+    | "COINFLIP"
+    | "RANGE"
+    | "WHEEL"
+    | "PLINKO"
+    | "MOON"
+    | "LOTTERY"
+    | "RPS"
+    | "DICE"
+    | "LIMBO"
+    | "SLOT"
+    | "ROULETTE"
+    | "MINES"
+    | "VIDEO_POKER"
+    | "KENO"
+    | "BACCARAT"
+    | "HORSE_RACE"
+    | "BLACKJACK"
+    | "HOLDEM_POKER"
+    | "WINR_BONANZA"
+    | "ONE_HAND_BLACKJACK";
+  player: string;
+  username: string | null;
+  /**
+   * @default 0
+   */
+  multiplier: number;
+};
+
+export type PlayerRankObject = {
+  /**
+   * @default 0
+   */
+  rank: number;
+  /**
+   * @default 0
+   */
+  totalWon: number;
+  /**
+   * @default 0
+   */
+  bets: number;
+  /**
+   * @default 0
+   */
+  winRate: number;
+  /**
+   * @default 0
+   */
+  volume: number;
+  /**
+   * @default
+   */
+  player: string;
+  /**
+   * @default
+   */
+  username: string | null;
+  /**
+   * @default 0
+   */
+  refPlayerCount: number;
+};
+
 export type RefundInput = {
   game:
     | "COINFLIP"
@@ -175,6 +311,7 @@ export type VaultOutput = {
   bankrollTokenAddress: string;
   liquidityManagerAddress: string;
   shareTokenAddress: string;
+  vaultAddress: string;
   price: number;
   wallet: number;
   poolSupply: number;

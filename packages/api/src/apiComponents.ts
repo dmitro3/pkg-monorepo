@@ -101,7 +101,9 @@ export type GameControllerBetHistoryQueryParams = {
 
 export type GameControllerBetHistoryError = Fetcher.ErrorWrapper<undefined>;
 
-export type GameControllerBetHistoryResponse = Schemas.GameResultDto[];
+export type GameControllerBetHistoryResponse = Schemas.PaginatedResonse & {
+  data?: Schemas.GameResultDto[];
+};
 
 export type GameControllerBetHistoryVariables = {
   queryParams?: GameControllerBetHistoryQueryParams;
@@ -445,6 +447,376 @@ export const useGameControllerGetMultiplayerGameHistory = <
     }),
     queryFn: ({ signal }) =>
       fetchGameControllerGetMultiplayerGameHistory(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type GameControllerGetLiveWinsError = Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerGetLiveWinsResponse = Schemas.LiveWinsDto[];
+
+export type GameControllerGetLiveWinsVariables = ApiContext["fetcherOptions"];
+
+export const fetchGameControllerGetLiveWins = (
+  variables: GameControllerGetLiveWinsVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    GameControllerGetLiveWinsResponse,
+    GameControllerGetLiveWinsError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/game/live-wins", method: "get", ...variables, signal });
+
+export const useGameControllerGetLiveWins = <
+  TData = GameControllerGetLiveWinsResponse,
+>(
+  variables: GameControllerGetLiveWinsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GameControllerGetLiveWinsResponse,
+      GameControllerGetLiveWinsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    GameControllerGetLiveWinsResponse,
+    GameControllerGetLiveWinsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/game/live-wins",
+      operationId: "gameControllerGetLiveWins",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerGetLiveWins(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type GameControllerGetBigWinsQueryParams = {
+  range?: "ALL_TIME" | "DAY" | "WEEK" | "MONTH";
+};
+
+export type GameControllerGetBigWinsError = Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerGetBigWinsResponse = Schemas.BigWinsDto[];
+
+export type GameControllerGetBigWinsVariables = {
+  queryParams?: GameControllerGetBigWinsQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchGameControllerGetBigWins = (
+  variables: GameControllerGetBigWinsVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    GameControllerGetBigWinsResponse,
+    GameControllerGetBigWinsError,
+    undefined,
+    {},
+    GameControllerGetBigWinsQueryParams,
+    {}
+  >({ url: "/game/live-big-wins", method: "get", ...variables, signal });
+
+export const useGameControllerGetBigWins = <
+  TData = GameControllerGetBigWinsResponse,
+>(
+  variables: GameControllerGetBigWinsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GameControllerGetBigWinsResponse,
+      GameControllerGetBigWinsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    GameControllerGetBigWinsResponse,
+    GameControllerGetBigWinsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/game/live-big-wins",
+      operationId: "gameControllerGetBigWins",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerGetBigWins(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type GameControllerGetLiveLuckyWinsQueryParams = {
+  range?: "ALL_TIME" | "DAY" | "WEEK" | "MONTH";
+};
+
+export type GameControllerGetLiveLuckyWinsError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerGetLiveLuckyWinsResponse = Schemas.LuckyWinsDto[];
+
+export type GameControllerGetLiveLuckyWinsVariables = {
+  queryParams?: GameControllerGetLiveLuckyWinsQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchGameControllerGetLiveLuckyWins = (
+  variables: GameControllerGetLiveLuckyWinsVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    GameControllerGetLiveLuckyWinsResponse,
+    GameControllerGetLiveLuckyWinsError,
+    undefined,
+    {},
+    GameControllerGetLiveLuckyWinsQueryParams,
+    {}
+  >({ url: "/game/live-lucky-wins", method: "get", ...variables, signal });
+
+export const useGameControllerGetLiveLuckyWins = <
+  TData = GameControllerGetLiveLuckyWinsResponse,
+>(
+  variables: GameControllerGetLiveLuckyWinsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GameControllerGetLiveLuckyWinsResponse,
+      GameControllerGetLiveLuckyWinsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    GameControllerGetLiveLuckyWinsResponse,
+    GameControllerGetLiveLuckyWinsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/game/live-lucky-wins",
+      operationId: "gameControllerGetLiveLuckyWins",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerGetLiveLuckyWins(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type GameControllerGetLuckyWinsQueryParams = {
+  /**
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  wallet: string;
+};
+
+export type GameControllerGetLuckyWinsError = Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerGetLuckyWinsResponse = Schemas.PaginatedResonse & {
+  data?: Schemas.LuckyWinsDto[];
+};
+
+export type GameControllerGetLuckyWinsVariables = {
+  queryParams: GameControllerGetLuckyWinsQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchGameControllerGetLuckyWins = (
+  variables: GameControllerGetLuckyWinsVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    GameControllerGetLuckyWinsResponse,
+    GameControllerGetLuckyWinsError,
+    undefined,
+    {},
+    GameControllerGetLuckyWinsQueryParams,
+    {}
+  >({ url: "/game/lucky-wins", method: "get", ...variables, signal });
+
+export const useGameControllerGetLuckyWins = <
+  TData = GameControllerGetLuckyWinsResponse,
+>(
+  variables: GameControllerGetLuckyWinsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GameControllerGetLuckyWinsResponse,
+      GameControllerGetLuckyWinsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    GameControllerGetLuckyWinsResponse,
+    GameControllerGetLuckyWinsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/game/lucky-wins",
+      operationId: "gameControllerGetLuckyWins",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerGetLuckyWins(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type GameControllerGetTopBetsQueryParams = {
+  /**
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  wallet: string;
+};
+
+export type GameControllerGetTopBetsError = Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerGetTopBetsResponse = Schemas.PaginatedResonse & {
+  data?: Schemas.LuckyWinsDto[];
+};
+
+export type GameControllerGetTopBetsVariables = {
+  queryParams: GameControllerGetTopBetsQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchGameControllerGetTopBets = (
+  variables: GameControllerGetTopBetsVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    GameControllerGetTopBetsResponse,
+    GameControllerGetTopBetsError,
+    undefined,
+    {},
+    GameControllerGetTopBetsQueryParams,
+    {}
+  >({ url: "/game/top-bets", method: "get", ...variables, signal });
+
+export const useGameControllerGetTopBets = <
+  TData = GameControllerGetTopBetsResponse,
+>(
+  variables: GameControllerGetTopBetsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GameControllerGetTopBetsResponse,
+      GameControllerGetTopBetsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    GameControllerGetTopBetsResponse,
+    GameControllerGetTopBetsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/game/top-bets",
+      operationId: "gameControllerGetTopBets",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerGetTopBets(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type GameControllerGetStatsByPlayerQueryParams = {
+  wallet: string;
+};
+
+export type GameControllerGetStatsByPlayerError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerGetStatsByPlayerVariables = {
+  queryParams: GameControllerGetStatsByPlayerQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchGameControllerGetStatsByPlayer = (
+  variables: GameControllerGetStatsByPlayerVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    Schemas.PlayerRankObject,
+    GameControllerGetStatsByPlayerError,
+    undefined,
+    {},
+    GameControllerGetStatsByPlayerQueryParams,
+    {}
+  >({ url: "/game/stats-by-player", method: "get", ...variables, signal });
+
+export const useGameControllerGetStatsByPlayer = <
+  TData = Schemas.PlayerRankObject,
+>(
+  variables: GameControllerGetStatsByPlayerVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Schemas.PlayerRankObject,
+      GameControllerGetStatsByPlayerError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    Schemas.PlayerRankObject,
+    GameControllerGetStatsByPlayerError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/game/stats-by-player",
+      operationId: "gameControllerGetStatsByPlayer",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerGetStatsByPlayer(
         { ...fetcherOptions, ...variables },
         signal,
       ),
@@ -851,7 +1223,9 @@ export type ReferralControllerGetReferralHistoryByPlayerError =
   Fetcher.ErrorWrapper<undefined>;
 
 export type ReferralControllerGetReferralHistoryByPlayerResponse =
-  Schemas.ReferralRewardEntity[];
+  Schemas.PaginatedResonse & {
+    data?: Schemas.ReferralRewardEntity[];
+  };
 
 export type ReferralControllerGetReferralHistoryByPlayerVariables = {
   pathParams: ReferralControllerGetReferralHistoryByPlayerPathParams;
@@ -933,7 +1307,9 @@ export type ReferralControllerRewardsDistributionHistoryError =
   Fetcher.ErrorWrapper<undefined>;
 
 export type ReferralControllerRewardsDistributionHistoryResponse =
-  Schemas.ReferralClaimEntity[];
+  Schemas.PaginatedResonse & {
+    data?: Schemas.ReferralClaimEntity[];
+  };
 
 export type ReferralControllerRewardsDistributionHistoryVariables = {
   pathParams: ReferralControllerRewardsDistributionHistoryPathParams;
@@ -1303,6 +1679,36 @@ export type QueryOperation =
       path: "/game/multiplayer-game-history";
       operationId: "gameControllerGetMultiplayerGameHistory";
       variables: GameControllerGetMultiplayerGameHistoryVariables;
+    }
+  | {
+      path: "/game/live-wins";
+      operationId: "gameControllerGetLiveWins";
+      variables: GameControllerGetLiveWinsVariables;
+    }
+  | {
+      path: "/game/live-big-wins";
+      operationId: "gameControllerGetBigWins";
+      variables: GameControllerGetBigWinsVariables;
+    }
+  | {
+      path: "/game/live-lucky-wins";
+      operationId: "gameControllerGetLiveLuckyWins";
+      variables: GameControllerGetLiveLuckyWinsVariables;
+    }
+  | {
+      path: "/game/lucky-wins";
+      operationId: "gameControllerGetLuckyWins";
+      variables: GameControllerGetLuckyWinsVariables;
+    }
+  | {
+      path: "/game/top-bets";
+      operationId: "gameControllerGetTopBets";
+      variables: GameControllerGetTopBetsVariables;
+    }
+  | {
+      path: "/game/stats-by-player";
+      operationId: "gameControllerGetStatsByPlayer";
+      variables: GameControllerGetStatsByPlayerVariables;
     }
   | {
       path: "/statistic/stats";

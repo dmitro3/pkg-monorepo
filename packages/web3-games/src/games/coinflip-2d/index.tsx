@@ -304,7 +304,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate
-          betHistory={betHistory || []}
+          betHistory={betHistory}
           loading={isHistoryLoading}
           onChangeFilter={(filter) => setHistoryFilter(filter)}
           currencyList={mapHistoryTokens}

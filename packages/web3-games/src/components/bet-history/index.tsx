@@ -1,4 +1,7 @@
-import { useGameControllerBetHistory } from "@winrlabs/api";
+import {
+  GameControllerBetHistoryResponse,
+  useGameControllerBetHistory,
+} from "@winrlabs/api";
 import {
   BetHistoryCurrencyList,
   BetHistoryFilter,
@@ -16,6 +19,7 @@ const BetHistory = ({ gameType }: { gameType: GameType }) => {
 
   const defaultParams = {
     game: gameType,
+    page: 1,
     limit: 10,
   };
   const { data, isLoading } = useGameControllerBetHistory({
@@ -42,7 +46,7 @@ const BetHistory = ({ gameType }: { gameType: GameType }) => {
 
   return (
     <BetHistoryTemplate
-      betHistory={data || []}
+      betHistory={data as GameControllerBetHistoryResponse}
       loading={isLoading}
       onChangeFilter={(filter) => setFilter(filter)}
       currencyList={mapTokens}

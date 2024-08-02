@@ -43,7 +43,7 @@ const BetTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {betHistory?.map((bet, i) => {
+        {betHistory.data?.map((bet, i) => {
           return (
             <TableRow key={i}>
               <TableCell className="max-lg:wr-w-[150px]">
