@@ -14,6 +14,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.27.1
         version: 2.27.7
+      turbo:
+        specifier: ^2.0.11
+        version: 2.0.11
     devDependencies:
       '@winrlabs/eslint-config':
         specifier: workspace:*
@@ -24,9 +27,6 @@ importers:
       prettier:
         specifier: ^3.1.1
         version: 3.3.3
-      turbo:
-        specifier: latest
-        version: 2.0.11
 
   apps/package-docs:
     dependencies:
@@ -4256,6 +4256,7 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.7
+      napi-wasm: 1.1.0
     dev: false
     bundledDependencies:
       - napi-wasm
@@ -14830,6 +14831,10 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  /napi-wasm@1.1.0:
+    resolution: {integrity: sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==}
+    dev: false
+
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
@@ -18244,7 +18249,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-darwin-arm64@2.0.11:
@@ -18252,7 +18257,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-linux-64@2.0.11:
@@ -18260,7 +18265,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-linux-arm64@2.0.11:
@@ -18268,7 +18273,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-windows-64@2.0.11:
@@ -18276,7 +18281,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-windows-arm64@2.0.11:
@@ -18284,7 +18289,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo@2.0.11:
@@ -18297,7 +18302,7 @@ packages:
       turbo-linux-arm64: 2.0.11
       turbo-windows-64: 2.0.11
       turbo-windows-arm64: 2.0.11
-    dev: true
+    dev: false
 
   /tweetnacl@1.0.3:
     resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
