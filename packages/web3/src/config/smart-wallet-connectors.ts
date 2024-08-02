@@ -27,6 +27,7 @@ interface Web3AuthConnectorInstanceParams {
 interface Connectors {
   connector: CreateConnectorFn<IProvider>;
   loginProvider: LOGIN_PROVIDER_TYPE | CUSTOM_LOGIN_PROVIDER_TYPE;
+  web3AuthInstance: Web3AuthNoModal;
 }
 
 export const SmartWalletConnectorWagmiType = "Web3Auth";
@@ -84,23 +85,30 @@ export class SmartWalletConnectors {
 
     web3AuthInstance.configureAdapter(openloginAdapter);
 
-    return Web3AuthConnector({
+    const web3AuthConnector = Web3AuthConnector({
       web3AuthInstance,
       loginParams: {
         loginProvider,
       },
     });
+
+    return {
+      web3AuthConnector,
+      web3AuthInstance,
+    };
   }
 
   private createConnectors() {
     return this.loginProviders.map((loginProvider) => {
-      const connector = this.createConnectorInstance(
-        loginProvider
-      ) as unknown as CreateConnectorFn<IProvider>;
+      const connector =
+        this.createConnectorInstance(
+          loginProvider
+        ); /* as unknown as CreateConnectorFn<IProvider>; */
 
       return {
-        connector,
+        connector: connector.web3AuthConnector as unknown as CreateConnectorFn<IProvider>,
         loginProvider,
+        web3AuthInstance: connector.web3AuthInstance,
       };
     });
   }
