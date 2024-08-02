@@ -10,7 +10,13 @@ import { cn } from "../../../../lib/utils/style";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { Form } from "../../../ui/form";
 import { toDecimals } from "../../../utils/web3";
-import { LUCK_MULTIPLIER, MAX_BET_COUNT, MIN_BET_COUNT } from "../constant";
+import {
+  LUCK_MULTIPLIER,
+  MAX_BET_COUNT,
+  MAX_VALUE,
+  MIN_BET_COUNT,
+  MIN_VALUE,
+} from "../constant";
 import { Dice } from "../index";
 import { DiceFormFields } from "../types";
 import { BetController } from "./bet-controller";
@@ -65,9 +71,9 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
       }),
     stopGain: z.number(),
     stopLoss: z.number(),
-    rollValue: z.number().min(5).max(95),
+    rollValue: z.number().min(MIN_VALUE).max(MAX_VALUE),
     rollType: z.enum(["OVER", "UNDER"]),
-    winChance: z.number().min(5).max(95),
+    winChance: z.number().min(MIN_VALUE).max(MAX_VALUE),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({

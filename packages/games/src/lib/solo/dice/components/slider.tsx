@@ -3,9 +3,10 @@ import { useFormContext } from "react-hook-form";
 
 import { cn } from "../../../../lib/utils/style";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
-import { useDiceGameStore } from "..";
-import { DiceForm } from "../types";
 import { toDecimals } from "../../../utils/web3";
+import { useDiceGameStore } from "..";
+import { MAX_VALUE, MIN_VALUE } from "../constant";
+import { DiceForm } from "../types";
 
 export interface SliderTrackOptions {
   color?: string;
@@ -17,10 +18,6 @@ export interface SliderProps {
   disabled?: boolean;
   track?: SliderTrackOptions;
 }
-
-const MIN_VALUE = 5;
-
-const MAX_VALUE = 95;
 
 export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
   const form = useFormContext() as DiceForm;
@@ -88,7 +85,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                   />
                 </SliderPrimitive.Track>
                 <SliderPrimitive.Thumb
-                  className="wr-relative wr-grid wr-h-16 wr-w-16 wr-place-items-center wr-rounded-[10px] wr-bg-gradient-to-b wr-from-white wr-to-[#C5C5CC] wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
+                  className="wr-relative wr-grid wr-size-12 wr-place-items-center wr-rounded-[10px] wr-bg-gradient-to-b wr-from-white wr-to-[#C5C5CC] wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
                   aria-label="Volume"
                 >
                   <div className="wr-absolute -wr-top-[50px] wr-text-4xl wr-font-bold">
@@ -109,8 +106,11 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
         )}
       />
       <div className="wr-mt-[22px] wr-flex wr-justify-between wr-text-[15px] wr-font-bold">
-        <span>{MIN_VALUE}</span>
-        <span>{MAX_VALUE}</span>
+        {[0, 25, 50, 75, 100].map((value) => (
+          <span key={value} className="block wr-size-10 wr-text-center">
+            {value}
+          </span>
+        ))}
       </div>
     </div>
   );
