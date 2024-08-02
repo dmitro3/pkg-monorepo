@@ -63,7 +63,7 @@ export const Coin: React.FC<CoinProps> = ({
       const payoutInUsd = coinFlipGameResults[i]?.payoutInUsd || 0;
       flipEffect.play();
 
-      coinRotate.finish(side, 1250).then(() => {
+      coinRotate.finish(side, 750).then(() => {
         const curr = i + 1;
 
         onAnimationStep && onAnimationStep(curr);
@@ -88,7 +88,7 @@ export const Coin: React.FC<CoinProps> = ({
           const delay =
             coinFlipGameResults[coinFlipGameResults.length - 1]?.coinSide ==
             coinSide
-              ? 500
+              ? 400
               : 0;
 
           setTimeout(() => updateGameStatus("ENDED"), delay);
@@ -118,7 +118,7 @@ export const Coin: React.FC<CoinProps> = ({
 
   return (
     <>
-      <div className="wr-absolute wr-top-[40%] wr-left-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 max-md:wr-scale-75">
+      <div className="wr-absolute wr-top-[50%] wr-left-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 max-md:wr-scale-75">
         <Player
           ref={lottieRef}
           src={CoinConfetti}

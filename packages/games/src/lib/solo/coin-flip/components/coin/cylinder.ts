@@ -7,13 +7,13 @@ const getMaterials = () => {
 
   return [
     new THREE.MeshBasicMaterial({
-      map: loader.load(`${CDN_URL}/coin-flip-2d/side.png`),
+      map: loader.load(`${CDN_URL}/coin-flip-2d/sidde.png`),
     }),
     new THREE.MeshBasicMaterial({
-      map: loader.load(`${CDN_URL}/coin-flip-2d/back.jpg`),
+      map: loader.load(`${CDN_URL}/coin-flip-2d/back.png`),
     }),
     new THREE.MeshBasicMaterial({
-      map: loader.load(`${CDN_URL}/coin-flip-2d/front.jpg`),
+      map: loader.load(`${CDN_URL}/coin-flip-2d/front.png`),
     }),
   ];
 };

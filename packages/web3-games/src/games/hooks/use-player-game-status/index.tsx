@@ -200,12 +200,12 @@ export const usePlayerGameStatus = ({
   };
 
   React.useEffect(() => {
-    console.log("ishalted", isHalted);
-  }, [isHalted]);
-
-  React.useEffect(() => {
     console.log(playerLevelStatusRead.data, "data");
   }, [playerLevelStatusRead.dataUpdatedAt]);
+
+  React.useEffect(() => {
+    console.log("isReIterable", isReIterable, "isRefundable", isRefundable);
+  }, [sessionRead.dataUpdatedAt]);
 
   return {
     isPlayerHalted: isHalted,

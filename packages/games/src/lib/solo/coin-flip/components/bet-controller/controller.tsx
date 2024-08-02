@@ -1,13 +1,18 @@
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { useFormContext } from "react-hook-form";
 
-import { CDN_URL } from "../../../constants";
-import { FormControl, FormField, FormItem } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { toFormatted } from "../../../utils/web3";
-import { useCoinFlipGameStore } from "..";
-import { CoinSide, WIN_MULTIPLIER } from "../constants";
-import { CoinFlipForm } from "../types";
+import { CDN_URL } from "../../../../constants";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "../../../../ui/form";
+import { CoinSide, WIN_MULTIPLIER } from "../../constants";
+import { cn } from "../../../../utils/style";
+import { CoinFlipForm } from "../../types";
+import useCoinFlipGameStore from "../../store";
+import { toFormatted } from "../../../../utils/web3";
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlipForm;
@@ -17,12 +22,13 @@ export const CoinFlipController = () => {
   const { gameStatus } = useCoinFlipGameStore(["gameStatus"]);
 
   return (
-    <div className="wr-flex wr-items-center lg:wr-absolute wr-bottom-[56px] lg:wr-left-1/2 lg:-wr-translate-x-1/2 wr-w-full wr-max-w-[412px]">
+    <div className="wr-flex wr-items-center wr-w-full wr-mb-5">
       <FormField
         control={form.control}
         name="coinSide"
         render={({ field }) => (
-          <FormItem className="wr-mb-0 wr-h-12 wr-w-full">
+          <FormItem className="wr-h-10 wr-w-full wr-mb-[60px]">
+            <FormLabel>Choose Side</FormLabel>
             <FormControl>
               <RadioGroupPrimitive.Root
                 onValueChange={field.onChange}
@@ -42,20 +48,20 @@ export const CoinFlipController = () => {
                         className="wr-relative wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-text-unity-white-50"
                       >
                         <img
-                          src={`${CDN_URL}/coin-flip-2d/eth.png`}
+                          src={`${CDN_URL}/coin-flip-2d/doge.png`}
                           width={20}
                           height={20}
-                          alt="eth_icon"
+                          alt="doge_icon"
                         />
-                        ETH
-                        <RadioGroupPrimitive.Indicator className="wr-absolute wr-left-0 wr-top-0 wr-flex wr-h-12 wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md wr-bg-gradient-to-t wr-bg-green-500 wr-text-zinc-100">
+                        DOGE
+                        <RadioGroupPrimitive.Indicator className="wr-absolute wr-left-0 wr-top-0 wr-flex wr-h-10 wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md wr-bg-gradient-to-t wr-bg-green-500 wr-text-zinc-100">
                           <img
-                            src={`${CDN_URL}/coin-flip-2d/eth.png`}
+                            src={`${CDN_URL}/coin-flip-2d/doge.png`}
                             width={20}
                             height={20}
-                            alt="eth_icon"
+                            alt="doge_icon"
                           />
-                          ETH
+                          DOGE
                         </RadioGroupPrimitive.Indicator>
                       </RadioGroupPrimitive.Item>
                       <span
@@ -82,20 +88,20 @@ export const CoinFlipController = () => {
                         className="wr-relative wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-text-unity-white-50"
                       >
                         <img
-                          src={`${CDN_URL}/coin-flip-2d/btc.png`}
+                          src={`${CDN_URL}/coin-flip-2d/pepe.png`}
                           width={20}
                           height={20}
-                          alt="btc_icon"
+                          alt="pepe_icon"
                         />
-                        BTC
-                        <RadioGroupPrimitive.Indicator className="wr-h-12 wr-absolute wr-left-0 wr-top-0 wr-flex wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md wr-bg-gradient-to-t wr-bg-green-500 wr-text-zinc-100">
+                        PEPE
+                        <RadioGroupPrimitive.Indicator className="wr-h-10 wr-absolute wr-left-0 wr-top-0 wr-flex wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-rounded-md wr-bg-gradient-to-t wr-bg-green-500 wr-text-zinc-100">
                           <img
-                            src={`${CDN_URL}/coin-flip-2d/btc.png`}
+                            src={`${CDN_URL}/coin-flip-2d/pepe.png`}
                             width={20}
                             height={20}
-                            alt="btc_icon"
+                            alt="pepe_icon"
                           />
-                          BTC
+                          PEPE
                         </RadioGroupPrimitive.Indicator>
                       </RadioGroupPrimitive.Item>
                     </FormControl>
