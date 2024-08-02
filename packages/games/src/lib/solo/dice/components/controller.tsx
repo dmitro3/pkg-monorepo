@@ -1,7 +1,11 @@
 import { useFormContext } from "react-hook-form";
 
 import { cn } from "../../../../lib/utils/style";
-import { IconChevronUp } from "../../../svgs";
+import {
+  IconCloseCircle,
+  IconPercentageCircle,
+  IconSwitchHorizontal,
+} from "../../../svgs";
 import { Button } from "../../../ui/button";
 import {
   FormControl,
@@ -19,6 +23,10 @@ export interface RangeControllerProps {
   disabled?: boolean;
 }
 
+const InputAppend = ({ children }: { children: React.ReactNode }) => {
+  return <div className="wr-absolute wr-right-2">{children}</div>;
+};
+
 export const Controller: React.FC<RangeControllerProps> = ({
   winMultiplier,
   disabled,
@@ -28,12 +36,42 @@ export const Controller: React.FC<RangeControllerProps> = ({
   const { gameStatus } = useDiceGameStore(["gameStatus"]);
 
   return (
-    <div className="wr-relative wr-flex wr-w-full wr-shrink-0 wr-items-end wr-justify-center wr-gap-2 wr-">
+    <div className="wr-relative wr-flex wr-gap-2 wr-bg-neutral-900 wr-rounded-lg wr-py-3.5 wr-px-[18px] wr-w-full">
+      <FormItem className="!wr-mb-0 wr-flex-1">
+        <FormControl>
+          <NumberInput.Root
+            className="wr-opacity-100"
+            value={winMultiplier}
+            onChange={(val) => null}
+          >
+            <FormLabel className=" wr-text-zinc-400 wr-font-normal">
+              Multiplier
+            </FormLabel>
+            <NumberInput.Container
+              className={cn(
+                "wr-rounded-md wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-py-[10px] wr-relative"
+              )}
+            >
+              <NumberInput.Input
+                decimalScale={2}
+                className={cn(
+                  "wr-border-none wr-bg-transparent wr-px-2 wr-py-2 wr-font-semibold wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
+                )}
+              />
+              <InputAppend>
+                <IconCloseCircle className="wr-h-5 wr-w-" />
+              </InputAppend>
+            </NumberInput.Container>
+          </NumberInput.Root>
+        </FormControl>
+        <FormMessage className="wr-absolute wr-left-2 wr-top-20" />
+      </FormItem>
+
       <FormField
         control={form.control}
         name="rollValue"
         render={({ field }) => (
-          <FormItem className="!wr-mb-0 wr-max-w-[148px]">
+          <FormItem className="!wr-mb-0 wr-flex-1 wr-relative">
             <FormControl>
               <NumberInput.Root
                 {...field}
@@ -55,67 +93,66 @@ export const Controller: React.FC<RangeControllerProps> = ({
                   });
                 }}
               >
-                <FormLabel className="wr-justify-center wr-text-zinc-400">
+                <FormLabel className=" wr-text-zinc-400 wr-font-normal">
                   Roll {form.getValues().rollType === "OVER" ? "Over" : "Under"}
                 </FormLabel>
                 <NumberInput.Container
                   className={cn(
-                    "wr-rounded-md wr-border wr-border-zinc-600 wr-bg-zinc-950 wr-py-[10px]"
+                    "wr-rounded-md wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-py-[10px] wr-relative"
                   )}
                 >
                   <NumberInput.Input
                     decimalScale={2}
                     className={cn(
-                      "wr-border-none wr-bg-transparent wr-px-2 wr-py-2 wr-text-center wr-font-semibold wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
+                      "wr-border-none wr-bg-transparent wr-px-2 wr-py-2 wr-font-semibold wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
                     )}
                   />
+                  <Button
+                    variant={"success"}
+                    size={"sm"}
+                    type="button"
+                    className="wr-mb-1 wr-h-10 wr-w-10 wr-shrink-0 wr-bg-green-500 wr-p-0 hover:wr-bg-green-600 wr-absolute wr-right-0 wr-top-0"
+                    onClick={() => {
+                      const { rollType, winChance } = form.getValues();
+
+                      const newRollType =
+                        rollType === "OVER" ? "UNDER" : "OVER";
+
+                      form.setValue("rollType", newRollType, {
+                        shouldValidate: true,
+                      });
+
+                      form.setValue("winChance", 100 - winChance, {
+                        shouldValidate: true,
+                      });
+                    }}
+                    disabled={
+                      disabled ||
+                      form.formState.isSubmitting ||
+                      form.formState.isLoading ||
+                      gameStatus == "PLAYING"
+                    }
+                  >
+                    <IconSwitchHorizontal
+                      className={cn(
+                        "wr-h-5 wr-w-5 wr-text-zinc-100 wr-transition-all wr-duration-300 wr-rotate-90"
+                      )}
+                    />
+                  </Button>
                 </NumberInput.Container>
               </NumberInput.Root>
             </FormControl>
+
             <FormMessage className="wr-absolute wr-left-2 wr-top-20" />
           </FormItem>
         )}
       />
-      <Button
-        variant={"success"}
-        size={"sm"}
-        type="button"
-        className="wr-mb-1 wr-h-10 wr-w-10 wr-shrink-0 wr-bg-green-500 wr-p-0 hover:wr-bg-green-600"
-        onClick={() => {
-          const { rollType, winChance } = form.getValues();
 
-          const newRollType = rollType === "OVER" ? "UNDER" : "OVER";
-
-          form.setValue("rollType", newRollType, {
-            shouldValidate: true,
-          });
-
-          form.setValue("winChance", 100 - winChance, {
-            shouldValidate: true,
-          });
-        }}
-        disabled={
-          disabled ||
-          form.formState.isSubmitting ||
-          form.formState.isLoading ||
-          gameStatus == "PLAYING"
-        }
-      >
-        <IconChevronUp
-          className={cn(
-            "wr-h-5 wr-w-5 wr-text-zinc-100 wr-transition-all wr-duration-300",
-            {
-              ["wr-rotate-180 wr-transform"]:
-                form.getValues().rollType === "UNDER",
-            }
-          )}
-        />
-      </Button>
       <FormField
         control={form.control}
         name="winChance"
         render={({ field }) => (
-          <FormItem className="!wr-mb-0 wr-max-w-[148px]">
+          <FormItem className="!wr-mb-0 wr-flex-1">
             <FormControl>
               <NumberInput.Root
                 {...field}
@@ -137,23 +174,23 @@ export const Controller: React.FC<RangeControllerProps> = ({
                   });
                 }}
               >
-                <FormLabel className="wr-justify-center wr-text-center wr-text-zinc-400">
+                <FormLabel className=" wr-text-zinc-400 wr-font-normal">
                   Win Chance
                 </FormLabel>
                 <NumberInput.Container
                   className={cn(
-                    " wr-rounded-md wr-border wr-border-zinc-600 wr-bg-zinc-950 wr-py-[10px] wr-text-center"
+                    " wr-rounded-md wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-py-[10px] "
                   )}
                 >
                   <NumberInput.Input
                     decimalScale={2}
                     className={cn(
-                      "wr-border-none wr-bg-transparent wr-px-2 wr-py-2 wr-text-center wr-font-semibold wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
+                      "wr-border-none wr-bg-transparent wr-px-2 wr-py-2  wr-font-semibold wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
                     )}
                   />
-                  <div className="wr-absolute wr-right-2 wr-flex wr-h-5 wr-w-5 wr-flex-shrink-0 wr-items-center wr-justify-center wr-rounded-full wr-bg-zinc-600">
-                    <span className="wr-text-xs">%</span>
-                  </div>
+                  <InputAppend>
+                    <IconPercentageCircle className="wr-size-5" />
+                  </InputAppend>
                 </NumberInput.Container>
               </NumberInput.Root>
             </FormControl>
@@ -161,14 +198,6 @@ export const Controller: React.FC<RangeControllerProps> = ({
           </FormItem>
         )}
       />
-      <div className="wr-w-[140px]">
-        <FormLabel className="wr-justify-center wr-text-zinc-400">
-          Multiplier
-        </FormLabel>
-        <div className="wr-mb-1 wr-flex wr-h-10 wr-w-full wr-flex-shrink-0 wr-items-center wr-justify-center wr-rounded-lg wr-bg-zinc-600 wr-px-2 wr-py-[10px] wr-text-center wr-font-bold">
-          x{winMultiplier}
-        </div>
-      </div>
     </div>
   );
 };
