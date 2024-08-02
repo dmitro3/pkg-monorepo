@@ -111,7 +111,7 @@ export const RangeGame = ({
       onAnimationSkipped(diceGameResults);
       updateDiceGameResults([]);
       updateCurrentAnimationCount(0);
-    }, 1000);
+    }, 700);
   };
 
   return <>{children}</>;
