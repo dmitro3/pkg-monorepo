@@ -31,11 +31,7 @@ import {
   SingleStepSettledEvent,
 } from "../utils";
 
-type TemplateOptions = {
-  scene?: {
-    backgroundImage?: string;
-  };
-};
+type TemplateOptions = {};
 
 interface TemplateWithWeb3Props {
   options: TemplateOptions;
