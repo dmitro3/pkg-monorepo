@@ -11,9 +11,7 @@ import { BetController } from "./bet-controller";
 import { LimboGameProps } from "./game";
 
 type TemplateOptions = {
-  scene?: {
-    backgroundImage?: string;
-  };
+  scene?: {};
 };
 
 type TemplateProps = LimboGameProps & {
@@ -25,8 +23,6 @@ type TemplateProps = LimboGameProps & {
 };
 
 const LimboTemplate = ({ ...props }: TemplateProps) => {
-  const options = { ...props.options };
-
   const formSchema = z.object({
     wager: z
       .number()
@@ -82,16 +78,11 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
             minWager={props?.minWager || 1}
             winMultiplier={multiplier}
           />
-          <SceneContainer
-            className="wr-h-[790px] wr-overflow-hidden  !wr-p-0"
-            style={{
-              backgroundImage: options?.scene?.backgroundImage,
-            }}
-          >
+          <SceneContainer className="wr-h-[700px] wr-overflow-hidden  !wr-p-0">
             <Limbo.Game {...props}>
               <Limbo.GameArea {...props}>
                 <Limbo.LastBets />
-                <Limbo.Slider />
+                <Limbo.Result />
               </Limbo.GameArea>
             </Limbo.Game>
           </SceneContainer>

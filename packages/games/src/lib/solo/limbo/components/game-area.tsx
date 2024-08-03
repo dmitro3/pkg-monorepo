@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useGameSkip } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import useLimboGameStore from "../store";
 import { LimboGameResult } from "../types";
 
@@ -19,8 +18,6 @@ const GameArea: React.FC<GameAreaProps> = ({
   children,
 }) => {
   const skipRef = React.useRef<boolean>(false);
-
-  const effect = useAudioEffect(SoundEffects.RANGE_WIN);
 
   const { isAnimationSkipped } = useGameSkip();
 
@@ -66,10 +63,6 @@ const GameArea: React.FC<GameAreaProps> = ({
           payout,
           payoutInUsd,
         });
-
-        if (payout > 0) {
-          effect.play();
-        }
 
         if (skipRef.current) {
           onSkip();

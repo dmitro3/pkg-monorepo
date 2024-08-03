@@ -1,15 +1,14 @@
 import { LimboGame } from "./components/game";
 import GameArea from "./components/game-area";
 import LastBets from "./components/last-bets";
-import ResultAnimation from "./components/result-animation";
-import LimboSlider from "./components/slider";
+import Result from "./components/result";
 
 export const Limbo = {
   GameArea,
   LastBets,
-  ResultAnimation,
   Game: LimboGame,
-  Slider: LimboSlider,
+  Result,
+  // Slider: LimboSlider,
 };
 
 export { default as LimboTemplate } from "./components/template";
