@@ -18,7 +18,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "tsup",
-    "dev": "npm run build -- --watch",
+    "dev": "DEBUG=true npm run build -- --watch",
     "test": "jest",
     "test:watch": "jest --watch",
     "generate:component": "turbo gen react-component"
