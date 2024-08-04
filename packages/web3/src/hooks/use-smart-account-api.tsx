@@ -77,10 +77,9 @@ export const SmartAccountApiProvider: React.FC<{
   >(undefined);
 
   React.useEffect(() => {
-    const createSmartAccountApi = () => {
-      if (!client || !address || !signer || !publicClient) return;
+    if (!client || !address || !signer || !publicClient) return;
 
-      if (connector?.type !== SmartWalletConnectorWagmiType) return;
+    const createSmartAccountApi = () => {
 
       const _accountApi = new SimpleAccountAPI({
         provider: publicClient,
@@ -99,7 +98,7 @@ export const SmartAccountApiProvider: React.FC<{
     };
 
     createSmartAccountApi();
-  }, [client, address, signer, publicClient, connector?.type]);
+  }, [client, address, signer, publicClient]);
 
   return (
     <SmartAccountApiContext.Provider value={{ accountApi }}>
