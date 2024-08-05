@@ -30,8 +30,9 @@
 }
 
 .ballMover .ball.jump {
-  animation: jump 400ms ease-out infinite;
-  -webkit-animation: jump 400ms ease-out infinite;
+  display: block;
+  animation: jump 300ms ease-out infinite;
+  -webkit-animation: jump 300ms ease-out infinite;
 }
 
 .ballMover .ball::before {

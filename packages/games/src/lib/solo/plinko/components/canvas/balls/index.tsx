@@ -49,12 +49,12 @@ const Ball: React.FC<PlinkoBallProps> = ({
   React.useEffect(() => {
     if (path.length > 0) {
       let x = 0;
-      let delay = order * 500;
+      let delay = order * 375;
 
       const initialX = mobileRef.current ? 10 : 25;
       const initialY = mobileRef.current ? 20 : 30;
 
-      const ballInterval = setInterval(() => ballEffect.play(), 400);
+      const ballInterval = setInterval(() => ballEffect.play(), 300);
 
       for (let i = 0; i < path.length + 2; i++) {
         console.log(i, "i");
@@ -62,7 +62,7 @@ const Ball: React.FC<PlinkoBallProps> = ({
           const t = setTimeout(() => {
             setStyle({
               transform: `translate(0px, 0px)`,
-              transitionDuration: "400ms",
+              transitionDuration: "300ms",
               transitionTimingFunction: "ease-in",
             });
             setJump(true);
@@ -84,7 +84,7 @@ const Ball: React.FC<PlinkoBallProps> = ({
 
               setStyle({
                 transform: `translate(${x}px, ${i * initialY}px)`,
-                transitionDuration: "400ms",
+                transitionDuration: "300ms",
                 transitionTimingFunction: "ease-in",
               });
 
@@ -96,15 +96,13 @@ const Ball: React.FC<PlinkoBallProps> = ({
                 clearInterval(ballInterval);
               }
 
-              // if (skipRef.current) {
-              //   onAnimationEnd(order, true);
-              // }
+              const isPathEnded = i === path.length;
 
-              if (i === path.length) {
+              if (isPathEnded) {
                 const t = setTimeout(() => {
                   setStyle(initialStyle);
                   setJump(false);
-                }, 600);
+                }, 475);
 
                 if (skipRef.current) {
                   clearTimeout(t);
@@ -115,7 +113,7 @@ const Ball: React.FC<PlinkoBallProps> = ({
                 clearInterval(ballInterval);
               }
             },
-            delay + i * 400
+            delay + i * 275
           );
         }
       }
@@ -123,7 +121,13 @@ const Ball: React.FC<PlinkoBallProps> = ({
   }, [path]);
 
   return (
-    <div className={styles.ballMover} style={style}>
+    <div
+      className={styles.ballMover}
+      style={{
+        ...style,
+        visibility: jump ? "visible" : "hidden",
+      }}
+    >
       <div className={cn(styles.ball, jump && styles.jump)} />
     </div>
   );
@@ -162,7 +166,11 @@ export const Balls: React.FC<PlinkoBallsProps> = ({
   }, [isAnimationSkipped]);
 
   return (
-    <>
+    <div
+      className={cn({
+        "wr-hidden": paths?.length === 0,
+      })}
+    >
       {balls.map((i) => (
         <Ball
           key={i}
@@ -172,6 +180,6 @@ export const Balls: React.FC<PlinkoBallsProps> = ({
           onAnimationEnd={onAnimationEnd}
         />
       ))}
-    </>
+    </div>
   );
 };

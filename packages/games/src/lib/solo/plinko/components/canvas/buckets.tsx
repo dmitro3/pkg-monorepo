@@ -33,7 +33,7 @@ const Bucket: React.FC<PlinkoBucketProps> = ({ multiplier, value }) => {
 
     if (value) {
       setFlash(true);
-      setTimeout(() => setFlash(false), 250);
+      setTimeout(() => setFlash(false), 300);
     }
   }, [value]);
 
@@ -47,6 +47,7 @@ const Bucket: React.FC<PlinkoBucketProps> = ({ multiplier, value }) => {
             flash && multiplier < 1,
           "wr-bg-[#204838] wr-transition-[0ms] wr-border-t-[#38dd4a] wr-border-[#38dd4a]":
             flash && multiplier >= 1,
+          "wr-translate-y-2": flash,
         }
       )}
     >

@@ -129,17 +129,20 @@ export const Canvas: React.FC<CanvasProps> = ({
     }
 
     if (!skipped && order === paths.length - 1) {
-      dispatch({ type: PlinkoResultActions.CLEAR });
-
       onAnimationCompleted(lastBets);
       updatePlinkoGameResults([]);
       updateGameStatus("ENDED");
+
+      // TO ENABLE THE BUCKET ANIMATION
+      setTimeout(() => {
+        dispatch({ type: PlinkoResultActions.CLEAR });
+      }, 300);
     }
   };
 
   return (
     <div className="wr-w-full wr-h-full wr-flex wr-justify-center wr-items-center max-md:wr-max-w-[280px] max-md:wr-my-7 max-md:wr-mx-auto">
-      <div className="wr-relative wr-overflow-hidden wr-pt-[5px] max-md:wr-pt-[2px]">
+      <div className="wr-relative wr-pt-[5px] max-md:wr-pt-[2px]">
         <Balls
           count={betCount}
           paths={paths}
