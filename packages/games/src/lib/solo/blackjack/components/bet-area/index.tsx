@@ -6,6 +6,7 @@ import { renderChipIcon } from "../../../../common/chip-controller-fixed/utils";
 import { CDN_URL } from "../../../../constants";
 import { cn } from "../../../../utils/style";
 import styles from "./bet-area.module.css";
+import { numberShorter } from "../../../../utils/number";
 
 interface BetAreaProps {
   onClick: () => void;
@@ -47,7 +48,7 @@ export const BetArea: React.FC<BetAreaProps> = ({
               styles.chipAmount
             )}
           >
-            {chipAmount ? chipAmount : ""}
+            {chipAmount ? numberShorter(chipAmount) : ""}
           </span>
         </div>
       ) : (
@@ -63,7 +64,7 @@ export const BetArea: React.FC<BetAreaProps> = ({
               styles.chipAmount
             )}
           >
-            {chipAmount ? chipAmount : ""}
+            {chipAmount ? numberShorter(chipAmount) : ""}
           </span>
         </div>
       ) : (
@@ -79,7 +80,7 @@ export const BetArea: React.FC<BetAreaProps> = ({
               styles.chipAmount
             )}
           >
-            {chipAmount ? chipAmount / 2 : ""}
+            {chipAmount ? numberShorter(chipAmount / 2) : ""}
           </span>
         </div>
       ) : (

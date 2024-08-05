@@ -58,7 +58,9 @@ const Chip: React.FC<ChipFixedProps> = ({
         alt="JustBet Decentralized Casino Chip"
       />
       <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 wr-translate-y-[-55%] wr-text-base wr-font-bold">
-        {value}
+        {value <= 100 && value}
+        {value == 1000 && "1K"}
+        {value == 10000 && "10K"}
       </span>
     </div>
   );

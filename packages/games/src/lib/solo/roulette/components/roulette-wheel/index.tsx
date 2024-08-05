@@ -32,7 +32,7 @@ export const RouletteWheel: React.FC<RouletteWheelProps> = ({
       className={cn(
         "wr-relative wr-flex wr-h-[235px] wr-w-[235px] wr-items-center wr-justify-center wr-opacity-100",
         {
-          "wr-origin-center wr-animate-roulette-rotation max-lg:wr-opacity-0":
+          "wr-origin-center wr-animate-roulette-rotation max-md:wr-opacity-0":
             !isPrepared,
           "wr-animate-playing-roulette-rotation wr-delay-300": isAnimating,
         }

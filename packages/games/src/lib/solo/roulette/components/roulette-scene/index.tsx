@@ -129,10 +129,9 @@ export const RouletteScene: React.FC<{
   return (
     <div
       className={cn(
-        "wr-relative wr-origin-top wr-transition-all wr-duration-500 wr-top",
+        "wr-relative wr-origin-top wr-transition-all wr-duration-500 wr-scale-[1.2]",
         {
-          "wr-scale-100": !isPrepared,
-          "wr-scale-[2] max-md:wr-top-1/2 max-md:-wr-translate-y-1/2 max-lg:wr-top-20 max-lg:wr-scale-110 wr-z-[1]":
+          "max-md:wr-top-1/2 max-md:-wr-translate-y-1/2 max-md:wr-scale-110 wr-z-[1]":
             isPrepared,
         }
       )}

@@ -11,6 +11,7 @@ import {
   rouletteNumbers,
 } from "../../constants";
 import { RouletteForm } from "../../types";
+import { numberShorter } from "../../../../utils/number";
 
 export interface RouletteTableProps {
   selectedChip: Chip;
@@ -34,11 +35,10 @@ export const RouletteTable: React.FC<RouletteTableProps> = ({
   return (
     <div
       className={cn(
-        "wr-h-[250px] max-md:wr-absolute md:wr-relative md:wr-w-full wr-max-w-[742px] wr-transition-all wr-duration-500 max-md:wr-h-[225px] max-md:wr-w-[575px] max-md:wr-rotate-90 max-lg:-wr-translate-y-[45%]",
+        "wr-h-[250px] max-md:wr-absolute md:wr-relative md:wr-w-full wr-max-w-[742px] wr-transition-all wr-duration-500 max-md:wr-h-[225px] max-md:wr-w-[575px] max-md:wr-rotate-90 md:wr-top-[50px] max-md:wr-top-1/2 max-md:-wr-translate-y-[45%]",
         {
-          "md:wr-top-0 wr-z-10 wr-blur-0 max-lg:wr-absolute max-lg:wr-top-1/2":
-            !isPrepared,
-          "wr-top-1/2 lg:wr-top-[250px] wr-blur-[4px] md:wr-top-[150px] md:wr-z-0":
+          "wr-z-10 wr-blur-0 max-md:wr-absolute": !isPrepared,
+          "max-md:wr-top-1/2 max-md:wr-blur-[4px] md:wr-brightness-50 wr-select-none wr-pointer-events-none md:wr-z-0":
             isPrepared,
         }
       )}
@@ -206,7 +206,7 @@ const AddedChips: React.FC<{ totalWager: number }> = ({ totalWager }) => {
     <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-flex -wr-translate-x-1/2 -wr-translate-y-1/2 wr-items-center wr-justify-center wr-text-white">
       {renderChipIcon(totalWager)}
       <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 wr-translate-y-[-55%] wr-text-xs">
-        {totalWager ? totalWager : ""}
+        {totalWager ? numberShorter(totalWager) : ""}
       </span>
     </div>
   );

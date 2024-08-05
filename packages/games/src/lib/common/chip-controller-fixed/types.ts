@@ -1,9 +1,9 @@
 export enum ChipFixed {
   ONE = 1,
-  TWO = 5,
-  THREE = 10,
-  FOUR = 20,
-  FIVE = 100,
+  TWO = 10,
+  THREE = 100,
+  FOUR = 1000,
+  FIVE = 10000,
 }
 
 export interface ChipControllerFixedProps {

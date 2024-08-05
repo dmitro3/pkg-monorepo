@@ -12,6 +12,7 @@ import {
 } from "../../types";
 import { CardArea } from "../baccarat-card-area";
 import styles from "./baccarat-scene.module.css";
+import { numberShorter } from "../../../../utils/number";
 
 // canvas width 900px
 // canvas height 900px
@@ -136,7 +137,7 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               <div className="wr-absolute wr-bottom-[8%] wr-left-1/2 wr-z-[1] wr-flex -wr-translate-x-1/2">
                 {renderChipIcon(tieWager)}
                 <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-font-bold wr-text-white">
-                  {tieWager ? tieWager : ""}
+                  {tieWager ? numberShorter(tieWager) : ""}
                 </span>
               </div>
 
@@ -165,7 +166,7 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               <div className="wr-absolute wr-bottom-[7%] wr-left-1/2 wr-z-[1] wr-flex -wr-translate-x-1/2">
                 {renderChipIcon(bankerWager)}
                 <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-font-bold wr-text-white">
-                  {bankerWager ? bankerWager : ""}
+                  {bankerWager ? numberShorter(bankerWager) : ""}
                 </span>
               </div>
 
@@ -194,7 +195,7 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               <div className="wr-absolute wr-bottom-[5%] wr-left-1/2 wr-z-[1] wr-flex -wr-translate-x-1/2">
                 {renderChipIcon(playerWager)}
                 <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-font-bold wr-text-white">
-                  {playerWager ? playerWager : ""}
+                  {playerWager ? numberShorter(playerWager) : ""}
                 </span>
               </div>
 
