@@ -18,6 +18,7 @@ export interface UseHandleTxOptions {
   showDefaultToasts?: boolean;
   refetchInterval?: number;
   forceRefetch?: boolean;
+  unauthRedirectionCb?: () => void;
 }
 
 interface UseHandleTxParams<
@@ -64,6 +65,7 @@ export const useHandleTx = <
   params: UseHandleTxParams<abi, functionName>
 ) => {
   const { writeContractVariables, options, encodedTxData } = params;
+  const { address } = useCurrentAccount();
   const { accountApi } = useSmartAccountApi();
   const { isSocialLogin } = useCurrentAccount();
   const { client } = useBundlerClient();
@@ -85,6 +87,12 @@ export const useHandleTx = <
 
   const handleTxMutation = useMutation({
     mutationFn: async () => {
+      if (!address && params.options.unauthRedirectionCb) {
+        params.options.unauthRedirectionCb();
+
+        return;
+      }
+
       if (!client) return;
 
       let userOp = cachedUserOp;
