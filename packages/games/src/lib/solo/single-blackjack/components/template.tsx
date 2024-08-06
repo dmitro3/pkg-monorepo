@@ -380,7 +380,10 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
               styles.sceneWrapper
             )}
             style={{
-              backgroundImage: options?.scene?.backgroundImage,
+              backgroundPosition: "center",
+              backgroundImage:
+                options?.scene?.backgroundImage ||
+                `url(${CDN_URL}/blackjack/blackjack-bg.png)`,
             }}
           >
             {/* canvas start */}
@@ -390,13 +393,6 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
                 "wr-absolute wr-h-full wr-max-w-[750px] wr-w-[calc(100%_-_28px)] wr-select-none wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-overflow-hidden"
               )}
             >
-              <img
-                src={`${CDN_URL}/blackjack/bj-table.png`}
-                width={410}
-                height={105}
-                className="wr-absolute wr-z-0 wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-select-none wr-pointer-events-none"
-              />
-
               <img
                 src={`${CDN_URL}/blackjack/deck.svg`}
                 width={105}
