@@ -58,11 +58,11 @@ export const RangeGame = ({
 
     if (gameResults?.length) {
       updateSkipAnimation(false);
-      updateGameStatus("PLAYING");
     }
   }, [gameResults]);
 
   const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
+  const lastBetClearRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const animCallback = async (curr = 0) => {
     const isAnimationFinished = curr === diceGameResults.length;
@@ -74,7 +74,6 @@ export const RangeGame = ({
       }, 1000);
       updateDiceGameResults([]);
 
-      updateGameStatus("ENDED");
       clearInterval(intervalRef.current!);
       intervalRef.current = null;
       return;
@@ -87,17 +86,40 @@ export const RangeGame = ({
 
   React.useEffect(() => {
     if (diceGameResults.length === 0) return;
+    lastBetClearRef.current && clearTimeout(lastBetClearRef.current);
+    const isSingleGame = diceGameResults.length == 1;
+
+    if (isSingleGame) {
+      updateGameStatus("ENDED");
+    }
 
     if (!isAnimationSkipped) {
       let curr = currentAnimationCount;
 
-      intervalRef.current = setInterval(() => {
+      const stepTrigger = () => {
+        const isGameEnded = curr === diceGameResults.length;
+
+        if (isGameEnded) {
+          updateGameStatus("ENDED");
+        }
+
         animCallback(curr);
         diceGameResults[curr] &&
           addLastBet(diceGameResults[curr] as DiceGameResult);
         updateCurrentAnimationCount(curr);
         curr += 1;
-      }, 1000);
+      };
+
+      if (isSingleGame) {
+        stepTrigger();
+        onAnimationCompleted(diceGameResults);
+
+        lastBetClearRef.current = setTimeout(() => {
+          updateDiceGameResults([]);
+        }, 1000);
+      } else {
+        intervalRef.current = setInterval(stepTrigger, 1000);
+      }
     } else {
       onSkip();
     }

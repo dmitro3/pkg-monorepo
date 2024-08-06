@@ -107,7 +107,10 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
       />
       <div className="wr-mt-[22px] wr-flex wr-justify-between wr-text-[15px] wr-font-bold">
         {[0, 25, 50, 75, 100].map((value) => (
-          <span key={value} className="block wr-size-10 wr-text-center">
+          <span
+            key={value}
+            className="block wr-size-10 wr-text-center first:wr-text-left last:wr-text-right"
+          >
             {value}
           </span>
         ))}
