@@ -97,7 +97,6 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || "0x",
-    balancesToRead: [selectedToken.address],
   });
 
   const allowance = useTokenAllowance({
