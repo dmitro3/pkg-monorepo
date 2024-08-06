@@ -8,7 +8,7 @@ export default function PlinkoPage() {
       <PlinkoGame
         options={{
           scene: {
-            backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
+            backgroundImage: "url(/plinko.png)",
           },
         }}
         minWager={0.1}
