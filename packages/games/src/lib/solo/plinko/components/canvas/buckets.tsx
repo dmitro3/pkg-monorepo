@@ -32,9 +32,9 @@ const Bucket: React.FC<PlinkoBucketProps> = ({ multiplier, value }) => {
 
   useEffect(() => {
     if (value) {
-      if (multiplier < 2) smallWinEffect.play();
-      if (multiplier >= 2 && multiplier < 4) midWinEffect.play();
-      if (multiplier >= 4) bigWinEffect.play();
+      if (multiplier < 0.7) smallWinEffect.play();
+      if (multiplier >= 0.7 && multiplier < 2) midWinEffect.play();
+      if (multiplier >= 2) bigWinEffect.play();
 
       setFlash(true);
       setTimeout(() => setFlash(false), 300);

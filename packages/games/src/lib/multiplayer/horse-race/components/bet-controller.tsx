@@ -19,6 +19,7 @@ import { toFormatted } from "../../../utils/web3";
 import { Horse, HorseRaceStatus } from "../constants";
 import useHorseRaceGameStore from "../store";
 import { HorseRaceForm } from "../types";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 interface Props {
   minWager: number;
@@ -36,6 +37,8 @@ export const HorseRaceBetController: React.FC<Props> = ({
   logo,
 }) => {
   const form = useFormContext() as HorseRaceForm;
+  const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
+  const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
 
   const { updateState, startTime, status, finishTime, resetState } =
     useHorseRaceGameStore([
@@ -102,7 +105,10 @@ export const HorseRaceBetController: React.FC<Props> = ({
               <FormLabel className="wr-text-unity-white-50">Choose</FormLabel>
               <FormControl>
                 <Radio.RadioGroup
-                  onValueChange={field.onChange}
+                  onValueChange={(e) => {
+                    digitalClickEffect.play();
+                    field.onChange(e);
+                  }}
                   defaultValue={field.value}
                   className="wr-grid wr-grid-cols-5 wr-grid-rows-1 wr-gap-[6px]"
                 >
@@ -217,6 +223,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
               }
             )}
             size={"xl"}
+            onClick={() => clickEffect.play()}
             disabled={
               form.formState.isSubmitting ||
               form.formState.isLoading ||

@@ -28,6 +28,7 @@ type Props = {
 export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   const form = useFormContext() as KenoForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
+  const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
 
   const selections = form.watch("selections");
 
@@ -36,6 +37,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   const maxPayout = 10;
 
   const clearBetHandler = () => {
+    digitalClickEffect.play();
     form.setValue("selections", []);
   };
 
@@ -44,6 +46,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   };
 
   const autoPickHandler = () => {
+    digitalClickEffect.play();
     clearBetHandler();
 
     var randomNumbers: number[] = [];

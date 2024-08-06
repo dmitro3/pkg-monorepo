@@ -25,6 +25,7 @@ import { toFormatted } from "../../../utils/web3";
 import { MultiplayerGameStatus } from "../../core/type";
 import { useCrashGameStore } from "../store";
 import { CrashForm } from "../types";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 interface CrashBetControllerProps {
   minWager: number;
@@ -45,6 +46,8 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
   const form: CrashForm = useFormContext();
   const wager = form.watch("wager");
   const multiplier = form.watch("multiplier");
+  const sliderEffect = useAudioEffect(SoundEffects.SLIDER_TICK_1X);
+  const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   const maxPayout = wager * multiplier;
 
@@ -154,6 +157,7 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
                     max={100}
                     step={0.01}
                     onValueChange={(e) => {
+                      sliderEffect.play();
                       form.setValue("multiplier", e[0]!, {
                         shouldValidate: true,
                       });
@@ -191,6 +195,7 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
             variant={"crash"}
             className="wr-w-full"
             size={"xl"}
+            onClick={() => clickEffect.play()}
             disabled={
               form.formState.isSubmitting ||
               form.formState.isLoading ||

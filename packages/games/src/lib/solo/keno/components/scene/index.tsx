@@ -143,13 +143,13 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
                             <CheckboxPrimitive.Root
                               checked={field.value.includes(cell)}
                               onCheckedChange={(checked) => {
+                                pickEffect.play();
+
                                 if (!checked) {
                                   form.setValue(
                                     "selections",
                                     field.value.filter((item) => item !== cell)
                                   );
-
-                                  pickEffect.play();
                                 }
 
                                 if (form.watch("selections").length >= 10) {

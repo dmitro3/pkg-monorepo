@@ -12,11 +12,14 @@ import {
 import { cn } from "../../../utils/style";
 import { kenoMultipliers } from "../constants";
 import { KenoForm } from "../types";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
+import React from "react";
 
 const MultiplierCarousel: React.FC<{ currentNumbers: number[][] }> = ({
   currentNumbers,
 }) => {
   const form = useFormContext() as KenoForm;
+  const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
 
   const selections = form.watch("selections");
 
@@ -25,6 +28,11 @@ const MultiplierCarousel: React.FC<{ currentNumbers: number[][] }> = ({
   const count = selections.filter((num: any) =>
     currentNumbers.includes(num)
   ).length;
+
+  React.useEffect(() => {
+    const multiplier = kenoMultipliers[selectionsLength]?.[count] || 0;
+    if (multiplier > 1) winEffect.play();
+  }, [count]);
 
   if (selectionsLength === 0)
     return (
