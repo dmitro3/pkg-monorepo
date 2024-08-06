@@ -5,7 +5,11 @@ export * from "./lib/common/live-results";
 export * from "./lib/common/modals";
 export { GameType } from "./lib/constants";
 export { GameProvider } from "./lib/game-provider";
-export { AudioContextProvider } from "./lib/hooks/use-audio-effect";
+export {
+  AudioContextProvider,
+  useAudioContext,
+  useAudioEffect,
+} from "./lib/hooks/use-audio-effect";
 export * from "./lib/hooks/use-web3";
 export * from "./lib/multiplayer/core/type";
 export * from "./lib/multiplayer/crash";
