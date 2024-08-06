@@ -105,7 +105,7 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
     if (!plinkoResult) return [];
 
     return plinkoResult?.program?.[0]?.data.converted.steps.map((s) => ({
-      outcomes: s.outcome,
+      outcomes: s.outcome.map((n) => (n > 0 ? 1 : 0)),
       payout: s.payout,
       payoutInUsd: s.payout,
     }));
@@ -217,8 +217,9 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
       setPlinkoResult(finalResult);
+    }
   }, [gameEvent]);
 
   const {
