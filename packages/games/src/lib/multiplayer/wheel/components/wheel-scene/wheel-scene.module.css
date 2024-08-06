@@ -1,25 +1,25 @@
 .container {
-  width: 464px;
+  width: 385px;
   position: relative;
   display: flex;
   justify-content: center;
-  padding: 28px 0 0 0;
+  padding: 55px 0 0 0;
 }
 .cursor {
-  width: 150px;
+  width: 100px;
   height: 100px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
   position: absolute;
   left: 50%;
-  top: 60px;
+  top: 0;
   transform: translateX(-50%);
   z-index: 5;
 }
 .circle {
-  width: 465px;
-  height: 465px;
+  width: 385px;
+  height: 385px;
   position: relative;
 }
 .circle:before,
@@ -28,8 +28,8 @@
   display: block;
 }
 .circle:after {
-  width: 343px;
-  height: 343px;
+  width: 278px;
+  height: 278px;
   background: black;
   position: absolute;
   border-radius: 100%;
@@ -37,6 +37,13 @@
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   z-index: 1;
+}
+.circleTurret {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
 .field {
   width: 1px;
@@ -58,23 +65,54 @@
   display: block;
 }
 .field div:before {
-  height: 10px;
+  height: 16px;
 }
 .field div:after {
-  height: 14px;
+  height: 18px;
 }
+
 .grey {
+  background-color: #3a3b3c;
+}
+.grey div:before {
   background-color: #27272a;
 }
+.grey div:after {
+  background-color: transparent;
+}
+
+
 .red {
-  background-color: #dc2626;
+  background-color: #ff0000;
 }
+.red div:before {
+  background-color: #eb3838;
+}
+.red div:after {
+  background-color: #ea2323;
+}
+
+
 .blue {
-  background-color: #2563eb;
+  background-color: #0e44bb;
 }
+.blue div:before {
+  background-color: #0069cb;
+}
+.blue div:after {
+  background-color: #1550d5;
+}
+
 .green {
-  background-color: #65a30d;
+  background-color: #0e883b;
 }
+.green div:before {
+  background-color: #16A34A;
+}
+.green div:after {
+  background-color: #159a46;
+}
+
 .black {
   background-color: #232d40;
 }
@@ -85,8 +123,8 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  z-index: 2;
+  transform: translateX(-50%) translateY(-25%);
+  z-index: 3;
   text-align: center;
 }
 .multiplier:before {

@@ -93,10 +93,19 @@ export const Wheel: React.FC<WheelContainerProps> = ({
       <div
         className={styles.cursor}
         style={{
-          backgroundImage: `url(${CDN_URL}/wheel/cursor.svg)`,
+          backgroundImage: `url(${CDN_URL}/wheel/cursor-wheel.svg)`,
         }}
       />
+
       <div ref={circleRef} className={styles.circle}>
+        <img
+          width={278}
+          height={278}
+          className={styles.circleTurret}
+          src={`${CDN_URL}/wheel/circle.svg`}
+          alt="JustBet WINR Chain"
+        />
+
         {genNumberArray(totalWidthOfCircle).map((index) => {
           const portionIndex =
             index / portionHeight - ((index / portionHeight) % 1);
