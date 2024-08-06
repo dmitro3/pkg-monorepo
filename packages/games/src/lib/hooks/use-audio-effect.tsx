@@ -31,6 +31,10 @@ export enum SoundEffects {
   PLINKO_MID,
   PLINKO_SMALL,
   CHIP_EFFECT,
+  EFFECT_1,
+  EFFECT_2,
+  WIN_CLAIM_SOUND,
+  BIG_COIN_WIN,
 }
 
 export interface AudioContextType {
@@ -96,10 +100,7 @@ export const effects: Map<SoundEffects, string> = new Map();
 effects.set(SoundEffects.COIN_FLIP_TOSS, "coin-toss.wav");
 effects.set(SoundEffects.COIN_FLIP_WIN, "coin-flip-win.wav");
 effects.set(SoundEffects.SLIDER, "slider-effect.mp3");
-effects.set(
-  SoundEffects.WIN,
-  "mixkit-quick-win-video-game-notification-269.wav"
-);
+effects.set(SoundEffects.WIN, "win.mp3");
 effects.set(SoundEffects.ROLLING_DICE, "rolling-dice.mp3");
 effects.set(SoundEffects.RPS, "rps.mp3");
 effects.set(SoundEffects.RANGE_WIN, "mixkit-magical-coin-win-1936.wav");
@@ -122,6 +123,10 @@ effects.set(SoundEffects.PLINKO_BIG, "plinko-big.mp3");
 effects.set(SoundEffects.PLINKO_MID, "plinko-mid.mp3");
 effects.set(SoundEffects.PLINKO_SMALL, "plinko-small.mp3");
 effects.set(SoundEffects.CHIP_EFFECT, "coin-chip-add-effect-controller.mp3");
+effects.set(SoundEffects.EFFECT_1, "effect-1.mp3");
+effects.set(SoundEffects.EFFECT_2, "effect-2.mp3");
+effects.set(SoundEffects.WIN_CLAIM_SOUND, "win-claim-coinsound.mp3");
+effects.set(SoundEffects.BIG_COIN_WIN, "big-coin-win.mp3");
 
 type PlayOptions = {
   playbackRate?: number;
