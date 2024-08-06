@@ -27,7 +27,8 @@ export const RangeGame = ({
   gameResults,
   children,
 }: RangeGameProps) => {
-  const sliderEffect = useAudioEffect(SoundEffects.SLIDER);
+  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
+  const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
 
   const { isAnimationSkipped, updateSkipAnimation } = useGameSkip();
 
@@ -71,13 +72,16 @@ export const RangeGame = ({
       setTimeout(() => {
         updateCurrentAnimationCount(0);
         onAnimationCompleted(diceGameResults);
-      }, 1000);
+      }, 500);
       updateDiceGameResults([]);
 
       clearInterval(intervalRef.current!);
       intervalRef.current = null;
       return;
     }
+
+    const currResult = diceGameResults[curr] as DiceGameResult;
+    if (currResult.payout > 0) winEffect.play();
 
     sliderEffect.play();
     updateCurrentAnimationCount(curr);
@@ -116,9 +120,9 @@ export const RangeGame = ({
 
         lastBetClearRef.current = setTimeout(() => {
           updateDiceGameResults([]);
-        }, 1000);
+        }, 500);
       } else {
-        intervalRef.current = setInterval(stepTrigger, 1000);
+        intervalRef.current = setInterval(stepTrigger, 650);
       }
     } else {
       onSkip();
