@@ -130,7 +130,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
               minWager={props?.minWager || 2}
               currentMultiplier={currentMultiplier}
             />
-            <SceneContainer className="lg:wr-h-[790px]">
+            <SceneContainer className="lg:wr-h-[740px] lg:wr-py-10">
               <Mines.Scene
                 currentMultiplier={currentMultiplier}
                 isLoading={props.isLoading}

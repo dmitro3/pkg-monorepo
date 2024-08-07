@@ -47,6 +47,8 @@ const MineCell: React.FC<{
               <CheckboxPrimitive.Root
                 className={cn("wr-h-full wr-w-full")}
                 onClick={() => {
+                  if (gameStatus == MINES_GAME_STATUS.ENDED) return;
+
                   clickEffect.play();
                   updateMinesGameState({
                     submitType:
@@ -57,6 +59,8 @@ const MineCell: React.FC<{
                 }}
                 checked={field.value[idx]}
                 onCheckedChange={(checked) => {
+                  if (gameStatus == MINES_GAME_STATUS.ENDED) return;
+
                   const currentSelectedCellAmount = field.value.filter(
                     (item) => item === true
                   ).length;
@@ -94,14 +98,21 @@ const MineCell: React.FC<{
 
                   return field.onChange(newSelectedCells);
                 }}
-                disabled={mineCell.isBomb || mineCell.isRevealed || isLoading}
+                disabled={
+                  mineCell.isBomb ||
+                  mineCell.isRevealed ||
+                  isLoading ||
+                  gameStatus == MINES_GAME_STATUS.ENDED
+                }
               >
                 <div className="wr-relative wr-aspect-square lg:wr-aspect-auto lg:wr-h-[120px] lg:wr-w-[120px]">
                   <MineCellBg
-                    isLoading={isLoading}
+                    isLoading={isLoading && mineCell.isSelected}
                     className={cn(
                       "wr-absolute wr-left-0 wr-top-0 wr-rounded-xl wr-text-zinc-700 wr-opacity-100 wr-transition-all wr-duration-300 hover:wr-scale-105",
                       {
+                        "wr-animate-mines-pulse":
+                          isLoading && mineCell.isSelected,
                         "wr-text-red-600": mineCell.isSelected,
                         "wr-opacity-0": mineCell.isRevealed,
                       }
@@ -110,10 +121,10 @@ const MineCell: React.FC<{
 
                   <div
                     className={cn(
-                      "wr-absolute -wr-bottom-20 wr-left-0 wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-rounded-xl wr-opacity-100 wr-transition-all wr-duration-500",
+                      "wr-absolute wr-bottom-0 wr-left-0 wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-rounded-xl wr-opacity-100 wr-transition-all wr-duration-500",
                       {
-                        "wr-opacity-0": !mineCell.isRevealed,
-                        "wr-bottom-0": mineCell.isRevealed,
+                        "wr-opacity-0 wr-scale-0": !mineCell.isRevealed,
+                        // "wr-bottom-0 wr-scale-100": mineCell.isRevealed,
                       }
                     )}
                     style={{
@@ -131,6 +142,10 @@ const MineCell: React.FC<{
                       width={88}
                       height={88}
                       alt="revealed gem"
+                      className={cn("wr-duration-500 wr-transition-all", {
+                        "wr-opacity-0 wr-scale-0": !mineCell.isRevealed,
+                        "wr-opacity-100 wr-scale-100": mineCell.isRevealed,
+                      })}
                     />
                   </div>
                 </div>

@@ -30,6 +30,7 @@ export const MinesBetController: React.FC<Props> = ({
   minWager,
   maxWager,
   currentCashoutAmount,
+  currentMultiplier,
 }) => {
   const form = useFormContext() as MinesForm;
 
@@ -69,6 +70,23 @@ export const MinesBetController: React.FC<Props> = ({
 
     return toDecimals(wager * largestMultiplier, 2);
   }, [wager, numMines]);
+
+  React.useEffect(() => {
+    if (gameStatus == MINES_GAME_STATUS.ENDED) {
+      setTimeout(() => {
+        updateMinesGameState({
+          gameStatus: MINES_GAME_STATUS.IDLE,
+          submitType: MINES_SUBMIT_TYPE.IDLE,
+        });
+
+        form.resetField("selectedCells");
+
+        updateMinesGameState({
+          board: initialBoard,
+        });
+      }, 1000);
+    }
+  }, [gameStatus]);
 
   return (
     <BetControllerContainer>
@@ -159,26 +177,27 @@ export const MinesBetController: React.FC<Props> = ({
         </div>
         <PreBetButton>
           {gameStatus === MINES_GAME_STATUS.ENDED ? (
-            <Button
-              variant={"default"}
-              className="wr-w-full wr-bg-yellow-600 hover:wr-bg-yellow-700"
-              size={"xl"}
-              type="button"
-              onClick={() => {
-                updateMinesGameState({
-                  gameStatus: MINES_GAME_STATUS.IDLE,
-                  submitType: MINES_SUBMIT_TYPE.IDLE,
-                });
+            // <Button
+            //   variant={"default"}
+            //   className="wr-w-full wr-bg-yellow-600 hover:wr-bg-yellow-700"
+            //   size={"xl"}
+            //   type="button"
+            //   onClick={() => {
+            //     updateMinesGameState({
+            //       gameStatus: MINES_GAME_STATUS.IDLE,
+            //       submitType: MINES_SUBMIT_TYPE.IDLE,
+            //     });
 
-                form.resetField("selectedCells");
+            //     form.resetField("selectedCells");
 
-                updateMinesGameState({
-                  board: initialBoard,
-                });
-              }}
-            >
-              Reset
-            </Button>
+            //     updateMinesGameState({
+            //       board: initialBoard,
+            //     });
+            //   }}
+            // >
+            //   Reset
+            // </Button>
+            <></>
           ) : (
             <>
               {/* <Button
@@ -213,7 +232,7 @@ export const MinesBetController: React.FC<Props> = ({
                 <Button
                   type="submit"
                   variant={"success"}
-                  className="wr-mt-2 wr-flex wr-w-full wr-items-center wr-gap-2 wr-bg-green-500 hover:wr-bg-lime-700 disabled:wr-bg-lime-950"
+                  className="wr-mt-2 wr-flex wr-w-full wr-items-center wr-gap-2"
                   size={"xl"}
                   isLoading={
                     form.formState.isSubmitting || form.formState.isLoading
@@ -229,7 +248,7 @@ export const MinesBetController: React.FC<Props> = ({
                 >
                   <span>Get </span>
                   <div className="wr-h-1 wr-w-1 wr-rounded-full wr-bg-white" />
-                  {`$${currentCashoutAmount}`}
+                  {`$${currentCashoutAmount} (${currentMultiplier}x)`}
                 </Button>
               )}
             </>

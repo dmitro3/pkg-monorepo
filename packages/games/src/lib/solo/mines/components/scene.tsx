@@ -37,12 +37,12 @@ export const MinesScene = ({
           </FormItem>
         )}
       />
-      <div className="wr-mx-auto wr-max-w-fit wr-rounded-lg wr-border wr-order-zinc-800 wr-bg-zinc-900 wr-px-8 wr-py-2 wr-text-4xl wr-font-bold">
+      {/* <div className="wr-mx-auto wr-max-w-fit wr-rounded-lg wr-border wr-order-zinc-800 wr-bg-zinc-900 wr-px-8 wr-py-2 wr-text-4xl wr-font-bold">
         <p className="wr-mb-1 wr-text-sm wr-text-zinc-500">
           Current Multiplier
         </p>
         X <span>{currentMultiplier}</span>
-      </div>
+      </div> */}
     </section>
   );
 };

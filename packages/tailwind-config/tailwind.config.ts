@@ -388,7 +388,7 @@ const config: Omit<Config, "content"> = {
             opacity: "0.7",
           },
           "25%": {
-            transform: "scale(1.1)",
+            transform: "scale(1.15)",
             opacity: "1",
           },
           "50%": {
@@ -396,7 +396,7 @@ const config: Omit<Config, "content"> = {
             opacity: "0.7",
           },
           "75%": {
-            transform: "scale(1.1)",
+            transform: "scale(1.15)",
             opacity: "1",
           },
           "100%": {
