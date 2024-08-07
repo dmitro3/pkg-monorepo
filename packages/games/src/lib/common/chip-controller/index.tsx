@@ -18,7 +18,7 @@ export const ChipController: React.FC<ChipControllerProps> = ({
   className,
 }) => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
-  const clickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
+  const clickEffect = useAudioEffect(SoundEffects.CHIP_EFFECT);
 
   const scrollHorizontal = (scrollAmount: number) => {
     if (scrollRef.current) {

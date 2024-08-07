@@ -83,7 +83,7 @@ export const CardComponent: React.FC<{
 }> = ({ card, index }) => {
   const [flipped, setFlipped] = React.useState(false);
 
-  const flipCardEffect = useAudioEffect(SoundEffects.FLIP_CARD);
+  const flipCardEffect = useAudioEffect(SoundEffects.POKER_CARD_FOLD);
   const clickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
 
   const [isFirstAnimationFinished, setIsFirstAnimationFinished] =

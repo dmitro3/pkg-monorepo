@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useContext, useEffect, useRef,useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import styles from "./style.module.css";
 
 // Define a type for our context state
-type CountdownContextState = {
+export type CountdownContextState = {
   days: number;
   hours: number;
   minutes: number;
@@ -21,12 +21,14 @@ const CountdownContext = React.createContext<CountdownContextState | null>(
 interface CountdownProviderProps {
   targetDate: string;
   children: React.ReactNode;
+  onTimeLeftChange?: (timeLeft: CountdownContextState) => void;
 }
 
 // Root Component
 export const CountdownProvider = ({
   targetDate,
   children,
+  onTimeLeftChange,
 }: CountdownProviderProps) => {
   const [timeLeft, setTimeLeft] = useState<CountdownContextState>(
     calculateTimeLeft(targetDate)
@@ -36,7 +38,9 @@ export const CountdownProvider = ({
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(targetDate));
+      const timeLeft = calculateTimeLeft(targetDate);
+      setTimeLeft(timeLeft);
+      onTimeLeftChange && onTimeLeftChange(timeLeft);
     }, 1000);
 
     return () => {

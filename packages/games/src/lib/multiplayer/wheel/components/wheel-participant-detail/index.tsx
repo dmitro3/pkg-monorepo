@@ -1,10 +1,16 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 
 import { Avatar, Wheel } from "../../../../svgs";
 import { Separator } from "../../../../ui/separator";
 import { cn } from "../../../../utils/style";
-import { Multiplier } from "../../constants";
+import { Multiplier, colorMultipliers } from "../../constants";
 import { useWheelGameStore } from "../../store";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
+import { MultiplayerGameStatus } from "../../../core/type";
+import { useGameOptions } from "../../../../game-provider";
 
 const color = {
   gray: " wr-bg-[#ffffff15] ",
@@ -31,9 +37,22 @@ const WheelParticipantDetail: React.FC<WheelParticipantDetailProps> = ({
   variant,
   multiplier,
 }) => {
-  const { isParticipantsOpen, wheelParticipants } = useWheelGameStore([
+  const participantEffect = useAudioEffect(SoundEffects.EFFECT_2);
+  const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
+
+  const { account } = useGameOptions();
+  const {
+    isParticipantsOpen,
+    wheelParticipants,
+    showResult,
+    status,
+    winnerColor,
+  } = useWheelGameStore([
     "isParticipantsOpen",
     "wheelParticipants",
+    "status",
+    "showResult",
+    "winnerColor",
   ]);
 
   const participants = useMemo(() => {
@@ -57,6 +76,30 @@ const WheelParticipantDetail: React.FC<WheelParticipantDetailProps> = ({
 
     return result;
   }, [multiplier, wheelParticipants]);
+
+  const winnerMultiplier = colorMultipliers[winnerColor];
+
+  React.useEffect(() => {
+    if (
+      participants.length &&
+      (status == MultiplayerGameStatus.Start ||
+        status == MultiplayerGameStatus.Wait)
+    )
+      participantEffect.play();
+  }, [participants]);
+
+  React.useEffect(() => {
+    if (
+      status == MultiplayerGameStatus.Finish &&
+      showResult &&
+      participants.length
+    ) {
+      const gambler = participants.find((p) => p.player == account?.address);
+
+      const winnerMultiplierAsStr = `${winnerMultiplier}x`;
+      if (gambler && winnerMultiplierAsStr == multiplier) winEffect.play();
+    }
+  }, [showResult, status, participants, winnerMultiplier]);
 
   return (
     <div className="wr-flex wr-flex-col">

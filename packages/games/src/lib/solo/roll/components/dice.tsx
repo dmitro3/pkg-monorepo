@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { DICE, RollForm } from "../types";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 interface Props {
   item: DICE;
@@ -86,6 +87,7 @@ const Dice: React.FC<Props> = ({
   isDisabled = false,
 }) => {
   const form = useFormContext() as RollForm;
+  const clickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
 
   return (
     <FormField
@@ -116,6 +118,7 @@ const Dice: React.FC<Props> = ({
                 )}
                 checked={field.value?.includes(item)}
                 onCheckedChange={(checked) => {
+                  clickEffect.play();
                   return checked
                     ? field.onChange([...field.value, item])
                     : field.onChange(

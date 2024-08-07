@@ -10,6 +10,7 @@ interface Currency {
 
 interface Account {
   isLoggedIn?: boolean;
+  address?: `0x${string}`;
   balance: number;
   balanceAsDollar: number;
 }

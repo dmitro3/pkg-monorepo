@@ -24,17 +24,29 @@ export enum SoundEffects {
   SLIDER_TICK_1X,
   BUTTON_CLICK_DIGITAL,
   SPIN_TICK_1X,
+  SPIN_TICK_3X,
+  SPIN_TICK_6X,
   WIN_COIN_DIGITAL,
   MINES_BOMB,
   LIMBO_SPIN_1,
   PLINKO_BIG,
   PLINKO_MID,
   PLINKO_SMALL,
+  PLINKO_1,
+  PLINKO_2,
+  PLINKO_3,
+  PLINKO_4,
+  PLINKO_5,
+  PLINKO_6,
+  PLINKO_7,
   CHIP_EFFECT,
   EFFECT_1,
   EFFECT_2,
   WIN_CLAIM_SOUND,
   BIG_COIN_WIN,
+  POKER_CARD_FOLD,
+  WIN_SMALL,
+  COUNTDOWN,
 }
 
 export interface AudioContextType {
@@ -116,17 +128,29 @@ effects.set(SoundEffects.BET_BUTTON_CLICK, "bet-button-click.mp3");
 effects.set(SoundEffects.SLIDER_TICK_1X, "slider-tick-1x.mp3");
 effects.set(SoundEffects.BUTTON_CLICK_DIGITAL, "button-click-digital.mp3");
 effects.set(SoundEffects.SPIN_TICK_1X, "spin-tick-1.mp3");
+effects.set(SoundEffects.SPIN_TICK_3X, "spin-tick-3x.mp3");
+effects.set(SoundEffects.SPIN_TICK_6X, "spin-tick-6x.mp3");
 effects.set(SoundEffects.WIN_COIN_DIGITAL, "win-claim-coin-digital.mp3");
 effects.set(SoundEffects.MINES_BOMB, "mines-bomb.mp3");
 effects.set(SoundEffects.LIMBO_SPIN_1, "limbo-spin-1.mp3");
 effects.set(SoundEffects.PLINKO_BIG, "plinko-big.mp3");
 effects.set(SoundEffects.PLINKO_MID, "plinko-mid.mp3");
 effects.set(SoundEffects.PLINKO_SMALL, "plinko-small.mp3");
+effects.set(SoundEffects.PLINKO_1, "plinko-1.mp3");
+effects.set(SoundEffects.PLINKO_2, "plinko-2.mp3");
+effects.set(SoundEffects.PLINKO_3, "plinko-3.mp3");
+effects.set(SoundEffects.PLINKO_4, "plinko-4.mp3");
+effects.set(SoundEffects.PLINKO_5, "plinko-5.mp3");
+effects.set(SoundEffects.PLINKO_6, "plinko-6.mp3");
+effects.set(SoundEffects.PLINKO_7, "plinko-7.mp3");
 effects.set(SoundEffects.CHIP_EFFECT, "coin-chip-add-effect-controller.mp3");
 effects.set(SoundEffects.EFFECT_1, "effect-1.mp3");
 effects.set(SoundEffects.EFFECT_2, "effect-2.mp3");
 effects.set(SoundEffects.WIN_CLAIM_SOUND, "win-claim-coinsound.mp3");
 effects.set(SoundEffects.BIG_COIN_WIN, "big-coin-win.mp3");
+effects.set(SoundEffects.POKER_CARD_FOLD, "poker-card-fold.mp3");
+effects.set(SoundEffects.WIN_SMALL, "win-small.mp3");
+effects.set(SoundEffects.COUNTDOWN, "countdown-wheel-crash.mp3");
 
 type PlayOptions = {
   playbackRate?: number;

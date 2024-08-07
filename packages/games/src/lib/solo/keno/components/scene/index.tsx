@@ -28,7 +28,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
 
   const pickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
 
-  const outComeEffect = useAudioEffect(SoundEffects.KENO_OUTCOME_NUMBER);
+  const outComeEffect = useAudioEffect(SoundEffects.WIN_CLAIM_SOUND);
 
   const [currentNumbers, setCurrentNumbers] = React.useState<number[][]>([]);
 

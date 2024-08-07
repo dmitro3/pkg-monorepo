@@ -12,7 +12,12 @@ import { PreBetButton } from "../../../common/pre-bet-button";
 import { WagerCurrencyIcon } from "../../../common/wager";
 import useCountdown from "../../../hooks/use-time-left";
 import { Button } from "../../../ui/button";
-import { CountdownProvider, Minutes, Seconds } from "../../../ui/countdown";
+import {
+  CountdownContextState,
+  CountdownProvider,
+  Minutes,
+  Seconds,
+} from "../../../ui/countdown";
 import {
   FormControl,
   FormField,
@@ -46,8 +51,9 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
   const form: CrashForm = useFormContext();
   const wager = form.watch("wager");
   const multiplier = form.watch("multiplier");
-  const sliderEffect = useAudioEffect(SoundEffects.SLIDER_TICK_1X);
+  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_6X);
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
+  const countdownEffect = useAudioEffect(SoundEffects.COUNTDOWN);
 
   const maxPayout = wager * multiplier;
 
@@ -69,6 +75,9 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
   const timeLeft = useCountdown(cooldownFinish, () => {
     resetState();
   });
+
+  const handleTimeLeftChange = (timeLeft: CountdownContextState) =>
+    timeLeft.seconds == 3 && countdownEffect.play();
 
   return (
     <UnityBetControllerContainer className="wr-top-[600px] wr-z-[15] wr-w-full md:wr-top-0 md:!wr-w-[264px]">
@@ -99,6 +108,7 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
           {joiningFinish > 0 ? (
             <CountdownProvider
               targetDate={new Date(joiningFinish * 1000)?.toISOString()}
+              onTimeLeftChange={handleTimeLeftChange}
             >
               <section className="wr-flex wr-items-center wr-gap-2 ">
                 <div className="wr-text-[48px] wr-font-bold wr-leading-[64px] wr-text-white">

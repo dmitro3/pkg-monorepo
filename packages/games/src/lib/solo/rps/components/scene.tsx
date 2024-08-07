@@ -24,7 +24,7 @@ const Scene: React.FC<GameAreaProps> = ({
 }) => {
   const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
   const playingEffect = useAudioEffect(SoundEffects.LIMBO_SPIN_1);
-  const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
+  const digitalClickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
 
   const form = useFormContext() as RPSForm;
 

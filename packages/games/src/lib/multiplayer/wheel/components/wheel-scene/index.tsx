@@ -1,10 +1,21 @@
-import { CountdownProvider, Minutes, Seconds } from "../../../../ui/countdown";
+import React from "react";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
+import {
+  CountdownContextState,
+  CountdownProvider,
+  Minutes,
+  Seconds,
+} from "../../../../ui/countdown";
 import { cn } from "../../../../utils/style";
 import { MultiplayerGameStatus } from "../../../core/type";
 import { colorMultipliers, WheelUnits } from "../../constants";
 import { useWheelGameStore } from "../../store";
 import { Wheel } from "./wheel";
 import styles from "./wheel-scene.module.css";
+import { useGameOptions } from "../../../../game-provider";
 
 export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
   const {
@@ -13,6 +24,7 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
     joiningFinish,
     status,
     showResult,
+    wheelParticipants,
     setShowResult,
   } = useWheelGameStore([
     "winnerAngle",
@@ -21,8 +33,14 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
     "status",
     "showResult",
     "setShowResult",
+    "wheelParticipants",
   ]);
   const multiplier = colorMultipliers[winnerColor];
+  const countdownEffect = useAudioEffect(SoundEffects.COUNTDOWN);
+  const { account } = useGameOptions();
+
+  const handleTimeLeftChange = (timeLeft: CountdownContextState) =>
+    timeLeft.seconds == 3 && countdownEffect.play();
 
   return (
     <div className={styles.container}>
@@ -44,6 +62,7 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
               </div>
               <CountdownProvider
                 targetDate={new Date(joiningFinish * 1000)?.toISOString()}
+                onTimeLeftChange={handleTimeLeftChange}
               >
                 <section className="wr-mt-2 wr-flex wr-items-center wr-justify-center wr-gap-2">
                   <div className="wr-text-[32px] wr-font-bold wr-leading-[32px] wr-text-white">

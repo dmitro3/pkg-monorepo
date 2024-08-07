@@ -12,7 +12,12 @@ import { PreBetButton } from "../../../common/pre-bet-button";
 import { WagerCurrencyIcon } from "../../../common/wager";
 import useCountdown from "../../../hooks/use-time-left";
 import { Button } from "../../../ui/button";
-import { CountdownProvider, Minutes, Seconds } from "../../../ui/countdown";
+import {
+  CountdownContextState,
+  CountdownProvider,
+  Minutes,
+  Seconds,
+} from "../../../ui/countdown";
 import { FormControl, FormField, FormItem, FormLabel } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { toFormatted } from "../../../utils/web3";
@@ -38,7 +43,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
 }) => {
   const form = useFormContext() as HorseRaceForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
-  const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
+  const countdownEffect = useAudioEffect(SoundEffects.COUNTDOWN);
 
   const { updateState, startTime, status, finishTime, resetState } =
     useHorseRaceGameStore([
@@ -59,6 +64,9 @@ export const HorseRaceBetController: React.FC<Props> = ({
     resetState();
   });
 
+  const handleTimeLeftChange = (timeLeft: CountdownContextState) =>
+    timeLeft.seconds == 3 && countdownEffect.play();
+
   return (
     <UnityBetControllerContainer className="wr-top-[276px] wr-z-[50] wr-h-full wr-w-full md:wr-top-0 md:!wr-w-[264px]">
       <div className="wr-mb-3 wr-flex wr-flex-col">
@@ -73,6 +81,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
           {startTime > 0 ? (
             <CountdownProvider
               targetDate={new Date(startTime * 1000)?.toISOString()}
+              onTimeLeftChange={handleTimeLeftChange}
             >
               <section className="wr-flex wr-items-center wr-gap-2">
                 <div className="wr-text-[64px] wr-font-bold wr-leading-[64px] wr-text-white max-md:wr-text-[32px] max-md:wr-leading-[32px]">
@@ -106,7 +115,7 @@ export const HorseRaceBetController: React.FC<Props> = ({
               <FormControl>
                 <Radio.RadioGroup
                   onValueChange={(e) => {
-                    digitalClickEffect.play();
+                    clickEffect.play();
                     field.onChange(e);
                   }}
                   defaultValue={field.value}

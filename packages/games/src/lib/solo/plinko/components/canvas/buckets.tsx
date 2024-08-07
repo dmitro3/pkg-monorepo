@@ -26,15 +26,25 @@ interface PlinkoBucketProps {
 
 const Bucket: React.FC<PlinkoBucketProps> = ({ multiplier, value }) => {
   const [flash, setFlash] = useState(false);
-  const smallWinEffect = useAudioEffect(SoundEffects.PLINKO_SMALL);
+  const plinkoOneEffect = useAudioEffect(SoundEffects.PLINKO_1);
+  const plinkoTwoEffect = useAudioEffect(SoundEffects.PLINKO_2);
+  const plinkoThreeEffect = useAudioEffect(SoundEffects.PLINKO_3);
+  const plinkoFourEffect = useAudioEffect(SoundEffects.PLINKO_4);
+  const plinkoFiveEffect = useAudioEffect(SoundEffects.PLINKO_5);
+  const plinkoSixEffect = useAudioEffect(SoundEffects.PLINKO_6);
+  const plinkoSevenEffect = useAudioEffect(SoundEffects.PLINKO_7);
   const midWinEffect = useAudioEffect(SoundEffects.PLINKO_MID);
   const bigWinEffect = useAudioEffect(SoundEffects.PLINKO_BIG);
 
   useEffect(() => {
     if (value) {
-      if (multiplier < 0.7) smallWinEffect.play();
-      if (multiplier >= 0.7 && multiplier < 2) midWinEffect.play();
-      if (multiplier >= 2) bigWinEffect.play();
+      if (multiplier <= 0.4) plinkoOneEffect.play();
+      if (multiplier > 0.4 && multiplier < 0.9) plinkoTwoEffect.play();
+      if (multiplier >= 0.9 && multiplier < 2) plinkoThreeEffect.play();
+      if (multiplier >= 2 && multiplier < 3) plinkoFourEffect.play();
+      if (multiplier >= 3 && multiplier < 16) plinkoFiveEffect.play();
+      if (multiplier >= 16 && multiplier <= 47) plinkoSixEffect.play();
+      if (multiplier >= 70) plinkoSevenEffect.play();
 
       setFlash(true);
       setTimeout(() => setFlash(false), 300);

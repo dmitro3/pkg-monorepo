@@ -56,7 +56,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   const form = useFormContext() as WheelForm;
 
   const betClickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
-  const clickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
+  const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   const chosenColor = form.watch("color");
 

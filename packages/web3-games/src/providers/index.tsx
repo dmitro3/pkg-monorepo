@@ -52,6 +52,7 @@ export const WinrLabsWeb3GamesProvider = ({
             symbol: selectedToken.symbol,
           },
           account: {
+            address: address,
             isLoggedIn: !!address,
             balance,
             balanceAsDollar,

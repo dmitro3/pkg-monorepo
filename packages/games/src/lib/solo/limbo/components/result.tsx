@@ -31,7 +31,7 @@ const Result = () => {
         {currentResult?.number ? (
           <>
             <NumberTicker
-              value={currentResult?.number}
+              value={currentResult?.number < 1 ? 1 : currentResult?.number}
               onAnimationComplete={() => {
                 setIsAnimated(true);
                 if (currentResult?.payout > 0) {

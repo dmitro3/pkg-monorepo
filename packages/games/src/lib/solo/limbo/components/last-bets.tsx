@@ -20,7 +20,9 @@ const LastBets = () => {
               }
             )}
           >
-            <div className="wr-text-zinc-100">{result.number}</div>
+            <div className="wr-text-zinc-100">
+              {result.number < 1 ? 1 : result.number}
+            </div>
           </div>
         );
       })}

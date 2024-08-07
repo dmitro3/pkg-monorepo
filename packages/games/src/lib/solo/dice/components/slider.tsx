@@ -24,7 +24,7 @@ export interface SliderProps {
 
 export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
   const form = useFormContext() as DiceForm;
-  const sliderEffect = useAudioEffect(SoundEffects.SLIDER_TICK_1X);
+  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_6X);
 
   const { gameStatus } = useDiceGameStore(["gameStatus"]);
 

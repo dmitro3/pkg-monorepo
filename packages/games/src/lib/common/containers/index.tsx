@@ -65,7 +65,7 @@ export const BetControllerContainer: React.FC<Props> = ({
 
 export const BetCountSlider = ({ ...props }) => {
   const form = useFormContext();
-  const sliderEffect = useAudioEffect(SoundEffects.SLIDER_TICK_1X);
+  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_6X);
   const betCount = form.watch("betCount");
   const debouncedBetCount = useDebounce(betCount, 50);
 

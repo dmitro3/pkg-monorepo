@@ -20,7 +20,7 @@ import {
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlipForm;
-  const clickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
+  const clickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
 
   const wager = form.watch("wager");
 

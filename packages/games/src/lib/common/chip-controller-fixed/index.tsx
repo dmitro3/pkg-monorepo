@@ -11,7 +11,7 @@ export const ChipControllerFixed: React.FC<ChipControllerFixedProps> = ({
   isDisabled,
   className,
 }) => {
-  const clickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
+  const clickEffect = useAudioEffect(SoundEffects.CHIP_EFFECT);
   return (
     <div
       className={cn(

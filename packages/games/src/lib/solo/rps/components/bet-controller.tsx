@@ -61,7 +61,7 @@ export const BetController: React.FC<BetControllerProps> = ({
 }) => {
   const form = useFormContext() as RPSForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
-  const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
+  const digitalClickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
 
   const { rpsGameResults, gameStatus } = useRpsGameStore([
     "rpsGameResults",
