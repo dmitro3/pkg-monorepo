@@ -105,11 +105,12 @@ export const MinesBetController: React.FC<Props> = ({
   return (
     <BetControllerContainer>
       <div>
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Mines</BetControllerTitle>
         </div>
 
         <WagerFormField
+          className="max-lg:!wr-mb-0"
           minWager={minWager}
           maxWager={maxWager}
           isDisabled={gameStatus !== MINES_GAME_STATUS.IDLE}
@@ -168,9 +169,12 @@ export const MinesBetController: React.FC<Props> = ({
             );
           }}
         />
-        <MinesCountDisplay />
 
-        <div className="wr-mb-6 wr-mt-6 wr-grid wr-grid-cols-2 wr-gap-2">
+        <div className="lg:!wr-block wr-hidden">
+          <MinesCountDisplay />
+        </div>
+
+        <div className="wr-mb-6 wr-mt-6 lg:!wr-grid wr-grid-cols-2 wr-gap-2 wr-hidden">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div

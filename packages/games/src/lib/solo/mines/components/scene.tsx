@@ -23,7 +23,7 @@ export const MinesScene = ({
         name="selectedCells"
         control={form.control}
         render={() => (
-          <FormItem className="wr-mb-1 wr-grid wr-aspect-square wr-grid-cols-5 wr-grid-rows-5 wr-items-center wr-justify-center wr-gap-2 lg:wr-aspect-auto">
+          <FormItem className="wr-mb-1 wr-grid wr-aspect-square wr-grid-cols-5 wr-grid-rows-5 wr-items-center wr-justify-center lg:wr-gap-2 wr-gap-1 lg:wr-aspect-auto">
             {board.map((mine, idx) => {
               return (
                 <MineCell
