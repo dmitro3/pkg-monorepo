@@ -274,7 +274,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
         winEffect.play();
         const multiplier = baccaratSettled.payout / totalWager;
         const payout = baccaratSettled.payout;
-        setTimeout(() => showWinAnimation({ payout, multiplier }), 1000);
+        setTimeout(() => showWinAnimation({ payout, multiplier }), 750);
       }
       onAnimationCompleted(baccaratSettled);
     }
