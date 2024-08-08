@@ -79,8 +79,8 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           maxWager={maxWager}
           isDisabled={isFormInProgress}
         />
-        <BetCountFormField maxValue={3} isDisabled={isFormInProgress} />
-        <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
+        <BetCountFormField maxValue={3} isDisabled={isFormInProgress} hideSm />
+        <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
@@ -103,7 +103,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           </div>
         </div>
 
-        <div>
+        <div className="lg:!wr-block wr-hidden">
           <Advanced>
             <div className="wr-grid grid-cols-2 gap-2">
               <StopGainFormField isDisabled={isFormInProgress} />
@@ -115,7 +115,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           <Button
             type="submit"
             variant={"success"}
-            className="wr-w-full max-lg:-wr-order-2 max-lg:wr-mb-3.5"
+            className="wr-w-full max-lg:-wr-order-2 max-lg:wr-mb-1"
             size={"xl"}
             onClick={() => clickEffect.play()}
             isLoading={isFormInProgress}
