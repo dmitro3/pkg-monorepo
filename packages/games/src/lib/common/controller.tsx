@@ -39,14 +39,19 @@ export const BetControllerTitle: React.FC<Props> = ({
   className,
 }) => {
   return (
-    <h1 className={cn("wr-text-lg wr-font-bold", className)}>{children}</h1>
+    <h1
+      className={cn("wr-text-lg wr-font-bold  lg:wr-flex wr-hidden", className)}
+    >
+      {children}
+    </h1>
   );
 };
 
 export const BetCountFormField: React.FC<{
   isDisabled?: boolean;
   maxValue?: number;
-}> = ({ isDisabled = false, maxValue = 100 }) => {
+  hideSm?: boolean;
+}> = ({ isDisabled = false, maxValue = 100, hideSm = false }) => {
   const form = useFormContext();
 
   return (
@@ -55,7 +60,7 @@ export const BetCountFormField: React.FC<{
         control={form.control}
         name="betCount"
         render={({ field }) => (
-          <FormItem>
+          <FormItem className={cn({ "wr-hidden lg:!wr-block": hideSm })}>
             <FormLabel>Multiple Bets (1-{maxValue}) </FormLabel>
 
             <FormControl>
@@ -162,7 +167,7 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
       control={form.control}
       name="wager"
       render={({ field }) => (
-        <FormItem className={cn(className)}>
+        <FormItem className={cn(className, "wr-mb-4")}>
           <FormLabel>
             {customLabel ? customLabel : "Wager"}
             <div>
@@ -177,8 +182,12 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
                 {...field}
                 hasError={!!form.formState.errors.wager}
                 isDisabled={isDisabled}
+                minWager={minWager}
+                maxWager={maxWager}
+                form={form}
               />
               <WagerSetterButtons
+                className="wr-hidden lg:wr-block"
                 isDisabled={isDisabled}
                 form={form}
                 minWager={minWager}
@@ -225,6 +234,9 @@ export const UnityWagerFormField: React.FC<WagerFormFieldProps> = ({
                 containerClassName={cn(
                   "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
                 )}
+                minWager={minWager}
+                maxWager={maxWager}
+                form={form}
               />
               <WagerSetterButtons
                 form={form}

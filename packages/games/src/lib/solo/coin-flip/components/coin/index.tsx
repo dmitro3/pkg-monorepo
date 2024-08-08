@@ -12,6 +12,7 @@ import { CoinCanvas, CoinFlipForm, CoinProps } from "../../types";
 import Canvas from "./canvas";
 import CoinRotate from "./coin-rotate";
 import CoinConfetti from "./lottie/coins-confetti.json";
+import useMediaQuery from "../../../../hooks/use-media-query";
 
 export const Coin: React.FC<CoinProps> = ({
   width,
@@ -20,6 +21,8 @@ export const Coin: React.FC<CoinProps> = ({
   onAnimationStep,
   onAnimationSkipped = () => {},
 }) => {
+  const isMobile = useMediaQuery("(max-width:768px)");
+
   const [coinRotate] = useState<CoinRotate>(new CoinRotate());
   const handleLoad = (canvas: CoinCanvas) => {
     coinRotate.setCanvas(canvas).initialize();
@@ -124,8 +127,8 @@ export const Coin: React.FC<CoinProps> = ({
           src={CoinConfetti}
           speed={2}
           style={{
-            width: "700px",
-            height: "700px",
+            width: isMobile ? "500px" : "700px",
+            height: isMobile ? "500px" : "700px",
             opacity: gameStatus == "IDLE" || gameStatus == "ENDED" ? 0 : 1,
           }}
         />

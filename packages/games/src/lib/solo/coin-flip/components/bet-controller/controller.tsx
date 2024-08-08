@@ -27,13 +27,15 @@ export const CoinFlipController = () => {
   const { gameStatus } = useCoinFlipGameStore(["gameStatus"]);
 
   return (
-    <div className="wr-flex wr-items-center wr-w-full wr-mb-5">
+    <div className="wr-flex wr-items-center wr-w-full lg:wr-mb-5">
       <FormField
         control={form.control}
         name="coinSide"
         render={({ field }) => (
-          <FormItem className="wr-h-10 wr-w-full wr-mb-[60px]">
-            <FormLabel>Choose Side</FormLabel>
+          <FormItem className="wr-h-10 wr-w-full lg:!wr-mb-[60px] wr-mb-0">
+            <FormLabel className="lg:!wr-block wr-hidden">
+              Choose Side
+            </FormLabel>
             <FormControl>
               <RadioGroupPrimitive.Root
                 onValueChange={(v) => {
@@ -74,7 +76,7 @@ export const CoinFlipController = () => {
                       </RadioGroupPrimitive.Item>
                       <span
                         className={cn(
-                          "wr-relative wr-top-2 wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100",
+                          "wr-relative wr-top-2 lg:!wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 wr-hidden",
                           {
                             "wr-text-lime-500": field.value === CoinSide.HEADS,
                             "wr-text-red-500": field.value === CoinSide.TAILS,
@@ -93,7 +95,7 @@ export const CoinFlipController = () => {
                     <FormControl>
                       <RadioGroupPrimitive.Item
                         value={CoinSide.TAILS as unknown as string}
-                        className="wr-relative wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-text-unity-white-50"
+                        className="wr-relative wr-flex wr-h-full wr-w-full wr-items-center wr-justify-center wr-gap-1 wr-text-unity-white-50 "
                       >
                         <img
                           src={`${CDN_URL}/coin-flip-2d/pepe.png`}
@@ -115,7 +117,7 @@ export const CoinFlipController = () => {
                     </FormControl>
                     <span
                       className={cn(
-                        "wr-relative wr-top-2 wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100",
+                        "wr-relative wr-top-2 lg:!wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 wr-hidden",
                         {
                           "wr-text-lime-500": field.value === CoinSide.TAILS,
                           "wr-text-red-500": field.value === CoinSide.HEADS,

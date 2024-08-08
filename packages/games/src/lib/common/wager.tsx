@@ -32,14 +32,22 @@ export const WagerCurrency = ({ className }: Props) => {
 interface WagerInputProps extends Props, INumberInputContext {
   containerClassName?: string;
   hasError?: boolean;
+  minWager: number;
+  maxWager: number;
+  form: any;
 }
 
 export const WagerInput = ({
   className,
   containerClassName,
   hasError,
+  minWager,
+  maxWager,
+  form,
   ...rest
 }: WagerInputProps) => {
+  const clickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
+
   return (
     <NumberInput.Root {...rest}>
       <NumberInput.Container
@@ -58,7 +66,40 @@ export const WagerInput = ({
             className
           )}
         />
-        <WagerCurrencyIcon />
+        <WagerCurrencyIcon className="wr-hidden lg:!wr-block" />
+
+        <div className="wr-z-10 wr-flex -wr-m-[6px] wr-gap-[2px] lg:!wr-hidden">
+          <Button
+            className={cn("wr-w-14 wr-font-[600] wr-text-base", className)}
+            type="button"
+            disabled={rest.isDisabled}
+            variant={"secondary"}
+            onClick={() => {
+              clickEffect.play();
+              const newValue = rest.value / 3;
+
+              if (newValue < minWager) form.setValue("wager", minWager);
+              else form.setValue("wager", newValue);
+            }}
+          >
+            1/3
+          </Button>
+          <Button
+            className={cn("wr-w-14 wr-font-[600] wr-text-base", className)}
+            type="button"
+            disabled={rest.isDisabled}
+            variant={"secondary"}
+            onClick={() => {
+              clickEffect.play();
+              const newValue = rest.value * 2;
+
+              if (newValue > maxWager) form.setValue("wager", maxWager);
+              else form.setValue("wager", newValue);
+            }}
+          >
+            2x
+          </Button>
+        </div>
       </NumberInput.Container>
     </NumberInput.Root>
   );
@@ -83,7 +124,7 @@ export const WagerSetterButtons = ({
   const clickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
 
   return (
-    <div className="wr-flex wr-items-center wr-gap-1 wr-">
+    <div className="wr-flex wr-items-center wr-gap-1">
       <Button
         className={cn("wr-w-full wr-font-[600] wr-text-base", className)}
         type="button"

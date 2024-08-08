@@ -55,7 +55,7 @@ export const BetController: React.FC<Props> = ({
   ]);
 
   return (
-    <BetControllerContainer>
+    <BetControllerContainer className="wr-z-40">
       <div className="wr-flex-col wr-flex lg:wr-block lg:wr-flex-row">
         <div className="wr-mb-3">
           <BetControllerTitle>Coin Flip</BetControllerTitle>
@@ -79,8 +79,9 @@ export const BetController: React.FC<Props> = ({
             gameStatus == "PLAYING" ||
             isGettingResults
           }
+          hideSm
         />
-        <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
+        <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
@@ -103,7 +104,7 @@ export const BetController: React.FC<Props> = ({
           </div>
         </div>
 
-        <div>
+        <div className="lg:wr-block wr-hidden">
           <Advanced>
             <div className="wr-grid wr-grid-cols-2 wr-gap-2">
               <StopGainFormField
@@ -126,7 +127,7 @@ export const BetController: React.FC<Props> = ({
           </Advanced>
         </div>
         {!(coinFlipGameResults.length > 3) && (
-          <PreBetButton>
+          <PreBetButton className="max-lg:-wr-order-1 max-lg:wr-mb-3.5">
             <Button
               type="submit"
               variant={"success"}
