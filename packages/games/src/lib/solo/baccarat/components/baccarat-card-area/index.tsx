@@ -12,6 +12,7 @@ import {
 import { wait } from "../../../../utils/promise";
 import { cn } from "../../../../utils/style";
 import {
+  BaccaratForm,
   BaccaratGameResult,
   BaccaratGameSettledResult,
   BaccaratSuit,
@@ -24,6 +25,8 @@ import {
   getBaccaratIcon,
 } from "./card";
 import Confetti from "./lottie/confetti.json";
+import { useFormContext } from "react-hook-form";
+import { useWinAnimation } from "../../../../hooks/use-win-animation";
 
 const TIMEOUT = 500;
 
@@ -55,7 +58,18 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 }) => {
   const flipEffect = useAudioEffect(SoundEffects.FLIP_CARD);
   const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
+  const { showWinAnimation } = useWinAnimation();
 
+  const form = useFormContext() as BaccaratForm;
+  const wager = form.watch("wager");
+  const playerChipAmount = form.watch("playerWager");
+  const bankerChipAmount = form.watch("bankerWager");
+  const tieChipAmount = form.watch("tieWager");
+
+  const totalWager = React.useMemo(
+    () => wager * (playerChipAmount + bankerChipAmount + tieChipAmount),
+    [wager, playerChipAmount, bankerChipAmount, tieChipAmount]
+  );
   const playerLottieRef = React.useRef<any>(null);
 
   const bankerLottieRef = React.useRef<any>(null);
@@ -255,7 +269,13 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
   React.useEffect(() => {
     if (isAnimationCompleted && baccaratSettled) {
       // on animation completed
-      if (baccaratSettled.won) winEffect.play();
+      console.log(baccaratSettled, "baccarat settled");
+      if (baccaratSettled.won) {
+        winEffect.play();
+        const multiplier = baccaratSettled.payout / totalWager;
+        const payout = baccaratSettled.payout;
+        setTimeout(() => showWinAnimation({ payout, multiplier }), 1000);
+      }
       onAnimationCompleted(baccaratSettled);
     }
   }, [isAnimationCompleted, baccaratSettled]);

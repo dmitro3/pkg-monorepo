@@ -13,6 +13,9 @@ import mineMultipliers from "../constants/mines-multipliers.json";
 import { useMinesGameStateStore } from "../store";
 import { FormSetValue, MINES_GAME_STATUS, MinesFormField } from "../types";
 import { MinesGameProps } from "./game";
+import { WinAnimation } from "../../../common/win-animation";
+import { useWinAnimation } from "../../../hooks/use-win-animation";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 type TemplateProps = MinesGameProps & {
   minWager?: number;
@@ -135,6 +138,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
                 currentMultiplier={currentMultiplier}
                 isLoading={props.isLoading}
               />
+              <WinAnimation />
             </SceneContainer>
           </Mines.Game>
         </GameContainer>

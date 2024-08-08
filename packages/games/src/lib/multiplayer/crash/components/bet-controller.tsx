@@ -51,7 +51,7 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
   const form: CrashForm = useFormContext();
   const wager = form.watch("wager");
   const multiplier = form.watch("multiplier");
-  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_6X);
+  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
   const countdownEffect = useAudioEffect(SoundEffects.COUNTDOWN);
 

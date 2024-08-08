@@ -18,6 +18,8 @@ import { useMinesGameStateStore } from "../store";
 import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from "../types";
 import MinesCountButton from "./count-button";
 import MinesCountDisplay from "./count-display";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
+import { useWinAnimation } from "../../../hooks/use-win-animation";
 
 type Props = {
   minWager: number;
@@ -33,6 +35,10 @@ export const MinesBetController: React.FC<Props> = ({
   currentMultiplier,
 }) => {
   const form = useFormContext() as MinesForm;
+
+  const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
+
+  const { showWinAnimation, closeWinAnimation } = useWinAnimation();
 
   const { updateMinesGameState, gameStatus, board } = useMinesGameStateStore([
     "updateMinesGameState",
@@ -73,17 +79,25 @@ export const MinesBetController: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (gameStatus == MINES_GAME_STATUS.ENDED) {
+      if (!board.some((v) => v.isBomb == true)) {
+        showWinAnimation({
+          payout: currentCashoutAmount,
+          multiplier: currentMultiplier,
+        });
+
+        winEffect.play();
+      }
+
       setTimeout(() => {
         updateMinesGameState({
           gameStatus: MINES_GAME_STATUS.IDLE,
           submitType: MINES_SUBMIT_TYPE.IDLE,
         });
-
         form.resetField("selectedCells");
-
         updateMinesGameState({
           board: initialBoard,
         });
+        closeWinAnimation();
       }, 1000);
     }
   }, [gameStatus]);

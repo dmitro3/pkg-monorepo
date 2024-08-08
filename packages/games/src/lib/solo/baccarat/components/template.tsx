@@ -11,7 +11,11 @@ import { GameContainer, SceneContainer } from "../../../common/containers";
 import { CDN_URL } from "../../../constants";
 import { Form } from "../../../ui/form";
 import { RotationWrapper } from "../../../ui/rotation-wrapper";
-import { MULTIPLIER_BANKER, MULTIPLIER_TIE } from "../constants";
+import {
+  MULTIPLIER_BANKER,
+  MULTIPLIER_PLAYER,
+  MULTIPLIER_TIE,
+} from "../constants";
 import {
   BaccaratBetType,
   BaccaratFormFields,
@@ -22,6 +26,7 @@ import {
 import { BaccaratScene } from "./baccarat-scene";
 import { BetController } from "./bet-controller";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
+import { WinAnimation } from "../../../common/win-animation";
 
 type TemplateProps = BaccaratGameProps & {
   minWager?: number;
@@ -177,7 +182,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
 
     const bankerMaxPayout = bankerWager * MULTIPLIER_BANKER * wager;
 
-    const playerMaxPayout = playerWager * MULTIPLIER_BANKER * wager;
+    const playerMaxPayout = playerWager * MULTIPLIER_PLAYER * wager;
 
     if (tieMaxPayout > bankerMaxPayout && tieMaxPayout > playerMaxPayout)
       setMaxPayout(tieMaxPayout);
@@ -246,6 +251,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
               selectedChip={selectedChip}
               onAnimationCompleted={onAnimationCompleted}
             />
+            <WinAnimation />
           </SceneContainer>
         </GameContainer>
       </form>

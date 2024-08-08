@@ -14,6 +14,7 @@ import { initialKenoCells } from "../../constants";
 import useKenoGameStore from "../../store";
 import { KenoForm, KenoGameResult } from "../../types";
 import styles from "./scene.module.css";
+import { useWinAnimation } from "../../../../hooks/use-win-animation";
 
 export type KenoSceneProps = {
   onAnimationStep?: (step: number) => void;
@@ -27,8 +28,9 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
   const form = useFormContext() as KenoForm;
 
   const pickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
-
   const outComeEffect = useAudioEffect(SoundEffects.WIN_CLAIM_SOUND);
+
+  const { showWinAnimation, closeWinAnimation } = useWinAnimation();
 
   const [currentNumbers, setCurrentNumbers] = React.useState<number[][]>([]);
 
@@ -61,6 +63,13 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
       if (kenoGameResults.length === curr) {
         updateKenoGameResults([]);
         onAnimationCompleted && onAnimationCompleted(kenoGameResults);
+
+        const { payout, multiplier } = calculatePayout();
+        showWinAnimation({
+          payout,
+          multiplier,
+        });
+
         setTimeout(() => {
           // setCurrentNumbers([]);
           updateGameStatus("ENDED");
@@ -72,6 +81,20 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
 
     turn();
   }, [kenoGameResults]);
+
+  const calculatePayout = (): {
+    multiplier: number;
+    payout: number;
+  } => {
+    let totalPayout = 0;
+    kenoGameResults.forEach((v) => (totalPayout += v.settled.payoutsInUsd));
+    const totalWager = kenoGameResults.length * form.watch("wager");
+
+    return {
+      multiplier: totalPayout / totalWager,
+      payout: totalPayout,
+    };
+  };
 
   const renderCell = (cell: number, win: boolean, loss: boolean) => {
     if (win) {

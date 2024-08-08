@@ -243,10 +243,10 @@ const PlinkoRowInput = ({
 
 const PlinkoRowSlider = ({ ...props }) => {
   const form = useFormContext();
-  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_6X);
+  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
 
   const plinkoSize = form.watch("plinkoSize");
-  const debouncedPlinkoSize = useDebounce(plinkoSize, 100);
+  const debouncedPlinkoSize = useDebounce(plinkoSize, 25);
 
   React.useEffect(() => {
     sliderEffect.play();

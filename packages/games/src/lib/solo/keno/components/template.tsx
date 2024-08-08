@@ -10,6 +10,7 @@ import { GameContainer, SceneContainer } from "../../../common/containers";
 import { Form } from "../../../ui/form";
 import { Keno, KenoFormField } from "..";
 import { KenoGameProps } from "./game";
+import { WinAnimation } from "../../../common/win-animation";
 
 type TemplateOptions = {
   scene?: {
@@ -79,6 +80,7 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
             />
             <SceneContainer className="wr-relative md:wr-h-[750px] lg:wr-px-[14px] lg:wr-pb-[14px]">
               <Keno.Scene {...props} />
+              <WinAnimation />
             </SceneContainer>
           </Keno.Game>
         </GameContainer>

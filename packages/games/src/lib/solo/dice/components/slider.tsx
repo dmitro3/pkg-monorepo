@@ -24,7 +24,7 @@ export interface SliderProps {
 
 export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
   const form = useFormContext() as DiceForm;
-  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_6X);
+  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
 
   const { gameStatus } = useDiceGameStore(["gameStatus"]);
 
@@ -32,7 +32,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
 
   const rollType = form.watch("rollType");
 
-  const debouncedRollValue = useDebounce(rollValue, 150);
+  const debouncedRollValue = useDebounce(rollValue * 100, 50);
 
   React.useEffect(() => {
     sliderEffect.play();

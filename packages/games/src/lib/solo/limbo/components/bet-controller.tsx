@@ -63,9 +63,9 @@ export const BetController: React.FC<Props> = ({
     return toDecimals(wager * betCount * winMultiplier, 2);
   }, [form.getValues().wager, form.getValues().betCount, winMultiplier]);
 
-  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_6X);
+  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
   const limboMultiplier = form.watch("limboMultiplier");
-  const debouncedBetCount = useDebounce(limboMultiplier, 100);
+  const debouncedBetCount = useDebounce(limboMultiplier, 25);
 
   React.useEffect(() => {
     sliderEffect.play();

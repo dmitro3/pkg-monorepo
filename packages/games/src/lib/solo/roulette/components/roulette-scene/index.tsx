@@ -10,8 +10,10 @@ import { wait } from "../../../../utils/promise";
 import { cn } from "../../../../utils/style";
 import { rouletteWheelNumbers } from "../../constants";
 import useRouletteGameStore from "../../store";
-import { RouletteGameResult } from "../../types";
+import { RouletteForm, RouletteGameResult } from "../../types";
 import { RouletteWheel } from "../roulette-wheel";
+import { useWinAnimation } from "../../../../hooks/use-win-animation";
+import { useFormContext } from "react-hook-form";
 
 const ANIMATION_TIMEOUT = 5000;
 
@@ -44,6 +46,13 @@ export const RouletteScene: React.FC<{
     "rouletteGameResults",
   ]);
 
+  const { showWinAnimation } = useWinAnimation();
+  const form = useFormContext() as RouletteForm;
+
+  const selectedNumbers = form.watch("selectedNumbers");
+  const wager = form.watch("wager");
+  const betCount = form.watch("betCount");
+
   const [degree, setDegree] = React.useState<number>(0);
 
   const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
@@ -63,6 +72,11 @@ export const RouletteScene: React.FC<{
   const { isAnimationSkipped } = useGameSkip();
 
   const skipRef = React.useRef<boolean>(false);
+
+  const totalWager = React.useMemo(() => {
+    const totalChipCount = selectedNumbers.reduce((acc, cur) => acc + cur, 0);
+    return totalChipCount * wager * betCount;
+  }, [selectedNumbers, wager, betCount]);
 
   React.useEffect(() => {
     if (rouletteResult && rouletteResult.length) {
@@ -107,6 +121,12 @@ export const RouletteScene: React.FC<{
           updateRouletteGameResults([]);
           onAnimationCompleted(rouletteResult);
 
+          const { payout, multiplier } = calculatePayout();
+          showWinAnimation({
+            payout,
+            multiplier,
+          });
+
           updateGameStatus("ENDED");
 
           return;
@@ -118,6 +138,26 @@ export const RouletteScene: React.FC<{
       turn(0);
     }
   }, [rouletteResult]);
+
+  const calculatePayout = (): {
+    multiplier: number;
+    payout: number;
+  } => {
+    let totalPayout = 0;
+    rouletteResult.forEach((v) => (totalPayout += v.payoutInUsd));
+
+    console.log(
+      totalPayout,
+      "totalpay",
+      totalWager,
+      "totalw",
+      totalPayout / totalWager
+    );
+    return {
+      multiplier: totalPayout / totalWager,
+      payout: totalPayout,
+    };
+  };
 
   const onSkip = () => {
     updateLastBets(rouletteResult as RouletteGameResult[]);
