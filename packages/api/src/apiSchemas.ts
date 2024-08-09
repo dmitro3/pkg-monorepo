@@ -11,8 +11,8 @@ export type PriceResponse = {
 export type PaginatedResonse = {
   totalCount: number;
   totalPages: number;
-  limit: number | null;
-  currentPage: number | null;
+  limit: number;
+  currentPage: number;
   /**
    * @default false
    */
@@ -111,6 +111,7 @@ export type AssignUsernameInput = {
   walletAddress: string;
   signature: string;
   avatar?: number | null;
+  isAA: boolean;
 };
 
 export type UsernameObject = {
@@ -296,6 +297,10 @@ export type MiningStatistics = {
   /**
    * @default 0
    */
+  totalStakedVWINR: number;
+  /**
+   * @default 0
+   */
   totalSupply: number;
   /**
    * @default 0
@@ -305,6 +310,34 @@ export type MiningStatistics = {
    * @default 0
    */
   maxSupply: number;
+};
+
+export type LeaderboardVolumeObject = {
+  username: string;
+  player: string;
+  won: number;
+  bet: number;
+  winRate: number;
+  volume: number;
+};
+
+export type LeaderboardProfitObject = {
+  username: string;
+  player: string;
+  won: number;
+  bet: number;
+  winRate: number;
+  profit: number;
+};
+
+export type LeaderboardLuckyWinnerObject = {
+  username: string;
+  player: string;
+  won: number;
+  bet: number;
+  winRate: number;
+  volume: number;
+  multiplier: number;
 };
 
 export type VaultOutput = {
@@ -387,42 +420,31 @@ export type CodesVolumeAndReward = {
 };
 
 export type AwardBadge = {
-  /**
-   * The type of the badge to award
-   *
-   * @example 7
-   */
-  type:
-    | 0
-    | 1
-    | 2
-    | 3
-    | 4
-    | 5
-    | 6
-    | 7
-    | 8
-    | 9
-    | 10
-    | 11
-    | 12
-    | 13
-    | 14
-    | 15
-    | 16
-    | 17
-    | 18
-    | 19
-    | 20
-    | 21
-    | 22
-    | 23;
-  /**
-   * The transaction hash of the game
-   *
-   * @example 0x1234567890123456789012345678901234567890
-   */
-  transactionHash: string | null;
+  type?:
+    | "LuckyWinner"
+    | "BettingBuddy"
+    | "BankrollBooster"
+    | "StakingStar"
+    | "VolumeUp"
+    | "StakingTycoon"
+    | "ReferralBadge"
+    | "BetVeteran"
+    | "BankrollHyperBooster"
+    | "BettingTitan"
+    | "LuckyStriker"
+    | "WeeklyClaimer"
+    | "LossLegend"
+    | "WinrChainKingpin"
+    | "BankrollCashCow"
+    | "StakingSage"
+    | "JackpotJamboree"
+    | "VolumeWinner"
+    | "LuckyStreak"
+    | "GamblingGuru"
+    | "DailyStreak"
+    | "WinrChainer"
+    | "HighRoller"
+    | "LuckyRoller";
   /**
    * The player address to award the badge to
    *
@@ -435,30 +457,30 @@ export type AwardBadgeResponse = {
   awarded: boolean;
   player?: string;
   badge?:
-    | 0
-    | 1
-    | 2
-    | 3
-    | 4
-    | 5
-    | 6
-    | 7
-    | 8
-    | 9
-    | 10
-    | 11
-    | 12
-    | 13
-    | 14
-    | 15
-    | 16
-    | 17
-    | 18
-    | 19
-    | 20
-    | 21
-    | 22
-    | 23;
+    | "LuckyWinner"
+    | "BettingBuddy"
+    | "BankrollBooster"
+    | "StakingStar"
+    | "VolumeUp"
+    | "StakingTycoon"
+    | "ReferralBadge"
+    | "BetVeteran"
+    | "BankrollHyperBooster"
+    | "BettingTitan"
+    | "LuckyStriker"
+    | "WeeklyClaimer"
+    | "LossLegend"
+    | "WinrChainKingpin"
+    | "BankrollCashCow"
+    | "StakingSage"
+    | "JackpotJamboree"
+    | "VolumeWinner"
+    | "LuckyStreak"
+    | "GamblingGuru"
+    | "DailyStreak"
+    | "WinrChainer"
+    | "HighRoller"
+    | "LuckyRoller";
 };
 
 export type WeeklyClaimer = {
@@ -480,30 +502,30 @@ export type BadgeResponse = {
   awarded: boolean;
   player?: string;
   badge?:
-    | 0
-    | 1
-    | 2
-    | 3
-    | 4
-    | 5
-    | 6
-    | 7
-    | 8
-    | 9
-    | 10
-    | 11
-    | 12
-    | 13
-    | 14
-    | 15
-    | 16
-    | 17
-    | 18
-    | 19
-    | 20
-    | 21
-    | 22
-    | 23;
+    | "LuckyWinner"
+    | "BettingBuddy"
+    | "BankrollBooster"
+    | "StakingStar"
+    | "VolumeUp"
+    | "StakingTycoon"
+    | "ReferralBadge"
+    | "BetVeteran"
+    | "BankrollHyperBooster"
+    | "BettingTitan"
+    | "LuckyStriker"
+    | "WeeklyClaimer"
+    | "LossLegend"
+    | "WinrChainKingpin"
+    | "BankrollCashCow"
+    | "StakingSage"
+    | "JackpotJamboree"
+    | "VolumeWinner"
+    | "LuckyStreak"
+    | "GamblingGuru"
+    | "DailyStreak"
+    | "WinrChainer"
+    | "HighRoller"
+    | "LuckyRoller";
 };
 
 export type SummaryResponse = {

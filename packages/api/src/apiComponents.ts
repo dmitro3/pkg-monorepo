@@ -1009,6 +1009,210 @@ export const useStatisticControllerGetMiningStats = <
   });
 };
 
+export type StatisticControllerGetLeaderboardListByVolumeQueryParams = {
+  period?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
+  sortBy?: "WON" | "BET" | "WINRATE" | "VOLUME" | "PROFIT" | "MULTIPLIER";
+  sortOrder?: "ASC" | "DESC";
+};
+
+export type StatisticControllerGetLeaderboardListByVolumeError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type StatisticControllerGetLeaderboardListByVolumeResponse =
+  Schemas.LeaderboardVolumeObject[];
+
+export type StatisticControllerGetLeaderboardListByVolumeVariables = {
+  queryParams?: StatisticControllerGetLeaderboardListByVolumeQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchStatisticControllerGetLeaderboardListByVolume = (
+  variables: StatisticControllerGetLeaderboardListByVolumeVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    StatisticControllerGetLeaderboardListByVolumeResponse,
+    StatisticControllerGetLeaderboardListByVolumeError,
+    undefined,
+    {},
+    StatisticControllerGetLeaderboardListByVolumeQueryParams,
+    {}
+  >({
+    url: "/statistic/volume-leaderboard-list",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+export const useStatisticControllerGetLeaderboardListByVolume = <
+  TData = StatisticControllerGetLeaderboardListByVolumeResponse,
+>(
+  variables: StatisticControllerGetLeaderboardListByVolumeVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      StatisticControllerGetLeaderboardListByVolumeResponse,
+      StatisticControllerGetLeaderboardListByVolumeError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    StatisticControllerGetLeaderboardListByVolumeResponse,
+    StatisticControllerGetLeaderboardListByVolumeError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/statistic/volume-leaderboard-list",
+      operationId: "statisticControllerGetLeaderboardListByVolume",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchStatisticControllerGetLeaderboardListByVolume(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type StatisticControllerGetLeaderboardListByProfitQueryParams = {
+  period?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
+  sortBy?: "WON" | "BET" | "WINRATE" | "VOLUME" | "PROFIT" | "MULTIPLIER";
+  sortOrder?: "ASC" | "DESC";
+};
+
+export type StatisticControllerGetLeaderboardListByProfitError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type StatisticControllerGetLeaderboardListByProfitResponse =
+  Schemas.LeaderboardProfitObject[];
+
+export type StatisticControllerGetLeaderboardListByProfitVariables = {
+  queryParams?: StatisticControllerGetLeaderboardListByProfitQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchStatisticControllerGetLeaderboardListByProfit = (
+  variables: StatisticControllerGetLeaderboardListByProfitVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    StatisticControllerGetLeaderboardListByProfitResponse,
+    StatisticControllerGetLeaderboardListByProfitError,
+    undefined,
+    {},
+    StatisticControllerGetLeaderboardListByProfitQueryParams,
+    {}
+  >({
+    url: "/statistic/profit-leaderboard-list",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+export const useStatisticControllerGetLeaderboardListByProfit = <
+  TData = StatisticControllerGetLeaderboardListByProfitResponse,
+>(
+  variables: StatisticControllerGetLeaderboardListByProfitVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      StatisticControllerGetLeaderboardListByProfitResponse,
+      StatisticControllerGetLeaderboardListByProfitError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    StatisticControllerGetLeaderboardListByProfitResponse,
+    StatisticControllerGetLeaderboardListByProfitError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/statistic/profit-leaderboard-list",
+      operationId: "statisticControllerGetLeaderboardListByProfit",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchStatisticControllerGetLeaderboardListByProfit(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type StatisticControllerGetLeaderboardListByLuckyWinnerQueryParams = {
+  period?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
+  sortBy?: "WON" | "BET" | "WINRATE" | "VOLUME" | "PROFIT" | "MULTIPLIER";
+  sortOrder?: "ASC" | "DESC";
+};
+
+export type StatisticControllerGetLeaderboardListByLuckyWinnerError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type StatisticControllerGetLeaderboardListByLuckyWinnerResponse =
+  Schemas.LeaderboardLuckyWinnerObject[];
+
+export type StatisticControllerGetLeaderboardListByLuckyWinnerVariables = {
+  queryParams?: StatisticControllerGetLeaderboardListByLuckyWinnerQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchStatisticControllerGetLeaderboardListByLuckyWinner = (
+  variables: StatisticControllerGetLeaderboardListByLuckyWinnerVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    StatisticControllerGetLeaderboardListByLuckyWinnerResponse,
+    StatisticControllerGetLeaderboardListByLuckyWinnerError,
+    undefined,
+    {},
+    StatisticControllerGetLeaderboardListByLuckyWinnerQueryParams,
+    {}
+  >({
+    url: "/statistic/lucky-leaderboard-list",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+export const useStatisticControllerGetLeaderboardListByLuckyWinner = <
+  TData = StatisticControllerGetLeaderboardListByLuckyWinnerResponse,
+>(
+  variables: StatisticControllerGetLeaderboardListByLuckyWinnerVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      StatisticControllerGetLeaderboardListByLuckyWinnerResponse,
+      StatisticControllerGetLeaderboardListByLuckyWinnerError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    StatisticControllerGetLeaderboardListByLuckyWinnerResponse,
+    StatisticControllerGetLeaderboardListByLuckyWinnerError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/statistic/lucky-leaderboard-list",
+      operationId: "statisticControllerGetLeaderboardListByLuckyWinner",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchStatisticControllerGetLeaderboardListByLuckyWinner(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type BankrollControllerUpdateSingleSidedPoolsNotifyQueryParams = {
   /**
    * comma separated
@@ -1434,43 +1638,6 @@ export const useReferralControllerCodesVolumeAndRewardAmounts = <
   });
 };
 
-export type BadgeControllerErrorError = Fetcher.ErrorWrapper<undefined>;
-
-export type BadgeControllerErrorVariables = ApiContext["fetcherOptions"];
-
-export const fetchBadgeControllerError = (
-  variables: BadgeControllerErrorVariables,
-  signal?: AbortSignal,
-) =>
-  apiFetch<undefined, BadgeControllerErrorError, undefined, {}, {}, {}>({
-    url: "/badge/error",
-    method: "post",
-    ...variables,
-    signal,
-  });
-
-export const useBadgeControllerError = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      undefined,
-      BadgeControllerErrorError,
-      BadgeControllerErrorVariables
-    >,
-    "mutationFn"
-  >,
-) => {
-  const { fetcherOptions } = useApiContext();
-  return reactQuery.useMutation<
-    undefined,
-    BadgeControllerErrorError,
-    BadgeControllerErrorVariables
-  >({
-    mutationFn: (variables: BadgeControllerErrorVariables) =>
-      fetchBadgeControllerError({ ...fetcherOptions, ...variables }),
-    ...options,
-  });
-};
-
 export type BadgeControllerAwardBadgeError = Fetcher.ErrorWrapper<undefined>;
 
 export type BadgeControllerAwardBadgeVariables = {
@@ -1719,6 +1886,21 @@ export type QueryOperation =
       path: "/statistic/mininig-stats";
       operationId: "statisticControllerGetMiningStats";
       variables: StatisticControllerGetMiningStatsVariables;
+    }
+  | {
+      path: "/statistic/volume-leaderboard-list";
+      operationId: "statisticControllerGetLeaderboardListByVolume";
+      variables: StatisticControllerGetLeaderboardListByVolumeVariables;
+    }
+  | {
+      path: "/statistic/profit-leaderboard-list";
+      operationId: "statisticControllerGetLeaderboardListByProfit";
+      variables: StatisticControllerGetLeaderboardListByProfitVariables;
+    }
+  | {
+      path: "/statistic/lucky-leaderboard-list";
+      operationId: "statisticControllerGetLeaderboardListByLuckyWinner";
+      variables: StatisticControllerGetLeaderboardListByLuckyWinnerVariables;
     }
   | {
       path: "/bankroll/update-notify-single-sided-pools";
