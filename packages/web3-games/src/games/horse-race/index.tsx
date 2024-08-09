@@ -31,6 +31,7 @@ import {
 
 import {
   useBetHistory,
+  useGetBadges,
   useListenMultiplayerGameEvent,
   usePlayerGameStatus,
 } from "../hooks";
@@ -94,6 +95,8 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     useHorseRaceGameStore(["updateState", "setSelectedHorse", "selectedHorse"]);
 
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.horse_race);
+
+  const { handleGetBadges } = useGetBadges();
 
   console.log("gameEvent", gameEvent);
 
@@ -360,13 +363,16 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
 
     const { result } = gameEvent;
     const isWon = result === Number(formValues.horse);
+    const payout = isWon
+      ? formValues.wager * horseMultipliers[result as unknown as Horse]
+      : 0;
 
     addResult({
       won: isWon,
-      payout: isWon
-        ? formValues.wager * horseMultipliers[result as unknown as Horse]
-        : 0,
+      payout,
     });
+
+    handleGetBadges({ totalPayout: payout, totalWager: formValues.wager });
   };
 
   return (

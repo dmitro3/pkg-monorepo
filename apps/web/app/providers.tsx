@@ -103,7 +103,7 @@ export function Providers(props: { children: ReactNode }) {
             },
             {
               address: "0xaa54Ca4f14B57777895f7342778919B8ee5B9D7B",
-              bankrollIndex: "0x0000000000000000000000000000000000000004",
+              bankrollIndex: "0x0000000000000000000000000000000000000005",
               displayDecimals: 6,
               decimals: 18,
               icon: "/tokens/weth.png",
@@ -114,7 +114,7 @@ export function Providers(props: { children: ReactNode }) {
           ]}
           selectedToken={{
             address: "0xaa54Ca4f14B57777895f7342778919B8ee5B9D7B",
-            bankrollIndex: "0x0000000000000000000000000000000000000004",
+            bankrollIndex: "0x0000000000000000000000000000000000000005",
             displayDecimals: 6,
             decimals: 18,
             icon: "/tokens/weth.png",

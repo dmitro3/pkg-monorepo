@@ -21,7 +21,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
-import { useBetHistory, usePlayerGameStatus } from "../hooks";
+import { useBetHistory, useGetBadges, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -93,6 +93,8 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   }));
 
   const { priceFeed } = usePriceFeed();
+
+  const { handleGetBadges } = useGetBadges();
 
   const [coinFlipResult, setCoinFlipResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent>>();
@@ -257,6 +259,10 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     refetchHistory();
     refetchPlayerGameStatus();
     updateBalances();
+
+    const totalWager = formValues.wager * formValues.betCount;
+    const totalPayout = result.reduce((acc, cur) => acc + cur.payoutInUsd, 0);
+    handleGetBadges({ totalWager, totalPayout });
   };
 
   const onAnimationStep = React.useCallback(
@@ -278,6 +284,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
 
   const onAnimationSkipped = React.useCallback(
     (result: CoinFlipGameResult[]) => {
+      onGameCompleted(result);
       skipAll(
         result.map((value) => ({
           won: value.payout > 0,

@@ -38,6 +38,7 @@ import {
 
 import {
   useBetHistory,
+  useGetBadges,
   useListenMultiplayerGameEvent,
   usePlayerGameStatus,
 } from "../hooks";
@@ -392,6 +393,8 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     },
   });
 
+  const { handleGetBadges } = useGetBadges();
+
   const onWheelCompleted = () => {
     refetchBetHistory();
     refetchHistory();
@@ -400,13 +403,15 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
 
     const { result } = gameEvent;
     const isWon = result === Number(formValues.color);
+    const payout = isWon
+      ? formValues.wager * colorMultipliers[String(result) as WheelColor]
+      : 0;
 
     addResult({
       won: isWon,
-      payout: isWon
-        ? formValues.wager * colorMultipliers[String(result) as WheelColor]
-        : 0,
+      payout,
     });
+    handleGetBadges({ totalWager: formValues.wager, totalPayout: payout });
   };
 
   return (

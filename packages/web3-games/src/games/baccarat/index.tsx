@@ -20,7 +20,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
 
-import { useBetHistory, usePlayerGameStatus } from "../hooks";
+import { useBetHistory, useGetBadges, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import {
@@ -81,6 +81,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || "0x",
   });
+  const { handleGetBadges } = useGetBadges();
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -212,10 +213,13 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         bankerHand: hands.banker,
       });
 
+      const { wager, tieWager, playerWager, bankerWager } = formValues;
+      const totalWager = wager * (tieWager + playerWager + bankerWager);
+
       setBaccaratSettledResult({
         won: win,
-        payout: converted.payout,
-        wager: 0,
+        payout: win ? converted.payout : 0,
+        wager: totalWager,
       });
     }
   }, [gameEvent]);
@@ -238,6 +242,10 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     refetchHistory();
     refetchPlayerGameStatus();
     updateBalances();
+    handleGetBadges({
+      totalWager: result.wager,
+      totalPayout: result.payout,
+    });
   };
   return (
     <>
