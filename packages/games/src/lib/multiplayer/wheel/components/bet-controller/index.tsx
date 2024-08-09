@@ -92,7 +92,9 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             name="color"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="wr-text-white/50">Choose</FormLabel>
+                <FormLabel className="wr-text-white/50 lg:!wr-block wr-hidden">
+                  Choose
+                </FormLabel>
                 <FormControl>
                   <Radio.RadioGroup
                     onValueChange={(e) => {
@@ -157,7 +159,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           />
         </div>
 
-        <div className="wr-mb-6">
+        <div className="wr-mb-6 lg:!wr-block wr-hidden">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
@@ -176,7 +178,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           <Button
             type="submit"
             variant={"success"}
-            className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
+            className="wr-w-full max-lg:wr-mb-3.5"
             size={"xl"}
             onClick={() => betClickEffect.play()}
             isLoading={form.formState.isSubmitting || form.formState.isLoading}
