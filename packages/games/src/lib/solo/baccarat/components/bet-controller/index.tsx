@@ -20,6 +20,7 @@ import {
   SoundEffects,
   useAudioEffect,
 } from "../../../../hooks/use-audio-effect";
+import Control from "../control";
 
 export interface Props {
   totalWager: number;
@@ -45,7 +46,6 @@ export const BetController: React.FC<Props> = ({
   const { account } = useGameOptions();
   const form = useFormContext() as BaccaratForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
-  const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
 
   const wager = form.watch("wager");
 
@@ -77,49 +77,13 @@ export const BetController: React.FC<Props> = ({
           className="wr-mb-6"
         />
 
-        <div className="wr-flex wr-w-full wr-items-center wr-gap-2 wr-mb-6">
-          <Button
-            type="button"
-            disabled={totalWager === 0 || isDisabled}
-            variant="secondary"
-            size="xl"
-            className="wr-flex wr-w-full wr-items-center wr-gap-1"
-            onClick={() => {
-              digitalClickEffect.play();
-              undoBet();
-            }}
-          >
-            <img
-              src={`${CDN_URL}/icons/icon-undo.svg`}
-              width={20}
-              height={20}
-              alt="Justbet Decentralized Casino"
-            />
-            <span className="max-lg:wr-hidden">Undo</span>
-          </Button>
-
-          <Button
-            type="button"
-            variant="secondary"
-            size="xl"
-            className="wr-flex wr-w-full wr-items-center wr-gap-1"
-            disabled={totalWager === 0 || isDisabled}
-            onClick={() => {
-              digitalClickEffect.play();
-              form.reset();
-            }}
-          >
-            <img
-              src={`${CDN_URL}/icons/icon-trash.svg`}
-              width={20}
-              height={20}
-              alt="Justbet Decentralized Casino"
-            />
-            <span className="max-lg:wr-hidden">Clear</span>
-          </Button>
-        </div>
-
-        <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
+        <Control
+          totalWager={totalWager}
+          isDisabled={isDisabled}
+          undoBet={undoBet}
+          reset={form.reset}
+        />
+        <div className="wr-mb-6 lg:!wr-grid wr-hidden wr-grid-cols-2 wr-gap-2">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
@@ -139,7 +103,7 @@ export const BetController: React.FC<Props> = ({
           </div>
         </div>
 
-        <div className="wr-w-full -wr-order-1 lg:wr-order-none wr-mb-6">
+        <div className="wr-w-full lg:wr-order-none wr-mb-6">
           <PreBetButton>
             <Button
               type="submit"

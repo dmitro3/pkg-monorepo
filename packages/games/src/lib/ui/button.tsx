@@ -29,6 +29,7 @@ const buttonVariants = cva(
         crash:
           "wr-bg-[#5B6CFF] wr-transition-all wr-duration-300 hover:wr-bg-[#3C4DE1] disabled:wr-bg-zinc-700",
         plinko: `!wr-rounded-none wr-bg-plinko-button bg-[size:wr-100%] wr-bg-no-repeat wr-font-furore wr-text-2xl wr-leading-6 wr-transition-all wr-duration-300 [text-shadow:wr-_0px_2px_0px_#054352] [box-shadow:wr-0px_2.7px_0px_0px_#004265] hover:wr-scale-110 hover:wr-ease-in disabled:wr-bg-plinko-button-disabled lg:wr-bg-contain`,
+        ghost: "wr-bg-transparent wr-text-white",
       },
       size: {
         sm: "wr-h-7 wr-rounded-sm",

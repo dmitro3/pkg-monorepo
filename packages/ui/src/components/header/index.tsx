@@ -101,8 +101,12 @@ export const Header = ({
       )}
     >
       <nav className="wr-relative wr-top-0 wr-flex writems-center wr-justify-between">
-        <section className="wr-flex wr-items-center wr-gap-2 lg:wr-gap-6">
+        <section className="wr-flex wr-items-center wr-gap-2 lg:wr-gap-6 wr-relative">
           {appLogo ? appLogo : <LogoMain />}
+
+          <span className="wr-bg-emerald-600 wr-px-2 wr-rounded-full wr-font-semibold wr-absolute -wr-right-4 -wr-bottom-2 wr-text-xs">
+            DEV
+          </span>
 
           {leftSideComponents &&
             leftSideComponents.length &&

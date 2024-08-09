@@ -27,6 +27,7 @@ import { BaccaratScene } from "./baccarat-scene";
 import { BetController } from "./bet-controller";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { WinAnimation } from "../../../common/win-animation";
+import Control from "./control";
 
 type TemplateProps = BaccaratGameProps & {
   minWager?: number;
@@ -222,6 +223,8 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     return () => subscription.unsubscribe();
   }, [form.watch]);
 
+  const totalWager = (bankerWager + tieWager + playerWager) * wager;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(prepareSubmit)}>
@@ -230,14 +233,14 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
             maxWager={maxWager || 2000}
             minWager={minWager || 1}
             isDisabled={isGamePlaying}
-            totalWager={(bankerWager + tieWager + playerWager) * wager}
+            totalWager={totalWager}
             maxPayout={maxPayout}
             selectedChip={selectedChip}
             undoBet={undoBet}
             onSelectedChipChange={setSelectedChip}
           />
           <SceneContainer
-            className="wr-relative wr-flex wr-h-[475px] lg:wr-h-[640px] wr-overflow-hidden"
+            className="wr-relative wr-flex wr-h-[340px] lg:wr-h-[640px] wr-overflow-hidden"
             style={{
               backgroundImage: `url(${CDN_URL}/baccarat/baccarat-bg.png)`,
             }}
@@ -250,6 +253,13 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
               addWager={addWager}
               selectedChip={selectedChip}
               onAnimationCompleted={onAnimationCompleted}
+            />
+            <Control
+              totalWager={totalWager}
+              isDisabled={isGamePlaying}
+              undoBet={undoBet}
+              reset={form.reset}
+              variant="overlay"
             />
             <WinAnimation />
           </SceneContainer>

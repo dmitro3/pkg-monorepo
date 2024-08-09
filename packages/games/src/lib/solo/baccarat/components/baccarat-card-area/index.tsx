@@ -290,8 +290,8 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
   // 110 -> 400
   return (
     <div className="wr-absolute wr-left-[47%] wr-top-[45%] wr-z-[5] wr-flex -wr-translate-x-1/2 -wr-translate-y-1/2 wr-items-start wr-justify-center">
-      <div className="wr-absolute wr-left-[-175px] lg:wr-left-[-325px] wr-top-[380px] wr-h-[200px] wr-w-[160px]">
-        <div className="wr-absolute wr-bottom-[-55px] wr-left-1/2 -wr-translate-x-1/2 wr-gap-1 wr-text-center wr-text-md wr-font-bold ">
+      <div className="wr-absolute wr-left-[-175px] lg:wr-left-[-325px] wr-top-[50px] lg:!wr-top-[380px] wr-h-[200px] wr-w-[160px]">
+        <div className="wr-absolute wr-bottom-[-60px] wr-left-1/2 -wr-translate-x-1/2 wr-gap-1 wr-text-center wr-text-md wr-font-bold ">
           <AnimatePresence>
             {playerCount !== null && (
               <motion.div
@@ -330,8 +330,8 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
           )}
         </div>
       </div>
-      <div className="wr-absolute wr-left-[70px] lg:wr-left-[220px] wr-top-[380px] wr-h-[200px] wr-w-[160px]">
-        <div className="wr-absolute wr-bottom-[-55px] wr-left-1/2 wr-flex -wr-translate-x-1/2 wr-flex-col wr-gap-1 wr-text-center wr-text-md wr-font-bold">
+      <div className="wr-absolute wr-left-[70px] lg:wr-left-[220px] wr-top-[50px] lg:!wr-top-[380px] wr-h-[200px] wr-w-[160px]">
+        <div className="wr-absolute wr-bottom-[-60px] wr-left-1/2 wr-flex -wr-translate-x-1/2 wr-flex-col wr-gap-1 wr-text-center wr-text-md wr-font-bold">
           <AnimatePresence>
             {bankerCount !== null && (
               <motion.div

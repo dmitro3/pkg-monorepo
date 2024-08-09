@@ -1,3 +1,7 @@
+:root {
+  --baccarat-player-card-sm-top: 180px;
+}
+
 .card {
   position: absolute;
   top: 50%;
@@ -220,55 +224,59 @@
   }
 }
 
+@media only screen and (max-width: 1024px) {
+  .card {
+    transform: scale(0.7, 0.7);
+    transform-origin: -140px -180px;
+  }
 
-@media only screen and (max-width:1024px) {
   .playerFirstCard {
-  top: 475px;
-  left: -100px;
-}
+    top: var(--baccarat-player-card-sm-top);
+    left: -100px;
+  }
 
-.playerFirstCard.withThird {
-  top: 470px;
-  left: -110px;
-}
+  .playerFirstCard.withThird {
+    top: calc(var(--baccarat-player-card-sm-top) - 5px);
+    left: -110px;
+  }
 
-.playerSecondCard {
-  top: 485px;
-  left: -70px;
-}
+  .playerSecondCard {
+    top: calc(var(--baccarat-player-card-sm-top) + 10px);
+    left: -70px;
+  }
 
-.playerSecondCard.withThird {
-  top: 480px;
-  left: -85px;
-}
+  .playerSecondCard.withThird {
+    top: calc(var(--baccarat-player-card-sm-top) + 5px);
+    left: -85px;
+  }
 
-.playerThirdCard {
-  top: 490px;
-  left: -60px;
-}
+  .playerThirdCard {
+    top: calc(var(--baccarat-player-card-sm-top) + 10px);
+    left: -60px;
+  }
 
-.bankerFirstCard {
-  top: 475px;
-  left: 145px;
-}
+  .bankerFirstCard {
+    top: var(--baccarat-player-card-sm-top);
+    left: 145px;
+  }
 
-.bankerFirstCard.withThird {
-  top: 470px;
-  left: 135px;
-}
+  .bankerFirstCard.withThird {
+    top: calc(var(--baccarat-player-card-sm-top) - 5px);
+    left: 135px;
+  }
 
-.bankerSecondCard {
-  top: 485px;
-  left: 175px;
-}
+  .bankerSecondCard {
+    top: calc(var(--baccarat-player-card-sm-top) + 10px);
+    left: 175px;
+  }
 
-.bankerSecondCard.withThird {
-  top: 480px;
-  left: 160px;
-}
+  .bankerSecondCard.withThird {
+    top: calc(var(--baccarat-player-card-sm-top) + 5px);
+    left: 160px;
+  }
 
-.bankerThirdCard {
-  top: 490px;
-  left: 185px;
-}
+  .bankerThirdCard {
+    top: calc(var(--baccarat-player-card-sm-top) + 10px);
+    left: 185px;
+  }
 }
