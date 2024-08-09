@@ -46,6 +46,7 @@ export const HoldemPokerScene = ({
   const [ante, setAnte] = React.useState<number>(0);
   const [aaBonus, setAaBonus] = React.useState<number>(0);
   const [wager, setWager] = React.useState<number>(minWager || 1);
+  const [lastMove, setLastMove] = React.useState<"fold" | "call">("call");
 
   const [status, setStatus] = React.useState<HOLDEM_POKER_GAME_STATUS>(
     HOLDEM_POKER_GAME_STATUS.OnIdle
@@ -88,14 +89,18 @@ export const HoldemPokerScene = ({
     console.log(unityEvent, "unity event");
 
     if (unityEvent.name === UnityDealEvent) {
-      console.log("Deal event");
-
       handleDealEvent();
     }
 
-    if (unityEvent.name === UnityFoldEvent) handleFinalizeFoldEvent();
+    if (unityEvent.name === UnityFoldEvent) {
+      handleFinalizeFoldEvent();
+      setLastMove("fold");
+    }
 
-    if (unityEvent.name === UnityCallEvent) handleFinalizeEvent();
+    if (unityEvent.name === UnityCallEvent) {
+      handleFinalizeEvent();
+      setLastMove("call");
+    }
 
     if (unityEvent.name === UnityPlayerHandWin) {
       sendMessage(
@@ -103,11 +108,7 @@ export const HoldemPokerScene = ({
         "ReceiveMessage",
         `HP_SetResult|${toDecimals(activeGameData.payoutAmount, 2)}`
       );
-      onGameCompleted && onGameCompleted();
     }
-
-    if (unityEvent.name === UnityDealerHandWin)
-      onGameCompleted && onGameCompleted();
 
     if (unityEvent.name === UnityWaitForResult)
       sendMessage(
@@ -118,6 +119,7 @@ export const HoldemPokerScene = ({
 
     if (unityEvent.name === UnityNextGameAvailable) {
       onRefresh();
+      onGameCompleted && onGameCompleted(lastMove);
 
       sendMessage("WebGLHandler", "ReceiveMessage", "HP_HideResult");
     }

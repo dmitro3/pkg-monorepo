@@ -31,6 +31,12 @@ export interface MinesGameResult {
   multiplier: number;
 }
 
+export interface MinesGameResultOnComplete {
+  won: boolean;
+  currentCashoutAmount: number;
+  currentMultiplier: number;
+}
+
 export interface FormSetValue {
   key: keyof MinesFormField;
   value: MinesFormField[keyof MinesFormField];

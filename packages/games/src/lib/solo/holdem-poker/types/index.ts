@@ -11,7 +11,7 @@ export interface HoldemPokerGameProps {
   handleFinalizeFold: () => Promise<void>;
   onFormChange: (fields: HoldemPokerFormFields) => void;
   onRefresh: () => void;
-  onGameCompleted?: () => void;
+  onGameCompleted?: (move: "fold" | "call") => void;
 }
 
 export interface HoldemPokerFormFields {

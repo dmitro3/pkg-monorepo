@@ -26,7 +26,7 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useBetHistory, usePlayerGameStatus } from "../hooks";
+import { useBetHistory, useGetBadges, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import { prepareGameTransaction } from "../utils";
@@ -374,10 +374,19 @@ export default function WinrBonanzaTemplateWithWeb3({
     },
   });
 
+  const { handleGetBadges } = useGetBadges();
+
   const handleRefresh = async () => {
     refetchHistory();
     refetchPlayerGameStatus();
     updateBalances();
+
+    const wager = settledResult?.betAmount || 0;
+    const payoutMultiplier = settledResult?.payoutMultiplier || 0;
+    handleGetBadges({
+      totalPayout: wager * payoutMultiplier,
+      totalWager: wager,
+    });
   };
 
   return (

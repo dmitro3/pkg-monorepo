@@ -24,6 +24,7 @@ import { useReadContract } from "wagmi";
 
 import {
   useBetHistory,
+  useGetBadges,
   useListenGameEvent,
   usePlayerGameStatus,
 } from "../hooks";
@@ -295,11 +296,20 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     },
   });
 
+  const { handleGetBadges } = useGetBadges();
+
   const onGameCompleted = (payout: number) => {
     props.onAnimationCompleted && props.onAnimationCompleted(payout);
     refetchHistory();
     refetchPlayerGameStatus();
     updateBalances();
+
+    const totalPayout =
+      (settledCards?.result !== VideoPokerResult.LOST
+        ? settledCards?.payout
+        : 0) || 0;
+
+    handleGetBadges({ totalWager: formValues.wager, totalPayout });
   };
 
   return (

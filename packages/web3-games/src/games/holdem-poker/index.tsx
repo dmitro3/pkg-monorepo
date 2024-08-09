@@ -29,6 +29,7 @@ import { useReadContract } from "wagmi";
 
 import {
   useBetHistory,
+  useGetBadges,
   useListenGameEvent,
   usePlayerGameStatus,
 } from "../hooks";
@@ -115,6 +116,8 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
 
   const gameEvent = useListenGameEvent();
+
+  const { handleGetBadges } = useGetBadges();
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -466,10 +469,21 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     },
   });
 
-  const onGameCompleted = () => {
+  const onGameCompleted = (move: "fold" | "call") => {
     props.onGameCompleted && props.onGameCompleted();
     refetchPlayerGameStatus();
     refetchHistory();
+
+    const { ante, aaBonus, wager } = formValues;
+    let totalWager = 0;
+
+    if (move == "fold") totalWager = wager * (ante + aaBonus);
+    else if (move == "call") totalWager = wager * (ante + aaBonus + ante * 2);
+
+    handleGetBadges({
+      totalWager,
+      totalPayout: activeGame.payoutAmount,
+    });
   };
 
   return (

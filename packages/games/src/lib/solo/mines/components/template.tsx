@@ -31,7 +31,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 2, {
+      .min(props?.minWager || 1, {
         message: `Minimum wager is ${props?.minWager}`,
       })
       .max(props?.maxWager || 2000, {
@@ -47,7 +47,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: "all",
     defaultValues: {
-      wager: 2,
+      wager: props?.minWager || 1,
       minesCount: 1,
       selectedCells: initialBoard.map((mine) => mine.isSelected),
     },
@@ -117,7 +117,13 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
 
   React.useEffect(() => {
     if (gameStatus == MINES_GAME_STATUS.ENDED) {
-      props.onAnimationCompleted && props.onAnimationCompleted([] as any);
+      const won = !board.some((v) => v.isBomb == true);
+      props.onAnimationCompleted &&
+        props.onAnimationCompleted({
+          won,
+          currentCashoutAmount,
+          currentMultiplier,
+        });
     }
   }, [gameStatus]);
 

@@ -30,6 +30,7 @@ import {
 
 import {
   useBetHistory,
+  useGetBadges,
   useListenMultiplayerGameEvent,
   usePlayerGameStatus,
 } from "../hooks";
@@ -97,6 +98,8 @@ const CrashGame = (props: CrashTemplateProps) => {
     updateGame,
     clear: clearLiveResults,
   } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
+
+  const { handleGetBadges } = useGetBadges();
 
   const [formValues, setFormValues] = useState<CrashFormFields>({
     multiplier: 1,
@@ -349,10 +352,12 @@ const CrashGame = (props: CrashTemplateProps) => {
     refetchHistory();
     refetchPlayerGameStatus();
 
+    const payout = isWon ? formValues.wager * userMultiplier : 0;
     addResult({
       won: isWon,
-      payout: isWon ? formValues.wager * userMultiplier : 0,
+      payout,
     });
+    handleGetBadges({ totalPayout: payout, totalWager: formValues.wager });
   };
 
   useEffect(() => {

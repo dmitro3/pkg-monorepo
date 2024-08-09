@@ -1,11 +1,15 @@
 import React from "react";
-import { MINES_GAME_STATUS, MinesGameResult } from "../types";
+import {
+  MINES_GAME_STATUS,
+  MinesGameResult,
+  MinesGameResultOnComplete,
+} from "../types";
 import { useMinesGameStateStore } from "../store";
 
 export type MinesGameProps = React.ComponentProps<"div"> & {
   gameResults: MinesGameResult[];
   isLoading?: boolean;
-  onAnimationCompleted?: (result: MinesGameResult[]) => void;
+  onAnimationCompleted?: (result: MinesGameResultOnComplete) => void;
 };
 
 export const MinesGame = ({ gameResults, children }: MinesGameProps) => {

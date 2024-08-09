@@ -8,6 +8,7 @@ import {
   MINES_SUBMIT_TYPE,
   MinesFormField,
   MinesGameResult,
+  MinesGameResultOnComplete,
   MinesTemplate,
   toDecimals,
   useMinesGameStateStore,
@@ -32,7 +33,7 @@ import {
 } from "viem";
 import { useReadContract } from "wagmi";
 
-import { useBetHistory, usePlayerGameStatus } from "../hooks";
+import { useBetHistory, useGetBadges, usePlayerGameStatus } from "../hooks";
 import { useContractConfigContext } from "../hooks/use-contract-config";
 import { useListenGameEvent } from "../hooks/use-listen-game-event";
 import { prepareGameTransaction } from "../utils";
@@ -48,7 +49,7 @@ interface TemplateWithWeb3Props {
   minWager?: number;
   maxWager?: number;
   hideBetHistory?: boolean;
-  onAnimationCompleted?: (result: MinesGameResult[]) => void;
+  onAnimationCompleted?: (result: MinesGameResultOnComplete) => void;
 }
 
 const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
@@ -461,11 +462,18 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     },
   });
 
-  const onGameCompleted = (result: MinesGameResult[]) => {
+  const { handleGetBadges } = useGetBadges();
+
+  const onGameCompleted = (result: MinesGameResultOnComplete) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);
     refetchHistory();
     refetchPlayerGameStatus();
     updateBalances();
+
+    handleGetBadges({
+      totalPayout: result.won ? result.currentCashoutAmount : 0,
+      totalWager: formValues.wager,
+    });
   };
 
   return (
