@@ -6,12 +6,14 @@ import * as React from "react";
 import { Accordion, AccordionContent, AccordionItem } from "../ui/accordion";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
+import { cn } from "../utils/style";
 
 interface Props {
   children?: React.ReactNode;
+  hideSm?: boolean;
 }
 
-export const Advanced: React.FC<Props> = ({ children }) => {
+export const Advanced: React.FC<Props> = ({ children, hideSm = true }) => {
   const [accordionValue, setAccordionValue] = React.useState<string>("");
 
   return (
@@ -22,6 +24,9 @@ export const Advanced: React.FC<Props> = ({ children }) => {
       onValueChange={(val) => {
         setAccordionValue(val);
       }}
+      className={cn({
+        "lg:!wr-block wr-hidden": hideSm,
+      })}
     >
       <AccordionItem value="advanced" className="wr-border-b-0">
         <AccordionPrimitive.Header className="wr-flex">

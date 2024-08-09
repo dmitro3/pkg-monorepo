@@ -96,7 +96,11 @@ const GameArea: React.FC<GameAreaProps> = ({
     }
   }, [isAnimationSkipped]);
 
-  return <div className="wr-relative wr-h-full wr-w-full">{children}</div>;
+  return (
+    <div className="wr-relative wr-h-full wr-w-full wr-flex wr-justify-between wr-flex-col">
+      {children}
+    </div>
+  );
 };
 
 export default GameArea;
