@@ -103,7 +103,7 @@ const Dice: React.FC<Props> = ({
             <FormControl>
               <CheckboxPrimitive.Root
                 className={cn(
-                  " focus-visible:wr-ring-ring  data-[state=checked]:wr-bg-primary data-[state=checked]:wr-text-primary-foreground wr-peer wr-relative wr-mb-0 wr-h-full wr-w-full wr-shrink-0 wr-rounded-xl wr-bg-zinc-700    focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-cursor-not-allowed disabled:wr-opacity-50",
+                  " focus-visible:wr-ring-ring  data-[state=checked]:wr-bg-primary data-[state=checked]:wr-text-primary-foreground wr-peer wr-relative wr-mb-0 wr-h-full wr-w-full wr-shrink-0 wr-rounded-md md:wr-rounded-xl wr-bg-zinc-700    focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-cursor-not-allowed disabled:wr-opacity-50",
                   {
                     "wr-bg-white": field.value?.includes(item),
                     "wr-bg-green-500":
@@ -159,7 +159,7 @@ export const Dot = ({
   return (
     <div
       className={cn(
-        "wr-ease wr-transfrom  wr-absolute wr-h-4 wr-w-4 wr-shrink-0 wr-rounded-full wr-border-2 wr-border-[#EDEDF1] wr-bg-dice wr-transition-all sm:wr-h-[23px] sm:wr-w-[23px]",
+        "wr-ease wr-transfrom  wr-absolute md:!wr-size-6 wr-size-3 wr-shrink-0 wr-rounded-full wr-border-2 wr-border-[#EDEDF1] wr-bg-dice wr-transition-all sm:wr-h-[23px] sm:wr-w-[23px]",
         className,
         { "wr-border-[#41414C] wr-bg-dice-selected": selected }
       )}
