@@ -115,7 +115,9 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
             isGettingResults={props.isGettingResult}
           />
           <SceneContainer
-            className={cn("wr-h-[640px]  max-md:wr-h-[425px] lg:wr-py-12")}
+            className={cn(
+              "wr-h-[640px]  max-md:wr-h-auto max-md:wr-pt-[130px] lg:wr-py-12"
+            )}
           >
             <Dice.Game {...props}>
               {/* last bets */}

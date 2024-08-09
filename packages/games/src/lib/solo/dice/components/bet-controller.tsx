@@ -55,7 +55,7 @@ export const BetController: React.FC<Props> = ({
   return (
     <BetControllerContainer>
       <div className="wr-max-lg:flex wr-max-lg:flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Dice</BetControllerTitle>
         </div>
 
@@ -76,8 +76,9 @@ export const BetController: React.FC<Props> = ({
             gameStatus == "PLAYING" ||
             isGettingResults
           }
+          hideSm
         />
-        <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
+        <div className="wr-mb-6 lg:!wr-grid wr-grid-cols-2 wr-gap-2 wr-hidden">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
@@ -100,7 +101,7 @@ export const BetController: React.FC<Props> = ({
           </div>
         </div>
 
-        <div>
+        <div className="lg:!wr-block wr-hidden">
           <Advanced>
             <div className="wr-grid wr-grid-cols-2 wr-gap-2">
               <StopGainFormField
