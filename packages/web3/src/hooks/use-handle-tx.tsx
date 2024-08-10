@@ -66,9 +66,7 @@ export const useHandleTx = <
   const { writeContractVariables, options, encodedTxData } = params;
   const { address } = useCurrentAccount();
   const { accountApi } = useSmartAccountApi();
-  const { isSocialLogin } = useCurrentAccount();
   const { client } = useBundlerClient();
-  const queryClient = useQueryClient();
 
   const handleTxMutation = useMutation({
     mutationFn: async () => {
@@ -125,11 +123,6 @@ export const useHandleTx = <
     onSuccess: (data) => {
       if (options.successCb) {
         options.successCb();
-      }
-      if (isSocialLogin) {
-        queryClient.invalidateQueries({
-          queryKey: ["cachedSignature"],
-        });
       }
     },
     onError: (error) => {
