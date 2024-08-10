@@ -99,6 +99,18 @@ export const WagerInput = ({
           >
             2x
           </Button>
+          <Button
+            className={cn("wr-w-14 wr-font-[600] wr-text-base", className)}
+            type="button"
+            disabled={rest.isDisabled}
+            variant={"secondary"}
+            onClick={() => {
+              clickEffect.play();
+              form.setValue("wager", maxWager);
+            }}
+          >
+            MAX
+          </Button>
         </div>
       </NumberInput.Container>
     </NumberInput.Root>
