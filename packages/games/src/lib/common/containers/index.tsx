@@ -37,10 +37,7 @@ export const SceneContainer: React.FC<Props> = ({
 export const GameContainer: React.FC<Props> = ({ children, className }) => {
   return (
     <div
-      className={cn(
-        "wr-flex wr-gap-3 wr-pt-3 max-lg:wr-flex-col-reverse",
-        className
-      )}
+      className={cn("wr-flex wr-gap-3 max-lg:wr-flex-col-reverse", className)}
     >
       {children}
     </div>
