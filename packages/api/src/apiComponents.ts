@@ -1009,9 +1009,69 @@ export const useStatisticControllerGetMiningStats = <
   });
 };
 
+export type StatisticControllerGetDashboardStatsError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type StatisticControllerGetDashboardStatsVariables =
+  ApiContext["fetcherOptions"];
+
+export const fetchStatisticControllerGetDashboardStats = (
+  variables: StatisticControllerGetDashboardStatsVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    Schemas.DashboardStats,
+    StatisticControllerGetDashboardStatsError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/statistic/dashboard-stats", method: "get", ...variables, signal });
+
+export const useStatisticControllerGetDashboardStats = <
+  TData = Schemas.DashboardStats,
+>(
+  variables: StatisticControllerGetDashboardStatsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Schemas.DashboardStats,
+      StatisticControllerGetDashboardStatsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    Schemas.DashboardStats,
+    StatisticControllerGetDashboardStatsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/statistic/dashboard-stats",
+      operationId: "statisticControllerGetDashboardStats",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchStatisticControllerGetDashboardStats(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type StatisticControllerGetLeaderboardListByVolumeQueryParams = {
   period?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
-  sortBy?: "WON" | "BET" | "WINRATE" | "VOLUME" | "PROFIT" | "MULTIPLIER";
+  sortBy?:
+    | "WON"
+    | "BET"
+    | "WINRATE"
+    | "VOLUME"
+    | "PROFIT"
+    | "MULTIPLIER"
+    | "LOSS";
   sortOrder?: "ASC" | "DESC";
 };
 
@@ -1079,7 +1139,14 @@ export const useStatisticControllerGetLeaderboardListByVolume = <
 
 export type StatisticControllerGetLeaderboardListByProfitQueryParams = {
   period?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
-  sortBy?: "WON" | "BET" | "WINRATE" | "VOLUME" | "PROFIT" | "MULTIPLIER";
+  sortBy?:
+    | "WON"
+    | "BET"
+    | "WINRATE"
+    | "VOLUME"
+    | "PROFIT"
+    | "MULTIPLIER"
+    | "LOSS";
   sortOrder?: "ASC" | "DESC";
 };
 
@@ -1147,7 +1214,14 @@ export const useStatisticControllerGetLeaderboardListByProfit = <
 
 export type StatisticControllerGetLeaderboardListByLuckyWinnerQueryParams = {
   period?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
-  sortBy?: "WON" | "BET" | "WINRATE" | "VOLUME" | "PROFIT" | "MULTIPLIER";
+  sortBy?:
+    | "WON"
+    | "BET"
+    | "WINRATE"
+    | "VOLUME"
+    | "PROFIT"
+    | "MULTIPLIER"
+    | "LOSS";
   sortOrder?: "ASC" | "DESC";
 };
 
@@ -1205,6 +1279,156 @@ export const useStatisticControllerGetLeaderboardListByLuckyWinner = <
     }),
     queryFn: ({ signal }) =>
       fetchStatisticControllerGetLeaderboardListByLuckyWinner(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type StatisticControllerGetLeaderboardListBigWinsQueryParams = {
+  period?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
+  sortBy?:
+    | "WON"
+    | "BET"
+    | "WINRATE"
+    | "VOLUME"
+    | "PROFIT"
+    | "MULTIPLIER"
+    | "LOSS";
+  sortOrder?: "ASC" | "DESC";
+};
+
+export type StatisticControllerGetLeaderboardListBigWinsError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type StatisticControllerGetLeaderboardListBigWinsResponse =
+  Schemas.LeaderboardBigWinsObject[];
+
+export type StatisticControllerGetLeaderboardListBigWinsVariables = {
+  queryParams?: StatisticControllerGetLeaderboardListBigWinsQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchStatisticControllerGetLeaderboardListBigWins = (
+  variables: StatisticControllerGetLeaderboardListBigWinsVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    StatisticControllerGetLeaderboardListBigWinsResponse,
+    StatisticControllerGetLeaderboardListBigWinsError,
+    undefined,
+    {},
+    StatisticControllerGetLeaderboardListBigWinsQueryParams,
+    {}
+  >({
+    url: "/statistic/bigwins-leaderboard-list",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+export const useStatisticControllerGetLeaderboardListBigWins = <
+  TData = StatisticControllerGetLeaderboardListBigWinsResponse,
+>(
+  variables: StatisticControllerGetLeaderboardListBigWinsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      StatisticControllerGetLeaderboardListBigWinsResponse,
+      StatisticControllerGetLeaderboardListBigWinsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    StatisticControllerGetLeaderboardListBigWinsResponse,
+    StatisticControllerGetLeaderboardListBigWinsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/statistic/bigwins-leaderboard-list",
+      operationId: "statisticControllerGetLeaderboardListBigWins",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchStatisticControllerGetLeaderboardListBigWins(
+        { ...fetcherOptions, ...variables },
+        signal,
+      ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type StatisticControllerGetLeaderboardListLossLegendsQueryParams = {
+  period?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
+  sortBy?:
+    | "WON"
+    | "BET"
+    | "WINRATE"
+    | "VOLUME"
+    | "PROFIT"
+    | "MULTIPLIER"
+    | "LOSS";
+  sortOrder?: "ASC" | "DESC";
+};
+
+export type StatisticControllerGetLeaderboardListLossLegendsError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type StatisticControllerGetLeaderboardListLossLegendsResponse =
+  Schemas.LeaderboardLossLegendsObject[];
+
+export type StatisticControllerGetLeaderboardListLossLegendsVariables = {
+  queryParams?: StatisticControllerGetLeaderboardListLossLegendsQueryParams;
+} & ApiContext["fetcherOptions"];
+
+export const fetchStatisticControllerGetLeaderboardListLossLegends = (
+  variables: StatisticControllerGetLeaderboardListLossLegendsVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    StatisticControllerGetLeaderboardListLossLegendsResponse,
+    StatisticControllerGetLeaderboardListLossLegendsError,
+    undefined,
+    {},
+    StatisticControllerGetLeaderboardListLossLegendsQueryParams,
+    {}
+  >({
+    url: "/statistic/loss-legends-leaderboard-list",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+export const useStatisticControllerGetLeaderboardListLossLegends = <
+  TData = StatisticControllerGetLeaderboardListLossLegendsResponse,
+>(
+  variables: StatisticControllerGetLeaderboardListLossLegendsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      StatisticControllerGetLeaderboardListLossLegendsResponse,
+      StatisticControllerGetLeaderboardListLossLegendsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    StatisticControllerGetLeaderboardListLossLegendsResponse,
+    StatisticControllerGetLeaderboardListLossLegendsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/statistic/loss-legends-leaderboard-list",
+      operationId: "statisticControllerGetLeaderboardListLossLegends",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchStatisticControllerGetLeaderboardListLossLegends(
         { ...fetcherOptions, ...variables },
         signal,
       ),
@@ -1816,6 +2040,170 @@ export const useRankControllerTakeLevelupSnapshot = (
   });
 };
 
+export type BridgeControllerDepositError = Fetcher.ErrorWrapper<undefined>;
+
+export type BridgeControllerDepositVariables = {
+  body: Schemas.BridgeDepositDto;
+} & ApiContext["fetcherOptions"];
+
+export const fetchBridgeControllerDeposit = (
+  variables: BridgeControllerDepositVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    Schemas.BridgeDepositDto,
+    BridgeControllerDepositError,
+    Schemas.BridgeDepositDto,
+    {},
+    {},
+    {}
+  >({ url: "/deposit", method: "post", ...variables, signal });
+
+export const useBridgeControllerDeposit = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.BridgeDepositDto,
+      BridgeControllerDepositError,
+      BridgeControllerDepositVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useApiContext();
+  return reactQuery.useMutation<
+    Schemas.BridgeDepositDto,
+    BridgeControllerDepositError,
+    BridgeControllerDepositVariables
+  >({
+    mutationFn: (variables: BridgeControllerDepositVariables) =>
+      fetchBridgeControllerDeposit({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
+export type BridgeControllerWithdrawError = Fetcher.ErrorWrapper<undefined>;
+
+export type BridgeControllerWithdrawVariables = {
+  body: Schemas.BridgeWithdrawDto;
+} & ApiContext["fetcherOptions"];
+
+export const fetchBridgeControllerWithdraw = (
+  variables: BridgeControllerWithdrawVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    Schemas.BridgeWithdrawDto,
+    BridgeControllerWithdrawError,
+    Schemas.BridgeWithdrawDto,
+    {},
+    {},
+    {}
+  >({ url: "/withdraw", method: "post", ...variables, signal });
+
+export const useBridgeControllerWithdraw = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.BridgeWithdrawDto,
+      BridgeControllerWithdrawError,
+      BridgeControllerWithdrawVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useApiContext();
+  return reactQuery.useMutation<
+    Schemas.BridgeWithdrawDto,
+    BridgeControllerWithdrawError,
+    BridgeControllerWithdrawVariables
+  >({
+    mutationFn: (variables: BridgeControllerWithdrawVariables) =>
+      fetchBridgeControllerWithdraw({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
+export type BridgeControllerHistoryError = Fetcher.ErrorWrapper<undefined>;
+
+export type BridgeControllerHistoryVariables = {
+  body: Schemas.BridgeHistoryDto;
+} & ApiContext["fetcherOptions"];
+
+export const fetchBridgeControllerHistory = (
+  variables: BridgeControllerHistoryVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    Schemas.BridgeHistoryDto,
+    BridgeControllerHistoryError,
+    Schemas.BridgeHistoryDto,
+    {},
+    {},
+    {}
+  >({ url: "/history", method: "post", ...variables, signal });
+
+export const useBridgeControllerHistory = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.BridgeHistoryDto,
+      BridgeControllerHistoryError,
+      BridgeControllerHistoryVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useApiContext();
+  return reactQuery.useMutation<
+    Schemas.BridgeHistoryDto,
+    BridgeControllerHistoryError,
+    BridgeControllerHistoryVariables
+  >({
+    mutationFn: (variables: BridgeControllerHistoryVariables) =>
+      fetchBridgeControllerHistory({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
+export type BridgeControllerLatestError = Fetcher.ErrorWrapper<undefined>;
+
+export type BridgeControllerLatestVariables = {
+  body: Schemas.BridgeHistoryDto;
+} & ApiContext["fetcherOptions"];
+
+export const fetchBridgeControllerLatest = (
+  variables: BridgeControllerLatestVariables,
+  signal?: AbortSignal,
+) =>
+  apiFetch<
+    Schemas.BridgeHistoryDto,
+    BridgeControllerLatestError,
+    Schemas.BridgeHistoryDto,
+    {},
+    {},
+    {}
+  >({ url: "/latest", method: "post", ...variables, signal });
+
+export const useBridgeControllerLatest = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.BridgeHistoryDto,
+      BridgeControllerLatestError,
+      BridgeControllerLatestVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useApiContext();
+  return reactQuery.useMutation<
+    Schemas.BridgeHistoryDto,
+    BridgeControllerLatestError,
+    BridgeControllerLatestVariables
+  >({
+    mutationFn: (variables: BridgeControllerLatestVariables) =>
+      fetchBridgeControllerLatest({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
 export type QueryOperation =
   | {
       path: "/currency/get-last-prices";
@@ -1888,6 +2276,11 @@ export type QueryOperation =
       variables: StatisticControllerGetMiningStatsVariables;
     }
   | {
+      path: "/statistic/dashboard-stats";
+      operationId: "statisticControllerGetDashboardStats";
+      variables: StatisticControllerGetDashboardStatsVariables;
+    }
+  | {
       path: "/statistic/volume-leaderboard-list";
       operationId: "statisticControllerGetLeaderboardListByVolume";
       variables: StatisticControllerGetLeaderboardListByVolumeVariables;
@@ -1901,6 +2294,16 @@ export type QueryOperation =
       path: "/statistic/lucky-leaderboard-list";
       operationId: "statisticControllerGetLeaderboardListByLuckyWinner";
       variables: StatisticControllerGetLeaderboardListByLuckyWinnerVariables;
+    }
+  | {
+      path: "/statistic/bigwins-leaderboard-list";
+      operationId: "statisticControllerGetLeaderboardListBigWins";
+      variables: StatisticControllerGetLeaderboardListBigWinsVariables;
+    }
+  | {
+      path: "/statistic/loss-legends-leaderboard-list";
+      operationId: "statisticControllerGetLeaderboardListLossLegends";
+      variables: StatisticControllerGetLeaderboardListLossLegendsVariables;
     }
   | {
       path: "/bankroll/update-notify-single-sided-pools";
