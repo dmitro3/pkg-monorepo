@@ -31,6 +31,11 @@ export type BundlerMethods = {
     hash: Hex;
     status: string;
   };
+
+  "sendGameOperation"(params: Partial<UserOperation>): {
+    hash: Hex;
+    status: string;
+  };
 };
 
 export enum BundlerNetwork {

@@ -198,7 +198,9 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedParams.encodedTxData,
   });
 

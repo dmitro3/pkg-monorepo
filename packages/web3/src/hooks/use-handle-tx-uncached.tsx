@@ -63,10 +63,7 @@ export const useHandleTxUncached = <
 ) => {
   const { options } = params;
   const { accountApi } = useSmartAccountApi();
-  const { isSocialLogin } = useCurrentAccount();
   const { client } = useBundlerClient();
-
-  const { writeContractAsync } = useWriteContract();
 
   const handleTxUncached = async ({
     encodedTxData,

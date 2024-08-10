@@ -18,6 +18,7 @@ export interface UseHandleTxOptions {
   showDefaultToasts?: boolean;
   refetchInterval?: number;
   unauthRedirectionCb?: () => void;
+  method?: "sendUserOperation" | "sendGameOperation";
 }
 
 interface UseHandleTxParams<
@@ -64,6 +65,7 @@ export const useHandleTx = <
   params: UseHandleTxParams<abi, functionName>
 ) => {
   const { writeContractVariables, options, encodedTxData } = params;
+  const { method = "sendUserOperation" } = options;
   const { address } = useCurrentAccount();
   const { accountApi } = useSmartAccountApi();
   const { client } = useBundlerClient();
@@ -88,7 +90,7 @@ export const useHandleTx = <
         throw new Error("No cached signature found");
       }
 
-      const { status, hash } = await client.request("sendUserOperation", {
+      const { status, hash } = await client.request(method, {
         sender: userOp.sender,
         nonce: userOp.nonce.toString(),
         factory: userOp.factory,
