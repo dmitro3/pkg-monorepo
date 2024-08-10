@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Abi, Address, ContractFunctionArgs, ContractFunctionName } from "viem";
 import { Config } from "wagmi";
 import { WriteContractVariables } from "wagmi/query";
