@@ -14,6 +14,7 @@ export interface UseHandleTxUncachedOptions {
   successMessage?: string;
   successCb?: () => void;
   errorCb?: (e?: any) => void;
+  method?: "sendUserOperation" | "sendGameOperation";
 }
 
 interface UseHandleTxParams {
@@ -62,6 +63,7 @@ export const useHandleTxUncached = <
   params: UseHandleTxParams
 ) => {
   const { options } = params;
+  const { method = "sendUserOperation" } = options;
   const { accountApi } = useSmartAccountApi();
   const { client } = useBundlerClient();
 
@@ -86,7 +88,7 @@ export const useHandleTxUncached = <
       throw new Error("No cached signature found");
     }
 
-    const { status, hash } = await client.request("sendUserOperation", {
+    const { status, hash } = await client.request(method, {
       sender: userOp.sender,
       nonce: userOp.nonce.toString(),
       factory: userOp.factory,
