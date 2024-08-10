@@ -12,6 +12,7 @@ const BundlerClientContext = createContext<UseBundlerClient>({
   client: undefined,
   isLoading: false,
   error: undefined,
+  changeBundlerNetwork: () => {},
 });
 
 export const useBundlerClient = () => {
@@ -51,6 +52,7 @@ interface UseBundlerClient {
   client?: WinrBundlerClient;
   isLoading: boolean;
   error?: Error;
+  changeBundlerNetwork: (network: BundlerNetwork) => void;
 }
 
 const fetchBundlerClient = async ({
@@ -99,14 +101,23 @@ const fetchBundlerClient = async ({
 export const BundlerClientProvider: React.FC<{
   children: ReactNode;
   rpcUrl: string;
-  network: BundlerNetwork;
-}> = ({ children, rpcUrl, network }) => {
+  initialNetwork?: BundlerNetwork;
+}> = ({ children, rpcUrl, initialNetwork = BundlerNetwork.WINR }) => {
   const { address } = useAccount();
+
+  const [network, setNetwork] = React.useState<BundlerNetwork>(initialNetwork);
+
+  const changeBundlerNetwork = (network: BundlerNetwork) => {
+    setNetwork(network);
+
+    refetch();
+  };
 
   const {
     data: client,
     error,
     isLoading,
+    refetch,
   } = useQuery<WinrBundlerClient>({
     queryKey: ["bundler-client", address],
     queryFn: () =>
@@ -115,7 +126,7 @@ export const BundlerClientProvider: React.FC<{
         walletAddress: address,
         network,
       }),
-    enabled: !!address && !!rpcUrl,
+    enabled: !!address && !!rpcUrl && !!network,
   });
 
   React.useEffect(() => {
@@ -128,6 +139,7 @@ export const BundlerClientProvider: React.FC<{
         client,
         isLoading,
         error: error as unknown as Error | undefined,
+        changeBundlerNetwork,
       }}
     >
       {children}

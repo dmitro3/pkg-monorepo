@@ -27,7 +27,7 @@ export const WinrLabsWeb3Provider = ({
   return (
     <BundlerClientProvider
       rpcUrl={smartAccountConfig.bundlerUrl}
-      network={smartAccountConfig.network}
+      initialNetwork={smartAccountConfig.network}
     >
       <SmartAccountApiProvider
         entryPointAddress={smartAccountConfig.entryPointAddress}
