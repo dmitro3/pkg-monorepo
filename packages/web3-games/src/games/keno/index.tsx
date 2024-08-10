@@ -196,9 +196,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       ],
       address: controllerAddress as Address,
     },
-    options: {
-      forceRefetch: true,
-    },
+    options: {},
     encodedTxData: encodedParams.encodedTxData,
   });
 
