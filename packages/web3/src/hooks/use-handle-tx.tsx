@@ -17,7 +17,6 @@ export interface UseHandleTxOptions {
   confirmations?: number;
   showDefaultToasts?: boolean;
   refetchInterval?: number;
-  forceRefetch?: boolean;
   unauthRedirectionCb?: () => void;
 }
 
@@ -71,20 +70,6 @@ export const useHandleTx = <
   const { client } = useBundlerClient();
   const queryClient = useQueryClient();
 
-  const { data: cachedUserOp } = useQuery({
-    queryKey: [
-      "cachedSignature",
-      writeContractVariables.functionName,
-      isSocialLogin,
-      encodedTxData,
-    ],
-    queryFn: () =>
-      getCachedSignature(writeContractVariables, encodedTxData, accountApi),
-    enabled: !!accountApi && isSocialLogin && !!encodedTxData,
-    staleTime: 10000,
-    refetchInterval: params.options.refetchInterval || 10000,
-  });
-
   const handleTxMutation = useMutation({
     mutationFn: async () => {
       if (!address && params.options.unauthRedirectionCb) {
@@ -95,15 +80,11 @@ export const useHandleTx = <
 
       if (!client) return;
 
-      let userOp = cachedUserOp;
-
-      if (!userOp || options.forceRefetch || !isSocialLogin) {
-        userOp = await getCachedSignature(
-          writeContractVariables,
-          encodedTxData,
-          accountApi
-        );
-      }
+      const userOp = await getCachedSignature(
+        writeContractVariables,
+        encodedTxData,
+        accountApi
+      );
 
       if (!userOp) {
         throw new Error("No cached signature found");

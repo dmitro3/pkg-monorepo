@@ -182,10 +182,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       ],
       address: controllerAddress as Address,
     },
-    options: {
-      // TODO: consider it. it breaks he caching mechanism and refetch and ignroe the cached op
-      forceRefetch: true,
-    },
+    options: {},
     encodedTxData: encodedParams.encodedTxData,
   });
 
