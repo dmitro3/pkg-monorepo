@@ -90,9 +90,9 @@ export default defineConfig({
   external: ["react", "react-dom"],
   minify: true,
   esbuildOptions: (options) => {
-    if (!process.env.DEBUG) {
-      options.drop = ["console"];
-    }
+    // if (!process.env.DEBUG) {
+    //   options.drop = ["console"];
+    // }
     return options;
   },
 });
