@@ -209,7 +209,7 @@ export const BetController: React.FC<Props> = ({
           </Button>
         </PreBetButton>
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between md:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>
