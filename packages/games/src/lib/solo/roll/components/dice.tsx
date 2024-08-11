@@ -117,8 +117,12 @@ const Dice: React.FC<Props> = ({
                   }
                 )}
                 checked={field.value?.includes(item)}
-                onCheckedChange={(checked) => {
-                  clickEffect.play();
+                onCheckedChange={async (checked) => {
+                  try {
+                    await clickEffect?.play();
+                  } catch (e) {
+                    console.log(e);
+                  }
                   return checked
                     ? field.onChange([...field.value, item])
                     : field.onChange(
