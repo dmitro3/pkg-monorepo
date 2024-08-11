@@ -155,7 +155,7 @@ export const CardComponent: React.FC<{
             "wr-bottom-full wr-opacity-0": status === VideoPokerStatus.None,
           },
           {
-            "-wr-bottom-10 wr-block wr-opacity-100":
+            "wr-top-3 lg:wr-top-[unset] lg:!-wr-bottom-10 wr-block wr-opacity-100":
               status === VideoPokerStatus.Dealt ||
               status === VideoPokerStatus.Final,
           }

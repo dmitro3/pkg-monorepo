@@ -187,7 +187,7 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
                 form={form}
               />
               <WagerSetterButtons
-                className="wr-hidden lg:wr-block"
+                className="wr-hidden lg:!wr-block"
                 isDisabled={isDisabled}
                 form={form}
                 minWager={minWager}

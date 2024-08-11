@@ -11,7 +11,7 @@ import { CDN_URL } from "../../../constants";
 import { Form, FormField } from "../../../ui/form";
 import { VideoPokerResult } from "../constants";
 import useVideoPokerGameStore, { VideoPokerStatus } from "../store";
-import { CardStatus, parseCards,VideoPokerFormFields } from "../types";
+import { CardStatus, parseCards, VideoPokerFormFields } from "../types";
 import { VideoPokerBetController } from "./bet-controller";
 import { VideoPokerResults } from "./game-scene";
 import { CardComponent } from "./game-scene/card";
@@ -191,7 +191,7 @@ const VideoPokerTemplate = ({
               minWager={minWager || 1}
             />
             <SceneContainer
-              className="wr-relative wr-h-[640px] wr-justify-start wr-overflow-hidden lg:wr-pb-0 lg:wr-pt-0"
+              className="wr-relative max-lg:wr-h-[420px] wr-h-[640px] lg:!wr-justify-start wr-overflow-hidden lg:wr-pb-0 lg:wr-pt-0 wr-flex wr-justify-end"
               style={{
                 perspectiveOrigin: "bottom",
                 perspective: "1000px",
@@ -202,44 +202,45 @@ const VideoPokerTemplate = ({
                 width={170}
                 height={234}
                 alt={"card_stack"}
-                className="wr-mb-[68px]"
+                className="wr-mb-[68px] wr-hidden lg:!wr-block"
               />
               <VideoPokerResults />
-
-              {isLoading ? (
-                <>loading</>
-              ) : (
-                <>
-                  <FormField
-                    name="cardsToSend"
-                    control={form.control}
-                    render={({ field }) => {
-                      return (
-                        <React.Fragment>
-                          <FormField
-                            control={form.control}
-                            name="cardsToSend"
-                            render={({ field }) => {
-                              return (
-                                <React.Fragment>
-                                  {currentCards?.map((card, i) => (
-                                    <CardComponent
-                                      card={card}
-                                      index={i}
-                                      key={i}
-                                      field={field}
-                                    />
-                                  ))}
-                                </React.Fragment>
-                              );
-                            }}
-                          />
-                        </React.Fragment>
-                      );
-                    }}
-                  />
-                </>
-              )}
+              <div className="wr-left-0 max-lg:wr-top-3 lg:wr-bottom-0 wr-w-full lg:wr-h-full wr-flex wr-justify-center  wr-absolute max-lg:wr-scale-[.6] max-lg:wr-w-full max-lg:wr-flex max-lg:wr-justify-center wr-items-center">
+                {isLoading ? (
+                  <>loading</>
+                ) : (
+                  <>
+                    <FormField
+                      name="cardsToSend"
+                      control={form.control}
+                      render={({ field }) => {
+                        return (
+                          <React.Fragment>
+                            <FormField
+                              control={form.control}
+                              name="cardsToSend"
+                              render={({ field }) => {
+                                return (
+                                  <React.Fragment>
+                                    {currentCards?.map((card, i) => (
+                                      <CardComponent
+                                        card={card}
+                                        index={i}
+                                        key={i}
+                                        field={field}
+                                      />
+                                    ))}
+                                  </React.Fragment>
+                                );
+                              }}
+                            />
+                          </React.Fragment>
+                        );
+                      }}
+                    />
+                  </>
+                )}
+              </div>
             </SceneContainer>
           </GameContainer>
         </form>
