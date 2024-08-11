@@ -70,7 +70,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   return (
     <BetControllerContainer>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Keno</BetControllerTitle>
         </div>
 
@@ -111,26 +111,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             </div>
           </Advanced>
         </div>
-        <PreBetButton>
-          <Button
-            type="submit"
-            variant={"success"}
-            className="wr-w-full max-lg:-wr-order-2 max-lg:wr-mb-1"
-            size={"xl"}
-            onClick={() => clickEffect.play()}
-            isLoading={isFormInProgress}
-            disabled={
-              !form.formState.isValid ||
-              form.formState.isSubmitting ||
-              form.formState.isLoading ||
-              selections.length === 0 ||
-              gameStatus == "PLAYING"
-            }
-          >
-            Bet
-          </Button>
-        </PreBetButton>
-        <div className="wr-mt-2 wr-grid wr-grid-cols-2 wr-gap-2 max-lg:-wr-order-1 ">
+        <div className="wr-mb-3 lg:wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
           <Button
             size={"xl"}
             variant={"secondary"}
@@ -152,6 +133,25 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             Clear
           </Button>
         </div>
+        <PreBetButton>
+          <Button
+            type="submit"
+            variant={"success"}
+            className="wr-w-full max-lg:wr-mb-1"
+            size={"xl"}
+            onClick={() => clickEffect.play()}
+            isLoading={isFormInProgress}
+            disabled={
+              !form.formState.isValid ||
+              form.formState.isSubmitting ||
+              form.formState.isLoading ||
+              selections.length === 0 ||
+              gameStatus == "PLAYING"
+            }
+          >
+            Bet
+          </Button>
+        </PreBetButton>
       </div>
       <footer className="wr-flex wr-items-center wr-justify-between">
         <AudioController />

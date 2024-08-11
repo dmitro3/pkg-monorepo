@@ -24,6 +24,7 @@ import { RouletteFormFields, RouletteGameProps } from "../types";
 import { useGameOptions } from "../../../game-provider";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { WinAnimation } from "../../../common/win-animation";
+import { MobileController } from "./mobile-controller";
 
 type TemplateProps = RouletteGameProps & {
   minWager?: number;
@@ -211,6 +212,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
                 isPrepared={isPrepared}
               />
               <Roulette.LastBets />
+              <MobileController isPrepared={isPrepared} undoBet={undoBet} />
             </Roulette.Game>
             <WinAnimation />
           </SceneContainer>

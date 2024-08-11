@@ -57,7 +57,7 @@ export const BetController: React.FC<Props> = ({
   return (
     <BetControllerContainer className="wr-z-40">
       <div className="wr-flex-col wr-flex lg:wr-block lg:wr-flex-row">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Coin Flip</BetControllerTitle>
         </div>
 
@@ -127,11 +127,11 @@ export const BetController: React.FC<Props> = ({
           </Advanced>
         </div>
         {!(coinFlipGameResults.length > 3) && (
-          <PreBetButton className="max-lg:-wr-order-1 max-lg:wr-mb-3.5">
+          <PreBetButton>
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5 wr-select-none"
+              className="wr-w-full wr-select-none"
               size={"xl"}
               onClick={() => clickEffect.play()}
               isLoading={
@@ -157,7 +157,7 @@ export const BetController: React.FC<Props> = ({
           <SkipButton />
         )}
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between md:wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>

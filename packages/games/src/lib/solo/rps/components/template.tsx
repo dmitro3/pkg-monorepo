@@ -84,7 +84,7 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
             winMultiplier={1.96}
           />
           <SceneContainer
-            className="wr-relative wr-h-[640px] wr-overflow-hidden !wr-p-0 max-md:wr-h-[350px]"
+            className="wr-relative wr-h-[640px] wr-overflow-hidden !wr-p-0 max-md:wr-h-[300px]"
             style={{
               backgroundImage: options?.scene?.backgroundImage,
             }}

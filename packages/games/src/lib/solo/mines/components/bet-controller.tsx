@@ -20,6 +20,7 @@ import MinesCountButton from "./count-button";
 import MinesCountDisplay from "./count-display";
 import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { useWinAnimation } from "../../../hooks/use-win-animation";
+import { useGameOptions } from "../../../game-provider";
 
 type Props = {
   minWager: number;
@@ -45,6 +46,8 @@ export const MinesBetController: React.FC<Props> = ({
     "gameStatus",
     "board",
   ]);
+
+  const { account } = useGameOptions();
 
   const wager = form.watch("wager");
 
@@ -110,7 +113,7 @@ export const MinesBetController: React.FC<Props> = ({
         </div>
 
         <WagerFormField
-          className="max-lg:!wr-mb-0"
+          className="wr-mb-3 lg:wr-mb-6"
           minWager={minWager}
           maxWager={maxWager}
           isDisabled={gameStatus !== MINES_GAME_STATUS.IDLE}
@@ -121,21 +124,31 @@ export const MinesBetController: React.FC<Props> = ({
           name="minesCount"
           render={({ field }) => {
             return (
-              <FormItem>
-                <FormLabel>Mines Count (1 - 24)</FormLabel>
+              <FormItem
+                className={cn({
+                  "wr-mb-0 lg:wr-mb-6":
+                    account?.isLoggedIn || !!account?.balanceAsDollar,
+                  "wr-mb-3 lg:wr-mb-6":
+                    !account?.isLoggedIn || !account?.balanceAsDollar,
+                })}
+              >
+                <FormLabel className="wr-mb-3 lg:wr-mb-[6px] wr-leading-4 lg:wr-leading-6">
+                  Mines Count (1 - 24)
+                </FormLabel>
                 <NumberInput.Root
                   {...field}
+                  errorClassName="wr-hidden lg:wr-block"
                   className="wr-relative wr-flex wr-items-center wr-gap-2"
                   isDisabled={gameStatus !== MINES_GAME_STATUS.IDLE}
                 >
-                  <NumberInput.Container>
+                  <NumberInput.Container className="wr-bg-zinc-950">
                     <img
                       alt="mine_icon"
                       width={17}
                       height={17}
                       src={`${CDN_URL}/mines/mine-icon.png`}
                     />
-                    <NumberInput.Input className="" />
+                    <NumberInput.Input className="wr-text-sm wr-font-semibold" />
                   </NumberInput.Container>
                   <div className="wr-flex wr-flex-shrink-0 wr-items-center wr-justify-between wr-gap-1">
                     <MinesCountButton

@@ -75,7 +75,7 @@ export const VideoPokerBetController: React.FC<Props> = ({
           <Button
             type="submit"
             variant={"success"}
-            className="wr-w-full max-lg:wr-mb-3.5"
+            className="wr-w-full"
             size={"xl"}
             onClick={() => clickEffect.play()}
             isLoading={form.formState.isSubmitting || form.formState.isLoading}

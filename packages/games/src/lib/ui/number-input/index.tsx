@@ -51,9 +51,9 @@ const ErrorMessage: React.FC<{
   return (
     <div
       className={cn(
-        "wr-mt-1 wr-text-red-600 wr-transition-all wr-motion-safe:ease-in",
+        "wr-text-red-600 wr-transition-all wr-motion-safe:ease-in",
         {
-          "wr-h-10": hasErrorMessage,
+          "wr-h-10 wr-mt-1": hasErrorMessage,
           "wr-h-0": !hasErrorMessage,
         },
         className

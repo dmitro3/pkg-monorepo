@@ -8,7 +8,7 @@ import { cn } from "../utils/style";
 import { Spinner } from "./spinner";
 
 const buttonVariants = cva(
-  "focus-visible:wr-ring-ring wr-inline-flex wr-h-2 wr-items-center wr-justify-center wr-rounded-md wr-px-3 wr-py-0 wr-text-[15px] wr-font-semibold wr-leading-4 wr-transition wr-duration-300 wr-ease-out hover:wr-ease-in focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-pointer-events-none disabled:wr-cursor-not-allowed",
+  "focus-visible:wr-ring-ring wr-inline-flex wr-h-2 wr-items-center wr-justify-center wr-rounded-md wr-px-3 wr-py-0 wr-text-[14px] wr-font-semibold wr-leading-4 wr-transition wr-duration-300 wr-ease-out hover:wr-ease-in focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-pointer-events-none disabled:wr-cursor-not-allowed",
   {
     variants: {
       variant: {

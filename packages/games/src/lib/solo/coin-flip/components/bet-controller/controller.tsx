@@ -27,7 +27,7 @@ export const CoinFlipController = () => {
   const { gameStatus } = useCoinFlipGameStore(["gameStatus"]);
 
   return (
-    <div className="wr-flex wr-items-center wr-w-full lg:wr-mb-5">
+    <div className="wr-flex wr-items-center wr-w-full wr-mb-3 lg:wr-mb-6">
       <FormField
         control={form.control}
         name="coinSide"
