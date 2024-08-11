@@ -32,7 +32,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
 
   const rollType = form.watch("rollType");
 
-  const debouncedRollValue = useDebounce(rollValue * 100, 50);
+  const debouncedRollValue = useDebounce(rollValue, 50);
 
   React.useEffect(() => {
     sliderEffect.play();
@@ -62,7 +62,6 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                 max={MAX_VALUE}
                 onValueChange={(e) => {
                   field.onChange(e[0]);
-                  sliderEffect.play();
 
                   const { rollType } = form.getValues();
 

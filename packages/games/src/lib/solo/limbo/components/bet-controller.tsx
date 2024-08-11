@@ -30,8 +30,8 @@ import { cn } from "../../../utils/style";
 import { toDecimals } from "../../../utils/web3";
 import useLimboGameStore from "../store";
 import { LimboForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { useDebounce } from "use-debounce";
+// import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
+// import { useDebounce } from "use-debounce";
 
 interface Props {
   minWager: number;
@@ -63,13 +63,13 @@ export const BetController: React.FC<Props> = ({
     return toDecimals(wager * betCount * winMultiplier, 2);
   }, [form.getValues().wager, form.getValues().betCount, winMultiplier]);
 
-  const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
+  // const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
   const limboMultiplier = form.watch("limboMultiplier");
-  const debouncedBetCount = useDebounce(limboMultiplier, 25);
+  // const debouncedBetCount = useDebounce(limboMultiplier, 40);
 
-  React.useEffect(() => {
-    sliderEffect.play();
-  }, [debouncedBetCount[0]]);
+  // React.useEffect(() => {
+  //   sliderEffect.play();
+  // }, [debouncedBetCount[0]]);
 
   return (
     <BetControllerContainer>
