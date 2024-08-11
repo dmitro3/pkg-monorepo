@@ -45,7 +45,7 @@ export const BetController: React.FC<Props> = ({
   winMultiplier,
 }) => {
   const form = useFormContext() as LimboForm;
-  const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
+  // const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   const { limboGameResults, gameStatus } = useLimboGameStore([
     "limboGameResults",
@@ -173,7 +173,7 @@ export const BetController: React.FC<Props> = ({
               variant={"success"}
               className="wr-w-full"
               size={"xl"}
-              onClick={() => clickEffect.play()}
+              // onClick={() => clickEffect.play()}
               isLoading={
                 form.formState.isSubmitting || form.formState.isLoading
               }

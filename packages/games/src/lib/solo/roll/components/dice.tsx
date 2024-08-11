@@ -87,7 +87,7 @@ const Dice: React.FC<Props> = ({
   isDisabled = false,
 }) => {
   const form = useFormContext() as RollForm;
-  const clickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
+  // const clickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
 
   return (
     <FormField
@@ -117,12 +117,7 @@ const Dice: React.FC<Props> = ({
                   }
                 )}
                 checked={field.value?.includes(item)}
-                onCheckedChange={async (checked) => {
-                  try {
-                    await clickEffect?.play();
-                  } catch (e) {
-                    console.log(e);
-                  }
+                onCheckedChange={(checked) => {
                   return checked
                     ? field.onChange([...field.value, item])
                     : field.onChange(
