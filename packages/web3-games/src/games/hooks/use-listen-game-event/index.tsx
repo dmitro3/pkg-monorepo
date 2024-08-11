@@ -5,6 +5,7 @@ import { DecodedEvent, Event } from "../../utils";
 import { useGameSocketContext } from "../use-game-socket";
 import { Socket, io } from "socket.io-client";
 import { useCurrentAccount } from "@winrlabs/web3";
+import dayjs from "dayjs";
 
 export const useListenGameEvent = () => {
   const [gameEvent, setGameEvent] = React.useState<DecodedEvent<
@@ -69,7 +70,7 @@ export const useListenGameEvent = () => {
 
     const context = _e.context as DecodedEvent<any, any>;
 
-    console.log(context, "CONTEXT!");
+    console.log(context, "CONTEXT!", dayjs(new Date()).unix());
 
     setGameEvent(context);
   };

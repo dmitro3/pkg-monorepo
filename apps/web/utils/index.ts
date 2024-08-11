@@ -2,6 +2,7 @@ import { parseUnits } from "viem";
 import SuperJSON from "superjson";
 import { Address, Hex } from "viem";
 import { toDecimals } from "@winrlabs/games";
+import { EventLogic } from "@winrlabs/web3";
 
 export enum GAME_HUB_GAMES {
   rps = "rps",
@@ -156,6 +157,7 @@ export type DecodedEvent<T, K> = {
   key: Hex;
   type: string;
   version: number;
+  logic: EventLogic;
   timestamp: number;
   context: Item<T>[];
   program: Item<K>[];

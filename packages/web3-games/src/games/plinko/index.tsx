@@ -192,7 +192,9 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedParams.encodedTxData,
   });
 

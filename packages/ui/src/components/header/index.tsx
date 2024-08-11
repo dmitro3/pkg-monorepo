@@ -1,9 +1,11 @@
 "use client";
 
 import {
+  FastOrVerifiedOption,
   delay,
   erc20Abi,
   useCurrentAccount,
+  useFastOrVerifiedStore,
   useHandleTx,
   useTokenBalances,
   useTokenStore,
@@ -55,6 +57,7 @@ export const Header = ({
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
+  const { option, updateOption } = useFastOrVerifiedStore();
 
   const { disconnect, disconnectAsync, isPending, data } = useDisconnect({
     config: wagmiConfig,
@@ -117,6 +120,31 @@ export const Header = ({
         {account.isGettingAddress && <Skeleton className="wr-h-10 wr-w-24" />}
         {account.address && !account.isGettingAddress && (
           <>
+            <section className="wr-flex wr-gap-2">
+              <div
+                className={cn(
+                  "wr-p-2 wr-rounded-lg wr-transition-all wr-duration-200 wr-text-center wr-font-bold wr-cursor-pointer",
+                  {
+                    "wr-bg-green-500": option == FastOrVerifiedOption.FAST,
+                  }
+                )}
+                onClick={() => updateOption(FastOrVerifiedOption.FAST)}
+              >
+                Fast
+              </div>
+              <div
+                className={cn(
+                  "wr-p-2 wr-rounded-lg wr-transition-all wr-duration-200 wr-text-center wr-font-bold wr-cursor-pointer",
+                  {
+                    "wr-bg-green-500": option == FastOrVerifiedOption.VERIFIED,
+                  }
+                )}
+                onClick={() => updateOption(FastOrVerifiedOption.VERIFIED)}
+              >
+                Verified
+              </div>
+            </section>
+
             <div className="wr-mx-4 wr-gap-2 wr-flex wr-items-center lg:wr-absolute lg:wr-left-[50%] lg:wr-top-[50%] lg:wr-mx-0 lg:wr-translate-x-[-50%] lg:wr-translate-y-[-50%]">
               <SelectGameCurrency />
               <Button

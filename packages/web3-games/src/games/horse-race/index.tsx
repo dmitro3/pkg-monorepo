@@ -164,12 +164,14 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
         gameAddresses.horseRace,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "claim",
+        "bet",
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedParams.encodedTxData,
   });
 

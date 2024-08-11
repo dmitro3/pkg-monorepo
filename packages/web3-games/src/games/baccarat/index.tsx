@@ -175,7 +175,9 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedParams.encodedTxData,
   });
 
