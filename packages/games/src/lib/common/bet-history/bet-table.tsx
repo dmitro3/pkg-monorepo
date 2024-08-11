@@ -17,6 +17,7 @@ import { cn } from "../../utils/style";
 import { toDecimals, toFormatted } from "../../utils/web3";
 import { BetHistoryCurrencyList } from ".";
 import { GameType } from "../../constants";
+import useMediaQuery from "../../hooks/use-media-query";
 
 const gameMap: Record<GameType, string> = {
   [GameType.BACCARAT]: "Baccarat",
@@ -30,7 +31,7 @@ const gameMap: Record<GameType, string> = {
   [GameType.LOTTERY]: "Lottery",
   [GameType.MINES]: "Mines",
   [GameType.MOON]: "Crash",
-  [GameType.ONE_HAND_BLACKJACK]: "Single Blackjack",
+  [GameType.ONE_HAND_BLACKJACK]: "Blackjack",
   [GameType.PLINKO]: "Plinko",
   [GameType.RANGE]: "Dice",
   [GameType.ROULETTE]: "Roulette",
@@ -48,12 +49,13 @@ const BetTable = ({
   betHistory: GameControllerBetHistoryResponse;
   currencyList: BetHistoryCurrencyList;
 }) => {
+  const isMobile = useMediaQuery("(max-width:1024px)");
   return (
     <Table className="max-lg:wr-max-w-full max-md:wr-overflow-scroll max-md:wr-scrollbar-none">
       <TableHeader>
         <TableRow>
-          <TableHead className="wr-text-center lg:wr-text-left">
-            Transaction
+          <TableHead className="wr-w-[50px] lg:wr-w-[150px] wr-text-left">
+            {isMobile ? "TX" : "Transaction"}
           </TableHead>
           <TableHead className="wr-text-center lg:wr-text-left wr-table-cell lg:wr-hidden">
             Game
@@ -61,20 +63,20 @@ const BetTable = ({
           <TableHead className="wr-text-center lg:wr-text-left">
             Player
           </TableHead>
-          <TableHead className="wr-hidden lg:wr-table-cell wr-text-center lg:wr-text-left">
+          <TableHead className="wr-hidden lg:wr-table-cell lg:wr-text-left">
             Bet
           </TableHead>
           <TableHead className="wr-hidden lg:wr-table-cell">Wager</TableHead>
-          <TableHead className="wr-text-center lg:wr-text-left">
+          <TableHead className="wr-hidden lg-wr:table-cell wr-text-left">
             Payout
           </TableHead>
           <TableHead className="wr-hidden lg:wr-table-cell">
             Multiplier
           </TableHead>
-          <TableHead className="wr-hidden lg:wr-table-cell">Profit</TableHead>
-          <TableHead className="wr-hidden lg:wr-table-cell wr-text-center">
-            Currency
+          <TableHead className="wr-text-right lg:wr-text-left">
+            Profit
           </TableHead>
+          <TableHead className="wr-hidden lg:wr-table-cell">Currency</TableHead>
           <TableHead className="wr-hidden lg:wr-table-cell wr-w-12 wr-text-right">
             Share
           </TableHead>
@@ -84,11 +86,11 @@ const BetTable = ({
         {betHistory.data?.map((bet, i) => {
           return (
             <TableRow key={i}>
-              <TableCell className="lg:wr-w-[150px]">
+              <TableCell className="wr-w-[50px] lg:wr-w-[150px]">
                 {/* {dayjs(bet.createdAt * 1000).format("DD-MM-YY, HH:mm")} */}
                 {/* TODO: ADD ROUTE TO EXPLORER */}
                 <a href="">
-                  <div className="wr-flex wr-gap-2 wr-items-center wr-justify-center lg:wr-justify-left">
+                  <div className="wr-flex wr-gap-2 wr-items-center wr-justify-start">
                     <span className="wr-hidden lg:wr-flex">
                       {walletShorter(bet.hash, 5)}
                     </span>
@@ -110,10 +112,10 @@ const BetTable = ({
                 {bet.playedGameCount}
               </TableCell>
               <TableCell className="wr-hidden lg:wr-table-cell">
-                $ {toFormatted(bet.wagerInDollar, 2)}
+                ${toFormatted(bet.wagerInDollar, 2)}
               </TableCell>
-              <TableCell className="wr-text-center lg:wr-text-left">
-                $ {toFormatted(bet.payoutInDollar, 2)}
+              <TableCell className="wr-hidden lg:wr-table-cell wr-text-center lg:wr-text-left">
+                ${toFormatted(bet.payoutInDollar, 2)}
               </TableCell>
               <TableCell className="wr-hidden lg:wr-table-cell">
                 <div
@@ -128,7 +130,7 @@ const BetTable = ({
                 </div>
               </TableCell>
               <TableCell
-                className={cn("wr-hidden lg:wr-table-cell", {
+                className={cn("wr-text-right lg:wr-text-left", {
                   "wr-text-green-500": bet.won === true,
                   "wr-text-red-600": bet.won === false,
                 })}

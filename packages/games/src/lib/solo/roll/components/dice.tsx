@@ -159,7 +159,7 @@ export const Dot = ({
   return (
     <div
       className={cn(
-        "wr-ease wr-transfrom  wr-absolute md:!wr-size-6 wr-size-3 wr-shrink-0 wr-rounded-full wr-border-2 wr-border-[#EDEDF1] wr-bg-dice wr-transition-all sm:wr-h-[23px] sm:wr-w-[23px]",
+        "wr-ease wr-transfrom  wr-absolute lg:!wr-size-6 wr-size-3 wr-shrink-0 wr-rounded-full wr-border-2 wr-border-[#EDEDF1] wr-bg-dice wr-transition-all lg:wr-h-[23px] lg:wr-w-[23px]",
         className,
         { "wr-border-[#41414C] wr-bg-dice-selected": selected }
       )}
