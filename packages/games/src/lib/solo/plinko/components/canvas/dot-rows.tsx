@@ -14,9 +14,9 @@ const Dots: React.FC<PlinkoDotRowsProps> = ({ size }) => {
       {count.map((i) => (
         <div
           key={i}
-          className="wr-flex wr-w-[50px] wr-h-[30px] wr-justify-center wr-items-center max-md:wr-w-[20px] max-md:wr-h-[20px]"
+          className="wr-flex wr-w-[50px] wr-h-[30px] wr-justify-center wr-items-center max-md:wr-w-[25px] max-md:wr-h-[25px]"
         >
-          <div className="wr-rounded-full wr-bg-[#3A4D69] wr-bg-opacity-[0.25] wr-p-[4px] before:wr-content-[''] before:wr-block before:wr-w-[7px] before:wr-h-[7px] before:wr-rounded-sm before:wr-bg-[#696969] max-md:wr-p-[3px] max-md:before:wr-w-[4px] max-md:before:wr-h-[4px]" />
+          <div className="wr-rounded-full wr-bg-[#3A4D69] wr-bg-opacity-[0.25] wr-p-[4px] before:wr-content-[''] before:wr-block before:wr-w-[7px] before:wr-h-[7px] before:wr-rounded-sm before:wr-bg-[#696969] max-md:wr-p-[2px] max-md:before:wr-w-[5px] max-md:before:wr-h-[5px]" />
         </div>
       ))}
     </>

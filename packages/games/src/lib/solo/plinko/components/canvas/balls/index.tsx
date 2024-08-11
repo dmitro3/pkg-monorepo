@@ -35,32 +35,23 @@ const Ball: React.FC<PlinkoBallProps> = ({
   const [jump, setJump] = React.useState(false);
   const [style, setStyle] = React.useState(initialStyle);
   const skipRef = React.useRef<boolean>(isSkipped);
-  const isMobile = useMediaQuery("(max-width:768px)");
-  const mobileRef = React.useRef<boolean>(isMobile);
-  const ballEffect = useAudioEffect(SoundEffects.BALL_BUMP);
-  const { gameStatus } = usePlinkoGameStore(["gameStatus"]);
 
   React.useEffect(() => {
     skipRef.current = isSkipped;
   }, [isSkipped]);
 
   React.useEffect(() => {
-    mobileRef.current = isMobile;
-  }, [isMobile]);
-
-  React.useEffect(() => {
+    const isMobile = window.innerWidth < 768;
     if (path.length > 0) {
       let x = 0;
       let delay = order * 400;
 
-      const initialX = mobileRef.current ? 10 : 25;
-      const initialY = mobileRef.current ? 20 : 30;
+      const initialX = isMobile ? 15 : 25;
+      const initialY = isMobile ? 25 : 30;
 
       if (betCount === 1) {
         delay = 1;
       }
-
-      // const ballInterval = setInterval(() => ballEffect.play(), 300);
 
       for (let i = 0; i < path.length + 2; i++) {
         console.log(i, "i");
