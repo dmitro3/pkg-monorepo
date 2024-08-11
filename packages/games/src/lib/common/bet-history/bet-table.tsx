@@ -57,8 +57,8 @@ const BetTable = ({
               <TableCell className="wr-text-center lg:wr-text-left">
                 {bet.playedGameCount}
               </TableCell>
-              <TableCell>$ {toFormatted(bet.wagerInDollar, 2)}</TableCell>
-              <TableCell>$ {toFormatted(bet.payoutInDollar, 2)}</TableCell>
+              <TableCell>${toFormatted(bet.wagerInDollar, 2)}</TableCell>
+              <TableCell>${toFormatted(bet.payoutInDollar, 2)}</TableCell>
               <TableCell>
                 <div
                   className={cn(
