@@ -160,7 +160,7 @@ export const BetController: React.FC<Props> = ({
           <Button
             type="submit"
             variant="plinko"
-            className="wr-w-full !wr-rounded-none max-lg:-wr-order-2 max-lg:wr-mb-3.5 max-lg:wr-bg-cover"
+            className="wr-w-full !wr-rounded-none max-lg:wr-bg-cover"
             size={"xl"}
             onClick={() => clickEffect.play()}
             disabled={

@@ -10,7 +10,7 @@ import {
 } from "../../../svgs";
 import { cn } from "../../../utils/style";
 import useRpsGameStore from "../store";
-import { RockPaperScissors,RPSForm } from "../types";
+import { RockPaperScissors, RPSForm, RPSGameResult } from "../types";
 
 const MiniRPSIcon = ({ rps }: { rps: string }) => {
   switch (rps) {
@@ -35,7 +35,7 @@ const LastBets = () => {
   const rpsChoice = form.watch("rpsChoice");
 
   return (
-    <LastBetsContainer className="wr-absolute wr-top-3 wr-z-10 wr-max-w-[430px] max-md:wr-max-w-[340px]">
+    <LastBetsContainer className="wr-absolute wr-top-3 wr-z-10 wr-max-w-[430px] max-md:wr-max-w-[340px] max-md:wr-scale-90">
       {lastBets?.map((result, index) => {
         return (
           <div

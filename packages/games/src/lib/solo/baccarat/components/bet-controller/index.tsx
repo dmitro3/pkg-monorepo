@@ -52,7 +52,7 @@ export const BetController: React.FC<Props> = ({
   return (
     <BetControllerContainer>
       <div className="wr-flex-col wr-flex lg:wr-block lg:wr-flex-row">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Baccarat</BetControllerTitle>
         </div>
 
@@ -74,7 +74,6 @@ export const BetController: React.FC<Props> = ({
           isDisabled={isDisabled}
           selectedChip={selectedChip}
           onSelectedChipChange={onSelectedChipChange}
-          className="wr-mb-6"
         />
 
         <Control
@@ -103,7 +102,7 @@ export const BetController: React.FC<Props> = ({
           </div>
         </div>
 
-        <div className="wr-w-full lg:wr-order-none wr-mb-6">
+        <div className="wr-w-full lg:wr-order-none lg:wr-mb-6">
           <PreBetButton>
             <Button
               type="submit"
@@ -126,7 +125,7 @@ export const BetController: React.FC<Props> = ({
           </PreBetButton>
         </div>
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between md:wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>

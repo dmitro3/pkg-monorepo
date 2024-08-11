@@ -59,7 +59,7 @@ export const BetController: React.FC<Props> = ({
   return (
     <BetControllerContainer>
       <div className="wr-flex-col wr-flex lg:wr-block lg:wr-flex-row">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Roulette</BetControllerTitle>
         </div>
 
@@ -81,10 +81,10 @@ export const BetController: React.FC<Props> = ({
           isDisabled={isPrepared}
           selectedChip={selectedChip}
           onSelectedChipChange={onSelectedChipChange}
-          className="wr-mb-6"
+          className="lg:wr-mb-6"
         />
 
-        <div className="wr-flex wr-w-full wr-items-center wr-gap-2 wr-mb-6">
+        <div className="wr-hidden lg:wr-flex wr-w-full wr-items-center wr-gap-2 wr-mb-6">
           <Button
             type="button"
             disabled={isPrepared || form.getValues().totalWager === 0}
@@ -129,15 +129,17 @@ export const BetController: React.FC<Props> = ({
           </Button>
         </div>
 
-        <BetCountFormField
-          isDisabled={
-            form.formState.isSubmitting ||
-            form.formState.isLoading ||
-            gameStatus == "PLAYING"
-          }
-        />
+        <div className="wr-hidden lg:wr-block">
+          <BetCountFormField
+            isDisabled={
+              form.formState.isSubmitting ||
+              form.formState.isLoading ||
+              gameStatus == "PLAYING"
+            }
+          />
+        </div>
 
-        <div className="wr-w-full -wr-order-1 lg:wr-order-none wr-mb-6">
+        <div className="wr-w-full lg:wr-mb-6">
           {!(rouletteGameResults.length > 3) && (
             <PreBetButton totalWager={totalWager}>
               <Button
@@ -166,7 +168,7 @@ export const BetController: React.FC<Props> = ({
         </div>
       </div>
 
-      <footer className="wr-flex wr-items-center wr-justify-between md:wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>

@@ -82,7 +82,7 @@ export const BetController: React.FC<BetControllerProps> = ({
   return (
     <BetControllerContainer>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Rock Paper Scissors</BetControllerTitle>
         </div>
 
@@ -95,7 +95,7 @@ export const BetController: React.FC<BetControllerProps> = ({
           control={form.control}
           name="rpsChoice"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="wr-mb-3 lg:wr-mb-6">
               <FormControl>
                 <RadioGroupPrimitive.Root
                   {...field}
@@ -158,7 +158,7 @@ export const BetController: React.FC<BetControllerProps> = ({
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full  max-lg:wr-mb-3.5"
+              className="wr-w-full"
               size={"xl"}
               onClick={() => clickEffect.play()}
               isLoading={
@@ -177,7 +177,7 @@ export const BetController: React.FC<BetControllerProps> = ({
         )}
         {rpsGameResults.length > 3 && gameStatus == "PLAYING" && <SkipButton />}
       </div>
-      <footer className="wr-mt-4 wr-flex wr-items-center wr-justify-between">
+      <footer className="lg:wr-mt-4 wr-flex wr-items-center wr-justify-between">
         <AudioController />
       </footer>
     </BetControllerContainer>

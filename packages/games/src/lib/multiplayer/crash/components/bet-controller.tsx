@@ -221,7 +221,7 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
           </Button>
         </PreBetButton>
 
-        <footer className="wr-mt-3 wr-flex wr-items-center wr-justify-between max-md:wr-absolute max-md:wr-top-14">
+        <footer className="wr-hidden wr-mt-3 lg:wr-flex wr-items-center wr-justify-between max-md:wr-absolute max-md:wr-top-14">
           <UnityAudioController />
         </footer>
       </div>

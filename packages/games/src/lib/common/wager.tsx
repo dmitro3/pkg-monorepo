@@ -76,13 +76,13 @@ export const WagerInput = ({
             variant={"secondary"}
             onClick={() => {
               clickEffect.play();
-              const newValue = rest.value / 3;
+              const newValue = rest.value / 2;
 
               if (newValue < minWager) form.setValue("wager", minWager);
               else form.setValue("wager", newValue);
             }}
           >
-            1/3
+            1/2
           </Button>
           <Button
             className={cn("wr-w-14 wr-font-[600] wr-text-base", className)}

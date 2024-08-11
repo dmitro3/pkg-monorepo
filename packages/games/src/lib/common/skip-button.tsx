@@ -18,10 +18,7 @@ export const SkipButton: React.FC = ({
       type="button"
       size="xl"
       variant={variant ? variant : "success"}
-      className={cn(
-        "wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5 wr-gap-2",
-        className && className
-      )}
+      className={cn("wr-w-full wr-gap-2", className && className)}
     >
       Skip{" "}
       <img

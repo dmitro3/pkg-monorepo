@@ -74,7 +74,7 @@ export const BetController: React.FC<Props> = ({
   return (
     <BetControllerContainer>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Limbo</BetControllerTitle>
         </div>
 
@@ -89,7 +89,7 @@ export const BetController: React.FC<Props> = ({
             control={form.control}
             name="limboMultiplier"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="wr-mb-3 lg:wr-mb-6">
                 <FormLabel>Multiplier (1.1-{100}) </FormLabel>
 
                 <FormControl>
@@ -171,7 +171,7 @@ export const BetController: React.FC<Props> = ({
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full  max-lg:wr-mb-3.5"
+              className="wr-w-full"
               size={"xl"}
               onClick={() => clickEffect.play()}
               isLoading={

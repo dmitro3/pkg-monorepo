@@ -167,8 +167,12 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
       control={form.control}
       name="wager"
       render={({ field }) => (
-        <FormItem className={cn(className, "wr-mb-4")}>
-          <FormLabel>
+        <FormItem className={cn(className, "wr-mb-3 lg:wr-mb-6")}>
+          <FormLabel
+            className={cn(
+              "wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6"
+            )}
+          >
             {customLabel ? customLabel : "Wager"}
             <div>
               <WagerBalance className="wr-text-zinc-100" />
@@ -243,7 +247,9 @@ export const UnityWagerFormField: React.FC<WagerFormFieldProps> = ({
                 minWager={minWager}
                 maxWager={maxWager}
                 currentWager={field.value}
-                className={cn("wr-bg-unity-white-15 wr-backdrop-blur-md")}
+                className={cn(
+                  "wr-bg-unity-white-15 wr-backdrop-blur-md wr-hidden lg:wr-block"
+                )}
               />
             </>
           </FormControl>

@@ -62,7 +62,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   return (
     <BetControllerContainer>
       <div className="wr-max-lg:flex wr-max-lg:flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Plinko</BetControllerTitle>
         </div>
 
@@ -140,7 +140,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
+              className="wr-w-full"
               size={"xl"}
               onClick={() => clickEffect.play()}
               isLoading={
@@ -160,7 +160,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           <SkipButton />
         )}
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between md:wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>
@@ -180,8 +180,10 @@ const PlinkoRowFormField: React.FC<{
         control={form.control}
         name="plinkoSize"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>Plinko Row</FormLabel>
+          <FormItem className="wr-mb-3 lg:wr-mb-6">
+            <FormLabel className="wr-leading-4 lg:wr-leading-6 wr-mb-3 lg:wr-mb-[6px]">
+              Plinko Row
+            </FormLabel>
 
             <FormControl>
               <div>
