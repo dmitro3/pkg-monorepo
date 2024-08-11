@@ -82,9 +82,9 @@ export const Canvas: React.FC<CanvasProps> = ({
   useEffect(() => {
     if (!plinkoGameResults.length) return;
 
-    if (plinkoGameResults.length === 1) {
-      // @ts-ignore
-      setPaths((prev) => [...prev, plinkoGameResults[0].outcomes]);
+    if (plinkoGameResults[0] && plinkoGameResults.length === 1) {
+      const newOutcomes = plinkoGameResults[0].outcomes;
+      setPaths((prev) => [...prev, newOutcomes]);
     } else {
       dispatch({ type: PlinkoResultActions.CLEAR });
       setPaths(plinkoGameResults.map((r) => r.outcomes));
