@@ -148,8 +148,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
               disabled={
                 !form.formState.isValid ||
                 form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                gameStatus == "PLAYING"
+                form.formState.isLoading
               }
             >
               Bet

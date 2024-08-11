@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import { useGameSkip } from "../../../../../game-provider";
 import {
@@ -22,6 +22,7 @@ interface PlinkoBallProps {
   path: number[];
   isSkipped: boolean;
   onAnimationEnd: (order: number, isSkipped?: boolean) => void;
+  betCount: number;
 }
 
 const Ball: React.FC<PlinkoBallProps> = ({
@@ -29,6 +30,7 @@ const Ball: React.FC<PlinkoBallProps> = ({
   order,
   isSkipped,
   onAnimationEnd,
+  betCount,
 }) => {
   const [jump, setJump] = React.useState(false);
   const [style, setStyle] = React.useState(initialStyle);
@@ -53,6 +55,10 @@ const Ball: React.FC<PlinkoBallProps> = ({
 
       const initialX = mobileRef.current ? 10 : 25;
       const initialY = mobileRef.current ? 20 : 30;
+
+      if (betCount === 1) {
+        delay = 1;
+      }
 
       // const ballInterval = setInterval(() => ballEffect.play(), 300);
 
@@ -144,16 +150,14 @@ export const Balls: React.FC<PlinkoBallsProps> = ({
   paths,
   onAnimationEnd,
 }) => {
+  const calls = useRef<number[]>([]);
   const { isAnimationSkipped } = useGameSkip();
 
   const skipRef = React.useRef<boolean>(false);
-  const balls = React.useMemo(() => {
-    if (skipRef.current) {
-      return [];
-    } else {
-      return genNumberArray(count);
-    }
-  }, [count, skipRef.current]);
+
+  useEffect(() => {
+    calls.current = [];
+  }, [paths]);
 
   React.useEffect(() => {
     if (isAnimationSkipped) {
@@ -171,15 +175,21 @@ export const Balls: React.FC<PlinkoBallsProps> = ({
         "wr-hidden": paths?.length === 0,
       })}
     >
-      {balls.map((i) => (
-        <Ball
-          key={i}
-          order={i}
-          path={(paths && paths[i] ? paths[i] : []) as number[]}
-          isSkipped={isAnimationSkipped}
-          onAnimationEnd={onAnimationEnd}
-        />
-      ))}
+      {paths &&
+        paths.map((path, i) => (
+          <Ball
+            betCount={count}
+            key={i}
+            order={i}
+            path={path as number[]}
+            isSkipped={isAnimationSkipped}
+            onAnimationEnd={(order, skipped) => {
+              if (calls.current.includes(order)) return;
+              calls.current.push(order);
+              onAnimationEnd(order, skipped);
+            }}
+          />
+        ))}
     </div>
   );
 };

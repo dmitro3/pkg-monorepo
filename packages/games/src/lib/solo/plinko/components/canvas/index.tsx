@@ -4,7 +4,7 @@
 // paths: number[][]
 // is skipped. is animation skipped
 
-import { useMemo, useReducer } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import {
@@ -77,11 +77,18 @@ export const Canvas: React.FC<CanvasProps> = ({
     else return _ps;
   }, [form]);
   const multipliers = rowMultipliers[plinkoSize] as number[];
+  const [paths, setPaths] = useState<number[][]>([]);
 
-  const paths = useMemo(() => {
-    return plinkoGameResults.length
-      ? plinkoGameResults.map((r) => r.outcomes)
-      : [];
+  useEffect(() => {
+    if (!plinkoGameResults.length) return;
+
+    if (plinkoGameResults.length === 1) {
+      // @ts-ignore
+      setPaths((prev) => [...prev, plinkoGameResults[0].outcomes]);
+    } else {
+      dispatch({ type: PlinkoResultActions.CLEAR });
+      setPaths(plinkoGameResults.map((r) => r.outcomes));
+    }
   }, [plinkoGameResults]);
 
   const handleAnimationEnd = (order: number, skipped = false) => {
@@ -89,11 +96,11 @@ export const Canvas: React.FC<CanvasProps> = ({
       return;
     }
 
-    const lastBets = plinkoGameResults.map((r) => ({
+    const lastBets = plinkoGameResults.map((r, i) => ({
       multiplier: multipliers[
         getMultiplierIndex(
           plinkoSize,
-          plinkoGameResults[order]?.outcomes as number[]
+          skipped ? (paths[i] as number[]) : (paths[order] as number[])
         )
       ] as number,
       ...r,
@@ -101,6 +108,7 @@ export const Canvas: React.FC<CanvasProps> = ({
 
     if (skipped) {
       dispatch({ type: PlinkoResultActions.CLEAR });
+      setPaths([]);
       updateLastBets(lastBets);
       onAnimationSkipped(lastBets);
       updatePlinkoGameResults([]);
@@ -116,10 +124,7 @@ export const Canvas: React.FC<CanvasProps> = ({
 
     if (!skipped) {
       const multiplier = multipliers[
-        getMultiplierIndex(
-          plinkoSize,
-          plinkoGameResults[order]?.outcomes as number[]
-        )
+        getMultiplierIndex(plinkoSize, paths[order] as number[])
       ] as number;
       onAnimationStep(order, multiplier);
       addLastBet({
@@ -128,7 +133,14 @@ export const Canvas: React.FC<CanvasProps> = ({
       });
     }
 
-    if (!skipped && order === paths.length - 1) {
+    if (betCount === 1) {
+      onAnimationCompleted(lastBets);
+      updateGameStatus("ENDED");
+
+      return;
+    }
+
+    if (!skipped && order === paths.length - 1 && betCount > 1) {
       onAnimationCompleted(lastBets);
       updatePlinkoGameResults([]);
       updateGameStatus("ENDED");
