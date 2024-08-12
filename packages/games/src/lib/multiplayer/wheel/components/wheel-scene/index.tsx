@@ -1,4 +1,6 @@
 import React from "react";
+
+import { useGameOptions } from "../../../../game-provider";
 import {
   SoundEffects,
   useAudioEffect,
@@ -15,7 +17,6 @@ import { colorMultipliers, WheelUnits } from "../../constants";
 import { useWheelGameStore } from "../../store";
 import { Wheel } from "./wheel";
 import styles from "./wheel-scene.module.css";
-import { useGameOptions } from "../../../../game-provider";
 
 export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
   const {

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { shallow } from "zustand/shallow";
+
 import { initialBoard } from "../constants";
 import {
   MINES_GAME_STATUS,

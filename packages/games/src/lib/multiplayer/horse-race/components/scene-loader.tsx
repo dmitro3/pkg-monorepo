@@ -1,4 +1,5 @@
 import * as Progress from "@radix-ui/react-progress";
+
 import { toFormatted } from "../../../utils/web3";
 
 export const SceneLoader = ({

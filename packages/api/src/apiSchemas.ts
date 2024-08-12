@@ -312,6 +312,14 @@ export type MiningStatistics = {
   maxSupply: number;
 };
 
+export type DashboardStats = {
+  winrPrice: string;
+  winrChange: string;
+  winrVolume: string;
+  tvl: string;
+  holdersUSD: string;
+};
+
 export type LeaderboardVolumeObject = {
   username: string;
   player: string;
@@ -338,6 +346,43 @@ export type LeaderboardLuckyWinnerObject = {
   winRate: number;
   volume: number;
   multiplier: number;
+};
+
+export type LeaderboardBigWinsObject = {
+  username: string;
+  player: string;
+  profit: number;
+  multiplier: number;
+  game:
+    | "COINFLIP"
+    | "RANGE"
+    | "WHEEL"
+    | "PLINKO"
+    | "MOON"
+    | "LOTTERY"
+    | "RPS"
+    | "DICE"
+    | "LIMBO"
+    | "SLOT"
+    | "ROULETTE"
+    | "MINES"
+    | "VIDEO_POKER"
+    | "KENO"
+    | "BACCARAT"
+    | "HORSE_RACE"
+    | "BLACKJACK"
+    | "HOLDEM_POKER"
+    | "WINR_BONANZA"
+    | "ONE_HAND_BLACKJACK";
+};
+
+export type LeaderboardLossLegendsObject = {
+  username: string;
+  player: string;
+  bet: number;
+  winRate: number;
+  volume: number;
+  loss: number;
 };
 
 export type VaultOutput = {
@@ -535,5 +580,19 @@ export type SummaryResponse = {
 };
 
 export type TakeLevelupSnapshotInput = {
+  player: string;
+};
+
+export type BridgeDepositDto = {
+  player: string;
+  amount: string;
+};
+
+export type BridgeWithdrawDto = {
+  player: string;
+  amount: string;
+};
+
+export type BridgeHistoryDto = {
   player: string;
 };

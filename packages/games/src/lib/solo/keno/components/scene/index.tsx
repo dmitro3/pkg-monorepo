@@ -7,6 +7,7 @@ import {
   SoundEffects,
   useAudioEffect,
 } from "../../../../hooks/use-audio-effect";
+import { useWinAnimation } from "../../../../hooks/use-win-animation";
 import { FormControl, FormField, FormItem } from "../../../../ui/form";
 import { cn } from "../../../../utils/style";
 import { Keno } from "../..";
@@ -14,7 +15,6 @@ import { initialKenoCells } from "../../constants";
 import useKenoGameStore from "../../store";
 import { KenoForm, KenoGameResult } from "../../types";
 import styles from "./scene.module.css";
-import { useWinAnimation } from "../../../../hooks/use-win-animation";
 
 export type KenoSceneProps = {
   onAnimationStep?: (step: number) => void;

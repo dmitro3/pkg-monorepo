@@ -7,9 +7,9 @@ export { GameType } from "./lib/constants";
 export { GameProvider } from "./lib/game-provider";
 export {
   AudioContextProvider,
+  SoundEffects,
   useAudioContext,
   useAudioEffect,
-  SoundEffects,
 } from "./lib/hooks/use-audio-effect";
 export * from "./lib/hooks/use-web3";
 export * from "./lib/multiplayer/core/type";

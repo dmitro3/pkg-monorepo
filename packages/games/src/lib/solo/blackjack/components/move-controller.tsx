@@ -3,11 +3,10 @@
 import React from "react";
 
 import { useGameOptions } from "../../../game-provider";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import { cn } from "../../../utils/style";
 import { ActiveGameHands, GameStruct } from "..";
-import { useFormContext } from "react-hook-form";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 export interface MoveControllerProps {
   isDistributionCompleted: boolean;

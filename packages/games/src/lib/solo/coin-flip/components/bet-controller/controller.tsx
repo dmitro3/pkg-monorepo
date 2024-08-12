@@ -3,20 +3,20 @@ import { useFormContext } from "react-hook-form";
 
 import { CDN_URL } from "../../../../constants";
 import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
+import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
 } from "../../../../ui/form";
-import { CoinSide, WIN_MULTIPLIER } from "../../constants";
 import { cn } from "../../../../utils/style";
-import { CoinFlipForm } from "../../types";
-import useCoinFlipGameStore from "../../store";
 import { toFormatted } from "../../../../utils/web3";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
+import { CoinSide, WIN_MULTIPLIER } from "../../constants";
+import useCoinFlipGameStore from "../../store";
+import { CoinFlipForm } from "../../types";
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlipForm;
@@ -27,7 +27,7 @@ export const CoinFlipController = () => {
   const { gameStatus } = useCoinFlipGameStore(["gameStatus"]);
 
   return (
-    <div className="wr-flex wr-items-center wr-w-full lg:wr-mb-5">
+    <div className="wr-flex wr-items-center wr-w-full wr-mb-3 lg:wr-mb-6">
       <FormField
         control={form.control}
         name="coinSide"

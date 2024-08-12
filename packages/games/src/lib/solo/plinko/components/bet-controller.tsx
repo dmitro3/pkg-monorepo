@@ -2,6 +2,7 @@
 import * as Slider from "@radix-ui/react-slider";
 import * as React from "react";
 import { useFormContext } from "react-hook-form";
+import { useDebounce } from "use-debounce";
 
 import { Advanced } from "../../../common/advanced";
 import { AudioController } from "../../../common/audio-controller";
@@ -16,6 +17,7 @@ import {
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { SkipButton } from "../../../common/skip-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import {
   FormControl,
@@ -30,8 +32,6 @@ import { toDecimals, toFormatted } from "../../../utils/web3";
 import { rowMultipliers } from "../constants";
 import usePlinkoGameStore from "../store";
 import { PlinkoForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { useDebounce } from "use-debounce";
 
 interface Props {
   minWager: number;
@@ -62,7 +62,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   return (
     <BetControllerContainer>
       <div className="wr-max-lg:flex wr-max-lg:flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Plinko</BetControllerTitle>
         </div>
 
@@ -81,6 +81,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             form.formState.isLoading ||
             gameStatus == "PLAYING"
           }
+          hideSm
         />
         <PlinkoRowFormField
           minValue={6}
@@ -91,7 +92,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             gameStatus == "PLAYING"
           }
         />
-        <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
+        <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
@@ -139,7 +140,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
+              className="wr-w-full"
               size={"xl"}
               onClick={() => clickEffect.play()}
               isLoading={
@@ -148,8 +149,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
               disabled={
                 !form.formState.isValid ||
                 form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                gameStatus == "PLAYING"
+                form.formState.isLoading
               }
             >
               Bet
@@ -160,7 +160,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           <SkipButton />
         )}
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>
@@ -180,8 +180,10 @@ const PlinkoRowFormField: React.FC<{
         control={form.control}
         name="plinkoSize"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>Plinko Row</FormLabel>
+          <FormItem className="wr-mb-3 lg:wr-mb-6">
+            <FormLabel className="wr-leading-4 lg:wr-leading-6 wr-mb-3 lg:wr-mb-[6px]">
+              Plinko Row
+            </FormLabel>
 
             <FormControl>
               <div>

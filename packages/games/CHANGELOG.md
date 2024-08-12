@@ -1,5 +1,109 @@
 # @winrlabs/games
 
+## 2.15.32
+
+### Patch Changes
+
+- ff3207b: mobile ui updates
+
+## 2.15.31
+
+### Patch Changes
+
+- 0a16590: mobile fixes
+
+## 2.15.30
+
+### Patch Changes
+
+- 1c83dbb: fix
+
+## 2.15.29
+
+### Patch Changes
+
+- 07975d9: revert
+- 52f3cce: cleanup
+- 52f3cce: clean lint
+
+## 2.15.28
+
+### Patch Changes
+
+- 16075f5: remove sound effect
+
+## 2.15.27
+
+### Patch Changes
+
+- b2f6467: css revert
+
+## 2.15.26
+
+### Patch Changes
+
+- 0dadafd: remove sound
+
+## 2.15.25
+
+### Patch Changes
+
+- 6190ede: testing weird error
+
+## 2.15.24
+
+### Patch Changes
+
+- f9038e1: dummy patch
+
+## 2.15.23
+
+### Patch Changes
+
+- f6cc264: poker mobile fix
+- e270597: fix
+- 8a69fa0: mobile fixes
+
+## 2.15.22
+
+### Patch Changes
+
+- c85df88: update
+
+## 2.15.21
+
+### Patch Changes
+
+- 72d5928: up
+
+## 2.15.20
+
+### Patch Changes
+
+- bf0865b: introduce instant bet for plinko
+- bd062cc: remove wager/profit space in bet table
+- b82dcb5: video poker mobile
+- e1241c4: plinko mobile
+
+## 2.15.19
+
+### Patch Changes
+
+- a9aa835: add max to wager input
+- 1bbf5ae: disable audio controller on mobile
+
+## 2.15.18
+
+### Patch Changes
+
+- cac6048: remove game container spacing
+
+## 2.15.17
+
+### Patch Changes
+
+- 2c69282: remove cached operation
+
 ## 2.15.16
 
 ### Patch Changes

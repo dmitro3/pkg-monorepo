@@ -2,6 +2,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 
 import { CDN_URL } from "../../../../constants";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
 import { genNumberArray } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
 import {
@@ -14,10 +18,6 @@ import {
 import { BlackjackCard, calcTotalAmounts } from "../../utils";
 import { Card } from "../card";
 import styles from "./splitted-card-area.module.css";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
 
 interface SplittedCardAreaProps {
   handType: BlackjackHandIndex;

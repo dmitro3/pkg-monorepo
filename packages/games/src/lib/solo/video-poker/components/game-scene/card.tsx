@@ -109,6 +109,15 @@ export const CardComponent: React.FC<{
   }, [isFirstAnimationFinished, status, cardsToSend]);
 
   React.useEffect(() => {
+    const openHand = {
+      "wr-mr-40 wr-mt-5": index === 0,
+      "wr-mr-20": index === 1,
+      "": index === 2,
+      "wr-ml-20 ": index === 3,
+      "wr-ml-40 wr-mt-5": index === 4,
+    };
+
+    const isMobile = window.innerWidth < 768;
     if (status === VideoPokerStatus.None) {
       setIsFirstAnimationFinished(false);
 
@@ -118,9 +127,14 @@ export const CardComponent: React.FC<{
 
       setTransformDegree(0);
 
-      setAnimatedObj({
-        "wr-mr-0 wr-ml-0 wr-p-0": true,
-      });
+      if (isMobile) {
+        setTransformDegree(angles[index] as number);
+        setAnimatedObj(openHand);
+      } else {
+        setAnimatedObj({
+          "wr-mr-0 wr-ml-0 wr-p-0": true,
+        });
+      }
     } else {
       flipCardEffect.play();
 
@@ -131,13 +145,7 @@ export const CardComponent: React.FC<{
       setTimeout(() => {
         setTransformDegree(angles[index] as number);
 
-        setAnimatedObj({
-          "wr-mr-40 wr-pt-10": index === 0,
-          "wr-mr-20 wr-pt-3": index === 1,
-          "": index === 2,
-          "wr-ml-20 wr-pt-3": index === 3,
-          "wr-ml-40 wr-pt-10": index === 4,
-        });
+        setAnimatedObj(openHand);
 
         setIsFirstAnimationFinished(true);
       }, 1200);
@@ -148,14 +156,14 @@ export const CardComponent: React.FC<{
     <AnimatePresence>
       <motion.div
         className={cn(
-          "wr-absolute wr-mb-0 wr-h-[190px] wr-w-[128px] wr-transform-gpu wr-rounded-lg wr-bg-transparent wr-transition-[bottom_1000ms,margin-left_300ms,margin-right_300ms,padding-top_300ms] wr-duration-1000 wr-perspective-1000",
+          "wr-absolute wr-mb-0 wr-h-[190px] wr-w-[128px] wr-transform-gpu wr-rounded-lg wr-bg-transparent wr-transition-[bottom_1000ms,margin-left_300ms,margin-right_300ms,padding-top_300ms] wr-duration-1000 wr-perspective-1000 wr-top-14 lg:wr-top-[unset]",
           animatedObj,
 
           {
-            "wr-bottom-full wr-opacity-0": status === VideoPokerStatus.None,
+            "wr-bottom-full lg:wr-opacity-0": status === VideoPokerStatus.None,
           },
           {
-            "-wr-bottom-10 wr-block wr-opacity-100":
+            "lg:!-wr-bottom-10 wr-block wr-opacity-100":
               status === VideoPokerStatus.Dealt ||
               status === VideoPokerStatus.Final,
           }

@@ -1,15 +1,15 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import React from "react";
 import { useFormContext } from "react-hook-form";
 
 import { CDN_URL } from "../../../constants";
-import { MineCellBg } from "./mine-cell-bg";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { boardsSchema, initialBoard } from "../constants";
 import { useMinesGameStateStore } from "../store";
 import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import React from "react";
+import { MineCellBg } from "./mine-cell-bg";
 
 const MineCell: React.FC<{
   mineCell: (typeof initialBoard)["0"];

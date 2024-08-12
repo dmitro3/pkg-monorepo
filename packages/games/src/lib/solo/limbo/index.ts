@@ -12,6 +12,5 @@ export const Limbo = {
 };
 
 export { default as LimboTemplate } from "./components/template";
-export * from "./types";
-
 export * from "./store";
+export * from "./types";

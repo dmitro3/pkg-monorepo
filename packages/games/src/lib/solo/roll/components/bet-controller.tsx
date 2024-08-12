@@ -58,7 +58,7 @@ export const BetController: React.FC<Props> = ({
   return (
     <BetControllerContainer>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Roll</BetControllerTitle>
         </div>
 
@@ -67,8 +67,8 @@ export const BetController: React.FC<Props> = ({
           maxWager={maxWager}
           isDisabled={isFormInProgress}
         />
-        <BetCountFormField isDisabled={isFormInProgress} hideSm />
-        <div className="wr-mb-6 lg:!wr-grid wr-hidden wr-grid-cols-2 wr-gap-2">
+        <BetCountFormField isDisabled={isFormInProgress} />
+        <div className="wr-mb-6 lg:wr-grid wr-hidden wr-grid-cols-2 wr-gap-2">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
@@ -102,7 +102,7 @@ export const BetController: React.FC<Props> = ({
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full max-lg:wr-mb-3.5"
+              className="wr-w-full"
               size={"xl"}
               onClick={() => clickEffect.play()}
               isLoading={
@@ -123,7 +123,7 @@ export const BetController: React.FC<Props> = ({
           <SkipButton />
         )}
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>

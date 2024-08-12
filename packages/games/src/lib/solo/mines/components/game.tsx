@@ -1,10 +1,11 @@
 import React from "react";
+
+import { useMinesGameStateStore } from "../store";
 import {
   MINES_GAME_STATUS,
   MinesGameResult,
   MinesGameResultOnComplete,
 } from "../types";
-import { useMinesGameStateStore } from "../store";
 
 export type MinesGameProps = React.ComponentProps<"div"> & {
   gameResults: MinesGameResult[];

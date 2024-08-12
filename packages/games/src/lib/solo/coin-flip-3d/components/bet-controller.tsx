@@ -158,7 +158,7 @@ export const BetController: React.FC<Props> = ({
           <Button
             type="submit"
             variant={"coinflip"}
-            className="wr-w-full max-lg:-wr-order-2 max-lg:wr-mb-3.5"
+            className="wr-w-full max-lg:-wr-order-2"
             size={"xl"}
             disabled={
               !form.formState.isValid ||

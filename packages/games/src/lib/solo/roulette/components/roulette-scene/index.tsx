@@ -1,4 +1,5 @@
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
 import { CDN_URL } from "../../../../constants";
 import { useGameSkip } from "../../../../game-provider";
@@ -6,14 +7,13 @@ import {
   SoundEffects,
   useAudioEffect,
 } from "../../../../hooks/use-audio-effect";
+import { useWinAnimation } from "../../../../hooks/use-win-animation";
 import { wait } from "../../../../utils/promise";
 import { cn } from "../../../../utils/style";
 import { rouletteWheelNumbers } from "../../constants";
 import useRouletteGameStore from "../../store";
 import { RouletteForm, RouletteGameResult } from "../../types";
 import { RouletteWheel } from "../roulette-wheel";
-import { useWinAnimation } from "../../../../hooks/use-win-animation";
-import { useFormContext } from "react-hook-form";
 
 const ANIMATION_TIMEOUT = 5000;
 

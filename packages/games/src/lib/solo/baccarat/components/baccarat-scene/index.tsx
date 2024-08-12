@@ -4,6 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { Chip } from "../../../../common/chip-controller/types";
 import { renderChipIcon } from "../../../../common/chip-controller/utils";
 import { CDN_URL } from "../../../../constants";
+import { numberShorter } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
 import {
   BaccaratBetType,
@@ -12,7 +13,6 @@ import {
 } from "../../types";
 import { CardArea } from "../baccarat-card-area";
 import styles from "./baccarat-scene.module.css";
-import { numberShorter } from "../../../../utils/number";
 
 // canvas width 900px
 // canvas height 900px

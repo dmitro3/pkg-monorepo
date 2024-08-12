@@ -1,8 +1,7 @@
 import { GameControllerBetHistoryResponse } from "@winrlabs/api";
-import dayjs from "dayjs";
-import React from "react";
 
-import { Eye } from "../../svgs";
+import { GameType } from "../../constants";
+import { Eye, LinkIcon } from "../../svgs";
 import { Button } from "../../ui/button";
 import {
   Table,
@@ -12,10 +11,35 @@ import {
   TableHeader,
   TableRow,
 } from "../../ui/table";
-import { shorter } from "../../utils/string";
+import { shorter, walletShorter } from "../../utils/string";
 import { cn } from "../../utils/style";
 import { toDecimals, toFormatted } from "../../utils/web3";
 import { BetHistoryCurrencyList } from ".";
+import useMediaQuery from "../../hooks/use-media-query";
+import dayjs from "dayjs";
+
+const gameMap: Record<GameType, string> = {
+  [GameType.BACCARAT]: "Baccarat",
+  [GameType.BLACKJACK]: "Blackjack",
+  [GameType.COINFLIP]: "Coin Flip",
+  [GameType.DICE]: "Roll",
+  [GameType.HOLDEM_POKER]: "Holdem Poker",
+  [GameType.HORSE_RACE]: "Horse Race",
+  [GameType.KENO]: "Keno",
+  [GameType.LIMBO]: "Limbo",
+  [GameType.LOTTERY]: "Lottery",
+  [GameType.MINES]: "Mines",
+  [GameType.MOON]: "Crash",
+  [GameType.ONE_HAND_BLACKJACK]: "Blackjack",
+  [GameType.PLINKO]: "Plinko",
+  [GameType.RANGE]: "Dice",
+  [GameType.ROULETTE]: "Roulette",
+  [GameType.RPS]: "RPS",
+  [GameType.SLOT]: "Slot",
+  [GameType.VIDEO_POKER]: "Video Poker",
+  [GameType.WHEEL]: "Wheel",
+  [GameType.WINR_BONANZA]: "Winr Bonanza",
+};
 
 const BetTable = ({
   betHistory,
@@ -24,42 +48,77 @@ const BetTable = ({
   betHistory: GameControllerBetHistoryResponse;
   currencyList: BetHistoryCurrencyList;
 }) => {
+  const isMobile = useMediaQuery("(max-width:1024px)");
   return (
-    <Table className="max-lg:wr-min-w-[700px] max-md:wr-overflow-scroll max-md:wr-scrollbar-none ">
+    <Table className="max-lg:wr-max-w-full max-md:wr-overflow-scroll max-md:wr-scrollbar-none">
       <TableHeader>
         <TableRow>
-          <TableHead className="max-lg:wr-w-[150px]">Transaction</TableHead>
-          <TableHead>Player</TableHead>
-          {/* {!isGameHistory && (
-            <TableHead className="text-center lg:text-left">Game</TableHead>
-          )} */}
-          <TableHead className="wr-text-center lg:wr-text-left">Bet</TableHead>
-          <TableHead>Wager</TableHead>
-          <TableHead>Payout</TableHead>
-          <TableHead>Multiplier</TableHead>
-          <TableHead>Profit</TableHead>
-          <TableHead className="wr-text-center">Currency</TableHead>
-          <TableHead className="wr-w-12 wr-text-right">Share</TableHead>
+          <TableHead className="wr-w-[50px] lg:wr-w-[150px] wr-text-left">
+            {isMobile ? "TX" : "Transaction"}
+          </TableHead>
+          <TableHead className="wr-text-center lg:wr-text-left wr-table-cell lg:wr-hidden">
+            Game
+          </TableHead>
+          <TableHead className="wr-text-center lg:wr-text-left">
+            Player
+          </TableHead>
+          <TableHead className="wr-hidden lg:wr-table-cell lg:wr-text-left">
+            Bet
+          </TableHead>
+          <TableHead className="wr-hidden lg:wr-table-cell">Wager</TableHead>
+          <TableHead className="wr-hidden lg:wr-table-cell wr-text-left">
+            Payout
+          </TableHead>
+          <TableHead className="wr-hidden lg:wr-table-cell">
+            Multiplier
+          </TableHead>
+          <TableHead className="wr-text-right lg:wr-text-left">
+            Profit
+          </TableHead>
+          <TableHead className="wr-hidden lg:wr-table-cell">Currency</TableHead>
+          <TableHead className="wr-hidden lg:wr-table-cell wr-w-12 wr-text-right">
+            Share
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {betHistory.data?.map((bet, i) => {
           return (
             <TableRow key={i}>
-              <TableCell className="max-lg:wr-w-[150px]">
-                {dayjs(bet.createdAt * 1000).format("DD-MM-YY, HH:mm")}
+              <TableCell className="wr-w-[50px] lg:wr-w-[150px]">
+                {/* TODO: ADD DYNAMIC ROUTE TO EXPLORER */}
+                <a
+                  target="_blank"
+                  href={`https://explorer.winr.games/tx/${bet.hash}`}
+                >
+                  <div className="wr-flex wr-gap-2 wr-items-center wr-justify-start">
+                    <span className="wr-hidden lg:wr-flex">
+                      {dayjs(bet.createdAt * 1000).format("DD-MM-YY, HH:mm")}
+                    </span>
+                    <div className="wr-p-1 wr-border wr-border-zinc-800 wr-rounded-sm">
+                      <LinkIcon className="wr-w-4 wr-h-4 wr-text-zinc-500" />
+                    </div>
+                  </div>
+                </a>
               </TableCell>
-              <TableCell>
+              <TableCell className="wr-text-center lg:wr-text-left wr-table-cell lg:wr-hidden">
+                {gameMap[bet.game]}
+              </TableCell>
+              <TableCell className="wr-text-center lg:wr-text-left">
                 {bet.username.length > 41
                   ? shorter(bet.username, 2)
                   : bet.username}
               </TableCell>
-              <TableCell className="wr-text-center lg:wr-text-left">
+              <TableCell className="wr-hidden lg:wr-table-cell wr-text-center lg:wr-text-left">
                 {bet.playedGameCount}
               </TableCell>
-              <TableCell>$ {toFormatted(bet.wagerInDollar, 2)}</TableCell>
-              <TableCell>$ {toFormatted(bet.payoutInDollar, 2)}</TableCell>
-              <TableCell>
+              <TableCell className="wr-hidden lg:wr-table-cell">
+                ${toFormatted(bet.wagerInDollar, 2)}
+              </TableCell>
+              <TableCell className="wr-hidden lg:wr-table-cell wr-text-center lg:wr-text-left">
+                ${toFormatted(bet.payoutInDollar, 2)}
+              </TableCell>
+              <TableCell className="wr-hidden lg:wr-table-cell">
                 <div
                   className={cn(
                     "wr-w-max wr-rounded-full wr-bg-zinc-700 wr-px-2 wr-py-[6px] wr-font-semibold wr-leading-4",
@@ -72,7 +131,7 @@ const BetTable = ({
                 </div>
               </TableCell>
               <TableCell
-                className={cn({
+                className={cn("wr-text-right lg:wr-text-left", {
                   "wr-text-green-500": bet.won === true,
                   "wr-text-red-600": bet.won === false,
                 })}
@@ -82,8 +141,8 @@ const BetTable = ({
                   2
                 )}`}
               </TableCell>
-              <TableCell>
-                <div className="wr-flex wr-items-center wr-justify-center">
+              <TableCell className="wr-hidden lg:wr-table-cell">
+                <div className="wr-flex wr-items-center wr-justify-start">
                   <img
                     src={currencyList[bet.token]?.icon}
                     alt={currencyList[bet.token]?.symbol}
@@ -92,7 +151,7 @@ const BetTable = ({
                   />
                 </div>
               </TableCell>
-              <TableCell className="wr-w-12 wr-text-right">
+              <TableCell className="wr-hidden lg:wr-table-cell wr-w-12 wr-text-right">
                 <Button
                   variant={"outline"}
                   className="wr-h-[30px] wr-w-[30px]  disabled:wr-bg-zinc-700"

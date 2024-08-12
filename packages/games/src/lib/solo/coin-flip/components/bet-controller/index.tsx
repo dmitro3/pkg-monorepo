@@ -15,6 +15,10 @@ import {
 import { PreBetButton } from "../../../../common/pre-bet-button";
 import { SkipButton } from "../../../../common/skip-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../../common/wager";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
 import { Button } from "../../../../ui/button";
 import { FormLabel } from "../../../../ui/form";
 import { cn } from "../../../../utils/style";
@@ -22,10 +26,6 @@ import { toDecimals, toFormatted } from "../../../../utils/web3";
 import { useCoinFlipGameStore } from "../..";
 import { CoinFlipForm } from "../../types";
 import { CoinFlipController } from "./controller";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
 
 interface Props {
   minWager: number;
@@ -57,7 +57,7 @@ export const BetController: React.FC<Props> = ({
   return (
     <BetControllerContainer className="wr-z-40">
       <div className="wr-flex-col wr-flex lg:wr-block lg:wr-flex-row">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Coin Flip</BetControllerTitle>
         </div>
 
@@ -79,7 +79,6 @@ export const BetController: React.FC<Props> = ({
             gameStatus == "PLAYING" ||
             isGettingResults
           }
-          hideSm
         />
         <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
           <div>
@@ -127,11 +126,11 @@ export const BetController: React.FC<Props> = ({
           </Advanced>
         </div>
         {!(coinFlipGameResults.length > 3) && (
-          <PreBetButton className="max-lg:-wr-order-1 max-lg:wr-mb-3.5">
+          <PreBetButton>
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5 wr-select-none"
+              className="wr-w-full wr-select-none"
               size={"xl"}
               onClick={() => clickEffect.play()}
               isLoading={
@@ -157,7 +156,7 @@ export const BetController: React.FC<Props> = ({
           <SkipButton />
         )}
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>

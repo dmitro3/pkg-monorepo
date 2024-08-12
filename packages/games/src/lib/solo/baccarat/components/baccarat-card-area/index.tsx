@@ -3,12 +3,14 @@
 import { Player } from "@lottiefiles/react-lottie-player";
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
 import { CDN_URL } from "../../../../constants";
 import {
   SoundEffects,
   useAudioEffect,
 } from "../../../../hooks/use-audio-effect";
+import { useWinAnimation } from "../../../../hooks/use-win-animation";
 import { wait } from "../../../../utils/promise";
 import { cn } from "../../../../utils/style";
 import {
@@ -25,8 +27,6 @@ import {
   getBaccaratIcon,
 } from "./card";
 import Confetti from "./lottie/confetti.json";
-import { useFormContext } from "react-hook-form";
-import { useWinAnimation } from "../../../../hooks/use-win-animation";
 
 const TIMEOUT = 500;
 

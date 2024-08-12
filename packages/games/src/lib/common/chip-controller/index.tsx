@@ -1,12 +1,12 @@
 import React from "react";
 
+import { CDN_URL } from "../../constants";
+import { SoundEffects, useAudioEffect } from "../../hooks/use-audio-effect";
+import { Button } from "../../ui/button";
+import { ScrollArea } from "../../ui/scroll-area";
 import { cn } from "../../utils/style";
 import { chips } from "./constants";
 import { ChipControllerProps, ChipProps } from "./types";
-import { Button } from "../../ui/button";
-import { ScrollArea } from "../../ui/scroll-area";
-import { CDN_URL } from "../../constants";
-import { SoundEffects, useAudioEffect } from "../../hooks/use-audio-effect";
 
 export const ChipController: React.FC<ChipControllerProps> = ({
   chipAmount,
@@ -35,7 +35,7 @@ export const ChipController: React.FC<ChipControllerProps> = ({
   return (
     <div
       className={cn(
-        "wr-relative wr-flex wr-items-end wr-justify-center wr-gap-2 wr-w-full wr-rounded-md wr-py-1 wr-pl-12 wr-pr-12 wr-bg-zinc-700",
+        "wr-relative wr-flex wr-items-end wr-justify-center wr-gap-2 wr-w-full wr-rounded-md wr-py-1 wr-pl-12 wr-pr-12 wr-bg-zinc-700 wr-mb-3 lg:wr-mb-6",
         className && className,
         {
           "wr-bg-zinc-800": isDisabled,

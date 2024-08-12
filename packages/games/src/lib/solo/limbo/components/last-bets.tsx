@@ -3,13 +3,16 @@ import React from "react";
 import { LastBetsContainer } from "../../../common/last-bets-container";
 import { cn } from "../../../utils/style";
 import useLimboGameStore from "../store";
+import useMediaQuery from "../../../hooks/use-media-query";
 
 const LastBets = () => {
   const { lastBets } = useLimboGameStore(["lastBets"]);
+  const isMobile = useMediaQuery("(max-width:1024px)");
+  const lastFiveBets = lastBets?.slice(isMobile ? -4 : -5);
 
   return (
-    <LastBetsContainer className="wr-mx-auto lg:wr-pt-3.5 max-md:wr-static">
-      {lastBets?.map((result, index) => {
+    <LastBetsContainer>
+      {lastFiveBets?.map((result, index) => {
         return (
           <div
             key={index}

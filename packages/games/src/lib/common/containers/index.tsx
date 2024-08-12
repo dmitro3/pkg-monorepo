@@ -1,14 +1,13 @@
 import * as Slider from "@radix-ui/react-slider";
+import React from "react";
 import { useFormContext } from "react-hook-form";
+import { useDebounce } from "use-debounce";
 
 import {
-  AudioContextProvider,
   SoundEffects,
   useAudioEffect,
 } from "../../hooks/use-audio-effect";
 import { cn } from "../../utils/style";
-import React from "react";
-import { useDebounce } from "use-debounce";
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
   children?: React.ReactNode;
@@ -37,10 +36,7 @@ export const SceneContainer: React.FC<Props> = ({
 export const GameContainer: React.FC<Props> = ({ children, className }) => {
   return (
     <div
-      className={cn(
-        "wr-flex wr-gap-3 wr-pt-3 max-lg:wr-flex-col-reverse",
-        className
-      )}
+      className={cn("wr-flex wr-gap-3 max-lg:wr-flex-col-reverse", className)}
     >
       {children}
     </div>
@@ -54,7 +50,7 @@ export const BetControllerContainer: React.FC<Props> = ({
   return (
     <section
       className={cn(
-        "wr-flex wr-flex-shrink-0 wr-flex-col wr-justify-between wr-rounded-lg wr-bg-zinc-900 wr-p-4 lg:wr-w-[340px]",
+        "wr-flex wr-flex-shrink-0 wr-flex-col wr-justify-between wr-rounded-lg wr-bg-zinc-900 wr-px-4 wr-py-3 lg:wr-py-3 lg:wr-w-[340px]",
         className
       )}
     >

@@ -15,13 +15,13 @@ import {
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { SkipButton } from "../../../common/skip-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import { FormLabel } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { toDecimals, toFormatted } from "../../../utils/web3";
 import { useDiceGameStore } from "..";
 import { DiceForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 // import { AudioController } from "@/components/common/audio-controller";
 // import { PreBetButton } from "@/app/(games)/_components/bet-button";
 
@@ -76,7 +76,6 @@ export const BetController: React.FC<Props> = ({
             gameStatus == "PLAYING" ||
             isGettingResults
           }
-          hideSm
         />
         <div className="wr-mb-6 lg:!wr-grid wr-grid-cols-2 wr-gap-2 wr-hidden">
           <div>
@@ -128,7 +127,7 @@ export const BetController: React.FC<Props> = ({
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
+              className="wr-w-full"
               size={"xl"}
               onClick={() => clickEffect.play()}
               isLoading={
@@ -154,7 +153,7 @@ export const BetController: React.FC<Props> = ({
           <SkipButton />
         )}
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>

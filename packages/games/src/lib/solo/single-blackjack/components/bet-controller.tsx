@@ -6,10 +6,10 @@ import { BetControllerContainer } from "../../../common/containers";
 import { BetControllerTitle, WagerFormField } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { useGameOptions } from "../../../game-provider";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import { BlackjackGameStatus } from "../../blackjack";
 import { SingleBJActiveGameHands } from "..";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 interface Props {
   minWager: number;
@@ -78,7 +78,7 @@ export const BetController: React.FC<Props> = ({
   return (
     <BetControllerContainer>
       <div className="wr-max-lg:flex wr-max-lg:flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>1-Hand Blackjack</BetControllerTitle>
         </div>
 
@@ -109,7 +109,7 @@ export const BetController: React.FC<Props> = ({
               disabled={!isDistributionCompleted || isControllerDisabled}
             />
           ) : (
-            <div className="wr-grid wr-grid-cols-2 wr-grid-rows-2 wr-gap-x-4 wr-gap-y-5">
+            <div className="wr-grid wr-grid-cols-2 wr-grid-rows-2 wr-gap-3 lg:wr-gap-x-4 lg:wr-gap-y-5">
               <Button
                 onClick={() => {
                   clickEffect.play();
@@ -189,7 +189,7 @@ export const BetController: React.FC<Props> = ({
             </div>
           )}
           <Button
-            className="wr-w-full wr-mt-6"
+            className="wr-w-full wr-mt-3 lg:wr-mt-6"
             variant="success"
             isLoading={form.formState.isSubmitting || form.formState.isLoading}
             onClick={() => clickEffect.play()}
@@ -209,7 +209,7 @@ export const BetController: React.FC<Props> = ({
           </Button>
         </PreBetButton>
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between wr-mt-4">
+      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
     </BetControllerContainer>

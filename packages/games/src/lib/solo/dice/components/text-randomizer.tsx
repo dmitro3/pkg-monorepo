@@ -3,7 +3,6 @@ import * as React from "react";
 
 import { cn } from "../../../../lib/utils/style";
 import useDiceGameStore from "../store";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 export const TextRandomizer = () => {
   const { diceGameResults, currentAnimationCount, gameStatus } =

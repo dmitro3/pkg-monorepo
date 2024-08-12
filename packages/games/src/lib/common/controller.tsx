@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useFormContext } from "react-hook-form";
 
+import { CDN_URL } from "../constants";
+import { Button } from "../ui/button";
 import {
   FormControl,
   FormField,
@@ -18,8 +20,6 @@ import {
   WagerInput,
   WagerSetterButtons,
 } from "./wager";
-import { Button } from "../ui/button";
-import { CDN_URL } from "../constants";
 
 interface WagerFormFieldProps {
   customLabel?: string;
@@ -60,8 +60,18 @@ export const BetCountFormField: React.FC<{
         control={form.control}
         name="betCount"
         render={({ field }) => (
-          <FormItem className={cn({ "wr-hidden lg:!wr-block": hideSm })}>
-            <FormLabel>Multiple Bets (1-{maxValue}) </FormLabel>
+          <FormItem
+            className={cn("wr-mb-3 lg:wr-mb-6", {
+              "wr-hidden lg:!wr-block": hideSm,
+            })}
+          >
+            <FormLabel
+              className={cn(
+                "wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6"
+              )}
+            >
+              Multiple Bets (1-{maxValue}){" "}
+            </FormLabel>
 
             <FormControl>
               <div>
@@ -167,8 +177,12 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
       control={form.control}
       name="wager"
       render={({ field }) => (
-        <FormItem className={cn(className, "wr-mb-4")}>
-          <FormLabel>
+        <FormItem className={cn(className, "wr-mb-3 lg:wr-mb-6")}>
+          <FormLabel
+            className={cn(
+              "wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6"
+            )}
+          >
             {customLabel ? customLabel : "Wager"}
             <div>
               <WagerBalance className="wr-text-zinc-100" />
@@ -187,7 +201,7 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
                 form={form}
               />
               <WagerSetterButtons
-                className="wr-hidden lg:wr-block"
+                className="wr-hidden lg:!wr-block"
                 isDisabled={isDisabled}
                 form={form}
                 minWager={minWager}
@@ -243,7 +257,9 @@ export const UnityWagerFormField: React.FC<WagerFormFieldProps> = ({
                 minWager={minWager}
                 maxWager={maxWager}
                 currentWager={field.value}
-                className={cn("wr-bg-unity-white-15 wr-backdrop-blur-md")}
+                className={cn(
+                  "wr-bg-unity-white-15 wr-backdrop-blur-md wr-hidden lg:wr-block"
+                )}
               />
             </>
           </FormControl>

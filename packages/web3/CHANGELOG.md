@@ -1,5 +1,86 @@
 # @winrlabs/web3
 
+## 0.10.35
+
+### Patch Changes
+
+- ff3207b: mobile ui updates
+
+## 0.10.34
+
+### Patch Changes
+
+- 0a16590: mobile fixes
+
+## 0.10.33
+
+### Patch Changes
+
+- 07975d9: revert
+  - @winrlabs/api@1.3.4
+
+## 0.10.32
+
+### Patch Changes
+
+- 16075f5: remove sound effect
+
+## 0.10.31
+
+### Patch Changes
+
+- b2f6467: css revert
+
+## 0.10.30
+
+### Patch Changes
+
+- 0dadafd: remove sound
+
+## 0.10.29
+
+### Patch Changes
+
+- 6190ede: testing weird error
+
+## 0.10.28
+
+### Patch Changes
+
+- f9038e1: dummy patch
+
+## 0.10.27
+
+### Patch Changes
+
+- 8a69fa0: mobile fixes
+
+## 0.10.26
+
+### Patch Changes
+
+- Updated dependencies [c85df88]
+  - @winrlabs/api@1.3.4
+
+## 0.10.25
+
+### Patch Changes
+
+- 72d5928: up
+
+## 0.10.24
+
+### Patch Changes
+
+- Updated dependencies [a799bc7]
+  - @winrlabs/api@1.3.3
+
+## 0.10.23
+
+### Patch Changes
+
+- 2c69282: remove cached operation
+
 ## 0.10.22
 
 ### Patch Changes

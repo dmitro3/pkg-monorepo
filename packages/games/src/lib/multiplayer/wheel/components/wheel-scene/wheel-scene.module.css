@@ -81,7 +81,6 @@
   background-color: transparent;
 }
 
-
 .red {
   background-color: #ff0000;
 }
@@ -91,7 +90,6 @@
 .red div:after {
   background-color: #ea2323;
 }
-
 
 .blue {
   background-color: #0e44bb;
@@ -107,7 +105,7 @@
   background-color: #0e883b;
 }
 .green div:before {
-  background-color: #16A34A;
+  background-color: #16a34a;
 }
 .green div:after {
   background-color: #159a46;
@@ -162,5 +160,6 @@
   .container {
     transform: scale(0.8);
     margin-top: -35px;
+    padding: 40px 0 0 0;
   }
 }

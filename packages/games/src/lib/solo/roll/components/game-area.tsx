@@ -128,7 +128,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
   }, [isAnimationSkipped]);
 
   return (
-    <div className="wr-w-full lg:!wr-max-w-[422px] wr-max-w-[240px] wr-relative wr-top-1/2 -wr-translate-y-1/2">
+    <div className="wr-w-full lg:wr-max-w-[422px] wr-max-w-[240px] wr-relative wr-top-1/2 -wr-translate-y-[55%] lg:-wr-translate-y-1/2">
       <FormField
         control={form.control}
         name="dices"
@@ -137,7 +137,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
             className={cn(
               "wr-grid-row-2 wr-relative wr-grid wr-grid-cols-3 wr-items-center wr-gap-4 wr-transition-all wr-ease-in-out",
               {
-                "wr-animate-dice-shake ": loading,
+                "wr-animate-dice-shake": loading,
               }
             )}
           >

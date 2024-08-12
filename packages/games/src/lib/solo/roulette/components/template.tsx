@@ -6,12 +6,13 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { AudioController } from "../../../common/audio-controller";
 import { Chip } from "../../../common/chip-controller/types";
 import { GameContainer, SceneContainer } from "../../../common/containers";
+import { WinAnimation } from "../../../common/win-animation";
 import { CDN_URL } from "../../../constants";
+import { useGameOptions } from "../../../game-provider";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Form } from "../../../ui/form";
-import { RotationWrapper } from "../../../ui/rotation-wrapper";
 import { Roulette } from "..";
 import {
   chunkMinWagerIndexes,
@@ -21,9 +22,7 @@ import {
   NUMBER_INDEX_COUNT,
 } from "../constants";
 import { RouletteFormFields, RouletteGameProps } from "../types";
-import { useGameOptions } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { WinAnimation } from "../../../common/win-animation";
+import { MobileController } from "./mobile-controller";
 
 type TemplateProps = RouletteGameProps & {
   minWager?: number;
@@ -194,7 +193,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
             style={{
               backgroundImage: `url(${CDN_URL}/roulette/roulette-bg.png)`,
             }}
-            className="wr-relative wr-flex wr-h-[675px] md:wr-h-[640px] wr-flex-col wr-items-center wr-justify-start wr-gap-8 wr-bg-center wr-pb-20 wr-pt-6 wr-overflow-hidden"
+            className="wr-relative wr-flex wr-h-[625px] md:wr-h-[640px] wr-flex-col wr-items-center wr-justify-start wr-gap-8 wr-bg-center wr-pb-20 wr-pt-6 wr-overflow-hidden"
           >
             <Roulette.Game gameResults={gameResults}>
               <Roulette.Scene
@@ -211,6 +210,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
                 isPrepared={isPrepared}
               />
               <Roulette.LastBets />
+              <MobileController isPrepared={isPrepared} undoBet={undoBet} />
             </Roulette.Game>
             <WinAnimation />
           </SceneContainer>

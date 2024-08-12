@@ -1,5 +1,176 @@
 # @winrlabs/web3-games
 
+## 7.0.48
+
+### Patch Changes
+
+- ff3207b: mobile ui updates
+- Updated dependencies [ff3207b]
+  - @winrlabs/games@2.15.32
+  - @winrlabs/web3@0.10.35
+  - @winrlabs/web3-games@7.0.48
+
+## 7.0.47
+
+### Patch Changes
+
+- 0a16590: mobile fixes
+- Updated dependencies [0a16590]
+  - @winrlabs/games@2.15.31
+  - @winrlabs/web3@0.10.34
+  - @winrlabs/web3-games@7.0.47
+
+## 7.0.46
+
+### Patch Changes
+
+- Updated dependencies [1c83dbb]
+  - @winrlabs/games@2.15.30
+  - @winrlabs/web3-games@7.0.46
+
+## 7.0.45
+
+### Patch Changes
+
+- 07975d9: revert
+- Updated dependencies [07975d9]
+- Updated dependencies [52f3cce]
+- Updated dependencies [52f3cce]
+  - @winrlabs/games@2.15.29
+  - @winrlabs/web3@0.10.33
+  - @winrlabs/web3-games@7.0.45
+  - @winrlabs/api@1.3.4
+
+## 7.0.44
+
+### Patch Changes
+
+- 16075f5: remove sound effect
+- Updated dependencies [16075f5]
+  - @winrlabs/games@2.15.28
+  - @winrlabs/web3@0.10.32
+  - @winrlabs/web3-games@7.0.44
+
+## 7.0.43
+
+### Patch Changes
+
+- b2f6467: css revert
+- Updated dependencies [b2f6467]
+  - @winrlabs/games@2.15.27
+  - @winrlabs/web3@0.10.31
+  - @winrlabs/web3-games@7.0.43
+
+## 7.0.42
+
+### Patch Changes
+
+- 0dadafd: remove sound
+- Updated dependencies [0dadafd]
+  - @winrlabs/games@2.15.26
+  - @winrlabs/web3@0.10.30
+  - @winrlabs/web3-games@7.0.42
+
+## 7.0.41
+
+### Patch Changes
+
+- 6190ede: testing weird error
+- Updated dependencies [6190ede]
+  - @winrlabs/games@2.15.25
+  - @winrlabs/web3@0.10.29
+  - @winrlabs/web3-games@7.0.41
+
+## 7.0.40
+
+### Patch Changes
+
+- f9038e1: dummy patch
+- Updated dependencies [f9038e1]
+  - @winrlabs/games@2.15.24
+  - @winrlabs/web3@0.10.28
+  - @winrlabs/web3-games@7.0.40
+
+## 7.0.39
+
+### Patch Changes
+
+- 8a69fa0: mobile fixes
+- Updated dependencies [f6cc264]
+- Updated dependencies [e270597]
+- Updated dependencies [8a69fa0]
+  - @winrlabs/games@2.15.23
+  - @winrlabs/web3@0.10.27
+  - @winrlabs/web3-games@7.0.39
+
+## 7.0.38
+
+### Patch Changes
+
+- Updated dependencies [c85df88]
+  - @winrlabs/games@2.15.22
+  - @winrlabs/api@1.3.4
+  - @winrlabs/web3-games@7.0.38
+  - @winrlabs/web3@0.10.26
+
+## 7.0.37
+
+### Patch Changes
+
+- 72d5928: up
+- Updated dependencies [72d5928]
+  - @winrlabs/games@2.15.21
+  - @winrlabs/web3@0.10.25
+  - @winrlabs/web3-games@7.0.37
+
+## 7.0.36
+
+### Patch Changes
+
+- Updated dependencies [bf0865b]
+- Updated dependencies [bd062cc]
+- Updated dependencies [b82dcb5]
+- Updated dependencies [e1241c4]
+  - @winrlabs/games@2.15.20
+  - @winrlabs/web3-games@7.0.36
+
+## 7.0.35
+
+### Patch Changes
+
+- Updated dependencies [a799bc7]
+  - @winrlabs/api@1.3.3
+  - @winrlabs/games@2.15.19
+  - @winrlabs/web3@0.10.24
+  - @winrlabs/web3-games@7.0.35
+
+## 7.0.34
+
+### Patch Changes
+
+- Updated dependencies [a9aa835]
+- Updated dependencies [1bbf5ae]
+  - @winrlabs/games@2.15.19
+  - @winrlabs/web3-games@7.0.34
+
+## 7.0.33
+
+### Patch Changes
+
+- Updated dependencies [cac6048]
+  - @winrlabs/games@2.15.18
+  - @winrlabs/web3-games@7.0.33
+
+## 7.0.32
+
+### Patch Changes
+
+- 2c69282: remove cached operation
+- Updated dependencies [2c69282]
+  - @winrlabs/games@2.15.17
+  - @winrlabs/web3@0.10.23
+  - @winrlabs/web3-games@7.0.32
+
 ## 7.0.31
 
 ### Patch Changes

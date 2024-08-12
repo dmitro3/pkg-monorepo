@@ -3,6 +3,7 @@
 import * as Slider from "@radix-ui/react-slider";
 import React from "react";
 import { useFormContext } from "react-hook-form";
+import { useDebounce } from "use-debounce";
 
 import { Advanced } from "../../../common/advanced";
 import { AudioController } from "../../../common/audio-controller";
@@ -17,6 +18,7 @@ import {
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { SkipButton } from "../../../common/skip-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import {
   FormControl,
@@ -30,8 +32,6 @@ import { cn } from "../../../utils/style";
 import { toDecimals } from "../../../utils/web3";
 import useLimboGameStore from "../store";
 import { LimboForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { useDebounce } from "use-debounce";
 
 interface Props {
   minWager: number;
@@ -45,7 +45,7 @@ export const BetController: React.FC<Props> = ({
   winMultiplier,
 }) => {
   const form = useFormContext() as LimboForm;
-  const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
+  // const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   const { limboGameResults, gameStatus } = useLimboGameStore([
     "limboGameResults",
@@ -65,7 +65,7 @@ export const BetController: React.FC<Props> = ({
 
   const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
   const limboMultiplier = form.watch("limboMultiplier");
-  const debouncedBetCount = useDebounce(limboMultiplier, 25);
+  const debouncedBetCount = useDebounce(limboMultiplier, 40);
 
   React.useEffect(() => {
     sliderEffect.play();
@@ -74,7 +74,7 @@ export const BetController: React.FC<Props> = ({
   return (
     <BetControllerContainer>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Limbo</BetControllerTitle>
         </div>
 
@@ -83,13 +83,13 @@ export const BetController: React.FC<Props> = ({
           maxWager={maxWager}
           isDisabled={isFormInProgress}
         />
-        <BetCountFormField isDisabled={isFormInProgress} hideSm />
+        <BetCountFormField isDisabled={isFormInProgress} />
         <>
           <FormField
             control={form.control}
             name="limboMultiplier"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="wr-mb-3 lg:wr-mb-6">
                 <FormLabel>Multiplier (1.1-{100}) </FormLabel>
 
                 <FormControl>
@@ -97,7 +97,7 @@ export const BetController: React.FC<Props> = ({
                     <NumberInput.Root {...field} isDisabled={isFormInProgress}>
                       <NumberInput.Container
                         className={cn(
-                          " wr-rounded-b-[6px] wr-border-none wr-bg-zinc-950 wr-px-2  wr-py-[10px]"
+                          "wr-rounded-b-[6px] wr-border-none wr-bg-zinc-950 wr-px-2  wr-py-[10px]"
                         )}
                       >
                         <NumberInput.Input
@@ -171,9 +171,9 @@ export const BetController: React.FC<Props> = ({
             <Button
               type="submit"
               variant={"success"}
-              className="wr-w-full  max-lg:wr-mb-3.5"
+              className="wr-w-full"
               size={"xl"}
-              onClick={() => clickEffect.play()}
+              // onClick={() => clickEffect.play()}
               isLoading={
                 form.formState.isSubmitting || form.formState.isLoading
               }

@@ -11,15 +11,15 @@ import {
 } from "../../../../common/controller";
 import { PreBetButton } from "../../../../common/pre-bet-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../../common/wager";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
 import { Button } from "../../../../ui/button";
 import { FormLabel } from "../../../../ui/form";
 import { cn } from "../../../../utils/style";
 import useVideoPokerGameStore, { VideoPokerStatus } from "../../store";
 import { VideoPokerForm } from "../../types";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
 
 interface Props {
   minWager: number;
@@ -42,7 +42,7 @@ export const VideoPokerBetController: React.FC<Props> = ({
   return (
     <BetControllerContainer>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Video Poker</BetControllerTitle>
         </div>
 
@@ -52,7 +52,7 @@ export const VideoPokerBetController: React.FC<Props> = ({
           isDisabled={form.formState.isSubmitting || form.formState.isLoading}
         />
 
-        <div className="wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
+        <div className="wr-mb-6 lg:!wr-grid wr-grid-cols-2 wr-gap-2 wr-hidden">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
@@ -75,7 +75,7 @@ export const VideoPokerBetController: React.FC<Props> = ({
           <Button
             type="submit"
             variant={"success"}
-            className="wr-w-full max-lg:-wr-order-1 max-lg:wr-mb-3.5"
+            className="wr-w-full"
             size={"xl"}
             onClick={() => clickEffect.play()}
             isLoading={form.formState.isSubmitting || form.formState.isLoading}

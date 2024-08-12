@@ -10,6 +10,7 @@ import {
 } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { WagerCurrencyIcon } from "../../../common/wager";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import useCountdown from "../../../hooks/use-time-left";
 import { Button } from "../../../ui/button";
 import {
@@ -24,7 +25,6 @@ import { toFormatted } from "../../../utils/web3";
 import { Horse, HorseRaceStatus } from "../constants";
 import useHorseRaceGameStore from "../store";
 import { HorseRaceForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 interface Props {
   minWager: number;

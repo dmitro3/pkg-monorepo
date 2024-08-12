@@ -10,6 +10,7 @@ import {
 } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { WagerCurrencyIcon } from "../../../common/wager";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import useCountdown from "../../../hooks/use-time-left";
 import { Button } from "../../../ui/button";
 import {
@@ -30,7 +31,6 @@ import { toFormatted } from "../../../utils/web3";
 import { MultiplayerGameStatus } from "../../core/type";
 import { useCrashGameStore } from "../store";
 import { CrashForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 interface CrashBetControllerProps {
   minWager: number;
@@ -221,7 +221,7 @@ export const CrashBetController: React.FC<CrashBetControllerProps> = ({
           </Button>
         </PreBetButton>
 
-        <footer className="wr-mt-3 wr-flex wr-items-center wr-justify-between max-md:wr-absolute max-md:wr-top-14">
+        <footer className="wr-hidden wr-mt-3 lg:wr-flex wr-items-center wr-justify-between max-md:wr-absolute max-md:wr-top-14">
           <UnityAudioController />
         </footer>
       </div>

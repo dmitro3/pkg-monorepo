@@ -1,13 +1,13 @@
+import { ChipControllerFixed } from "../../../common/chip-controller-fixed";
+import { ChipFixed } from "../../../common/chip-controller-fixed/types";
 import { PreBetButton } from "../../../common/pre-bet-button";
-import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
+import { WagerCurrencyIcon } from "../../../common/wager";
 import { CDN_URL } from "../../../constants";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import { NumberInput } from "../../../ui/number-input";
 import { cn } from "../../../utils/style";
 import { BlackjackGameStatus } from "..";
-import { ChipControllerFixed } from "../../../common/chip-controller-fixed";
-import { ChipFixed } from "../../../common/chip-controller-fixed/types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 interface BetControllerProps {
   wager: number;

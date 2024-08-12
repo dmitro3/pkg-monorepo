@@ -1,5 +1,7 @@
+import React from "react";
 import { useFormContext } from "react-hook-form";
 
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { IconChevronLeft } from "../../../svgs";
 import { Card, CardContent } from "../../../ui/card";
 import {
@@ -12,8 +14,6 @@ import {
 import { cn } from "../../../utils/style";
 import { kenoMultipliers } from "../constants";
 import { KenoForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import React from "react";
 
 const MultiplierCarousel: React.FC<{ currentNumbers: number[][] }> = ({
   currentNumbers,

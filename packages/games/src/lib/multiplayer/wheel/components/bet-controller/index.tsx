@@ -10,6 +10,10 @@ import {
 } from "../../../../common/controller";
 import { PreBetButton } from "../../../../common/pre-bet-button";
 import { WagerCurrencyIcon } from "../../../../common/wager";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
 import useCountdown from "../../../../hooks/use-time-left";
 // import useWheelGameStore from "../../_store/game-info-store";
 // import useCountdown from "@/hooks/use-time-left";
@@ -26,10 +30,6 @@ import { MultiplayerGameStatus } from "../../../core/type";
 import { colorMultipliers, WheelColor } from "../../constants";
 import { useWheelGameStore } from "../../store";
 import { WheelForm } from "../../types";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
 
 interface Props {
   minWager: number;
@@ -77,7 +77,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   return (
     <BetControllerContainer>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
-        <div className="wr-mb-3">
+        <div className="lg:wr-mb-3">
           <BetControllerTitle>Wheel</BetControllerTitle>
         </div>
 
@@ -86,12 +86,12 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           maxWager={maxWager}
           isDisabled={form.formState.isSubmitting || form.formState.isLoading}
         />
-        <div className="wr-mb-6">
+        <div className="wr-mb-3 lg:wr-mb-6">
           <FormField
             control={form.control}
             name="color"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="wr-mb-0">
                 <FormLabel className="wr-text-white/50 lg:!wr-block wr-hidden">
                   Choose
                 </FormLabel>
@@ -178,7 +178,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           <Button
             type="submit"
             variant={"success"}
-            className="wr-w-full max-lg:wr-mb-3.5"
+            className="wr-w-full"
             size={"xl"}
             onClick={() => betClickEffect.play()}
             isLoading={form.formState.isSubmitting || form.formState.isLoading}
