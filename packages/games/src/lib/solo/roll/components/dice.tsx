@@ -2,7 +2,6 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import { DICE, RollForm } from "../types";

@@ -18,7 +18,7 @@ export const LastBets = () => {
         return (
           <div
             className={cn(
-              "wr-relative wr-aspect-square md:!wr-size-9 wr-size-12 wr-rounded-md wr-border-2 wr-border-zinc-800 wr-bg-black",
+              "wr-relative wr-aspect-square wr-h-9 wr-w-9 wr-rounded-md wr-border-2 wr-border-zinc-800 wr-bg-black",
               {
                 "wr-bg-green-500": result.payout > 0,
               }
@@ -48,19 +48,15 @@ export const RollController: React.FC<{
   winChance: number;
 }> = ({ multiplier, winChance }) => {
   return (
-    <section className="wr-z-10 wr-grid wr-w-[240px] lg:wr-w-[280px] wr-grid-cols-2 wr-items-center wr-gap-2 wr-rounded-xl wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-p-[14px]">
+    <section className="wr-z-10 wr-grid wr-w-[280px] wr-grid-cols-2 wr-items-center wr-gap-2 wr-rounded-xl wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-p-[14px]">
       <div>
-        <FormLabel className="wr-leading-4 lg:wr-leading-6">
-          Multiplier
-        </FormLabel>
+        <FormLabel>Multiplier</FormLabel>
         <div className="wr-rounded-md wr-bg-zinc-800 wr-p-3 wr-font-semibold">
           {multiplier}x
         </div>
       </div>
       <div>
-        <FormLabel className="wr-leading-4 lg:wr-leading-6">
-          Win Chance
-        </FormLabel>
+        <FormLabel>Win Chance</FormLabel>
         <div className="wr-rounded-md wr-bg-zinc-800 wr-p-3 wr-font-semibold">
           {winChance}%
         </div>
