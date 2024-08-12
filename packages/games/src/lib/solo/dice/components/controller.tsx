@@ -44,7 +44,7 @@ export const Controller: React.FC<RangeControllerProps> = ({
             value={winMultiplier}
             onChange={(val) => null}
           >
-            <FormLabel className=" wr-text-zinc-400 wr-font-normal">
+            <FormLabel className="wr-text-zinc-400 wr-font-normal">
               Multiplier
             </FormLabel>
             <NumberInput.Container
@@ -93,7 +93,7 @@ export const Controller: React.FC<RangeControllerProps> = ({
                   });
                 }}
               >
-                <FormLabel className=" wr-text-zinc-400 wr-font-normal">
+                <FormLabel className="wr-text-zinc-400 wr-font-normal">
                   Roll {form.getValues().rollType === "OVER" ? "Over" : "Under"}
                 </FormLabel>
                 <NumberInput.Container
@@ -174,12 +174,12 @@ export const Controller: React.FC<RangeControllerProps> = ({
                   });
                 }}
               >
-                <FormLabel className=" wr-text-zinc-400 wr-font-normal">
+                <FormLabel className="wr-text-zinc-400 wr-font-normal">
                   Win Chance
                 </FormLabel>
                 <NumberInput.Container
                   className={cn(
-                    " wr-rounded-md wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-py-[10px] "
+                    "wr-rounded-md wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-py-[10px] "
                   )}
                 >
                   <NumberInput.Input

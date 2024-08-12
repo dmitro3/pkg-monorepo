@@ -97,7 +97,7 @@ export const BetController: React.FC<Props> = ({
                     <NumberInput.Root {...field} isDisabled={isFormInProgress}>
                       <NumberInput.Container
                         className={cn(
-                          " wr-rounded-b-[6px] wr-border-none wr-bg-zinc-950 wr-px-2  wr-py-[10px]"
+                          "wr-rounded-b-[6px] wr-border-none wr-bg-zinc-950 wr-px-2  wr-py-[10px]"
                         )}
                       >
                         <NumberInput.Input

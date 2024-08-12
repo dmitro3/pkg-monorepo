@@ -1,3 +1,5 @@
+"use client";
+
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import React from "react";
 import { useFormContext } from "react-hook-form";
@@ -82,7 +84,7 @@ export const miniDotPosition = {
 const Dice: React.FC<Props> = ({
   item,
   winner,
-  isBetting = false,
+  isBetting,
   isDisabled = false,
 }) => {
   const form = useFormContext() as RollForm;
@@ -101,7 +103,7 @@ const Dice: React.FC<Props> = ({
             <FormControl>
               <CheckboxPrimitive.Root
                 className={cn(
-                  " focus-visible:wr-ring-ring  data-[state=checked]:wr-bg-primary data-[state=checked]:wr-text-primary-foreground wr-peer wr-relative wr-mb-0 wr-h-full wr-w-full wr-shrink-0 wr-rounded-xl wr-bg-zinc-700    focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-cursor-not-allowed disabled:wr-opacity-50",
+                  "focus-visible:wr-ring-ring  data-[state=checked]:wr-bg-primary data-[state=checked]:wr-text-primary-foreground wr-peer wr-relative wr-mb-0 wr-h-full wr-w-full wr-shrink-0 wr-rounded-xl wr-bg-zinc-700    focus-visible:wr-outline-none focus-visible:wr-ring-2 focus-visible:wr-ring-offset-2 disabled:wr-cursor-not-allowed disabled:wr-opacity-50",
                   {
                     "wr-bg-white": field.value?.includes(item),
                     "wr-bg-green-500":
