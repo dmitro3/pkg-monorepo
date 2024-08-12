@@ -1,12 +1,12 @@
 import React from "react";
 
+import { CDN_URL } from "../../constants";
+import { SoundEffects, useAudioEffect } from "../../hooks/use-audio-effect";
+import { Button } from "../../ui/button";
+import { ScrollArea } from "../../ui/scroll-area";
 import { cn } from "../../utils/style";
 import { chips } from "./constants";
 import { ChipControllerProps, ChipProps } from "./types";
-import { Button } from "../../ui/button";
-import { ScrollArea } from "../../ui/scroll-area";
-import { CDN_URL } from "../../constants";
-import { SoundEffects, useAudioEffect } from "../../hooks/use-audio-effect";
 
 export const ChipController: React.FC<ChipControllerProps> = ({
   chipAmount,

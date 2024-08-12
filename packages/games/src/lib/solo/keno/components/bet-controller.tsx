@@ -12,13 +12,13 @@ import {
 } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { IconMagicStick, IconTrash } from "../../../svgs";
 import { Button } from "../../../ui/button";
 import { FormLabel } from "../../../ui/form";
 import { cn } from "../../../utils/style";
 import useKenoGameStore from "../store";
 import { KenoForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 type Props = {
   minWager: number;

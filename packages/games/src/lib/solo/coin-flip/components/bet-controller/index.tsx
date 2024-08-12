@@ -15,6 +15,10 @@ import {
 import { PreBetButton } from "../../../../common/pre-bet-button";
 import { SkipButton } from "../../../../common/skip-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../../common/wager";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
 import { Button } from "../../../../ui/button";
 import { FormLabel } from "../../../../ui/form";
 import { cn } from "../../../../utils/style";
@@ -22,10 +26,6 @@ import { toDecimals, toFormatted } from "../../../../utils/web3";
 import { useCoinFlipGameStore } from "../..";
 import { CoinFlipForm } from "../../types";
 import { CoinFlipController } from "./controller";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
 
 interface Props {
   minWager: number;

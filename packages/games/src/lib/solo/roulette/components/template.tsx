@@ -6,12 +6,13 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { AudioController } from "../../../common/audio-controller";
 import { Chip } from "../../../common/chip-controller/types";
 import { GameContainer, SceneContainer } from "../../../common/containers";
+import { WinAnimation } from "../../../common/win-animation";
 import { CDN_URL } from "../../../constants";
+import { useGameOptions } from "../../../game-provider";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Form } from "../../../ui/form";
-import { RotationWrapper } from "../../../ui/rotation-wrapper";
 import { Roulette } from "..";
 import {
   chunkMinWagerIndexes,
@@ -21,9 +22,6 @@ import {
   NUMBER_INDEX_COUNT,
 } from "../constants";
 import { RouletteFormFields, RouletteGameProps } from "../types";
-import { useGameOptions } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { WinAnimation } from "../../../common/win-animation";
 import { MobileController } from "./mobile-controller";
 
 type TemplateProps = RouletteGameProps & {

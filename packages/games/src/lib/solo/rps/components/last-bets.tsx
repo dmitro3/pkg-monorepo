@@ -10,7 +10,7 @@ import {
 } from "../../../svgs";
 import { cn } from "../../../utils/style";
 import useRpsGameStore from "../store";
-import { RockPaperScissors, RPSForm, RPSGameResult } from "../types";
+import { RockPaperScissors, RPSForm } from "../types";
 
 const MiniRPSIcon = ({ rps }: { rps: string }) => {
   switch (rps) {

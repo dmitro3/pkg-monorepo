@@ -16,6 +16,7 @@ import {
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { SkipButton } from "../../../common/skip-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import { FormControl, FormField, FormItem, FormLabel } from "../../../ui/form";
 import { cn } from "../../../utils/style";
@@ -23,7 +24,6 @@ import { toDecimals } from "../../../utils/web3";
 import { ALL_RPS_CHOICES, rpsChoiceMap } from "../constant";
 import useRpsGameStore from "../store";
 import { RockPaperScissors, RPSForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 interface BetControllerProps {
   minWager: number;

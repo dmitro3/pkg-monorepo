@@ -6,10 +6,10 @@ import { BetControllerContainer } from "../../../common/containers";
 import { BetControllerTitle, WagerFormField } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { useGameOptions } from "../../../game-provider";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import { BlackjackGameStatus } from "../../blackjack";
 import { SingleBJActiveGameHands } from "..";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 interface Props {
   minWager: number;

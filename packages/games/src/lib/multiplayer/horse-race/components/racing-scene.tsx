@@ -1,11 +1,9 @@
-import * as Progress from "@radix-ui/react-progress";
 import React from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 import { useDevicePixelRatio } from "../../../hooks/use-device-pixel-ratio";
 import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
 import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
-import { toFormatted } from "../../../utils/web3";
 import { HorseRaceStatus } from "../constants";
 import useHorseRaceGameStore from "../store";
 import { SceneLoader } from "./scene-loader";

@@ -13,7 +13,6 @@ import { toDecimals, toFormatted } from "../../../utils/web3";
 import {
   UnityCallEvent,
   UnityDealEvent,
-  UnityDealerHandWin,
   UnityFoldEvent,
   UnityNextGameAvailable,
   UnityPlayerHandWin,

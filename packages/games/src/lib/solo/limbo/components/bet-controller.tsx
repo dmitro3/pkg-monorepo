@@ -3,6 +3,7 @@
 import * as Slider from "@radix-ui/react-slider";
 import React from "react";
 import { useFormContext } from "react-hook-form";
+import { useDebounce } from "use-debounce";
 
 import { Advanced } from "../../../common/advanced";
 import { AudioController } from "../../../common/audio-controller";
@@ -17,6 +18,7 @@ import {
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { SkipButton } from "../../../common/skip-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import {
   FormControl,
@@ -30,8 +32,6 @@ import { cn } from "../../../utils/style";
 import { toDecimals } from "../../../utils/web3";
 import useLimboGameStore from "../store";
 import { LimboForm } from "../types";
-// import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-// import { useDebounce } from "use-debounce";
 
 interface Props {
   minWager: number;

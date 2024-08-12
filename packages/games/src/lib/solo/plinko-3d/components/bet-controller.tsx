@@ -16,6 +16,7 @@ import {
 } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Button } from "../../../ui/button";
 import { FormLabel } from "../../../ui/form";
 import { cn } from "../../../utils/style";
@@ -24,7 +25,6 @@ import { rowMultipliers } from "../constants";
 import usePlinko3dGameStore from "../store";
 import { Plinko3dForm } from "../types";
 import PlinkoRow from "./plinko-row";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 
 type Props = {
   minWager: number;

@@ -1,14 +1,13 @@
 import * as Slider from "@radix-ui/react-slider";
+import React from "react";
 import { useFormContext } from "react-hook-form";
+import { useDebounce } from "use-debounce";
 
 import {
-  AudioContextProvider,
   SoundEffects,
   useAudioEffect,
 } from "../../hooks/use-audio-effect";
 import { cn } from "../../utils/style";
-import React from "react";
-import { useDebounce } from "use-debounce";
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
   children?: React.ReactNode;

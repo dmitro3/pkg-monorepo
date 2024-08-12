@@ -10,6 +10,10 @@ import {
 } from "../../../../common/controller";
 import { PreBetButton } from "../../../../common/pre-bet-button";
 import { WagerCurrencyIcon } from "../../../../common/wager";
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
 import useCountdown from "../../../../hooks/use-time-left";
 // import useWheelGameStore from "../../_store/game-info-store";
 // import useCountdown from "@/hooks/use-time-left";
@@ -26,10 +30,6 @@ import { MultiplayerGameStatus } from "../../../core/type";
 import { colorMultipliers, WheelColor } from "../../constants";
 import { useWheelGameStore } from "../../store";
 import { WheelForm } from "../../types";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
 
 interface Props {
   minWager: number;

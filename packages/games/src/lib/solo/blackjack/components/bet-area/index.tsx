@@ -4,9 +4,9 @@ import React from "react";
 
 import { renderChipIcon } from "../../../../common/chip-controller-fixed/utils";
 import { CDN_URL } from "../../../../constants";
+import { numberShorter } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
 import styles from "./bet-area.module.css";
-import { numberShorter } from "../../../../utils/number";
 
 interface BetAreaProps {
   onClick: () => void;

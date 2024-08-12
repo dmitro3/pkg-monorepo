@@ -1,16 +1,16 @@
 import React, { useMemo } from "react";
 
-import { Avatar, Wheel } from "../../../../svgs";
-import { Separator } from "../../../../ui/separator";
-import { cn } from "../../../../utils/style";
-import { Multiplier, colorMultipliers } from "../../constants";
-import { useWheelGameStore } from "../../store";
+import { useGameOptions } from "../../../../game-provider";
 import {
   SoundEffects,
   useAudioEffect,
 } from "../../../../hooks/use-audio-effect";
+import { Avatar, Wheel } from "../../../../svgs";
+import { Separator } from "../../../../ui/separator";
+import { cn } from "../../../../utils/style";
 import { MultiplayerGameStatus } from "../../../core/type";
-import { useGameOptions } from "../../../../game-provider";
+import { colorMultipliers,Multiplier } from "../../constants";
+import { useWheelGameStore } from "../../store";
 
 const color = {
   gray: " wr-bg-[#ffffff15] ",

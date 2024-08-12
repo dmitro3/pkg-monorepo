@@ -1,9 +1,9 @@
 import React from "react";
+
 import { WagerBalance, WagerCurrency, WagerInput } from "../../../common/wager";
-import { FormItem, FormLabel } from "../../../ui/form";
-import { HOLDEM_POKER_GAME_STATUS } from "../types";
 import { Button } from "../../../ui/button";
 import { cn } from "../../../utils/style";
+import { HOLDEM_POKER_GAME_STATUS } from "../types";
 
 export const WagerBetController: React.FC<{
   status: HOLDEM_POKER_GAME_STATUS;

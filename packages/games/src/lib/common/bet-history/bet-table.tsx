@@ -1,7 +1,6 @@
 import { GameControllerBetHistoryResponse } from "@winrlabs/api";
-import dayjs from "dayjs";
-import React from "react";
 
+import { GameType } from "../../constants";
 import { Eye, LinkIcon } from "../../svgs";
 import { Button } from "../../ui/button";
 import {
@@ -16,7 +15,6 @@ import { shorter, walletShorter } from "../../utils/string";
 import { cn } from "../../utils/style";
 import { toDecimals, toFormatted } from "../../utils/web3";
 import { BetHistoryCurrencyList } from ".";
-import { GameType } from "../../constants";
 import useMediaQuery from "../../hooks/use-media-query";
 
 const gameMap: Record<GameType, string> = {

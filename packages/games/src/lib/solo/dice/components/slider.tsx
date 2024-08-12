@@ -1,15 +1,15 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
+import React from "react";
 import { useFormContext } from "react-hook-form";
+import { useDebounce } from "use-debounce";
 
 import { cn } from "../../../../lib/utils/style";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { FormControl, FormField, FormItem } from "../../../ui/form";
 import { toDecimals } from "../../../utils/web3";
 import { useDiceGameStore } from "..";
 import { MAX_VALUE, MIN_VALUE } from "../constant";
 import { DiceForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { useDebounce } from "use-debounce";
-import React from "react";
 
 export interface SliderTrackOptions {
   color?: string;

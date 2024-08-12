@@ -7,6 +7,9 @@ import { BetControllerTitle, WagerFormField } from "../../../common/controller";
 import { PreBetButton } from "../../../common/pre-bet-button";
 import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
 import { CDN_URL } from "../../../constants";
+import { useGameOptions } from "../../../game-provider";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
+import { useWinAnimation } from "../../../hooks/use-win-animation";
 import { Button } from "../../../ui/button";
 import { FormField, FormItem, FormLabel, FormMessage } from "../../../ui/form";
 import { NumberInput } from "../../../ui/number-input";
@@ -18,9 +21,6 @@ import { useMinesGameStateStore } from "../store";
 import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from "../types";
 import MinesCountButton from "./count-button";
 import MinesCountDisplay from "./count-display";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { useWinAnimation } from "../../../hooks/use-win-animation";
-import { useGameOptions } from "../../../game-provider";
 
 type Props = {
   minWager: number;

@@ -4,7 +4,7 @@ import React from "react";
 import { useDebounce } from "use-debounce";
 
 import { AudioController } from "../../../common/audio-controller";
-import { Chip } from "../../../common/chip-controller/types";
+import { ChipFixed } from "../../../common/chip-controller-fixed/types";
 import { GameContainer, SceneContainer } from "../../../common/containers";
 import { CDN_URL } from "../../../constants";
 import { useGameOptions } from "../../../game-provider";
@@ -26,7 +26,6 @@ import { DealerCardArea } from "./dealer-card-area";
 import { MoveController } from "./move-controller";
 import { SplittedCardArea } from "./splitted-card-area";
 import styles from "./styles.module.css";
-import { ChipFixed } from "../../../common/chip-controller-fixed/types";
 
 type TemplateOptions = {
   scene?: {

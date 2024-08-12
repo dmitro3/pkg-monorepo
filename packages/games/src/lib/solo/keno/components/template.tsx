@@ -7,10 +7,10 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 import { GameContainer, SceneContainer } from "../../../common/containers";
+import { WinAnimation } from "../../../common/win-animation";
 import { Form } from "../../../ui/form";
 import { Keno, KenoFormField } from "..";
 import { KenoGameProps } from "./game";
-import { WinAnimation } from "../../../common/win-animation";
 
 type TemplateOptions = {
   scene?: {

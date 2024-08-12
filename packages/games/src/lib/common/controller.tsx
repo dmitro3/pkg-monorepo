@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useFormContext } from "react-hook-form";
 
+import { CDN_URL } from "../constants";
+import { Button } from "../ui/button";
 import {
   FormControl,
   FormField,
@@ -18,8 +20,6 @@ import {
   WagerInput,
   WagerSetterButtons,
 } from "./wager";
-import { Button } from "../ui/button";
-import { CDN_URL } from "../constants";
 
 interface WagerFormFieldProps {
   customLabel?: string;

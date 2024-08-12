@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form";
 
 import { Chip } from "../../../../common/chip-controller/types";
 import { renderChipIcon } from "../../../../common/chip-controller/utils";
+import { numberShorter } from "../../../../utils/number";
 import { cn } from "../../../../utils/style";
 import {
   actions,
@@ -11,7 +12,6 @@ import {
   rouletteNumbers,
 } from "../../constants";
 import { RouletteForm } from "../../types";
-import { numberShorter } from "../../../../utils/number";
 
 export interface RouletteTableProps {
   selectedChip: Chip;

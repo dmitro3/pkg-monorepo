@@ -7,12 +7,12 @@ import {
   SoundEffects,
   useAudioEffect,
 } from "../../../../hooks/use-audio-effect";
+import useMediaQuery from "../../../../hooks/use-media-query";
 import { useCoinFlipGameStore } from "../..";
 import { CoinCanvas, CoinFlipForm, CoinProps } from "../../types";
 import Canvas from "./canvas";
 import CoinRotate from "./coin-rotate";
 import CoinConfetti from "./lottie/coins-confetti.json";
-import useMediaQuery from "../../../../hooks/use-media-query";
 
 export const Coin: React.FC<CoinProps> = ({
   width,

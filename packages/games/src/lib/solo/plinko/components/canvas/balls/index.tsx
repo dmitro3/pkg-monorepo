@@ -1,14 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
 import { useGameSkip } from "../../../../../game-provider";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../../hooks/use-audio-effect";
-import useMediaQuery from "../../../../../hooks/use-media-query";
-import { genNumberArray } from "../../../../../utils/number";
 import { cn } from "../../../../../utils/style";
-import { usePlinkoGameStore } from "../../..";
 import styles from "./balls.module.css";
 
 const initialStyle = {

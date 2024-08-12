@@ -1,6 +1,5 @@
 import React from "react";
 
-import { CDN_URL } from "../../../constants";
 import { Avatar, Horse } from "../../../svgs";
 import { Separator } from "../../../ui/separator";
 import { cn } from "../../../utils/style";

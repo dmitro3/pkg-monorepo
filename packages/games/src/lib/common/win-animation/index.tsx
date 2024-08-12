@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useWinAnimationStore } from "./store";
-import { toFormatted } from "../../utils/web3";
-import { useRef } from "react";
+
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { toFormatted } from "../../utils/web3";
+import { useWinAnimationStore } from "./store";
 
 export const WinAnimation = () => {
   const { show, multiplier, payout, updateWinAnimationState } =

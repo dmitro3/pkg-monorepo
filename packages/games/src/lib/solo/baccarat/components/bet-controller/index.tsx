@@ -1,25 +1,25 @@
 import { useFormContext } from "react-hook-form";
+
+import { AudioController } from "../../../../common/audio-controller";
+import { ChipController } from "../../../../common/chip-controller";
+import { Chip } from "../../../../common/chip-controller/types";
 import { BetControllerContainer } from "../../../../common/containers";
 import {
   BetControllerTitle,
   WagerFormField,
 } from "../../../../common/controller";
-import { BaccaratForm } from "../../types";
-import { useGameOptions } from "../../../../game-provider";
-import { Chip } from "../../../../common/chip-controller/types";
-import { ChipController } from "../../../../common/chip-controller";
-import { Button } from "../../../../ui/button";
-import { CDN_URL } from "../../../../constants";
-import { cn } from "../../../../utils/style";
-import { FormLabel } from "../../../../ui/form";
-import { TotalWager, WagerCurrencyIcon } from "../../../../common/wager";
-import { toFormatted } from "../../../../utils/web3";
 import { PreBetButton } from "../../../../common/pre-bet-button";
-import { AudioController } from "../../../../common/audio-controller";
+import { TotalWager, WagerCurrencyIcon } from "../../../../common/wager";
+import { useGameOptions } from "../../../../game-provider";
 import {
   SoundEffects,
   useAudioEffect,
 } from "../../../../hooks/use-audio-effect";
+import { Button } from "../../../../ui/button";
+import { FormLabel } from "../../../../ui/form";
+import { cn } from "../../../../utils/style";
+import { toFormatted } from "../../../../utils/web3";
+import { BaccaratForm } from "../../types";
 import Control from "../control";
 
 export interface Props {

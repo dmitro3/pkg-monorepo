@@ -1,9 +1,9 @@
 import React from "react";
 
+import { SoundEffects, useAudioEffect } from "../../hooks/use-audio-effect";
 import { cn } from "../../utils/style";
 import { chips } from "./constants";
 import { ChipControllerFixedProps, ChipFixedProps } from "./types";
-import { SoundEffects, useAudioEffect } from "../../hooks/use-audio-effect";
 
 export const ChipControllerFixed: React.FC<ChipControllerFixedProps> = ({
   selectedChip,

@@ -8,9 +8,10 @@ import * as z from "zod";
 
 import { Chip } from "../../../common/chip-controller/types";
 import { GameContainer, SceneContainer } from "../../../common/containers";
+import { WinAnimation } from "../../../common/win-animation";
 import { CDN_URL } from "../../../constants";
+import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
 import { Form } from "../../../ui/form";
-import { RotationWrapper } from "../../../ui/rotation-wrapper";
 import {
   MULTIPLIER_BANKER,
   MULTIPLIER_PLAYER,
@@ -25,8 +26,6 @@ import {
 } from "../types";
 import { BaccaratScene } from "./baccarat-scene";
 import { BetController } from "./bet-controller";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { WinAnimation } from "../../../common/win-animation";
 import Control from "./control";
 
 type TemplateProps = BaccaratGameProps & {

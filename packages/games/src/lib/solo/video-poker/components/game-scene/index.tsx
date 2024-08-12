@@ -3,15 +3,15 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 
+import {
+  SoundEffects,
+  useAudioEffect,
+} from "../../../../hooks/use-audio-effect";
 import { cn } from "../../../../utils/style";
 import { toFormatted } from "../../../../utils/web3";
 import { videoPokerHands, VideoPokerResult } from "../../constants";
 import useVideoPokerGameStore from "../../store";
 import { VideoPokerForm } from "../../types";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
 const ResultBox: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   children,
   className,
