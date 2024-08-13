@@ -588,22 +588,22 @@ importers:
         version: 8.12.2(@babel/runtime@7.25.0)
       '@web3auth/ethereum-provider':
         specifier: ^8.4.0
-        version: 8.12.2(@babel/runtime@7.25.0)
+        version: 8.12.3(@babel/runtime@7.25.0)
       '@web3auth/modal':
         specifier: ^8.5.0
-        version: 8.12.2(@babel/runtime@7.25.0)(react-dom@18.3.1)(react-native@0.74.5)(react@18.3.1)
+        version: 8.12.3(@babel/runtime@7.25.0)(react-dom@18.3.1)(react-native@0.74.5)(react@18.3.1)
       '@web3auth/no-modal':
         specifier: ^8.4.0
-        version: 8.12.2(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
+        version: 8.12.3(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
       '@web3auth/openlogin-adapter':
         specifier: ^8.4.0
         version: 8.12.2(@babel/runtime@7.25.0)
       '@web3auth/wallet-services-plugin':
         specifier: ^8.4.0
-        version: 8.12.2(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
+        version: 8.12.3(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
       '@web3auth/web3auth-wagmi-connector':
         specifier: ^6.0.0
-        version: 6.0.0(@wagmi/core@2.11.2)(@web3auth/base@8.12.2)(@web3auth/modal@8.12.2)(@web3auth/no-modal@8.12.2)(@web3auth/openlogin-adapter@8.12.2)(viem@2.19.4)
+        version: 6.0.0(@wagmi/core@2.11.2)(@web3auth/base@8.12.2)(@web3auth/modal@8.12.3)(@web3auth/no-modal@8.12.3)(@web3auth/openlogin-adapter@8.12.2)(viem@2.19.4)
       '@winrlabs/api':
         specifier: workspace:*
         version: link:../api
@@ -4300,7 +4300,6 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.7
-      napi-wasm: 1.1.0
     dev: false
     bundledDependencies:
       - napi-wasm
@@ -7662,8 +7661,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@web3auth/ethereum-provider@8.12.2(@babel/runtime@7.25.0):
-    resolution: {integrity: sha512-DNOIG0fkYl6sz/MIttP1uRaVjLHkuFjAG/eZk+PaQTXQ47dNNPLNGFKHe/mF3YvWoUqW/KABJRb95l8522ecQA==}
+  /@web3auth/ethereum-provider@8.12.3(@babel/runtime@7.25.0):
+    resolution: {integrity: sha512-OP9g7bLh4lCZKZWJyKtuH94S1lYTTH18j8Clu/WWH79uKRTIc9KZbblAXzuszfYIOiuGewr++Mm4WWfgkhphxQ==}
     engines: {node: '>=18.x', npm: '>=9.x'}
     peerDependencies:
       '@babel/runtime': 7.x
@@ -7689,8 +7688,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@web3auth/modal@8.12.2(@babel/runtime@7.25.0)(react-dom@18.3.1)(react-native@0.74.5)(react@18.3.1):
-    resolution: {integrity: sha512-17dlCEqhAWPLuZZr9i2zIH3ebwu55qdTOijkCM7h+5b9UZqKEaRgHnRXa0pEXfpjj9AgiRvo7oHzjBi/U+CX8w==}
+  /@web3auth/modal@8.12.3(@babel/runtime@7.25.0)(react-dom@18.3.1)(react-native@0.74.5)(react@18.3.1):
+    resolution: {integrity: sha512-VLVbSziAcgaDjS5qrF0xIGBMwNx2xzntPksnARjQqnzFg4kh3rJkKr2td4qL9BzX2r0NigIIKm3UZ92UsQ9srg==}
     engines: {node: '>=18.x', npm: '>=9.x'}
     peerDependencies:
       '@babel/runtime': ^7.x
@@ -7702,7 +7701,7 @@ packages:
       '@babel/runtime': 7.25.0
       '@web3auth/base': 8.12.2(@babel/runtime@7.25.0)
       '@web3auth/base-provider': 8.12.2(@babel/runtime@7.25.0)
-      '@web3auth/no-modal': 8.12.2(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
+      '@web3auth/no-modal': 8.12.3(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
       '@web3auth/openlogin-adapter': 8.12.2(@babel/runtime@7.25.0)
       '@web3auth/ui': 8.12.2(@babel/runtime@7.25.0)(react-dom@18.3.1)(react-native@0.74.5)(react@18.3.1)
       lodash.clonedeep: 4.5.0
@@ -7717,8 +7716,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@web3auth/no-modal@8.12.2(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2):
-    resolution: {integrity: sha512-hDhptHVYju+TGfLuziP2ixmLdsC0XviDW3/2wdsmPTx1TdXSWbsgJg3brY8Udo93HJdgweeSylELulmQFPz0sw==}
+  /@web3auth/no-modal@8.12.3(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2):
+    resolution: {integrity: sha512-3vllN1Xib5/vfR481Nt4Slj2sF0SuJT3ByDka1dgHTnkOp+ugfV2IkzuGTU/c6e5PE0IXif0FH3xEfZ9CTYn+Q==}
     engines: {node: '>=18.x', npm: '>=9.x'}
     peerDependencies:
       '@babel/runtime': ^7.x
@@ -7797,8 +7796,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@web3auth/wallet-services-plugin@8.12.2(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2):
-    resolution: {integrity: sha512-zRpns4s78WmwiJI39uopckwxJkg1y/v1sokwGtqdusXIE6edsdGT9JFrZ8C0r8mpQCNMi566NRW54ELuNpPYbw==}
+  /@web3auth/wallet-services-plugin@8.12.3(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2):
+    resolution: {integrity: sha512-H603HAnzSV1q6l4YLB6+caHUn5eUdYXEG2/eGFyruAPG453TC4ABHjCJVrDLe6iyQWmJLo1lagfbJBg2R8dPhg==}
     engines: {node: '>=18.x', npm: '>=9.x'}
     peerDependencies:
       '@babel/runtime': ^7.x
@@ -7806,7 +7805,7 @@ packages:
       '@babel/runtime': 7.25.0
       '@toruslabs/openlogin-jrpc': 8.3.0(@babel/runtime@7.25.0)
       '@web3auth/base': 8.12.2(@babel/runtime@7.25.0)
-      '@web3auth/no-modal': 8.12.2(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
+      '@web3auth/no-modal': 8.12.3(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
       '@web3auth/ws-embed': 2.0.21(@babel/runtime@7.25.0)
       loglevel: 1.9.1
     transitivePeerDependencies:
@@ -7818,7 +7817,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@web3auth/web3auth-wagmi-connector@6.0.0(@wagmi/core@2.11.2)(@web3auth/base@8.12.2)(@web3auth/modal@8.12.2)(@web3auth/no-modal@8.12.2)(@web3auth/openlogin-adapter@8.12.2)(viem@2.19.4):
+  /@web3auth/web3auth-wagmi-connector@6.0.0(@wagmi/core@2.11.2)(@web3auth/base@8.12.2)(@web3auth/modal@8.12.3)(@web3auth/no-modal@8.12.3)(@web3auth/openlogin-adapter@8.12.2)(viem@2.19.4):
     resolution: {integrity: sha512-vKa0j/3DJ9bQWX//DWZ+/zJiuHhfoBxg2EBJEERvTHdK23L7GWYk6cEpmbYDFIpTTQfRfAVuNjoVFVorbeZAHQ==}
     engines: {node: '>=18.x', npm: '>=9.x'}
     peerDependencies:
@@ -7834,8 +7833,8 @@ packages:
     dependencies:
       '@wagmi/core': 2.11.2(@types/react@18.3.3)(react@18.3.1)(typescript@5.5.4)(viem@2.19.4)(zod@3.23.8)
       '@web3auth/base': 8.12.2(@babel/runtime@7.25.0)
-      '@web3auth/modal': 8.12.2(@babel/runtime@7.25.0)(react-dom@18.3.1)(react-native@0.74.5)(react@18.3.1)
-      '@web3auth/no-modal': 8.12.2(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
+      '@web3auth/modal': 8.12.3(@babel/runtime@7.25.0)(react-dom@18.3.1)(react-native@0.74.5)(react@18.3.1)
+      '@web3auth/no-modal': 8.12.3(@babel/runtime@7.25.0)(@web3auth/openlogin-adapter@8.12.2)
       '@web3auth/openlogin-adapter': 8.12.2(@babel/runtime@7.25.0)
       viem: 2.19.4(typescript@5.5.4)(zod@3.23.8)
     dev: false
@@ -14213,7 +14212,7 @@ packages:
     engines: {node: '>=18'}
     dependencies:
       flow-enums-runtime: 0.0.6
-      terser: 5.31.5
+      terser: 5.31.6
     dev: false
 
   /metro-resolver@0.80.10:
@@ -14928,10 +14927,6 @@ packages:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-
-  /napi-wasm@1.1.0:
-    resolution: {integrity: sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==}
-    dev: false
 
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
@@ -17995,8 +17990,8 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /terser@5.31.5:
-    resolution: {integrity: sha512-YPmas0L0rE1UyLL/llTWA0SiDOqIcAQYLeUj7cJYzXHlRTAnMSg9pPe4VJ5PlKvTrPQsdVFuiRiwyeNlYgwh2Q==}
+  /terser@5.31.6:
+    resolution: {integrity: sha512-PQ4DAriWzKj+qgehQ7LK5bQqCFNMmlhjR2PFFLuqGCpuCAauxemVBWwWOxo3UIwWQx8+Pr61Df++r76wDmkQBg==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
