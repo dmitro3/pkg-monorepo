@@ -1,5 +1,5 @@
 import { BaccaratGameHand, toDecimals } from '@winrlabs/games';
-import { Token } from '@winrlabs/web3';
+import { EventLogic, Token } from '@winrlabs/web3';
 import { parseUnits } from 'viem';
 import { Hex } from 'viem';
 
@@ -105,6 +105,7 @@ export type DecodedEvent<T, K> = {
   type: string;
   version: number;
   timestamp: number;
+  logic: EventLogic;
   context: Item<T>[];
   program: Item<K>[];
 };

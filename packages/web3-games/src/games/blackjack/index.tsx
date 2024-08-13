@@ -381,7 +381,9 @@ export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) 
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedBetParams.encodedTxData,
   });
 
@@ -398,7 +400,9 @@ export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) 
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedHitParams.encodedTxData,
   });
 
@@ -415,7 +419,9 @@ export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) 
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedStandParams.encodedTxData,
   });
 
@@ -432,7 +438,9 @@ export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) 
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedDoubleParams.encodedTxData,
   });
 
@@ -449,7 +457,9 @@ export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) 
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedSplitParams.encodedTxData,
   });
 
@@ -466,7 +476,9 @@ export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) 
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedBuyInsuranceParams.encodedTxData,
   });
 

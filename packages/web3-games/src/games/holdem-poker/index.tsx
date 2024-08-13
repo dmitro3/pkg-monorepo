@@ -204,7 +204,9 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedBetParams.encodedTxData,
   });
 
@@ -221,7 +223,9 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedFinalizeParams.encodedTxData,
   });
 
@@ -238,7 +242,9 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedFinalizeFoldParams.encodedTxData,
   });
 

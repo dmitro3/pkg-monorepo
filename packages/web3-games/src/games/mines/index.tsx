@@ -135,7 +135,9 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   }, [dataUpdatedAt]);
 
   const handlePerformTx = useHandleTxUncached<typeof controllerAbi, 'perform'>({
-    options: {},
+    options: {
+      method: 'sendGameOperation',
+    },
   });
 
   const handleCashout = async () => {

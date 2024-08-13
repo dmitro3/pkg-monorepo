@@ -156,7 +156,9 @@ const CrashGame = (props: CrashTemplateProps) => {
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedParams.encodedTxData,
   });
 

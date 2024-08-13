@@ -1,6 +1,7 @@
 import { useCurrentAccount } from '@winrlabs/web3';
+import dayjs from 'dayjs';
 import React from 'react';
-import { io,Socket } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import SuperJSON from 'superjson';
 
 import { DecodedEvent, Event } from '../../utils';
@@ -66,7 +67,7 @@ export const useListenGameEvent = () => {
 
     const context = _e.context as DecodedEvent<any, any>;
 
-    console.log(context, 'CONTEXT!');
+    console.log(context, 'CONTEXT!', dayjs(new Date()).unix());
 
     setGameEvent(context);
   };

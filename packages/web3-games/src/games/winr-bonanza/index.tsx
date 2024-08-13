@@ -180,7 +180,9 @@ export default function WinrBonanzaTemplateWithWeb3({
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedParams.encodedTxData,
   });
 
@@ -197,7 +199,9 @@ export default function WinrBonanzaTemplateWithWeb3({
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedBuyFreeSpinParams.encodedTxData,
   });
 
@@ -214,7 +218,9 @@ export default function WinrBonanzaTemplateWithWeb3({
       ],
       address: controllerAddress as Address,
     },
-    options: {},
+    options: {
+      method: "sendGameOperation",
+    },
     encodedTxData: encodedFreeSpinParams.encodedTxData,
   });
 

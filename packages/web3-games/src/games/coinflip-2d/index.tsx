@@ -10,8 +10,11 @@ import {
   useLiveResultStore,
 } from '@winrlabs/games';
 import {
+  EventLogic,
+  FastOrVerifiedOption,
   controllerAbi,
   useCurrentAccount,
+  useFastOrVerified,
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
@@ -66,6 +69,8 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     clear: clearLiveResults,
   } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
 
+  const { eventLogic } = useFastOrVerified();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [formValues, setFormValues] = useState<CoinFlipFormFields>({
@@ -81,7 +86,6 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
-
   const { priceFeed } = usePriceFeed();
 
   const { handleGetBadges } = useGetBadges();
@@ -221,7 +225,13 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
+    console.log(finalResult?.logic, eventLogic);
+    if (
+      finalResult?.logic == eventLogic &&
+      finalResult?.program[0]?.type == GAME_HUB_EVENT_TYPES.Settled
+    ) {
+      console.log(eventLogic, "curr event log");
+
       setCoinFlipResult(finalResult);
       updateGame({
         wager: formValues.wager || 0,
