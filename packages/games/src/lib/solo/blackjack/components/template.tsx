@@ -26,6 +26,8 @@ import { DealerCardArea } from "./dealer-card-area";
 import { MoveController } from "./move-controller";
 import { SplittedCardArea } from "./splitted-card-area";
 import styles from "./styles.module.css";
+import { RotatedBackButton } from "../../../common/rotated-back-button";
+import { CurrencySelect } from "./currency-select";
 
 type TemplateOptions = {
   scene?: {
@@ -46,6 +48,10 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
   initialDataFetched,
   minWager,
   maxWager,
+  currencyList,
+  selectedCurrency,
+  balances,
+  onChangeCurrency,
 
   onGameCompleted,
   onDeal,
@@ -686,6 +692,15 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
   return (
     <RotationWrapper>
+      <span className="lg:wr-hidden">
+        <RotatedBackButton />
+        <CurrencySelect
+          currencyList={currencyList || []}
+          selectedCurrency={selectedCurrency}
+          balances={balances}
+          onChange={onChangeCurrency}
+        />
+      </span>
       <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0 wr-max-w-[1140px]">
         <SceneContainer
           style={{

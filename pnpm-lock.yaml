@@ -236,6 +236,9 @@ importers:
       '@radix-ui/react-scroll-area':
         specifier: ^1.1.0
         version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
+      '@radix-ui/react-select':
+        specifier: ^2.0.0
+        version: 2.1.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
       '@radix-ui/react-separator':
         specifier: ^1.1.0
         version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
@@ -263,6 +266,9 @@ importers:
       '@types/three':
         specifier: ^0.150.1
         version: 0.150.2
+      '@winrlabs/types':
+        specifier: workspace:*
+        version: link:../types
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -423,6 +429,19 @@ importers:
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.7
+
+  packages/types:
+    dependencies:
+      viem:
+        specifier: 2.x
+        version: 2.18.7(typescript@5.5.4)(zod@3.23.8)
+    devDependencies:
+      '@winrlabs/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.0.4
+        version: 5.5.4
 
   packages/typescript-config: {}
 
@@ -5722,7 +5741,7 @@ packages:
   /@scure/bip32@1.4.0:
     resolution: {integrity: sha512-sVUpc0Vq3tXCkDGYVWGIZTRfnvu8LoTDaev7vbwh0omSvVORONr960MQWdKqJDCReIEmTj3PAr73O3aoxz7OPg==}
     dependencies:
-      '@noble/curves': 1.4.0
+      '@noble/curves': 1.4.2
       '@noble/hashes': 1.4.0
       '@scure/base': 1.1.7
     dev: false
@@ -19152,7 +19171,7 @@ packages:
   /webauthn-p256@0.0.5:
     resolution: {integrity: sha512-drMGNWKdaixZNobeORVIqq7k5DsRC9FnG201K2QjeOoQLmtSDaSsVZdkg6n5jUALJKcAG++zBPJXmv6hy0nWFg==}
     dependencies:
-      '@noble/curves': 1.4.0
+      '@noble/curves': 1.4.2
       '@noble/hashes': 1.4.0
     dev: false
 

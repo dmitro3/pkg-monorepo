@@ -14,6 +14,7 @@ import {
 import {
   blackjackReaderAbi,
   controllerAbi,
+  useBalanceStore,
   useCurrentAccount,
   useHandleTx,
   usePriceFeed,
@@ -123,9 +124,13 @@ export default function BlackjackTemplateWithWeb3(
     wagmiConfig,
   });
 
-  const { selectedToken } = useTokenStore((s) => ({
+  const { tokens, selectedToken, setSelectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
+    tokens: s.tokens,
+    setSelectedToken: s.setSelectedToken,
   }));
+
+  const balances = useBalanceStore((state) => state.balances);
 
   const gameEvent = useListenGameEvent();
 
@@ -1283,6 +1288,10 @@ export default function BlackjackTemplateWithWeb3(
         onStand={handleStand}
         onReset={resetGame}
         options={{}}
+        currencyList={tokens}
+        selectedCurrency={selectedToken}
+        balances={balances}
+        onChangeCurrency={(t) => setSelectedToken(t)}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

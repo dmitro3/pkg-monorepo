@@ -1,0 +1,23 @@
+{
+  "name": "@winrlabs/types",
+  "version": "0.0.1",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "viem": "2.x"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4",
+    "@winrlabs/typescript-config": "workspace:*"
+  } 
+}

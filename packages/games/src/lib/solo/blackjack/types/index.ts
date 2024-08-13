@@ -1,3 +1,5 @@
+import { Token, BalanceMap } from "@winrlabs/types";
+
 export enum BlackjackHandIndex {
   FIRST,
   SECOND,
@@ -93,6 +95,10 @@ export interface BlackjackGameProps {
   activeGameHands: ActiveGameHands;
   isControllerDisabled?: boolean;
   initialDataFetched: boolean;
+  currencyList: Token[];
+  selectedCurrency: Token;
+  balances: BalanceMap;
+  onChangeCurrency: (token: Token) => void;
 
   onGameCompleted: () => void;
   onDeal: (

@@ -1,0 +1,7 @@
+{
+  "extends": "@winrlabs/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "emitDeclarationOnly": true
+  }
+}
