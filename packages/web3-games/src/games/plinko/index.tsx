@@ -11,6 +11,7 @@ import {
 import {
   controllerAbi,
   useCurrentAccount,
+  useFastOrVerified,
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
@@ -84,6 +85,8 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
   } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
 
   const gameEvent = useListenGameEvent();
+
+  const { eventLogic } = useFastOrVerified();
 
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
@@ -224,7 +227,10 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
+    if (
+      finalResult?.logic == eventLogic &&
+      finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled
+    ) {
       setPlinkoResult(finalResult);
 
       updateGame({

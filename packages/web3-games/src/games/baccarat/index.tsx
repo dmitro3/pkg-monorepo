@@ -11,6 +11,7 @@ import {
 import {
   controllerAbi,
   useCurrentAccount,
+  useFastOrVerified,
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
@@ -66,6 +67,8 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   });
 
   const gameEvent = useListenGameEvent();
+
+  const { eventLogic } = useFastOrVerified();
 
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
@@ -205,8 +208,10 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   };
 
   React.useEffect(() => {
-    if (gameEvent?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
-      console.log(gameEvent, "settled");
+    if (
+      gameEvent?.logic == eventLogic &&
+      gameEvent?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled
+    ) {
       const { hands, win, converted } = gameEvent.program[0]
         .data as BaccaratSettledEvent;
 

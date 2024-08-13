@@ -13,6 +13,7 @@ import {
 import {
   controllerAbi,
   useCurrentAccount,
+  useFastOrVerified,
   useHandleTx,
   usePriceFeed,
   useTokenAllowance,
@@ -88,6 +89,8 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   const { updateGameStatus } = useLimboGameStore(["updateGameStatus"]);
 
   const gameEvent = useListenGameEvent();
+
+  const { eventLogic } = useFastOrVerified();
 
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
@@ -230,12 +233,16 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
+    if (
+      finalResult?.logic == eventLogic &&
+      finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled
+    ) {
       setLimboResult(finalResult);
-    updateGame({
-      wager: formValues.wager || 0,
-      betCount: formValues.betCount || 0,
-    });
+      updateGame({
+        wager: formValues.wager || 0,
+        betCount: formValues.betCount || 0,
+      });
+    }
   }, [gameEvent]);
 
   const {
