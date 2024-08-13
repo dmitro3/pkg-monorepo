@@ -5,6 +5,7 @@ import { encodeFunctionData, formatUnits, parseEther } from "viem";
 import { useReadContract } from "wagmi";
 
 import { erc20Abi } from "../abis";
+import { WinrBundlerClient } from "./use-bundler-client";
 import { useHandleTx } from "./use-handle-tx";
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
@@ -17,6 +18,7 @@ interface UseTokenAllowanceParams {
   spender: string;
   amountToApprove: number;
   showDefaultToasts?: boolean;
+  client?: WinrBundlerClient;
 }
 
 export function useTokenAllowance({
@@ -25,7 +27,9 @@ export function useTokenAllowance({
   tokenAddress,
   amountToApprove,
   showDefaultToasts = true,
+  client
 }: UseTokenAllowanceParams) {
+
   const handleTx = useHandleTx<typeof erc20Abi, "approve">({
     writeContractVariables: {
       address: tokenAddress,
@@ -33,7 +37,9 @@ export function useTokenAllowance({
       functionName: "approve",
       args: [spender as `0x${string}`, parseEther(UNLIMITED_AMOUNT.toString())],
     },
-    options: {},
+    options: {
+      client: client || undefined,
+    },
     encodedTxData: encodeFunctionData({
       abi: erc20Abi,
       functionName: "approve",

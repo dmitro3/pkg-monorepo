@@ -60,7 +60,7 @@ interface UseBundlerClient {
   changeBundlerNetwork: (network: BundlerNetwork) => void;
 }
 
-const fetchBundlerClient = async ({
+export const fetchBundlerClient = async ({
   rpcUrl,
   walletAddress,
   network,

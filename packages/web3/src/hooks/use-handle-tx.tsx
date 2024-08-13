@@ -6,7 +6,7 @@ import { Config } from "wagmi";
 import { WriteContractVariables } from "wagmi/query";
 
 import { SimpleAccountAPI } from "../smart-wallet";
-import { useBundlerClient } from "./use-bundler-client";
+import { useBundlerClient, WinrBundlerClient } from "./use-bundler-client";
 import { useCurrentAccount } from "./use-current-address";
 import { useSmartAccountApi } from "./use-smart-account-api";
 
@@ -19,6 +19,7 @@ export interface UseHandleTxOptions {
   refetchInterval?: number;
   unauthRedirectionCb?: () => void;
   method?: "sendUserOperation" | "sendGameOperation";
+  client?: WinrBundlerClient;
 }
 
 interface UseHandleTxParams<
@@ -68,7 +69,7 @@ export const useHandleTx = <
   const { method = "sendUserOperation" } = options;
   const { address } = useCurrentAccount();
   const { accountApi } = useSmartAccountApi();
-  const { client } = useBundlerClient();
+  const { client: defaultClient } = useBundlerClient();
 
   const handleTxMutation = useMutation({
     mutationFn: async () => {
@@ -77,6 +78,8 @@ export const useHandleTx = <
 
         return;
       }
+
+      let client = options.client ? options.client : defaultClient;
 
       if (!client) return;
 
