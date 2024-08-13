@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from 'react';
 
-import { useGameSkip } from "../../../../../game-provider";
-import { cn } from "../../../../../utils/style";
-import styles from "./balls.module.css";
+import { useGameSkip } from '../../../../../game-provider';
+import { cn } from '../../../../../utils/style';
+import styles from './balls.module.css';
 
 const initialStyle = {
   transform: `translate(0px, -12px)`,
-  transitionDuration: "0ms",
-  transitionTimingFunction: "ease-in",
+  transitionDuration: '0ms',
+  transitionTimingFunction: 'ease-in',
 };
 
 interface PlinkoBallProps {
@@ -18,13 +18,7 @@ interface PlinkoBallProps {
   betCount: number;
 }
 
-const Ball: React.FC<PlinkoBallProps> = ({
-  path,
-  order,
-  isSkipped,
-  onAnimationEnd,
-  betCount,
-}) => {
+const Ball: React.FC<PlinkoBallProps> = ({ path, order, isSkipped, onAnimationEnd, betCount }) => {
   const [jump, setJump] = React.useState(false);
   const [style, setStyle] = React.useState(initialStyle);
   const skipRef = React.useRef<boolean>(isSkipped);
@@ -47,13 +41,13 @@ const Ball: React.FC<PlinkoBallProps> = ({
       }
 
       for (let i = 0; i < path.length + 2; i++) {
-        console.log(i, "i");
+        console.log(i, 'i');
         if (i === 0) {
           const t = setTimeout(() => {
             setStyle({
               transform: `translate(0px, 0px)`,
-              transitionDuration: "300ms",
-              transitionTimingFunction: "ease-in",
+              transitionDuration: '300ms',
+              transitionTimingFunction: 'ease-in',
             });
             setJump(true);
           }, delay);
@@ -74,8 +68,8 @@ const Ball: React.FC<PlinkoBallProps> = ({
 
               setStyle({
                 transform: `translate(${x}px, ${i * initialY}px)`,
-                transitionDuration: "300ms",
-                transitionTimingFunction: "ease-in",
+                transitionDuration: '300ms',
+                transitionTimingFunction: 'ease-in',
               });
 
               if (i - 1 === path.length && !skipRef.current) {
@@ -115,7 +109,7 @@ const Ball: React.FC<PlinkoBallProps> = ({
       className={styles.ballMover}
       style={{
         ...style,
-        visibility: jump ? "visible" : "hidden",
+        visibility: jump ? 'visible' : 'hidden',
       }}
     >
       <div className={cn(styles.ball, jump && styles.jump)} />
@@ -129,11 +123,7 @@ interface PlinkoBallsProps {
   onAnimationEnd: (order: number, isSkipped?: boolean) => void;
 }
 
-export const Balls: React.FC<PlinkoBallsProps> = ({
-  count,
-  paths,
-  onAnimationEnd,
-}) => {
+export const Balls: React.FC<PlinkoBallsProps> = ({ count, paths, onAnimationEnd }) => {
   const calls = useRef<number[]>([]);
   const { isAnimationSkipped } = useGameSkip();
 
@@ -156,7 +146,7 @@ export const Balls: React.FC<PlinkoBallsProps> = ({
   return (
     <div
       className={cn({
-        "wr-hidden": paths?.length === 0,
+        'wr-hidden': paths?.length === 0,
       })}
     >
       {paths &&

@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
 
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { WinAnimation } from "../../../common/win-animation";
-import { Form } from "../../../ui/form";
-import { Keno, KenoFormField } from "..";
-import { KenoGameProps } from "./game";
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { WinAnimation } from '../../../common/win-animation';
+import { Form } from '../../../ui/form';
+import { Keno, KenoFormField } from '..';
+import { KenoGameProps } from './game';
 
 type TemplateOptions = {
   scene?: {
@@ -36,8 +36,8 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
       .max(props?.maxWager || 2000, {
         message: `Maximum wager is ${props?.maxWager}`,
       }),
-    betCount: z.number().min(1, { message: "Minimum bet count is 1" }).max(3, {
-      message: "Maximum bet count is 3",
+    betCount: z.number().min(1, { message: 'Minimum bet count is 1' }).max(3, {
+      message: 'Maximum bet count is 3',
     }),
     selections: z.array(z.number()),
     stopGain: z.number(),
@@ -49,7 +49,7 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "onSubmit",
+    mode: 'onSubmit',
     defaultValues: {
       wager: props.minWager || 1,
       betCount: 1,
@@ -74,10 +74,7 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
           <Keno.Game {...props}>
-            <Keno.Controller
-              maxWager={props?.maxWager || 2000}
-              minWager={props?.minWager || 1}
-            />
+            <Keno.Controller maxWager={props?.maxWager || 2000} minWager={props?.minWager || 1} />
             <SceneContainer className="wr-relative md:wr-h-[750px] lg:wr-px-[14px] lg:wr-pb-[14px] max-lg:!wr-border-0 max-lg:!wr-p-0">
               <Keno.Scene {...props} />
               <WinAnimation />

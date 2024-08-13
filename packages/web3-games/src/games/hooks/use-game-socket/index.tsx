@@ -1,15 +1,14 @@
-"use client";
+'use client';
 
-import { BundlerNetwork, useCurrentAccount } from "@winrlabs/web3";
-import React from "react";
-import { io, Socket } from "socket.io-client";
+import { BundlerNetwork } from '@winrlabs/web3';
+import React from 'react';
 
 interface GameSocket {
   bundlerWsUrl: string;
   network: BundlerNetwork;
 }
 const GameSocketContext = React.createContext<GameSocket>({
-  bundlerWsUrl: "",
+  bundlerWsUrl: '',
   network: BundlerNetwork.WINR,
 });
 

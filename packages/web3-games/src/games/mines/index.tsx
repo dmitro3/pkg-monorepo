@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   BetHistoryTemplate,
@@ -7,12 +7,11 @@ import {
   MINES_GAME_STATUS,
   MINES_SUBMIT_TYPE,
   MinesFormField,
-  MinesGameResult,
   MinesGameResultOnComplete,
   MinesTemplate,
   toDecimals,
   useMinesGameStateStore,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   controllerAbi,
   minesAbi,
@@ -23,20 +22,15 @@ import {
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import React, { useEffect, useState } from "react";
-import {
-  Address,
-  encodeAbiParameters,
-  encodeFunctionData,
-  formatUnits,
-} from "viem";
-import { useReadContract } from "wagmi";
+} from '@winrlabs/web3';
+import React, { useEffect, useState } from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
+import { useReadContract } from 'wagmi';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
-import { prepareGameTransaction } from "../utils";
+import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { useListenGameEvent } from '../hooks/use-listen-game-event';
+import { prepareGameTransaction } from '../utils';
 
 enum Status {
   None = 0, // No game
@@ -53,25 +47,15 @@ interface TemplateWithWeb3Props {
 }
 
 const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.mines,
-    gameType: GameType.MINES,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.mines,
+      gameType: GameType.MINES,
+      wagmiConfig,
+    });
 
   const { priceFeed } = usePriceFeed();
 
@@ -88,29 +72,27 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     selectedCells: [],
   });
 
-  const [isWaitingResponse, setIsWaitingResponse] =
-    React.useState<boolean>(false);
+  const [isWaitingResponse, setIsWaitingResponse] = React.useState<boolean>(false);
 
   const gameEvent = useListenGameEvent();
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
 
-  const { submitType, updateMinesGameState, board, gameStatus } =
-    useMinesGameStateStore([
-      "submitType",
-      "updateMinesGameState",
-      "board",
-      "gameStatus",
-    ]);
+  const { submitType, updateMinesGameState, board, gameStatus } = useMinesGameStateStore([
+    'submitType',
+    'updateMinesGameState',
+    'board',
+    'gameStatus',
+  ]);
 
   const { data, dataUpdatedAt } = useReadContract({
     abi: minesAbi,
     address: gameAddresses.mines as Address,
-    functionName: "getPlayerStatus",
-    args: [currentAccount.address || "0x0"],
+    functionName: 'getPlayerStatus',
+    args: [currentAccount.address || '0x0'],
     config: wagmiConfig,
     query: {
       enabled: !!currentAccount.address,
@@ -129,27 +111,21 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         };
       });
 
-      const initialToken = tokens.find(
-        (t) => t.bankrollIndex == data.bankroll
-      ) as Token;
-      const wagerInGameCurrency = formatUnits(
-        data.wager,
-        initialToken.decimals
-      );
+      const initialToken = tokens.find((t) => t.bankrollIndex == data.bankroll) as Token;
+      const wagerInGameCurrency = formatUnits(data.wager, initialToken.decimals);
 
-      const wager =
-        Number(wagerInGameCurrency) * priceFeed[initialToken.priceKey];
+      const wager = Number(wagerInGameCurrency) * priceFeed[initialToken.priceKey];
 
       const _wager = wager < 1 ? Math.ceil(wager) : wager;
 
-      setFormSetValue({ key: "wager", value: toDecimals(_wager, 2) });
+      setFormSetValue({ key: 'wager', value: toDecimals(_wager, 2) });
 
       setFormSetValue({
-        key: "selectedCells",
+        key: 'selectedCells',
         value: newBoard.map((cell) => cell.isSelected),
       });
 
-      setFormSetValue({ key: "minesCount", value: data?.numMines });
+      setFormSetValue({ key: 'minesCount', value: data?.numMines });
 
       updateMinesGameState({
         board: newBoard,
@@ -158,20 +134,20 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     }
   }, [dataUpdatedAt]);
 
-  const handlePerformTx = useHandleTxUncached<typeof controllerAbi, "perform">({
+  const handlePerformTx = useHandleTxUncached<typeof controllerAbi, 'perform'>({
     options: {},
   });
 
   const handleCashout = async () => {
     const encodedTxData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.mines as Address,
         selectedTokenAddress.bankrollIndex,
         uiOperatorAddress as Address,
-        "endGame",
-        "0x",
+        'endGame',
+        '0x',
       ],
     });
 
@@ -179,13 +155,13 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       encodedTxData,
       writeContractVariables: {
         abi: controllerAbi,
-        functionName: "perform",
+        functionName: 'perform',
         args: [
           gameAddresses.mines,
           selectedTokenAddress.bankrollIndex,
           uiOperatorAddress as Address,
-          "endGame",
-          "0x",
+          'endGame',
+          '0x',
         ],
         address: controllerAddress as Address,
       },
@@ -199,33 +175,31 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       lastPrice: priceFeed[selectedTokenAddress.priceKey],
     });
 
-    console.log(values.selectedCells, "selectedCells");
+    console.log(values.selectedCells, 'selectedCells');
 
     const encodedFirstRevealGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "numMines", type: "uint8" },
-        { name: "cellsPicked", type: "bool[25]" },
-        { name: "isCashout", type: "bool" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'numMines', type: 'uint8' },
+        { name: 'cellsPicked', type: 'bool[25]' },
+        { name: 'isCashout', type: 'bool' },
       ],
       [
         wagerInWei,
         values.minesCount,
-        values.selectedCells.length
-          ? values.selectedCells
-          : (Array(25).fill(false) as any),
+        values.selectedCells.length ? values.selectedCells : (Array(25).fill(false) as any),
         submitType === MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT ? true : false,
       ]
     );
 
     const encodedTxData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.mines as Address,
         selectedTokenAddress.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedFirstRevealGameData,
       ],
     });
@@ -234,12 +208,12 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       encodedTxData,
       writeContractVariables: {
         abi: controllerAbi,
-        functionName: "perform",
+        functionName: 'perform',
         args: [
           gameAddresses.mines,
           selectedTokenAddress.bankrollIndex,
           uiOperatorAddress as Address,
-          "bet",
+          'bet',
           encodedFirstRevealGameData,
         ],
         address: controllerAddress as Address,
@@ -247,16 +221,13 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     });
   };
 
-  const handleReveal = async (
-    values: MinesFormField,
-    revealCells: boolean[]
-  ) => {
-    console.log(revealCells, "revealcells");
+  const handleReveal = async (values: MinesFormField, revealCells: boolean[]) => {
+    console.log(revealCells, 'revealcells');
 
     const encodedRevealGameData = encodeAbiParameters(
       [
-        { name: "cellsPicked", type: "bool[25]" },
-        { name: "isCashout", type: "bool" },
+        { name: 'cellsPicked', type: 'bool[25]' },
+        { name: 'isCashout', type: 'bool' },
       ],
       [
         revealCells.length ? revealCells : (Array(25).fill(false) as any),
@@ -266,12 +237,12 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
 
     const encodedRevealTxData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.mines as Address,
         selectedTokenAddress.bankrollIndex,
         uiOperatorAddress as Address,
-        "revealCells",
+        'revealCells',
         encodedRevealGameData,
       ],
     });
@@ -280,12 +251,12 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       encodedTxData: encodedRevealTxData,
       writeContractVariables: {
         abi: controllerAbi,
-        functionName: "perform",
+        functionName: 'perform',
         args: [
           gameAddresses.mines,
           selectedTokenAddress.bankrollIndex,
           uiOperatorAddress as Address,
-          "revealCells",
+          'revealCells',
           encodedRevealGameData,
         ],
         address: controllerAddress as Address,
@@ -295,7 +266,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedTokenAddress.address,
     showDefaultToasts: false,
@@ -303,19 +274,19 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
 
   const onGameSubmit = async (values: MinesFormField) => {
     setIsWaitingResponse(true);
-    console.log(values, "form values");
+    console.log(values, 'form values');
 
     try {
       if (!allowance.hasAllowance) {
         const handledAllowance = await allowance.handleAllowance({
           errorCb: (e: any) => {
-            console.log("error", e);
+            console.log('error', e);
           },
         });
 
         if (!handledAllowance) return;
       }
-      console.log("submit Type:", submitType);
+      console.log('submit Type:', submitType);
       if (isPlayerHalted) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
@@ -347,7 +318,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         });
       }
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
       setIsWaitingResponse(false);
     }
@@ -361,20 +332,16 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     if (gameData.status === Status.Final) {
       const hasMine = gameData.mines?.some((cell: boolean) => cell === true);
 
-      const mineIndex = gameData.mines.findIndex(
-        (cell: boolean) => cell === true
-      );
+      const mineIndex = gameData.mines.findIndex((cell: boolean) => cell === true);
 
       if (hasMine) {
-        const newBoard = gameData.revealedCells.map(
-          (cell: boolean, idx: number) => {
-            return {
-              isSelected: cell,
-              isBomb: idx === mineIndex,
-              isRevealed: cell,
-            };
-          }
-        );
+        const newBoard = gameData.revealedCells.map((cell: boolean, idx: number) => {
+          return {
+            isSelected: cell,
+            isBomb: idx === mineIndex,
+            isRevealed: cell,
+          };
+        });
 
         updateMinesGameState({
           gameStatus: MINES_GAME_STATUS.ENDED,
@@ -394,7 +361,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
           board: newBoard,
         });
 
-        console.log("Congrats! You win!!!");
+        console.log('Congrats! You win!!!');
       }
       setIsWaitingResponse(false);
     } else {
@@ -402,27 +369,23 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
 
       const hasMine = gameData?.mines?.some((cell: boolean) => cell === true);
 
-      const mineIndex = gameData.mines.findIndex(
-        (cell: boolean) => cell === true
-      );
+      const mineIndex = gameData.mines.findIndex((cell: boolean) => cell === true);
 
       if (hasMine) {
-        const newBoard = gameData.revealedCells.map(
-          (cell: boolean, idx: number) => {
-            return {
-              isSelected: cell,
-              isBomb: idx === mineIndex,
-              isRevealed: cell,
-            };
-          }
-        );
+        const newBoard = gameData.revealedCells.map((cell: boolean, idx: number) => {
+          return {
+            isSelected: cell,
+            isBomb: idx === mineIndex,
+            isRevealed: cell,
+          };
+        });
 
         updateMinesGameState({
           gameStatus: MINES_GAME_STATUS.ENDED,
           board: newBoard,
         });
 
-        console.log("OOPS You hit a mine");
+        console.log('OOPS You hit a mine');
       } else {
         const newBoard = gameData.revealedCells.map((cell: boolean) => {
           return {
@@ -449,18 +412,13 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   //   submitType === MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT ? true : false
   // );
 
-  const {
-    betHistory,
-    isHistoryLoading,
-    mapHistoryTokens,
-    setHistoryFilter,
-    refetchHistory,
-  } = useBetHistory({
-    gameType: GameType.MINES,
-    options: {
-      enabled: !props.hideBetHistory,
-    },
-  });
+  const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
+    useBetHistory({
+      gameType: GameType.MINES,
+      options: {
+        enabled: !props.hideBetHistory,
+      },
+    });
 
   const { handleGetBadges } = useGetBadges();
 

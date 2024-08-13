@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   BetHistoryTemplate,
@@ -7,9 +7,9 @@ import {
   LimboGameResult,
   LimboTemplate,
   toDecimals,
-  useLiveResultStore,
   useLimboGameStore,
-} from "@winrlabs/games";
+  useLiveResultStore,
+} from '@winrlabs/games';
 import {
   controllerAbi,
   useCurrentAccount,
@@ -18,19 +18,19 @@ import {
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import React, { useMemo, useState } from "react";
-import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+} from '@winrlabs/web3';
+import React, { useMemo, useState } from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
+import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import {
   DecodedEvent,
   GAME_HUB_EVENT_TYPES,
   prepareGameTransaction,
   SingleStepSettledEvent,
-} from "../utils";
+} from '../utils';
 
 type TemplateOptions = {
   scene?: {
@@ -50,25 +50,15 @@ interface TemplateWithWeb3Props {
 }
 
 export default function LimboGame(props: TemplateWithWeb3Props) {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.limbo,
-    gameType: GameType.LIMBO,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.limbo,
+      gameType: GameType.LIMBO,
+      wagmiConfig,
+    });
 
   const [formValues, setFormValues] = useState<LimboFormField>({
     betCount: 1,
@@ -83,9 +73,9 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     updateGame,
     skipAll,
     clear: clearLiveResults,
-  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
 
-  const { updateGameStatus } = useLimboGameStore(["updateGameStatus"]);
+  const { updateGameStatus } = useLimboGameStore(['updateGameStatus']);
 
   const gameEvent = useListenGameEvent();
 
@@ -94,16 +84,15 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   }));
   const { priceFeed } = usePriceFeed();
 
-  const [limboResult, setLimboResult] =
-    useState<DecodedEvent<any, SingleStepSettledEvent>>();
+  const [limboResult, setLimboResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedToken.address,
     showDefaultToasts: false,
@@ -120,20 +109,19 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   }, [limboResult]);
 
   const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
-      prepareGameTransaction({
-        wager: formValues.wager,
-        stopGain: formValues.stopGain,
-        stopLoss: formValues.stopLoss,
-        selectedCurrency: selectedToken,
-        lastPrice: priceFeed[selectedToken.priceKey],
-      });
+    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
+      wager: formValues.wager,
+      stopGain: formValues.stopGain,
+      stopLoss: formValues.stopLoss,
+      selectedCurrency: selectedToken,
+      lastPrice: priceFeed[selectedToken.priceKey],
+    });
 
     const encodedChoice = encodeAbiParameters(
       [
         {
-          name: "data",
-          type: "uint8",
+          name: 'data',
+          type: 'uint8',
         },
       ],
       [Number(toDecimals(formValues.limboMultiplier * 100, 2))]
@@ -141,11 +129,11 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "stopGain", type: "uint128" },
-        { name: "stopLoss", type: "uint128" },
-        { name: "count", type: "uint8" },
-        { name: "data", type: "bytes" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'stopGain', type: 'uint128' },
+        { name: 'stopLoss', type: 'uint128' },
+        { name: 'count', type: 'uint8' },
+        { name: 'data', type: 'bytes' },
       ],
       [
         wagerInWei,
@@ -158,12 +146,12 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.limbo as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -183,15 +171,15 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     priceFeed[selectedToken.priceKey],
   ]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.limbo as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -201,13 +189,13 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async () => {
-    updateGameStatus("PLAYING");
+    updateGameStatus('PLAYING');
 
     clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -220,7 +208,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
 
       await handleTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
   };
@@ -228,26 +216,20 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     const finalResult = gameEvent;
 
-    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled)
-      setLimboResult(finalResult);
+    if (finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) setLimboResult(finalResult);
     updateGame({
       wager: formValues.wager || 0,
       betCount: formValues.betCount || 0,
     });
   }, [gameEvent]);
 
-  const {
-    betHistory,
-    isHistoryLoading,
-    mapHistoryTokens,
-    setHistoryFilter,
-    refetchHistory,
-  } = useBetHistory({
-    gameType: GameType.LIMBO,
-    options: {
-      enabled: !props.hideBetHistory,
-    },
-  });
+  const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
+    useBetHistory({
+      gameType: GameType.LIMBO,
+      options: {
+        enabled: !props.hideBetHistory,
+      },
+    });
 
   const { handleGetBadges } = useGetBadges();
 
@@ -266,8 +248,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     (step: number) => {
       props.onAnimationStep && props.onAnimationStep(step);
 
-      const currentStepResult =
-        limboResult?.program?.[0]?.data.converted.steps[step];
+      const currentStepResult = limboResult?.program?.[0]?.data.converted.steps[step];
 
       if (!currentStepResult) return;
 

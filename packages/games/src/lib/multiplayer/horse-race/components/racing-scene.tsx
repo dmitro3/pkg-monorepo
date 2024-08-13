@@ -1,14 +1,14 @@
-import React from "react";
-import { Unity, useUnityContext } from "react-unity-webgl";
+import React from 'react';
+import { Unity, useUnityContext } from 'react-unity-webgl';
 
-import { useDevicePixelRatio } from "../../../hooks/use-device-pixel-ratio";
-import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
-import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
-import { HorseRaceStatus } from "../constants";
-import useHorseRaceGameStore from "../store";
-import { SceneLoader } from "./scene-loader";
+import { useDevicePixelRatio } from '../../../hooks/use-device-pixel-ratio';
+import { useListenUnityEvent } from '../../../hooks/use-listen-unity-event';
+import { useEqualizeUnitySound } from '../../../hooks/use-unity-sound';
+import { HorseRaceStatus } from '../constants';
+import useHorseRaceGameStore from '../store';
+import { SceneLoader } from './scene-loader';
 
-const UnityFinalizedEvent = "HR_GameEnd";
+const UnityFinalizedEvent = 'HR_GameEnd';
 
 interface Props {
   onComplete?: () => void;
@@ -16,19 +16,15 @@ interface Props {
   loaderImg?: string;
 }
 
-export const RacingScene = ({
-  onComplete,
-  buildedGameUrl,
-  loaderImg,
-}: Props) => {
+export const RacingScene = ({ onComplete, buildedGameUrl, loaderImg }: Props) => {
   const devicePixelRatio = useDevicePixelRatio();
 
   const BUILDED_GAME_URL = `${buildedGameUrl}/builded-games/horse-racing`;
 
   const { status, winnerHorse, resetSelectedHorse } = useHorseRaceGameStore([
-    "status",
-    "winnerHorse",
-    "resetSelectedHorse",
+    'status',
+    'winnerHorse',
+    'resetSelectedHorse',
   ]);
 
   const percentageRef = React.useRef(0);
@@ -58,15 +54,14 @@ export const RacingScene = ({
 
   const { unityEvent } = useListenUnityEvent();
 
-  const startRace = () =>
-    sendMessage("WebGLHandler", "ReceiveMessage", "StartRace");
+  const startRace = () => sendMessage('WebGLHandler', 'ReceiveMessage', 'StartRace');
 
   const finishRace = (winningHorse: number) => {
-    sendMessage("WebGLHandler", "ReceiveMessage", `WinnerList|${winningHorse}`);
+    sendMessage('WebGLHandler', 'ReceiveMessage', `WinnerList|${winningHorse}`);
   };
 
   React.useEffect(() => {
-    console.log(status, "GameStatus", HorseRaceStatus[status]);
+    console.log(status, 'GameStatus', HorseRaceStatus[status]);
 
     if (isLoaded && status === HorseRaceStatus.Race) {
       startRace();
@@ -81,12 +76,12 @@ export const RacingScene = ({
     if (unityEvent.name === UnityFinalizedEvent) {
       onComplete && onComplete();
 
-      console.log("finish line!!");
+      console.log('finish line!!');
 
       setTimeout(() => {
         resetSelectedHorse();
 
-        sendMessage("WebGLHandler", "ReceiveMessage", "Reset");
+        sendMessage('WebGLHandler', 'ReceiveMessage', 'Reset');
       }, 3000);
     }
   }, [unityEvent]);
@@ -98,10 +93,7 @@ export const RacingScene = ({
   return (
     <>
       {percentageRef.current !== 100 && (
-        <SceneLoader
-          percentage={percentageRef.current}
-          loaderImage={loaderImg || ""}
-        />
+        <SceneLoader percentage={percentageRef.current} loaderImage={loaderImg || ''} />
       )}
       <Unity
         unityProvider={unityProvider}

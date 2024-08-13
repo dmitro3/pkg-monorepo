@@ -1,26 +1,26 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { AudioController } from "../../../common/audio-controller";
-import { BetControllerContainer } from "../../../common/containers";
-import { BetControllerTitle, WagerFormField } from "../../../common/controller";
-import { PreBetButton } from "../../../common/pre-bet-button";
-import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
-import { CDN_URL } from "../../../constants";
-import { useGameOptions } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { useWinAnimation } from "../../../hooks/use-win-animation";
-import { Button } from "../../../ui/button";
-import { FormField, FormItem, FormLabel, FormMessage } from "../../../ui/form";
-import { NumberInput } from "../../../ui/number-input";
-import { cn } from "../../../utils/style";
-import { toDecimals } from "../../../utils/web3";
-import { initialBoard } from "../constants";
-import mineMultipliers from "../constants/mines-multipliers.json";
-import { useMinesGameStateStore } from "../store";
-import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from "../types";
-import MinesCountButton from "./count-button";
-import MinesCountDisplay from "./count-display";
+import { AudioController } from '../../../common/audio-controller';
+import { BetControllerContainer } from '../../../common/containers';
+import { BetControllerTitle, WagerFormField } from '../../../common/controller';
+import { PreBetButton } from '../../../common/pre-bet-button';
+import { TotalWager, WagerCurrencyIcon } from '../../../common/wager';
+import { CDN_URL } from '../../../constants';
+import { useGameOptions } from '../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { useWinAnimation } from '../../../hooks/use-win-animation';
+import { Button } from '../../../ui/button';
+import { FormField, FormItem, FormLabel, FormMessage } from '../../../ui/form';
+import { NumberInput } from '../../../ui/number-input';
+import { cn } from '../../../utils/style';
+import { toDecimals } from '../../../utils/web3';
+import { initialBoard } from '../constants';
+import mineMultipliers from '../constants/mines-multipliers.json';
+import { useMinesGameStateStore } from '../store';
+import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from '../types';
+import MinesCountButton from './count-button';
+import MinesCountDisplay from './count-display';
 
 type Props = {
   minWager: number;
@@ -42,29 +42,26 @@ export const MinesBetController: React.FC<Props> = ({
   const { showWinAnimation, closeWinAnimation } = useWinAnimation();
 
   const { updateMinesGameState, gameStatus, board } = useMinesGameStateStore([
-    "updateMinesGameState",
-    "gameStatus",
-    "board",
+    'updateMinesGameState',
+    'gameStatus',
+    'board',
   ]);
 
   const { account } = useGameOptions();
 
-  const wager = form.watch("wager");
+  const wager = form.watch('wager');
 
-  const numMines = form.watch("minesCount");
+  const numMines = form.watch('minesCount');
 
-  const selectedCells = form.watch("selectedCells");
+  const selectedCells = form.watch('selectedCells');
 
   const isSomeCellSelected =
-    board.filter((cell) => cell.isRevealed).length !==
-    selectedCells.filter((cell) => cell).length
+    board.filter((cell) => cell.isRevealed).length !== selectedCells.filter((cell) => cell).length
       ? false
       : true;
 
   const maxPayout = React.useMemo(() => {
-    const currentScheme = mineMultipliers.filter(
-      (scheme) => scheme.numOfMines === numMines
-    );
+    const currentScheme = mineMultipliers.filter((scheme) => scheme.numOfMines === numMines);
 
     if (currentScheme.length === 0) return 0;
 
@@ -72,10 +69,7 @@ export const MinesBetController: React.FC<Props> = ({
       return obj.reveal > max.reveal ? obj : max;
     });
 
-    const largestMultiplier = toDecimals(
-      Number(largestReveal.multiplier) / 10000,
-      2
-    );
+    const largestMultiplier = toDecimals(Number(largestReveal.multiplier) / 10000, 2);
 
     return toDecimals(wager * largestMultiplier, 2);
   }, [wager, numMines]);
@@ -96,7 +90,7 @@ export const MinesBetController: React.FC<Props> = ({
           gameStatus: MINES_GAME_STATUS.IDLE,
           submitType: MINES_SUBMIT_TYPE.IDLE,
         });
-        form.resetField("selectedCells");
+        form.resetField('selectedCells');
         updateMinesGameState({
           board: initialBoard,
         });
@@ -126,10 +120,8 @@ export const MinesBetController: React.FC<Props> = ({
             return (
               <FormItem
                 className={cn({
-                  "wr-mb-0 lg:wr-mb-6":
-                    account?.isLoggedIn || !!account?.balanceAsDollar,
-                  "wr-mb-3 lg:wr-mb-6":
-                    !account?.isLoggedIn || !account?.balanceAsDollar,
+                  'wr-mb-0 lg:wr-mb-6': account?.isLoggedIn || !!account?.balanceAsDollar,
+                  'wr-mb-3 lg:wr-mb-6': !account?.isLoggedIn || !account?.balanceAsDollar,
                 })}
               >
                 <FormLabel className="wr-mb-3 lg:wr-mb-[6px] wr-leading-4 lg:wr-leading-6">
@@ -192,13 +184,11 @@ export const MinesBetController: React.FC<Props> = ({
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]"
+                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
-                ${maxPayout}
-              </span>
+              <span className={cn('wr-font-semibold wr-text-zinc-100')}>${maxPayout}</span>
             </div>
           </div>
           <div>
@@ -262,20 +252,16 @@ export const MinesBetController: React.FC<Props> = ({
               {gameStatus == MINES_GAME_STATUS.IN_PROGRESS && (
                 <Button
                   type="submit"
-                  variant={"success"}
+                  variant={'success'}
                   className="wr-mt-2 wr-flex wr-w-full wr-items-center wr-gap-2"
-                  size={"xl"}
-                  isLoading={
-                    form.formState.isSubmitting || form.formState.isLoading
-                  }
+                  size={'xl'}
+                  isLoading={form.formState.isSubmitting || form.formState.isLoading}
                   onClick={() => {
                     updateMinesGameState({
                       submitType: MINES_SUBMIT_TYPE.CASHOUT,
                     });
                   }}
-                  disabled={
-                    form.formState.isSubmitting || form.formState.isLoading
-                  }
+                  disabled={form.formState.isSubmitting || form.formState.isLoading}
                 >
                   <span>Get </span>
                   <div className="wr-h-1 wr-w-1 wr-rounded-full wr-bg-white" />

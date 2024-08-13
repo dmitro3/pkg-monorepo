@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { MultiplayerGameStatus } from "../../core/type";
-import { Participant } from "../types";
+import { MultiplayerGameStatus } from '../../core/type';
+import { Participant } from '../types';
 
 export type CrashGameState = {
   status: MultiplayerGameStatus;
@@ -48,9 +48,7 @@ export const crashGameStore = create<CrashGameStore>()((set) => ({
     }),
   addParticipant: (participant: Participant) =>
     set((state) => {
-      const existingParticipant = state.participants.find(
-        (p) => p.name === participant.name
-      );
+      const existingParticipant = state.participants.find((p) => p.name === participant.name);
 
       if (existingParticipant) {
         return state;

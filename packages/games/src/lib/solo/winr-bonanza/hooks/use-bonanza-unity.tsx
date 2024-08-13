@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import { useUnityContext } from "react-unity-webgl";
+import React, { useEffect } from 'react';
+import { useUnityContext } from 'react-unity-webgl';
 
-import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
-import { useBonanzaGameStore } from "../store";
-import { Bonanza_Unity_Methods } from "../types";
+import { useEqualizeUnitySound } from '../../../hooks/use-unity-sound';
+import { useBonanzaGameStore } from '../store';
+import { Bonanza_Unity_Methods } from '../types';
 
 interface UseUnityBonanzaParams {
   buildedGameUrl: string;
@@ -16,17 +16,13 @@ export const useUnityBonanza = ({
   buildedGameUrl,
   buildedGameUrlMobile,
 }: UseUnityBonanzaParams) => {
-  const { gameUrl, setGameUrl, prevWidth, setPrevWidth } =
-    useBonanzaGameStore();
+  const { gameUrl, setGameUrl, prevWidth, setPrevWidth } = useBonanzaGameStore();
 
   useEffect(() => {
     const handleResize = () => {
       const currentWidth = window.innerWidth;
 
-      if (
-        (prevWidth <= 768 && currentWidth > 768) ||
-        (prevWidth > 768 && currentWidth <= 768)
-      ) {
+      if ((prevWidth <= 768 && currentWidth > 768) || (prevWidth > 768 && currentWidth <= 768)) {
         window.location.reload(); // Reload the page to ensure the game is loaded correctly
 
         // Update the URL based on the new width
@@ -41,18 +37,16 @@ export const useUnityBonanza = ({
       setPrevWidth(currentWidth);
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, [prevWidth]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.innerWidth < 768
-        ? setGameUrl(buildedGameUrl)
-        : setGameUrl(buildedGameUrlMobile);
+    if (typeof window !== 'undefined') {
+      window.innerWidth < 768 ? setGameUrl(buildedGameUrl) : setGameUrl(buildedGameUrlMobile);
     }
   }, []);
 
@@ -80,8 +74,8 @@ export const useUnityBonanza = ({
       if (!sendMessage) return;
 
       sendMessage(
-        "WebGLHandler",
-        "ReceiveMessage",
+        'WebGLHandler',
+        'ReceiveMessage',
         `${Bonanza_Unity_Methods.SET_CREDIT_VALUE}|${balance}`
       );
     },
@@ -89,13 +83,13 @@ export const useUnityBonanza = ({
   );
 
   const handleSpinStatus = React.useCallback(
-    (status: "active" | "inactive") => {
+    (status: 'active' | 'inactive') => {
       if (!sendMessage) return;
 
       sendMessage(
-        "WebGLHandler",
-        "ReceiveMessage",
-        `${Bonanza_Unity_Methods.SET_SPIN_STATUS}|${status === "active"}`
+        'WebGLHandler',
+        'ReceiveMessage',
+        `${Bonanza_Unity_Methods.SET_SPIN_STATUS}|${status === 'active'}`
       );
     },
     [sendMessage]
@@ -105,15 +99,11 @@ export const useUnityBonanza = ({
     (grid: number[][]) => {
       if (!sendMessage) return;
 
-      const _grid = JSON.stringify(grid).replace(/,/g, ", ");
+      const _grid = JSON.stringify(grid).replace(/,/g, ', ');
 
-      console.log(_grid, "replaced grid");
+      console.log(_grid, 'replaced grid');
 
-      sendMessage(
-        "WebGLHandler",
-        "ReceiveMessage",
-        `${Bonanza_Unity_Methods.SEND_GRID}|${_grid}`
-      );
+      sendMessage('WebGLHandler', 'ReceiveMessage', `${Bonanza_Unity_Methods.SEND_GRID}|${_grid}`);
     },
     [sendMessage]
   );
@@ -123,8 +113,8 @@ export const useUnityBonanza = ({
       if (!sendMessage) return;
 
       sendMessage(
-        "WebGLHandler",
-        "ReceiveMessage",
+        'WebGLHandler',
+        'ReceiveMessage',
         `${Bonanza_Unity_Methods.UPDATE_WIN_TEXT}|${win}`
       );
     },
@@ -136,8 +126,8 @@ export const useUnityBonanza = ({
       if (!sendMessage) return;
 
       sendMessage(
-        "WebGLHandler",
-        "ReceiveMessage",
+        'WebGLHandler',
+        'ReceiveMessage',
         `${Bonanza_Unity_Methods.SET_FREESPIN_AMOUNT}|${amount}`
       );
     },
@@ -147,61 +137,41 @@ export const useUnityBonanza = ({
   const hideFreeSpinText = React.useCallback(() => {
     if (!sendMessage) return;
 
-    sendMessage(
-      "WebGLHandler",
-      "ReceiveMessage",
-      `${Bonanza_Unity_Methods.HIDE_FREE_SPIN_COUNT}`
-    );
+    sendMessage('WebGLHandler', 'ReceiveMessage', `${Bonanza_Unity_Methods.HIDE_FREE_SPIN_COUNT}`);
   }, [sendMessage]);
 
   const handleUnlockUi = React.useCallback(() => {
     if (!sendMessage) return;
 
-    sendMessage(
-      "WebGLHandler",
-      "ReceiveMessage",
-      Bonanza_Unity_Methods.UNLOCK_UI
-    );
+    sendMessage('WebGLHandler', 'ReceiveMessage', Bonanza_Unity_Methods.UNLOCK_UI);
   }, [sendMessage]);
 
   const handleEnterFreespin = React.useCallback(() => {
     if (!sendMessage) return;
 
-    console.log("ENTER WITH SCATTER");
+    console.log('ENTER WITH SCATTER');
 
-    sendMessage(
-      "WebGLHandler",
-      "ReceiveMessage",
-      Bonanza_Unity_Methods.ENTER_FREE_SPIN
-    );
+    sendMessage('WebGLHandler', 'ReceiveMessage', Bonanza_Unity_Methods.ENTER_FREE_SPIN);
   }, [sendMessage]);
 
   const handleEnterFreespinWithoutScatter = React.useCallback(() => {
     if (!sendMessage) return;
 
-    console.log("ENTER WITHOUT SCATTER");
+    console.log('ENTER WITHOUT SCATTER');
 
-    sendMessage(
-      "WebGLHandler",
-      "ReceiveMessage",
-      "M3_EnterFreeSpinWithoutScatter"
-    );
+    sendMessage('WebGLHandler', 'ReceiveMessage', 'M3_EnterFreeSpinWithoutScatter');
   }, [sendMessage]);
 
   const handleExitFreespin = React.useCallback(() => {
     if (!sendMessage) return;
 
-    sendMessage(
-      "WebGLHandler",
-      "ReceiveMessage",
-      Bonanza_Unity_Methods.EXIT_FREE_SPIN
-    );
+    sendMessage('WebGLHandler', 'ReceiveMessage', Bonanza_Unity_Methods.EXIT_FREE_SPIN);
   }, [sendMessage]);
 
   const handleLogin = () => {
     if (!sendMessage) return;
 
-    sendMessage("WebGLHandler", "ReceiveMessage", Bonanza_Unity_Methods.LOGIN);
+    sendMessage('WebGLHandler', 'ReceiveMessage', Bonanza_Unity_Methods.LOGIN);
   };
 
   return {

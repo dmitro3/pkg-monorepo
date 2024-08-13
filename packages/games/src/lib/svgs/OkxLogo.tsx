@@ -1,14 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgOkxLogo = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={20}
-    height={20}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
     <path
       fill="#fff"
       d="M12.41 7.222H7.595a.37.37 0 0 0-.37.37v4.815c0 .205.165.37.37.37h4.815a.37.37 0 0 0 .37-.37V7.592a.37.37 0 0 0-.37-.37ZM6.852 1.667H2.037a.37.37 0 0 0-.37.37v4.815c0 .204.166.37.37.37h4.815a.37.37 0 0 0 .37-.37V2.037a.37.37 0 0 0-.37-.37ZM17.963 1.667h-4.815a.37.37 0 0 0-.37.37v4.815c0 .204.166.37.37.37h4.815a.37.37 0 0 0 .37-.37V2.037a.37.37 0 0 0-.37-.37ZM6.852 12.777H2.037a.37.37 0 0 0-.37.37v4.815c0 .205.166.37.37.37h4.815a.37.37 0 0 0 .37-.37v-4.814a.37.37 0 0 0-.37-.37ZM17.963 12.777h-4.815a.37.37 0 0 0-.37.37v4.815c0 .205.166.37.37.37h4.815a.37.37 0 0 0 .37-.37v-4.814a.37.37 0 0 0-.37-.37Z"

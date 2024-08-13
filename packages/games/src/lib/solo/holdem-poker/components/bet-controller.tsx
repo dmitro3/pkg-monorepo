@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { WagerBalance, WagerCurrency, WagerInput } from "../../../common/wager";
-import { Button } from "../../../ui/button";
-import { cn } from "../../../utils/style";
-import { HOLDEM_POKER_GAME_STATUS } from "../types";
+import { WagerBalance, WagerCurrency, WagerInput } from '../../../common/wager';
+import { Button } from '../../../ui/button';
+import { cn } from '../../../utils/style';
+import { HOLDEM_POKER_GAME_STATUS } from '../types';
 
 export const WagerBetController: React.FC<{
   status: HOLDEM_POKER_GAME_STATUS;
@@ -28,7 +28,7 @@ export const WagerBetController: React.FC<{
         isDisabled={status == HOLDEM_POKER_GAME_STATUS.OnPlay}
         hasError={wager < minWager || wager > maxWager}
         containerClassName={cn(
-          "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
+          'wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md'
         )}
       />
       <WagerSetterButtons
@@ -55,7 +55,7 @@ const WagerSetterButtons: React.FC<{
         className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
         type="button"
         disabled={isDisabled}
-        variant={"secondary"}
+        variant={'secondary'}
         onClick={() => {
           setWager(minWager);
         }}
@@ -66,7 +66,7 @@ const WagerSetterButtons: React.FC<{
         className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
         type="button"
         disabled={isDisabled}
-        variant={"secondary"}
+        variant={'secondary'}
         onClick={() => {
           const newValue = wager / 3;
 
@@ -80,7 +80,7 @@ const WagerSetterButtons: React.FC<{
         className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
         type="button"
         disabled={isDisabled}
-        variant={"secondary"}
+        variant={'secondary'}
         onClick={() => {
           const newValue = wager * 2;
 
@@ -94,7 +94,7 @@ const WagerSetterButtons: React.FC<{
         className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
         type="button"
         disabled={isDisabled}
-        variant={"secondary"}
+        variant={'secondary'}
         onClick={() => {
           setWager(maxWager);
         }}

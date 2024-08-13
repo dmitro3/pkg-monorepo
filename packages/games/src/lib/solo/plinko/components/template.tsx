@@ -1,17 +1,17 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { Form } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { Plinko } from "..";
-import { MAX_BET_COUNT, MIN_BET_COUNT } from "../constants";
-import { PlinkoFormFields } from "../types";
-import { BetController } from "./bet-controller";
-import { PlinkoGameProps } from "./game";
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { Form } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import { Plinko } from '..';
+import { MAX_BET_COUNT, MIN_BET_COUNT } from '../constants';
+import { PlinkoFormFields } from '../types';
+import { BetController } from './bet-controller';
+import { PlinkoGameProps } from './game';
 
 type TemplateOptions = {
   scene?: {
@@ -42,9 +42,9 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
       }),
     betCount: z
       .number()
-      .min(MIN_BET_COUNT, { message: "Minimum bet count is 1" })
+      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 1' })
       .max(MAX_BET_COUNT, {
-        message: "Maximum bet count is 100",
+        message: 'Maximum bet count is 100',
       }),
     stopGain: z.number(),
     stopLoss: z.number(),
@@ -55,7 +55,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "onSubmit",
+    mode: 'onSubmit',
     defaultValues: {
       wager: props?.minWager || 1,
       betCount: 1,
@@ -79,13 +79,10 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
-          <BetController
-            minWager={props.minWager || 1}
-            maxWager={props.maxWager || 2000}
-          />
+          <BetController minWager={props.minWager || 1} maxWager={props.maxWager || 2000} />
           <SceneContainer
             className={cn(
-              "wr-h-[640px] max-md:wr-h-[350px] lg:wr-py-12 wr-relative !wr-px-4 wr-bg-center"
+              'wr-h-[640px] max-md:wr-h-[350px] lg:wr-py-12 wr-relative !wr-px-4 wr-bg-center'
             )}
             style={{
               backgroundImage: options?.scene?.backgroundImage,

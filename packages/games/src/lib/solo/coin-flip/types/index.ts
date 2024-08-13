@@ -1,7 +1,7 @@
-import { UseFormReturn } from "react-hook-form";
-import THREE from "three";
+import { UseFormReturn } from 'react-hook-form';
+import THREE from 'three';
 
-import { CoinSide } from "../constants";
+import { CoinSide } from '../constants';
 
 export interface CoinFlipFormFields {
   wager: number;

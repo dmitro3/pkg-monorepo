@@ -4,8 +4,8 @@
 // paths: number[][]
 // is skipped. is animation skipped
 
-import { useEffect, useMemo, useReducer, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 import {
   PlinkoForm,
@@ -13,12 +13,12 @@ import {
   PlinkoLastBet,
   PlinkoResultActions,
   usePlinkoGameStore,
-} from "../..";
-import { rowMultipliers } from "../../constants";
-import { getMultiplierIndex } from "../../utils";
-import { Balls } from "./balls";
-import { Buckets } from "./buckets";
-import { DotRows } from "./dot-rows";
+} from '../..';
+import { rowMultipliers } from '../../constants';
+import { getMultiplierIndex } from '../../utils';
+import { Balls } from './balls';
+import { Buckets } from './buckets';
+import { DotRows } from './dot-rows';
 
 const initialState = { results: [] };
 
@@ -62,16 +62,16 @@ export const Canvas: React.FC<CanvasProps> = ({
     updateLastBets,
     addLastBet,
   } = usePlinkoGameStore([
-    "plinkoGameResults",
-    "updateGameStatus",
-    "updatePlinkoGameResults",
-    "updateLastBets",
-    "addLastBet",
+    'plinkoGameResults',
+    'updateGameStatus',
+    'updatePlinkoGameResults',
+    'updateLastBets',
+    'addLastBet',
   ]);
 
-  const betCount = form.watch("betCount");
+  const betCount = form.watch('betCount');
   const plinkoSize = useMemo(() => {
-    const _ps = form.watch("plinkoSize");
+    const _ps = form.watch('plinkoSize');
     if (_ps < 6) return 6;
     if (_ps > 12) return 12;
     else return _ps;
@@ -112,7 +112,7 @@ export const Canvas: React.FC<CanvasProps> = ({
       updateLastBets(lastBets);
       onAnimationSkipped(lastBets);
       updatePlinkoGameResults([]);
-      updateGameStatus("ENDED");
+      updateGameStatus('ENDED');
 
       return;
     }
@@ -135,7 +135,7 @@ export const Canvas: React.FC<CanvasProps> = ({
 
     if (betCount === 1) {
       onAnimationCompleted(lastBets);
-      updateGameStatus("ENDED");
+      updateGameStatus('ENDED');
 
       return;
     }
@@ -143,7 +143,7 @@ export const Canvas: React.FC<CanvasProps> = ({
     if (!skipped && order === paths.length - 1 && betCount > 1) {
       onAnimationCompleted(lastBets);
       updatePlinkoGameResults([]);
-      updateGameStatus("ENDED");
+      updateGameStatus('ENDED');
 
       // TO ENABLE THE BUCKET ANIMATION
       setTimeout(() => {
@@ -155,17 +155,9 @@ export const Canvas: React.FC<CanvasProps> = ({
   return (
     <div className="wr-w-full wr-h-full wr-flex wr-justify-center wr-items-center max-md:wr-max-w-[280px] max-md:wr-mx-auto">
       <div className="wr-relative wr-pt-[5px] max-md:wr-pt-[2px]">
-        <Balls
-          count={betCount}
-          paths={paths}
-          onAnimationEnd={handleAnimationEnd}
-        />
+        <Balls count={betCount} paths={paths} onAnimationEnd={handleAnimationEnd} />
         <DotRows size={plinkoSize} />
-        <Buckets
-          size={plinkoSize}
-          multipliers={multipliers}
-          values={state.results}
-        />
+        <Buckets size={plinkoSize} multipliers={multipliers} values={state.results} />
       </div>
     </div>
   );

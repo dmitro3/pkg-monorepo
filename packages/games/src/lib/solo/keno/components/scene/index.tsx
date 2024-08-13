@@ -1,30 +1,24 @@
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { CDN_URL } from "../../../../constants";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import { useWinAnimation } from "../../../../hooks/use-win-animation";
-import { FormControl, FormField, FormItem } from "../../../../ui/form";
-import { cn } from "../../../../utils/style";
-import { Keno } from "../..";
-import { initialKenoCells } from "../../constants";
-import useKenoGameStore from "../../store";
-import { KenoForm, KenoGameResult } from "../../types";
-import styles from "./scene.module.css";
+import { CDN_URL } from '../../../../constants';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { useWinAnimation } from '../../../../hooks/use-win-animation';
+import { FormControl, FormField, FormItem } from '../../../../ui/form';
+import { cn } from '../../../../utils/style';
+import { Keno } from '../..';
+import { initialKenoCells } from '../../constants';
+import useKenoGameStore from '../../store';
+import { KenoForm, KenoGameResult } from '../../types';
+import styles from './scene.module.css';
 
 export type KenoSceneProps = {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: KenoGameResult[]) => void;
 };
 
-export const KenoScene: React.FC<KenoSceneProps> = ({
-  onAnimationStep,
-  onAnimationCompleted,
-}) => {
+export const KenoScene: React.FC<KenoSceneProps> = ({ onAnimationStep, onAnimationCompleted }) => {
   const form = useFormContext() as KenoForm;
 
   const pickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
@@ -34,12 +28,11 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
 
   const [currentNumbers, setCurrentNumbers] = React.useState<number[][]>([]);
 
-  const { kenoGameResults, updateKenoGameResults, updateGameStatus } =
-    useKenoGameStore([
-      "kenoGameResults",
-      "updateKenoGameResults",
-      "updateGameStatus",
-    ]);
+  const { kenoGameResults, updateKenoGameResults, updateGameStatus } = useKenoGameStore([
+    'kenoGameResults',
+    'updateKenoGameResults',
+    'updateGameStatus',
+  ]);
 
   React.useEffect(() => {
     if (kenoGameResults.length == 0) return;
@@ -51,8 +44,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
 
       const isWon = kenoGameResults?.[i]?.settled.won;
 
-      const results = kenoGameResults?.[i]
-        ?.resultNumbers as unknown as number[][];
+      const results = kenoGameResults?.[i]?.resultNumbers as unknown as number[][];
 
       setCurrentNumbers(results || []);
 
@@ -72,7 +64,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
 
         setTimeout(() => {
           // setCurrentNumbers([]);
-          updateGameStatus("ENDED");
+          updateGameStatus('ENDED');
         }, 1000);
       } else {
         setTimeout(() => turn(curr), 1500);
@@ -88,7 +80,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
   } => {
     let totalPayout = 0;
     kenoGameResults.forEach((v) => (totalPayout += v.settled.payoutsInUsd));
-    const totalWager = kenoGameResults.length * form.watch("wager");
+    const totalWager = kenoGameResults.length * form.watch('wager');
 
     return {
       multiplier: totalPayout / totalWager,
@@ -101,16 +93,11 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
       return (
         <div
           className={cn(
-            styles["wr-keno-flip-animation"],
-            " wr-grid wr-animate-keno-gem-flip  wr-grid-cols-3  "
+            styles['wr-keno-flip-animation'],
+            ' wr-grid wr-animate-keno-gem-flip  wr-grid-cols-3  '
           )}
         >
-          <div
-            className={cn(
-              styles["wr-rotateY-180"],
-              " wr-relative  wr-col-start-2 wr-w-full "
-            )}
-          >
+          <div className={cn(styles['wr-rotateY-180'], ' wr-relative  wr-col-start-2 wr-w-full ')}>
             <img
               src={`${CDN_URL}/keno/blue-gem-1.png`}
               alt="win"
@@ -123,16 +110,11 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
       return (
         <div
           className={cn(
-            styles["wr-keno-flip-animation"],
-            "wr-grid wr-animate-keno-gem-flip wr-grid-cols-3"
+            styles['wr-keno-flip-animation'],
+            'wr-grid wr-animate-keno-gem-flip wr-grid-cols-3'
           )}
         >
-          <div
-            className={cn(
-              styles["wr-rotateY-180"],
-              "wr-relative wr-col-start-2 wr-w-full "
-            )}
-          >
+          <div className={cn(styles['wr-rotateY-180'], 'wr-relative wr-col-start-2 wr-w-full ')}>
             <img
               src={`${CDN_URL}/keno/black-gem.png`}
               alt="loss"
@@ -170,36 +152,29 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
 
                                 if (!checked) {
                                   form.setValue(
-                                    "selections",
+                                    'selections',
                                     field.value.filter((item) => item !== cell)
                                   );
                                 }
 
-                                if (form.watch("selections").length >= 10) {
+                                if (form.watch('selections').length >= 10) {
                                   return;
                                 }
 
                                 if (checked) {
-                                  form.setValue(
-                                    "selections",
-                                    field.value.concat(cell)
-                                  );
+                                  form.setValue('selections', field.value.concat(cell));
                                 }
                               }}
                               className="wr-h-[34px] wr-w-full wr-rounded-lg wr-bg-keno-cell-bg wr-bg-[size:200%]  wr-bg-no-repeat wr-transition-all wr-duration-300 hover:wr-scale-105 sm:wr-h-[70px]"
                               style={{
-                                backgroundPosition: field.value.includes(cell)
-                                  ? "100% 90%"
-                                  : "top",
+                                backgroundPosition: field.value.includes(cell) ? '100% 90%' : 'top',
                               }}
                             >
                               <div className="wr-font-semibold">
                                 {renderCell(
                                   cell,
-                                  currentNumbers.includes(cell) &&
-                                    field.value.includes(cell),
-                                  currentNumbers.includes(cell) &&
-                                    !field.value.includes(cell)
+                                  currentNumbers.includes(cell) && field.value.includes(cell),
+                                  currentNumbers.includes(cell) && !field.value.includes(cell)
                                 )}
                               </div>
                             </CheckboxPrimitive.Root>

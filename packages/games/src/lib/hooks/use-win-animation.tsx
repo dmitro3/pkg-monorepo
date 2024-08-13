@@ -1,15 +1,9 @@
-import { useWinAnimationStore } from "../common/win-animation/store";
+import { useWinAnimationStore } from '../common/win-animation/store';
 
 export const useWinAnimation = () => {
   const { updateWinAnimationState } = useWinAnimationStore();
 
-  const showWinAnimation = ({
-    payout,
-    multiplier,
-  }: {
-    payout: number;
-    multiplier: number;
-  }) => {
+  const showWinAnimation = ({ payout, multiplier }: { payout: number; multiplier: number }) => {
     if (multiplier <= 1) return;
 
     updateWinAnimationState({

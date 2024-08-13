@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   ActiveGameHands,
@@ -11,7 +11,7 @@ import {
   SingleBJActiveGameHands,
   SingleBJDealFormFields,
   SingleBlackjackTemplate,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   blackjackReaderAbi,
   controllerAbi,
@@ -21,15 +21,10 @@ import {
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import React from "react";
-import {
-  Address,
-  encodeAbiParameters,
-  encodeFunctionData,
-  formatUnits,
-} from "viem";
-import { useReadContract } from "wagmi";
+} from '@winrlabs/web3';
+import React from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
+import { useReadContract } from 'wagmi';
 
 import {
   BJ_EVENT_TYPES,
@@ -40,14 +35,10 @@ import {
   BlackjackResultEvent,
   BlackjackSettledEvent,
   BlackjackStandOffEvent,
-} from "../blackjack/types";
-import {
-  useBetHistory,
-  useListenGameEvent,
-  usePlayerGameStatus,
-} from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { DecodedEvent, prepareGameTransaction } from "../utils";
+} from '../blackjack/types';
+import { useBetHistory, useListenGameEvent, usePlayerGameStatus } from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { DecodedEvent, prepareGameTransaction } from '../utils';
 
 type TemplateOptions = {
   scene?: {
@@ -86,25 +77,15 @@ const defaultGameData = {
 };
 
 export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.singleBlackjack,
-    gameType: GameType.ONE_HAND_BLACKJACK,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.singleBlackjack,
+      gameType: GameType.ONE_HAND_BLACKJACK,
+      wagmiConfig,
+    });
 
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
@@ -119,17 +100,15 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     wager: props.minWager || 1,
   });
   const [activeMove, setActiveMove] = React.useState<
-    "Created" | "HitCard" | "StandOff" | "DoubleDown" | "Split" | "Insurance"
+    'Created' | 'HitCard' | 'StandOff' | 'DoubleDown' | 'Split' | 'Insurance'
   >();
 
-  const [activeGameData, setActiveGameData] =
-    React.useState<GameStruct>(defaultGameData);
+  const [activeGameData, setActiveGameData] = React.useState<GameStruct>(defaultGameData);
 
   const [activeGameHands, setActiveGameHands] =
     React.useState<SingleBJActiveGameHands>(defaultActiveGameHands);
 
-  const [initialDataFetched, setInitialDataFetched] =
-    React.useState<boolean>(false);
+  const [initialDataFetched, setInitialDataFetched] = React.useState<boolean>(false);
 
   const resetGame = () => {
     setActiveGameData(defaultGameData);
@@ -139,11 +118,11 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   // TRANSACTIONS
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedToken.address,
     showDefaultToasts: false,
@@ -158,21 +137,21 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "chipAmounts", type: "uint16[3]" },
-        { name: "amountHands", type: "uint8" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'chipAmounts', type: 'uint16[3]' },
+        { name: 'amountHands', type: 'uint8' },
       ],
       [wagerInWei, [1, 0, 0], 1]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -182,11 +161,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [
-    formValues.wager,
-    selectedToken.address,
-    priceFeed[selectedToken.priceKey],
-  ]);
+  }, [formValues.wager, selectedToken.address, priceFeed[selectedToken.priceKey]]);
 
   const encodedHitParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
@@ -196,18 +171,18 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     });
 
     const encodedGameData = encodeAbiParameters(
-      [{ name: "handIndex", type: "uint256" }],
+      [{ name: 'handIndex', type: 'uint256' }],
       [activeGameData.activeHandIndex as unknown as bigint]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "hitAnotherCard",
+        'hitAnotherCard',
         encodedGameData,
       ],
     });
@@ -227,18 +202,18 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     });
 
     const encodedGameData = encodeAbiParameters(
-      [{ name: "handIndex", type: "uint256" }],
+      [{ name: 'handIndex', type: 'uint256' }],
       [activeGameData.activeHandIndex as unknown as bigint]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "standOff",
+        'standOff',
         encodedGameData,
       ],
     });
@@ -258,18 +233,18 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     });
 
     const encodedGameData = encodeAbiParameters(
-      [{ name: "handIndex", type: "uint256" }],
+      [{ name: 'handIndex', type: 'uint256' }],
       [activeGameData.activeHandIndex as unknown as bigint]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "doubleDown",
+        'doubleDown',
         encodedGameData,
       ],
     });
@@ -289,18 +264,18 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     });
 
     const encodedGameData = encodeAbiParameters(
-      [{ name: "handIndex", type: "uint256" }],
+      [{ name: 'handIndex', type: 'uint256' }],
       [activeGameData.activeHandIndex as unknown as bigint]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "splitHand",
+        'splitHand',
         encodedGameData,
       ],
     });
@@ -320,18 +295,18 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     });
 
     const encodedGameData = encodeAbiParameters(
-      [{ name: "handIndex", type: "uint256" }],
+      [{ name: 'handIndex', type: 'uint256' }],
       [activeGameData.activeHandIndex as unknown as bigint]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "buyInsurance",
+        'buyInsurance',
         encodedGameData,
       ],
     });
@@ -343,15 +318,15 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     };
   }, [activeGameData.activeHandIndex, selectedToken.address]);
 
-  const handleBetTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleBetTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedBetParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -360,15 +335,15 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedBetParams.encodedTxData,
   });
 
-  const handleHitTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleHitTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "hitAnotherCard",
+        'hitAnotherCard',
         encodedHitParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -377,15 +352,15 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedHitParams.encodedTxData,
   });
 
-  const handleStandTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleStandTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "standOff",
+        'standOff',
         encodedStandParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -394,15 +369,15 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedStandParams.encodedTxData,
   });
 
-  const handleDoubleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleDoubleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "doubleDown",
+        'doubleDown',
         encodedDoubleParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -411,15 +386,15 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedDoubleParams.encodedTxData,
   });
 
-  const handleSplitTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleSplitTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "splitHand",
+        'splitHand',
         encodedSplitParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -428,15 +403,15 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedSplitParams.encodedTxData,
   });
 
-  const handleBuyInsuranceTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleBuyInsuranceTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.singleBlackjack,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "buyInsurance",
+        'buyInsurance',
         encodedBuyInsuranceParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -450,7 +425,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -463,7 +438,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
 
       await handleBetTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
     setIsLoading(false); // Set loading state to false
@@ -477,7 +452,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
 
       await handleHitTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
     setIsLoading(false); // Set loading state to false
@@ -488,7 +463,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     try {
       await handleStandTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
     }
     setIsLoading(false); // Set loading state to false
   };
@@ -501,7 +476,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
 
       await handleDoubleTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
     setIsLoading(false); // Set loading state to false
@@ -512,7 +487,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -525,7 +500,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
 
       await handleSplitTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
     setIsLoading(false); // Set loading state to false
@@ -536,7 +511,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -546,7 +521,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     try {
       await handleBuyInsuranceTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
     }
     setIsLoading(false); // Set loading state to false
   };
@@ -555,8 +530,8 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     config: wagmiConfig,
     abi: blackjackReaderAbi,
     address: gameAddresses.singleBlackjackReader,
-    functionName: "getPlayerStatus",
-    args: [currentAccount.address || "0x0000000"],
+    functionName: 'getPlayerStatus',
+    args: [currentAccount.address || '0x0000000'],
     query: {
       enabled: !!currentAccount.address,
       refetchOnWindowFocus: false,
@@ -574,11 +549,10 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
 
     if (!activeHandIndex) return;
 
-    console.log(gameDataRead.data, "initial");
+    console.log(gameDataRead.data, 'initial');
 
     setActiveGameData({
-      activeHandIndex:
-        status === BlackjackGameStatus.FINISHED ? 0 : Number(activeHandIndex),
+      activeHandIndex: status === BlackjackGameStatus.FINISHED ? 0 : Number(activeHandIndex),
       canInsure: canInsure,
       status: status,
     });
@@ -594,10 +568,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
           // DEALER HAND
           const _amountCards = hand.cards.cards.filter((n) => n !== 0).length;
 
-          const _totalCount = hand.cards.cards.reduce(
-            (acc, cur) => acc + cur,
-            0
-          );
+          const _totalCount = hand.cards.cards.reduce((acc, cur) => acc + cur, 0);
 
           setActiveGameHands((prev) => ({
             ...prev,
@@ -617,10 +588,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
           if (handId == 0) continue;
 
           const _amountCards = hand.cards.cards.filter((n) => n !== 0).length;
-          const _totalCount = hand.cards.cards.reduce(
-            (acc, cur) => acc + cur,
-            0
-          );
+          const _totalCount = hand.cards.cards.reduce((acc, cur) => acc + cur, 0);
           const _canSplit =
             _amountCards === 2 &&
             new BlackjackCard(hand.cards.cards[0] as number).value ===
@@ -710,72 +678,59 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
 
         // handle events by game status
         if (status == BlackjackGameStatus.FINISHED) {
-          console.log("game finished");
+          console.log('game finished');
           handleGameFinalizeEvent(gameEvent);
         }
 
-        console.log(activeMove, "ACTIVE MOVE!");
+        console.log(activeMove, 'ACTIVE MOVE!');
         // handle events by active move
-        if (activeMove == "Created") {
+        if (activeMove == 'Created') {
           setTimeout(() => {
             gameDataRead.refetch();
           }, 200);
-        } else if (activeMove == "HitCard") {
-          console.log("player hit move!");
+        } else if (activeMove == 'HitCard') {
+          console.log('player hit move!');
           handlePlayerEvent(gameEvent);
-        } else if (activeMove == "DoubleDown") {
-          console.log("player double move!");
+        } else if (activeMove == 'DoubleDown') {
+          console.log('player double move!');
           handlePlayerEvent(gameEvent);
-        } else if (activeMove == "Split") {
-          console.log("player split move!");
-          const playerCardsEvent = gameEvent.program[2]
-            ?.data as BlackjackPlayerCardsEvent;
-          const playerHandEvent = gameEvent.program[3]
-            ?.data as BlackjackPlayerHandEvent;
-          const splittedPlayerCardsEvent = gameEvent.program[4]
-            ?.data as BlackjackPlayerCardsEvent;
-          const splittedPlayerHandEvent = gameEvent.program[5]
-            ?.data as BlackjackPlayerHandEvent;
-          const settledEvent = gameEvent.program[0]
-            ?.data as BlackjackSettledEvent;
-          handleSplitEventCards(
-            playerCardsEvent,
-            playerHandEvent,
-            settledEvent
-          );
-          handleSplitEventCards(
-            splittedPlayerCardsEvent,
-            splittedPlayerHandEvent,
-            settledEvent
-          );
+        } else if (activeMove == 'Split') {
+          console.log('player split move!');
+          const playerCardsEvent = gameEvent.program[2]?.data as BlackjackPlayerCardsEvent;
+          const playerHandEvent = gameEvent.program[3]?.data as BlackjackPlayerHandEvent;
+          const splittedPlayerCardsEvent = gameEvent.program[4]?.data as BlackjackPlayerCardsEvent;
+          const splittedPlayerHandEvent = gameEvent.program[5]?.data as BlackjackPlayerHandEvent;
+          const settledEvent = gameEvent.program[0]?.data as BlackjackSettledEvent;
+          handleSplitEventCards(playerCardsEvent, playerHandEvent, settledEvent);
+          handleSplitEventCards(splittedPlayerCardsEvent, splittedPlayerHandEvent, settledEvent);
         }
         break;
       }
       case BJ_EVENT_TYPES.Created:
-        setActiveMove("Created");
+        setActiveMove('Created');
         break;
 
       case BJ_EVENT_TYPES.HitCard: {
-        setActiveMove("HitCard");
+        setActiveMove('HitCard');
         break;
       }
       case BJ_EVENT_TYPES.StandOff: {
-        console.log("player stand move!");
-        setActiveMove("StandOff");
+        console.log('player stand move!');
+        setActiveMove('StandOff');
         handlePlayerStandEvent(gameEvent);
         break;
       }
       case BJ_EVENT_TYPES.DoubleDown: {
-        setActiveMove("DoubleDown");
+        setActiveMove('DoubleDown');
         break;
       }
       case BJ_EVENT_TYPES.Split: {
-        setActiveMove("Split");
+        setActiveMove('Split');
         handlePlayerSplitEvent(gameEvent);
         break;
       }
       case BJ_EVENT_TYPES.Insurance: {
-        setActiveMove("Insurance");
+        setActiveMove('Insurance');
         handleBuyInsuranceEvent(gameEvent);
       }
       default: {
@@ -787,29 +742,26 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   // event handlers
   const handlePlayerEvent = (results: DecodedEvent<any, any>) => {
     const hitCardEvent = results.program[0]?.data as BlackjackSettledEvent;
-    const playerCardsEvent = results.program[2]
-      ?.data as BlackjackPlayerCardsEvent;
-    const playerHandEvent = results.program[3]
-      ?.data as BlackjackPlayerHandEvent;
+    const playerCardsEvent = results.program[2]?.data as BlackjackPlayerCardsEvent;
+    const playerHandEvent = results.program[3]?.data as BlackjackPlayerHandEvent;
 
     const handId = Number(playerCardsEvent.handIndex);
 
-    let prevHand: ActiveGameHands["firstHand" | "secondHand" | "thirdHand"] =
+    let prevHand: ActiveGameHands['firstHand' | 'secondHand' | 'thirdHand'] =
       defaultActiveGameHands.firstHand;
 
-    console.log("interested hand id:", handId);
+    console.log('interested hand id:', handId);
 
-    console.log(activeGameHands, "inner active game hands");
+    console.log(activeGameHands, 'inner active game hands');
 
-    if (activeGameHands.firstHand.handId === handId)
-      prevHand = activeGameHands.firstHand;
+    if (activeGameHands.firstHand.handId === handId) prevHand = activeGameHands.firstHand;
 
     if (activeGameHands.splittedFirstHand.handId === handId)
       prevHand = activeGameHands.splittedFirstHand;
 
-    console.log(prevHand, "previous hand", activeGameHands);
+    console.log(prevHand, 'previous hand', activeGameHands);
 
-    const newHand: ActiveGameHands["firstHand" | "secondHand" | "thirdHand"] = {
+    const newHand: ActiveGameHands['firstHand' | 'secondHand' | 'thirdHand'] = {
       cards: {
         cards: playerCardsEvent.cards.cards,
         amountCards: playerCardsEvent.cards.cards.filter((n) => n !== 0).length,
@@ -828,7 +780,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
       handId,
     };
 
-    console.log(newHand, "newHandObject with new fields");
+    console.log(newHand, 'newHandObject with new fields');
 
     // set new hand data
     if (activeGameHands.firstHand.handId === handId)
@@ -855,10 +807,8 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   };
 
   const handlePlayerSplitEvent = (gameEvent: DecodedEvent<any, any>) => {
-    const playerCardsEvent = gameEvent.program[2]
-      ?.data as BlackjackPlayerCardsEvent;
-    const splittedPlayerCardsEvent = gameEvent.program[4]
-      ?.data as BlackjackPlayerCardsEvent;
+    const playerCardsEvent = gameEvent.program[2]?.data as BlackjackPlayerCardsEvent;
+    const splittedPlayerCardsEvent = gameEvent.program[4]?.data as BlackjackPlayerCardsEvent;
 
     const handId = Number(playerCardsEvent.handIndex);
     const splittedHandId = Number(splittedPlayerCardsEvent.handIndex);
@@ -897,22 +847,21 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   ) => {
     const handId = Number(playerCardsEvent.handIndex);
 
-    let prevHand: ActiveGameHands["firstHand" | "secondHand" | "thirdHand"] =
+    let prevHand: ActiveGameHands['firstHand' | 'secondHand' | 'thirdHand'] =
       defaultActiveGameHands.firstHand;
 
-    console.log("interested hand id:", handId);
+    console.log('interested hand id:', handId);
 
-    console.log(activeGameHands, "inner active game hands");
+    console.log(activeGameHands, 'inner active game hands');
 
-    if (activeGameHands.firstHand.handId === handId)
-      prevHand = activeGameHands.firstHand;
+    if (activeGameHands.firstHand.handId === handId) prevHand = activeGameHands.firstHand;
 
     if (activeGameHands.splittedFirstHand.handId === handId)
       prevHand = activeGameHands.splittedFirstHand;
 
-    console.log(prevHand, "previous hand", activeGameHands);
+    console.log(prevHand, 'previous hand', activeGameHands);
 
-    const newHand: ActiveGameHands["firstHand" | "secondHand" | "thirdHand"] = {
+    const newHand: ActiveGameHands['firstHand' | 'secondHand' | 'thirdHand'] = {
       cards: {
         cards: playerCardsEvent.cards.cards,
         amountCards: playerCardsEvent.cards.cards.filter((n) => n !== 0).length,
@@ -931,7 +880,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
       handId,
     };
 
-    console.log(newHand, "newHandObject with new fields");
+    console.log(newHand, 'newHandObject with new fields');
 
     // set new hand data
     if (activeGameHands.firstHand.handId === handId)
@@ -949,8 +898,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   };
 
   const handleBuyInsuranceEvent = (gameEvent: DecodedEvent<any, any>) => {
-    const playerHandEvent = gameEvent.program[1]
-      ?.data as BlackjackPlayerHandEvent;
+    const playerHandEvent = gameEvent.program[1]?.data as BlackjackPlayerHandEvent;
     const handId = Number(playerHandEvent.handIndex);
 
     if (handId === activeGameHands.firstHand.handId) {
@@ -974,13 +922,10 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   const handleGameFinalizeEvent = (gameEvent: DecodedEvent<any, any>) => {
     const results = gameEvent.program[1]?.data as BlackjackResultEvent;
 
-    const dealerCardsEvent = gameEvent.program.find(
-      (e) => e.type == BJ_EVENT_TYPES.DealerCards
-    )?.data as BlackjackDealerCardsEvent;
+    const dealerCardsEvent = gameEvent.program.find((e) => e.type == BJ_EVENT_TYPES.DealerCards)
+      ?.data as BlackjackDealerCardsEvent;
     const gameResults = results.results[0];
-    const gamePayout = Number(
-      formatUnits(BigInt(results.results[1]), selectedToken.decimals)
-    );
+    const gamePayout = Number(formatUnits(BigInt(results.results[1]), selectedToken.decimals));
     const gamePayoutAsDollar = gamePayout * priceFeed[selectedToken.priceKey];
 
     setActiveGameHands((prev) => ({
@@ -988,8 +933,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
       dealer: {
         cards: {
           cards: dealerCardsEvent.cards.cards,
-          amountCards: dealerCardsEvent.cards.cards.filter((n) => n !== 0)
-            .length,
+          amountCards: dealerCardsEvent.cards.cards.filter((n) => n !== 0).length,
           totalCount: dealerCardsEvent.cards.totalCount,
           isSoftHand: dealerCardsEvent.cards.isSoftHand,
           canSplit: false,
@@ -1017,18 +961,13 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     }));
   };
 
-  const {
-    betHistory,
-    isHistoryLoading,
-    mapHistoryTokens,
-    setHistoryFilter,
-    refetchHistory,
-  } = useBetHistory({
-    gameType: GameType.ONE_HAND_BLACKJACK,
-    options: {
-      enabled: !props.hideBetHistory,
-    },
-  });
+  const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
+    useBetHistory({
+      gameType: GameType.ONE_HAND_BLACKJACK,
+      options: {
+        enabled: !props.hideBetHistory,
+      },
+    });
 
   const onGameCompleted = () => {
     props.onGameCompleted && props.onGameCompleted(activeGameData.payout || 0);

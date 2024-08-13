@@ -1,5 +1,5 @@
-import { CDN_URL } from "../../constants";
-import { Chip } from "./types";
+import { CDN_URL } from '../../constants';
+import { Chip } from './types';
 
 export const chips = [
   {

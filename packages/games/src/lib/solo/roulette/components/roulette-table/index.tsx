@@ -1,17 +1,12 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { Chip } from "../../../../common/chip-controller/types";
-import { renderChipIcon } from "../../../../common/chip-controller/utils";
-import { numberShorter } from "../../../../utils/number";
-import { cn } from "../../../../utils/style";
-import {
-  actions,
-  miniActions,
-  redNumbers,
-  rouletteNumbers,
-} from "../../constants";
-import { RouletteForm } from "../../types";
+import { Chip } from '../../../../common/chip-controller/types';
+import { renderChipIcon } from '../../../../common/chip-controller/utils';
+import { numberShorter } from '../../../../utils/number';
+import { cn } from '../../../../utils/style';
+import { actions, miniActions, redNumbers, rouletteNumbers } from '../../constants';
+import { RouletteForm } from '../../types';
 
 export interface RouletteTableProps {
   selectedChip: Chip;
@@ -30,15 +25,15 @@ export const RouletteTable: React.FC<RouletteTableProps> = ({
 
   const form = useFormContext() as RouletteForm;
 
-  const selectedNumbers = form.watch("selectedNumbers");
+  const selectedNumbers = form.watch('selectedNumbers');
 
   return (
     <div
       className={cn(
-        "wr-h-[250px] max-md:wr-absolute md:wr-relative md:wr-w-full wr-max-w-[742px] wr-transition-all wr-duration-500 max-md:wr-h-[225px] max-md:wr-w-[575px] max-md:wr-rotate-90 md:wr-top-[72px] max-md:wr-top-1/2 max-md:-wr-translate-y-[50%]",
+        'wr-h-[250px] max-md:wr-absolute md:wr-relative md:wr-w-full wr-max-w-[742px] wr-transition-all wr-duration-500 max-md:wr-h-[225px] max-md:wr-w-[575px] max-md:wr-rotate-90 md:wr-top-[72px] max-md:wr-top-1/2 max-md:-wr-translate-y-[50%]',
         {
-          "wr-z-10 wr-blur-0 max-md:wr-absolute": !isPrepared,
-          "max-md:wr-top-1/2 max-md:wr-blur-[4px] wr-select-none wr-pointer-events-none md:wr-z-0":
+          'wr-z-10 wr-blur-0 max-md:wr-absolute': !isPrepared,
+          'max-md:wr-top-1/2 max-md:wr-blur-[4px] wr-select-none wr-pointer-events-none md:wr-z-0':
             isPrepared,
         }
       )}
@@ -66,8 +61,8 @@ export const RouletteTable: React.FC<RouletteTableProps> = ({
                 isHovered={hoveredNumbers.includes(n)}
                 isWinningNumber={winningNumber !== null && winningNumber === n}
                 isLosingNumber={winningNumber !== null && winningNumber !== n}
-                className={cn("hover:wr-border-zinc-50", {
-                  "wr-bg-red-600": redNumbers.includes(n),
+                className={cn('hover:wr-border-zinc-50', {
+                  'wr-bg-red-600': redNumbers.includes(n),
                 })}
                 gridArea={`1 / ${gridValue} / auto / auto`}
                 totalWager={selectedNumbers[n] as number}
@@ -86,8 +81,8 @@ export const RouletteTable: React.FC<RouletteTableProps> = ({
                 isHovered={hoveredNumbers.includes(n)}
                 isWinningNumber={winningNumber !== null && winningNumber === n}
                 isLosingNumber={winningNumber !== null && winningNumber !== n}
-                className={cn("hover:wr-border-zinc-50", {
-                  "wr-bg-red-600": redNumbers.includes(n),
+                className={cn('hover:wr-border-zinc-50', {
+                  'wr-bg-red-600': redNumbers.includes(n),
                 })}
                 gridArea={`2 / ${gridValue} / auto / auto`}
                 totalWager={selectedNumbers[n] as number}
@@ -106,8 +101,8 @@ export const RouletteTable: React.FC<RouletteTableProps> = ({
                 isHovered={hoveredNumbers.includes(n)}
                 isWinningNumber={winningNumber !== null && winningNumber === n}
                 isLosingNumber={winningNumber !== null && winningNumber !== n}
-                className={cn("hover:wr-border-zinc-50", {
-                  "wr-bg-red-600": redNumbers.includes(n),
+                className={cn('hover:wr-border-zinc-50', {
+                  'wr-bg-red-600': redNumbers.includes(n),
                 })}
                 gridArea={`3 / ${gridValue} / auto / auto`}
                 totalWager={selectedNumbers[n] as number}
@@ -122,7 +117,7 @@ export const RouletteTable: React.FC<RouletteTableProps> = ({
             label={a.label}
             onClick={() => addWager(a.index, selectedChip)}
             className={cn(
-              "wr-z-[1] wr-border wr-border-[#396C4C] wr-bg-[#0F311E] wr-transition-all wr-duration-300 hover:wr-border-zinc-50",
+              'wr-z-[1] wr-border wr-border-[#396C4C] wr-bg-[#0F311E] wr-transition-all wr-duration-300 hover:wr-border-zinc-50',
               a.styles
             )}
             gridArea={a.gridArea}
@@ -138,7 +133,7 @@ export const RouletteTable: React.FC<RouletteTableProps> = ({
             label=""
             onClick={() => addWager(a.index, selectedChip)}
             className={cn(
-              "wr-relative wr-z-[2] wr-flex wr-h-[16%] wr-w-[16%] wr-cursor-pointer wr-border-transparent wr-bg-transparent wr-transition-all wr-duration-300",
+              'wr-relative wr-z-[2] wr-flex wr-h-[16%] wr-w-[16%] wr-cursor-pointer wr-border-transparent wr-bg-transparent wr-transition-all wr-duration-300',
               a.styles
             )}
             gridArea={a.gridArea}
@@ -183,12 +178,12 @@ const TableItem: React.FC<TableItemProps> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className={cn(
-        "wr-relative wr-z-[2] wr-flex wr-h-full wr-w-full wr-cursor-pointer wr-select-none wr-items-center wr-justify-center wr-rounded-sm wr-border wr-border-transparent wr-bg-zinc-800 wr-p-0 wr-font-bold wr-transition-all wr-duration-300",
+        'wr-relative wr-z-[2] wr-flex wr-h-full wr-w-full wr-cursor-pointer wr-select-none wr-items-center wr-justify-center wr-rounded-sm wr-border wr-border-transparent wr-bg-zinc-800 wr-p-0 wr-font-bold wr-transition-all wr-duration-300',
         className && className,
         {
-          "wr-border-yellow-500": isWinningNumber,
-          "wr-blur-[1px]": isLosingNumber,
-          "wr-border-zinc-50": isHovered,
+          'wr-border-yellow-500': isWinningNumber,
+          'wr-blur-[1px]': isLosingNumber,
+          'wr-border-zinc-50': isHovered,
         }
       )}
       style={{
@@ -206,7 +201,7 @@ const AddedChips: React.FC<{ totalWager: number }> = ({ totalWager }) => {
     <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-flex -wr-translate-x-1/2 -wr-translate-y-1/2 wr-items-center wr-justify-center wr-text-white">
       {renderChipIcon(totalWager)}
       <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 wr-translate-y-[-55%] wr-text-xs">
-        {totalWager ? numberShorter(totalWager) : ""}
+        {totalWager ? numberShorter(totalWager) : ''}
       </span>
     </div>
   );

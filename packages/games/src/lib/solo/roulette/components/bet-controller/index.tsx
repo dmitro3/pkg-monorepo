@@ -1,27 +1,24 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { AudioController } from "../../../../common/audio-controller";
-import { ChipController } from "../../../../common/chip-controller";
-import { Chip } from "../../../../common/chip-controller/types";
-import { BetControllerContainer } from "../../../../common/containers";
+import { AudioController } from '../../../../common/audio-controller';
+import { ChipController } from '../../../../common/chip-controller';
+import { Chip } from '../../../../common/chip-controller/types';
+import { BetControllerContainer } from '../../../../common/containers';
 import {
   BetControllerTitle,
   BetCountFormField,
   WagerFormField,
-} from "../../../../common/controller";
-import { PreBetButton } from "../../../../common/pre-bet-button";
-import { SkipButton } from "../../../../common/skip-button";
-import { CDN_URL } from "../../../../constants";
-import { useGameOptions } from "../../../../game-provider";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import { Button } from "../../../../ui/button";
-import { NUMBER_INDEX_COUNT } from "../../constants";
-import useRouletteGameStore from "../../store";
-import { RouletteForm } from "../../types";
+} from '../../../../common/controller';
+import { PreBetButton } from '../../../../common/pre-bet-button';
+import { SkipButton } from '../../../../common/skip-button';
+import { CDN_URL } from '../../../../constants';
+import { useGameOptions } from '../../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { Button } from '../../../../ui/button';
+import { NUMBER_INDEX_COUNT } from '../../constants';
+import useRouletteGameStore from '../../store';
+import { RouletteForm } from '../../types';
 
 export interface Props {
   isPrepared: boolean;
@@ -45,16 +42,16 @@ export const BetController: React.FC<Props> = ({
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
   const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
 
-  const wager = form.watch("wager");
-  const selectedNumbers = form.watch("selectedNumbers");
+  const wager = form.watch('wager');
+  const selectedNumbers = form.watch('selectedNumbers');
   const totalWager = React.useMemo(() => {
     const totalChipCount = selectedNumbers.reduce((acc, cur) => acc + cur, 0);
     return totalChipCount * wager;
   }, [selectedNumbers, wager]);
 
   const { rouletteGameResults, gameStatus } = useRouletteGameStore([
-    "rouletteGameResults",
-    "gameStatus",
+    'rouletteGameResults',
+    'gameStatus',
   ]);
 
   return (
@@ -69,9 +66,7 @@ export const BetController: React.FC<Props> = ({
           minWager={minWager}
           maxWager={maxWager}
           isDisabled={
-            form.formState.isSubmitting ||
-            form.formState.isLoading ||
-            gameStatus == "PLAYING"
+            form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
           }
         />
 
@@ -114,10 +109,7 @@ export const BetController: React.FC<Props> = ({
             disabled={isPrepared}
             onClick={() => {
               digitalClickEffect.play();
-              form.setValue(
-                "selectedNumbers",
-                new Array(NUMBER_INDEX_COUNT).fill(0)
-              );
+              form.setValue('selectedNumbers', new Array(NUMBER_INDEX_COUNT).fill(0));
             }}
           >
             <img
@@ -133,9 +125,7 @@ export const BetController: React.FC<Props> = ({
         <div className="wr-hidden lg:wr-block">
           <BetCountFormField
             isDisabled={
-              form.formState.isSubmitting ||
-              form.formState.isLoading ||
-              gameStatus == "PLAYING"
+              form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
             }
           />
         </div>
@@ -154,18 +144,14 @@ export const BetController: React.FC<Props> = ({
                   form.formState.isLoading ||
                   isPrepared
                 }
-                isLoading={
-                  form.formState.isSubmitting || form.formState.isLoading
-                }
+                isLoading={form.formState.isSubmitting || form.formState.isLoading}
                 className="wr-w-full"
               >
                 Bet
               </Button>
             </PreBetButton>
           )}
-          {rouletteGameResults.length > 3 && gameStatus == "PLAYING" && (
-            <SkipButton />
-          )}
+          {rouletteGameResults.length > 3 && gameStatus == 'PLAYING' && <SkipButton />}
         </div>
       </div>
 

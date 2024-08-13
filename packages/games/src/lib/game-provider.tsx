@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext } from 'react';
 
 interface Currency {
   icon: string;
@@ -50,9 +50,9 @@ const GameContext = createContext<
 >({
   options: {
     currency: {
-      icon: "",
-      name: "",
-      symbol: "",
+      icon: '',
+      name: '',
+      symbol: '',
     },
   },
   isAnimationSkipped: false,
@@ -60,8 +60,7 @@ const GameContext = createContext<
 });
 
 export const GameProvider = ({ children, options }: GameProviderProps) => {
-  const [isAnimationSkipped, setIsAnimationSkipped] =
-    React.useState<boolean>(false);
+  const [isAnimationSkipped, setIsAnimationSkipped] = React.useState<boolean>(false);
 
   return (
     <GameContext.Provider

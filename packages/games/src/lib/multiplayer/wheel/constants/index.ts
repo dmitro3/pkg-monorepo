@@ -1,18 +1,18 @@
-export type Multiplier = "2x" | "3x" | "6x" | "48x";
+export type Multiplier = '2x' | '3x' | '6x' | '48x';
 
 export enum WheelColor {
-  IDLE = "0",
-  GREY = "1",
-  BLUE = "2",
-  GREEN = "3",
-  RED = "4",
+  IDLE = '0',
+  GREY = '1',
+  BLUE = '2',
+  GREEN = '3',
+  RED = '4',
 }
 
 export enum WheelStatus {
-  Finished = "Finished",
-  Idle = "Idle",
-  Spin = "Spin",
-  Started = "Started",
+  Finished = 'Finished',
+  Idle = 'Idle',
+  Spin = 'Spin',
+  Started = 'Started',
 }
 
 export const colorMultipliers: { [key in WheelColor]: number } = {
@@ -78,16 +78,16 @@ export const WheelUnits = [
 export const ANGLE_SCALE = 1.764;
 
 export const participantMapWithStore: Record<WheelColor, Multiplier> = {
-  [WheelColor.IDLE]: "2x",
-  [WheelColor.GREY]: "2x",
-  [WheelColor.BLUE]: "3x",
-  [WheelColor.GREEN]: "6x",
-  [WheelColor.RED]: "48x",
+  [WheelColor.IDLE]: '2x',
+  [WheelColor.GREY]: '2x',
+  [WheelColor.BLUE]: '3x',
+  [WheelColor.GREEN]: '6x',
+  [WheelColor.RED]: '48x',
 };
 
 export const multiplierColors: Record<Multiplier, WheelColor> = {
-  "2x": WheelColor.GREY,
-  "3x": WheelColor.BLUE,
-  "6x": WheelColor.GREEN,
-  "48x": WheelColor.RED,
+  '2x': WheelColor.GREY,
+  '3x': WheelColor.BLUE,
+  '6x': WheelColor.GREEN,
+  '48x': WheelColor.RED,
 };

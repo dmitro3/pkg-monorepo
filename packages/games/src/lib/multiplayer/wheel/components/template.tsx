@@ -1,17 +1,17 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { Form } from "../../../ui/form";
-import { WheelColor } from "../constants";
-import { WheelFormFields } from "../types";
-import BetController from "./bet-controller";
-import LastBets from "./last-bet";
-import WheelParticipants from "./wheel-participants";
-import { WheelScene } from "./wheel-scene";
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { Form } from '../../../ui/form';
+import { WheelColor } from '../constants';
+import { WheelFormFields } from '../types';
+import BetController from './bet-controller';
+import LastBets from './last-bet';
+import WheelParticipants from './wheel-participants';
+import { WheelScene } from './wheel-scene';
 
 type TemplateOptions = {
   scene?: {
@@ -45,7 +45,7 @@ const WheelTemplate = (props: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "onSubmit",
+    mode: 'onSubmit',
     defaultValues: {
       wager: props?.minWager || 1,
       color: WheelColor.IDLE,
@@ -70,10 +70,7 @@ const WheelTemplate = (props: TemplateProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
-          <BetController
-            maxWager={props?.maxWager || 2000}
-            minWager={props?.minWager || 1}
-          />
+          <BetController maxWager={props?.maxWager || 2000} minWager={props?.minWager || 1} />
           <SceneContainer className="wr-h-[640px] max-md:wr-h-[360px] lg:wr-p-[14px]">
             <LastBets />
             <WheelScene onComplete={onComplete} />

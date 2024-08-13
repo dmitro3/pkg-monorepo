@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { TabsContent } from "@radix-ui/react-tabs";
-import React from "react";
+import { TabsContent } from '@radix-ui/react-tabs';
+import React from 'react';
 
-import { cn } from "../utils/style";
+import { cn } from '../utils/style';
 
 export const AnimatedTabContent = ({
   children,

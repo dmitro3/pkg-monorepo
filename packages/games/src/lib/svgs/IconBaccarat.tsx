@@ -1,13 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgIconBaccarat = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 17 20"
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 20" fill="none" {...props}>
     <path
       fill="currentColor"
       d="M0 4.167A4.167 4.167 0 0 1 4.167 0h5c1.579 0 2.953.878 3.66 2.173a4.148 4.148 0 0 0-1.994-.506h-5a4.167 4.167 0 0 0-4.166 4.166v8.334c0 .722.183 1.4.506 1.993A4.166 4.166 0 0 1 0 12.5V4.167ZM11.42 10.318c0-.77-.607-1.376-1.376-1.376-.769 0-1.386.606-1.386 1.376 0 .769.617 1.386 1.386 1.386.77 0 1.376-.617 1.376-1.386Z"

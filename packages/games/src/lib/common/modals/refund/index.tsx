@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { IconWarning } from "../../../svgs";
-import { Button } from "../../../ui/button";
+import { IconWarning } from '../../../svgs';
+import { Button } from '../../../ui/button';
 import {
   Dialog,
   DialogBody,
@@ -9,9 +9,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../../../ui/dialog";
-import { useWeb3GamesModalsStore } from "../modals.store";
-import { Web3GamesRefundModalProps } from "../types";
+} from '../../../ui/dialog';
+import { useWeb3GamesModalsStore } from '../modals.store';
+import { Web3GamesRefundModalProps } from '../types';
 
 export const RefundModal = ({
   isRefundable,
@@ -20,15 +20,15 @@ export const RefundModal = ({
 }: Web3GamesRefundModalProps) => {
   const { modal, openModal } = useWeb3GamesModalsStore();
 
-  console.log(isRefundable, "is Refundable in modal");
+  console.log(isRefundable, 'is Refundable in modal');
 
   return (
-    <Dialog open={modal === "refund"}>
+    <Dialog open={modal === 'refund'}>
       <DialogContent
         onPointerDownOutside={() =>
           setTimeout(
             () =>
-              openModal("refund", {
+              openModal('refund', {
                 refund: {
                   isRefundable,
                   isRefunding,
@@ -41,7 +41,7 @@ export const RefundModal = ({
         onInteractOutside={() =>
           setTimeout(
             () =>
-              openModal("refund", {
+              openModal('refund', {
                 refund: {
                   isRefundable,
                   isRefunding,
@@ -60,8 +60,7 @@ export const RefundModal = ({
           </DialogTitle>
         </DialogHeader>
         <DialogBody className="wr-pt-0 wr-font-medium">
-          You have a refundable game. Please make a refund you can continue
-          playing.
+          You have a refundable game. Please make a refund you can continue playing.
         </DialogBody>
         <DialogFooter className="wr-flex">
           <Button

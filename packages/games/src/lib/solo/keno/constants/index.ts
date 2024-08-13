@@ -1,4 +1,4 @@
-import { KenoMultipliers } from "../types";
+import { KenoMultipliers } from '../types';
 
 export const kenoMultipliers: KenoMultipliers = {
   0: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

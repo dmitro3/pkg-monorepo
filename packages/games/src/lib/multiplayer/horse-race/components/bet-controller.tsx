@@ -1,30 +1,22 @@
-import * as Radio from "@radix-ui/react-radio-group";
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import * as Radio from '@radix-ui/react-radio-group';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { UnityAudioController } from "../../../common/audio-controller";
-import { UnityBetControllerContainer } from "../../../common/containers";
-import {
-  BetControllerTitle,
-  UnityWagerFormField,
-} from "../../../common/controller";
-import { PreBetButton } from "../../../common/pre-bet-button";
-import { WagerCurrencyIcon } from "../../../common/wager";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import useCountdown from "../../../hooks/use-time-left";
-import { Button } from "../../../ui/button";
-import {
-  CountdownContextState,
-  CountdownProvider,
-  Minutes,
-  Seconds,
-} from "../../../ui/countdown";
-import { FormControl, FormField, FormItem, FormLabel } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { toFormatted } from "../../../utils/web3";
-import { Horse, HorseRaceStatus } from "../constants";
-import useHorseRaceGameStore from "../store";
-import { HorseRaceForm } from "../types";
+import { UnityAudioController } from '../../../common/audio-controller';
+import { UnityBetControllerContainer } from '../../../common/containers';
+import { BetControllerTitle, UnityWagerFormField } from '../../../common/controller';
+import { PreBetButton } from '../../../common/pre-bet-button';
+import { WagerCurrencyIcon } from '../../../common/wager';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import useCountdown from '../../../hooks/use-time-left';
+import { Button } from '../../../ui/button';
+import { CountdownContextState, CountdownProvider, Minutes, Seconds } from '../../../ui/countdown';
+import { FormControl, FormField, FormItem, FormLabel } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import { toFormatted } from '../../../utils/web3';
+import { Horse, HorseRaceStatus } from '../constants';
+import useHorseRaceGameStore from '../store';
+import { HorseRaceForm } from '../types';
 
 interface Props {
   minWager: number;
@@ -45,16 +37,15 @@ export const HorseRaceBetController: React.FC<Props> = ({
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
   const countdownEffect = useAudioEffect(SoundEffects.COUNTDOWN);
 
-  const { updateState, startTime, status, finishTime, resetState } =
-    useHorseRaceGameStore([
-      "finishTime",
-      "startTime",
-      "status",
-      "updateState",
-      "resetState",
-    ]);
+  const { updateState, startTime, status, finishTime, resetState } = useHorseRaceGameStore([
+    'finishTime',
+    'startTime',
+    'status',
+    'updateState',
+    'resetState',
+  ]);
 
-  const selectedHorse = form.watch("horse");
+  const selectedHorse = form.watch('horse');
 
   useCountdown(startTime, () => {
     updateState({ status: HorseRaceStatus.Race });
@@ -125,10 +116,9 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-white/80 wr-py-[10px] wr-text-center wr-text-white wr-transition-all wr-duration-150 wr-hover:text-white wr-font-semibold",
+                          'wr-h-full wr-w-full wr-rounded-md wr-bg-white/80 wr-py-[10px] wr-text-center wr-text-white wr-transition-all wr-duration-150 wr-hover:text-white wr-font-semibold',
                           {
-                            "wr-bg-white/70 wr-text-white":
-                              field.value === Horse.ONE,
+                            'wr-bg-white/70 wr-text-white': field.value === Horse.ONE,
                           }
                         )}
                         value={Horse.ONE}
@@ -141,10 +131,9 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-yellow-400/80 wr-py-[10px] wr-text-center wr-text-yellow-300 wr-transition-all wr-duration-150 wr-hover:text-white wr-font-semibold",
+                          'wr-h-full wr-w-full wr-rounded-md wr-bg-yellow-400/80 wr-py-[10px] wr-text-center wr-text-yellow-300 wr-transition-all wr-duration-150 wr-hover:text-white wr-font-semibold',
                           {
-                            "wr-bg-yellow-600 wr-text-white":
-                              field.value === Horse.TWO,
+                            'wr-bg-yellow-600 wr-text-white': field.value === Horse.TWO,
                           }
                         )}
                         value={Horse.TWO}
@@ -157,10 +146,9 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-blue-600/70 wr-py-[10px] wr-text-center wr-text-blue-300 wr-font-semibold",
+                          'wr-h-full wr-w-full wr-rounded-md wr-bg-blue-600/70 wr-py-[10px] wr-text-center wr-text-blue-300 wr-font-semibold',
                           {
-                            "wr-bg-blue-600 wr-text-white":
-                              field.value === Horse.THREE,
+                            'wr-bg-blue-600 wr-text-white': field.value === Horse.THREE,
                           }
                         )}
                         value={Horse.THREE}
@@ -173,10 +161,9 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/80 wr-py-[10px] wr-text-center wr-text-green-300 wr-font-semibold",
+                          'wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/80 wr-py-[10px] wr-text-center wr-text-green-300 wr-font-semibold',
                           {
-                            "wr-bg-green-500 wr-text-white":
-                              field.value === Horse.FOUR,
+                            'wr-bg-green-500 wr-text-white': field.value === Horse.FOUR,
                           }
                         )}
                         value={Horse.FOUR}
@@ -189,10 +176,9 @@ export const HorseRaceBetController: React.FC<Props> = ({
                     <FormControl>
                       <Radio.Item
                         className={cn(
-                          "wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/80 wr-py-[10px] wr-text-center wr-text-red-300 wr-font-semibold",
+                          'wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/80 wr-py-[10px] wr-text-center wr-text-red-300 wr-font-semibold',
                           {
-                            "wr-bg-red-600 wr-text-white":
-                              field.value === Horse.FIVE,
+                            'wr-bg-red-600 wr-text-white': field.value === Horse.FIVE,
                           }
                         )}
                         value={Horse.FIVE}
@@ -210,12 +196,12 @@ export const HorseRaceBetController: React.FC<Props> = ({
           <FormLabel className="wr-text-unity-white-50">Max Payout</FormLabel>
           <div
             className={cn(
-              "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]",
-              "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
+              'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]',
+              'wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md'
             )}
           >
             <WagerCurrencyIcon />
-            <span className={cn("wr-font-semibold wr-text-zinc-100")}>
+            <span className={cn('wr-font-semibold wr-text-zinc-100')}>
               ${toFormatted(maxPayout, 2)}
             </span>
           </div>
@@ -224,14 +210,10 @@ export const HorseRaceBetController: React.FC<Props> = ({
           <Button
             type="submit"
             variant="horse-race"
-            className={cn(
-              "wr-order-1 wr-mb-4 wr-w-full md:wr-order-[unset] md:wr-mb-0",
-              {
-                "wr-text-sm":
-                  finishTimeLeft > 0 && status === HorseRaceStatus.Finished,
-              }
-            )}
-            size={"xl"}
+            className={cn('wr-order-1 wr-mb-4 wr-w-full md:wr-order-[unset] md:wr-mb-0', {
+              'wr-text-sm': finishTimeLeft > 0 && status === HorseRaceStatus.Finished,
+            })}
+            size={'xl'}
             onClick={() => clickEffect.play()}
             disabled={
               form.formState.isSubmitting ||
@@ -243,10 +225,10 @@ export const HorseRaceBetController: React.FC<Props> = ({
             }
           >
             {form.formState.isSubmitting || form.formState.isLoading
-              ? "Placing bet..."
+              ? 'Placing bet...'
               : finishTimeLeft > 0 && status === HorseRaceStatus.Finished
                 ? `Next game in ${finishTimeLeft} seconds`
-                : "Place bet"}
+                : 'Place bet'}
           </Button>
         </PreBetButton>
       </div>

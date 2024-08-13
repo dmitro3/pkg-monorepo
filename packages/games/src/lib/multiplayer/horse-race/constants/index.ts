@@ -1,12 +1,12 @@
-export type HorseRaceMultiplier = "2x" | "3x" | "8x" | "15x" | "60x";
+export type HorseRaceMultiplier = '2x' | '3x' | '8x' | '15x' | '60x';
 
 export enum Horse {
-  IDLE = "0",
-  ONE = "1",
-  TWO = "2",
-  THREE = "3",
-  FOUR = "4",
-  FIVE = "5",
+  IDLE = '0',
+  ONE = '1',
+  TWO = '2',
+  THREE = '3',
+  FOUR = '4',
+  FIVE = '5',
 }
 
 export const horseMultipliers: Record<Horse, number> = {
@@ -19,20 +19,17 @@ export const horseMultipliers: Record<Horse, number> = {
 };
 
 export enum HorseRaceStatus {
-  Finished = "Finished",
-  Idle = "Idle",
-  Race = "Race",
-  Started = "Started",
+  Finished = 'Finished',
+  Idle = 'Idle',
+  Race = 'Race',
+  Started = 'Started',
 }
 
-export const horseRaceParticipantMapWithStore: Record<
-  Horse,
-  HorseRaceMultiplier
-> = {
-  [Horse.IDLE]: "2x",
-  [Horse.ONE]: "2x",
-  [Horse.TWO]: "3x",
-  [Horse.THREE]: "8x",
-  [Horse.FOUR]: "15x",
-  [Horse.FIVE]: "60x",
+export const horseRaceParticipantMapWithStore: Record<Horse, HorseRaceMultiplier> = {
+  [Horse.IDLE]: '2x',
+  [Horse.ONE]: '2x',
+  [Horse.TWO]: '3x',
+  [Horse.THREE]: '8x',
+  [Horse.FOUR]: '15x',
+  [Horse.FIVE]: '60x',
 };

@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { useGameSkip } from "../../../game-provider";
-import useRollGameStore from "../store";
-import { RollGameResult } from "../types";
+import { useGameSkip } from '../../../game-provider';
+import useRollGameStore from '../store';
+import { RollGameResult } from '../types';
 
-export type RollGameProps = React.ComponentProps<"div"> & {
+export type RollGameProps = React.ComponentProps<'div'> & {
   gameResults: RollGameResult[];
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: RollGameResult[]) => void;
@@ -13,8 +13,8 @@ export type RollGameProps = React.ComponentProps<"div"> & {
 
 export const RollGame = ({ gameResults, children }: RollGameProps) => {
   const { updateRollGameResults, updateGameStatus } = useRollGameStore([
-    "updateRollGameResults",
-    "updateGameStatus",
+    'updateRollGameResults',
+    'updateGameStatus',
   ]);
 
   const { updateSkipAnimation } = useGameSkip();
@@ -23,7 +23,7 @@ export const RollGame = ({ gameResults, children }: RollGameProps) => {
     if (gameResults.length) {
       updateSkipAnimation(false);
       updateRollGameResults(gameResults);
-      updateGameStatus("PLAYING");
+      updateGameStatus('PLAYING');
     }
   }, [gameResults]);
 

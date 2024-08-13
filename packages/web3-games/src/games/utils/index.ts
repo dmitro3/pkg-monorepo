@@ -1,30 +1,30 @@
-import { BaccaratGameHand, toDecimals } from "@winrlabs/games";
-import { Token } from "@winrlabs/web3";
-import { parseUnits } from "viem";
-import { Hex } from "viem";
+import { BaccaratGameHand, toDecimals } from '@winrlabs/games';
+import { Token } from '@winrlabs/web3';
+import { parseUnits } from 'viem';
+import { Hex } from 'viem';
 
 export enum GAME_HUB_GAMES {
-  rps = "rps",
-  dice = "dice",
-  keno = "keno",
-  limbo = "limbo",
-  mines = "mines",
-  range = "range",
-  plinko = "plinko",
-  roulette = "roulette",
-  coin_flip = "coin_flip",
-  baccarat = "baccarat",
-  black_jack = "black_jack",
-  video_poker = "video_poker",
-  wheel = "wheel",
-  crash = "moon",
-  horse_race = "horse-race",
+  rps = 'rps',
+  dice = 'dice',
+  keno = 'keno',
+  limbo = 'limbo',
+  mines = 'mines',
+  range = 'range',
+  plinko = 'plinko',
+  roulette = 'roulette',
+  coin_flip = 'coin_flip',
+  baccarat = 'baccarat',
+  black_jack = 'black_jack',
+  video_poker = 'video_poker',
+  wheel = 'wheel',
+  crash = 'moon',
+  horse_race = 'horse-race',
 }
 
 export enum GAME_HUB_EVENT_TYPES {
-  Settled = "Settled",
-  Created = "Created",
-  BaccaratHands = "Hands",
+  Settled = 'Settled',
+  Created = 'Created',
+  BaccaratHands = 'Hands',
 }
 
 export interface SingleStepSettledEvent<T = number> {
@@ -65,25 +65,25 @@ export type UnitySendMessage = (
 ) => void;
 
 export enum PUBLIC_MULTIPLAYER_GAME_EVENTS {
-  moon_game_events = "moon_game_events",
-  wheel_game_events = "wheel_game_events",
-  horse_race_game_events = "horse_race_game_events",
+  moon_game_events = 'moon_game_events',
+  wheel_game_events = 'wheel_game_events',
+  horse_race_game_events = 'horse_race_game_events',
 }
 
 // V2 GAMEHUB
 export enum DecoderType {
-  Context = "context",
-  Moon = "moon",
-  Dice = "dice",
-  Keno = "keno",
-  Limbo = "limbo",
-  Range = "range",
-  Wheel = "wheel",
-  Plinko = "plinko",
-  CoinFlip = "coin-flip",
-  Roulette = "roulette",
-  HorseRace = "horse-race",
-  RockPaperScissors = "rock-paper-scissors",
+  Context = 'context',
+  Moon = 'moon',
+  Dice = 'dice',
+  Keno = 'keno',
+  Limbo = 'limbo',
+  Range = 'range',
+  Wheel = 'wheel',
+  Plinko = 'plinko',
+  CoinFlip = 'coin-flip',
+  Roulette = 'roulette',
+  HorseRace = 'horse-race',
+  RockPaperScissors = 'rock-paper-scissors',
 }
 
 export type Item<T> = {
@@ -127,28 +127,13 @@ export interface PrepareGameTransactionResult {
 export const prepareGameTransaction = (
   params: PrepareGameTransactionParams
 ): PrepareGameTransactionResult => {
-  const {
-    lastPrice,
-    wager,
-    selectedCurrency,
-    stopGain = 0,
-    stopLoss = 0,
-  } = params;
+  const { lastPrice, wager, selectedCurrency, stopGain = 0, stopLoss = 0 } = params;
 
-  const wagerInGameCurrency = toDecimals(
-    (wager / lastPrice).toString(),
-    6
-  ).toString();
+  const wagerInGameCurrency = toDecimals((wager / lastPrice).toString(), 6).toString();
 
-  const stopGainInGameCurrency = toDecimals(
-    (stopGain / lastPrice).toString(),
-    6
-  ).toString();
+  const stopGainInGameCurrency = toDecimals((stopGain / lastPrice).toString(), 6).toString();
 
-  const stopLossInGameCurrency = toDecimals(
-    (stopLoss / lastPrice).toString(),
-    6
-  ).toString();
+  const stopLossInGameCurrency = toDecimals((stopLoss / lastPrice).toString(), 6).toString();
 
   const decimal = selectedCurrency.decimals;
 

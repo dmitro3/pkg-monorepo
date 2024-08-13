@@ -1,21 +1,21 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { AudioController } from "../../../common/audio-controller";
-import { BetControllerContainer } from "../../../common/containers";
-import { BetControllerTitle, WagerFormField } from "../../../common/controller";
-import { PreBetButton } from "../../../common/pre-bet-button";
-import { useGameOptions } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { Button } from "../../../ui/button";
-import { BlackjackGameStatus } from "../../blackjack";
-import { SingleBJActiveGameHands } from "..";
+import { AudioController } from '../../../common/audio-controller';
+import { BetControllerContainer } from '../../../common/containers';
+import { BetControllerTitle, WagerFormField } from '../../../common/controller';
+import { PreBetButton } from '../../../common/pre-bet-button';
+import { useGameOptions } from '../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { Button } from '../../../ui/button';
+import { BlackjackGameStatus } from '../../blackjack';
+import { SingleBJActiveGameHands } from '..';
 
 interface Props {
   minWager: number;
   maxWager: number;
 
-  activeHandByIndex: SingleBJActiveGameHands["firstHand" | "splittedFirstHand"];
+  activeHandByIndex: SingleBJActiveGameHands['firstHand' | 'splittedFirstHand'];
   activeHandChipAmount: number;
   canInsure: boolean;
   status: BlackjackGameStatus;
@@ -47,22 +47,18 @@ export const BetController: React.FC<Props> = ({
   onSplit,
   onInsure,
 }) => {
-  const [showInsuranceBox, setShowInsuranceBox] = React.useState<
-    "show" | "hide"
-  >("hide");
+  const [showInsuranceBox, setShowInsuranceBox] = React.useState<'show' | 'hide'>('hide');
 
   React.useEffect(() => {
-    if (canInsure && !activeHandByIndex.hand?.isInsured)
-      setShowInsuranceBox("show");
+    if (canInsure && !activeHandByIndex.hand?.isInsured) setShowInsuranceBox('show');
   }, [canInsure, activeHandByIndex.handId, activeHandByIndex.hand?.isInsured]);
 
   React.useEffect(() => {
-    if (canInsure && activeHandByIndex.hand?.isInsured)
-      setShowInsuranceBox("hide");
+    if (canInsure && activeHandByIndex.hand?.isInsured) setShowInsuranceBox('hide');
   }, [canInsure, activeHandByIndex.hand?.isInsured]);
 
   React.useEffect(() => {
-    if (status == BlackjackGameStatus.FINISHED) setShowInsuranceBox("hide");
+    if (status == BlackjackGameStatus.FINISHED) setShowInsuranceBox('hide');
   }, [status]);
 
   const { account } = useGameOptions();
@@ -97,8 +93,7 @@ export const BetController: React.FC<Props> = ({
         />
 
         <PreBetButton>
-          {showInsuranceBox == "show" &&
-          status !== BlackjackGameStatus.FINISHED ? (
+          {showInsuranceBox == 'show' && status !== BlackjackGameStatus.FINISHED ? (
             <InsuranceBox
               activeGameIndex={activeHandByIndex.handId || 0}
               onInsure={(handId) => {
@@ -220,7 +215,7 @@ const InsuranceBox: React.FC<{
   activeGameIndex: number;
   disabled: boolean;
   onInsure: (handIndex: number) => void;
-  setShow: (show: "show" | "hide") => void;
+  setShow: (show: 'show' | 'hide') => void;
 }> = ({ activeGameIndex, disabled, onInsure, setShow }) => {
   return (
     <div className="wr-flex wr-flex-col wr-justify-center wr-items-center wr-gap-3 wr-font-bold">
@@ -237,7 +232,7 @@ const InsuranceBox: React.FC<{
           Accept Insurance
         </Button>
         <Button
-          onClick={() => setShow("hide")}
+          onClick={() => setShow('hide')}
           variant="secondary"
           size="xl"
           className="wr-text-sm wr-font-semibold"

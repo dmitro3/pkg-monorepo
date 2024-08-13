@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useGameControllerGetMultiplayerGameHistory } from "@winrlabs/api";
+import { useGameControllerGetMultiplayerGameHistory } from '@winrlabs/api';
 import {
   ANGLE_SCALE,
   BetHistoryTemplate,
@@ -17,7 +17,7 @@ import {
   WheelColor,
   WheelFormFields,
   WheelTemplate,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   controllerAbi,
   useCurrentAccount,
@@ -26,24 +26,18 @@ import {
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  Address,
-  encodeAbiParameters,
-  encodeFunctionData,
-  formatUnits,
-  fromHex,
-} from "viem";
+} from '@winrlabs/web3';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
 import {
   useBetHistory,
   useGetBadges,
   useListenMultiplayerGameEvent,
   usePlayerGameStatus,
-} from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
+} from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { GAME_HUB_GAMES, prepareGameTransaction } from '../utils';
 
 type TemplateOptions = {
   scene?: {
@@ -61,25 +55,15 @@ interface TemplateWithWeb3Props {
 }
 
 export default function WheelGame(props: TemplateWithWeb3Props) {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.wheel,
-    gameType: GameType.WHEEL,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.wheel,
+      gameType: GameType.WHEEL,
+      wagmiConfig,
+    });
 
   const selectedToken = useTokenStore((s) => s.selectedToken);
   const selectedTokenAddress = selectedToken.address;
@@ -92,12 +76,11 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
         limit: 2,
       },
     });
-  const { updateState, setWheelParticipant, setIsGamblerParticipant } =
-    useWheelGameStore([
-      "updateState",
-      "setWheelParticipant",
-      "setIsGamblerParticipant",
-    ]);
+  const { updateState, setWheelParticipant, setIsGamblerParticipant } = useWheelGameStore([
+    'updateState',
+    'setWheelParticipant',
+    'setIsGamblerParticipant',
+  ]);
 
   const [formValues, setFormValues] = useState<WheelFormFields>({
     color: WheelColor.IDLE,
@@ -109,7 +92,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     addResult,
     updateGame,
     clear: clearLiveResults,
-  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
 
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.wheel);
 
@@ -117,12 +100,12 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   const allTokens = useTokenStore((s) => s.tokens);
   const { priceFeed } = usePriceFeed();
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedTokenAddress,
     showDefaultToasts: false,
@@ -139,20 +122,20 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "color", type: "uint8" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'color', type: 'uint8' },
       ],
       [wagerInWei, formValues.color as unknown as number]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.wheel as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -169,15 +152,15 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     priceFeed[selectedToken.priceKey],
   ]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.wheel,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -199,31 +182,31 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
 
     const encodedParams = encodeAbiParameters(
       [
-        { name: "address", type: "address" },
+        { name: 'address', type: 'address' },
         {
-          name: "data",
-          type: "address",
+          name: 'data',
+          type: 'address',
         },
         {
-          name: "bytes",
-          type: "bytes",
+          name: 'bytes',
+          type: 'bytes',
         },
       ],
       [
-        currentAccount.address || "0x0000000000000000000000000000000000000000",
-        "0x0000000000000000000000000000000000000000",
+        currentAccount.address || '0x0000000000000000000000000000000000000000',
+        '0x0000000000000000000000000000000000000000',
         encodedChoice,
       ]
     );
 
     const encodedClaimData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.wheel as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "claim",
+        'claim',
         encodedParams,
       ],
     });
@@ -235,15 +218,15 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     };
   }, [formValues.color, formValues.wager, selectedToken.bankrollIndex]);
 
-  const handleClaimTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleClaimTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.wheel,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "claim",
+        'claim',
         encodedClaimParams.encodedClaimData,
       ],
       address: controllerAddress as Address,
@@ -257,19 +240,19 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
       if (!handledAllowance) return;
     }
 
-    console.log("CLAIM TX!");
+    console.log('CLAIM TX!');
     try {
       await handleClaimTx.mutateAsync();
     } catch (error) {}
 
-    console.log("cLAIM TX SUCCESS, TRYING BET TX");
+    console.log('cLAIM TX SUCCESS, TRYING BET TX');
 
     try {
       if (isPlayerHalted) await playerLevelUp();
@@ -277,11 +260,11 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
 
       await handleTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
 
-    console.log("BET TX COMPLETED");
+    console.log('BET TX COMPLETED');
 
     setIsGamblerParticipant(true);
   };
@@ -306,10 +289,8 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       session,
     } = gameEvent;
 
-    const isGameFinished =
-      currentTime >= joiningFinish && joiningFinish > 0 && randoms;
-    const shouldWait =
-      currentTime <= joiningFinish && currentTime >= joiningStart;
+    const isGameFinished = currentTime >= joiningFinish && joiningFinish > 0 && randoms;
+    const shouldWait = currentTime <= joiningFinish && currentTime >= joiningStart;
 
     if (shouldWait) {
       status = MultiplayerGameStatus.Wait;
@@ -339,15 +320,13 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
           setIsGamblerParticipant(true);
         }
 
-        const token = allTokens.find(
-          (t) => t.bankrollIndex === p.session.bankroll
-        );
+        const token = allTokens.find((t) => t.bankrollIndex === p.session.bankroll);
         const tokenDecimal = token?.decimals || 0;
 
         setWheelParticipant(
           participantMapWithStore[
             fromHex(p.choice, {
-              to: "number",
+              to: 'number',
             }) as unknown as WheelColor
           ],
           {
@@ -370,8 +349,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     if (betHistory && betHistory?.length > 0) {
       updateState({
         lastBets: betHistory.map(
-          (data) =>
-            participantMapWithStore[data.result as unknown as WheelColor]
+          (data) => participantMapWithStore[data.result as unknown as WheelColor]
         ),
       });
     }
@@ -400,9 +378,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
 
     const { result } = gameEvent;
     const isWon = result === Number(formValues.color);
-    const payout = isWon
-      ? formValues.wager * colorMultipliers[String(result) as WheelColor]
-      : 0;
+    const payout = isWon ? formValues.wager * colorMultipliers[String(result) as WheelColor] : 0;
 
     addResult({
       won: isWon,

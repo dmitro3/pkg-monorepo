@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { Advanced } from "../../../common/advanced";
-import { AudioController } from "../../../common/audio-controller";
-import { BetControllerContainer } from "../../../common/containers";
+import { Advanced } from '../../../common/advanced';
+import { AudioController } from '../../../common/audio-controller';
+import { BetControllerContainer } from '../../../common/containers';
 import {
   BetControllerTitle,
   BetCountFormField,
   StopGainFormField,
   StopLossFormField,
   WagerFormField,
-} from "../../../common/controller";
-import { PreBetButton } from "../../../common/pre-bet-button";
-import { SkipButton } from "../../../common/skip-button";
-import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
-import { Button } from "../../../ui/button";
-import { FormLabel } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { toDecimals } from "../../../utils/web3";
-import useRollGameStore from "../store";
-import { RollForm } from "../types";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
+} from '../../../common/controller';
+import { PreBetButton } from '../../../common/pre-bet-button';
+import { SkipButton } from '../../../common/skip-button';
+import { TotalWager, WagerCurrencyIcon } from '../../../common/wager';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { Button } from '../../../ui/button';
+import { FormLabel } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import { toDecimals } from '../../../utils/web3';
+import useRollGameStore from '../store';
+import { RollForm } from '../types';
 
 interface Props {
   minWager: number;
@@ -30,26 +30,17 @@ interface Props {
   winMultiplier: number;
 }
 
-export const BetController: React.FC<Props> = ({
-  minWager,
-  maxWager,
-  winMultiplier,
-}) => {
+export const BetController: React.FC<Props> = ({ minWager, maxWager, winMultiplier }) => {
   const form = useFormContext() as RollForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
-  const wager = form.watch("wager");
+  const wager = form.watch('wager');
 
-  const betCount = form.watch("betCount");
+  const betCount = form.watch('betCount');
 
-  const { rollGameResults, gameStatus } = useRollGameStore([
-    "rollGameResults",
-    "gameStatus",
-  ]);
+  const { rollGameResults, gameStatus } = useRollGameStore(['rollGameResults', 'gameStatus']);
   const isFormInProgress =
-    form.formState.isSubmitting ||
-    form.formState.isLoading ||
-    gameStatus == "PLAYING";
+    form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING';
 
   const maxPayout = React.useMemo(() => {
     return toDecimals(wager * betCount * winMultiplier, 2);
@@ -62,24 +53,18 @@ export const BetController: React.FC<Props> = ({
           <BetControllerTitle>Roll</BetControllerTitle>
         </div>
 
-        <WagerFormField
-          minWager={minWager}
-          maxWager={maxWager}
-          isDisabled={isFormInProgress}
-        />
+        <WagerFormField minWager={minWager} maxWager={maxWager} isDisabled={isFormInProgress} />
         <BetCountFormField isDisabled={isFormInProgress} />
         <div className="wr-mb-6 lg:wr-grid wr-hidden wr-grid-cols-2 wr-gap-2">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]"
+                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
-                ${maxPayout}
-              </span>
+              <span className={cn('wr-font-semibold wr-text-zinc-100')}>${maxPayout}</span>
             </div>
           </div>
           <div>
@@ -101,27 +86,23 @@ export const BetController: React.FC<Props> = ({
           <PreBetButton>
             <Button
               type="submit"
-              variant={"success"}
+              variant={'success'}
               className="wr-w-full"
-              size={"xl"}
+              size={'xl'}
               onClick={() => clickEffect.play()}
-              isLoading={
-                form.formState.isSubmitting || form.formState.isLoading
-              }
+              isLoading={form.formState.isSubmitting || form.formState.isLoading}
               disabled={
                 !form.formState.isValid ||
                 form.formState.isSubmitting ||
                 form.formState.isLoading ||
-                gameStatus == "PLAYING"
+                gameStatus == 'PLAYING'
               }
             >
               Bet
             </Button>
           </PreBetButton>
         )}
-        {rollGameResults.length > 3 && gameStatus == "PLAYING" && (
-          <SkipButton />
-        )}
+        {rollGameResults.length > 3 && gameStatus == 'PLAYING' && <SkipButton />}
       </div>
       <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />

@@ -1,2 +1,2 @@
-export { default as SingleBlackjackTemplate } from "./components/template";
-export * from "./types";
+export { default as SingleBlackjackTemplate } from './components/template';
+export * from './types';

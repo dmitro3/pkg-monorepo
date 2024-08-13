@@ -1,10 +1,10 @@
-import * as Tabs from "@radix-ui/react-tabs";
-import { GameControllerBetHistoryResponse } from "@winrlabs/api";
-import React, { useEffect, useState } from "react";
+import * as Tabs from '@radix-ui/react-tabs';
+import { GameControllerBetHistoryResponse } from '@winrlabs/api';
+import React, { useEffect, useState } from 'react';
 
-import { Document, Person } from "../../svgs";
-import { AnimatedTabContent } from "../animated-tab-content";
-import BetTable from "./bet-table";
+import { Document, Person } from '../../svgs';
+import { AnimatedTabContent } from '../animated-tab-content';
+import BetTable from './bet-table';
 
 export type BetHistoryCurrencyList = Record<
   string,
@@ -14,7 +14,7 @@ export type BetHistoryCurrencyList = Record<
   }
 >;
 
-export type BetHistoryType = "bets" | "player";
+export type BetHistoryType = 'bets' | 'player';
 
 export type BetHistoryFilter = {
   type?: BetHistoryType;
@@ -34,7 +34,7 @@ export const BetHistoryTemplate = ({
   currencyList,
 }: BetHistoryTemplateProps) => {
   const [filter, setFilter] = useState<BetHistoryFilter>({
-    type: "bets",
+    type: 'bets',
   });
 
   useEffect(() => {

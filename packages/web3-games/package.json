@@ -14,6 +14,8 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "generate:component": "turbo gen react-component",
     "build": "tsup",
     "dev": "DEBUG=true npm run build -- --watch"
@@ -62,6 +64,8 @@
     "viem": "2.x",
     "wagmi": "2.10.2",
     "zod": "^3.22.4",
-    "zustand": "^4.4.1"
+    "zustand": "^4.4.1",
+    "@winrlabs/prettier-config": "workspace:*",
+    "prettier": "^3.3.3"
   }
 }

@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { VideoPokerResult } from "../constants";
+import { VideoPokerResult } from '../constants';
 
 export enum VideoPokerStatus {
   None,
@@ -33,9 +33,7 @@ export const videoPokerGameStore = create<VideoPokerGameStore>((set) => ({
     }),
 }));
 
-export const useVideoPokerGameStore = <T extends keyof VideoPokerGameStore>(
-  keys: T[]
-) =>
+export const useVideoPokerGameStore = <T extends keyof VideoPokerGameStore>(keys: T[]) =>
   videoPokerGameStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];

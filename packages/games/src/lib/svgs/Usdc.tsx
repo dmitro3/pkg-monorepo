@@ -1,14 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgUsdc = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={17}
-    height={17}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={17} height={17} fill="none" {...props}>
     <circle cx={8.333} cy={8.333} r={8.333} fill="#3C71C1" />
     <path
       fill="#558CDE"

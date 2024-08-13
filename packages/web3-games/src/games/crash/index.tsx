@@ -1,5 +1,5 @@
-"use client";
-import { useGameControllerGetMultiplayerGameHistory } from "@winrlabs/api";
+'use client';
+import { useGameControllerGetMultiplayerGameHistory } from '@winrlabs/api';
 import {
   BetHistoryTemplate,
   GameType,
@@ -8,8 +8,8 @@ import {
   useConfigureMultiplayerLiveResultStore,
   useCrashGameStore,
   useLiveResultStore,
-} from "@winrlabs/games";
-import { CrashFormFields, CrashTemplate } from "@winrlabs/games";
+} from '@winrlabs/games';
+import { CrashFormFields, CrashTemplate } from '@winrlabs/games';
 import {
   controllerAbi,
   useCurrentAccount,
@@ -18,24 +18,18 @@ import {
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import { useEffect, useMemo, useState } from "react";
-import {
-  Address,
-  encodeAbiParameters,
-  encodeFunctionData,
-  formatUnits,
-  fromHex,
-} from "viem";
+} from '@winrlabs/web3';
+import { useEffect, useMemo, useState } from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
 import {
   useBetHistory,
   useGetBadges,
   useListenMultiplayerGameEvent,
   usePlayerGameStatus,
-} from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
+} from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { GAME_HUB_GAMES, prepareGameTransaction } from '../utils';
 
 type TemplateOptions = {
   scene?: {
@@ -54,25 +48,15 @@ interface CrashTemplateProps {
 }
 
 const CrashGame = (props: CrashTemplateProps) => {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.crash,
-    gameType: GameType.MOON,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.crash,
+      gameType: GameType.MOON,
+      wagmiConfig,
+    });
 
   const currentAccount = useCurrentAccount();
   const allTokens = useTokenStore((s) => s.tokens);
@@ -88,7 +72,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       },
     });
   const { refetch: refetchBalances } = useTokenBalances({
-    account: currentAccount.address || "0x0000000",
+    account: currentAccount.address || '0x0000000',
   });
 
   useConfigureMultiplayerLiveResultStore();
@@ -96,7 +80,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     addResult,
     updateGame,
     clear: clearLiveResults,
-  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
 
   const { handleGetBadges } = useGetBadges();
 
@@ -105,18 +89,17 @@ const CrashGame = (props: CrashTemplateProps) => {
     wager: 1,
   });
 
-  const { updateState, addParticipant, setIsGamblerParticipant } =
-    useCrashGameStore([
-      "updateState",
-      "addParticipant",
-      "setIsGamblerParticipant",
-    ]);
+  const { updateState, addParticipant, setIsGamblerParticipant } = useCrashGameStore([
+    'updateState',
+    'addParticipant',
+    'setIsGamblerParticipant',
+  ]);
 
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.crash);
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedTokenAddress,
     showDefaultToasts: false,
@@ -135,20 +118,20 @@ const CrashGame = (props: CrashTemplateProps) => {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "multiplier", type: "uint16" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'multiplier', type: 'uint16' },
       ],
       [wagerInWei, toDecimals(formValues.multiplier * 100)]
     );
 
     const encodedData = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.crash as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -158,21 +141,17 @@ const CrashGame = (props: CrashTemplateProps) => {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [
-    formValues.multiplier,
-    formValues.wager,
-    priceFeed[selectedToken.priceKey],
-  ]);
+  }, [formValues.multiplier, formValues.wager, priceFeed[selectedToken.priceKey]]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.crash,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -186,31 +165,31 @@ const CrashGame = (props: CrashTemplateProps) => {
 
     const encodedParams = encodeAbiParameters(
       [
-        { name: "address", type: "address" },
+        { name: 'address', type: 'address' },
         {
-          name: "data",
-          type: "address",
+          name: 'data',
+          type: 'address',
         },
         {
-          name: "bytes",
-          type: "bytes",
+          name: 'bytes',
+          type: 'bytes',
         },
       ],
       [
-        currentAccount.address || "0x0000000000000000000000000000000000000000",
-        "0x0000000000000000000000000000000000000000",
+        currentAccount.address || '0x0000000000000000000000000000000000000000',
+        '0x0000000000000000000000000000000000000000',
         encodedChoice,
       ]
     );
 
     const encodedClaimData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.crash as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "claim",
+        'claim',
         encodedParams,
       ],
     });
@@ -222,15 +201,15 @@ const CrashGame = (props: CrashTemplateProps) => {
     };
   }, [formValues.multiplier, formValues.wager]);
 
-  const handleClaimTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleClaimTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.crash,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "claim",
+        'claim',
         encodedClaimParams.encodedClaimData,
       ],
       address: controllerAddress as Address,
@@ -244,7 +223,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -253,7 +232,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     try {
       await handleClaimTx.mutateAsync();
     } catch (error) {
-      console.log("handleClaimTx error", error);
+      console.log('handleClaimTx error', error);
     }
 
     try {
@@ -263,7 +242,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       await handleTx.mutateAsync();
       setIsGamblerParticipant(true);
     } catch (e: any) {
-      console.log("handleTx error", e);
+      console.log('handleTx error', e);
       refetchPlayerGameStatus();
     }
   };
@@ -285,10 +264,8 @@ const CrashGame = (props: CrashTemplateProps) => {
       isGameActive,
     } = gameEvent;
 
-    const isGameFinished =
-      currentTime >= joiningFinish && joiningFinish > 0 && randoms;
-    const shouldWait =
-      currentTime <= joiningFinish && currentTime >= joiningStart;
+    const isGameFinished = currentTime >= joiningFinish && joiningFinish > 0 && randoms;
+    const shouldWait = currentTime <= joiningFinish && currentTime >= joiningStart;
 
     let status: MultiplayerGameStatus = MultiplayerGameStatus.None;
 
@@ -312,18 +289,16 @@ const CrashGame = (props: CrashTemplateProps) => {
       wager: formValues.wager || 0,
     });
 
-    const token = allTokens.find(
-      (t) => t.bankrollIndex === session.bankrollIndex
-    );
+    const token = allTokens.find((t) => t.bankrollIndex === session.bankrollIndex);
     const tokenDecimal = token?.decimals || 0;
 
     if (participants?.length > 0 && isGameActive) {
       participants?.forEach((p) => {
         addParticipant({
-          avatar: "",
+          avatar: '',
           name: p.player,
           multiplier: fromHex(p.choice, {
-            to: "number",
+            to: 'number',
           }) as unknown as number,
           bet: Number(formatUnits(p.wager, tokenDecimal)),
         });
@@ -332,7 +307,7 @@ const CrashGame = (props: CrashTemplateProps) => {
 
     if (bet && bet?.converted?.wager && player) {
       addParticipant({
-        avatar: "",
+        avatar: '',
         name: player,
         multiplier: bet.choice as unknown as number,
         bet: Number(formatUnits(bet.wager, tokenDecimal)),

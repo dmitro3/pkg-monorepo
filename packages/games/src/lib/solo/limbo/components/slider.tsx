@@ -1,15 +1,10 @@
-import React, {
-  MouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import useDimensions from "react-cool-dimensions";
-import { useFormContext } from "react-hook-form";
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import useDimensions from 'react-cool-dimensions';
+import { useFormContext } from 'react-hook-form';
 
-import { cn } from "../../../utils/style";
-import useLimboGameStore from "../store";
-import { LimboForm } from "../types";
+import { cn } from '../../../utils/style';
+import useLimboGameStore from '../store';
+import { LimboForm } from '../types';
 
 type ScalePoint = {
   value: number;
@@ -86,9 +81,7 @@ function interpolateValue(percent: number): number | null {
     if (current && next) {
       if (percent <= current.topPercent && percent >= next.topPercent) {
         // Calculate the interpolation ratio between the two points
-        const ratio =
-          (current.topPercent - percent) /
-          (current.topPercent - next.topPercent);
+        const ratio = (current.topPercent - percent) / (current.topPercent - next.topPercent);
         // Interpolate the value based on the calculated ratio and return it
         return current.value + ratio * (next.value - current.value);
       }
@@ -100,13 +93,9 @@ function interpolateValue(percent: number): number | null {
 }
 function interpolate(value: number, points: ScalePoint[]): number {
   // Find the two points between which we need to interpolate
-  const lowerPoint = points.reduce((prev, curr) =>
-    value >= curr.value ? curr : prev
-  );
+  const lowerPoint = points.reduce((prev, curr) => (value >= curr.value ? curr : prev));
 
-  const upperPoint = points.reduce((prev, curr) =>
-    value <= curr.value ? curr : prev
-  );
+  const upperPoint = points.reduce((prev, curr) => (value <= curr.value ? curr : prev));
 
   // Calculate the position of the value between the two points (0 to 1)
   const rangeValue = upperPoint.value - lowerPoint.value;
@@ -116,8 +105,7 @@ function interpolate(value: number, points: ScalePoint[]): number {
   const valuePosition = (value - lowerPoint.value) / rangeValue;
 
   // Interpolate the topPercent for the value
-  const interpolatedPercent =
-    lowerPoint.topPercent + valuePosition * rangePercent;
+  const interpolatedPercent = lowerPoint.topPercent + valuePosition * rangePercent;
 
   // console.log("interpolatedPercent", interpolatedPercent);
 
@@ -125,13 +113,12 @@ function interpolate(value: number, points: ScalePoint[]): number {
 }
 
 const LimboSlider = () => {
-  const { gameStatus, lastBets, limboGameResults, currentAnimationCount } =
-    useLimboGameStore([
-      "gameStatus",
-      "lastBets",
-      "limboGameResults",
-      "currentAnimationCount",
-    ]);
+  const { gameStatus, lastBets, limboGameResults, currentAnimationCount } = useLimboGameStore([
+    'gameStatus',
+    'lastBets',
+    'limboGameResults',
+    'currentAnimationCount',
+  ]);
 
   const won = lastBets[lastBets.length - 1]?.payout || 0 > 0 ? true : false;
 
@@ -147,11 +134,11 @@ const LimboSlider = () => {
 
   const form = useFormContext() as LimboForm;
 
-  const limboMultiplier = form.watch("limboMultiplier");
+  const limboMultiplier = form.watch('limboMultiplier');
 
   const showNumber =
-    gameStatus === "IDLE" ||
-    gameStatus === "ENDED" ||
+    gameStatus === 'IDLE' ||
+    gameStatus === 'ENDED' ||
     result === 0 ||
     limboGameResults.length === 0 ||
     currentAnimationCount === 0
@@ -202,12 +189,9 @@ const LimboSlider = () => {
       if (
         Number(topPositionPercent) > 1.1 &&
         Number(topPositionPercent) < 100 &&
-        gameStatus !== "PLAYING"
+        gameStatus !== 'PLAYING'
       )
-        form.setValue(
-          "limboMultiplier",
-          Number(topPositionPercent?.toFixed(2))
-        );
+        form.setValue('limboMultiplier', Number(topPositionPercent?.toFixed(2)));
     }
   };
 
@@ -253,13 +237,12 @@ const LimboSlider = () => {
       }
     };
 
-    const handleMouseEvent = (e: Event) =>
-      handleMouse(e as unknown as MouseEvent);
+    const handleMouseEvent = (e: Event) => handleMouse(e as unknown as MouseEvent);
 
-    document.addEventListener("mousemove", handleMouseEvent);
+    document.addEventListener('mousemove', handleMouseEvent);
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseEvent);
+      document.removeEventListener('mousemove', handleMouseEvent);
     };
   }, []);
 
@@ -272,13 +255,11 @@ const LimboSlider = () => {
         <div className="wr-relative wr-h-full wr-w-full wr-select-none">
           <div
             className={cn(
-              "wr-absolute wr-flex wr-cursor-pointer wr-h-[400%] wr-w-full wr-flex-col wr-justify-between wr-px-[15px] wr-text-[14px] wr-text-zinc-600 wr-transition-all wr-duration-300 wr-ease-in-out",
+              'wr-absolute wr-flex wr-cursor-pointer wr-h-[400%] wr-w-full wr-flex-col wr-justify-between wr-px-[15px] wr-text-[14px] wr-text-zinc-600 wr-transition-all wr-duration-300 wr-ease-in-out',
 
               {
-                "wr-bg-limbo-win":
-                  won && result !== 0 && gameStatus === "PLAYING",
-                "wr-bg-limbo-loss":
-                  !won && result !== 0 && gameStatus === "PLAYING",
+                'wr-bg-limbo-win': won && result !== 0 && gameStatus === 'PLAYING',
+                'wr-bg-limbo-loss': !won && result !== 0 && gameStatus === 'PLAYING',
               }
             )}
             style={{

@@ -1,13 +1,10 @@
-"use client";
+'use client';
 
-import {
-  GameControllerBetHistoryResponse,
-  useGameControllerBetHistory,
-} from "@winrlabs/api";
-import { GameType } from "@winrlabs/games";
-import { BetHistoryCurrencyList, BetHistoryFilter } from "@winrlabs/games";
-import { useCurrentAccount, useTokenStore } from "@winrlabs/web3";
-import React from "react";
+import { GameControllerBetHistoryResponse, useGameControllerBetHistory } from '@winrlabs/api';
+import { GameType } from '@winrlabs/games';
+import { BetHistoryCurrencyList, BetHistoryFilter } from '@winrlabs/games';
+import { useCurrentAccount, useTokenStore } from '@winrlabs/web3';
+import React from 'react';
 
 interface IUseBetHistory {
   gameType: GameType;
@@ -18,7 +15,7 @@ interface IUseBetHistory {
 
 export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
   const [filter, setFilter] = React.useState<BetHistoryFilter>({
-    type: "bets",
+    type: 'bets',
   });
 
   const { address } = useCurrentAccount();
@@ -31,7 +28,7 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
   const { data, isLoading, refetch } = useGameControllerBetHistory(
     {
       queryParams:
-        filter.type === "player"
+        filter.type === 'player'
           ? {
               player: address,
               ...defaultParams,

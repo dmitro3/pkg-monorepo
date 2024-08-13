@@ -1,31 +1,28 @@
-import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
+import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
 
-import { CDN_URL } from "../../../../constants";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import { genNumberArray } from "../../../../utils/number";
-import { cn } from "../../../../utils/style";
+import { CDN_URL } from '../../../../constants';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { genNumberArray } from '../../../../utils/number';
+import { cn } from '../../../../utils/style';
 import {
   ActiveGameHands,
   BlackjackGameResult,
   BlackjackHandIndex,
   BlackjackHandStatus,
   GameStruct,
-} from "../..";
-import { BlackjackCard, calcTotalAmounts } from "../../utils";
-import { Card } from "../card";
-import styles from "./splitted-card-area.module.css";
+} from '../..';
+import { BlackjackCard, calcTotalAmounts } from '../../utils';
+import { Card } from '../card';
+import styles from './splitted-card-area.module.css';
 
 interface SplittedCardAreaProps {
   handType: BlackjackHandIndex;
   uiCards: (BlackjackCard | null)[];
   hand:
-    | ActiveGameHands["splittedFirstHand"]
-    | ActiveGameHands["splittedSecondHand"]
-    | ActiveGameHands["splittedThirdHand"];
+    | ActiveGameHands['splittedFirstHand']
+    | ActiveGameHands['splittedSecondHand']
+    | ActiveGameHands['splittedThirdHand'];
   activeGameData: GameStruct;
   isDistributionCompleted: boolean;
   isLastDistributionCompleted: boolean;
@@ -47,8 +44,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
   const { cards: cardData, settledResult } = hand;
   const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
 
-  const [isCompletedAndBusted, setIsCompletedAndBusted] =
-    React.useState<boolean>(false);
+  const [isCompletedAndBusted, setIsCompletedAndBusted] = React.useState<boolean>(false);
 
   const [delayedCardAmounts, setDelayedCardAmounts] = React.useState({
     amount: 0,
@@ -89,8 +85,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
 
     if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_WIN) return true;
 
-    if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_BLACKJACK)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_BLACKJACK) return true;
   }, [settledResult, isLastDistributionCompleted]);
 
   const isLoser = React.useMemo(() => {
@@ -98,8 +93,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
 
     if (!_result || !isLastDistributionCompleted) return false;
 
-    if (_result === BlackjackGameResult.DEALER_BLACKJACK_PLAYER_LOST)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_BLACKJACK_PLAYER_LOST) return true;
 
     if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_LOST) return true;
 
@@ -113,8 +107,7 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
 
     if (_result === BlackjackGameResult.DEALER_STAND_HAND_PUSH) return true;
 
-    if (Number(_result) === BlackjackGameResult.DEALER_BLACKJACK_HAND_PUSH)
-      return true;
+    if (Number(_result) === BlackjackGameResult.DEALER_BLACKJACK_HAND_PUSH) return true;
   }, [settledResult, isLastDistributionCompleted]);
 
   React.useEffect(() => {
@@ -176,16 +169,10 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
       {isDistributionCompleted && isSplitted && (
         <Card
           className={cn(
-            handType === BlackjackHandIndex.SPLITTED_FIRST &&
-              styles.unsplittedFirstHand,
-            handType === BlackjackHandIndex.SPLITTED_SECOND &&
-              styles.unsplittedSecondHand,
-            handType === BlackjackHandIndex.SPLITTED_THIRD &&
-              styles.unsplittedThirdHand,
-            uiCards[0] &&
-              isSplitted &&
-              !isCompletedAndBusted &&
-              styles[`card--1`],
+            handType === BlackjackHandIndex.SPLITTED_FIRST && styles.unsplittedFirstHand,
+            handType === BlackjackHandIndex.SPLITTED_SECOND && styles.unsplittedSecondHand,
+            handType === BlackjackHandIndex.SPLITTED_THIRD && styles.unsplittedThirdHand,
+            uiCards[0] && isSplitted && !isCompletedAndBusted && styles[`card--1`],
             uiCards[0] && isCompletedAndBusted && styles.busted
           )}
           card={uiCards[0] as BlackjackCard}
@@ -197,20 +184,15 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
       {delayedCardAmounts.amount > 0 && !isCompletedAndBusted ? (
         <div
           className={cn(styles.cardAmount, {
-            [styles.firstHand as any]:
-              BlackjackHandIndex.SPLITTED_FIRST === handType,
-            [styles.secondHand as any]:
-              BlackjackHandIndex.SPLITTED_SECOND === handType,
-            [styles.thirdHand as any]:
-              BlackjackHandIndex.SPLITTED_THIRD === handType,
+            [styles.firstHand as any]: BlackjackHandIndex.SPLITTED_FIRST === handType,
+            [styles.secondHand as any]: BlackjackHandIndex.SPLITTED_SECOND === handType,
+            [styles.thirdHand as any]: BlackjackHandIndex.SPLITTED_THIRD === handType,
           })}
         >
           {delayedCardAmounts.softHandAmount < 22 ? (
             cardData?.isSoftHand ? (
               <span>
-                {delayedCardAmounts.softHandAmount === 21
-                  ? ""
-                  : delayedCardAmounts.amount + "/"}
+                {delayedCardAmounts.softHandAmount === 21 ? '' : delayedCardAmounts.amount + '/'}
                 {delayedCardAmounts.softHandAmount}
               </span>
             ) : (
@@ -221,12 +203,12 @@ export const SplittedCardArea: React.FC<SplittedCardAreaProps> = ({
           )}
         </div>
       ) : (
-        ""
+        ''
       )}
 
       <div
-        className={cn("wr-transition-all wr-duration-200", {
-          "wr-opacity-0": !cardAmounts.amount && !isCompletedAndBusted,
+        className={cn('wr-transition-all wr-duration-200', {
+          'wr-opacity-0': !cardAmounts.amount && !isCompletedAndBusted,
         })}
       >
         {children}
@@ -287,15 +269,15 @@ const AnimatedText: React.FC<{
           exit={{ opacity: 0.0, translateY: -30, scaleY: 0.4 }}
         >
           <span
-            className={cn(styles.text, "font-furore", {
+            className={cn(styles.text, 'font-furore', {
               [styles.loser as any]: isLoser || isBusted,
               [styles.push as any]: isPush,
             })}
           >
-            {isWinner && showAnimation && "Win!"}
-            {isLoser && showAnimation && "Lost!"}
-            {isPush && showAnimation && "Push!"}
-            {isBusted && showAnimation && "Bust!"}
+            {isWinner && showAnimation && 'Win!'}
+            {isLoser && showAnimation && 'Lost!'}
+            {isPush && showAnimation && 'Push!'}
+            {isBusted && showAnimation && 'Bust!'}
           </span>
         </motion.div>
       </AnimatePresence>

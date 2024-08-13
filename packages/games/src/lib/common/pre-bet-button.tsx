@@ -1,18 +1,18 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext } from 'react-hook-form';
 
-import { useGameOptions } from "../game-provider";
-import { Button, ButtonProps } from "../ui/button";
-import { cn } from "../utils/style";
+import { useGameOptions } from '../game-provider';
+import { Button, ButtonProps } from '../ui/button';
+import { cn } from '../utils/style';
 
 export const PreBetButton = ({
   children,
-  variant = "success",
+  variant = 'success',
   className,
   totalWager,
 }: {
   totalWager?: number;
   children: React.ReactNode;
-  variant?: ButtonProps["variant"];
+  variant?: ButtonProps['variant'];
   className?: string;
 }) => {
   const form = useFormContext();
@@ -21,9 +21,9 @@ export const PreBetButton = ({
 
   let _betCount = 1;
 
-  const betCount = form?.watch("betCount");
+  const betCount = form?.watch('betCount');
 
-  const wager = form?.watch("wager");
+  const wager = form?.watch('wager');
 
   !betCount ? (_betCount = 1) : (_betCount = betCount);
 
@@ -31,27 +31,19 @@ export const PreBetButton = ({
 
   if (!account?.isLoggedIn)
     return (
-      <Button
-        variant={variant}
-        className={cn("wr-w-full", className)}
-        size={"xl"}
-        type="button"
-      >
+      <Button variant={variant} className={cn('wr-w-full', className)} size={'xl'} type="button">
         Login
       </Button>
     );
 
-  if (
-    account.isLoggedIn &&
-    (account.balanceAsDollar <= 0 || account.balanceAsDollar < _totalWager)
-  )
+  if (account.isLoggedIn && (account.balanceAsDollar <= 0 || account.balanceAsDollar < _totalWager))
     return (
       <Button
         disabled
         variant={variant}
         type="button"
-        className={cn("wr-w-full", className)}
-        size={"xl"}
+        className={cn('wr-w-full', className)}
+        size={'xl'}
       >
         Not enough Balance
       </Button>

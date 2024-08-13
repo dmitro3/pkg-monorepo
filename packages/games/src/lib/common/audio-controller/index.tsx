@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import * as Slider from "@radix-ui/react-slider";
-import React from "react";
+import * as Slider from '@radix-ui/react-slider';
+import React from 'react';
 
-import { CDN_URL } from "../../constants";
-import { useAudioContext } from "../../hooks/use-audio-effect";
-import { useOutsideClick } from "../../hooks/use-outside-click";
-import { Button } from "../../ui/button";
-import { cn } from "../../utils/style";
+import { CDN_URL } from '../../constants';
+import { useAudioContext } from '../../hooks/use-audio-effect';
+import { useOutsideClick } from '../../hooks/use-outside-click';
+import { Button } from '../../ui/button';
+import { cn } from '../../utils/style';
 
 export const AudioController: React.FC<{
   className?: string;
@@ -21,7 +21,7 @@ export const AudioController: React.FC<{
   });
 
   const handleVolumeChange = (val: number[]) => {
-    localStorage["lastVolume"] = val[0];
+    localStorage['lastVolume'] = val[0];
 
     onVolumeChange(val[0] as number);
   };
@@ -29,7 +29,7 @@ export const AudioController: React.FC<{
   return (
     <div
       className={cn(
-        "wr-relative wr-cursor-pointer wr-items-center wr-justify-center wr-gap-2 lg:!wr-flex wr-hidden",
+        'wr-relative wr-cursor-pointer wr-items-center wr-justify-center wr-gap-2 lg:!wr-flex wr-hidden',
         className
       )}
       ref={ref}
@@ -45,9 +45,7 @@ export const AudioController: React.FC<{
         type="button"
         className="wr-h-9 wr-w-9 wr-p-0"
         onClick={() => {
-          volume > 0
-            ? onVolumeChange(0)
-            : onVolumeChange(localStorage["lastVolume"] || 50);
+          volume > 0 ? onVolumeChange(0) : onVolumeChange(localStorage['lastVolume'] || 50);
         }}
       >
         {!volume || volume === 0 ? (
@@ -57,9 +55,9 @@ export const AudioController: React.FC<{
         )}
       </Button>
       <div
-        className={cn("wr-transition-all wr-duration-300", {
-          "wr-opacity-0": !isSliderOpen,
-          "wr-opacity-100": isSliderOpen,
+        className={cn('wr-transition-all wr-duration-300', {
+          'wr-opacity-0': !isSliderOpen,
+          'wr-opacity-100': isSliderOpen,
         })}
       >
         <Slider.Root
@@ -93,7 +91,7 @@ export const UnityAudioController: React.FC<{
   return (
     <div
       className={cn(
-        "wr-relative wr-flex wr-cursor-pointer wr-items-center wr-justify-center wr-gap-2",
+        'wr-relative wr-flex wr-cursor-pointer wr-items-center wr-justify-center wr-gap-2',
         className
       )}
     >

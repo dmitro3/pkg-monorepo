@@ -5,13 +5,15 @@
     "build:release": "turbo build --filter=./packages/* && changeset publish",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
     "clean": "turbo clean",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "turbo format",
     "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
     "@winrlabs/eslint-config": "workspace:*",
     "@winrlabs/typescript-config": "workspace:*",
+    "@winrlabs/prettier-config": "workspace:*",
     "prettier": "^3.1.1"
   },
   "packageManager": "pnpm@8.9.0",

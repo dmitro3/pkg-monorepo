@@ -10,7 +10,7 @@ import {
   useConfigureMultiplayerLiveResultStore,
   useHorseRaceGameStore,
   useLiveResultStore,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   controllerAbi,
   useCurrentAccount,
@@ -19,24 +19,18 @@ import {
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import { useEffect, useMemo, useState } from "react";
-import {
-  Address,
-  encodeAbiParameters,
-  encodeFunctionData,
-  formatUnits,
-  fromHex,
-} from "viem";
+} from '@winrlabs/web3';
+import { useEffect, useMemo, useState } from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
 import {
   useBetHistory,
   useGetBadges,
   useListenMultiplayerGameEvent,
   usePlayerGameStatus,
-} from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { GAME_HUB_GAMES, prepareGameTransaction } from "../utils";
+} from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { GAME_HUB_GAMES, prepareGameTransaction } from '../utils';
 
 type TemplateOptions = {
   scene?: {
@@ -55,25 +49,15 @@ interface TemplateWithWeb3Props {
 }
 
 const HorseRaceGame = (props: TemplateWithWeb3Props) => {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.horseRace,
-    gameType: GameType.HORSE_RACE,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.horseRace,
+      gameType: GameType.HORSE_RACE,
+      wagmiConfig,
+    });
 
   const selectedToken = useTokenStore((s) => s.selectedToken);
   const allTokens = useTokenStore((s) => s.tokens);
@@ -89,25 +73,28 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     addResult,
     updateGame,
     clear: clearLiveResults,
-  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
 
-  const { updateState, setSelectedHorse, selectedHorse } =
-    useHorseRaceGameStore(["updateState", "setSelectedHorse", "selectedHorse"]);
+  const { updateState, setSelectedHorse, selectedHorse } = useHorseRaceGameStore([
+    'updateState',
+    'setSelectedHorse',
+    'selectedHorse',
+  ]);
 
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.horse_race);
 
   const { handleGetBadges } = useGetBadges();
 
-  console.log("gameEvent", gameEvent);
+  console.log('gameEvent', gameEvent);
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedTokenAddress,
     showDefaultToasts: false,
@@ -126,20 +113,20 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "horse", type: "uint8" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'horse', type: 'uint8' },
       ],
       [wagerInWei, formValues.horse as any]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.horseRace as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -156,15 +143,15 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     selectedToken.address,
   ]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.horseRace,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "claim",
+        'claim',
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -178,31 +165,31 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
 
     const encodedParams = encodeAbiParameters(
       [
-        { name: "address", type: "address" },
+        { name: 'address', type: 'address' },
         {
-          name: "data",
-          type: "address",
+          name: 'data',
+          type: 'address',
         },
         {
-          name: "bytes",
-          type: "bytes",
+          name: 'bytes',
+          type: 'bytes',
         },
       ],
       [
-        currentAccount.address || "0x0000000000000000000000000000000000000000",
-        "0x0000000000000000000000000000000000000000",
+        currentAccount.address || '0x0000000000000000000000000000000000000000',
+        '0x0000000000000000000000000000000000000000',
         encodedChoice,
       ]
     );
 
     const encodedClaimData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.horseRace as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "claim",
+        'claim',
         encodedParams,
       ],
     });
@@ -214,15 +201,15 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     };
   }, [formValues.horse, formValues.wager, selectedToken.bankrollIndex]);
 
-  const handleClaimTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleClaimTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.horseRace,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "claim",
+        'claim',
         encodedClaimParams.encodedClaimData,
       ],
       address: controllerAddress as Address,
@@ -236,14 +223,14 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
       if (!handledAllowance) return;
     }
 
-    console.log("submit");
+    console.log('submit');
     try {
       await handleClaimTx.mutateAsync();
     } catch (error) {}
@@ -254,7 +241,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
 
       await handleTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
   };
@@ -262,7 +249,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
   useEffect(() => {
     if (!gameEvent) return;
 
-    console.log("gameEvent:", gameEvent);
+    console.log('gameEvent:', gameEvent);
 
     const currentTime = new Date().getTime() / 1000;
 
@@ -279,10 +266,8 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       session,
     } = gameEvent;
 
-    const isGameFinished =
-      currentTime >= joiningFinish && joiningFinish > 0 && randoms;
-    const shouldWait =
-      currentTime <= joiningFinish && currentTime >= joiningStart;
+    const isGameFinished = currentTime >= joiningFinish && joiningFinish > 0 && randoms;
+    const shouldWait = currentTime <= joiningFinish && currentTime >= joiningStart;
 
     if (shouldWait) {
       updateState({
@@ -303,8 +288,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     });
 
     if (bet && bet?.converted.wager && player) {
-      const _participantHorse =
-        horseRaceParticipantMapWithStore[bet?.choice as unknown as Horse];
+      const _participantHorse = horseRaceParticipantMapWithStore[bet?.choice as unknown as Horse];
 
       const names = selectedHorse[_participantHorse].map((item) => item.name);
 
@@ -321,15 +305,13 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
         const _participantHorse =
           horseRaceParticipantMapWithStore[
             fromHex(p.choice, {
-              to: "number",
+              to: 'number',
             }) as unknown as Horse
           ];
 
         const names = selectedHorse[_participantHorse].map((item) => item.name);
 
-        const token = allTokens.find(
-          (t) => t.bankrollIndex === session.bankrollIndex
-        );
+        const token = allTokens.find((t) => t.bankrollIndex === session.bankrollIndex);
         const tokenDecimal = token?.decimals || 0;
 
         if (!names.includes(p.player)) {
@@ -342,18 +324,13 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     }
   }, [gameEvent, currentAccount.address]);
 
-  const {
-    betHistory,
-    isHistoryLoading,
-    mapHistoryTokens,
-    setHistoryFilter,
-    refetchHistory,
-  } = useBetHistory({
-    gameType: GameType.HORSE_RACE,
-    options: {
-      enabled: !props.hideBetHistory,
-    },
-  });
+  const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
+    useBetHistory({
+      gameType: GameType.HORSE_RACE,
+      options: {
+        enabled: !props.hideBetHistory,
+      },
+    });
 
   const onGameCompleted = () => {
     props.onAnimationCompleted && props.onAnimationCompleted([]);
@@ -363,9 +340,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
 
     const { result } = gameEvent;
     const isWon = result === Number(formValues.horse);
-    const payout = isWon
-      ? formValues.wager * horseMultipliers[result as unknown as Horse]
-      : 0;
+    const payout = isWon ? formValues.wager * horseMultipliers[result as unknown as Horse] : 0;
 
     addResult({
       won: isWon,

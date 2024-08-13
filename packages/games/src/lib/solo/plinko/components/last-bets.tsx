@@ -1,11 +1,11 @@
-import { LastBetsContainer } from "../../../common/last-bets-container";
-import { cn } from "../../../utils/style";
-import { usePlinkoGameStore } from "..";
-import useMediaQuery from "../../../hooks/use-media-query";
+import { LastBetsContainer } from '../../../common/last-bets-container';
+import useMediaQuery from '../../../hooks/use-media-query';
+import { cn } from '../../../utils/style';
+import { usePlinkoGameStore } from '..';
 
 export const PlinkoLastBets = () => {
-  const { lastBets } = usePlinkoGameStore(["lastBets"]);
-  const isMobile = useMediaQuery("(max-width:1024px)");
+  const { lastBets } = usePlinkoGameStore(['lastBets']);
+  const isMobile = useMediaQuery('(max-width:1024px)');
   const lastFiveBets = lastBets?.slice(isMobile ? -4 : -5);
 
   return (
@@ -15,10 +15,10 @@ export const PlinkoLastBets = () => {
           <div
             key={index}
             className={cn(
-              "wr-flex wr-h-7 wr-w-[53px] wr-flex-shrink-0 wr-items-center wr-justify-center wr-rounded-[1000px] wr-bg-zinc-700 wr-font-semibold wr-text-zinc-100",
+              'wr-flex wr-h-7 wr-w-[53px] wr-flex-shrink-0 wr-items-center wr-justify-center wr-rounded-[1000px] wr-bg-zinc-700 wr-font-semibold wr-text-zinc-100',
               {
-                "wr-bg-green-500": Number(result.multiplier) > 1,
-                "wr-zinc-700": Number(result.multiplier) < 1,
+                'wr-bg-green-500': Number(result.multiplier) > 1,
+                'wr-zinc-700': Number(result.multiplier) < 1,
               }
             )}
           >

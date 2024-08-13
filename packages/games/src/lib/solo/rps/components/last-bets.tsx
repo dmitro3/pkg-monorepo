@@ -1,17 +1,12 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { LastBetsContainer } from "../../../common/last-bets-container";
-import {
-  RpsArrowRightSm,
-  RpsPaperSm,
-  RpsRockSm,
-  RpsScissorsSm,
-} from "../../../svgs";
-import { cn } from "../../../utils/style";
-import useRpsGameStore from "../store";
-import { RockPaperScissors, RPSForm } from "../types";
-import useMediaQuery from "../../../hooks/use-media-query";
+import { LastBetsContainer } from '../../../common/last-bets-container';
+import useMediaQuery from '../../../hooks/use-media-query';
+import { RpsArrowRightSm, RpsPaperSm, RpsRockSm, RpsScissorsSm } from '../../../svgs';
+import { cn } from '../../../utils/style';
+import useRpsGameStore from '../store';
+import { RockPaperScissors, RPSForm } from '../types';
 
 const MiniRPSIcon = ({ rps }: { rps: string }) => {
   switch (rps) {
@@ -30,12 +25,12 @@ const MiniRPSIcon = ({ rps }: { rps: string }) => {
 };
 
 const LastBets = () => {
-  const { lastBets } = useRpsGameStore(["lastBets"]);
-  const isMobile = useMediaQuery("(max-width:1024px)");
+  const { lastBets } = useRpsGameStore(['lastBets']);
+  const isMobile = useMediaQuery('(max-width:1024px)');
   const lastFiveBets = lastBets?.slice(isMobile ? -4 : -5);
   const form = useFormContext() as RPSForm;
 
-  const rpsChoice = form.watch("rpsChoice");
+  const rpsChoice = form.watch('rpsChoice');
 
   return (
     <LastBetsContainer className="wr-absolute wr-top-3 wr-z-10 wr-max-w-[430px] max-md:wr-max-w-[340px] max-md:wr-scale-90">
@@ -44,11 +39,10 @@ const LastBets = () => {
           <div
             key={index}
             className={cn(
-              "wr-flex wr-h-8 wr-w-[80px] wr-flex-shrink-0 wr-items-center  wr-justify-center wr-rounded-[1000px] wr-bg-zinc-700  wr-font-semibold wr-text-zinc-100",
+              'wr-flex wr-h-8 wr-w-[80px] wr-flex-shrink-0 wr-items-center  wr-justify-center wr-rounded-[1000px] wr-bg-zinc-700  wr-font-semibold wr-text-zinc-100',
               {
-                "wr-bg-green-500": result.payout > 0,
-                "wr-bg-yellow-500":
-                  result.rps.toString() === rpsChoice.toString(),
+                'wr-bg-green-500': result.payout > 0,
+                'wr-bg-yellow-500': result.rps.toString() === rpsChoice.toString(),
               }
             )}
           >

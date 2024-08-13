@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   BaccaratFormFields,
@@ -7,7 +7,7 @@ import {
   BaccaratTemplate,
   BetHistoryTemplate,
   GameType,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   controllerAbi,
   useCurrentAccount,
@@ -16,18 +16,14 @@ import {
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import React, { useMemo, useState } from "react";
-import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+} from '@winrlabs/web3';
+import React, { useMemo, useState } from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
-import {
-  BaccaratSettledEvent,
-  GAME_HUB_EVENT_TYPES,
-  prepareGameTransaction,
-} from "../utils";
+import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { useListenGameEvent } from '../hooks/use-listen-game-event';
+import { BaccaratSettledEvent, GAME_HUB_EVENT_TYPES, prepareGameTransaction } from '../utils';
 
 interface TemplateWithWeb3Props {
   minWager?: number;
@@ -38,25 +34,15 @@ interface TemplateWithWeb3Props {
 }
 
 export default function BaccaratGame(props: TemplateWithWeb3Props) {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.baccarat,
-    gameType: GameType.BACCARAT,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.baccarat,
+      gameType: GameType.BACCARAT,
+      wagmiConfig,
+    });
 
   const [formValues, setFormValues] = useState<BaccaratFormFields>({
     wager: props?.minWager || 1,
@@ -72,48 +58,46 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   }));
   const { priceFeed } = usePriceFeed();
 
-  const [baccaratResults, setBaccaratResults] =
-    useState<BaccaratGameResult | null>(null);
+  const [baccaratResults, setBaccaratResults] = useState<BaccaratGameResult | null>(null);
   const [baccaratSettledResult, setBaccaratSettledResult] =
     React.useState<BaccaratGameSettledResult | null>(null);
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
   const { handleGetBadges } = useGetBadges();
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedToken.address,
     showDefaultToasts: false,
   });
 
   const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
-      prepareGameTransaction({
-        wager: formValues.wager,
-        stopGain: 0,
-        stopLoss: 0,
-        selectedCurrency: selectedToken,
-        lastPrice: priceFeed[selectedToken.priceKey],
-      });
+    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
+      wager: formValues.wager,
+      stopGain: 0,
+      stopLoss: 0,
+      selectedCurrency: selectedToken,
+      lastPrice: priceFeed[selectedToken.priceKey],
+    });
 
     const encodedChoice = encodeAbiParameters(
       [
         {
-          name: "tieWins",
-          type: "uint16",
+          name: 'tieWins',
+          type: 'uint16',
         },
         {
-          name: "bankWins",
-          type: "uint16",
+          name: 'bankWins',
+          type: 'uint16',
         },
         {
-          name: "playerWins",
-          type: "uint16",
+          name: 'playerWins',
+          type: 'uint16',
         },
       ],
       [formValues.tieWager, formValues.bankerWager, formValues.playerWager]
@@ -121,29 +105,23 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "stopGain", type: "uint128" },
-        { name: "stopLoss", type: "uint128" },
-        { name: "count", type: "uint8" },
-        { name: "data", type: "bytes" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'stopGain', type: 'uint128' },
+        { name: 'stopLoss', type: 'uint128' },
+        { name: 'count', type: 'uint8' },
+        { name: 'data', type: 'bytes' },
       ],
-      [
-        wagerInWei,
-        stopGainInWei as bigint,
-        stopLossInWei as bigint,
-        1,
-        encodedChoice,
-      ]
+      [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.baccarat as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -162,15 +140,15 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     priceFeed[selectedToken.priceKey],
   ]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.baccarat,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -180,11 +158,11 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async () => {
-    console.log("SUBMITTING!");
+    console.log('SUBMITTING!');
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -197,16 +175,15 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
 
       await handleTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
   };
 
   React.useEffect(() => {
     if (gameEvent?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled) {
-      console.log(gameEvent, "settled");
-      const { hands, win, converted } = gameEvent.program[0]
-        .data as BaccaratSettledEvent;
+      console.log(gameEvent, 'settled');
+      const { hands, win, converted } = gameEvent.program[0].data as BaccaratSettledEvent;
 
       setBaccaratResults({
         playerHand: hands.player,
@@ -224,18 +201,13 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     }
   }, [gameEvent]);
 
-  const {
-    betHistory,
-    isHistoryLoading,
-    mapHistoryTokens,
-    setHistoryFilter,
-    refetchHistory,
-  } = useBetHistory({
-    gameType: GameType.BACCARAT,
-    options: {
-      enabled: !props.hideBetHistory,
-    },
-  });
+  const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
+    useBetHistory({
+      gameType: GameType.BACCARAT,
+      options: {
+        enabled: !props.hideBetHistory,
+      },
+    });
 
   const onGameCompleted = (result: BaccaratGameSettledResult) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);

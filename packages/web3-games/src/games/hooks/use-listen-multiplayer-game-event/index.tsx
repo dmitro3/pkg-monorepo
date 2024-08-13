@@ -1,8 +1,8 @@
-import { useCurrentAccount } from "@winrlabs/web3";
-import React, { useState } from "react";
-import { io, Socket } from "socket.io-client";
-import SuperJSON from "superjson";
-import { Address } from "viem";
+import { useCurrentAccount } from '@winrlabs/web3';
+import React, { useState } from 'react';
+import { io, Socket } from 'socket.io-client';
+import SuperJSON from 'superjson';
+import { Address } from 'viem';
 
 import {
   BetProgram,
@@ -12,9 +12,9 @@ import {
   Participant,
   RandomsContext,
   SessionContext,
-} from "../../multiplayer/type";
-import { GAME_HUB_GAMES } from "../../utils";
-import { useGameSocketContext } from "../use-game-socket";
+} from '../../multiplayer/type';
+import { GAME_HUB_GAMES } from '../../utils';
+import { useGameSocketContext } from '../use-game-socket';
 
 interface MultiplayerGameState {
   joiningStart: number;
@@ -50,7 +50,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     isGameActive: false,
     angle: 0,
     session: {
-      bankrollIndex: "0x0000000000000000000000000000000000000000",
+      bankrollIndex: '0x0000000000000000000000000000000000000000',
     },
   });
 
@@ -61,9 +61,9 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
       io(bundlerWsUrl, {
         autoConnect: false,
         extraHeaders: {
-          "x-address": address!,
-          "x-multiplayer-game": game,
-          "x-network": network,
+          'x-address': address!,
+          'x-multiplayer-game': game,
+          'x-network': network,
         },
       })
     );
@@ -74,17 +74,17 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     if (!socket) return;
     socket.connect();
 
-    socket.on("connect", () => {
-      console.log("[MULTIPLAYER] socket connected!");
+    socket.on('connect', () => {
+      console.log('[MULTIPLAYER] socket connected!');
     });
 
-    socket.on("disconnect", (er) => {
-      console.log("[MULTIPLAYER] socket disconnected");
+    socket.on('disconnect', (er) => {
+      console.log('[MULTIPLAYER] socket disconnected');
     });
 
     return () => {
-      socket.off("connect");
-      socket.off("disconnect");
+      socket.off('connect');
+      socket.off('disconnect');
       socket.disconnect();
     };
   }, [socket]);
@@ -92,7 +92,7 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
   React.useEffect(() => {
     if (!socket) return;
 
-    socket.on("message", onGameEvent);
+    socket.on('message', onGameEvent);
     // socket.on("connect_info", onConnectEvent);
 
     socket.onAny((e) => {
@@ -100,17 +100,16 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     });
 
     return () => {
-      socket.off("message", onGameEvent);
+      socket.off('message', onGameEvent);
       // socket.off("connect_info", onConnectEvent);
     };
   }, [socket]);
 
   const onGameEvent = (e: string) => {
-    const _e = SuperJSON.parse(e) as MultiplayerGameMessage &
-      MultiplayerUpdateMessage;
+    const _e = SuperJSON.parse(e) as MultiplayerGameMessage & MultiplayerUpdateMessage;
     const isGameActive = _e?.is_active;
 
-    console.log("onGameEvent", _e);
+    console.log('onGameEvent', _e);
 
     if (isGameActive) {
       setGameState((prev) => ({
@@ -127,14 +126,10 @@ export const useListenMultiplayerGameEvent = (game: GAME_HUB_GAMES) => {
     if (!_e?.context) return;
 
     // TODO: fix types here
-    const gameProgram = _e?.context?.program.find((p) => p.type == "Game")
-      ?.data as GameProgram;
-    const randoms = _e.context?.context.find((c) => c.type == "Randoms")
-      ?.data as RandomsContext;
-    const session = _e.context?.context.find((c) => c.type == "Session")
-      ?.data as SessionContext;
-    const bet = _e.context?.program.find((c) => c.type == "Bet")
-      ?.data as BetProgram;
+    const gameProgram = _e?.context?.program.find((p) => p.type == 'Game')?.data as GameProgram;
+    const randoms = _e.context?.context.find((c) => c.type == 'Randoms')?.data as RandomsContext;
+    const session = _e.context?.context.find((c) => c.type == 'Session')?.data as SessionContext;
+    const bet = _e.context?.program.find((c) => c.type == 'Bet')?.data as BetProgram;
 
     if (!gameProgram) {
       return;

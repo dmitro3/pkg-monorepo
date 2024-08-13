@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { CDN_URL } from "../../../../constants";
-import { genNumberArray } from "../../../../utils/number";
-import { cn } from "../../../../utils/style";
+import { CDN_URL } from '../../../../constants';
+import { genNumberArray } from '../../../../utils/number';
+import { cn } from '../../../../utils/style';
 import {
   BlackjackCard,
   BlackjackHandStatus,
   calcTotalAmounts,
   GameStruct,
-} from "../../../blackjack";
-import { SingleBJActiveGameHands } from "../..";
-import { Card } from "../card";
-import styles from "./single-dealer-card-area.module.css";
+} from '../../../blackjack';
+import { SingleBJActiveGameHands } from '../..';
+import { Card } from '../card';
+import styles from './single-dealer-card-area.module.css';
 
 interface DealerCardAreaProps {
-  hand: SingleBJActiveGameHands["dealer"];
+  hand: SingleBJActiveGameHands['dealer'];
   uiCards: (BlackjackCard | null)[];
   activeGameData: GameStruct;
   isDistributionCompleted: boolean;
@@ -34,8 +34,7 @@ export const DealerCardArea: React.FC<DealerCardAreaProps> = ({
 
   const { activeHandIndex } = activeGameData;
 
-  const [isCompletedAndBusted, setIsCompletedAndBusted] =
-    React.useState<boolean>(false);
+  const [isCompletedAndBusted, setIsCompletedAndBusted] = React.useState<boolean>(false);
 
   const [delayedCardAmounts, setDelayedCardAmounts] = React.useState({
     amount: 0,
@@ -80,8 +79,7 @@ export const DealerCardArea: React.FC<DealerCardAreaProps> = ({
         <Card
           key={n}
           className={cn({
-            [styles[`card--${n + 1}`] as any]:
-              uiCards[n] && !isCompletedAndBusted,
+            [styles[`card--${n + 1}`] as any]: uiCards[n] && !isCompletedAndBusted,
             [styles.busted as any]: uiCards[n] && isCompletedAndBusted,
           })}
           card={uiCards[n] as BlackjackCard}
@@ -116,9 +114,7 @@ export const DealerCardArea: React.FC<DealerCardAreaProps> = ({
           {delayedCardAmounts.softHandAmount < 22 ? (
             cardData?.isSoftHand ? (
               <span>
-                {delayedCardAmounts.softHandAmount === 21
-                  ? ""
-                  : delayedCardAmounts.amount + "/"}
+                {delayedCardAmounts.softHandAmount === 21 ? '' : delayedCardAmounts.amount + '/'}
                 {delayedCardAmounts.softHandAmount}
               </span>
             ) : (
@@ -129,7 +125,7 @@ export const DealerCardArea: React.FC<DealerCardAreaProps> = ({
           )}
         </div>
       ) : (
-        ""
+        ''
       )}
     </div>
   );

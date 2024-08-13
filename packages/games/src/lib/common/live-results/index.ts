@@ -1,2 +1,2 @@
-export * from "./store";
-export { default as LiveResultsTemplate } from "./template";
+export * from './store';
+export { default as LiveResultsTemplate } from './template';

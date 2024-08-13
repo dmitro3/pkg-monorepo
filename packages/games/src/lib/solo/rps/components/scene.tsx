@@ -1,21 +1,16 @@
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { CDN_URL } from "../../../constants";
-import { useGameSkip } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { FormControl, FormField, FormItem } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { ALL_RPS_CHOICES } from "../constant";
-import useRpsGameStore from "../store";
-import {
-  GameAreaProps,
-  RockPaperScissors,
-  RPSForm,
-  RPSGameResult,
-} from "../types";
-import { RPSChoiceRadio } from "./bet-controller";
+import { CDN_URL } from '../../../constants';
+import { useGameSkip } from '../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { FormControl, FormField, FormItem } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import { ALL_RPS_CHOICES } from '../constant';
+import useRpsGameStore from '../store';
+import { GameAreaProps, RockPaperScissors, RPSForm, RPSGameResult } from '../types';
+import { RPSChoiceRadio } from './bet-controller';
 
 const Scene: React.FC<GameAreaProps> = ({
   onAnimationCompleted,
@@ -28,15 +23,13 @@ const Scene: React.FC<GameAreaProps> = ({
 
   const form = useFormContext() as RPSForm;
 
-  const rpsChoice = form.watch("rpsChoice");
+  const rpsChoice = form.watch('rpsChoice');
 
   const skipRef = React.useRef<boolean>(false);
 
   const [winnerAnimation, setWinnerAnimation] = React.useState(false);
 
-  const [winner, setWinner] = React.useState<RPSGameResult | undefined>(
-    undefined
-  );
+  const [winner, setWinner] = React.useState<RPSGameResult | undefined>(undefined);
 
   const {
     rpsGameResults,
@@ -46,12 +39,12 @@ const Scene: React.FC<GameAreaProps> = ({
     updateGameStatus,
     addLastBet,
   } = useRpsGameStore([
-    "rpsGameResults",
-    "gameStatus",
-    "updateLastBets",
-    "updateRpsGameResults",
-    "updateGameStatus",
-    "addLastBet",
+    'rpsGameResults',
+    'gameStatus',
+    'updateLastBets',
+    'updateRpsGameResults',
+    'updateGameStatus',
+    'addLastBet',
   ]);
 
   const { isAnimationSkipped } = useGameSkip();
@@ -60,7 +53,7 @@ const Scene: React.FC<GameAreaProps> = ({
     if (rpsGameResults.length === 0) return;
 
     const turn = (i = 0) => {
-      const rps = rpsGameResults[i]?.rps || RockPaperScissors["ROCK"];
+      const rps = rpsGameResults[i]?.rps || RockPaperScissors['ROCK'];
       const payout = rpsGameResults[i]?.payout || 0;
       const payoutInUsd = rpsGameResults[i]?.payoutInUsd || 0;
 
@@ -96,7 +89,7 @@ const Scene: React.FC<GameAreaProps> = ({
           onAnimationCompleted && onAnimationCompleted(rpsGameResults);
           setTimeout(() => {
             setWinnerAnimation(false);
-            updateGameStatus("ENDED");
+            updateGameStatus('ENDED');
           }, 750);
         } else {
           setTimeout(() => turn(curr), 500);
@@ -114,7 +107,7 @@ const Scene: React.FC<GameAreaProps> = ({
     onAnimationSkipped(rpsGameResults);
     setTimeout(() => {
       setWinnerAnimation(false);
-      updateGameStatus("ENDED");
+      updateGameStatus('ENDED');
     }, 50);
   };
 
@@ -135,28 +128,25 @@ const Scene: React.FC<GameAreaProps> = ({
       <div className="wr-relative wr-basis-1/2 ">
         <div
           className={cn(
-            "wr-absolute -wr-top-0 wr-h-full wr-w-[200%] -wr-translate-x-1/2  -wr-skew-x-[30deg] wr-transform wr-transition-all  wr-duration-500  wr-ease-linear ",
-            { "wr-opacity-100 ": winnerAnimation },
-            { "wr-opacity-0": !winnerAnimation }
+            'wr-absolute -wr-top-0 wr-h-full wr-w-[200%] -wr-translate-x-1/2  -wr-skew-x-[30deg] wr-transform wr-transition-all  wr-duration-500  wr-ease-linear ',
+            { 'wr-opacity-100 ': winnerAnimation },
+            { 'wr-opacity-0': !winnerAnimation }
           )}
         >
           <div
-            className={cn("wr-h-full wr-w-full", {
-              "wr-bg-rps-win  ": winner?.payout || 0 <= 0,
-              "wr-border-red-600 wr-bg-rps-lost": winner?.payout || 0 > 0,
-              "wr-bg-yellow-500 wr-opacity-40":
-                rpsChoice.toString() === winner?.rps.toString(),
+            className={cn('wr-h-full wr-w-full', {
+              'wr-bg-rps-win  ': winner?.payout || 0 <= 0,
+              'wr-border-red-600 wr-bg-rps-lost': winner?.payout || 0 > 0,
+              'wr-bg-yellow-500 wr-opacity-40': rpsChoice.toString() === winner?.rps.toString(),
             })}
           />
         </div>
         <div
           className={cn(
-            "wr-absolute wr-left-1/2 md:!wr-top-[124px] wr-top-[70px] wr-hidden wr-transform wr-bg-rps-win-text wr-bg-clip-text wr-font-druk wr-text-[41px] wr-font-bold wr-leading-[45px] wr-text-transparent wr-duration-500 max-md:-wr-translate-x-1/2 max-md:wr-text-2xl",
-            { "wr-inline-block": winner?.payout === 0 },
+            'wr-absolute wr-left-1/2 md:!wr-top-[124px] wr-top-[70px] wr-hidden wr-transform wr-bg-rps-win-text wr-bg-clip-text wr-font-druk wr-text-[41px] wr-font-bold wr-leading-[45px] wr-text-transparent wr-duration-500 max-md:-wr-translate-x-1/2 max-md:wr-text-2xl',
+            { 'wr-inline-block': winner?.payout === 0 },
             {
-              "wr-hidden":
-                !winnerAnimation ||
-                rpsChoice.toString() === winner?.rps.toString(),
+              'wr-hidden': !winnerAnimation || rpsChoice.toString() === winner?.rps.toString(),
             }
           )}
         >
@@ -165,13 +155,12 @@ const Scene: React.FC<GameAreaProps> = ({
 
         <div
           className={cn(
-            "wr-absolute wr-left-1/2 md:!wr-top-[124px] wr-top-[70px] wr-hidden wr-transform wr-bg-gradient-to-b wr-from-yellow-300 wr-to-yellow-700 wr-bg-clip-text wr-font-druk   wr-text-[41px] wr-font-bold wr-leading-[45px] wr-text-transparent wr-duration-500 max-md:-wr-translate-x-1/2 max-md:wr-text-2xl",
+            'wr-absolute wr-left-1/2 md:!wr-top-[124px] wr-top-[70px] wr-hidden wr-transform wr-bg-gradient-to-b wr-from-yellow-300 wr-to-yellow-700 wr-bg-clip-text wr-font-druk   wr-text-[41px] wr-font-bold wr-leading-[45px] wr-text-transparent wr-duration-500 max-md:-wr-translate-x-1/2 max-md:wr-text-2xl',
             {
-              "wr-inline-block":
-                rpsChoice.toString() === winner?.rps.toString(),
+              'wr-inline-block': rpsChoice.toString() === winner?.rps.toString(),
             },
             {
-              "wr-hidden": !winnerAnimation,
+              'wr-hidden': !winnerAnimation,
             }
           )}
         >
@@ -179,8 +168,8 @@ const Scene: React.FC<GameAreaProps> = ({
         </div>
         <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-w-full  -wr-translate-x-1/2 -wr-translate-y-1/2  wr-transform">
           <div
-            className={cn("wr-relative wr-opacity-0", {
-              "wr-opacity-100": winnerAnimation,
+            className={cn('wr-relative wr-opacity-0', {
+              'wr-opacity-100': winnerAnimation,
             })}
           >
             <img
@@ -188,9 +177,8 @@ const Scene: React.FC<GameAreaProps> = ({
               width={294}
               height={116}
               alt="rock"
-              className={cn("wr-absolute  -wr-translate-y-1/2  wr-opacity-0", {
-                "wr-opacity-100":
-                  winner?.rps.toString() === RockPaperScissors.ROCK,
+              className={cn('wr-absolute  -wr-translate-y-1/2  wr-opacity-0', {
+                'wr-opacity-100': winner?.rps.toString() === RockPaperScissors.ROCK,
               })}
             />
             <img
@@ -198,9 +186,8 @@ const Scene: React.FC<GameAreaProps> = ({
               width={294}
               height={116}
               alt="paper"
-              className={cn("wr-absolute  -wr-translate-y-1/2  wr-opacity-0", {
-                "wr-opacity-100":
-                  winner?.rps.toString() === RockPaperScissors.PAPER,
+              className={cn('wr-absolute  -wr-translate-y-1/2  wr-opacity-0', {
+                'wr-opacity-100': winner?.rps.toString() === RockPaperScissors.PAPER,
               })}
             />
             <img
@@ -208,9 +195,8 @@ const Scene: React.FC<GameAreaProps> = ({
               width={294}
               height={116}
               alt="scissors"
-              className={cn("wr-absolute  -wr-translate-y-1/2  wr-opacity-0", {
-                "wr-opacity-100":
-                  winner?.rps.toString() === RockPaperScissors.SCISSORS,
+              className={cn('wr-absolute  -wr-translate-y-1/2  wr-opacity-0', {
+                'wr-opacity-100': winner?.rps.toString() === RockPaperScissors.SCISSORS,
               })}
             />
           </div>
@@ -222,37 +208,31 @@ const Scene: React.FC<GameAreaProps> = ({
       <div className="wr-relative wr-basis-1/2  ">
         <div
           className={cn(
-            "wr-absolute wr-left-0 wr-top-0   wr-h-full wr-w-[200%]    -wr-skew-x-[30deg] wr-bg-rps-default ",
-            { "wr-hidden": winnerAnimation }
+            'wr-absolute wr-left-0 wr-top-0   wr-h-full wr-w-[200%]    -wr-skew-x-[30deg] wr-bg-rps-default ',
+            { 'wr-hidden': winnerAnimation }
           )}
         />
         <div
           className={cn(
-            "wr-absolute wr-left-0 wr-top-[100%] wr-h-full wr-w-[200%]  -wr-skew-x-[30deg] wr-transform wr-bg-rps-default   wr-transition-all wr-duration-500 wr-ease-linear",
-            { "wr-opacity-100": winnerAnimation },
-            { "wr-opacity-0": !winnerAnimation }
+            'wr-absolute wr-left-0 wr-top-[100%] wr-h-full wr-w-[200%]  -wr-skew-x-[30deg] wr-transform wr-bg-rps-default   wr-transition-all wr-duration-500 wr-ease-linear',
+            { 'wr-opacity-100': winnerAnimation },
+            { 'wr-opacity-0': !winnerAnimation }
           )}
         >
           <div
-            className={cn(
-              "wr-h-full wr-w-full wr-transition-all wr-ease-linear",
-              {
-                "wr-border-red-600 wr-bg-rps-lost": winner?.payout || 0 <= 0,
-                "wr-bg-rps-win  ": winner?.payout || 0 > 0,
-                "wr-bg-yellow-500 wr-opacity-40":
-                  rpsChoice.toString() === winner?.rps.toString(),
-              }
-            )}
+            className={cn('wr-h-full wr-w-full wr-transition-all wr-ease-linear', {
+              'wr-border-red-600 wr-bg-rps-lost': winner?.payout || 0 <= 0,
+              'wr-bg-rps-win  ': winner?.payout || 0 > 0,
+              'wr-bg-yellow-500 wr-opacity-40': rpsChoice.toString() === winner?.rps.toString(),
+            })}
           />
         </div>
         <div
           className={cn(
-            "wr-relative wr-left-1/2 md:!wr-top-[124px] wr-top-[70px] wr-hidden wr-transform wr-bg-rps-win-text  wr-bg-clip-text wr-font-druk wr-text-[41px] wr-font-bold wr-leading-[45px] wr-text-transparent max-md:-wr-translate-x-1/2 max-md:wr-text-2xl",
-            { "wr-inline-block": winner?.payout || 0 > 0 },
+            'wr-relative wr-left-1/2 md:!wr-top-[124px] wr-top-[70px] wr-hidden wr-transform wr-bg-rps-win-text  wr-bg-clip-text wr-font-druk wr-text-[41px] wr-font-bold wr-leading-[45px] wr-text-transparent max-md:-wr-translate-x-1/2 max-md:wr-text-2xl',
+            { 'wr-inline-block': winner?.payout || 0 > 0 },
             {
-              "wr-hidden":
-                !winnerAnimation ||
-                rpsChoice.toString() === winner?.rps.toString(),
+              'wr-hidden': !winnerAnimation || rpsChoice.toString() === winner?.rps.toString(),
             }
           )}
         >
@@ -260,13 +240,12 @@ const Scene: React.FC<GameAreaProps> = ({
         </div>
         <div
           className={cn(
-            "wr-absolute wr-left-1/2 md:!wr-top-[124px] wr-top-[70px] wr-hidden wr-transform wr-bg-gradient-to-b wr-from-yellow-300 wr-to-yellow-700   wr-bg-clip-text wr-font-druk wr-text-[41px] wr-font-bold wr-leading-[45px] wr-text-transparent max-md:-wr-translate-x-1/2 max-md:wr-text-2xl",
+            'wr-absolute wr-left-1/2 md:!wr-top-[124px] wr-top-[70px] wr-hidden wr-transform wr-bg-gradient-to-b wr-from-yellow-300 wr-to-yellow-700   wr-bg-clip-text wr-font-druk wr-text-[41px] wr-font-bold wr-leading-[45px] wr-text-transparent max-md:-wr-translate-x-1/2 max-md:wr-text-2xl',
             {
-              "wr-inline-block":
-                rpsChoice.toString() === winner?.rps.toString(),
+              'wr-inline-block': rpsChoice.toString() === winner?.rps.toString(),
             },
             {
-              "wr-hidden": !winnerAnimation,
+              'wr-hidden': !winnerAnimation,
             }
           )}
         >
@@ -274,51 +253,36 @@ const Scene: React.FC<GameAreaProps> = ({
         </div>
         <div className="wr-absolute wr-left-1/2 wr-top-1/2 wr-w-full  -wr-translate-x-1/2 -wr-translate-y-1/2 wr-transform">
           <div className="-wr-scale-x-100 wr-text-center ">
-            <div className={cn("wr-relative ")}>
+            <div className={cn('wr-relative ')}>
               <div
                 className={cn(
-                  "wr-absolute -wr-translate-y-1/2 wr-transform wr-opacity-0  wr-transition-all  wr-ease-linear ",
+                  'wr-absolute -wr-translate-y-1/2 wr-transform wr-opacity-0  wr-transition-all  wr-ease-linear ',
                   {
-                    "wr-opacity-100 ": rpsChoice === RockPaperScissors.PAPER,
+                    'wr-opacity-100 ': rpsChoice === RockPaperScissors.PAPER,
                   }
                 )}
               >
-                <img
-                  src={`${CDN_URL}/rps/paper.png`}
-                  width={294}
-                  height={116}
-                  alt="paper"
-                />
+                <img src={`${CDN_URL}/rps/paper.png`} width={294} height={116} alt="paper" />
               </div>
               <div
                 className={cn(
-                  "wr-absolute -wr-translate-y-1/2 wr-transform wr-opacity-0  wr-transition-all  wr-ease-linear",
+                  'wr-absolute -wr-translate-y-1/2 wr-transform wr-opacity-0  wr-transition-all  wr-ease-linear',
                   {
-                    "wr-opacity-100": rpsChoice === RockPaperScissors.SCISSORS,
+                    'wr-opacity-100': rpsChoice === RockPaperScissors.SCISSORS,
                   }
                 )}
               >
-                <img
-                  src={`${CDN_URL}/rps/scissors.png`}
-                  width={294}
-                  height={116}
-                  alt="scissors"
-                />
+                <img src={`${CDN_URL}/rps/scissors.png`} width={294} height={116} alt="scissors" />
               </div>
               <div
                 className={cn(
-                  "wr-absolute -wr-translate-y-1/2 wr-transform wr-opacity-0  wr-transition-all  wr-ease-linear",
+                  'wr-absolute -wr-translate-y-1/2 wr-transform wr-opacity-0  wr-transition-all  wr-ease-linear',
                   {
-                    "wr-opacity-100": rpsChoice === RockPaperScissors.ROCK,
+                    'wr-opacity-100': rpsChoice === RockPaperScissors.ROCK,
                   }
                 )}
               >
-                <img
-                  src={`${CDN_URL}/rps/rock.png`}
-                  width={294}
-                  height={116}
-                  alt="rock"
-                />
+                <img src={`${CDN_URL}/rps/rock.png`} width={294} height={116} alt="rock" />
               </div>
             </div>
           </div>
@@ -339,10 +303,7 @@ const Scene: React.FC<GameAreaProps> = ({
                   {ALL_RPS_CHOICES.map((item) => (
                     <FormItem className="wr-mb-2 wr-cursor-pointer" key={item}>
                       <FormControl>
-                        <RPSChoiceRadio
-                          choice={item}
-                          disabled={gameStatus === "PLAYING"}
-                        />
+                        <RPSChoiceRadio choice={item} disabled={gameStatus === 'PLAYING'} />
                       </FormControl>
                     </FormItem>
                   ))}

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 export function useOrientation() {
   const [orientation, setOrientation] = React.useState({
     angle: 0,
-    type: "landscape-primary",
+    type: 'landscape-primary',
   });
 
   React.useLayoutEffect(() => {
@@ -20,7 +20,7 @@ export function useOrientation() {
 
     const handle_orientationchange = () => {
       setOrientation({
-        type: "UNKNOWN",
+        type: 'UNKNOWN',
         angle: window.orientation,
       });
     };
@@ -28,21 +28,18 @@ export function useOrientation() {
     if (window.screen?.orientation) {
       handleChange();
 
-      window.screen.orientation.addEventListener("change", handleChange);
+      window.screen.orientation.addEventListener('change', handleChange);
     } else {
       handle_orientationchange();
 
-      window.addEventListener("orientationchange", handle_orientationchange);
+      window.addEventListener('orientationchange', handle_orientationchange);
     }
 
     return () => {
       if (window.screen?.orientation) {
-        window.screen.orientation.removeEventListener("change", handleChange);
+        window.screen.orientation.removeEventListener('change', handleChange);
       } else {
-        window.removeEventListener(
-          "orientationchange",
-          handle_orientationchange
-        );
+        window.removeEventListener('orientationchange', handle_orientationchange);
       }
     };
   }, []);

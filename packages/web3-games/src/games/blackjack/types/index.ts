@@ -1,5 +1,5 @@
-import { BlackjackGameResult, BlackjackHandStatus } from "@winrlabs/games";
-import { Address } from "viem";
+import { BlackjackGameResult, BlackjackHandStatus } from '@winrlabs/games';
+import { Address } from 'viem';
 
 export interface BlackjackContractGameStruct {
   wagerAmount: bigint;
@@ -36,14 +36,14 @@ export interface BlackjackContractHandStruct {
 }
 
 export enum BJ_EVENT_TYPES {
-  Created = "Created",
-  Settled = "Settled",
-  HitCard = "HitCard",
-  StandOff = "StandOff",
-  DoubleDown = "DoubleDown",
-  DealerCards = "DealerCards",
-  Split = "Split",
-  Insurance = "Insurance",
+  Created = 'Created',
+  Settled = 'Settled',
+  HitCard = 'HitCard',
+  StandOff = 'StandOff',
+  DoubleDown = 'DoubleDown',
+  DealerCards = 'DealerCards',
+  Split = 'Split',
+  Insurance = 'Insurance',
 }
 
 export interface BlackjackSettledEvent {

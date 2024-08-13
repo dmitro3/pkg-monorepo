@@ -1,18 +1,18 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { KenoGameResult } from "../types";
+import { KenoGameResult } from '../types';
 
 interface KenoGameState {
   kenoGameResults: KenoGameResult[];
-  gameStatus: "IDLE" | "PLAYING" | "ENDED";
+  gameStatus: 'IDLE' | 'PLAYING' | 'ENDED';
   currentAnimationCount: number;
 }
 
 interface KenoGameStateActions {
   clearStore: () => void;
   updateKenoGameResults: (item: KenoGameResult[]) => void;
-  updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
+  updateGameStatus: (status: 'IDLE' | 'PLAYING' | 'ENDED') => void;
   updateCurrentAnimationCount: (count: number) => void;
 }
 
@@ -25,13 +25,12 @@ export const KenoResultsStore = create<KenoGameStore>()((set) => ({
   clearStore: () =>
     set({
       kenoGameResults: [],
-      gameStatus: "IDLE",
+      gameStatus: 'IDLE',
       currentAnimationCount: 0,
     }),
-  gameStatus: "IDLE",
+  gameStatus: 'IDLE',
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
-  updateCurrentAnimationCount: (count) =>
-    set(() => ({ currentAnimationCount: count })),
+  updateCurrentAnimationCount: (count) => set(() => ({ currentAnimationCount: count })),
 }));
 
 export const useKenoGameStore = <T extends keyof KenoGameStore>(keys: T[]) =>

@@ -1,22 +1,19 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { CDN_URL } from "../../../../constants";
-import { genNumberArray } from "../../../../utils/number";
-import { cn } from "../../../../utils/style";
-import { rouletteWheelNumbers } from "../../constants";
-import { RouletteWheelColor } from "../../types";
+import { CDN_URL } from '../../../../constants';
+import { genNumberArray } from '../../../../utils/number';
+import { cn } from '../../../../utils/style';
+import { rouletteWheelNumbers } from '../../constants';
+import { RouletteWheelColor } from '../../types';
 
 interface RouletteWheelProps {
   isPrepared: boolean;
   isAnimating: boolean;
 }
 
-export const RouletteWheel: React.FC<RouletteWheelProps> = ({
-  isPrepared,
-  isAnimating,
-}) => {
+export const RouletteWheel: React.FC<RouletteWheelProps> = ({ isPrepared, isAnimating }) => {
   const diameter = 720;
 
   const dpi = diameter / 180;
@@ -30,11 +27,10 @@ export const RouletteWheel: React.FC<RouletteWheelProps> = ({
   return (
     <div
       className={cn(
-        "wr-relative wr-flex wr-h-[235px] wr-w-[235px] wr-items-center wr-justify-center wr-opacity-100",
+        'wr-relative wr-flex wr-h-[235px] wr-w-[235px] wr-items-center wr-justify-center wr-opacity-100',
         {
-          "wr-origin-center wr-animate-roulette-rotation max-md:wr-opacity-0":
-            !isPrepared,
-          "wr-animate-playing-roulette-rotation wr-delay-300": isAnimating,
+          'wr-origin-center wr-animate-roulette-rotation max-md:wr-opacity-0': !isPrepared,
+          'wr-animate-playing-roulette-rotation wr-delay-300': isAnimating,
         }
       )}
     >
@@ -51,17 +47,9 @@ export const RouletteWheel: React.FC<RouletteWheelProps> = ({
         {genNumberArray(totalWidthOfCircle).map((idx) => {
           const portionIdx = idx / portionHeight - ((idx / portionHeight) % 1);
 
-          const color = rouletteWheelNumbers[portionIdx]
-            ?.color as RouletteWheelColor;
+          const color = rouletteWheelNumbers[portionIdx]?.color as RouletteWheelColor;
 
-          return (
-            <Unit
-              key={idx}
-              color={color}
-              width={unitWidth}
-              rotation={idx / dpi}
-            />
-          );
+          return <Unit key={idx} color={color} width={unitWidth} rotation={idx / dpi} />;
         })}
       </div>
     </div>
@@ -95,14 +83,11 @@ const Unit: React.FC<RouletteUnitProps> = ({ color, width, rotation }) => {
 
   return (
     <div
-      className={cn(
-        "wr-absolute wr-left-1/2 wr-h-1/2 wr-w-[1px] wr-origin-bottom",
-        {
-          "wr-bg-green-500": color === RouletteWheelColor.GREEN,
-          "wr-bg-zinc-800": color === RouletteWheelColor.GREY,
-          "wr-bg-red-600": color === RouletteWheelColor.RED,
-        }
-      )}
+      className={cn('wr-absolute wr-left-1/2 wr-h-1/2 wr-w-[1px] wr-origin-bottom', {
+        'wr-bg-green-500': color === RouletteWheelColor.GREEN,
+        'wr-bg-zinc-800': color === RouletteWheelColor.GREY,
+        'wr-bg-red-600': color === RouletteWheelColor.RED,
+      })}
       style={{
         width: `${width}px`,
         transform: `translateX(-${width / 2}px) rotate(${rotation}deg)`,
@@ -113,11 +98,11 @@ const Unit: React.FC<RouletteUnitProps> = ({ color, width, rotation }) => {
         className={cn(
           "wr-absolute wr-left-0 wr-top-0 wr-h-[40px] wr-w-[1px] before:wr-z-[1] before:wr-block before:wr-h-[22px] before:wr-content-[''] after:wr-z-[1] after:wr-block after:wr-h-[14px] after:wr-content-['']",
           {
-            "wr-bg-zinc-800 before:wr-bg-zinc-800 after:wr-bg-zinc-800":
+            'wr-bg-zinc-800 before:wr-bg-zinc-800 after:wr-bg-zinc-800':
               color === RouletteWheelColor.GREY,
-            "wr-bg-green-500 before:wr-bg-green-500 after:wr-bg-green-500":
+            'wr-bg-green-500 before:wr-bg-green-500 after:wr-bg-green-500':
               color === RouletteWheelColor.GREEN,
-            "wr-bg-red-600 before:wr-bg-red-600 after:wr-bg-red-600":
+            'wr-bg-red-600 before:wr-bg-red-600 after:wr-bg-red-600':
               color === RouletteWheelColor.RED,
           }
         )}

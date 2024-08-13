@@ -1,12 +1,12 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { RPSGameResult } from "../types";
+import { RPSGameResult } from '../types';
 
 interface RPSLastBetsState {
   lastBets: RPSGameResult[];
   rpsGameResults: RPSGameResult[];
-  gameStatus: "IDLE" | "PLAYING" | "ENDED";
+  gameStatus: 'IDLE' | 'PLAYING' | 'ENDED';
   currentAnimationCount: number;
 }
 
@@ -16,7 +16,7 @@ interface RPSLastBetsActions {
   removeLastBet: (index: number) => void;
   clearStore: () => void;
   updateRpsGameResults: (item: RPSGameResult[]) => void;
-  updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
+  updateGameStatus: (status: 'IDLE' | 'PLAYING' | 'ENDED') => void;
   updateCurrentAnimationCount: (count: number) => void;
 }
 
@@ -26,9 +26,8 @@ export const rpsLastBetsStore = create<RPSLastBetsStore>()((set) => ({
   lastBets: [],
   rpsGameResults: [],
   currentAnimationCount: 0,
-  gameStatus: "IDLE",
-  addLastBet: (item) =>
-    set((state) => ({ lastBets: [...state.lastBets, item] })),
+  gameStatus: 'IDLE',
+  addLastBet: (item) => set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
   removeLastBet: (index) =>
     set((state) => {
@@ -43,12 +42,11 @@ export const rpsLastBetsStore = create<RPSLastBetsStore>()((set) => ({
     set({
       lastBets: [],
       rpsGameResults: [],
-      gameStatus: "IDLE",
+      gameStatus: 'IDLE',
       currentAnimationCount: 0,
     }),
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
-  updateCurrentAnimationCount: (count) =>
-    set(() => ({ currentAnimationCount: count })),
+  updateCurrentAnimationCount: (count) => set(() => ({ currentAnimationCount: count })),
 }));
 
 export const useRpsGameStore = <T extends keyof RPSLastBetsStore>(keys: T[]) =>

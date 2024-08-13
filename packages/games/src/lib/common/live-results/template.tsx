@@ -1,12 +1,12 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useRef, useState } from "react";
-import Draggable from "react-draggable";
+import { AnimatePresence, motion } from 'framer-motion';
+import { useRef, useState } from 'react';
+import Draggable from 'react-draggable';
 
-import { Close } from "../../svgs";
-import { Button } from "../../ui/button";
-import { Card, CardHeader } from "../../ui/card";
-import { cn } from "../../utils/style";
-import Result from "./result";
+import { Close } from '../../svgs';
+import { Button } from '../../ui/button';
+import { Card, CardHeader } from '../../ui/card';
+import { cn } from '../../utils/style';
+import Result from './result';
 
 const LiveResultsTemplate = () => {
   const [isHidden, setIsHidden] = useState(true);
@@ -16,28 +16,26 @@ const LiveResultsTemplate = () => {
     <AnimatePresence>
       {isHidden ? (
         <motion.div
-          className={cn(
-            "wr-fixed wr-bottom-[75px] wr-z-50 wr-w-[133px] lg:wr-bottom-[10px]"
-          )}
+          className={cn('wr-fixed wr-bottom-[75px] wr-z-50 wr-w-[133px] lg:wr-bottom-[10px]')}
           initial={{
             opacity: 0,
-            width: "300px",
-            right: "10px",
+            width: '300px',
+            right: '10px',
           }}
           animate={{
             opacity: 1,
-            width: "133px",
-            right: "10px",
+            width: '133px',
+            right: '10px',
           }}
           exit={{
             opacity: 0,
-            width: "300px",
-            right: "10px",
+            width: '300px',
+            right: '10px',
           }}
-          transition={{ type: "spring", bounce: 0, duration: 0.6, delay: 0 }}
+          transition={{ type: 'spring', bounce: 0, duration: 0.6, delay: 0 }}
         >
           <Button
-            size={"lg"}
+            size={'lg'}
             className="wr-items-center wr-gap-1 wr-rounded-[1000px]"
             type="button"
             onClick={() => setIsHidden(false)}
@@ -62,25 +60,25 @@ const LiveResultsTemplate = () => {
           </Button>
         </motion.div>
       ) : (
-        <Draggable nodeRef={dragRef} bounds={"body"} handle=".handle">
+        <Draggable nodeRef={dragRef} bounds={'body'} handle=".handle">
           <motion.div
             initial={{
               opacity: 0,
-              width: "133px",
-              right: "10px",
+              width: '133px',
+              right: '10px',
             }}
             animate={{
               opacity: 1,
-              width: "300px",
-              right: "10px",
+              width: '300px',
+              right: '10px',
             }}
             exit={{
               opacity: 0,
-              width: "133px",
-              right: "10px",
+              width: '133px',
+              right: '10px',
             }}
             transition={{ duration: 0.2, delay: 0.1 }}
-            className={cn("wr-fixed wr-bottom-[10px] wr-z-50 wr-right-[10px]")}
+            className={cn('wr-fixed wr-bottom-[10px] wr-z-50 wr-right-[10px]')}
             ref={dragRef}
           >
             <Card className="wr-live-stats  wr-overflow-hidden wr-rounded-md wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-transition-all wr-duration-300 wr-ease-in">
@@ -103,10 +101,7 @@ const LiveResultsTemplate = () => {
                   Bet & Win
                 </motion.span>
                 <motion.div className="div">
-                  <Close
-                    className="wr-cursor-pointer"
-                    onClick={() => setIsHidden(true)}
-                  />
+                  <Close className="wr-cursor-pointer" onClick={() => setIsHidden(true)} />
                 </motion.div>
               </CardHeader>
               <Result />

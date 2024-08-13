@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 
-import { useGameSkip } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import useRangeGameStore from "../store";
-import { DiceGameResult } from "../types";
+import { useGameSkip } from '../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import useRangeGameStore from '../store';
+import { DiceGameResult } from '../types';
 
-export type RangeGameProps = React.ComponentProps<"div"> & {
+export type RangeGameProps = React.ComponentProps<'div'> & {
   gameResults?: DiceGameResult[];
   /**
    * Runs on each animation step
@@ -41,15 +41,15 @@ export const RangeGame = ({
     updateLastBets,
     updateGameStatus,
   } = useRangeGameStore([
-    "updateDiceGameResults",
-    "diceGameResults",
-    "updateCurrentAnimationCount",
-    "currentAnimationCount",
-    "updateRollValue",
-    "rollValue",
-    "addLastBet",
-    "updateLastBets",
-    "updateGameStatus",
+    'updateDiceGameResults',
+    'diceGameResults',
+    'updateCurrentAnimationCount',
+    'currentAnimationCount',
+    'updateRollValue',
+    'rollValue',
+    'addLastBet',
+    'updateLastBets',
+    'updateGameStatus',
   ]);
 
   React.useEffect(() => {
@@ -94,7 +94,7 @@ export const RangeGame = ({
     const isSingleGame = diceGameResults.length == 1;
 
     if (isSingleGame) {
-      updateGameStatus("ENDED");
+      updateGameStatus('ENDED');
     }
 
     if (!isAnimationSkipped) {
@@ -104,12 +104,11 @@ export const RangeGame = ({
         const isGameEnded = curr === diceGameResults.length;
 
         if (isGameEnded) {
-          updateGameStatus("ENDED");
+          updateGameStatus('ENDED');
         }
 
         animCallback(curr);
-        diceGameResults[curr] &&
-          addLastBet(diceGameResults[curr] as DiceGameResult);
+        diceGameResults[curr] && addLastBet(diceGameResults[curr] as DiceGameResult);
         updateCurrentAnimationCount(curr);
         curr += 1;
       };
@@ -133,7 +132,7 @@ export const RangeGame = ({
     updateLastBets(diceGameResults);
     clearInterval(intervalRef.current as NodeJS.Timeout);
     setTimeout(() => {
-      updateGameStatus("ENDED");
+      updateGameStatus('ENDED');
       onAnimationSkipped(diceGameResults);
       updateDiceGameResults([]);
       updateCurrentAnimationCount(0);

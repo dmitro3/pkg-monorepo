@@ -1,19 +1,17 @@
-"use client";
-import * as React from "react";
+'use client';
+import * as React from 'react';
 
-import { cn } from "../../../../lib/utils/style";
-import useDiceGameStore from "../store";
+import { cn } from '../../../../lib/utils/style';
+import useDiceGameStore from '../store';
 
 export const TextRandomizer = () => {
-  const { diceGameResults, currentAnimationCount, gameStatus } =
-    useDiceGameStore([
-      "diceGameResults",
-      "currentAnimationCount",
-      "gameStatus",
-    ]);
+  const { diceGameResults, currentAnimationCount, gameStatus } = useDiceGameStore([
+    'diceGameResults',
+    'currentAnimationCount',
+    'gameStatus',
+  ]);
 
-  const currentResult =
-    diceGameResults.length > 0 ? diceGameResults[currentAnimationCount] : null;
+  const currentResult = diceGameResults.length > 0 ? diceGameResults[currentAnimationCount] : null;
 
   const [resetAnimation, setResetAnimation] = React.useState(false);
 
@@ -38,20 +36,19 @@ export const TextRandomizer = () => {
       <div>
         {currentResult ? (
           <div
-            className={cn("", {
-              "wr-opacity-0 delay-1000":
-                currentAnimationCount + 1 === diceGameResults.length &&
-                gameStatus !== "PLAYING",
-              "wr-opacity-0": resetAnimation,
-              "wr-opacity-100 wr-delay-100": diceGameResults.length === 1,
+            className={cn('', {
+              'wr-opacity-0 delay-1000':
+                currentAnimationCount + 1 === diceGameResults.length && gameStatus !== 'PLAYING',
+              'wr-opacity-0': resetAnimation,
+              'wr-opacity-100 wr-delay-100': diceGameResults.length === 1,
             })}
           >
             <span
               className={cn(
-                "wr-absolute wr-bottom-6 wr-z-10 -wr-translate-x-1/2 wr-rounded-lg wr-p-2 wr-text-3xl wr-font-bold wr-transition-all wr-duration-75",
+                'wr-absolute wr-bottom-6 wr-z-10 -wr-translate-x-1/2 wr-rounded-lg wr-p-2 wr-text-3xl wr-font-bold wr-transition-all wr-duration-75',
                 {
-                  "wr-bg-lime-600": currentResult?.payout > 0,
-                  "wr-bg-red-600": currentResult?.payout <= 0,
+                  'wr-bg-lime-600': currentResult?.payout > 0,
+                  'wr-bg-red-600': currentResult?.payout <= 0,
                 }
               )}
               style={{ left: `${currentResult.resultNumber}%` }}
@@ -59,7 +56,7 @@ export const TextRandomizer = () => {
               {currentResult.resultNumber}
             </span>
             <Polygon
-              result={currentResult?.payout || 0 > 0 ? "win" : "loss"}
+              result={currentResult?.payout || 0 > 0 ? 'win' : 'loss'}
               resultNumber={currentResult.resultNumber}
             />
           </div>
@@ -69,13 +66,7 @@ export const TextRandomizer = () => {
   );
 };
 
-const Polygon = ({
-  result,
-  resultNumber,
-}: {
-  result: "win" | "loss";
-  resultNumber?: number;
-}) => {
+const Polygon = ({ result, resultNumber }: { result: 'win' | 'loss'; resultNumber?: number }) => {
   return (
     <svg
       width="21"
@@ -88,7 +79,7 @@ const Polygon = ({
     >
       <path
         d="M12.196 13.2864C11.4127 14.5397 9.58734 14.5397 8.804 13.2864L0.500001 -1.58893e-07L20.5 -1.90735e-06L12.196 13.2864Z"
-        fill={result === "win" ? "#65A30D" : "#DC2626"}
+        fill={result === 'win' ? '#65A30D' : '#DC2626'}
       />
     </svg>
   );

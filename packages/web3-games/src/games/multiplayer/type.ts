@@ -1,4 +1,4 @@
-import { Address } from "viem";
+import { Address } from 'viem';
 
 export type Item<K extends string, T> = {
   type: K;
@@ -51,11 +51,11 @@ export interface MultiplayerGameMessage {
     type: string;
     version: number;
     context: [
-      Item<"Session", SessionContext>,
-      Item<"Receipt", ReceiptContext>,
-      Item<"Randoms", RandomsContext>,
+      Item<'Session', SessionContext>,
+      Item<'Receipt', ReceiptContext>,
+      Item<'Randoms', RandomsContext>,
     ];
-    program: [Item<"Game", GameProgram>, Item<"Bet", BetProgram>];
+    program: [Item<'Game', GameProgram>, Item<'Bet', BetProgram>];
   };
   id: string;
   program: string;

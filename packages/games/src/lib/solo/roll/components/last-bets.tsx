@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import { LastBetsContainer } from "../../../common/last-bets-container";
-import { FormLabel } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import useRollGameStore from "../store";
-import { miniDotPosition } from "./dice";
-import useMediaQuery from "../../../hooks/use-media-query";
+import { LastBetsContainer } from '../../../common/last-bets-container';
+import useMediaQuery from '../../../hooks/use-media-query';
+import { FormLabel } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import useRollGameStore from '../store';
+import { miniDotPosition } from './dice';
 
 type DiceResultIndex = 0 | 1 | 2 | 3 | 4 | 5;
 
 export const LastBets = () => {
-  const { lastBets } = useRollGameStore(["lastBets"]);
-  const isMobile = useMediaQuery("(max-width:1024px)");
+  const { lastBets } = useRollGameStore(['lastBets']);
+  const isMobile = useMediaQuery('(max-width:1024px)');
   const lastFiveBets = lastBets?.slice(isMobile ? -4 : -5);
 
   return (
@@ -20,24 +20,22 @@ export const LastBets = () => {
         return (
           <div
             className={cn(
-              "wr-relative wr-aspect-square wr-h-9 wr-w-9 wr-rounded-md wr-border-2 wr-border-zinc-800 wr-bg-black",
+              'wr-relative wr-aspect-square wr-h-9 wr-w-9 wr-rounded-md wr-border-2 wr-border-zinc-800 wr-bg-black',
               {
-                "wr-bg-green-500": result.payout > 0,
+                'wr-bg-green-500': result.payout > 0,
               }
             )}
             key={`dot-${index}`}
           >
-            {miniDotPosition?.[(result.dice - 1) as DiceResultIndex]?.map(
-              (dot, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    "wr-absolute wr-h-2 wr-w-2 wr-shrink-0 wr-rounded-full wr-border-2 wr-border-[#EDEDF1] wr-bg-dice wr-transition-all",
-                    dot
-                  )}
-                />
-              )
-            )}
+            {miniDotPosition?.[(result.dice - 1) as DiceResultIndex]?.map((dot, i) => (
+              <div
+                key={i}
+                className={cn(
+                  'wr-absolute wr-h-2 wr-w-2 wr-shrink-0 wr-rounded-full wr-border-2 wr-border-[#EDEDF1] wr-bg-dice wr-transition-all',
+                  dot
+                )}
+              />
+            ))}
           </div>
         );
       })}
@@ -52,20 +50,12 @@ export const RollController: React.FC<{
   return (
     <section className="wr-z-10 wr-grid wr-w-[255px] lg:wr-w-[280px] wr-grid-cols-2 wr-items-center wr-gap-2 wr-rounded-xl wr-border wr-border-zinc-800 wr-bg-zinc-950 wr-p-[14px]">
       <div>
-        <FormLabel className="wr-leading-4 lg:wr-leading-6">
-          Multiplier
-        </FormLabel>
-        <div className="wr-rounded-md wr-bg-zinc-800 wr-p-3 wr-font-semibold">
-          {multiplier}x
-        </div>
+        <FormLabel className="wr-leading-4 lg:wr-leading-6">Multiplier</FormLabel>
+        <div className="wr-rounded-md wr-bg-zinc-800 wr-p-3 wr-font-semibold">{multiplier}x</div>
       </div>
       <div>
-        <FormLabel className="wr-leading-4 lg:wr-leading-6">
-          Win Chance
-        </FormLabel>
-        <div className="wr-rounded-md wr-bg-zinc-800 wr-p-3 wr-font-semibold">
-          {winChance}%
-        </div>
+        <FormLabel className="wr-leading-4 lg:wr-leading-6">Win Chance</FormLabel>
+        <div className="wr-rounded-md wr-bg-zinc-800 wr-p-3 wr-font-semibold">{winChance}%</div>
       </div>
     </section>
   );

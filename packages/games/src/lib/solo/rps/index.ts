@@ -1,6 +1,6 @@
-import { RpsGame } from "./components/game";
-import LastBets from "./components/last-bets";
-import Scene from "./components/scene";
+import { RpsGame } from './components/game';
+import LastBets from './components/last-bets';
+import Scene from './components/scene';
 
 export const Rps = {
   LastBets,
@@ -8,5 +8,5 @@ export const Rps = {
   Game: RpsGame,
 };
 
-export { default as RpsTemplate } from "./components/template";
-export * from "./types";
+export { default as RpsTemplate } from './components/template';
+export * from './types';

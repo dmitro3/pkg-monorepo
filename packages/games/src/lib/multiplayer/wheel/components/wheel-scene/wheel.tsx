@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
-import { CDN_URL } from "../../../../constants";
-import { genNumberArray } from "../../../../utils/number";
-import { cn } from "../../../../utils/style";
-import { WheelColor } from "../../constants";
-import WheelRotate from "./wheel-rotate";
-import styles from "./wheel-scene.module.css";
+import { CDN_URL } from '../../../../constants';
+import { genNumberArray } from '../../../../utils/number';
+import { cn } from '../../../../utils/style';
+import { WheelColor } from '../../constants';
+import WheelRotate from './wheel-rotate';
+import styles from './wheel-scene.module.css';
 
 export interface WheelUnitProps {
   width: number;
@@ -40,12 +40,7 @@ export interface WheelContainerProps {
   onComplete?: () => void;
 }
 
-export const Wheel: React.FC<WheelContainerProps> = ({
-  units,
-  spin,
-  degree,
-  onComplete,
-}) => {
+export const Wheel: React.FC<WheelContainerProps> = ({ units, spin, degree, onComplete }) => {
   const diameter = 720;
 
   const dpi = diameter / 180;
@@ -107,19 +102,11 @@ export const Wheel: React.FC<WheelContainerProps> = ({
         />
 
         {genNumberArray(totalWidthOfCircle).map((index) => {
-          const portionIndex =
-            index / portionHeight - ((index / portionHeight) % 1);
+          const portionIndex = index / portionHeight - ((index / portionHeight) % 1);
 
           const color = units[portionIndex];
 
-          return (
-            <Unit
-              key={index}
-              color={color}
-              width={unitWidth}
-              rotation={index / dpi}
-            />
-          );
+          return <Unit key={index} color={color} width={unitWidth} rotation={index / dpi} />;
         })}
       </div>
     </div>

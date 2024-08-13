@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { useGameSkip } from "../../../game-provider";
-import useRpsGameStore from "../store";
-import { RPSGameResult } from "../types";
+import { useGameSkip } from '../../../game-provider';
+import useRpsGameStore from '../store';
+import { RPSGameResult } from '../types';
 
-export type RpsGameProps = React.ComponentProps<"div"> & {
+export type RpsGameProps = React.ComponentProps<'div'> & {
   gameResults: RPSGameResult[];
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: RPSGameResult[]) => void;
@@ -13,8 +13,8 @@ export type RpsGameProps = React.ComponentProps<"div"> & {
 
 export const RpsGame = ({ gameResults, children }: RpsGameProps) => {
   const { updateRpsGameResults, updateGameStatus } = useRpsGameStore([
-    "updateRpsGameResults",
-    "updateGameStatus",
+    'updateRpsGameResults',
+    'updateGameStatus',
   ]);
 
   const { updateSkipAnimation } = useGameSkip();
@@ -23,7 +23,7 @@ export const RpsGame = ({ gameResults, children }: RpsGameProps) => {
     if (gameResults.length) {
       updateSkipAnimation(false);
       updateRpsGameResults(gameResults);
-      updateGameStatus("PLAYING");
+      updateGameStatus('PLAYING');
     }
   }, [gameResults]);
 

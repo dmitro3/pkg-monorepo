@@ -1,13 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgIconScissors = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 21 20"
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 20" fill="none" {...props}>
     <path
       fill="currentColor"
       d="M12.476 11.791c.597 0 1.088-.492 1.088-1.089v-3.16c0-.598-.491-1.09-1.088-1.09-.598 0-1.09.492-1.09 1.09v3.16a1.09 1.09 0 0 0 1.09 1.09ZM8.479 7.85 6.976 2.232a1.087 1.087 0 0 0-.506-.66 1.101 1.101 0 0 0-.829-.105 1.087 1.087 0 0 0-.66.505 1.103 1.103 0 0 0-.113.83L6.372 8.42l2.107-.57ZM14.934 6.804c-.597 0-1.089.491-1.089 1.089v3.16c0 .597.492 1.09 1.09 1.09.596 0 1.088-.493 1.088-1.09v-3.16c0-.598-.492-1.09-1.089-1.09Z"

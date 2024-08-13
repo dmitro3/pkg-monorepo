@@ -1,11 +1,11 @@
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { useFormContext } from "react-hook-form";
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import { useFormContext } from 'react-hook-form';
 
-import { CDN_URL } from "../../../constants";
-import { FormControl, FormField, FormItem } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { COIN_SIDE } from "../constants";
-import { CoinFlip3dForm } from "../types";
+import { CDN_URL } from '../../../constants';
+import { FormControl, FormField, FormItem } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import { COIN_SIDE } from '../constants';
+import { CoinFlip3dForm } from '../types';
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlip3dForm;
@@ -49,13 +49,13 @@ export const CoinFlipController = () => {
                       </RadioGroupPrimitive.Item>
                       <span
                         className={cn(
-                          "wr-relative wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 max-md:wr-top-2",
+                          'wr-relative wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 max-md:wr-top-2',
                           {
-                            "wr-text-green-500": field.value === COIN_SIDE.ETH,
+                            'wr-text-green-500': field.value === COIN_SIDE.ETH,
                           }
                         )}
                       >
-                        {field.value === COIN_SIDE.ETH ? "+$0.95" : "$1"}
+                        {field.value === COIN_SIDE.ETH ? '+$0.95' : '$1'}
                       </span>
                     </>
                   </FormControl>
@@ -87,13 +87,13 @@ export const CoinFlipController = () => {
                     </FormControl>
                     <span
                       className={cn(
-                        "wr-relative wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 max-md:wr-top-2",
+                        'wr-relative wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 max-md:wr-top-2',
                         {
-                          "wr-text-green-500": field.value === COIN_SIDE.BTC,
+                          'wr-text-green-500': field.value === COIN_SIDE.BTC,
                         }
                       )}
                     >
-                      {field.value === COIN_SIDE.BTC ? "+$0.95" : "$1"}
+                      {field.value === COIN_SIDE.BTC ? '+$0.95' : '$1'}
                     </span>
                   </>
                 </FormItem>

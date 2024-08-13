@@ -1,4 +1,4 @@
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from 'react-hook-form';
 
 export interface DiceFormFields {
   wager: number;
@@ -7,7 +7,7 @@ export interface DiceFormFields {
   stopLoss: number;
   rollValue: number;
   winChance: number;
-  rollType: "OVER" | "UNDER";
+  rollType: 'OVER' | 'UNDER';
 }
 export type DiceForm = UseFormReturn<DiceFormFields, any, undefined>;
 

@@ -1,5 +1,5 @@
-import type { StoreApi, UseBoundStore } from "zustand";
-import { shallow } from "zustand/shallow";
+import type { StoreApi, UseBoundStore } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
 /**
  * Select multiple keys from a store.
@@ -12,9 +12,7 @@ import { shallow } from "zustand/shallow";
  *
  * const { x, y } = useXStore(["x", "y"])
  */
-export const createSelectors = <T>(
-  store: UseBoundStore<StoreApi<T>>,
-) => {
+export const createSelectors = <T>(store: UseBoundStore<StoreApi<T>>) => {
   return <K extends keyof T>(keys: K[]) =>
     store((state: T) => {
       const x = keys.reduce((acc, cur) => {

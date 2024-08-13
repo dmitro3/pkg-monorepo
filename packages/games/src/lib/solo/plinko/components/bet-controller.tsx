@@ -1,37 +1,31 @@
-"use client";
-import * as Slider from "@radix-ui/react-slider";
-import * as React from "react";
-import { useFormContext } from "react-hook-form";
-import { useDebounce } from "use-debounce";
+'use client';
+import * as Slider from '@radix-ui/react-slider';
+import * as React from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useDebounce } from 'use-debounce';
 
-import { Advanced } from "../../../common/advanced";
-import { AudioController } from "../../../common/audio-controller";
-import { BetControllerContainer } from "../../../common/containers";
+import { Advanced } from '../../../common/advanced';
+import { AudioController } from '../../../common/audio-controller';
+import { BetControllerContainer } from '../../../common/containers';
 import {
   BetControllerTitle,
   BetCountFormField,
   StopGainFormField,
   StopLossFormField,
   WagerFormField,
-} from "../../../common/controller";
-import { PreBetButton } from "../../../common/pre-bet-button";
-import { SkipButton } from "../../../common/skip-button";
-import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { Button } from "../../../ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../../ui/form";
-import { INumberInputContext, NumberInput } from "../../../ui/number-input";
-import { cn } from "../../../utils/style";
-import { toDecimals, toFormatted } from "../../../utils/web3";
-import { rowMultipliers } from "../constants";
-import usePlinkoGameStore from "../store";
-import { PlinkoForm } from "../types";
+} from '../../../common/controller';
+import { PreBetButton } from '../../../common/pre-bet-button';
+import { SkipButton } from '../../../common/skip-button';
+import { TotalWager, WagerCurrencyIcon } from '../../../common/wager';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { Button } from '../../../ui/button';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../ui/form';
+import { INumberInputContext, NumberInput } from '../../../ui/number-input';
+import { cn } from '../../../utils/style';
+import { toDecimals, toFormatted } from '../../../utils/web3';
+import { rowMultipliers } from '../constants';
+import usePlinkoGameStore from '../store';
+import { PlinkoForm } from '../types';
 
 interface Props {
   minWager: number;
@@ -42,9 +36,9 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   const form = useFormContext() as PlinkoForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
-  const rowSize = form.watch("plinkoSize");
-  const wager = form.watch("wager");
-  const betCount = form.watch("betCount");
+  const rowSize = form.watch('plinkoSize');
+  const wager = form.watch('wager');
+  const betCount = form.watch('betCount');
 
   const maxPayout = React.useMemo(() => {
     const maxMultiplier = isNaN(rowMultipliers?.[rowSize]?.[0] as number)
@@ -54,10 +48,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
     return toDecimals(wager * betCount * maxMultiplier, 2);
   }, [betCount, wager, rowSize]);
 
-  const { plinkoGameResults, gameStatus } = usePlinkoGameStore([
-    "plinkoGameResults",
-    "gameStatus",
-  ]);
+  const { plinkoGameResults, gameStatus } = usePlinkoGameStore(['plinkoGameResults', 'gameStatus']);
 
   return (
     <BetControllerContainer>
@@ -70,16 +61,12 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           minWager={minWager}
           maxWager={maxWager}
           isDisabled={
-            form.formState.isSubmitting ||
-            form.formState.isLoading ||
-            gameStatus == "PLAYING"
+            form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
           }
         />
         <BetCountFormField
           isDisabled={
-            form.formState.isSubmitting ||
-            form.formState.isLoading ||
-            gameStatus == "PLAYING"
+            form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
           }
           hideSm
         />
@@ -87,9 +74,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           minValue={6}
           maxValue={12}
           isDisabled={
-            form.formState.isSubmitting ||
-            form.formState.isLoading ||
-            gameStatus == "PLAYING"
+            form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
           }
         />
         <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
@@ -97,21 +82,18 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden"
+                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
+              <span className={cn('wr-font-semibold wr-text-zinc-100')}>
                 ${toFormatted(maxPayout, 2)}
               </span>
             </div>
           </div>
           <div>
             <FormLabel>Total Wager</FormLabel>
-            <TotalWager
-              betCount={form.getValues().betCount}
-              wager={form.getValues().wager}
-            />
+            <TotalWager betCount={form.getValues().betCount} wager={form.getValues().wager} />
           </div>
         </div>
 
@@ -120,16 +102,12 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             <div className="wr-grid wr-grid-cols-2 wr-gap-2">
               <StopGainFormField
                 isDisabled={
-                  form.formState.isSubmitting ||
-                  form.formState.isLoading ||
-                  gameStatus == "PLAYING"
+                  form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
                 }
               />
               <StopLossFormField
                 isDisabled={
-                  form.formState.isSubmitting ||
-                  form.formState.isLoading ||
-                  gameStatus == "PLAYING"
+                  form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
                 }
               />
             </div>
@@ -139,26 +117,20 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           <PreBetButton>
             <Button
               type="submit"
-              variant={"success"}
+              variant={'success'}
               className="wr-w-full"
-              size={"xl"}
+              size={'xl'}
               onClick={() => clickEffect.play()}
-              isLoading={
-                form.formState.isSubmitting || form.formState.isLoading
-              }
+              isLoading={form.formState.isSubmitting || form.formState.isLoading}
               disabled={
-                !form.formState.isValid ||
-                form.formState.isSubmitting ||
-                form.formState.isLoading
+                !form.formState.isValid || form.formState.isSubmitting || form.formState.isLoading
               }
             >
               Bet
             </Button>
           </PreBetButton>
         )}
-        {plinkoGameResults.length > 3 && gameStatus == "PLAYING" && (
-          <SkipButton />
-        )}
+        {plinkoGameResults.length > 3 && gameStatus == 'PLAYING' && <SkipButton />}
       </div>
       <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
@@ -225,16 +197,16 @@ const PlinkoRowInput = ({
     <NumberInput.Root {...rest}>
       <NumberInput.Container
         className={cn(
-          "wr-rounded-b-[6px] wr-border-none wr-bg-zinc-950 wr-px-2 wr-py-[10px]",
+          'wr-rounded-b-[6px] wr-border-none wr-bg-zinc-950 wr-px-2 wr-py-[10px]',
           {
-            ["wr-border wr-border-solid wr-border-red-600"]: !!hasError,
+            ['wr-border wr-border-solid wr-border-red-600']: !!hasError,
           },
           containerClassName
         )}
       >
         <NumberInput.Input
           className={cn(
-            "wr-rounded-none wr-border-none wr-bg-transparent wr-px-0 wr-py-2 wr-text-base wr-font-semibold wr-leading-5 wr-text-white wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0",
+            'wr-rounded-none wr-border-none wr-bg-transparent wr-px-0 wr-py-2 wr-text-base wr-font-semibold wr-leading-5 wr-text-white wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0',
             className
           )}
         />
@@ -247,7 +219,7 @@ const PlinkoRowSlider = ({ ...props }) => {
   const form = useFormContext();
   const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
 
-  const plinkoSize = form.watch("plinkoSize");
+  const plinkoSize = form.watch('plinkoSize');
   const debouncedPlinkoSize = useDebounce(plinkoSize, 25);
 
   React.useEffect(() => {
@@ -257,16 +229,16 @@ const PlinkoRowSlider = ({ ...props }) => {
   return (
     <Slider.Root
       className={cn(
-        "wr-relative -wr-mt-2 wr-flex wr-w-full wr-touch-none wr-select-none wr-items-center",
+        'wr-relative -wr-mt-2 wr-flex wr-w-full wr-touch-none wr-select-none wr-items-center',
         {
-          "wr-cursor-none wr-pointer-events-none wr-opacity-60": props.disabled,
+          'wr-cursor-none wr-pointer-events-none wr-opacity-60': props.disabled,
         }
       )}
       min={props.minValue || 1}
       value={[props.value]}
       max={props.maxValue}
       onValueChange={(e) => {
-        form.setValue("plinkoSize", e[0], { shouldValidate: true });
+        form.setValue('plinkoSize', e[0], { shouldValidate: true });
       }}
     >
       <Slider.Track className="wr-relative wr-h-[6px] wr-w-full wr-grow wr-cursor-pointer wr-overflow-hidden wr-rounded-full wr-rounded-tl-md wr-rounded-tr-md wr-bg-zinc-600">

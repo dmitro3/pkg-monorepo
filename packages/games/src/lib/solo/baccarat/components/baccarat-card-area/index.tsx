@@ -1,32 +1,24 @@
-"use client";
+'use client';
 
-import { Player } from "@lottiefiles/react-lottie-player";
-import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import { Player } from '@lottiefiles/react-lottie-player';
+import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { CDN_URL } from "../../../../constants";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import { useWinAnimation } from "../../../../hooks/use-win-animation";
-import { wait } from "../../../../utils/promise";
-import { cn } from "../../../../utils/style";
+import { CDN_URL } from '../../../../constants';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { useWinAnimation } from '../../../../hooks/use-win-animation';
+import { wait } from '../../../../utils/promise';
+import { cn } from '../../../../utils/style';
 import {
   BaccaratForm,
   BaccaratGameResult,
   BaccaratGameSettledResult,
   BaccaratSuit,
-} from "../../types";
-import styles from "./baccarat-card.module.css";
-import {
-  BaccaratCard,
-  countCalculator,
-  generateBaccaratSuits,
-  getBaccaratIcon,
-} from "./card";
-import Confetti from "./lottie/confetti.json";
+} from '../../types';
+import styles from './baccarat-card.module.css';
+import { BaccaratCard, countCalculator, generateBaccaratSuits, getBaccaratIcon } from './card';
+import Confetti from './lottie/confetti.json';
 
 const TIMEOUT = 500;
 
@@ -61,10 +53,10 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
   const { showWinAnimation } = useWinAnimation();
 
   const form = useFormContext() as BaccaratForm;
-  const wager = form.watch("wager");
-  const playerChipAmount = form.watch("playerWager");
-  const bankerChipAmount = form.watch("bankerWager");
-  const tieChipAmount = form.watch("tieWager");
+  const wager = form.watch('wager');
+  const playerChipAmount = form.watch('playerWager');
+  const bankerChipAmount = form.watch('bankerWager');
+  const tieChipAmount = form.watch('tieWager');
 
   const totalWager = React.useMemo(
     () => wager * (playerChipAmount + bankerChipAmount + tieChipAmount),
@@ -74,30 +66,23 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
   const bankerLottieRef = React.useRef<any>(null);
 
-  const [playerFirstCard, setPlayerFirstCard] =
-    React.useState<BaccaratCard | null>(null);
+  const [playerFirstCard, setPlayerFirstCard] = React.useState<BaccaratCard | null>(null);
 
-  const [playerSecondCard, setPlayerSecondCard] =
-    React.useState<BaccaratCard | null>(null);
+  const [playerSecondCard, setPlayerSecondCard] = React.useState<BaccaratCard | null>(null);
 
-  const [playerThirdCard, setPlayerThirdCard] =
-    React.useState<BaccaratCard | null>(null);
+  const [playerThirdCard, setPlayerThirdCard] = React.useState<BaccaratCard | null>(null);
 
-  const [bankerFirstCard, setBankerFirstCard] =
-    React.useState<BaccaratCard | null>(null);
+  const [bankerFirstCard, setBankerFirstCard] = React.useState<BaccaratCard | null>(null);
 
-  const [bankerSecondCard, setBankerSecondCard] =
-    React.useState<BaccaratCard | null>(null);
+  const [bankerSecondCard, setBankerSecondCard] = React.useState<BaccaratCard | null>(null);
 
-  const [bankerThirdCard, setBankerThirdCard] =
-    React.useState<BaccaratCard | null>(null);
+  const [bankerThirdCard, setBankerThirdCard] = React.useState<BaccaratCard | null>(null);
 
   const [playerCount, setPlayerCount] = React.useState<number | null>(null);
 
   const [bankerCount, setBankerCount] = React.useState<number | null>(null);
 
-  const [isAnimationCompleted, setIsAnimationCompleted] =
-    React.useState<boolean>(false);
+  const [isAnimationCompleted, setIsAnimationCompleted] = React.useState<boolean>(false);
 
   const isPlayerWinner = React.useMemo(() => {
     if (playerCount !== null && bankerCount !== null && isAnimationCompleted)
@@ -120,10 +105,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
     const suits = generateBaccaratSuits();
 
-    const _playerFirstCard = new BaccaratCard(
-      playerHand.firstCard,
-      suits[0] as BaccaratSuit
-    );
+    const _playerFirstCard = new BaccaratCard(playerHand.firstCard, suits[0] as BaccaratSuit);
 
     flipEffect.play();
 
@@ -133,10 +115,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
     await wait(TIMEOUT);
 
-    const _bankerFirstCard = new BaccaratCard(
-      bankerHand.firstCard,
-      suits[1] as BaccaratSuit
-    );
+    const _bankerFirstCard = new BaccaratCard(bankerHand.firstCard, suits[1] as BaccaratSuit);
 
     flipEffect.play();
 
@@ -146,10 +125,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
     await wait(TIMEOUT);
 
-    const _playerSecondCard = new BaccaratCard(
-      playerHand.secondCard,
-      suits[2] as BaccaratSuit
-    );
+    const _playerSecondCard = new BaccaratCard(playerHand.secondCard, suits[2] as BaccaratSuit);
 
     flipEffect.play();
 
@@ -165,10 +141,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
     await wait(TIMEOUT);
 
-    const _bankerSecondCard = new BaccaratCard(
-      bankerHand.secondCard,
-      suits[3] as BaccaratSuit
-    );
+    const _bankerSecondCard = new BaccaratCard(bankerHand.secondCard, suits[3] as BaccaratSuit);
 
     flipEffect.play();
 
@@ -185,10 +158,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
     if (playerHand.hasThirdCard) {
       await wait(TIMEOUT);
 
-      const _playerThirdCard = new BaccaratCard(
-        playerHand.thirdCard,
-        suits[4] as BaccaratSuit
-      );
+      const _playerThirdCard = new BaccaratCard(playerHand.thirdCard, suits[4] as BaccaratSuit);
 
       flipEffect.play();
 
@@ -206,10 +176,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
     if (bankerHand.hasThirdCard) {
       await wait(TIMEOUT);
 
-      const _bankerThirdCard = new BaccaratCard(
-        bankerHand.thirdCard,
-        suits[5] as BaccaratSuit
-      );
+      const _bankerThirdCard = new BaccaratCard(bankerHand.thirdCard, suits[5] as BaccaratSuit);
 
       flipEffect.play();
 
@@ -269,7 +236,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
   React.useEffect(() => {
     if (isAnimationCompleted && baccaratSettled) {
       // on animation completed
-      console.log(baccaratSettled, "baccarat settled");
+      console.log(baccaratSettled, 'baccarat settled');
       if (baccaratSettled.won) {
         winEffect.play();
         const multiplier = baccaratSettled.payout / totalWager;
@@ -321,8 +288,8 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
               ref={playerLottieRef}
               src={Confetti}
               style={{
-                width: "200px",
-                height: "200px",
+                width: '200px',
+                height: '200px',
               }}
               loop={false}
               speed={1.5}
@@ -361,8 +328,8 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
               ref={bankerLottieRef}
               src={Confetti}
               style={{
-                width: "200px",
-                height: "200px",
+                width: '200px',
+                height: '200px',
               }}
               loop={false}
               speed={1.5}
@@ -376,7 +343,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
           width={100}
           height={150}
           className={cn(
-            "wr-absolute wr-z-[0] wr-max-h-[150px] wr-max-w-[100px] -wr-translate-x-1/2 -wr-translate-y-1/2 wr-hidden md:wr-block",
+            'wr-absolute wr-z-[0] wr-max-h-[150px] wr-max-w-[100px] -wr-translate-x-1/2 -wr-translate-y-1/2 wr-hidden md:wr-block',
             styles.playerFirstCard
           )}
           src={`${CDN_URL}/baccarat/stack.svg`}
@@ -387,7 +354,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
           width={100}
           height={150}
           className={cn(
-            "wr-absolute wr-z-[0] wr-max-h-[150px] wr-max-w-[100px] -wr-translate-x-1/2 -wr-translate-y-1/2 wr-hidden md:wr-block",
+            'wr-absolute wr-z-[0] wr-max-h-[150px] wr-max-w-[100px] -wr-translate-x-1/2 -wr-translate-y-1/2 wr-hidden md:wr-block',
             styles.bankerFirstCard
           )}
           src={`${CDN_URL}/baccarat/stack.svg`}
@@ -446,12 +413,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
         />
 
         {new Array(4).fill(0).map((_, idx) => (
-          <Card
-            card={null}
-            flipped={true}
-            className={styles[`fixed-${idx + 1}`]}
-            key={idx}
-          />
+          <Card card={null} flipped={true} className={styles[`fixed-${idx + 1}`]} key={idx} />
         ))}
       </div>
     </div>
@@ -474,7 +436,7 @@ const Card: React.FC<{
 
   return (
     <div
-      data-state={flippedWithDelay ? "flipped" : "unflipped"}
+      data-state={flippedWithDelay ? 'flipped' : 'unflipped'}
       className={cn(styles.card, className && className)}
     >
       <div className={styles.innerWrapper}>
@@ -482,14 +444,11 @@ const Card: React.FC<{
           <div className={styles.cardSuitArea}>
             <CardValue
               suit={card?.suit || BaccaratSuit.CLUBS}
-              value={card?.renderValue || ""}
+              value={card?.renderValue || ''}
               isUpsideDown={false}
             />
             <div className={styles.logo}>
-              <img
-                src={`${CDN_URL}/baccarat/card-front-logo.svg`}
-                alt="Justbet Baccarat"
-              />
+              <img src={`${CDN_URL}/baccarat/card-front-logo.svg`} alt="Justbet Baccarat" />
             </div>
           </div>
           <div
@@ -502,14 +461,11 @@ const Card: React.FC<{
           </div>
           <div className={styles.cardSuitArea}>
             <div className={styles.logo}>
-              <img
-                src={`${CDN_URL}/baccarat/card-front-logo.svg`}
-                alt="Justbet Baccarat"
-              />
+              <img src={`${CDN_URL}/baccarat/card-front-logo.svg`} alt="Justbet Baccarat" />
             </div>
             <CardValue
               suit={card?.suit || BaccaratSuit.CLUBS}
-              value={card?.renderValue || ""}
+              value={card?.renderValue || ''}
               isUpsideDown={true}
             />
           </div>
@@ -530,8 +486,8 @@ export const CardValue = ({
   suit,
   isUpsideDown,
 }: {
-  value: BaccaratCard["renderValue"];
-  suit: BaccaratCard["suit"];
+  value: BaccaratCard['renderValue'];
+  suit: BaccaratCard['suit'];
   isUpsideDown: boolean;
 }) => {
   return (

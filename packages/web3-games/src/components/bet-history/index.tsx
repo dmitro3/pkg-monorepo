@@ -1,18 +1,15 @@
-import {
-  GameControllerBetHistoryResponse,
-  useGameControllerBetHistory,
-} from "@winrlabs/api";
+import { GameControllerBetHistoryResponse, useGameControllerBetHistory } from '@winrlabs/api';
 import {
   BetHistoryCurrencyList,
   BetHistoryFilter,
   BetHistoryTemplate,
   GameType,
-} from "@winrlabs/games";
-import { useCurrentAccount, useTokenStore } from "@winrlabs/web3";
-import { useMemo, useState } from "react";
+} from '@winrlabs/games';
+import { useCurrentAccount, useTokenStore } from '@winrlabs/web3';
+import { useMemo, useState } from 'react';
 const BetHistory = ({ gameType }: { gameType: GameType }) => {
   const [filter, setFilter] = useState<BetHistoryFilter>({
-    type: "bets",
+    type: 'bets',
   });
 
   const { address } = useCurrentAccount();
@@ -24,7 +21,7 @@ const BetHistory = ({ gameType }: { gameType: GameType }) => {
   };
   const { data, isLoading } = useGameControllerBetHistory({
     queryParams:
-      filter.type === "player"
+      filter.type === 'player'
         ? {
             player: address,
             ...defaultParams,

@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import { CDN_URL } from "../../../constants";
-import { wait } from "../../../utils/promise";
-import { BlackjackGameResult, TIMEOUT } from "..";
+import { CDN_URL } from '../../../constants';
+import { wait } from '../../../utils/promise';
+import { BlackjackGameResult, TIMEOUT } from '..';
 
 const BigDiamonds = <img src={`${CDN_URL}/blackjack/suits/big-diamonds.svg`} />;
 const BigClubs = <img src={`${CDN_URL}/blackjack/suits/big-clubs.svg`} />;
@@ -10,9 +10,7 @@ const BigHearts = <img src={`${CDN_URL}/blackjack/suits/big-hearts.svg`} />;
 const BigSpades = <img src={`${CDN_URL}/blackjack/suits/big-spades.svg`} />;
 
 const SmallClubs = <img src={`${CDN_URL}/blackjack/suits/small-clubs.svg`} />;
-const SmallDiamonds = (
-  <img src={`${CDN_URL}/blackjack/suits/small-diamonds.svg`} />
-);
+const SmallDiamonds = <img src={`${CDN_URL}/blackjack/suits/small-diamonds.svg`} />;
 const SmallHearts = <img src={`${CDN_URL}/blackjack/suits/small-hearts.svg`} />;
 const SmallSpades = <img src={`${CDN_URL}/blackjack/suits/small-spades.svg`} />;
 
@@ -33,10 +31,10 @@ export enum BlackjackCardValue {
 }
 
 export enum BlackjackSuit {
-  HEARTS = "hearts",
-  DIAMONDS = "diamonds",
-  CLUBS = "clubs",
-  SPADES = "spades",
+  HEARTS = 'hearts',
+  DIAMONDS = 'diamonds',
+  CLUBS = 'clubs',
+  SPADES = 'spades',
 }
 
 export class BlackjackCard {
@@ -48,16 +46,16 @@ export class BlackjackCard {
   get renderValue(): string {
     switch (this._value) {
       case BlackjackCardValue.ACE:
-        return "A";
+        return 'A';
 
       case BlackjackCardValue.JACK:
-        return "J";
+        return 'J';
 
       case BlackjackCardValue.QUEEN:
-        return "Q";
+        return 'Q';
 
       case BlackjackCardValue.KING:
-        return "K";
+        return 'K';
 
       default:
         return this._value.toString();
@@ -93,13 +91,13 @@ export const getBlackjackIcon = (suit: BlackjackSuit) => {
     case BlackjackSuit.SPADES:
       return { main: BigSpades, suit: SmallSpades };
 
-    case "hearts":
+    case 'hearts':
       return { main: BigHearts, suit: SmallHearts };
 
-    case "diamonds":
+    case 'diamonds':
       return { main: BigDiamonds, suit: SmallDiamonds };
 
-    case "clubs":
+    case 'clubs':
       return { main: BigClubs, suit: SmallClubs };
   }
 };
@@ -114,28 +112,28 @@ export const getBlackjackSuit = (): BlackjackSuit => {
 
 export const checkBJGameResult = (
   result: BlackjackGameResult
-): "winner" | "push" | "lost" | "insured" => {
+): 'winner' | 'push' | 'lost' | 'insured' => {
   switch (result) {
     case BlackjackGameResult.DEALER_STAND_PLAYER_WIN:
-      return "winner";
+      return 'winner';
 
     case BlackjackGameResult.DEALER_BUST_PLAYER_WIN:
-      return "winner";
+      return 'winner';
 
     case BlackjackGameResult.DEALER_BUST_PLAYER_BLACKJACK:
-      return "winner";
+      return 'winner';
 
     case BlackjackGameResult.DEALER_BLACKJACK_HAND_PUSH:
-      return "push";
+      return 'push';
 
     case BlackjackGameResult.DEALER_STAND_HAND_PUSH:
-      return "push";
+      return 'push';
 
     case BlackjackGameResult.DEALER_BLACKJACK_PLAYER_INSURED:
-      return "insured";
+      return 'insured';
 
     default:
-      return "lost";
+      return 'lost';
   }
 };
 
@@ -174,10 +172,7 @@ export const distributeNewCards = async (
     const card = cardNumbers[i];
 
     if (!cards[i] && card) {
-      setNewCards((prev) => [
-        ...prev,
-        new BlackjackCard(card, getBlackjackSuit()),
-      ]);
+      setNewCards((prev) => [...prev, new BlackjackCard(card, getBlackjackSuit())]);
 
       sfxCb();
 

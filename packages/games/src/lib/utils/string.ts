@@ -8,7 +8,7 @@
  */
 export const shorter = (str?: string | null, length = 6): string => {
   if (!str) {
-    return "";
+    return '';
   } else {
     return `${str.slice(0, length)}...${str.slice(str.length - 4, str.length)}`;
   }
@@ -24,7 +24,7 @@ export const textShorter = (str: string, length = 14): string => {
 
 export const walletShorter = (str?: string | null, length = 6): string => {
   if (!str) {
-    return "";
+    return '';
   } else {
     return `${str.slice(0, length)}...${str.slice(str.length - 4, str.length)}`;
   }

@@ -1,16 +1,13 @@
-import React from "react";
-import SuperJSON from "superjson";
+import { useCurrentAccount } from '@winrlabs/web3';
+import React from 'react';
+import { io,Socket } from 'socket.io-client';
+import SuperJSON from 'superjson';
 
-import { DecodedEvent, Event } from "../../utils";
-import { useGameSocketContext } from "../use-game-socket";
-import { Socket, io } from "socket.io-client";
-import { useCurrentAccount } from "@winrlabs/web3";
+import { DecodedEvent, Event } from '../../utils';
+import { useGameSocketContext } from '../use-game-socket';
 
 export const useListenGameEvent = () => {
-  const [gameEvent, setGameEvent] = React.useState<DecodedEvent<
-    any,
-    any
-  > | null>(null);
+  const [gameEvent, setGameEvent] = React.useState<DecodedEvent<any, any> | null>(null);
 
   const [socket, setSocket] = React.useState<Socket | null>(null);
 
@@ -24,18 +21,18 @@ export const useListenGameEvent = () => {
 
     socket.connect();
 
-    socket.on("connect", () => {
-      console.log("socket connected!", socket);
+    socket.on('connect', () => {
+      console.log('socket connected!', socket);
     });
 
-    socket.on("disconnect", () => {
-      console.log("socket disconnected");
+    socket.on('disconnect', () => {
+      console.log('socket disconnected');
     });
 
     return () => {
-      socket.off("connect");
+      socket.off('connect');
 
-      socket.off("disconnect");
+      socket.off('disconnect');
 
       socket.disconnect();
     };
@@ -43,12 +40,12 @@ export const useListenGameEvent = () => {
 
   React.useEffect(() => {
     if (!address || !bundlerWsUrl || !network) return;
-    console.log(network, bundlerWsUrl, "bundler ws url");
+    console.log(network, bundlerWsUrl, 'bundler ws url');
     setSocket(
       io(bundlerWsUrl, {
         extraHeaders: {
-          "x-address": address,
-          "x-network": network,
+          'x-address': address,
+          'x-network': network,
         },
       })
     );
@@ -57,10 +54,10 @@ export const useListenGameEvent = () => {
   React.useEffect(() => {
     if (!socket) return;
 
-    socket.on("message", onListenEvent);
+    socket.on('message', onListenEvent);
 
     return () => {
-      socket.off("message", onListenEvent);
+      socket.off('message', onListenEvent);
     };
   }, [socket]);
 
@@ -69,7 +66,7 @@ export const useListenGameEvent = () => {
 
     const context = _e.context as DecodedEvent<any, any>;
 
-    console.log(context, "CONTEXT!");
+    console.log(context, 'CONTEXT!');
 
     setGameEvent(context);
   };

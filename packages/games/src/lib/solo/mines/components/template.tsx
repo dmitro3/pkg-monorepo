@@ -1,19 +1,19 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
 
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { WinAnimation } from "../../../common/win-animation";
-import { Form } from "../../../ui/form";
-import { toDecimals } from "../../../utils/web3";
-import { Mines } from "..";
-import { initialBoard } from "../constants";
-import mineMultipliers from "../constants/mines-multipliers.json";
-import { useMinesGameStateStore } from "../store";
-import { FormSetValue, MINES_GAME_STATUS, MinesFormField } from "../types";
-import { MinesGameProps } from "./game";
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { WinAnimation } from '../../../common/win-animation';
+import { Form } from '../../../ui/form';
+import { toDecimals } from '../../../utils/web3';
+import { Mines } from '..';
+import { initialBoard } from '../constants';
+import mineMultipliers from '../constants/mines-multipliers.json';
+import { useMinesGameStateStore } from '../store';
+import { FormSetValue, MINES_GAME_STATUS, MinesFormField } from '../types';
+import { MinesGameProps } from './game';
 
 type TemplateProps = MinesGameProps & {
   minWager?: number;
@@ -24,7 +24,7 @@ type TemplateProps = MinesGameProps & {
 };
 
 const MinesTemplate = ({ ...props }: TemplateProps) => {
-  const { board, gameStatus } = useMinesGameStateStore(["board", "gameStatus"]);
+  const { board, gameStatus } = useMinesGameStateStore(['board', 'gameStatus']);
 
   const formSchema = z.object({
     wager: z
@@ -43,7 +43,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "all",
+    mode: 'all',
     defaultValues: {
       wager: props?.minWager || 1,
       minesCount: 1,
@@ -51,11 +51,11 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
     },
   });
 
-  const selectedCells = form.watch("selectedCells");
+  const selectedCells = form.watch('selectedCells');
 
-  const minesCount = form.watch("minesCount");
+  const minesCount = form.watch('minesCount');
 
-  const _wager = form.watch("wager");
+  const _wager = form.watch('wager');
 
   const currentMultiplier = React.useMemo(() => {
     const multiplier =
@@ -69,19 +69,13 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   }, [selectedCells, minesCount]);
 
   const currentCashoutAmount = React.useMemo(() => {
-    const currentScheme = mineMultipliers.filter(
-      (scheme) => scheme.numOfMines === minesCount
-    );
+    const currentScheme = mineMultipliers.filter((scheme) => scheme.numOfMines === minesCount);
 
     const currentRevealAmount = currentScheme.find(
-      (scheme) =>
-        scheme.reveal === board.filter((val) => val.isRevealed === true).length
+      (scheme) => scheme.reveal === board.filter((val) => val.isRevealed === true).length
     );
 
-    const currentMultiplier = toDecimals(
-      Number(currentRevealAmount?.multiplier) || 0,
-      2
-    );
+    const currentMultiplier = toDecimals(Number(currentRevealAmount?.multiplier) || 0, 2);
 
     return toDecimals((_wager * currentMultiplier) / 10000, 2);
   }, [board, minesCount, _wager]);
@@ -105,13 +99,9 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     const values = form.getValues();
 
-    if (
-      values.selectedCells.some(
-        (c) => c === true && gameStatus !== MINES_GAME_STATUS.ENDED
-      )
-    )
+    if (values.selectedCells.some((c) => c === true && gameStatus !== MINES_GAME_STATUS.ENDED))
       props.onSubmitGameForm(values);
-  }, [form.getValues("selectedCells")]);
+  }, [form.getValues('selectedCells')]);
 
   React.useEffect(() => {
     if (gameStatus == MINES_GAME_STATUS.ENDED) {
@@ -138,10 +128,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
               currentMultiplier={currentMultiplier}
             />
             <SceneContainer className="lg:wr-h-[740px] lg:wr-py-10 max-lg:!wr-border-0 max-lg:!wr-p-0">
-              <Mines.Scene
-                currentMultiplier={currentMultiplier}
-                isLoading={props.isLoading}
-              />
+              <Mines.Scene currentMultiplier={currentMultiplier} isLoading={props.isLoading} />
               <WinAnimation />
             </SceneContainer>
           </Mines.Game>

@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { CDN_URL } from "../../../constants";
-import { Form, FormField } from "../../../ui/form";
-import { VideoPokerResult } from "../constants";
-import useVideoPokerGameStore, { VideoPokerStatus } from "../store";
-import { CardStatus, parseCards, VideoPokerFormFields } from "../types";
-import { VideoPokerBetController } from "./bet-controller";
-import { VideoPokerResults } from "./game-scene";
-import { CardComponent } from "./game-scene/card";
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { CDN_URL } from '../../../constants';
+import { Form, FormField } from '../../../ui/form';
+import { VideoPokerResult } from '../constants';
+import useVideoPokerGameStore, { VideoPokerStatus } from '../store';
+import { CardStatus, parseCards, VideoPokerFormFields } from '../types';
+import { VideoPokerBetController } from './bet-controller';
+import { VideoPokerResults } from './game-scene';
+import { CardComponent } from './game-scene/card';
 
 interface TemplateProps {
   minWager?: number;
@@ -48,14 +48,9 @@ const VideoPokerTemplate = ({
   handleStartGame,
   onAnimationCompleted,
 }: TemplateProps) => {
-  const [currentCards, setCurrentCards] = React.useState<any[]>(
-    new Array(5).fill(0)
-  );
+  const [currentCards, setCurrentCards] = React.useState<any[]>(new Array(5).fill(0));
 
-  const { updateState, status } = useVideoPokerGameStore([
-    "updateState",
-    "status",
-  ]);
+  const { updateState, status } = useVideoPokerGameStore(['updateState', 'status']);
 
   const formSchema = z.object({
     wager: z
@@ -73,7 +68,7 @@ const VideoPokerTemplate = ({
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "onSubmit",
+    mode: 'onSubmit',
     defaultValues: {
       wager: minWager || 1,
       cardsToSend: [
@@ -86,7 +81,7 @@ const VideoPokerTemplate = ({
     },
   });
 
-  const wager = form.watch("wager");
+  const wager = form.watch('wager');
 
   const maxPayout = React.useMemo(() => {
     return wager * 100;
@@ -99,7 +94,7 @@ const VideoPokerTemplate = ({
     });
 
     if (status === VideoPokerStatus.Dealt) {
-      console.log("values", values.cardsToSend);
+      console.log('values', values.cardsToSend);
 
       await handleFinishGame(values);
     } else {
@@ -110,7 +105,7 @@ const VideoPokerTemplate = ({
   React.useEffect(() => {
     if (!activeGame.hasActiveGame) return;
 
-    form.setValue("cardsToSend", [
+    form.setValue('cardsToSend', [
       CardStatus.OPEN,
       CardStatus.OPEN,
       CardStatus.OPEN,
@@ -118,10 +113,7 @@ const VideoPokerTemplate = ({
       CardStatus.OPEN,
     ]);
 
-    const cards =
-      activeGame.cards == 0
-        ? new Array(5).fill(0)
-        : parseCards(activeGame.cards);
+    const cards = activeGame.cards == 0 ? new Array(5).fill(0) : parseCards(activeGame.cards);
 
     setCurrentCards(cards);
 
@@ -133,7 +125,7 @@ const VideoPokerTemplate = ({
   React.useEffect(() => {
     if (!settledCards) return;
 
-    form.setValue("cardsToSend", [
+    form.setValue('cardsToSend', [
       CardStatus.OPEN,
       CardStatus.OPEN,
       CardStatus.OPEN,
@@ -193,15 +185,15 @@ const VideoPokerTemplate = ({
             <SceneContainer
               className="wr-relative max-lg:wr-h-[420px] wr-h-[640px] lg:!wr-justify-start wr-overflow-hidden lg:wr-pb-0 lg:wr-pt-0 wr-flex wr-justify-end"
               style={{
-                perspectiveOrigin: "bottom",
-                perspective: "1000px",
+                perspectiveOrigin: 'bottom',
+                perspective: '1000px',
               }}
             >
               <img
                 src={`${CDN_URL}/video-poker/card-stack.png`}
                 width={170}
                 height={234}
-                alt={"card_stack"}
+                alt={'card_stack'}
                 className="wr-mb-[68px] wr-hidden lg:!wr-block"
               />
               <VideoPokerResults />
@@ -223,12 +215,7 @@ const VideoPokerTemplate = ({
                                 return (
                                   <React.Fragment>
                                     {currentCards?.map((card, i) => (
-                                      <CardComponent
-                                        card={card}
-                                        index={i}
-                                        key={i}
-                                        field={field}
-                                      />
+                                      <CardComponent card={card} index={i} key={i} field={field} />
                                     ))}
                                   </React.Fragment>
                                 );

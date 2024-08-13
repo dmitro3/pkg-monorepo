@@ -1,13 +1,13 @@
-import { ChipControllerFixed } from "../../../common/chip-controller-fixed";
-import { ChipFixed } from "../../../common/chip-controller-fixed/types";
-import { PreBetButton } from "../../../common/pre-bet-button";
-import { WagerCurrencyIcon } from "../../../common/wager";
-import { CDN_URL } from "../../../constants";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { Button } from "../../../ui/button";
-import { NumberInput } from "../../../ui/number-input";
-import { cn } from "../../../utils/style";
-import { BlackjackGameStatus } from "..";
+import { ChipControllerFixed } from '../../../common/chip-controller-fixed';
+import { ChipFixed } from '../../../common/chip-controller-fixed/types';
+import { PreBetButton } from '../../../common/pre-bet-button';
+import { WagerCurrencyIcon } from '../../../common/wager';
+import { CDN_URL } from '../../../constants';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { Button } from '../../../ui/button';
+import { NumberInput } from '../../../ui/number-input';
+import { cn } from '../../../utils/style';
+import { BlackjackGameStatus } from '..';
 
 interface BetControllerProps {
   wager: number;
@@ -55,15 +55,14 @@ export const BetController: React.FC<BetControllerProps> = ({
             onChange={onWagerChange}
             isDisabled={
               isDisabled ||
-              (status !== BlackjackGameStatus.NONE &&
-                status !== BlackjackGameStatus.FINISHED)
+              (status !== BlackjackGameStatus.NONE && status !== BlackjackGameStatus.FINISHED)
             }
           >
             <NumberInput.Container
               className={cn(
-                "wr-border wr-px-2 wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md wr-text-base wr-font-semibold wr-leading-4 wr-m-0",
+                'wr-border wr-px-2 wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md wr-text-base wr-font-semibold wr-leading-4 wr-m-0',
                 {
-                  ["wr-border wr-border-solid wr-border-red-600"]: !!(
+                  ['wr-border wr-border-solid wr-border-red-600']: !!(
                     wager > (maxWager || 2000) || wager < (minWager || 1)
                   ),
                 }
@@ -72,7 +71,7 @@ export const BetController: React.FC<BetControllerProps> = ({
               <span className="wr-mt-[1px] wr-text-md">$</span>
               <NumberInput.Input
                 className={cn(
-                  "wr-z-10 wr-border-none wr-bg-transparent wr-pl-1 wr-text-base wr-leading-4 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0"
+                  'wr-z-10 wr-border-none wr-bg-transparent wr-pl-1 wr-text-base wr-leading-4 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0'
                 )}
               />
               <WagerCurrencyIcon />
@@ -81,8 +80,7 @@ export const BetController: React.FC<BetControllerProps> = ({
         </div>
       </div>
 
-      {(status === BlackjackGameStatus.FINISHED ||
-        status === BlackjackGameStatus.NONE) && (
+      {(status === BlackjackGameStatus.FINISHED || status === BlackjackGameStatus.NONE) && (
         <ChipControllerFixed
           isDisabled={isDisabled}
           selectedChip={selectedChip}
@@ -108,28 +106,23 @@ export const BetController: React.FC<BetControllerProps> = ({
               </Button>
             )}
 
-            {status !== BlackjackGameStatus.FINISHED &&
-              status !== BlackjackGameStatus.NONE && (
-                <Button
-                  variant="third"
-                  size="xl"
-                  disabled={true}
-                  className="wr-w-full max-lg:wr-text-sm"
-                >
-                  In game...
-                </Button>
-              )}
+            {status !== BlackjackGameStatus.FINISHED && status !== BlackjackGameStatus.NONE && (
+              <Button
+                variant="third"
+                size="xl"
+                disabled={true}
+                className="wr-w-full max-lg:wr-text-sm"
+              >
+                In game...
+              </Button>
+            )}
 
             {status === BlackjackGameStatus.FINISHED && (
               <Button
                 variant="default"
                 size="xl"
                 className="wr-w-full max-lg:wr-max-w-[75px]"
-                disabled={
-                  isDisabled ||
-                  !isLastDistributionCompleted ||
-                  !isDistributionCompleted
-                }
+                disabled={isDisabled || !isLastDistributionCompleted || !isDistributionCompleted}
                 onClick={() => {
                   clickEffect.play();
                   onRebet();
@@ -147,8 +140,7 @@ export const BetController: React.FC<BetControllerProps> = ({
               disabled={
                 totalWager === 0 ||
                 isDisabled ||
-                (status !== BlackjackGameStatus.FINISHED &&
-                  status !== BlackjackGameStatus.NONE)
+                (status !== BlackjackGameStatus.FINISHED && status !== BlackjackGameStatus.NONE)
               }
               onClick={() => {
                 clickEffect.play();

@@ -1,25 +1,14 @@
-import * as React from "react";
-import { useFormContext } from "react-hook-form";
+import * as React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { CDN_URL } from "../constants";
-import { Button } from "../ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { cn } from "../utils/style";
-import { BetCount } from "./bet-count";
-import { BetCountSlider } from "./containers";
-import { StopGainLossInput } from "./stop-gain-loss-input";
-import {
-  WagerBalance,
-  WagerCurrency,
-  WagerInput,
-  WagerSetterButtons,
-} from "./wager";
+import { CDN_URL } from '../constants';
+import { Button } from '../ui/button';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { cn } from '../utils/style';
+import { BetCount } from './bet-count';
+import { BetCountSlider } from './containers';
+import { StopGainLossInput } from './stop-gain-loss-input';
+import { WagerBalance, WagerCurrency, WagerInput, WagerSetterButtons } from './wager';
 
 interface WagerFormFieldProps {
   customLabel?: string;
@@ -34,16 +23,9 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export const BetControllerTitle: React.FC<Props> = ({
-  children,
-  className,
-}) => {
+export const BetControllerTitle: React.FC<Props> = ({ children, className }) => {
   return (
-    <h1
-      className={cn("wr-text-lg wr-font-bold  lg:wr-flex wr-hidden", className)}
-    >
-      {children}
-    </h1>
+    <h1 className={cn('wr-text-lg wr-font-bold  lg:wr-flex wr-hidden', className)}>{children}</h1>
   );
 };
 
@@ -61,30 +43,18 @@ export const BetCountFormField: React.FC<{
         name="betCount"
         render={({ field }) => (
           <FormItem
-            className={cn("wr-mb-3 lg:wr-mb-6", {
-              "wr-hidden lg:!wr-block": hideSm,
+            className={cn('wr-mb-3 lg:wr-mb-6', {
+              'wr-hidden lg:!wr-block': hideSm,
             })}
           >
-            <FormLabel
-              className={cn(
-                "wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6"
-              )}
-            >
-              Multiple Bets (1-{maxValue}){" "}
+            <FormLabel className={cn('wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6')}>
+              Multiple Bets (1-{maxValue}){' '}
             </FormLabel>
 
             <FormControl>
               <div>
-                <BetCount
-                  isDisabled={isDisabled}
-                  maxValue={maxValue}
-                  {...field}
-                />
-                <BetCountSlider
-                  disabled={isDisabled}
-                  maxValue={maxValue}
-                  {...field}
-                />
+                <BetCount isDisabled={isDisabled} maxValue={maxValue} {...field} />
+                <BetCountSlider disabled={isDisabled} maxValue={maxValue} {...field} />
               </div>
             </FormControl>
             <FormMessage />
@@ -177,13 +147,9 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
       control={form.control}
       name="wager"
       render={({ field }) => (
-        <FormItem className={cn(className, "wr-mb-3 lg:wr-mb-6")}>
-          <FormLabel
-            className={cn(
-              "wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6"
-            )}
-          >
-            {customLabel ? customLabel : "Wager"}
+        <FormItem className={cn(className, 'wr-mb-3 lg:wr-mb-6')}>
+          <FormLabel className={cn('wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6')}>
+            {customLabel ? customLabel : 'Wager'}
             <div>
               <WagerBalance className="wr-text-zinc-100" />
               <WagerCurrency />
@@ -246,7 +212,7 @@ export const UnityWagerFormField: React.FC<WagerFormFieldProps> = ({
                 isDisabled={isDisabled || field.disabled}
                 hasError={!!form.formState.errors.wager}
                 containerClassName={cn(
-                  "wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md"
+                  'wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md'
                 )}
                 minWager={minWager}
                 maxWager={maxWager}
@@ -257,9 +223,7 @@ export const UnityWagerFormField: React.FC<WagerFormFieldProps> = ({
                 minWager={minWager}
                 maxWager={maxWager}
                 currentWager={field.value}
-                className={cn(
-                  "wr-bg-unity-white-15 wr-backdrop-blur-md wr-hidden lg:wr-block"
-                )}
+                className={cn('wr-bg-unity-white-15 wr-backdrop-blur-md wr-hidden lg:wr-block')}
               />
             </>
           </FormControl>
@@ -283,9 +247,7 @@ export const UnityBetCountFormField: React.FC<{
       name="betCount"
       render={({ field }) => (
         <FormItem className={cn(className)}>
-          <FormLabel className="wr-text-unity-white-50">
-            Bet Count {children}
-          </FormLabel>
+          <FormLabel className="wr-text-unity-white-50">Bet Count {children}</FormLabel>
 
           <FormControl>
             <BetCount
@@ -311,16 +273,9 @@ export const UnityFullscreenButton: React.FC<{
       onClick={() => onChange(!isFullscreen)}
       variant="secondary"
       type="button"
-      className={cn(
-        "wr-h-9 wr-w-9 wr-p-0 max-lg:wr-hidden",
-        className && className
-      )}
+      className={cn('wr-h-9 wr-w-9 wr-p-0 max-lg:wr-hidden', className && className)}
     >
-      <img
-        src={`${CDN_URL}/icons/icon-fullscreen.svg`}
-        width={24}
-        height={24}
-      />
+      <img src={`${CDN_URL}/icons/icon-fullscreen.svg`} width={24} height={24} />
     </Button>
   );
 };

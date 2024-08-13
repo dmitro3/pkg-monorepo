@@ -1,8 +1,8 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-import { createSelectors } from "../../utils/store";
-import { MultiplayerGameStatus } from "../core/type";
-import { Multiplier, WheelColor } from "./constants";
+import { createSelectors } from '../../utils/store';
+import { MultiplayerGameStatus } from '../core/type';
+import { Multiplier, WheelColor } from './constants';
 
 type BetData = {
   bet: number;
@@ -42,10 +42,10 @@ interface WheelGameStateActions {
 }
 
 const defaultWheelParticipant: MultiplierArray = {
-  "2x": {},
-  "3x": {},
-  "6x": {},
-  "48x": {},
+  '2x': {},
+  '3x': {},
+  '6x': {},
+  '48x': {},
 };
 
 export type WheelGameStore = WheelGameState & WheelGameStateActions;
@@ -61,11 +61,9 @@ export const wheelGameStore = create<WheelGameStore>()((set, get) => ({
   isGamblerParticipant: false,
   showResult: false,
   setShowResult: (showResult: boolean) => set(() => ({ showResult })),
-  setIsGamblerParticipant: (isGamblerParticipant: boolean) =>
-    set(() => ({ isGamblerParticipant })),
+  setIsGamblerParticipant: (isGamblerParticipant: boolean) => set(() => ({ isGamblerParticipant })),
   isParticipantsOpen: false,
-  setIsParticipantsOpen: (isParticipantsOpen: boolean) =>
-    set(() => ({ isParticipantsOpen })),
+  setIsParticipantsOpen: (isParticipantsOpen: boolean) => set(() => ({ isParticipantsOpen })),
   wheelParticipants: defaultWheelParticipant,
   setWheelParticipant: (multiplier: Multiplier, data: BetData) =>
     set((state) => ({
@@ -81,8 +79,7 @@ export const wheelGameStore = create<WheelGameStore>()((set, get) => ({
   resetWheelParticipant: () =>
     set((state) => ({ ...state, wheelParticipants: defaultWheelParticipant })),
   allParticipantCount: () => 0,
-  updateState: (newState: Partial<WheelGameState>) =>
-    set((state) => ({ ...state, ...newState })),
+  updateState: (newState: Partial<WheelGameState>) => set((state) => ({ ...state, ...newState })),
   updateTime: (joiningStart: number, joiningFinish: number) =>
     set((state) => ({ ...state, joiningStart, joiningFinish })),
   resetState: () =>
@@ -97,5 +94,4 @@ export const wheelGameStore = create<WheelGameStore>()((set, get) => ({
     })),
 }));
 
-export const useWheelGameStore =
-  createSelectors<WheelGameStore>(wheelGameStore);
+export const useWheelGameStore = createSelectors<WheelGameStore>(wheelGameStore);

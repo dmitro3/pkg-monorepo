@@ -1,30 +1,22 @@
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { useFormContext } from "react-hook-form";
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import { useFormContext } from 'react-hook-form';
 
-import { CDN_URL } from "../../../../constants";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "../../../../ui/form";
-import { cn } from "../../../../utils/style";
-import { toFormatted } from "../../../../utils/web3";
-import { CoinSide, WIN_MULTIPLIER } from "../../constants";
-import useCoinFlipGameStore from "../../store";
-import { CoinFlipForm } from "../../types";
+import { CDN_URL } from '../../../../constants';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { FormControl, FormField, FormItem, FormLabel } from '../../../../ui/form';
+import { cn } from '../../../../utils/style';
+import { toFormatted } from '../../../../utils/web3';
+import { CoinSide, WIN_MULTIPLIER } from '../../constants';
+import useCoinFlipGameStore from '../../store';
+import { CoinFlipForm } from '../../types';
 
 export const CoinFlipController = () => {
   const form = useFormContext() as CoinFlipForm;
   const clickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
 
-  const wager = form.watch("wager");
+  const wager = form.watch('wager');
 
-  const { gameStatus } = useCoinFlipGameStore(["gameStatus"]);
+  const { gameStatus } = useCoinFlipGameStore(['gameStatus']);
 
   return (
     <div className="wr-flex wr-items-center wr-w-full wr-mb-3 lg:wr-mb-6">
@@ -33,9 +25,7 @@ export const CoinFlipController = () => {
         name="coinSide"
         render={({ field }) => (
           <FormItem className="wr-h-10 wr-w-full lg:!wr-mb-[60px] wr-mb-0">
-            <FormLabel className="lg:!wr-block wr-hidden">
-              Choose Side
-            </FormLabel>
+            <FormLabel className="lg:!wr-block wr-hidden">Choose Side</FormLabel>
             <FormControl>
               <RadioGroupPrimitive.Root
                 onValueChange={(v) => {
@@ -45,9 +35,7 @@ export const CoinFlipController = () => {
                 className="wr-grid wr-h-full wr-w-full wr-grid-cols-2 wr-items-center wr-justify-center wr-gap-0 wr-rounded-md wr-bg-unity-white-15 wr-font-semibold"
                 defaultValue={field.value as unknown as string}
                 disabled={
-                  form.formState.isSubmitting ||
-                  form.formState.isLoading ||
-                  gameStatus == "PLAYING"
+                  form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
                 }
               >
                 <FormItem className="wr-mb-0 wr-h-full wr-text-center">
@@ -76,10 +64,10 @@ export const CoinFlipController = () => {
                       </RadioGroupPrimitive.Item>
                       <span
                         className={cn(
-                          "wr-relative wr-top-2 lg:!wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 wr-hidden",
+                          'wr-relative wr-top-2 lg:!wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 wr-hidden',
                           {
-                            "wr-text-lime-500": field.value === CoinSide.HEADS,
-                            "wr-text-red-500": field.value === CoinSide.TAILS,
+                            'wr-text-lime-500': field.value === CoinSide.HEADS,
+                            'wr-text-red-500': field.value === CoinSide.TAILS,
                           }
                         )}
                       >
@@ -117,10 +105,10 @@ export const CoinFlipController = () => {
                     </FormControl>
                     <span
                       className={cn(
-                        "wr-relative wr-top-2 lg:!wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 wr-hidden",
+                        'wr-relative wr-top-2 lg:!wr-flex wr-items-center wr-justify-center wr-gap-1 wr-text-zinc-100 wr-hidden',
                         {
-                          "wr-text-lime-500": field.value === CoinSide.TAILS,
-                          "wr-text-red-500": field.value === CoinSide.HEADS,
+                          'wr-text-lime-500': field.value === CoinSide.TAILS,
+                          'wr-text-red-500': field.value === CoinSide.HEADS,
                         }
                       )}
                     >

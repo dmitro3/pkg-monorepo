@@ -1,10 +1,6 @@
-import TWEEN, { Easing } from "@tweenjs/tween.js";
+import TWEEN, { Easing } from '@tweenjs/tween.js';
 
-import {
-  baseCdnUrl,
-  effects,
-  SoundEffects,
-} from "../../../../hooks/use-audio-effect";
+import { baseCdnUrl, effects, SoundEffects } from '../../../../hooks/use-audio-effect';
 
 export declare type EasingFunction = (amount: number) => number;
 
@@ -18,15 +14,13 @@ class WheelRotate {
   private sound!: HTMLAudioElement;
 
   public get isInitialized() {
-    return typeof this.wheel !== "undefined";
+    return typeof this.wheel !== 'undefined';
   }
 
   public setWheel(wheel: HTMLDivElement): this {
     this.wheel = wheel;
 
-    this.sound = new Audio(
-      `${baseCdnUrl}/${effects.get(SoundEffects.WHEEL_STEP)}`,
-    );
+    this.sound = new Audio(`${baseCdnUrl}/${effects.get(SoundEffects.WHEEL_STEP)}`);
 
     return this;
   }
@@ -63,7 +57,7 @@ class WheelRotate {
       this.degree,
       this.calcMovementTo(toDegree),
       Easing.Circular.Out,
-      6000,
+      6000
     );
   }
 
@@ -97,7 +91,7 @@ class WheelRotate {
     from: number,
     to: number,
     easing: EasingFunction,
-    duration: number,
+    duration: number
   ): Promise<void> {
     return new Promise((resolve) => {
       const tween = new TWEEN.Tween({ z: from })
@@ -135,11 +129,11 @@ class WheelRotate {
 
       this.sound.currentTime = 0;
 
-      const volume = Number(localStorage["volume"]) || 0;
+      const volume = Number(localStorage['volume']) || 0;
 
       this.sound.volume = volume / 100;
 
-      this.sound.play().catch(() => console.log("click to sound on!"));
+      this.sound.play().catch(() => console.log('click to sound on!'));
     }
   }
 

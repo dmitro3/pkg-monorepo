@@ -1,25 +1,20 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
 
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { Form } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { toDecimals } from "../../../utils/web3";
-import { Roll } from "..";
-import {
-  ALL_DICES,
-  LUCK_MULTIPLIER,
-  MAX_BET_COUNT,
-  MIN_BET_COUNT,
-} from "../constant";
-import { DICE, RollFormFields } from "../types";
-import { BetController } from "./bet-controller";
-import { RollGameProps } from "./game";
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { Form } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import { toDecimals } from '../../../utils/web3';
+import { Roll } from '..';
+import { ALL_DICES, LUCK_MULTIPLIER, MAX_BET_COUNT, MIN_BET_COUNT } from '../constant';
+import { DICE, RollFormFields } from '../types';
+import { BetController } from './bet-controller';
+import { RollGameProps } from './game';
 
 type TemplateOptions = {
   scene?: {
@@ -49,9 +44,9 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
       }),
     betCount: z
       .number()
-      .min(MIN_BET_COUNT, { message: "Minimum bet count is 1" })
+      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 1' })
       .max(MAX_BET_COUNT, {
-        message: "Maximum bet count is 100",
+        message: 'Maximum bet count is 100',
       }),
     stopGain: z.number(),
     stopLoss: z.number(),
@@ -59,10 +54,10 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
       .array(z.nativeEnum(DICE))
       .nonempty()
       .min(1, {
-        message: "You have to select at least one dice.",
+        message: 'You have to select at least one dice.',
       })
       .max(5, {
-        message: "You can select up to 5 dices.",
+        message: 'You can select up to 5 dices.',
       }),
   });
 
@@ -70,7 +65,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "all",
+    mode: 'all',
     defaultValues: {
       wager: props?.minWager || 1,
       betCount: 1,
@@ -80,7 +75,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
     },
   });
 
-  const dices = form.watch("dices");
+  const dices = form.watch('dices');
 
   const { winMultiplier, winChance } = React.useMemo(() => {
     if (!dices.length)
@@ -90,10 +85,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
       };
 
     return {
-      winMultiplier: toDecimals(
-        (ALL_DICES.length / dices.length) * LUCK_MULTIPLIER,
-        4
-      ),
+      winMultiplier: toDecimals((ALL_DICES.length / dices.length) * LUCK_MULTIPLIER, 4),
       winChance: toDecimals((dices.length * 100) / ALL_DICES.length, 2),
     };
   }, [dices]);
@@ -119,9 +111,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
           />
 
           <SceneContainer
-            className={cn(
-              "wr-h-[640px] max-md:wr-h-[360px] lg:wr-py-12 wr-relative"
-            )}
+            className={cn('wr-h-[640px] max-md:wr-h-[360px] lg:wr-py-12 wr-relative')}
             style={{
               backgroundImage: options?.scene?.backgroundImage,
             }}
@@ -129,10 +119,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
             <Roll.Game {...props}>
               <Roll.LastBets />
               <Roll.GameArea {...props} />
-              <Roll.RollController
-                multiplier={winMultiplier}
-                winChance={winChance}
-              />
+              <Roll.RollController multiplier={winMultiplier} winChance={winChance} />
             </Roll.Game>
           </SceneContainer>
         </GameContainer>

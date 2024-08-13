@@ -1,35 +1,31 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
 
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { CDN_URL } from "../../../constants";
-import { useGameOptions } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { Form } from "../../../ui/form";
-import { wait } from "../../../utils/promise";
-import { cn } from "../../../utils/style";
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { CDN_URL } from '../../../constants';
+import { useGameOptions } from '../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { Form } from '../../../ui/form';
+import { wait } from '../../../utils/promise';
+import { cn } from '../../../utils/style';
 import {
   BlackjackCard,
   BlackjackGameStatus,
   distributeNewCards,
   getBlackjackSuit,
   TIMEOUT,
-} from "../../blackjack";
-import {
-  SingleBJDealFormFields,
-  SingleBlackjackGameProps,
-  SingleBlackjackHandIndex,
-} from "..";
-import { BetController } from "./bet-controller";
-import { CardArea } from "./card-area";
-import { DealerCardArea } from "./dealer-card-area";
-import styles from "./single-styles.module.css";
-import { SplittedCardArea } from "./splitted-card-area";
+} from '../../blackjack';
+import { SingleBJDealFormFields, SingleBlackjackGameProps, SingleBlackjackHandIndex } from '..';
+import { BetController } from './bet-controller';
+import { CardArea } from './card-area';
+import { DealerCardArea } from './dealer-card-area';
+import styles from './single-styles.module.css';
+import { SplittedCardArea } from './splitted-card-area';
 
 type TemplateOptions = {
   scene?: {
@@ -65,24 +61,20 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
   onFormChange,
 }) => {
   // ui cards
-  const [dealerCards, setDealerCards] = React.useState<
-    (BlackjackCard | null)[]
-  >([]);
+  const [dealerCards, setDealerCards] = React.useState<(BlackjackCard | null)[]>([]);
 
-  const [firstHandCards, setFirstHandCards] = React.useState<
-    (BlackjackCard | null)[]
-  >([]);
+  const [firstHandCards, setFirstHandCards] = React.useState<(BlackjackCard | null)[]>([]);
 
   const [splittedFirstHandCards, setSplittedFirstHandCards] = React.useState<
     (BlackjackCard | null)[]
   >([]);
 
   // splitted card states
-  const [firstHandSplittedCard, setFirstHandSplittedCard] =
-    React.useState<BlackjackCard | null>(null);
+  const [firstHandSplittedCard, setFirstHandSplittedCard] = React.useState<BlackjackCard | null>(
+    null
+  );
 
-  const [isDistributionCompleted, setIsDistrubitionCompleted] =
-    React.useState<boolean>(false);
+  const [isDistributionCompleted, setIsDistrubitionCompleted] = React.useState<boolean>(false);
 
   const flipEffect = useAudioEffect(SoundEffects.FLIP_CARD);
 
@@ -99,12 +91,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     )
       return true;
     else return false;
-  }, [
-    dealerCards,
-    activeGameHands.dealer,
-    isDistributionCompleted,
-    activeGameData.status,
-  ]);
+  }, [dealerCards, activeGameHands.dealer, isDistributionCompleted, activeGameData.status]);
 
   const activeHandByIndex = React.useMemo(() => {
     switch (activeGameData.activeHandIndex) {
@@ -156,10 +143,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     const dealerFirstCard = dealer.cards?.cards[0];
 
     if (dealerFirstCard) {
-      setDealerCards((prev) => [
-        ...prev,
-        new BlackjackCard(dealerFirstCard, getBlackjackSuit()),
-      ]);
+      setDealerCards((prev) => [...prev, new BlackjackCard(dealerFirstCard, getBlackjackSuit())]);
 
       flipEffect.play();
 
@@ -217,10 +201,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
       const dealerCard = dealer.cards?.cards[i];
 
       if (dealerCard) {
-        setDealerCards((prev) => [
-          ...prev,
-          new BlackjackCard(dealerCard, getBlackjackSuit()),
-        ]);
+        setDealerCards((prev) => [...prev, new BlackjackCard(dealerCard, getBlackjackSuit())]);
 
         flipEffect.play();
 
@@ -245,12 +226,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     if (isDistributionCompleted) {
       const cards = activeGameHands.firstHand.cards?.cards || [];
 
-      distributeNewCards(
-        cards,
-        firstHandCards,
-        setFirstHandCards,
-        flipEffect.play
-      );
+      distributeNewCards(cards, firstHandCards, setFirstHandCards, flipEffect.play);
     }
   }, [activeGameHands.firstHand.cards?.cards]);
 
@@ -258,12 +234,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     if (isDistributionCompleted) {
       const cards = activeGameHands.splittedFirstHand.cards?.cards || [];
 
-      distributeNewCards(
-        cards,
-        splittedFirstHandCards,
-        setSplittedFirstHandCards,
-        flipEffect.play
-      );
+      distributeNewCards(cards, splittedFirstHandCards, setSplittedFirstHandCards, flipEffect.play);
     }
   }, [activeGameHands.splittedFirstHand.cards?.cards]);
 
@@ -286,10 +257,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
 
       flipEffect.play();
     }
-  }, [
-    activeGameHands.firstHand.hand?.isSplitted,
-    activeGameHands.firstHand.cards?.cards[1],
-  ]);
+  }, [activeGameHands.firstHand.hand?.isSplitted, activeGameHands.firstHand.cards?.cards[1]]);
 
   React.useEffect(() => {
     if (initialDataFetched) {
@@ -320,7 +288,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "onSubmit",
+    mode: 'onSubmit',
     defaultValues: {
       wager: minWager || 2,
     },
@@ -329,7 +297,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
   // this effects used for get initial betAmounts
   React.useEffect(() => {
     if (initialDataFetched)
-      form.setValue("wager", activeGameHands.firstHand.hand?.chipsAmount || 0);
+      form.setValue('wager', activeGameHands.firstHand.hand?.chipsAmount || 0);
   }, [activeGameHands.firstHand.hand?.chipsAmount, initialDataFetched]);
 
   React.useEffect(() => {
@@ -352,7 +320,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     return () => subscription.unsubscribe();
   }, [form.watch]);
 
-  const wager = form.watch("wager");
+  const wager = form.watch('wager');
 
   return (
     <Form {...form}>
@@ -375,22 +343,18 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
             onInsure={onInsure}
           />
           <SceneContainer
-            className={cn(
-              "wr-relative wr-flex !wr-p-0 wr-max-w-full",
-              styles.sceneWrapper
-            )}
+            className={cn('wr-relative wr-flex !wr-p-0 wr-max-w-full', styles.sceneWrapper)}
             style={{
-              backgroundPosition: "center",
+              backgroundPosition: 'center',
               backgroundImage:
-                options?.scene?.backgroundImage ||
-                `url(${CDN_URL}/blackjack/blackjack-bg.png)`,
+                options?.scene?.backgroundImage || `url(${CDN_URL}/blackjack/blackjack-bg.png)`,
             }}
           >
             {/* canvas start */}
             <div
               className={cn(
                 styles.canvas,
-                "wr-absolute wr-h-full wr-max-w-[750px] wr-w-[calc(100%_-_28px)] wr-select-none wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-overflow-hidden"
+                'wr-absolute wr-h-full wr-max-w-[750px] wr-w-[calc(100%_-_28px)] wr-select-none wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-overflow-hidden'
               )}
             >
               <img
@@ -440,9 +404,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
                     splittedCard={firstHandSplittedCard}
                     isDistributionCompleted={isDistributionCompleted}
                     isLastDistributionCompleted={isLastDistributionCompleted}
-                    hasSplittedCards={
-                      !!activeGameHands.splittedFirstHand.cards?.amountCards
-                    }
+                    hasSplittedCards={!!activeGameHands.splittedFirstHand.cards?.amountCards}
                   />
                 </>
               )}

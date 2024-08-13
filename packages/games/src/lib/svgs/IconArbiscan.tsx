@@ -1,14 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgIconArbiscan = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={20}
-    height={20}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
     <mask
       id="icon-arbiscan_svg__a"
       width={16}
@@ -17,7 +11,7 @@ const SvgIconArbiscan = (props: SVGProps<SVGSVGElement>) => (
       y={1}
       maskUnits="userSpaceOnUse"
       style={{
-        maskType: "luminance",
+        maskType: 'luminance',
       }}
     >
       <path fill="#fff" d="M17.11 1.666H2.335v16.667H17.11z" />

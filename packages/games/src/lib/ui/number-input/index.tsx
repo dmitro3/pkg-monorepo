@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import * as Slider from "@radix-ui/react-slider";
-import React from "react";
-import { NumericFormat } from "react-number-format";
+import * as Slider from '@radix-ui/react-slider';
+import React from 'react';
+import { NumericFormat } from 'react-number-format';
 
 // import { ArrowDown, ArrowUp } from 'src/components/icons';
 // import { TokenAddress, getTokenDisplayDecimal } from "@winrlabs/chain-config";
-import { ChevronDown } from "../../svgs";
-import { cn } from "../../utils/style";
-import { toFormatted } from "../../utils/web3";
+import { ChevronDown } from '../../svgs';
+import { cn } from '../../utils/style';
+import { toFormatted } from '../../utils/web3';
 
 // min max tool
 // label
@@ -51,10 +51,10 @@ const ErrorMessage: React.FC<{
   return (
     <div
       className={cn(
-        "wr-text-red-600 wr-transition-all wr-motion-safe:ease-in",
+        'wr-text-red-600 wr-transition-all wr-motion-safe:ease-in',
         {
-          "wr-h-10 wr-mt-1": hasErrorMessage,
-          "wr-h-0": !hasErrorMessage,
+          'wr-h-10 wr-mt-1': hasErrorMessage,
+          'wr-h-0': !hasErrorMessage,
         },
         className
       )}
@@ -66,15 +66,15 @@ const ErrorMessage: React.FC<{
 
 type RootProps = Pick<
   INumberInputContext,
-  | "maxValue"
-  | "minValue"
-  | "onChange"
-  | "initialValue"
-  | "isDisabled"
-  | "value"
-  | "setHasError"
-  | "hasSlider"
-  | "hasExtraField"
+  | 'maxValue'
+  | 'minValue'
+  | 'onChange'
+  | 'initialValue'
+  | 'isDisabled'
+  | 'value'
+  | 'setHasError'
+  | 'hasSlider'
+  | 'hasExtraField'
 > & {
   className?: string;
   errorClassName?: string;
@@ -100,7 +100,7 @@ const Root: React.FC<RootProps & { children: React.ReactNode }> = ({
   secondaryValue,
   sliderStep,
 }) => {
-  const [errorMessage, setErrorMessage] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   React.useEffect(() => {
     if (initialValue) onChange(initialValue);
@@ -112,13 +112,13 @@ const Root: React.FC<RootProps & { children: React.ReactNode }> = ({
     if ((maxValue && _value > maxValue) || (minValue && _value < minValue)) {
       setErrorMessage(
         `Value must be between ${toFormatted(minValue || 0, 5)} and ${
-          toFormatted(maxValue || 0, 5) || "∞"
+          toFormatted(maxValue || 0, 5) || '∞'
         }`
       );
 
       setHasError && setHasError(true);
     } else {
-      setErrorMessage("");
+      setErrorMessage('');
 
       setHasError && setHasError(false);
     }
@@ -147,7 +147,7 @@ const Root: React.FC<RootProps & { children: React.ReactNode }> = ({
             errorMessage={errorMessage}
           />
         )}
-        {secondaryValue ? <div>${toFormatted(secondaryValue, 0)}</div> : ""}
+        {secondaryValue ? <div>${toFormatted(secondaryValue, 0)}</div> : ''}
       </fieldset>
     </NumberInputContext.Provider>
   );
@@ -157,9 +157,7 @@ const LabelText: React.FC<{
   className?: string;
   children?: React.ReactNode;
 }> = ({ children, className }) => {
-  return (
-    <p className={cn("wr-mb-3 wr-text-zinc-500", className)}>{children}</p>
-  );
+  return <p className={cn('wr-mb-3 wr-text-zinc-500', className)}>{children}</p>;
 };
 
 const LabelBalance: React.FC<{
@@ -179,9 +177,7 @@ const LabelBalance: React.FC<{
         }
       }}
     >
-      <span>
-        {/* {toFormatted(balance, getTokenDisplayDecimal({ token: unit }))} */}
-      </span>
+      <span>{/* {toFormatted(balance, getTokenDisplayDecimal({ token: unit }))} */}</span>
       {unit}
     </div>
   );
@@ -208,11 +204,11 @@ const Container: React.FC<{
   return (
     <div
       className={cn(
-        "wr-relative wr-flex wr-h-10 wr-w-full wr-items-center wr-rounded-md wr-border wr-border-zinc-800",
+        'wr-relative wr-flex wr-h-10 wr-w-full wr-items-center wr-rounded-md wr-border wr-border-zinc-800',
         className,
         {
-          ["wr-border-red-600"]: !!errorMessage,
-          ["wr-pointer-events-none wr-opacity-50"]: isDisabled,
+          ['wr-border-red-600']: !!errorMessage,
+          ['wr-pointer-events-none wr-opacity-50']: isDisabled,
         }
       )}
     >
@@ -227,7 +223,7 @@ const Input: React.FC<{
   className: string;
   id?: string;
   prefix?: string;
-}> = ({ placeholder, decimalScale = 4, className, id, prefix = "" }) => {
+}> = ({ placeholder, decimalScale = 4, className, id, prefix = '' }) => {
   const { value, onChange, isDisabled } = useNumberInput();
 
   return (
@@ -246,7 +242,7 @@ const Input: React.FC<{
       thousandSeparator=","
       prefix={prefix}
       className={cn(
-        "wr-h-full wr-w-full wr-rounded-md wr-border-none wr-bg-transparent wr-p-0 wr-py-2 wr-outline-none",
+        'wr-h-full wr-w-full wr-rounded-md wr-border-none wr-bg-transparent wr-p-0 wr-py-2 wr-outline-none',
         className
       )}
     />
@@ -261,7 +257,7 @@ const InputUnit: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div
       className={
-        "wr-absolute wr-left-2 wr-top-1/2 wr-mr-1 wr-flex wr-h-5 wr-w-5 -wr-translate-y-1/2 wr-items-center wr-justify-center"
+        'wr-absolute wr-left-2 wr-top-1/2 wr-mr-1 wr-flex wr-h-5 wr-w-5 -wr-translate-y-1/2 wr-items-center wr-justify-center'
       }
     >
       {children}
@@ -274,26 +270,18 @@ const AdjustValue: React.FC = () => {
 
   const [isMouseDown, setIsMouseDown] = React.useState(false);
 
-  const [action, setAction] = React.useState<
-    "increase" | "decrease" | undefined
-  >();
+  const [action, setAction] = React.useState<'increase' | 'decrease' | undefined>();
 
   const [step, setStep] = React.useState(0.001);
 
-  const handleArrows = ({
-    step,
-    type,
-  }: {
-    step: number;
-    type: "increase" | "decrease";
-  }) => {
+  const handleArrows = ({ step, type }: { step: number; type: 'increase' | 'decrease' }) => {
     const _value = value || 0;
 
     const _maxValue = maxValue || 10000000000000;
 
     const _minValue = minValue || 0;
 
-    if (type === "increase") {
+    if (type === 'increase') {
       if (_value + step > _maxValue) return;
 
       onChange(_value + step);
@@ -331,10 +319,10 @@ const AdjustValue: React.FC = () => {
     <div>
       <ChevronDown
         onClick={() => {
-          handleArrows({ step, type: "increase" });
+          handleArrows({ step, type: 'increase' });
         }}
         onMouseDown={() => {
-          setAction("increase");
+          setAction('increase');
 
           setIsMouseDown(true);
         }}
@@ -345,10 +333,10 @@ const AdjustValue: React.FC = () => {
       />
       <ChevronDown
         onClick={() => {
-          handleArrows({ step, type: "decrease" });
+          handleArrows({ step, type: 'decrease' });
         }}
         onMouseDown={() => {
-          setAction("decrease");
+          setAction('decrease');
 
           setIsMouseDown(true);
         }}
@@ -382,11 +370,11 @@ const SliderInput: React.FC = () => {
   } = useNumberInput();
 
   const handleChange = (_value: number[]) => {
-    if (typeof min !== "undefined" && min > _value[0]!) {
+    if (typeof min !== 'undefined' && min > _value[0]!) {
       _value[0] = min;
     }
 
-    if (typeof max !== "undefined" && _value[0]! > max) {
+    if (typeof max !== 'undefined' && _value[0]! > max) {
       _value[0] = max;
     }
 

@@ -1,15 +1,15 @@
-import * as SliderPrimitive from "@radix-ui/react-slider";
-import React from "react";
-import { useFormContext } from "react-hook-form";
-import { useDebounce } from "use-debounce";
+import * as SliderPrimitive from '@radix-ui/react-slider';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useDebounce } from 'use-debounce';
 
-import { cn } from "../../../../lib/utils/style";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { FormControl, FormField, FormItem } from "../../../ui/form";
-import { toDecimals } from "../../../utils/web3";
-import { useDiceGameStore } from "..";
-import { MAX_VALUE, MIN_VALUE } from "../constant";
-import { DiceForm } from "../types";
+import { cn } from '../../../../lib/utils/style';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { FormControl, FormField, FormItem } from '../../../ui/form';
+import { toDecimals } from '../../../utils/web3';
+import { useDiceGameStore } from '..';
+import { MAX_VALUE, MIN_VALUE } from '../constant';
+import { DiceForm } from '../types';
 
 export interface SliderTrackOptions {
   color?: string;
@@ -26,11 +26,11 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
   const form = useFormContext() as DiceForm;
   const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
 
-  const { gameStatus } = useDiceGameStore(["gameStatus"]);
+  const { gameStatus } = useDiceGameStore(['gameStatus']);
 
-  const rollValue = form.watch("rollValue");
+  const rollValue = form.watch('rollValue');
 
-  const rollType = form.watch("rollType");
+  const rollType = form.watch('rollType');
 
   const debouncedRollValue = useDebounce(rollValue, 50);
 
@@ -48,13 +48,13 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
             <FormControl>
               <SliderPrimitive.Root
                 className={cn(
-                  "wr-relative wr-flex wr-h-6 wr-cursor-pointer wr-touch-none wr-select-none wr-items-center",
+                  'wr-relative wr-flex wr-h-6 wr-cursor-pointer wr-touch-none wr-select-none wr-items-center',
                   {
-                    "wr-pointer-events-none wr-cursor-not-allowed":
+                    'wr-pointer-events-none wr-cursor-not-allowed':
                       form.formState.isSubmitting ||
                       form.formState.isLoading ||
                       isLoading ||
-                      gameStatus == "PLAYING",
+                      gameStatus == 'PLAYING',
                   }
                 )}
                 defaultValue={[rollValue]}
@@ -65,9 +65,9 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
 
                   const { rollType } = form.getValues();
 
-                  const newValue = rollType === "UNDER" ? e[0] : 100 - e[0]!;
+                  const newValue = rollType === 'UNDER' ? e[0] : 100 - e[0]!;
 
-                  form.setValue("winChance", newValue!, {
+                  form.setValue('winChance', newValue!, {
                     shouldValidate: true,
                   });
                 }}
@@ -77,20 +77,18 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
               >
                 <SliderPrimitive.Track
                   className={cn(
-                    "wr-relative wr-h-6 wr-grow wr-rounded-sm wr-transition-all wr-duration-300 wr-ease-linear"
+                    'wr-relative wr-h-6 wr-grow wr-rounded-sm wr-transition-all wr-duration-300 wr-ease-linear'
                   )}
                   style={{
-                    background:
-                      rollType === "OVER" ? track?.activeColor : track?.color,
+                    background: rollType === 'OVER' ? track?.activeColor : track?.color,
                   }}
                 >
                   <SliderPrimitive.Range
                     className={cn(
-                      "wr-absolute wr-h-full wr-rounded-sm wr-transition-all wr-duration-300 wr-ease-linear"
+                      'wr-absolute wr-h-full wr-rounded-sm wr-transition-all wr-duration-300 wr-ease-linear'
                     )}
                     style={{
-                      background:
-                        rollType === "OVER" ? track?.color : track?.activeColor,
+                      background: rollType === 'OVER' ? track?.color : track?.activeColor,
                     }}
                   />
                 </SliderPrimitive.Track>
@@ -99,10 +97,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                   aria-label="Volume"
                 >
                   <div className="wr-absolute -wr-top-[50px] wr-text-4xl wr-font-bold">
-                    {toDecimals(
-                      rollValue <= MAX_VALUE ? rollValue : MIN_VALUE,
-                      2
-                    )}
+                    {toDecimals(rollValue <= MAX_VALUE ? rollValue : MIN_VALUE, 2)}
                   </div>
                   <div className="wr-flex wr-gap-[6px]">
                     <div className="wr-h-[34px] wr-w-[6px] wr-rounded-[2px] wr-bg-zinc-400" />

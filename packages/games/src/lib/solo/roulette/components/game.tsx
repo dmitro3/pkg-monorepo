@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import { useGameSkip } from "../../../game-provider";
-import useRouletteGameStore from "../store";
-import { RouletteGameProps } from "../types";
+import { useGameSkip } from '../../../game-provider';
+import useRouletteGameStore from '../store';
+import { RouletteGameProps } from '../types';
 
 export const RouletteGame = ({
   gameResults,
@@ -11,8 +11,8 @@ export const RouletteGame = ({
   children: React.ReactNode;
 }) => {
   const { updateGameStatus, updateRouletteGameResults } = useRouletteGameStore([
-    "updateRouletteGameResults",
-    "updateGameStatus",
+    'updateRouletteGameResults',
+    'updateGameStatus',
   ]);
 
   const { updateSkipAnimation, isAnimationSkipped } = useGameSkip();
@@ -20,7 +20,7 @@ export const RouletteGame = ({
   React.useEffect(() => {
     if (gameResults.length && !isAnimationSkipped) {
       updateRouletteGameResults(gameResults);
-      updateGameStatus("PLAYING");
+      updateGameStatus('PLAYING');
     }
   }, [gameResults, isAnimationSkipped]);
 

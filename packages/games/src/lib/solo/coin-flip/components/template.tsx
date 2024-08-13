@@ -1,23 +1,18 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
 
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { Form } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { CoinFlip, CoinFlipFormFields } from "..";
-import {
-  CoinSide,
-  MAX_BET_COUNT,
-  MIN_BET_COUNT,
-  WIN_MULTIPLIER,
-} from "../constants";
-import { BetController } from "./bet-controller";
-import { CoinFlipGameProps } from "./game";
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { Form } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import { CoinFlip, CoinFlipFormFields } from '..';
+import { CoinSide, MAX_BET_COUNT, MIN_BET_COUNT, WIN_MULTIPLIER } from '../constants';
+import { BetController } from './bet-controller';
+import { CoinFlipGameProps } from './game';
 
 type TemplateOptions = {
   scene?: {
@@ -48,9 +43,9 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       }),
     betCount: z
       .number()
-      .min(MIN_BET_COUNT, { message: "Minimum bet count is 1" })
+      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 1' })
       .max(MAX_BET_COUNT, {
-        message: "Maximum bet count is 100",
+        message: 'Maximum bet count is 100',
       }),
     stopGain: z.number(),
     stopLoss: z.number(),
@@ -61,7 +56,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "onSubmit",
+    mode: 'onSubmit',
     defaultValues: {
       wager: props?.minWager || 1,
       betCount: 1,
@@ -93,7 +88,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
           />
           <SceneContainer
             className={cn(
-              "wr-h-auto max-lg:wr-h-[500px] max-md:wr-h-[300px] lg:wr-py-12 wr-relative"
+              'wr-h-auto max-lg:wr-h-[500px] max-md:wr-h-[300px] lg:wr-py-12 wr-relative'
             )}
             style={{
               backgroundImage: options?.scene?.backgroundImage,

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const seconds = () => Math.floor(Date.now() / 1000);
 const useCountdown = (endTime: number, onFinish?: () => void) => {

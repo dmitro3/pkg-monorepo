@@ -1,27 +1,27 @@
-"use client";
-import * as React from "react";
-import { useFormContext } from "react-hook-form";
+'use client';
+import * as React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { Advanced } from "../../../common/advanced";
-import { AudioController } from "../../../common/audio-controller";
-import { BetControllerContainer } from "../../../common/containers";
+import { Advanced } from '../../../common/advanced';
+import { AudioController } from '../../../common/audio-controller';
+import { BetControllerContainer } from '../../../common/containers';
 import {
   BetControllerTitle,
   BetCountFormField,
   StopGainFormField,
   StopLossFormField,
   WagerFormField,
-} from "../../../common/controller";
-import { PreBetButton } from "../../../common/pre-bet-button";
-import { SkipButton } from "../../../common/skip-button";
-import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { Button } from "../../../ui/button";
-import { FormLabel } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { toDecimals, toFormatted } from "../../../utils/web3";
-import { useDiceGameStore } from "..";
-import { DiceForm } from "../types";
+} from '../../../common/controller';
+import { PreBetButton } from '../../../common/pre-bet-button';
+import { SkipButton } from '../../../common/skip-button';
+import { TotalWager, WagerCurrencyIcon } from '../../../common/wager';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { Button } from '../../../ui/button';
+import { FormLabel } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import { toDecimals, toFormatted } from '../../../utils/web3';
+import { useDiceGameStore } from '..';
+import { DiceForm } from '../types';
 // import { AudioController } from "@/components/common/audio-controller";
 // import { PreBetButton } from "@/app/(games)/_components/bet-button";
 
@@ -47,10 +47,7 @@ export const BetController: React.FC<Props> = ({
     return toDecimals(wager * betCount * winMultiplier, 2);
   }, [form.getValues().wager, form.getValues().betCount, winMultiplier]);
 
-  const { gameStatus, diceGameResults } = useDiceGameStore([
-    "gameStatus",
-    "diceGameResults",
-  ]);
+  const { gameStatus, diceGameResults } = useDiceGameStore(['gameStatus', 'diceGameResults']);
 
   return (
     <BetControllerContainer>
@@ -65,7 +62,7 @@ export const BetController: React.FC<Props> = ({
           isDisabled={
             form.formState.isSubmitting ||
             form.formState.isLoading ||
-            gameStatus == "PLAYING" ||
+            gameStatus == 'PLAYING' ||
             isGettingResults
           }
         />
@@ -73,7 +70,7 @@ export const BetController: React.FC<Props> = ({
           isDisabled={
             form.formState.isSubmitting ||
             form.formState.isLoading ||
-            gameStatus == "PLAYING" ||
+            gameStatus == 'PLAYING' ||
             isGettingResults
           }
         />
@@ -82,21 +79,18 @@ export const BetController: React.FC<Props> = ({
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]"
+                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
+              <span className={cn('wr-font-semibold wr-text-zinc-100')}>
                 ${toFormatted(maxPayout, 2)}
               </span>
             </div>
           </div>
           <div>
             <FormLabel>Total Wager</FormLabel>
-            <TotalWager
-              betCount={form.getValues().betCount}
-              wager={form.getValues().wager}
-            />
+            <TotalWager betCount={form.getValues().betCount} wager={form.getValues().wager} />
           </div>
         </div>
 
@@ -107,7 +101,7 @@ export const BetController: React.FC<Props> = ({
                 isDisabled={
                   form.formState.isSubmitting ||
                   form.formState.isLoading ||
-                  gameStatus == "PLAYING" ||
+                  gameStatus == 'PLAYING' ||
                   isGettingResults
                 }
               />
@@ -115,7 +109,7 @@ export const BetController: React.FC<Props> = ({
                 isDisabled={
                   form.formState.isSubmitting ||
                   form.formState.isLoading ||
-                  gameStatus == "PLAYING" ||
+                  gameStatus == 'PLAYING' ||
                   isGettingResults
                 }
               />
@@ -126,20 +120,18 @@ export const BetController: React.FC<Props> = ({
           <PreBetButton>
             <Button
               type="submit"
-              variant={"success"}
+              variant={'success'}
               className="wr-w-full"
-              size={"xl"}
+              size={'xl'}
               onClick={() => clickEffect.play()}
               isLoading={
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                isGettingResults
+                form.formState.isSubmitting || form.formState.isLoading || isGettingResults
               }
               disabled={
                 !form.formState.isValid ||
                 form.formState.isSubmitting ||
                 form.formState.isLoading ||
-                (gameStatus == "PLAYING" &&
+                (gameStatus == 'PLAYING' &&
                   diceGameResults.length < 4 &&
                   diceGameResults.length > 1) ||
                 isGettingResults
@@ -149,9 +141,7 @@ export const BetController: React.FC<Props> = ({
             </Button>
           </PreBetButton>
         )}
-        {diceGameResults.length > 3 && gameStatus == "PLAYING" && (
-          <SkipButton />
-        )}
+        {diceGameResults.length > 3 && gameStatus == 'PLAYING' && <SkipButton />}
       </div>
       <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />

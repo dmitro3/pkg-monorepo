@@ -1,13 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgIconPaper = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 21 20"
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 20" fill="none" {...props}>
     <path
       fill="currentColor"
       d="M8.694 2.558c0-.277-.108-.541-.304-.744a1.054 1.054 0 0 0-1.792.744v5.553l2.096-.561V2.558Z"

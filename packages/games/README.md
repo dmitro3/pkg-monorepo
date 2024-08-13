@@ -17,7 +17,7 @@ pnpm add @winrlabs/games
 You need to wrap your react application via the `GameProvider` component to use the games.
 
 ```javascript
-import { GameProvider } from "@winrlabs/games";
+import { GameProvider } from '@winrlabs/games';
 
 const App = () => {
   return (
@@ -31,7 +31,7 @@ const App = () => {
 Here is the basic usage of the `DiceTemplate` component:
 
 ```javascript
-import { DiceTemplate } from "@winrlabs/games";
+import { DiceTemplate } from '@winrlabs/games';
 
 const Page = () => {
   return (
@@ -39,7 +39,7 @@ const Page = () => {
       <DiceTemplate
         options={{
           scene: {
-            backgroundImage: "url(/range.svg)",
+            backgroundImage: 'url(/range.svg)',
           },
         }}
         onSubmit={(data) => {

@@ -1,31 +1,31 @@
-import { useBadgeControllerAwardBadge } from "@winrlabs/api";
-import { useCurrentAccount } from "@winrlabs/web3";
+import { useBadgeControllerAwardBadge } from '@winrlabs/api';
+import { useCurrentAccount } from '@winrlabs/web3';
 
 enum Badge {
-  LuckyWinner = "LuckyWinner",
-  BettingBuddy = "BettingBuddy",
-  BankrollBooster = "BankrollBooster",
-  StakingStar = "StakingStar",
-  VolumeUp = "VolumeUp",
-  StakingTycoon = "StakingTycoon",
-  ReferralBadge = "ReferralBadge",
-  BetVeteran = "BetVeteran",
-  BankrollHyperBooster = "BankrollHyperBooster",
-  BettingTitan = "BettingTitan",
-  LuckyStriker = "LuckyStriker",
-  WeeklyClaimer = "WeeklyClaimer",
-  LossLegend = "LossLegend",
-  WinrChainKingpin = "WinrChainKingpin",
-  BankrollCashCow = "BankrollCashCow",
-  StakingSage = "StakingSage",
-  JackpotJamboree = "JackpotJamboree",
-  VolumeWinner = "VolumeWinner",
-  LuckyStreak = "LuckyStreak",
-  GamblingGuru = "GamblingGuru",
-  DailyStreak = "DailyStreak",
-  WinrChainer = "WinrChainer",
-  HighRoller = "HighRoller",
-  LuckyRoller = "LuckyRoller",
+  LuckyWinner = 'LuckyWinner',
+  BettingBuddy = 'BettingBuddy',
+  BankrollBooster = 'BankrollBooster',
+  StakingStar = 'StakingStar',
+  VolumeUp = 'VolumeUp',
+  StakingTycoon = 'StakingTycoon',
+  ReferralBadge = 'ReferralBadge',
+  BetVeteran = 'BetVeteran',
+  BankrollHyperBooster = 'BankrollHyperBooster',
+  BettingTitan = 'BettingTitan',
+  LuckyStriker = 'LuckyStriker',
+  WeeklyClaimer = 'WeeklyClaimer',
+  LossLegend = 'LossLegend',
+  WinrChainKingpin = 'WinrChainKingpin',
+  BankrollCashCow = 'BankrollCashCow',
+  StakingSage = 'StakingSage',
+  JackpotJamboree = 'JackpotJamboree',
+  VolumeWinner = 'VolumeWinner',
+  LuckyStreak = 'LuckyStreak',
+  GamblingGuru = 'GamblingGuru',
+  DailyStreak = 'DailyStreak',
+  WinrChainer = 'WinrChainer',
+  HighRoller = 'HighRoller',
+  LuckyRoller = 'LuckyRoller',
 }
 
 export const useGetBadges = () => {
@@ -47,7 +47,7 @@ export const useGetBadges = () => {
       getBadgeMutation({
         body: {
           type: Badge.HighRoller,
-          player: currentAccount.address || "0x",
+          player: currentAccount.address || '0x',
         },
       });
 
@@ -55,7 +55,7 @@ export const useGetBadges = () => {
       getBadgeMutation({
         body: {
           type: Badge.LossLegend,
-          player: currentAccount.address || "0x",
+          player: currentAccount.address || '0x',
         },
       });
 
@@ -63,7 +63,7 @@ export const useGetBadges = () => {
       getBadgeMutation({
         body: {
           type: Badge.LuckyRoller,
-          player: currentAccount.address || "0x",
+          player: currentAccount.address || '0x',
         },
       });
 
@@ -71,7 +71,7 @@ export const useGetBadges = () => {
       getBadgeMutation({
         body: {
           type: Badge.BettingTitan,
-          player: currentAccount.address || "0x",
+          player: currentAccount.address || '0x',
         },
       });
   };

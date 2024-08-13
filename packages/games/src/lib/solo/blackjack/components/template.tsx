@@ -1,33 +1,28 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useDebounce } from "use-debounce";
+import React from 'react';
+import { useDebounce } from 'use-debounce';
 
-import { AudioController } from "../../../common/audio-controller";
-import { ChipFixed } from "../../../common/chip-controller-fixed/types";
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { CDN_URL } from "../../../constants";
-import { useGameOptions } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { RotationWrapper } from "../../../ui/rotation-wrapper";
-import { wait } from "../../../utils/promise";
-import { cn } from "../../../utils/style";
-import {
-  BlackjackGameProps,
-  BlackjackGameStatus,
-  BlackjackHandIndex,
-  TIMEOUT,
-} from "..";
-import { BlackjackCard, distributeNewCards, getBlackjackSuit } from "../utils";
-import { BetArea } from "./bet-area";
-import { BetController } from "./bet-controller";
-import { CardArea } from "./card-area";
-import { DealerCardArea } from "./dealer-card-area";
-import { MoveController } from "./move-controller";
-import { SplittedCardArea } from "./splitted-card-area";
-import styles from "./styles.module.css";
-import { RotatedBackButton } from "../../../common/rotated-back-button";
-import { CurrencySelect } from "./currency-select";
+import { AudioController } from '../../../common/audio-controller';
+import { ChipFixed } from '../../../common/chip-controller-fixed/types';
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { RotatedBackButton } from '../../../common/rotated-back-button';
+import { CDN_URL } from '../../../constants';
+import { useGameOptions } from '../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { RotationWrapper } from '../../../ui/rotation-wrapper';
+import { wait } from '../../../utils/promise';
+import { cn } from '../../../utils/style';
+import { BlackjackGameProps, BlackjackGameStatus, BlackjackHandIndex, TIMEOUT } from '..';
+import { BlackjackCard, distributeNewCards, getBlackjackSuit } from '../utils';
+import { BetArea } from './bet-area';
+import { BetController } from './bet-controller';
+import { CardArea } from './card-area';
+import { CurrencySelect } from './currency-select';
+import { DealerCardArea } from './dealer-card-area';
+import { MoveController } from './move-controller';
+import { SplittedCardArea } from './splitted-card-area';
+import styles from './styles.module.css';
 
 type TemplateOptions = {
   scene?: {
@@ -64,30 +59,20 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
   onFormChange,
 }) => {
   const [wager, setWager] = React.useState<number>(minWager || 1);
-  const [selectedChip, setSelectedChip] = React.useState<ChipFixed>(
-    ChipFixed.ONE
-  );
+  const [selectedChip, setSelectedChip] = React.useState<ChipFixed>(ChipFixed.ONE);
 
   const [firstHandWager, setFirstHandWager] = React.useState<number>(0);
   const [secondHandWager, setSecondHandWager] = React.useState<number>(0);
   const [thirdHandWager, setThirdHandWager] = React.useState<number>(0);
 
   // ui cards
-  const [dealerCards, setDealerCards] = React.useState<
-    (BlackjackCard | null)[]
-  >([]);
+  const [dealerCards, setDealerCards] = React.useState<(BlackjackCard | null)[]>([]);
 
-  const [firstHandCards, setFirstHandCards] = React.useState<
-    (BlackjackCard | null)[]
-  >([]);
+  const [firstHandCards, setFirstHandCards] = React.useState<(BlackjackCard | null)[]>([]);
 
-  const [secondHandCards, setSecondHandCards] = React.useState<
-    (BlackjackCard | null)[]
-  >([]);
+  const [secondHandCards, setSecondHandCards] = React.useState<(BlackjackCard | null)[]>([]);
 
-  const [thirdHandCards, setThirdHandCards] = React.useState<
-    (BlackjackCard | null)[]
-  >([]);
+  const [thirdHandCards, setThirdHandCards] = React.useState<(BlackjackCard | null)[]>([]);
 
   const [splittedFirstHandCards, setSplittedFirstHandCards] = React.useState<
     (BlackjackCard | null)[]
@@ -102,17 +87,19 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
   >([]);
 
   // splitted card states
-  const [firstHandSplittedCard, setFirstHandSplittedCard] =
-    React.useState<BlackjackCard | null>(null);
+  const [firstHandSplittedCard, setFirstHandSplittedCard] = React.useState<BlackjackCard | null>(
+    null
+  );
 
-  const [secondHandSplittedCard, setSecondHandSplittedCard] =
-    React.useState<BlackjackCard | null>(null);
+  const [secondHandSplittedCard, setSecondHandSplittedCard] = React.useState<BlackjackCard | null>(
+    null
+  );
 
-  const [thirdHandSplittedCard, setThirdHandSplittedCard] =
-    React.useState<BlackjackCard | null>(null);
+  const [thirdHandSplittedCard, setThirdHandSplittedCard] = React.useState<BlackjackCard | null>(
+    null
+  );
 
-  const [isDistributionCompleted, setIsDistrubitionCompleted] =
-    React.useState<boolean>(false);
+  const [isDistributionCompleted, setIsDistrubitionCompleted] = React.useState<boolean>(false);
 
   const { account } = useGameOptions();
 
@@ -142,11 +129,9 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
       if (handIndex === BlackjackHandIndex.FIRST) return true;
 
-      if (handIndex === BlackjackHandIndex.SECOND && firstHandWager > 0)
-        return true;
+      if (handIndex === BlackjackHandIndex.SECOND && firstHandWager > 0) return true;
 
-      if (handIndex === BlackjackHandIndex.THIRD && secondHandWager > 0)
-        return true;
+      if (handIndex === BlackjackHandIndex.THIRD && secondHandWager > 0) return true;
 
       return false;
     },
@@ -164,12 +149,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     )
       return true;
     else return false;
-  }, [
-    dealerCards,
-    activeGameHands.dealer,
-    isDistributionCompleted,
-    activeGameData.status,
-  ]);
+  }, [dealerCards, activeGameHands.dealer, isDistributionCompleted, activeGameData.status]);
 
   const activeHandByIndex = React.useMemo(() => {
     switch (activeGameData.activeHandIndex) {
@@ -200,8 +180,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
   }, [activeGameData, isDistributionCompleted, activeGameHands]);
 
   const isTurn = React.useCallback(
-    (handId?: number) =>
-      isDistributionCompleted && activeHandByIndex?.handId === handId,
+    (handId?: number) => isDistributionCompleted && activeHandByIndex?.handId === handId,
     [isDistributionCompleted, activeHandByIndex]
   );
 
@@ -266,8 +245,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
         (wager += activeGameHands.splittedSecondHand.hand?.chipsAmount || 0);
 
       activeGameHands.splittedSecondHand.hand?.isInsured &&
-        (wager +=
-          activeGameHands.splittedSecondHand.hand?.chipsAmount / 2 || 0);
+        (wager += activeGameHands.splittedSecondHand.hand?.chipsAmount / 2 || 0);
 
       wager += activeGameHands.splittedThirdHand.hand?.chipsAmount || 0;
 
@@ -336,10 +314,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     const dealerFirstCard = dealer.cards?.cards[0];
 
     if (dealerFirstCard) {
-      setDealerCards((prev) => [
-        ...prev,
-        new BlackjackCard(dealerFirstCard, getBlackjackSuit()),
-      ]);
+      setDealerCards((prev) => [...prev, new BlackjackCard(dealerFirstCard, getBlackjackSuit())]);
 
       flipEffect.play();
 
@@ -475,10 +450,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
       const dealerCard = dealer.cards?.cards[i];
 
       if (dealerCard) {
-        setDealerCards((prev) => [
-          ...prev,
-          new BlackjackCard(dealerCard, getBlackjackSuit()),
-        ]);
+        setDealerCards((prev) => [...prev, new BlackjackCard(dealerCard, getBlackjackSuit())]);
 
         flipEffect.play();
 
@@ -509,12 +481,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     if (isDistributionCompleted) {
       const cards = activeGameHands.firstHand.cards?.cards || [];
 
-      distributeNewCards(
-        cards,
-        firstHandCards,
-        setFirstHandCards,
-        flipEffect.play
-      );
+      distributeNewCards(cards, firstHandCards, setFirstHandCards, flipEffect.play);
     }
   }, [activeGameHands.firstHand.cards?.cards]);
 
@@ -522,12 +489,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     if (isDistributionCompleted) {
       const cards = activeGameHands.secondHand.cards?.cards || [];
 
-      distributeNewCards(
-        cards,
-        secondHandCards,
-        setSecondHandCards,
-        flipEffect.play
-      );
+      distributeNewCards(cards, secondHandCards, setSecondHandCards, flipEffect.play);
     }
   }, [activeGameHands.secondHand.cards?.cards]);
 
@@ -535,12 +497,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     if (isDistributionCompleted) {
       const cards = activeGameHands.thirdHand.cards?.cards || [];
 
-      distributeNewCards(
-        cards,
-        thirdHandCards,
-        setThirdHandCards,
-        flipEffect.play
-      );
+      distributeNewCards(cards, thirdHandCards, setThirdHandCards, flipEffect.play);
     }
   }, [activeGameHands.thirdHand.cards?.cards]);
 
@@ -548,12 +505,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     if (isDistributionCompleted) {
       const cards = activeGameHands.splittedFirstHand.cards?.cards || [];
 
-      distributeNewCards(
-        cards,
-        splittedFirstHandCards,
-        setSplittedFirstHandCards,
-        flipEffect.play
-      );
+      distributeNewCards(cards, splittedFirstHandCards, setSplittedFirstHandCards, flipEffect.play);
     }
   }, [activeGameHands.splittedFirstHand.cards?.cards]);
 
@@ -574,12 +526,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
     if (isDistributionCompleted) {
       const cards = activeGameHands.splittedThirdHand.cards?.cards || [];
 
-      distributeNewCards(
-        cards,
-        splittedThirdHandCards,
-        setSplittedThirdHandCards,
-        flipEffect.play
-      );
+      distributeNewCards(cards, splittedThirdHandCards, setSplittedThirdHandCards, flipEffect.play);
     }
   }, [activeGameHands.splittedThirdHand.cards?.cards]);
 
@@ -602,10 +549,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
       flipEffect.play();
     }
-  }, [
-    activeGameHands.firstHand.hand?.isSplitted,
-    activeGameHands.firstHand.cards?.cards[1],
-  ]);
+  }, [activeGameHands.firstHand.hand?.isSplitted, activeGameHands.firstHand.cards?.cards[1]]);
 
   React.useEffect(() => {
     const card = activeGameHands.secondHand.cards?.cards[1];
@@ -615,10 +559,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
       flipEffect.play();
     }
-  }, [
-    activeGameHands.secondHand.hand?.isSplitted,
-    activeGameHands.secondHand.cards?.cards[1],
-  ]);
+  }, [activeGameHands.secondHand.hand?.isSplitted, activeGameHands.secondHand.cards?.cards[1]]);
 
   React.useEffect(() => {
     const card = activeGameHands.thirdHand.cards?.cards[1];
@@ -628,10 +569,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
       flipEffect.play();
     }
-  }, [
-    activeGameHands.thirdHand.hand?.isSplitted,
-    activeGameHands.thirdHand.cards?.cards[1],
-  ]);
+  }, [activeGameHands.thirdHand.hand?.isSplitted, activeGameHands.thirdHand.cards?.cards[1]]);
 
   React.useEffect(() => {
     if (initialDataFetched) {
@@ -649,18 +587,15 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
   // this effects used for get initial betAmounts
   React.useEffect(() => {
-    if (initialDataFetched)
-      setFirstHandWager(activeGameHands.firstHand.hand?.chipsAmount || 0);
+    if (initialDataFetched) setFirstHandWager(activeGameHands.firstHand.hand?.chipsAmount || 0);
   }, [activeGameHands.firstHand.hand?.chipsAmount, initialDataFetched]);
 
   React.useEffect(() => {
-    if (initialDataFetched)
-      setSecondHandWager(activeGameHands.secondHand.hand?.chipsAmount || 0);
+    if (initialDataFetched) setSecondHandWager(activeGameHands.secondHand.hand?.chipsAmount || 0);
   }, [activeGameHands.secondHand.hand?.chipsAmount, initialDataFetched]);
 
   React.useEffect(() => {
-    if (initialDataFetched)
-      setThirdHandWager(activeGameHands.thirdHand.hand?.chipsAmount || 0);
+    if (initialDataFetched) setThirdHandWager(activeGameHands.thirdHand.hand?.chipsAmount || 0);
   }, [activeGameHands.thirdHand.hand?.chipsAmount, initialDataFetched]);
 
   React.useEffect(() => {
@@ -675,13 +610,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
       thirdHandWager,
       handIndex: activeGameData.activeHandIndex,
     }),
-    [
-      wager,
-      firstHandWager,
-      secondHandWager,
-      thirdHandWager,
-      activeGameData.activeHandIndex,
-    ]
+    [wager, firstHandWager, secondHandWager, thirdHandWager, activeGameData.activeHandIndex]
   );
 
   const debouncedFormFields = useDebounce(formFields, 400);
@@ -708,7 +637,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
           }}
           className={cn(
             styles.bjSceneWrapper,
-            "wr-relative wr-flex wr-h-[675px] wr-border-0 wr-bg-center !wr-p-0"
+            'wr-relative wr-flex wr-h-[675px] wr-border-0 wr-bg-center !wr-p-0'
           )}
         >
           <AudioController className="wr-absolute wr-left-3 wr-top-3 wr-z-[999] wr-hidden lg:wr-block" />
@@ -716,7 +645,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
           <div
             className={cn(
               styles.canvas,
-              "wr-absolute wr-h-full wr-max-h-[675px] wr-w-[1140px] wr-select-none"
+              'wr-absolute wr-h-full wr-max-h-[675px] wr-w-[1140px] wr-select-none'
             )}
           >
             <img
@@ -751,9 +680,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
             {/* bet area start */}
             <BetArea
               onClick={() => addWager(selectedChip, BlackjackHandIndex.THIRD)}
-              isDisabled={
-                !canPlaceBet(BlackjackHandIndex.THIRD) || isControllerDisabled
-              }
+              isDisabled={!canPlaceBet(BlackjackHandIndex.THIRD) || isControllerDisabled}
               isDouble={activeGameHands.thirdHand.hand?.isDouble}
               chipAmount={thirdHandWager}
               isInsured={activeGameHands.thirdHand.hand?.isInsured}
@@ -763,9 +690,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
             <BetArea
               onClick={() => addWager(selectedChip, BlackjackHandIndex.SECOND)}
-              isDisabled={
-                !canPlaceBet(BlackjackHandIndex.SECOND) || isControllerDisabled
-              }
+              isDisabled={!canPlaceBet(BlackjackHandIndex.SECOND) || isControllerDisabled}
               isDouble={activeGameHands.secondHand.hand?.isDouble}
               chipAmount={secondHandWager}
               isInsured={activeGameHands.secondHand.hand?.isInsured}
@@ -775,9 +700,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
 
             <BetArea
               onClick={() => addWager(selectedChip, BlackjackHandIndex.FIRST)}
-              isDisabled={
-                !canPlaceBet(BlackjackHandIndex.FIRST) || isControllerDisabled
-              }
+              isDisabled={!canPlaceBet(BlackjackHandIndex.FIRST) || isControllerDisabled}
               isDouble={activeGameHands.firstHand.hand?.isDouble}
               chipAmount={firstHandWager}
               isInsured={activeGameHands.firstHand.hand?.isInsured}
@@ -799,20 +722,13 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
                   isSplitted={activeGameHands.firstHand.hand?.isSplitted}
                 >
                   <BetArea
-                    onClick={() =>
-                      addWager(selectedChip, BlackjackHandIndex.SPLITTED_FIRST)
-                    }
+                    onClick={() => addWager(selectedChip, BlackjackHandIndex.SPLITTED_FIRST)}
                     isDisabled={
-                      !canPlaceBet(BlackjackHandIndex.SPLITTED_FIRST) ||
-                      isControllerDisabled
+                      !canPlaceBet(BlackjackHandIndex.SPLITTED_FIRST) || isControllerDisabled
                     }
                     isDouble={activeGameHands.splittedFirstHand.hand?.isDouble}
-                    chipAmount={
-                      activeGameHands.splittedFirstHand.hand?.chipsAmount || 0
-                    }
-                    isInsured={
-                      activeGameHands.splittedFirstHand.hand?.isInsured
-                    }
+                    chipAmount={activeGameHands.splittedFirstHand.hand?.chipsAmount || 0}
+                    isInsured={activeGameHands.splittedFirstHand.hand?.isInsured}
                     isTurn={isTurn(activeGameHands.splittedFirstHand.handId)}
                     className="wr-right-[120px] wr-top-[170px] -wr-translate-x-1/2 -wr-translate-y-1/2"
                   />
@@ -828,20 +744,13 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
                   isSplitted={activeGameHands.secondHand.hand?.isSplitted}
                 >
                   <BetArea
-                    onClick={() =>
-                      addWager(selectedChip, BlackjackHandIndex.SPLITTED_SECOND)
-                    }
+                    onClick={() => addWager(selectedChip, BlackjackHandIndex.SPLITTED_SECOND)}
                     isDisabled={
-                      !canPlaceBet(BlackjackHandIndex.SPLITTED_SECOND) ||
-                      isControllerDisabled
+                      !canPlaceBet(BlackjackHandIndex.SPLITTED_SECOND) || isControllerDisabled
                     }
                     isDouble={activeGameHands.splittedSecondHand.hand?.isDouble}
-                    chipAmount={
-                      activeGameHands.splittedSecondHand.hand?.chipsAmount || 0
-                    }
-                    isInsured={
-                      activeGameHands.splittedSecondHand.hand?.isInsured
-                    }
+                    chipAmount={activeGameHands.splittedSecondHand.hand?.chipsAmount || 0}
+                    isInsured={activeGameHands.splittedSecondHand.hand?.isInsured}
                     isTurn={isTurn(activeGameHands.splittedSecondHand.handId)}
                     className="wr-bottom-[275px] wr-left-[50%] -wr-translate-x-1/2 -wr-translate-y-1/2"
                   />
@@ -857,20 +766,13 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
                   isSplitted={activeGameHands.thirdHand.hand?.isSplitted}
                 >
                   <BetArea
-                    onClick={() =>
-                      addWager(selectedChip, BlackjackHandIndex.SPLITTED_THIRD)
-                    }
+                    onClick={() => addWager(selectedChip, BlackjackHandIndex.SPLITTED_THIRD)}
                     isDisabled={
-                      !canPlaceBet(BlackjackHandIndex.SPLITTED_THIRD) ||
-                      isControllerDisabled
+                      !canPlaceBet(BlackjackHandIndex.SPLITTED_THIRD) || isControllerDisabled
                     }
                     isDouble={activeGameHands.splittedThirdHand.hand?.isDouble}
-                    chipAmount={
-                      activeGameHands.splittedThirdHand.hand?.chipsAmount || 0
-                    }
-                    isInsured={
-                      activeGameHands.splittedThirdHand.hand?.isInsured
-                    }
+                    chipAmount={activeGameHands.splittedThirdHand.hand?.chipsAmount || 0}
+                    isInsured={activeGameHands.splittedThirdHand.hand?.isInsured}
                     isTurn={isTurn(activeGameHands.splittedThirdHand.handId)}
                     className="wr-left-[200px] wr-top-[170px] -wr-translate-x-1/2 -wr-translate-y-1/2"
                   />
@@ -937,9 +839,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
               isDistributionCompleted={isDistributionCompleted}
               isLastDistributionCompleted={isLastDistributionCompleted}
               status={activeGameData.status}
-              onDeal={() =>
-                onDeal(firstHandWager, secondHandWager, thirdHandWager)
-              }
+              onDeal={() => onDeal(firstHandWager, secondHandWager, thirdHandWager)}
               onClear={() => {
                 handleClearWagers();
                 onReset();

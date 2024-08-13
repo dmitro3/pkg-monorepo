@@ -1,9 +1,9 @@
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from 'react-hook-form';
 
 export enum RockPaperScissors {
-  ROCK = "0",
-  PAPER = "1",
-  SCISSORS = "2",
+  ROCK = '0',
+  PAPER = '1',
+  SCISSORS = '2',
 }
 
 export type RPSChoiceType = RockPaperScissors;

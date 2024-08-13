@@ -1,6 +1,6 @@
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from 'react-hook-form';
 
-import { Horse } from "../constants";
+import { Horse } from '../constants';
 
 export interface HorseRaceFormFields {
   wager: number;

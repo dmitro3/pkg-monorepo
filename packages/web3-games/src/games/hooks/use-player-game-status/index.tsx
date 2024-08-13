@@ -1,22 +1,18 @@
-"use client";
+'use client';
 
 import {
   useRankControllerTakeLevelupSnapshot,
   useRefundControllerRefundGame,
   useRefundControllerReIterate,
-} from "@winrlabs/api";
-import { GameType, useWeb3GamesModalsStore } from "@winrlabs/games";
-import {
-  controllerAbi,
-  rankMiddlewareAbi,
-  useCurrentAccount,
-} from "@winrlabs/web3";
-import dayjs from "dayjs";
-import React from "react";
-import { Address } from "viem";
-import { Config, useReadContract } from "wagmi";
+} from '@winrlabs/api';
+import { GameType, useWeb3GamesModalsStore } from '@winrlabs/games';
+import { controllerAbi, rankMiddlewareAbi, useCurrentAccount } from '@winrlabs/web3';
+import dayjs from 'dayjs';
+import React from 'react';
+import { Address } from 'viem';
+import { Config, useReadContract } from 'wagmi';
 
-import { useContractConfigContext } from "../use-contract-config";
+import { useContractConfigContext } from '../use-contract-config';
 
 interface IUsePlayerStatusParams {
   gameAddress: Address;
@@ -36,15 +32,12 @@ export const usePlayerGameStatus = ({
   gameType,
   wagmiConfig,
 }: IUsePlayerStatusParams) => {
-  const [sessionStatus, setSessionStatus] = React.useState<SessionStatus>(
-    SessionStatus.Idle
-  );
+  const [sessionStatus, setSessionStatus] = React.useState<SessionStatus>(SessionStatus.Idle);
   const [lastSeen, setLastSeen] = React.useState<number>(0);
   const [refundCooldown, setRefundCooldown] = React.useState<number>(0);
   const [reIterateCooldown, setReIterateCooldown] = React.useState<number>(0);
 
-  const { rankMiddlewareAddress, controllerAddress } =
-    useContractConfigContext();
+  const { rankMiddlewareAddress, controllerAddress } = useContractConfigContext();
   const currentAccount = useCurrentAccount();
   const { openModal, closeModal } = useWeb3GamesModalsStore();
 
@@ -54,8 +47,8 @@ export const usePlayerGameStatus = ({
     abi: rankMiddlewareAbi,
     address: rankMiddlewareAddress,
     account: currentAccount.address,
-    functionName: "getPlayerStatus",
-    args: [currentAccount.address || "0x"],
+    functionName: 'getPlayerStatus',
+    args: [currentAccount.address || '0x'],
     query: {
       enabled: !!currentAccount.address,
       refetchOnMount: false,
@@ -67,8 +60,8 @@ export const usePlayerGameStatus = ({
     config: wagmiConfig,
     abi: controllerAbi,
     address: controllerAddress,
-    functionName: "getSessionByClient",
-    args: [gameAddress, currentAccount.address || "0x"],
+    functionName: 'getSessionByClient',
+    args: [gameAddress, currentAccount.address || '0x'],
     query: {
       enabled: !!currentAccount.address && !!gameAddress,
       refetchOnMount: false,
@@ -80,7 +73,7 @@ export const usePlayerGameStatus = ({
     config: wagmiConfig,
     abi: controllerAbi,
     address: controllerAddress,
-    functionName: "refundCooldown",
+    functionName: 'refundCooldown',
     args: [],
     query: {
       enabled: !!currentAccount.address,
@@ -93,7 +86,7 @@ export const usePlayerGameStatus = ({
     config: wagmiConfig,
     abi: controllerAbi,
     address: controllerAddress,
-    functionName: "reIterationCooldown",
+    functionName: 'reIterationCooldown',
     args: [],
     query: {
       enabled: !!currentAccount.address,
@@ -103,12 +96,7 @@ export const usePlayerGameStatus = ({
   });
 
   React.useEffect(() => {
-    if (
-      !sessionRead.data ||
-      !refundCooldownRead.data ||
-      !reIterationCooldownRead.data
-    )
-      return;
+    if (!sessionRead.data || !refundCooldownRead.data || !reIterationCooldownRead.data) return;
 
     setSessionStatus(Number(sessionRead.data?.[1].status));
     setLastSeen(Number(sessionRead.data?.[1].detail?.lastSeen || 0));
@@ -121,14 +109,11 @@ export const usePlayerGameStatus = ({
   ]);
 
   // Handlers
-  const getPassedTime = (lastSeen: EpochTimeStamp) =>
-    dayjs(new Date()).unix() - lastSeen;
+  const getPassedTime = (lastSeen: EpochTimeStamp) => dayjs(new Date()).unix() - lastSeen;
 
   // Checks
   const isHalted = React.useMemo(
-    () =>
-      (playerLevelStatusRead.data && playerLevelStatusRead.data.halted) ??
-      false,
+    () => (playerLevelStatusRead.data && playerLevelStatusRead.data.halted) ?? false,
     [playerLevelStatusRead.dataUpdatedAt]
   );
 
@@ -136,7 +121,7 @@ export const usePlayerGameStatus = ({
     if (!lastSeen || !refundCooldown) return false;
 
     const passedTime = getPassedTime(lastSeen);
-    console.log(sessionStatus, "session status");
+    console.log(sessionStatus, 'session status');
     console.log;
     return passedTime > refundCooldown && sessionStatus === SessionStatus.Wait;
   }, [lastSeen, refundCooldown, sessionStatus, sessionRead.dataUpdatedAt]);
@@ -145,11 +130,7 @@ export const usePlayerGameStatus = ({
     if (!lastSeen) return false;
 
     const passedTime = getPassedTime(lastSeen);
-    return (
-      !isRefundable &&
-      passedTime > reIterateCooldown &&
-      sessionStatus === SessionStatus.Wait
-    );
+    return !isRefundable && passedTime > reIterateCooldown && sessionStatus === SessionStatus.Wait;
   }, [sessionRead.dataUpdatedAt, lastSeen, sessionStatus, isRefundable]);
 
   // Mutations
@@ -160,7 +141,7 @@ export const usePlayerGameStatus = ({
   const handlePlayerLevelUp = async () =>
     await playerLevelUp.mutateAsync({
       body: {
-        player: currentAccount.address || "0x",
+        player: currentAccount.address || '0x',
       },
     });
 
@@ -168,7 +149,7 @@ export const usePlayerGameStatus = ({
     const refund = await playerRefund.mutateAsync({
       body: {
         game: gameType,
-        player: currentAccount.address || "0x",
+        player: currentAccount.address || '0x',
       },
     });
 
@@ -181,13 +162,13 @@ export const usePlayerGameStatus = ({
     await playerReIterate.mutateAsync({
       body: {
         game: gameType,
-        player: currentAccount.address || "0x",
+        player: currentAccount.address || '0x',
       },
     });
 
   React.useEffect(() => {
     if (isRefundable)
-      openModal("refund", {
+      openModal('refund', {
         refund: {
           isRefunding: playerRefund.isPending,
           isRefundable: isRefundable,
@@ -202,11 +183,11 @@ export const usePlayerGameStatus = ({
   };
 
   React.useEffect(() => {
-    console.log(playerLevelStatusRead.data, "data");
+    console.log(playerLevelStatusRead.data, 'data');
   }, [playerLevelStatusRead.dataUpdatedAt]);
 
   React.useEffect(() => {
-    console.log("isReIterable", isReIterable, "isRefundable", isRefundable);
+    console.log('isReIterable', isReIterable, 'isRefundable', isRefundable);
   }, [isReIterable, isRefundable]);
 
   return {

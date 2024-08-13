@@ -1,6 +1,6 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
-import { CDN_URL } from "../../../../constants";
+import { CDN_URL } from '../../../../constants';
 
 const getMaterials = () => {
   const loader = new THREE.TextureLoader();
@@ -18,10 +18,7 @@ const getMaterials = () => {
   ];
 };
 
-const createCylinder = (): THREE.Mesh<
-  THREE.CylinderGeometry,
-  THREE.MeshBasicMaterial[]
-> => {
+const createCylinder = (): THREE.Mesh<THREE.CylinderGeometry, THREE.MeshBasicMaterial[]> => {
   const materials = getMaterials();
 
   const cylinder = new THREE.Mesh(

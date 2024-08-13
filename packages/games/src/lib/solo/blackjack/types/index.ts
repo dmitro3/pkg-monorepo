@@ -1,4 +1,4 @@
-import { Token, BalanceMap } from "@winrlabs/types";
+import { BalanceMap,Token } from '@winrlabs/types';
 
 export enum BlackjackHandIndex {
   FIRST,
@@ -35,13 +35,13 @@ export type Cards = {
 };
 
 export type ActiveGameHands = Record<
-  | "dealer"
-  | "firstHand"
-  | "secondHand"
-  | "thirdHand"
-  | "splittedFirstHand"
-  | "splittedSecondHand"
-  | "splittedThirdHand",
+  | 'dealer'
+  | 'firstHand'
+  | 'secondHand'
+  | 'thirdHand'
+  | 'splittedFirstHand'
+  | 'splittedSecondHand'
+  | 'splittedThirdHand',
   {
     cards: Cards | null;
     hand: Hand | null;
@@ -101,11 +101,7 @@ export interface BlackjackGameProps {
   onChangeCurrency: (token: Token) => void;
 
   onGameCompleted: () => void;
-  onDeal: (
-    firstHandWager: number,
-    secondHandWager: number,
-    thirdHandWager: number
-  ) => void;
+  onDeal: (firstHandWager: number, secondHandWager: number, thirdHandWager: number) => void;
   onReset: () => void;
   onHit: (handIndex: number) => void;
   onSplit: (handIndex: number) => void;

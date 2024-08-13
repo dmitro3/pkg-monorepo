@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 export const useDevicePixelRatio = () => {
   const [devicePixelRatio, setDevicePixelRatio] = React.useState<number>(() =>
@@ -12,12 +12,10 @@ export const useDevicePixelRatio = () => {
       const updateDevicePixelRatio = function () {
         setDevicePixelRatio(window.devicePixelRatio);
       };
-      const mediaMatcher = window.matchMedia(
-        `screen and (resolution: ${devicePixelRatio}dppx)`
-      );
-      mediaMatcher.addEventListener("change", updateDevicePixelRatio);
+      const mediaMatcher = window.matchMedia(`screen and (resolution: ${devicePixelRatio}dppx)`);
+      mediaMatcher.addEventListener('change', updateDevicePixelRatio);
       return function () {
-        mediaMatcher.removeEventListener("change", updateDevicePixelRatio);
+        mediaMatcher.removeEventListener('change', updateDevicePixelRatio);
       };
     },
     [devicePixelRatio]

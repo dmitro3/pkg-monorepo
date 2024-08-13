@@ -1,5 +1,5 @@
-import { CDN_URL } from "../../../../constants";
-import { BaccaratCardValue, BaccaratSuit } from "../../types";
+import { CDN_URL } from '../../../../constants';
+import { BaccaratCardValue, BaccaratSuit } from '../../types';
 
 const BigDiamonds = <img src={`${CDN_URL}/blackjack/suits/big-diamonds.svg`} />;
 const BigClubs = <img src={`${CDN_URL}/blackjack/suits/big-clubs.svg`} />;
@@ -7,9 +7,7 @@ const BigHearts = <img src={`${CDN_URL}/blackjack/suits/big-hearts.svg`} />;
 const BigSpades = <img src={`${CDN_URL}/blackjack/suits/big-spades.svg`} />;
 
 const SmallClubs = <img src={`${CDN_URL}/blackjack/suits/small-clubs.svg`} />;
-const SmallDiamonds = (
-  <img src={`${CDN_URL}/blackjack/suits/small-diamonds.svg`} />
-);
+const SmallDiamonds = <img src={`${CDN_URL}/blackjack/suits/small-diamonds.svg`} />;
 const SmallHearts = <img src={`${CDN_URL}/blackjack/suits/small-hearts.svg`} />;
 const SmallSpades = <img src={`${CDN_URL}/blackjack/suits/small-spades.svg`} />;
 
@@ -22,16 +20,16 @@ export class BaccaratCard {
   get renderValue(): string {
     switch (this._value) {
       case BaccaratCardValue.ACE:
-        return "A";
+        return 'A';
 
       case BaccaratCardValue.JACK:
-        return "J";
+        return 'J';
 
       case BaccaratCardValue.QUEEN:
-        return "Q";
+        return 'Q';
 
       case BaccaratCardValue.KING:
-        return "K";
+        return 'K';
 
       default:
         return this._value.toString();
@@ -67,13 +65,13 @@ export const getBaccaratIcon = (suit: BaccaratSuit) => {
     case BaccaratSuit.SPADES:
       return { main: BigSpades, suit: SmallSpades };
 
-    case "hearts":
+    case 'hearts':
       return { main: BigHearts, suit: SmallHearts };
 
-    case "diamonds":
+    case 'diamonds':
       return { main: BigDiamonds, suit: SmallDiamonds };
 
-    case "clubs":
+    case 'clubs':
       return { main: BigClubs, suit: SmallClubs };
   }
 };

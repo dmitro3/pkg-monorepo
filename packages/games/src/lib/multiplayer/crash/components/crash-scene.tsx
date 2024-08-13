@@ -1,15 +1,15 @@
-import * as Progress from "@radix-ui/react-progress";
-import React from "react";
-import { useFormContext } from "react-hook-form";
-import { Unity, useUnityContext } from "react-unity-webgl";
+import * as Progress from '@radix-ui/react-progress';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
+import { Unity, useUnityContext } from 'react-unity-webgl';
 
-import { useDevicePixelRatio } from "../../../hooks/use-device-pixel-ratio";
-import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
-import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
-import { toFormatted } from "../../../utils/web3";
-import { MultiplayerGameStatus } from "../../core/type";
-import useCrashGameStore from "../store";
-import { CrashForm } from "../types";
+import { useDevicePixelRatio } from '../../../hooks/use-device-pixel-ratio';
+import { useListenUnityEvent } from '../../../hooks/use-listen-unity-event';
+import { useEqualizeUnitySound } from '../../../hooks/use-unity-sound';
+import { toFormatted } from '../../../utils/web3';
+import { MultiplayerGameStatus } from '../../core/type';
+import useCrashGameStore from '../store';
+import { CrashForm } from '../types';
 
 export const CrashScene = ({
   onComplete,
@@ -28,16 +28,15 @@ export const CrashScene = ({
   const devicePixelRatio = useDevicePixelRatio();
 
   const form = useFormContext() as CrashForm;
-  const multiplier = form.watch("multiplier");
+  const multiplier = form.watch('multiplier');
 
-  const { status, resetParticipants, finalMultiplier, isGamblerParticipant } =
-    useCrashGameStore([
-      "status",
-      "resetParticipants",
-      "resetState",
-      "finalMultiplier",
-      "isGamblerParticipant",
-    ]);
+  const { status, resetParticipants, finalMultiplier, isGamblerParticipant } = useCrashGameStore([
+    'status',
+    'resetParticipants',
+    'resetState',
+    'finalMultiplier',
+    'isGamblerParticipant',
+  ]);
 
   const percentageRef = React.useRef(0);
 
@@ -69,28 +68,23 @@ export const CrashScene = ({
   React.useEffect(() => {
     if (isLoaded && status === MultiplayerGameStatus.Wait) {
       // prepare rocket
-      sendMessage("WebGLHandler", "ReceiveMessage", "M_PrepareRocket");
+      sendMessage('WebGLHandler', 'ReceiveMessage', 'M_PrepareRocket');
     }
 
     if (isLoaded && status === MultiplayerGameStatus.Finish) {
-      isGamblerParticipant &&
-        sendMessage("WebGLHandler", "ReceiveMessage", `M_Win|${multiplier}`);
+      isGamblerParticipant && sendMessage('WebGLHandler', 'ReceiveMessage', `M_Win|${multiplier}`);
 
-      sendMessage(
-        "WebGLHandler",
-        "ReceiveMessage",
-        `M_StartGame|${finalMultiplier}`
-      );
+      sendMessage('WebGLHandler', 'ReceiveMessage', `M_StartGame|${finalMultiplier}`);
     }
   }, [status, finalMultiplier, isLoaded]);
 
   React.useEffect(() => {
-    if (unityEvent.name === "M_GameEnd") {
+    if (unityEvent.name === 'M_GameEnd') {
       onComplete && onComplete(finalMultiplier);
 
       setTimeout(() => {
         resetParticipants();
-        sendMessage("WebGLHandler", "ReceiveMessage", "ResetGame");
+        sendMessage('WebGLHandler', 'ReceiveMessage', 'ResetGame');
       }, 1500);
     }
   }, [unityEvent]);
@@ -110,7 +104,7 @@ export const CrashScene = ({
           />
           <span
             style={{
-              textShadow: "0 0 5px black, 0 0 5px black",
+              textShadow: '0 0 5px black, 0 0 5px black',
             }}
             className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
           >
@@ -119,7 +113,7 @@ export const CrashScene = ({
           <Progress.Root
             className="wr-radius-[1000px] wr-relative wr-z-50 wr-h-[25px] wr-w-[320px] wr-overflow-hidden wr-rounded-md wr-bg-black"
             style={{
-              transform: "translateZ(0)",
+              transform: 'translateZ(0)',
             }}
             value={percentageRef.current}
           >
@@ -127,13 +121,13 @@ export const CrashScene = ({
               className="wr-h-full wr-w-full wr-bg-gradient-to-t wr-from-unity-horse-race-blue-400 wr-to-unity-horse-race-blue-600"
               style={{
                 transform: `translateX(-${100 - percentageRef.current}%)`,
-                transition: "transform 660ms cubic-bezier(0.65, 0, 0.35, 1)",
+                transition: 'transform 660ms cubic-bezier(0.65, 0, 0.35, 1)',
               }}
             />
           </Progress.Root>
           <span
             style={{
-              textShadow: "0 0 5px black, 0 0 5px black",
+              textShadow: '0 0 5px black, 0 0 5px black',
             }}
             className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
           >

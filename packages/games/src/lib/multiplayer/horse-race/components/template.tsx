@@ -1,18 +1,18 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { UnityGameContainer } from "../../../common/containers";
-import { Form } from "../../../ui/form";
-import { Horse, horseMultipliers } from "../constants";
-import useHorseRaceGameStore from "../store";
-import { HorseRaceFormFields } from "../types";
-import { HorseRaceBetController } from "./bet-controller";
-import LastBets from "./last-bets";
-import { RacingScene } from "./racing-scene";
-import SelectedHorseDetail from "./selected-horse-detail";
+import { UnityGameContainer } from '../../../common/containers';
+import { Form } from '../../../ui/form';
+import { Horse, horseMultipliers } from '../constants';
+import useHorseRaceGameStore from '../store';
+import { HorseRaceFormFields } from '../types';
+import { HorseRaceBetController } from './bet-controller';
+import LastBets from './last-bets';
+import { RacingScene } from './racing-scene';
+import SelectedHorseDetail from './selected-horse-detail';
 
 type TemplateOptions = {
   scene?: {
@@ -33,9 +33,7 @@ type TemplateProps = {
 };
 
 const HorseRaceTemplate = (props: TemplateProps) => {
-  const { selectedHorse: participants } = useHorseRaceGameStore([
-    "selectedHorse",
-  ]);
+  const { selectedHorse: participants } = useHorseRaceGameStore(['selectedHorse']);
 
   const formSchema = z.object({
     wager: z
@@ -53,26 +51,26 @@ const HorseRaceTemplate = (props: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "all",
+    mode: 'all',
     defaultValues: {
       wager: props?.minWager || 1,
       horse: Horse.IDLE,
     },
   });
 
-  const selectedHorse = form.watch("horse");
+  const selectedHorse = form.watch('horse');
 
-  const currentWager = form.watch("wager");
+  const currentWager = form.watch('wager');
 
   const maxPayout = horseMultipliers[selectedHorse] * currentWager;
 
   const isGamblerParticipant = React.useMemo(() => {
     if (
-      participants["15x"].find((p) => p.name === props.currentAccount) ||
-      participants["2x"].find((p) => p.name === props.currentAccount) ||
-      participants["3x"].find((p) => p.name === props.currentAccount) ||
-      participants["60x"].find((p) => p.name === props.currentAccount) ||
-      participants["8x"].find((p) => p.name === props.currentAccount)
+      participants['15x'].find((p) => p.name === props.currentAccount) ||
+      participants['2x'].find((p) => p.name === props.currentAccount) ||
+      participants['3x'].find((p) => p.name === props.currentAccount) ||
+      participants['60x'].find((p) => p.name === props.currentAccount) ||
+      participants['8x'].find((p) => p.name === props.currentAccount)
     )
       return true;
     else return false;

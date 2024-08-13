@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import NumberTicker from "../../../common/number-ticker";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { cn } from "../../../utils/style";
-import useLimboGameStore from "../store";
+import NumberTicker from '../../../common/number-ticker';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { cn } from '../../../utils/style';
+import useLimboGameStore from '../store';
 
 const Result = () => {
   const [isAnimated, setIsAnimated] = useState(false);
@@ -11,9 +11,9 @@ const Result = () => {
   const spinEffect = useAudioEffect(SoundEffects.LIMBO_SPIN_1);
 
   const { limboGameResults, currentAnimationCount } = useLimboGameStore([
-    "limboGameResults",
-    "currentAnimationCount",
-    "gameStatus",
+    'limboGameResults',
+    'currentAnimationCount',
+    'gameStatus',
   ]);
 
   const currentResult = limboGameResults[currentAnimationCount];
@@ -24,8 +24,8 @@ const Result = () => {
     <div className="wr-w-full wr-h-full wr-flex wr-justify-center wr-items-center lg:!wr-text-[200px] wr-text-8xl wr-text-white wr-font-bold">
       <div
         className={cn({
-          "wr-text-lime-600": won && currentResult && isAnimated,
-          "wr-text-red-600": !won && currentResult && isAnimated,
+          'wr-text-lime-600': won && currentResult && isAnimated,
+          'wr-text-red-600': !won && currentResult && isAnimated,
         })}
       >
         {currentResult?.number ? (

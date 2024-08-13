@@ -1,25 +1,19 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { AudioController } from "../../../../common/audio-controller";
-import { BetControllerContainer } from "../../../../common/containers";
-import {
-  BetControllerTitle,
-  WagerFormField,
-} from "../../../../common/controller";
-import { PreBetButton } from "../../../../common/pre-bet-button";
-import { TotalWager, WagerCurrencyIcon } from "../../../../common/wager";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import { Button } from "../../../../ui/button";
-import { FormLabel } from "../../../../ui/form";
-import { cn } from "../../../../utils/style";
-import useVideoPokerGameStore, { VideoPokerStatus } from "../../store";
-import { VideoPokerForm } from "../../types";
+import { AudioController } from '../../../../common/audio-controller';
+import { BetControllerContainer } from '../../../../common/containers';
+import { BetControllerTitle, WagerFormField } from '../../../../common/controller';
+import { PreBetButton } from '../../../../common/pre-bet-button';
+import { TotalWager, WagerCurrencyIcon } from '../../../../common/wager';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { Button } from '../../../../ui/button';
+import { FormLabel } from '../../../../ui/form';
+import { cn } from '../../../../utils/style';
+import useVideoPokerGameStore, { VideoPokerStatus } from '../../store';
+import { VideoPokerForm } from '../../types';
 
 interface Props {
   minWager: number;
@@ -27,17 +21,13 @@ interface Props {
   maxPayout: number;
 }
 
-export const VideoPokerBetController: React.FC<Props> = ({
-  maxPayout,
-  maxWager,
-  minWager,
-}) => {
+export const VideoPokerBetController: React.FC<Props> = ({ maxPayout, maxWager, minWager }) => {
   const form = useFormContext() as VideoPokerForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
-  const { status } = useVideoPokerGameStore(["status", "updateState"]);
+  const { status } = useVideoPokerGameStore(['status', 'updateState']);
 
-  const wager = form.watch("wager");
+  const wager = form.watch('wager');
 
   return (
     <BetControllerContainer>
@@ -57,13 +47,11 @@ export const VideoPokerBetController: React.FC<Props> = ({
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]"
+                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
-                ${maxPayout}
-              </span>
+              <span className={cn('wr-font-semibold wr-text-zinc-100')}>${maxPayout}</span>
             </div>
           </div>
           <div>
@@ -74,18 +62,16 @@ export const VideoPokerBetController: React.FC<Props> = ({
         <PreBetButton>
           <Button
             type="submit"
-            variant={"success"}
+            variant={'success'}
             className="wr-w-full"
-            size={"xl"}
+            size={'xl'}
             onClick={() => clickEffect.play()}
             isLoading={form.formState.isSubmitting || form.formState.isLoading}
             disabled={
-              !form.formState.isValid ||
-              form.formState.isSubmitting ||
-              form.formState.isLoading
+              !form.formState.isValid || form.formState.isSubmitting || form.formState.isLoading
             }
           >
-            {status === VideoPokerStatus.Dealt ? "Finish game" : "Start game"}
+            {status === VideoPokerStatus.Dealt ? 'Finish game' : 'Start game'}
           </Button>
         </PreBetButton>
       </div>

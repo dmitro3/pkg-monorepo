@@ -1,4 +1,4 @@
-import { LiveResultsTemplate } from "@winrlabs/games";
+import { LiveResultsTemplate } from '@winrlabs/games';
 
 const LiveResults = () => {
   return <LiveResultsTemplate />;

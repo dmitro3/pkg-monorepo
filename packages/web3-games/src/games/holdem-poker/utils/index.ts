@@ -1,4 +1,4 @@
-import { Combination } from "@winrlabs/games";
+import { Combination } from '@winrlabs/games';
 
 export const checkPairOfAcesOrBetter = (drawnCards: number[]): Combination => {
   let allCards = [
@@ -72,10 +72,7 @@ const insertionSortByValueFive = (cards: number[]): number[] => {
   return cards;
 };
 
-const checkFlushesAndStraightsFive = (
-  values: number[],
-  types: number[]
-): Combination => {
+const checkFlushesAndStraightsFive = (values: number[], types: number[]): Combination => {
   // Count occurrences of each suit
   const suitCounts: number[] = [];
 
@@ -111,13 +108,7 @@ const checkFlushesAndStraightsFive = (
 
 const isSequentialStraightFive = (values: number[]): boolean => {
   // Special case for low straight (Ace to 5)
-  if (
-    values[0] == 2 &&
-    values[1] == 3 &&
-    values[2] == 4 &&
-    values[3] == 5 &&
-    values[4] == 14
-  ) {
+  if (values[0] == 2 && values[1] == 3 && values[2] == 4 && values[3] == 5 && values[4] == 14) {
     // since there are only 5 cards the cards must be sorted this way
     return true;
   }
@@ -148,19 +139,15 @@ const checkPairsAndFullHouseFive = (values: number[]): Combination => {
     if (values[i] == previousValue) {
       currentCount++;
     } else {
-      const [
-        _firstPairValue,
-        _secondPairValue,
-        _threeOfAKindValue,
-        _fourOfAKindValue,
-      ] = updateCounts(
-        currentCount,
-        previousValue,
-        firstPairValue,
-        secondPairValue,
-        threeOfAKindValue,
-        fourOfAKindValue
-      );
+      const [_firstPairValue, _secondPairValue, _threeOfAKindValue, _fourOfAKindValue] =
+        updateCounts(
+          currentCount,
+          previousValue,
+          firstPairValue,
+          secondPairValue,
+          threeOfAKindValue,
+          fourOfAKindValue
+        );
 
       firstPairValue = _firstPairValue as number;
 
@@ -177,12 +164,7 @@ const checkPairsAndFullHouseFive = (values: number[]): Combination => {
   }
 
   // Update counts for the last set of identical _values
-  const [
-    _firstPairValue,
-    _secondPairValue,
-    _threeOfAKindValue,
-    _fourOfAKindValue,
-  ] = updateCounts(
+  const [_firstPairValue, _secondPairValue, _threeOfAKindValue, _fourOfAKindValue] = updateCounts(
     currentCount,
     previousValue,
     firstPairValue,
@@ -209,11 +191,7 @@ const checkPairsAndFullHouseFive = (values: number[]): Combination => {
   }
 
   // Check for full house, in case of 5 card there only can be 1 three of a kind
-  if (
-    threeOfAKindValue > 0 &&
-    firstPairValue > 0 &&
-    firstPairValue != threeOfAKindValue
-  ) {
+  if (threeOfAKindValue > 0 && firstPairValue > 0 && firstPairValue != threeOfAKindValue) {
     combination = Combination.FULL_HOUSE;
 
     return combination;

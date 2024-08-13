@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { Chip } from "../../../common/chip-controller/types";
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { WinAnimation } from "../../../common/win-animation";
-import { CDN_URL } from "../../../constants";
-import { useGameOptions } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { Form } from "../../../ui/form";
-import { Roulette } from "..";
+import { Chip } from '../../../common/chip-controller/types';
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { WinAnimation } from '../../../common/win-animation';
+import { CDN_URL } from '../../../constants';
+import { useGameOptions } from '../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { Form } from '../../../ui/form';
+import { Roulette } from '..';
 import {
   chunkMinWagerIndexes,
   MAX_BET_COUNT,
   MIN_BET_COUNT,
   minWagerMultiplierForSideBets,
   NUMBER_INDEX_COUNT,
-} from "../constants";
-import { RouletteFormFields, RouletteGameProps } from "../types";
-import { MobileController } from "./mobile-controller";
+} from '../constants';
+import { RouletteFormFields, RouletteGameProps } from '../types';
+import { MobileController } from './mobile-controller';
 
 type TemplateProps = RouletteGameProps & {
   minWager?: number;
@@ -91,12 +91,12 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
     },
   });
 
-  const selectedNumbers = form.watch("selectedNumbers");
+  const selectedNumbers = form.watch('selectedNumbers');
 
   const addWager = (n: number, wager: Chip) => {
     const _selectedNumbers = [...selectedNumbers];
 
-    console.log(n, "index", chunkMinWagerIndexes.includes(n));
+    console.log(n, 'index', chunkMinWagerIndexes.includes(n));
 
     let newWager = 0;
 
@@ -118,14 +118,14 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
     _selectedNumbers[n] = newWager;
 
     const currentBalance = account?.balanceAsDollar || 0;
-    const chipAmount = form.watch("wager");
+    const chipAmount = form.watch('wager');
 
     if (totalWager * chipAmount > currentBalance) {
-      console.log("balance reached!");
+      console.log('balance reached!');
       return;
     } else {
-      form.setValue("selectedNumbers", [..._selectedNumbers]);
-      form.setValue("totalWager", totalWager + 1);
+      form.setValue('selectedNumbers', [..._selectedNumbers]);
+      form.setValue('totalWager', totalWager + 1);
 
       // set last selected for undo bet
       const _ls = lastSelecteds;
@@ -154,7 +154,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
 
     _sn[_ls.index] = _nw;
 
-    form.setValue("selectedNumbers", [..._sn]);
+    form.setValue('selectedNumbers', [..._sn]);
 
     // remove last items
     lastSelecteds.pop();

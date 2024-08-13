@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   BetHistoryTemplate,
@@ -7,7 +7,7 @@ import {
   RouletteGameResult,
   RouletteTemplate,
   useLiveResultStore,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   controllerAbi,
   useCurrentAccount,
@@ -16,19 +16,19 @@ import {
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import React, { useMemo, useState } from "react";
-import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+} from '@winrlabs/web3';
+import React, { useMemo, useState } from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
+import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import {
   DecodedEvent,
   GAME_HUB_EVENT_TYPES,
   prepareGameTransaction,
   SingleStepSettledEvent,
-} from "../utils";
+} from '../utils';
 
 type TemplateOptions = {
   scene?: {
@@ -48,25 +48,15 @@ interface TemplateWithWeb3Props {
 }
 
 export default function RouletteGame(props: TemplateWithWeb3Props) {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.roulette,
-    gameType: GameType.ROULETTE,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.roulette,
+      gameType: GameType.ROULETTE,
+      wagmiConfig,
+    });
 
   const [formValues, setFormValues] = useState<RouletteFormFields>({
     wager: props.minWager || 1,
@@ -80,7 +70,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     updateGame,
     skipAll,
     clear: clearLiveResults,
-  } = useLiveResultStore(["addResult", "clear", "updateGame", "skipAll"]);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
 
   const gameEvent = useListenGameEvent();
 
@@ -89,16 +79,15 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   }));
   const { priceFeed } = usePriceFeed();
 
-  const [rouletteResult, setRouletteResult] =
-    useState<DecodedEvent<any, SingleStepSettledEvent>>();
+  const [rouletteResult, setRouletteResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedToken.address,
     showDefaultToasts: false,
@@ -116,20 +105,19 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   }, [rouletteResult]);
 
   const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
-      prepareGameTransaction({
-        wager: formValues.wager,
-        stopGain: 0,
-        stopLoss: 0,
-        selectedCurrency: selectedToken,
-        lastPrice: priceFeed[selectedToken.priceKey],
-      });
+    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
+      wager: formValues.wager,
+      stopGain: 0,
+      stopLoss: 0,
+      selectedCurrency: selectedToken,
+      lastPrice: priceFeed[selectedToken.priceKey],
+    });
 
     const encodedChoice = encodeAbiParameters(
       [
         {
-          name: "data",
-          type: "uint8[145]",
+          name: 'data',
+          type: 'uint8[145]',
         },
       ],
       [formValues.selectedNumbers]
@@ -137,11 +125,11 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "stopGain", type: "uint128" },
-        { name: "stopLoss", type: "uint128" },
-        { name: "count", type: "uint8" },
-        { name: "data", type: "bytes" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'stopGain', type: 'uint128' },
+        { name: 'stopLoss', type: 'uint128' },
+        { name: 'count', type: 'uint8' },
+        { name: 'data', type: 'bytes' },
       ],
       [
         wagerInWei,
@@ -154,12 +142,12 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.roulette as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -177,15 +165,15 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     priceFeed[selectedToken.priceKey],
   ]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.roulette,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -199,7 +187,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -212,7 +200,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
       await handleTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
   };
@@ -234,12 +222,11 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     (step: number) => {
       props.onAnimationStep && props.onAnimationStep(step);
 
-      const currentStepResult =
-        rouletteResult?.program?.[0]?.data.converted.steps[step - 1];
+      const currentStepResult = rouletteResult?.program?.[0]?.data.converted.steps[step - 1];
 
       if (!currentStepResult) return;
 
-      console.log("step", rouletteResult?.program?.[0]?.data);
+      console.log('step', rouletteResult?.program?.[0]?.data);
 
       const isWon = currentStepResult.win;
 
@@ -264,18 +251,13 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     [rouletteResult]
   );
 
-  const {
-    betHistory,
-    isHistoryLoading,
-    mapHistoryTokens,
-    setHistoryFilter,
-    refetchHistory,
-  } = useBetHistory({
-    gameType: GameType.ROULETTE,
-    options: {
-      enabled: !props.hideBetHistory,
-    },
-  });
+  const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
+    useBetHistory({
+      gameType: GameType.ROULETTE,
+      options: {
+        enabled: !props.hideBetHistory,
+      },
+    });
 
   const { handleGetBadges } = useGetBadges();
 

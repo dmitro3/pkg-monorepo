@@ -1,7 +1,7 @@
-import { LimboGame } from "./components/game";
-import GameArea from "./components/game-area";
-import LastBets from "./components/last-bets";
-import Result from "./components/result";
+import { LimboGame } from './components/game';
+import GameArea from './components/game-area';
+import LastBets from './components/last-bets';
+import Result from './components/result';
 
 export const Limbo = {
   GameArea,
@@ -11,6 +11,6 @@ export const Limbo = {
   // Slider: LimboSlider,
 };
 
-export { default as LimboTemplate } from "./components/template";
-export * from "./store";
-export * from "./types";
+export { default as LimboTemplate } from './components/template';
+export * from './store';
+export * from './types';

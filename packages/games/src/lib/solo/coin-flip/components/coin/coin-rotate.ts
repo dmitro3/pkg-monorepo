@@ -1,17 +1,14 @@
-import TWEEN, { Easing } from "@tweenjs/tween.js";
+import TWEEN, { Easing } from '@tweenjs/tween.js';
 
-import { CoinSide } from "../../constants";
-import { CoinCanvas, EasingFunction } from "../../types";
-import createCylinder from "./cylinder";
+import { CoinSide } from '../../constants';
+import { CoinCanvas, EasingFunction } from '../../types';
+import createCylinder from './cylinder';
 
 class CoinRotate {
   private canvas!: CoinCanvas;
   private animation?: () => void;
   private increment = Math.PI / 15;
-  private cylinder!: THREE.Mesh<
-    THREE.CylinderGeometry,
-    THREE.MeshBasicMaterial[]
-  >;
+  private cylinder!: THREE.Mesh<THREE.CylinderGeometry, THREE.MeshBasicMaterial[]>;
 
   private addCylinder() {
     this.cylinder = createCylinder();
@@ -26,7 +23,7 @@ class CoinRotate {
 
   public initialize() {
     if (!this.canvas) {
-      throw new Error("Please set a canvas!");
+      throw new Error('Please set a canvas!');
     }
 
     this.addCylinder();
@@ -105,8 +102,7 @@ class CoinRotate {
 
   private getCurrentSide(): CoinSide {
     const remainingMovement = this.getRemainingMovement();
-    const currentSide =
-      Math.round((this.position + remainingMovement) / Math.PI) % 2;
+    const currentSide = Math.round((this.position + remainingMovement) / Math.PI) % 2;
 
     return currentSide;
   }
@@ -126,12 +122,7 @@ class CoinRotate {
   }
 
   public async start(duration: number): Promise<void> {
-    return this.animateByEffect(
-      0,
-      Math.PI * 2,
-      Easing.Quadratic.In,
-      duration
-    ).then(() => {
+    return this.animateByEffect(0, Math.PI * 2, Easing.Quadratic.In, duration).then(() => {
       this.continue();
     });
   }
@@ -141,12 +132,7 @@ class CoinRotate {
       this.clearAnimation();
       const to = this.getSidePositionInFuture(side);
 
-      return this.animateByEffect(
-        this.position,
-        to,
-        Easing.Elastic.Out,
-        duration
-      ).then(resolve);
+      return this.animateByEffect(this.position, to, Easing.Elastic.Out, duration).then(resolve);
     });
   }
 

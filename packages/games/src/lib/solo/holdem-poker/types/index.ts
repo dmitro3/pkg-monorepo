@@ -1,4 +1,3 @@
-
 export interface HoldemPokerGameProps {
   activeGameData: HoldemPokerActiveGame;
   isInitialDataFetched: boolean;
@@ -10,7 +9,7 @@ export interface HoldemPokerGameProps {
   handleFinalizeFold: () => Promise<void>;
   onFormChange: (fields: HoldemPokerFormFields) => void;
   onRefresh: () => void;
-  onGameCompleted?: (move: "fold" | "call") => void;
+  onGameCompleted?: (move: 'fold' | 'call') => void;
 }
 
 export interface HoldemPokerFormFields {
@@ -64,6 +63,6 @@ export enum HoldemPokerResult {
 }
 
 export enum HOLDEM_POKER_GAME_STATUS {
-  OnIdle = "OnIdle", // DEAL STATE
-  OnPlay = "OnPlay", // CALL OR FOLD STATE
+  OnIdle = 'OnIdle', // DEAL STATE
+  OnPlay = 'OnPlay', // CALL OR FOLD STATE
 }

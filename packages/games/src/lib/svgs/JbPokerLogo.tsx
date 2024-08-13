@@ -1,18 +1,9 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgJbPokerLogo = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={26}
-    height={26}
-    fill="none"
-    {...props}
-  >
-    <path
-      fill="#fff"
-      d="M26 13c0-7.18-5.82-13-13-13S0 5.82 0 13s5.82 13 13 13 13-5.82 13-13Z"
-    />
+  <svg xmlns="http://www.w3.org/2000/svg" width={26} height={26} fill="none" {...props}>
+    <path fill="#fff" d="M26 13c0-7.18-5.82-13-13-13S0 5.82 0 13s5.82 13 13 13 13-5.82 13-13Z" />
     <path
       fill="#000818"
       d="m7.05 11.155 4.576 2.344c.313.16.51.482.51.833v4.58a.935.935 0 0 1-1.375.825l-2.475-1.323a2.337 2.337 0 0 1-1.235-2.061v-1.89l.887.513c.217.125.35.356.35.606v.632c0 .333.178.64.466.808l2.11 1.225v-3.641l-3.04-1.537a1.349 1.349 0 0 1-.765-1.237c0-.294-.008-.677-.008-.677Z"

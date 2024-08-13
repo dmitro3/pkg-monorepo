@@ -1,4 +1,4 @@
-export type TWeb3GamesModals = "refund";
+export type TWeb3GamesModals = 'refund';
 
 export type Web3GamesModalPropsStore = {
   refund: Web3GamesRefundModalProps;
@@ -10,10 +10,7 @@ export interface Web3GamesModalsStoreState {
 }
 
 export interface Web3GamesModalsStoreActions {
-  openModal: (
-    modal: TWeb3GamesModals,
-    props?: Partial<Web3GamesModalPropsStore>
-  ) => void;
+  openModal: (modal: TWeb3GamesModals, props?: Partial<Web3GamesModalPropsStore>) => void;
   closeModal: () => void;
 }
 
@@ -23,5 +20,4 @@ export interface Web3GamesRefundModalProps {
   playerRefund?: () => Promise<void>;
 }
 
-export type Web3GamesModalsStore = Web3GamesModalsStoreState &
-  Web3GamesModalsStoreActions;
+export type Web3GamesModalsStore = Web3GamesModalsStoreState & Web3GamesModalsStoreActions;

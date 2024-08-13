@@ -1,13 +1,13 @@
-import { AlignLeft } from "../../../svgs";
-import { Button } from "../../../ui/button";
-import { cn } from "../../../utils/style";
-import useHorseRaceGameStore from "../store";
-import HorseDetail from "./horse-detail";
+import { AlignLeft } from '../../../svgs';
+import { Button } from '../../../ui/button';
+import { cn } from '../../../utils/style';
+import useHorseRaceGameStore from '../store';
+import HorseDetail from './horse-detail';
 
 const SelectedHorseDetail = () => {
   const { isParticipantsOpen, setIsParticipantsOpen } = useHorseRaceGameStore([
-    "isParticipantsOpen",
-    "setIsParticipantsOpen",
+    'isParticipantsOpen',
+    'setIsParticipantsOpen',
   ]);
 
   return (
@@ -16,17 +16,17 @@ const SelectedHorseDetail = () => {
         variant="secondary"
         type="button"
         className={cn(
-          "wr-absolute wr-top-0 wr-h-9 wr-w-9 wr-bg-zinc-100/60 wr-p-0 wr-transition-all wr-duration-200 wr-hidden  md:!wr-grid wr-place-items-center",
+          'wr-absolute wr-top-0 wr-h-9 wr-w-9 wr-bg-zinc-100/60 wr-p-0 wr-transition-all wr-duration-200 wr-hidden  md:!wr-grid wr-place-items-center',
           {
-            "wr-right-[190px]": isParticipantsOpen,
-            "wr-right-[45px]": !isParticipantsOpen,
+            'wr-right-[190px]': isParticipantsOpen,
+            'wr-right-[45px]': !isParticipantsOpen,
           }
         )}
         onClick={() => setIsParticipantsOpen(!isParticipantsOpen)}
       >
         <AlignLeft
-          className={cn("wr-rotate-180 wr-transition-all wr-duration-300", {
-            "wr-rotate-0": !isParticipantsOpen,
+          className={cn('wr-rotate-180 wr-transition-all wr-duration-300', {
+            'wr-rotate-0': !isParticipantsOpen,
           })}
         />
       </Button>

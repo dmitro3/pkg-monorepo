@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { Plinko3dGameResult } from "../types";
+import { Plinko3dGameResult } from '../types';
 
 export interface PlinkoLastBets {
   multiplier: string;
@@ -11,7 +11,7 @@ export interface PlinkoLastBets {
 interface PlinkoLastBetsState {
   lastBets: PlinkoLastBets[];
   plinkoGameResults: Plinko3dGameResult[];
-  gameStatus: "IDLE" | "PLAYING" | "ENDED";
+  gameStatus: 'IDLE' | 'PLAYING' | 'ENDED';
   currentAnimationCount: number;
 }
 
@@ -21,7 +21,7 @@ interface PlinkoLastBetsActions {
   removeLastBet: (index: number) => void;
   clearStore: () => void;
   updatePlinkoGameResults: (item: Plinko3dGameResult[]) => void;
-  updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
+  updateGameStatus: (status: 'IDLE' | 'PLAYING' | 'ENDED') => void;
   updateCurrentAnimationCount: (count: number) => void;
 }
 
@@ -31,9 +31,8 @@ export const plinkoLastBetsStore = create<PlinkoLastBetsStore>()((set) => ({
   lastBets: [],
   plinkoGameResults: [],
   currentAnimationCount: 0,
-  gameStatus: "IDLE",
-  addLastBet: (item) =>
-    set((state) => ({ lastBets: [...state.lastBets, item] })),
+  gameStatus: 'IDLE',
+  addLastBet: (item) => set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
   updatePlinkoGameResults: (item) => set(() => ({ plinkoGameResults: item })),
   removeLastBet: (index) =>
@@ -48,12 +47,11 @@ export const plinkoLastBetsStore = create<PlinkoLastBetsStore>()((set) => ({
     set({
       lastBets: [],
       plinkoGameResults: [],
-      gameStatus: "IDLE",
+      gameStatus: 'IDLE',
       currentAnimationCount: 0,
     }),
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
-  updateCurrentAnimationCount: (count) =>
-    set(() => ({ currentAnimationCount: count })),
+  updateCurrentAnimationCount: (count) => set(() => ({ currentAnimationCount: count })),
 }));
 
 const usePlinko3dGameStore = <T extends keyof PlinkoLastBetsStore>(keys: T[]) =>

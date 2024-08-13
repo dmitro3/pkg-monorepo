@@ -1,31 +1,28 @@
-"use client";
-import * as React from "react";
-import { useFormContext } from "react-hook-form";
+'use client';
+import * as React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { Advanced } from "../../../../common/advanced";
-import { AudioController } from "../../../../common/audio-controller";
-import { BetControllerContainer } from "../../../../common/containers";
+import { Advanced } from '../../../../common/advanced';
+import { AudioController } from '../../../../common/audio-controller';
+import { BetControllerContainer } from '../../../../common/containers';
 import {
   BetControllerTitle,
   BetCountFormField,
   StopGainFormField,
   StopLossFormField,
   WagerFormField,
-} from "../../../../common/controller";
-import { PreBetButton } from "../../../../common/pre-bet-button";
-import { SkipButton } from "../../../../common/skip-button";
-import { TotalWager, WagerCurrencyIcon } from "../../../../common/wager";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import { Button } from "../../../../ui/button";
-import { FormLabel } from "../../../../ui/form";
-import { cn } from "../../../../utils/style";
-import { toDecimals, toFormatted } from "../../../../utils/web3";
-import { useCoinFlipGameStore } from "../..";
-import { CoinFlipForm } from "../../types";
-import { CoinFlipController } from "./controller";
+} from '../../../../common/controller';
+import { PreBetButton } from '../../../../common/pre-bet-button';
+import { SkipButton } from '../../../../common/skip-button';
+import { TotalWager, WagerCurrencyIcon } from '../../../../common/wager';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { Button } from '../../../../ui/button';
+import { FormLabel } from '../../../../ui/form';
+import { cn } from '../../../../utils/style';
+import { toDecimals, toFormatted } from '../../../../utils/web3';
+import { useCoinFlipGameStore } from '../..';
+import { CoinFlipForm } from '../../types';
+import { CoinFlipController } from './controller';
 
 interface Props {
   minWager: number;
@@ -50,8 +47,8 @@ export const BetController: React.FC<Props> = ({
   }, [form.getValues().wager, form.getValues().betCount, winMultiplier]);
 
   const { coinFlipGameResults, gameStatus } = useCoinFlipGameStore([
-    "coinFlipGameResults",
-    "gameStatus",
+    'coinFlipGameResults',
+    'gameStatus',
   ]);
 
   return (
@@ -67,7 +64,7 @@ export const BetController: React.FC<Props> = ({
           isDisabled={
             form.formState.isSubmitting ||
             form.formState.isLoading ||
-            gameStatus == "PLAYING" ||
+            gameStatus == 'PLAYING' ||
             isGettingResults
           }
         />
@@ -76,7 +73,7 @@ export const BetController: React.FC<Props> = ({
           isDisabled={
             form.formState.isSubmitting ||
             form.formState.isLoading ||
-            gameStatus == "PLAYING" ||
+            gameStatus == 'PLAYING' ||
             isGettingResults
           }
         />
@@ -85,21 +82,18 @@ export const BetController: React.FC<Props> = ({
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden"
+                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
+              <span className={cn('wr-font-semibold wr-text-zinc-100')}>
                 ${toFormatted(maxPayout, 2)}
               </span>
             </div>
           </div>
           <div>
             <FormLabel>Total Wager</FormLabel>
-            <TotalWager
-              betCount={form.getValues().betCount}
-              wager={form.getValues().wager}
-            />
+            <TotalWager betCount={form.getValues().betCount} wager={form.getValues().wager} />
           </div>
         </div>
 
@@ -110,7 +104,7 @@ export const BetController: React.FC<Props> = ({
                 isDisabled={
                   form.formState.isSubmitting ||
                   form.formState.isLoading ||
-                  gameStatus == "PLAYING" ||
+                  gameStatus == 'PLAYING' ||
                   isGettingResults
                 }
               />
@@ -118,7 +112,7 @@ export const BetController: React.FC<Props> = ({
                 isDisabled={
                   form.formState.isSubmitting ||
                   form.formState.isLoading ||
-                  gameStatus == "PLAYING" ||
+                  gameStatus == 'PLAYING' ||
                   isGettingResults
                 }
               />
@@ -129,20 +123,18 @@ export const BetController: React.FC<Props> = ({
           <PreBetButton>
             <Button
               type="submit"
-              variant={"success"}
+              variant={'success'}
               className="wr-w-full wr-select-none"
-              size={"xl"}
+              size={'xl'}
               onClick={() => clickEffect.play()}
               isLoading={
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                isGettingResults
+                form.formState.isSubmitting || form.formState.isLoading || isGettingResults
               }
               disabled={
                 !form.formState.isValid ||
                 form.formState.isSubmitting ||
                 form.formState.isLoading ||
-                (gameStatus == "PLAYING" &&
+                (gameStatus == 'PLAYING' &&
                   coinFlipGameResults.length < 4 &&
                   coinFlipGameResults.length > 1) ||
                 isGettingResults
@@ -152,9 +144,7 @@ export const BetController: React.FC<Props> = ({
             </Button>
           </PreBetButton>
         )}
-        {coinFlipGameResults.length > 3 && gameStatus == "PLAYING" && (
-          <SkipButton />
-        )}
+        {coinFlipGameResults.length > 3 && gameStatus == 'PLAYING' && <SkipButton />}
       </div>
       <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />

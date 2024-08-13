@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import styles from "./style.module.css";
+import styles from './style.module.css';
 
 // Define a type for our context state
 export type CountdownContextState = {
@@ -13,9 +13,7 @@ export type CountdownContextState = {
 };
 
 // Context
-const CountdownContext = React.createContext<CountdownContextState | null>(
-  null
-);
+const CountdownContext = React.createContext<CountdownContextState | null>(null);
 
 // Define types for the props
 interface CountdownProviderProps {
@@ -30,9 +28,7 @@ export const CountdownProvider = ({
   children,
   onTimeLeftChange,
 }: CountdownProviderProps) => {
-  const [timeLeft, setTimeLeft] = useState<CountdownContextState>(
-    calculateTimeLeft(targetDate)
-  );
+  const [timeLeft, setTimeLeft] = useState<CountdownContextState>(calculateTimeLeft(targetDate));
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -48,11 +44,7 @@ export const CountdownProvider = ({
     };
   }, [targetDate]);
 
-  return (
-    <CountdownContext.Provider value={timeLeft}>
-      {children}
-    </CountdownContext.Provider>
-  );
+  return <CountdownContext.Provider value={timeLeft}>{children}</CountdownContext.Provider>;
 };
 
 // Helper function to calculate time left
@@ -84,7 +76,7 @@ export const Days: React.FC = () => {
   const ref = useRef({} as HTMLSpanElement | null);
 
   useEffect(() => {
-    ref?.current?.style.setProperty("--value", `${context?.days}`);
+    ref?.current?.style.setProperty('--value', `${context?.days}`);
   }, [context?.days]);
 
   return (
@@ -100,7 +92,7 @@ export const Hours: React.FC = () => {
   const ref = useRef({} as HTMLSpanElement | null);
 
   useEffect(() => {
-    ref?.current?.style.setProperty("--value", `${context?.hours}`);
+    ref?.current?.style.setProperty('--value', `${context?.hours}`);
   }, [context?.hours]);
 
   return (
@@ -116,7 +108,7 @@ export const Minutes: React.FC = () => {
   const ref = useRef({} as HTMLSpanElement | null);
 
   useEffect(() => {
-    ref?.current?.style.setProperty("--value", `${context?.minutes}`);
+    ref?.current?.style.setProperty('--value', `${context?.minutes}`);
   }, [context?.minutes]);
 
   return (
@@ -132,7 +124,7 @@ export const Seconds: React.FC = () => {
   const ref = useRef({} as HTMLSpanElement | null);
 
   useEffect(() => {
-    ref?.current?.style.setProperty("--value", `${context?.seconds}`);
+    ref?.current?.style.setProperty('--value', `${context?.seconds}`);
   }, [context?.seconds]);
 
   return (

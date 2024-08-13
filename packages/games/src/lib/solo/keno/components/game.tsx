@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import useKenoGameStore from "../store";
-import { KenoGameResult } from "../types";
+import useKenoGameStore from '../store';
+import { KenoGameResult } from '../types';
 
-export type KenoGameProps = React.ComponentProps<"div"> & {
+export type KenoGameProps = React.ComponentProps<'div'> & {
   gameResults: KenoGameResult[];
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: KenoGameResult[]) => void;
@@ -11,7 +11,7 @@ export type KenoGameProps = React.ComponentProps<"div"> & {
 };
 
 export const KenoGame = ({ gameResults, children }: KenoGameProps) => {
-  const { updateKenoGameResults } = useKenoGameStore(["updateKenoGameResults"]);
+  const { updateKenoGameResults } = useKenoGameStore(['updateKenoGameResults']);
 
   React.useEffect(() => {
     if (gameResults.length) {

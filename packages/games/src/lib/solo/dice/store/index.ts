@@ -1,12 +1,12 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { DiceGameResult } from "../types";
+import { DiceGameResult } from '../types';
 
 interface DiceGameState {
   lastBets: DiceGameResult[];
   diceGameResults: DiceGameResult[];
-  gameStatus: "IDLE" | "PLAYING" | "ENDED";
+  gameStatus: 'IDLE' | 'PLAYING' | 'ENDED';
   currentAnimationCount: number;
   rollValue: number;
 }
@@ -17,7 +17,7 @@ interface DiceGameStateActions {
   removeLastBet: (index: number) => void;
   clearStore: () => void;
   updateDiceGameResults: (item: DiceGameResult[]) => void;
-  updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
+  updateGameStatus: (status: 'IDLE' | 'PLAYING' | 'ENDED') => void;
   updateCurrentAnimationCount: (count: number) => void;
   updateRollValue: (value: number) => void;
 }
@@ -30,8 +30,7 @@ export const diceResultsStore = create<DiceGameStore>()((set) => ({
   currentAnimationCount: 0,
   rollValue: 0,
   updateRollValue: (value) => set(() => ({ rollValue: value })),
-  addLastBet: (item) =>
-    set((state) => ({ lastBets: [...state.lastBets, item] })),
+  addLastBet: (item) => set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
   removeLastBet: (index) =>
     set((state) => {
@@ -46,14 +45,13 @@ export const diceResultsStore = create<DiceGameStore>()((set) => ({
     set({
       lastBets: [],
       diceGameResults: [],
-      gameStatus: "IDLE",
+      gameStatus: 'IDLE',
       currentAnimationCount: 0,
       rollValue: 50,
     }),
-  gameStatus: "IDLE",
+  gameStatus: 'IDLE',
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
-  updateCurrentAnimationCount: (count) =>
-    set(() => ({ currentAnimationCount: count })),
+  updateCurrentAnimationCount: (count) => set(() => ({ currentAnimationCount: count })),
 }));
 
 export const useDiceGameStore = <T extends keyof DiceGameStore>(keys: T[]) =>

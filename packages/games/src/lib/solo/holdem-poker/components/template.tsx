@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { UnityAudioController } from "../../../common/audio-controller";
-import { UnityGameContainer } from "../../../common/containers";
-import { UnityFullscreenButton } from "../../../common/controller";
-import { cn } from "../../../utils/style";
-import { HoldemPokerGameProps } from "../types";
-import { HoldemPokerScene } from "./scene";
+import { UnityAudioController } from '../../../common/audio-controller';
+import { UnityGameContainer } from '../../../common/containers';
+import { UnityFullscreenButton } from '../../../common/controller';
+import { cn } from '../../../utils/style';
+import { HoldemPokerGameProps } from '../types';
+import { HoldemPokerScene } from './scene';
 
 type TemplateProps = HoldemPokerGameProps & {
   minWager?: number;
@@ -20,9 +20,8 @@ const HoldemPokerTemplate = (props: TemplateProps) => {
 
   return (
     <UnityGameContainer
-      className={cn("wr-h-[640px] wr-relative max-lg:wr-h-full", {
-        "wr-fixed -wr-left-0 wr-top-0 wr-z-50 wr-h-[100dvh] wr-w-[100dvw]":
-          isFullscreen,
+      className={cn('wr-h-[640px] wr-relative max-lg:wr-h-full', {
+        'wr-fixed -wr-left-0 wr-top-0 wr-z-50 wr-h-[100dvh] wr-w-[100dvw]': isFullscreen,
       })}
     >
       <HoldemPokerScene {...props} />

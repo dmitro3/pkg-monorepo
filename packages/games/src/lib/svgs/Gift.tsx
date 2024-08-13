@@ -1,13 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgGift = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" {...props}>
     <path
       fill="currentColor"
       d="M5 3.888c0-1.227.995-2.222 2.222-2.222 1.117 0 2.116.507 2.778 1.304a3.604 3.604 0 0 1 2.778-1.304c1.227 0 2.222.995 2.222 2.222 0 .716-.208 1.383-.568 1.945h1.401a1.667 1.667 0 1 1 0 3.333h-5V5.833h.556c1.074 0 1.944-.87 1.944-1.945a.556.556 0 0 0-.555-.555c-1.074 0-1.945.87-1.945 1.944v.556H9.167v-.556c0-1.074-.87-1.944-1.945-1.944a.556.556 0 0 0-.555.555c0 1.074.87 1.945 1.944 1.945h.556v3.333h-5a1.667 1.667 0 0 1 0-3.333h1.4A3.594 3.594 0 0 1 5 3.888ZM10.833 10.833h5.834v3.333a3.333 3.333 0 0 1-3.334 3.333h-2.5v-6.666ZM9.167 10.833H3.333v3.333a3.333 3.333 0 0 0 3.334 3.333h2.5v-6.666Z"

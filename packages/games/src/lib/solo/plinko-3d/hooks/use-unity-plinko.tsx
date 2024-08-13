@@ -1,22 +1,18 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useUnityContext } from "react-unity-webgl";
+import React from 'react';
+import { useUnityContext } from 'react-unity-webgl';
 
-import { useEqualizeUnitySound } from "../../../hooks/use-unity-sound";
+import { useEqualizeUnitySound } from '../../../hooks/use-unity-sound';
 
-const GenerateTable = "P_GenerateTable";
+const GenerateTable = 'P_GenerateTable';
 
 function arrayToString(input: number[][]): string {
   // Map each inner array to a string and join the resulting array of strings with ', '
-  return input?.map((arr) => `[${arr.join(",")}]`).join(", ");
+  return input?.map((arr) => `[${arr.join(',')}]`).join(', ');
 }
 
-export const useUnityPlinko = ({
-  buildedGameUrl,
-}: {
-  buildedGameUrl: string;
-}) => {
+export const useUnityPlinko = ({ buildedGameUrl }: { buildedGameUrl: string }) => {
   const BUILDED_GAME_URL = `${buildedGameUrl}/builded-games/plinko`;
 
   const {
@@ -48,7 +44,7 @@ export const useUnityPlinko = ({
 
       if (size < 6 || size > 12) return;
 
-      sendMessage("WebGLHandler", "ReceiveMessage", `${GenerateTable}|${size}`);
+      sendMessage('WebGLHandler', 'ReceiveMessage', `${GenerateTable}|${size}`);
     },
     [sendMessage]
   );
@@ -63,11 +59,7 @@ export const useUnityPlinko = ({
 
       const parsedResults = arrayToString(results);
 
-      sendMessage(
-        "WebGLHandler",
-        "ReceiveMessage",
-        `P_SpawnBall|${parsedResults}`
-      );
+      sendMessage('WebGLHandler', 'ReceiveMessage', `P_SpawnBall|${parsedResults}`);
     },
     [sendMessage]
   );

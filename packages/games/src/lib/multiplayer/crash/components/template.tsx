@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { UnityGameContainer } from "../../../common/containers";
-import { Form } from "../../../ui/form";
-import { CrashFormFields } from "../types";
-import { CrashBetController } from "./bet-controller";
-import { CrashScene } from "./crash-scene";
-import LastBets from "./last-bets";
-import CrashParticipant from "./participants";
+import { UnityGameContainer } from '../../../common/containers';
+import { Form } from '../../../ui/form';
+import { CrashFormFields } from '../types';
+import { CrashBetController } from './bet-controller';
+import { CrashScene } from './crash-scene';
+import LastBets from './last-bets';
+import CrashParticipant from './participants';
 
 type TemplateOptions = {
   scene?: {
@@ -48,7 +48,7 @@ const CrashTemplate = (props: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "all",
+    mode: 'all',
     defaultValues: {
       wager: props?.minWager || 1,
       multiplier: 1.01,
@@ -86,11 +86,7 @@ const CrashTemplate = (props: TemplateProps) => {
               options={props.options}
             />
             <LastBets />
-            <CrashScene
-              onComplete={onComplete}
-              gameUrl={props.gameUrl}
-              options={props.options}
-            />
+            <CrashScene onComplete={onComplete} gameUrl={props.gameUrl} options={props.options} />
             <div className="wr-absolute wr-top-0 wr-z-10 wr-h-full wr-w-full md:wr-bg-unity-overlay" />
             <CrashParticipant />
           </UnityGameContainer>

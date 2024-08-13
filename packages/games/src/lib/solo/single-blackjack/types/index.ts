@@ -1,4 +1,4 @@
-import { Cards, GameStruct, Hand } from "../../blackjack";
+import { Cards, GameStruct, Hand } from '../../blackjack';
 
 export enum SingleBlackjackHandIndex {
   FIRST,
@@ -7,7 +7,7 @@ export enum SingleBlackjackHandIndex {
 }
 
 export type SingleBJActiveGameHands = Record<
-  "dealer" | "firstHand" | "splittedFirstHand",
+  'dealer' | 'firstHand' | 'splittedFirstHand',
   {
     cards: Cards | null;
     hand: Hand | null;

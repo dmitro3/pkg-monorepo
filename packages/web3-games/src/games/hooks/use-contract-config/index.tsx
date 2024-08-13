@@ -1,5 +1,5 @@
-import React from "react";
-import { Config } from "wagmi";
+import React from 'react';
+import { Config } from 'wagmi';
 
 export interface ContractConfig {
   gameAddresses: GameAddresses;
@@ -39,31 +39,31 @@ interface ContractConfigContext extends ContractConfig {
 const ContractConfigContext = React.createContext<ContractConfigContext>({
   wagmiConfig: {} as Config,
   gameAddresses: {
-    coinFlip: "0x",
-    plinko: "0x",
-    limbo: "0x",
-    rps: "0x",
-    roll: "0x",
-    dice: "0x",
-    roulette: "0x",
-    baccarat: "0x",
-    keno: "0x",
-    wheel: "0x",
-    winrBonanza: "0x",
-    mines: "0x",
-    videoPoker: "0x",
-    blackjack: "0x",
-    blackjackReader: "0x",
-    horseRace: "0x",
-    crash: "0x",
-    singleBlackjack: "0x",
-    singleBlackjackReader: "0x",
-    holdemPoker: "0x",
+    coinFlip: '0x',
+    plinko: '0x',
+    limbo: '0x',
+    rps: '0x',
+    roll: '0x',
+    dice: '0x',
+    roulette: '0x',
+    baccarat: '0x',
+    keno: '0x',
+    wheel: '0x',
+    winrBonanza: '0x',
+    mines: '0x',
+    videoPoker: '0x',
+    blackjack: '0x',
+    blackjackReader: '0x',
+    horseRace: '0x',
+    crash: '0x',
+    singleBlackjack: '0x',
+    singleBlackjackReader: '0x',
+    holdemPoker: '0x',
   },
-  controllerAddress: "0x",
-  cashierAddress: "0x",
-  uiOperatorAddress: "0x",
-  rankMiddlewareAddress: "0x",
+  controllerAddress: '0x',
+  cashierAddress: '0x',
+  uiOperatorAddress: '0x',
+  rankMiddlewareAddress: '0x',
 });
 
 export const useContractConfigContext = () => {

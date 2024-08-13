@@ -1,12 +1,12 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { RouletteGameResult } from "../types";
+import { RouletteGameResult } from '../types';
 
 interface RouletteGameState {
   lastBets: RouletteGameResult[];
   rouletteGameResults: RouletteGameResult[];
-  gameStatus: "IDLE" | "PLAYING" | "ENDED";
+  gameStatus: 'IDLE' | 'PLAYING' | 'ENDED';
 }
 
 interface RouletteGameStateActions {
@@ -15,7 +15,7 @@ interface RouletteGameStateActions {
   removeLastBet: (index: number) => void;
   clearStore: () => void;
   updateRouletteGameResults: (item: RouletteGameResult[]) => void;
-  updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
+  updateGameStatus: (status: 'IDLE' | 'PLAYING' | 'ENDED') => void;
 }
 
 export type RouletteGameStore = RouletteGameState & RouletteGameStateActions;
@@ -23,8 +23,7 @@ export type RouletteGameStore = RouletteGameState & RouletteGameStateActions;
 export const rouletteResultStore = create<RouletteGameStore>()((set) => ({
   lastBets: [],
   rouletteGameResults: [],
-  addLastBet: (item) =>
-    set((state) => ({ lastBets: [...state.lastBets, item] })),
+  addLastBet: (item) => set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
   removeLastBet: (index) =>
     set((state) => {
@@ -34,21 +33,18 @@ export const rouletteResultStore = create<RouletteGameStore>()((set) => ({
 
       return { lastBets };
     }),
-  updateRouletteGameResults: (item) =>
-    set(() => ({ rouletteGameResults: item })),
+  updateRouletteGameResults: (item) => set(() => ({ rouletteGameResults: item })),
   clearStore: () =>
     set({
       lastBets: [],
       rouletteGameResults: [],
-      gameStatus: "IDLE",
+      gameStatus: 'IDLE',
     }),
-  gameStatus: "IDLE",
+  gameStatus: 'IDLE',
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
 }));
 
-export const useRouletteGameStore = <T extends keyof RouletteGameStore>(
-  keys: T[]
-) =>
+export const useRouletteGameStore = <T extends keyof RouletteGameStore>(keys: T[]) =>
   rouletteResultStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];

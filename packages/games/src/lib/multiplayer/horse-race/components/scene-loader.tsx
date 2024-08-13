@@ -1,6 +1,6 @@
-import * as Progress from "@radix-ui/react-progress";
+import * as Progress from '@radix-ui/react-progress';
 
-import { toFormatted } from "../../../utils/web3";
+import { toFormatted } from '../../../utils/web3';
 
 export const SceneLoader = ({
   percentage,
@@ -20,7 +20,7 @@ export const SceneLoader = ({
           />
           <span
             style={{
-              textShadow: "0 0 5px black, 0 0 5px black",
+              textShadow: '0 0 5px black, 0 0 5px black',
             }}
             className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
           >
@@ -29,7 +29,7 @@ export const SceneLoader = ({
           <Progress.Root
             className="wr-radius-[1000px] wr-relative wr-z-50 wr-h-[25px] wr-w-[320px] wr-overflow-hidden wr-rounded-md wr-bg-black"
             style={{
-              transform: "translateZ(0)",
+              transform: 'translateZ(0)',
             }}
             value={percentage}
           >
@@ -37,13 +37,13 @@ export const SceneLoader = ({
               className="wr-h-full wr-w-full wr-bg-gradient-to-t wr-from-unity-horse-race-blue-400 wr-to-unity-horse-race-blue-600"
               style={{
                 transform: `translateX(-${100 - percentage}%)`,
-                transition: "transform 660ms cubic-bezier(0.65, 0, 0.35, 1)",
+                transition: 'transform 660ms cubic-bezier(0.65, 0, 0.35, 1)',
               }}
             />
           </Progress.Root>
           <span
             style={{
-              textShadow: "0 0 5px black, 0 0 5px black",
+              textShadow: '0 0 5px black, 0 0 5px black',
             }}
             className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
           >

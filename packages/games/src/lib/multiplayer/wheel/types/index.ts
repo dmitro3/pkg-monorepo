@@ -1,6 +1,6 @@
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from 'react-hook-form';
 
-import { WheelColor, WheelStatus } from "../constants";
+import { WheelColor, WheelStatus } from '../constants';
 
 export interface WheelUnitProps {
   width: number;

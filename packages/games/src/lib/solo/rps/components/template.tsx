@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
 
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { Form } from "../../../ui/form";
-import { Rps } from "..";
-import { RockPaperScissors, RpsFormFields } from "../types";
-import { BetController } from "./bet-controller";
-import { RpsGameProps } from "./game";
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { Form } from '../../../ui/form';
+import { Rps } from '..';
+import { RockPaperScissors, RpsFormFields } from '../types';
+import { BetController } from './bet-controller';
+import { RpsGameProps } from './game';
 
 type TemplateOptions = {
   scene?: {
@@ -39,12 +39,9 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
       .max(props?.maxWager || 2000, {
         message: `Maximum wager is ${props?.maxWager}`,
       }),
-    betCount: z
-      .number()
-      .min(1, { message: "Minimum bet count is 1" })
-      .max(100, {
-        message: "Maximum bet count is 100",
-      }),
+    betCount: z.number().min(1, { message: 'Minimum bet count is 1' }).max(100, {
+      message: 'Maximum bet count is 100',
+    }),
     stopGain: z.number(),
     stopLoss: z.number(),
     rpsChoice: z.nativeEnum(RockPaperScissors),
@@ -54,7 +51,7 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "all",
+    mode: 'all',
     defaultValues: {
       wager: props?.minWager || 1,
       betCount: 1,

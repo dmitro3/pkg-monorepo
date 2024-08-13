@@ -1,14 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgIconDebank = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={20}
-    height={20}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
     <g clipPath="url(#icon-debank_svg__a)">
       <g opacity={0.8}>
         <mask
@@ -19,7 +13,7 @@ const SvgIconDebank = (props: SVGProps<SVGSVGElement>) => (
           y={1}
           maskUnits="userSpaceOnUse"
           style={{
-            maskType: "luminance",
+            maskType: 'luminance',
           }}
         >
           <path fill="#fff" d="M17.33 1.668H2.67v16.667h14.66z" />
@@ -40,7 +34,7 @@ const SvgIconDebank = (props: SVGProps<SVGSVGElement>) => (
           y={1}
           maskUnits="userSpaceOnUse"
           style={{
-            maskType: "luminance",
+            maskType: 'luminance',
           }}
         >
           <path fill="#fff" d="M12.82 1.668H2.67v16.667h10.15z" />

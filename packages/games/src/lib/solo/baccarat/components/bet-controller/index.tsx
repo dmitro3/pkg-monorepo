@@ -1,26 +1,20 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext } from 'react-hook-form';
 
-import { AudioController } from "../../../../common/audio-controller";
-import { ChipController } from "../../../../common/chip-controller";
-import { Chip } from "../../../../common/chip-controller/types";
-import { BetControllerContainer } from "../../../../common/containers";
-import {
-  BetControllerTitle,
-  WagerFormField,
-} from "../../../../common/controller";
-import { PreBetButton } from "../../../../common/pre-bet-button";
-import { TotalWager, WagerCurrencyIcon } from "../../../../common/wager";
-import { useGameOptions } from "../../../../game-provider";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import { Button } from "../../../../ui/button";
-import { FormLabel } from "../../../../ui/form";
-import { cn } from "../../../../utils/style";
-import { toFormatted } from "../../../../utils/web3";
-import { BaccaratForm } from "../../types";
-import Control from "../control";
+import { AudioController } from '../../../../common/audio-controller';
+import { ChipController } from '../../../../common/chip-controller';
+import { Chip } from '../../../../common/chip-controller/types';
+import { BetControllerContainer } from '../../../../common/containers';
+import { BetControllerTitle, WagerFormField } from '../../../../common/controller';
+import { PreBetButton } from '../../../../common/pre-bet-button';
+import { TotalWager, WagerCurrencyIcon } from '../../../../common/wager';
+import { useGameOptions } from '../../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { Button } from '../../../../ui/button';
+import { FormLabel } from '../../../../ui/form';
+import { cn } from '../../../../utils/style';
+import { toFormatted } from '../../../../utils/web3';
+import { BaccaratForm } from '../../types';
+import Control from '../control';
 
 export interface Props {
   totalWager: number;
@@ -47,7 +41,7 @@ export const BetController: React.FC<Props> = ({
   const form = useFormContext() as BaccaratForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
-  const wager = form.watch("wager");
+  const wager = form.watch('wager');
 
   return (
     <BetControllerContainer>
@@ -60,11 +54,7 @@ export const BetController: React.FC<Props> = ({
           customLabel="Chip Value"
           minWager={minWager}
           maxWager={maxWager}
-          isDisabled={
-            form.formState.isSubmitting ||
-            form.formState.isLoading ||
-            isDisabled
-          }
+          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isDisabled}
         />
 
         <ChipController
@@ -87,11 +77,11 @@ export const BetController: React.FC<Props> = ({
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden"
+                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
+              <span className={cn('wr-font-semibold wr-text-zinc-100')}>
                 ${toFormatted(maxPayout, 2)}
               </span>
             </div>
@@ -115,9 +105,7 @@ export const BetController: React.FC<Props> = ({
                 form.formState.isLoading ||
                 isDisabled
               }
-              isLoading={
-                form.formState.isSubmitting || form.formState.isLoading
-              }
+              isLoading={form.formState.isSubmitting || form.formState.isLoading}
               className="wr-w-full"
             >
               Deal

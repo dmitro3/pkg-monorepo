@@ -1,18 +1,14 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { Chip } from "../../../../common/chip-controller/types";
-import { renderChipIcon } from "../../../../common/chip-controller/utils";
-import { CDN_URL } from "../../../../constants";
-import { numberShorter } from "../../../../utils/number";
-import { cn } from "../../../../utils/style";
-import {
-  BaccaratBetType,
-  BaccaratGameResult,
-  BaccaratGameSettledResult,
-} from "../../types";
-import { CardArea } from "../baccarat-card-area";
-import styles from "./baccarat-scene.module.css";
+import { Chip } from '../../../../common/chip-controller/types';
+import { renderChipIcon } from '../../../../common/chip-controller/utils';
+import { CDN_URL } from '../../../../constants';
+import { numberShorter } from '../../../../utils/number';
+import { cn } from '../../../../utils/style';
+import { BaccaratBetType, BaccaratGameResult, BaccaratGameSettledResult } from '../../types';
+import { CardArea } from '../baccarat-card-area';
+import styles from './baccarat-scene.module.css';
 
 // canvas width 900px
 // canvas height 900px
@@ -39,11 +35,11 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
 }) => {
   const form = useFormContext();
 
-  const tieWager = form.watch("tieWager");
+  const tieWager = form.watch('tieWager');
 
-  const bankerWager = form.watch("bankerWager");
+  const bankerWager = form.watch('bankerWager');
 
-  const playerWager = form.watch("playerWager");
+  const playerWager = form.watch('playerWager');
 
   const [isTieWon, setIsTieWon] = React.useState<boolean>(false);
 
@@ -70,7 +66,7 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
   return (
     <div
       className={cn(
-        "wr-absolute wr-left-1/2 wr-top-[-375px] wr-mx-auto wr-h-[750px] wr-w-[750px] -wr-translate-x-1/2",
+        'wr-absolute wr-left-1/2 wr-top-[-375px] wr-mx-auto wr-h-[750px] wr-w-[750px] -wr-translate-x-1/2',
         styles.baccaratScene
       )}
     >
@@ -124,9 +120,8 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               className={cn(
                 styles.zone,
                 isTieWon && styles.tieWinner,
-                isDisabled &&
-                  "wr-pointer-events-none wr-cursor-default wr-overflow-hidden",
-                "!wr-z-[3] wr-bg-[#11331E]"
+                isDisabled && 'wr-pointer-events-none wr-cursor-default wr-overflow-hidden',
+                '!wr-z-[3] wr-bg-[#11331E]'
               )}
             >
               <div className="wr-absolute wr-bottom-[8%] wr-left-1/2 wr-flex -wr-translate-x-1/2 wr-flex-col wr-text-center wr-text-xl wr-font-bold">
@@ -137,7 +132,7 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               <div className="wr-absolute wr-bottom-[8%] wr-left-1/2 wr-z-[1] wr-flex -wr-translate-x-1/2">
                 {renderChipIcon(tieWager)}
                 <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-font-bold wr-text-white">
-                  {tieWager ? numberShorter(tieWager) : ""}
+                  {tieWager ? numberShorter(tieWager) : ''}
                 </span>
               </div>
 
@@ -155,8 +150,8 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               className={cn(
                 styles.zone,
                 isBankerWon && styles.winner,
-                isDisabled && "wr-pointer-events-none wr-cursor-default",
-                "!wr-z-[2] !wr-h-3/4 !wr-w-3/4 wr-bg-[#174128]"
+                isDisabled && 'wr-pointer-events-none wr-cursor-default',
+                '!wr-z-[2] !wr-h-3/4 !wr-w-3/4 wr-bg-[#174128]'
               )}
             >
               <div className="wr-absolute wr-bottom-[7%] wr-left-1/2 wr-flex -wr-translate-x-1/2 wr-flex-col wr-text-center wr-text-xl wr-font-bold">
@@ -166,7 +161,7 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               <div className="wr-absolute wr-bottom-[7%] wr-left-1/2 wr-z-[1] wr-flex -wr-translate-x-1/2">
                 {renderChipIcon(bankerWager)}
                 <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-font-bold wr-text-white">
-                  {bankerWager ? numberShorter(bankerWager) : ""}
+                  {bankerWager ? numberShorter(bankerWager) : ''}
                 </span>
               </div>
 
@@ -184,8 +179,8 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               className={cn(
                 styles.zone,
                 isPlayerWon && styles.winner,
-                isDisabled && "wr-pointer-events-none wr-cursor-default",
-                "!wr-z-[1] !wr-h-full !wr-w-full wr-bg-[#11331E]"
+                isDisabled && 'wr-pointer-events-none wr-cursor-default',
+                '!wr-z-[1] !wr-h-full !wr-w-full wr-bg-[#11331E]'
               )}
             >
               <div className="wr-absolute wr-bottom-[5%] wr-left-1/2 wr-flex -wr-translate-x-1/2 wr-flex-col wr-text-center wr-text-xl wr-font-bold">
@@ -195,7 +190,7 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
               <div className="wr-absolute wr-bottom-[5%] wr-left-1/2 wr-z-[1] wr-flex -wr-translate-x-1/2">
                 {renderChipIcon(playerWager)}
                 <span className="wr-absolute wr-left-1/2 wr-top-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-font-bold wr-text-white">
-                  {playerWager ? numberShorter(playerWager) : ""}
+                  {playerWager ? numberShorter(playerWager) : ''}
                 </span>
               </div>
 

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   COIN_SIDE,
@@ -6,7 +6,7 @@ import {
   CoinFlip3dGameResult,
   CoinFlip3DTemplate,
   GameType,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   controllerAbi,
   useCurrentAccount,
@@ -14,19 +14,19 @@ import {
   usePriceFeed,
   useTokenAllowance,
   useTokenStore,
-} from "@winrlabs/web3";
-import React, { useMemo, useState } from "react";
-import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
+} from '@winrlabs/web3';
+import React, { useMemo, useState } from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
+import { usePlayerGameStatus } from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import {
   DecodedEvent,
   GAME_HUB_EVENT_TYPES,
   prepareGameTransaction,
   SingleStepSettledEvent,
-} from "../utils";
-import { usePlayerGameStatus } from "../hooks";
+} from '../utils';
 
 type TemplateOptions = {
   scene?: {
@@ -48,25 +48,15 @@ interface TemplateWithWeb3Props {
 }
 
 export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.coinFlip,
-    gameType: GameType.COINFLIP,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.coinFlip,
+      gameType: GameType.COINFLIP,
+      wagmiConfig,
+    });
 
   const [formValues, setFormValues] = useState<CoinFlip3dFormFields>({
     betCount: 1,
@@ -83,13 +73,12 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
   }));
   const { priceFeed } = usePriceFeed();
 
-  const [coinFlipResult, setCoinFlipResult] =
-    useState<DecodedEvent<any, SingleStepSettledEvent>>();
+  const [coinFlipResult, setCoinFlipResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedToken.address,
     showDefaultToasts: false,
@@ -106,20 +95,19 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
   }, [coinFlipResult]);
 
   const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } =
-      prepareGameTransaction({
-        wager: formValues.wager,
-        stopGain: formValues.stopGain,
-        stopLoss: formValues.stopLoss,
-        selectedCurrency: selectedToken,
-        lastPrice: priceFeed[selectedToken.priceKey],
-      });
+    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
+      wager: formValues.wager,
+      stopGain: formValues.stopGain,
+      stopLoss: formValues.stopLoss,
+      selectedCurrency: selectedToken,
+      lastPrice: priceFeed[selectedToken.priceKey],
+    });
 
     const encodedChoice = encodeAbiParameters(
       [
         {
-          name: "data",
-          type: "uint8",
+          name: 'data',
+          type: 'uint8',
         },
       ],
       [Number(formValues.coinSide)]
@@ -127,11 +115,11 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "stopGain", type: "uint128" },
-        { name: "stopLoss", type: "uint128" },
-        { name: "count", type: "uint8" },
-        { name: "data", type: "bytes" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'stopGain', type: 'uint128' },
+        { name: 'stopLoss', type: 'uint128' },
+        { name: 'count', type: 'uint8' },
+        { name: 'data', type: 'bytes' },
       ],
       [
         wagerInWei,
@@ -144,12 +132,12 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.coinFlip as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -169,15 +157,15 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
     priceFeed[selectedToken.priceKey],
   ]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.coinFlip as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -190,7 +178,7 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -203,7 +191,7 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
 
       await handleTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
   };

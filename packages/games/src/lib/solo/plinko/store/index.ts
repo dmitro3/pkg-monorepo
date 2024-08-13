@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { PlinkoGameResult } from "../types";
+import { PlinkoGameResult } from '../types';
 
 export interface PlinkoLastBet extends PlinkoGameResult {
   multiplier: number;
@@ -10,7 +10,7 @@ export interface PlinkoLastBet extends PlinkoGameResult {
 interface PlinkoGameState {
   lastBets: PlinkoLastBet[];
   plinkoGameResults: PlinkoGameResult[];
-  gameStatus: "IDLE" | "PLAYING" | "ENDED";
+  gameStatus: 'IDLE' | 'PLAYING' | 'ENDED';
   currentAnimationCount: number;
 }
 
@@ -20,7 +20,7 @@ interface PlinkoGameStateActions {
   removeLastBet: (index: number) => void;
   clearStore: () => void;
   updatePlinkoGameResults: (item: PlinkoGameResult[]) => void;
-  updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
+  updateGameStatus: (status: 'IDLE' | 'PLAYING' | 'ENDED') => void;
   updateCurrentAnimationCount: (count: number) => void;
 }
 
@@ -30,8 +30,7 @@ export const plinkoResultStore = create<PlinkoGameStore>()((set) => ({
   lastBets: [],
   plinkoGameResults: [],
   currentAnimationCount: 0,
-  addLastBet: (item) =>
-    set((state) => ({ lastBets: [...state.lastBets, item] })),
+  addLastBet: (item) => set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
   removeLastBet: (index) =>
     set((state) => {
@@ -46,18 +45,15 @@ export const plinkoResultStore = create<PlinkoGameStore>()((set) => ({
     set({
       lastBets: [],
       plinkoGameResults: [],
-      gameStatus: "IDLE",
+      gameStatus: 'IDLE',
       currentAnimationCount: 0,
     }),
-  gameStatus: "IDLE",
+  gameStatus: 'IDLE',
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
-  updateCurrentAnimationCount: (count) =>
-    set(() => ({ currentAnimationCount: count })),
+  updateCurrentAnimationCount: (count) => set(() => ({ currentAnimationCount: count })),
 }));
 
-export const usePlinkoGameStore = <T extends keyof PlinkoGameStore>(
-  keys: T[]
-) =>
+export const usePlinkoGameStore = <T extends keyof PlinkoGameStore>(keys: T[]) =>
   plinkoResultStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];

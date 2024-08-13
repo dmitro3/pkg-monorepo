@@ -13,47 +13,47 @@ export enum VideoPokerResult {
 
 export const videoPokerHands = [
   {
-    name: "Royal Flush",
+    name: 'Royal Flush',
     multiplier: 100,
     value: VideoPokerResult.ROYAL_FLUSH,
   },
   {
-    name: "Straight Flush",
+    name: 'Straight Flush',
     multiplier: 50,
     value: VideoPokerResult.STRAIGHT_FLUSH,
   },
   {
-    name: "Four of a kind",
+    name: 'Four of a kind',
     multiplier: 25,
     value: VideoPokerResult.FOUR_OF_A_KIND,
   },
   {
-    name: "Full House",
+    name: 'Full House',
     multiplier: 8,
     value: VideoPokerResult.FULL_HOUSE,
   },
   {
-    name: "Flush",
+    name: 'Flush',
     multiplier: 6,
     value: VideoPokerResult.FLUSH,
   },
   {
-    name: "Straight",
+    name: 'Straight',
     multiplier: 5,
     value: VideoPokerResult.STRAIGHT,
   },
   {
-    name: "Three of a kind",
+    name: 'Three of a kind',
     multiplier: 3,
     value: VideoPokerResult.THREE_OF_A_KIND,
   },
   {
-    name: "Two Pairs",
+    name: 'Two Pairs',
     multiplier: 2,
     value: VideoPokerResult.TWO_PAIR,
   },
   {
-    name: "Jacks or Better",
+    name: 'Jacks or Better',
     multiplier: 1,
     value: VideoPokerResult.JACKS_OR_BETTER,
   },

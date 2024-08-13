@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   BetHistoryTemplate,
@@ -7,7 +7,7 @@ import {
   VideoPokerResult,
   VideoPokerStatus,
   VideoPokerTemplate,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   controllerAbi,
   useCurrentAccount,
@@ -17,19 +17,14 @@ import {
   useTokenBalances,
   useTokenStore,
   videoPokerAbi,
-} from "@winrlabs/web3";
-import React from "react";
-import { Address, encodeAbiParameters, encodeFunctionData } from "viem";
-import { useReadContract } from "wagmi";
+} from '@winrlabs/web3';
+import React from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
+import { useReadContract } from 'wagmi';
 
-import {
-  useBetHistory,
-  useGetBadges,
-  useListenGameEvent,
-  usePlayerGameStatus,
-} from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { prepareGameTransaction } from "../utils";
+import { useBetHistory, useGetBadges, useListenGameEvent, usePlayerGameStatus } from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { prepareGameTransaction } from '../utils';
 
 interface TemplateWithWeb3Props {
   minWager?: number;
@@ -39,25 +34,15 @@ interface TemplateWithWeb3Props {
 }
 
 export default function VideoPokerGame(props: TemplateWithWeb3Props) {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.videoPoker,
-    gameType: GameType.VIDEO_POKER,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.videoPoker,
+      gameType: GameType.VIDEO_POKER,
+      wagmiConfig,
+    });
 
   const [formValues, setFormValues] = React.useState<VideoPokerFormFields>({
     wager: props?.minWager || 1,
@@ -77,12 +62,12 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   }));
   const { priceFeed } = usePriceFeed();
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedToken.address,
     showDefaultToasts: false,
@@ -97,19 +82,16 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       lastPrice: priceFeed[selectedToken.priceKey],
     });
 
-    const encodedGameData = encodeAbiParameters(
-      [{ name: "wager", type: "uint128" }],
-      [wagerInWei]
-    );
+    const encodedGameData = encodeAbiParameters([{ name: 'wager', type: 'uint128' }], [wagerInWei]);
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.videoPoker as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "start",
+        'start',
         encodedGameData,
       ],
     });
@@ -119,21 +101,17 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [
-    formValues.wager,
-    selectedToken.address,
-    priceFeed[selectedToken.priceKey],
-  ]);
+  }, [formValues.wager, selectedToken.address, priceFeed[selectedToken.priceKey]]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.videoPoker,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "start",
+        'start',
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -152,23 +130,23 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     const mappedCards = formValues.cardsToSend
       .map((item) => (item === 0 ? 1 : 0))
       .reverse()
-      .join("");
+      .join('');
 
     const _cardsToSend = parseInt(mappedCards, 2);
 
     const encodedGameData = encodeAbiParameters(
-      [{ name: "change", type: "uint32" }],
+      [{ name: 'change', type: 'uint32' }],
       [_cardsToSend]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.videoPoker as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "finish",
+        'finish',
         encodedGameData,
       ],
     });
@@ -180,15 +158,15 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     };
   }, [formValues.cardsToSend]);
 
-  const handleFinishTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleFinishTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.videoPoker,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "finish",
+        'finish',
         encodedFinishParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -198,11 +176,11 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   });
 
   const handleStartGame = async () => {
-    console.log("SUBMITTING!");
+    console.log('SUBMITTING!');
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -215,17 +193,17 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
 
       await handleTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
   };
 
   const handleFinishGame = async () => {
-    console.log("FINISHING!");
+    console.log('FINISHING!');
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -238,7 +216,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
 
       await handleFinishTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
   };
@@ -248,7 +226,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     abi: videoPokerAbi,
     address: gameAddresses.videoPoker,
     account: currentAccount.address,
-    functionName: "games",
+    functionName: 'games',
     args: [currentAccount.address as Address],
     query: {
       enabled: !!currentAccount.address,
@@ -269,10 +247,10 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     if (!gameEvent) return;
 
-    if (gameEvent?.program[0]?.type == "Game") {
+    if (gameEvent?.program[0]?.type == 'Game') {
       const data = gameEvent.program[0].data;
 
-      console.log("event");
+      console.log('event');
 
       setSettledCards({
         cards: data.game.cards,
@@ -283,18 +261,13 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     }
   }, [gameEvent]);
 
-  const {
-    betHistory,
-    isHistoryLoading,
-    mapHistoryTokens,
-    setHistoryFilter,
-    refetchHistory,
-  } = useBetHistory({
-    gameType: GameType.VIDEO_POKER,
-    options: {
-      enabled: !props.hideBetHistory,
-    },
-  });
+  const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
+    useBetHistory({
+      gameType: GameType.VIDEO_POKER,
+      options: {
+        enabled: !props.hideBetHistory,
+      },
+    });
 
   const { handleGetBadges } = useGetBadges();
 
@@ -305,9 +278,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     updateBalances();
 
     const totalPayout =
-      (settledCards?.result !== VideoPokerResult.LOST
-        ? settledCards?.payout
-        : 0) || 0;
+      (settledCards?.result !== VideoPokerResult.LOST ? settledCards?.payout : 0) || 0;
 
     handleGetBadges({ totalWager: formValues.wager, totalPayout });
   };

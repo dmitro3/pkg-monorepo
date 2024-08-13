@@ -1,13 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { useMinesGameStateStore } from "../store";
-import {
-  MINES_GAME_STATUS,
-  MinesGameResult,
-  MinesGameResultOnComplete,
-} from "../types";
+import { useMinesGameStateStore } from '../store';
+import { MINES_GAME_STATUS, MinesGameResult, MinesGameResultOnComplete } from '../types';
 
-export type MinesGameProps = React.ComponentProps<"div"> & {
+export type MinesGameProps = React.ComponentProps<'div'> & {
   gameResults: MinesGameResult[];
   isLoading?: boolean;
   onAnimationCompleted?: (result: MinesGameResultOnComplete) => void;
@@ -15,8 +11,8 @@ export type MinesGameProps = React.ComponentProps<"div"> & {
 
 export const MinesGame = ({ gameResults, children }: MinesGameProps) => {
   const { updateMinesGameResults, updateGameStatus } = useMinesGameStateStore([
-    "updateMinesGameResults",
-    "updateGameStatus",
+    'updateMinesGameResults',
+    'updateGameStatus',
   ]);
 
   React.useEffect(() => {

@@ -1,5 +1,5 @@
-import { Combination } from "@winrlabs/games";
-import { Address } from "viem";
+import { Combination } from '@winrlabs/games';
+import { Address } from 'viem';
 
 export enum HoldemPokerContractStatus {
   NONE,
@@ -10,10 +10,10 @@ export enum HoldemPokerContractStatus {
 }
 
 export enum HOLDEM_POKER_EVENT_TYPES {
-  Settled = "Settled",
-  PlayerFolded = "PlayerFolded",
-  SideBetSettled = "SideBetSettled",
-  InitialGameDealt = "InitialGameDealt",
+  Settled = 'Settled',
+  PlayerFolded = 'PlayerFolded',
+  SideBetSettled = 'SideBetSettled',
+  InitialGameDealt = 'InitialGameDealt',
 }
 
 export interface HoldemPokerEventGameStatus {

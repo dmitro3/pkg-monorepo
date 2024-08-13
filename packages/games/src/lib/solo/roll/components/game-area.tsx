@@ -1,14 +1,14 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { useGameSkip } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { FormField, FormItem, FormMessage } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import { ALL_DICES } from "../constant";
-import useRollGameStore from "../store";
-import { RollForm, RollGameResult } from "../types";
-import Dice from "./dice";
+import { useGameSkip } from '../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { FormField, FormItem, FormMessage } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import { ALL_DICES } from '../constant';
+import useRollGameStore from '../store';
+import { RollForm, RollGameResult } from '../types';
+import Dice from './dice';
 
 export interface GameAreaProps {
   onAnimationStep?: (step: number) => void;
@@ -23,7 +23,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
 }) => {
   const form = useFormContext() as RollForm;
 
-  const selectedDices = form.watch("dices");
+  const selectedDices = form.watch('dices');
 
   const skipRef = React.useRef<boolean>(false);
 
@@ -46,15 +46,15 @@ export const GameArea: React.FC<GameAreaProps> = ({
     updateCurrentAnimationCount,
     currentAnimationCount,
   } = useRollGameStore([
-    "gameStatus",
-    "rollGameResults",
-    "updateRollGameResults",
-    "updateGameStatus",
-    "addLastBet",
-    "updateLastBets",
-    "lastBets",
-    "updateCurrentAnimationCount",
-    "currentAnimationCount",
+    'gameStatus',
+    'rollGameResults',
+    'updateRollGameResults',
+    'updateGameStatus',
+    'addLastBet',
+    'updateLastBets',
+    'lastBets',
+    'updateCurrentAnimationCount',
+    'currentAnimationCount',
   ]);
 
   React.useEffect(() => {
@@ -97,7 +97,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
           setTimeout(() => {
             updateCurrentAnimationCount(0);
             updateRollGameResults([]);
-            updateGameStatus("ENDED");
+            updateGameStatus('ENDED');
           }, 1000);
         } else {
           setTimeout(() => turn(curr), 350);
@@ -115,7 +115,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
     setTimeout(() => {
       updateRollGameResults([]);
       updateCurrentAnimationCount(0);
-      updateGameStatus("ENDED");
+      updateGameStatus('ENDED');
     }, 50);
   };
 
@@ -135,9 +135,9 @@ export const GameArea: React.FC<GameAreaProps> = ({
         render={() => (
           <FormItem
             className={cn(
-              "wr-grid-row-2 wr-relative wr-grid wr-grid-cols-3 wr-items-center wr-gap-4 wr-transition-all wr-ease-in-out",
+              'wr-grid-row-2 wr-relative wr-grid wr-grid-cols-3 wr-items-center wr-gap-4 wr-transition-all wr-ease-in-out',
               {
-                "wr-animate-dice-shake": loading,
+                'wr-animate-dice-shake': loading,
               }
             )}
           >
@@ -146,16 +146,12 @@ export const GameArea: React.FC<GameAreaProps> = ({
                 key={item}
                 item={item}
                 winner={
-                  gameStatus === "IDLE" ||
-                  gameStatus === "ENDED" ||
-                  currentAnimationCount === 0
+                  gameStatus === 'IDLE' || gameStatus === 'ENDED' || currentAnimationCount === 0
                     ? undefined
                     : lastBets[lastBets.length - 1]?.dice
                 }
-                isBetting={gameStatus === "PLAYING" ? true : false}
-                isDisabled={
-                  form.formState.isLoading || form.formState.isSubmitting
-                }
+                isBetting={gameStatus === 'PLAYING' ? true : false}
+                isDisabled={form.formState.isLoading || form.formState.isSubmitting}
               />
             ))}
             {selectedDices.length === 0 ? (

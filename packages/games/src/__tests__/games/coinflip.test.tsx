@@ -1,12 +1,12 @@
 // write me a test for the coinflip game keep in mind that it uses game provider
 
-import { render } from "@testing-library/react";
+import { render } from '@testing-library/react';
 
-import { GameProvider } from "../../lib/game-provider";
-import { CoinFlipTemplate, CoinSide } from "../../lib/solo/coin-flip";
+import { GameProvider } from '../../lib/game-provider';
+import { CoinFlipTemplate, CoinSide } from '../../lib/solo/coin-flip';
 
-jest.mock("../../lib/solo/coin-flip/components/coin/coin-rotate", () =>
-  jest.requireActual("../../test-utils/deepMock").deepMock()
+jest.mock('../../lib/solo/coin-flip/components/coin/coin-rotate', () =>
+  jest.requireActual('../../test-utils/deepMock').deepMock()
 );
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
@@ -15,8 +15,8 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }));
 
-jest.mock("three", () => {
-  const THREE = jest.requireActual("three");
+jest.mock('three', () => {
+  const THREE = jest.requireActual('three');
   return {
     ...THREE,
     WebGLRenderer: jest.fn().mockReturnValue({
@@ -28,15 +28,15 @@ jest.mock("three", () => {
   };
 });
 
-describe("CoinFlip", () => {
-  it("should render the CoinFlip game", () => {
+describe('CoinFlip', () => {
+  it('should render the CoinFlip game', () => {
     render(
       <GameProvider
         options={{
           currency: {
-            icon: "BNB",
-            name: "BNB",
-            symbol: "BNB",
+            icon: 'BNB',
+            name: 'BNB',
+            symbol: 'BNB',
           },
           defaults: {
             maxBet: 1,
@@ -56,7 +56,7 @@ describe("CoinFlip", () => {
           onSubmit={(params) => params}
           options={{
             scene: {
-              backgroundImage: "https://via.placeholder.com/1920x1080",
+              backgroundImage: 'https://via.placeholder.com/1920x1080',
             },
           }}
         />

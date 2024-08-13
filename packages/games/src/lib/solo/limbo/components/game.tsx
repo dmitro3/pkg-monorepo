@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { useGameSkip } from "../../../game-provider";
-import useLimboGameStore from "../store";
-import { LimboGameResult } from "../types";
+import { useGameSkip } from '../../../game-provider';
+import useLimboGameStore from '../store';
+import { LimboGameResult } from '../types';
 
-export type LimboGameProps = React.ComponentProps<"div"> & {
+export type LimboGameProps = React.ComponentProps<'div'> & {
   gameResults: LimboGameResult[];
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: LimboGameResult[]) => void;
@@ -13,8 +13,8 @@ export type LimboGameProps = React.ComponentProps<"div"> & {
 
 export const LimboGame = ({ gameResults, children }: LimboGameProps) => {
   const { updateLimboGameResults, updateGameStatus } = useLimboGameStore([
-    "updateLimboGameResults",
-    "updateGameStatus",
+    'updateLimboGameResults',
+    'updateGameStatus',
   ]);
 
   const { updateSkipAnimation } = useGameSkip();

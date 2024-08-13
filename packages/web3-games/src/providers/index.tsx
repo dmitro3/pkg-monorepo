@@ -1,18 +1,15 @@
-import { GameProvider } from "@winrlabs/games";
+import { GameProvider } from '@winrlabs/games';
 import {
   BundlerNetwork,
   useBalanceStore,
   useCurrentAccount,
   usePriceFeed,
   useTokenStore,
-} from "@winrlabs/web3";
-import { Config } from "wagmi";
+} from '@winrlabs/web3';
+import { Config } from 'wagmi';
 
-import { GameSocketProvider } from "../games/hooks";
-import {
-  ContractConfig,
-  ContractConfigProvider,
-} from "../games/hooks/use-contract-config";
+import { GameSocketProvider } from '../games/hooks';
+import { ContractConfig, ContractConfigProvider } from '../games/hooks/use-contract-config';
 
 type WinrLabsWeb3GamesConfig = {
   wagmiConfig: Config;
@@ -26,10 +23,7 @@ type WinrLabsWeb3GamesProviderProps = {
   config: WinrLabsWeb3GamesConfig;
 };
 
-export const WinrLabsWeb3GamesProvider = ({
-  children,
-  config,
-}: WinrLabsWeb3GamesProviderProps) => {
+export const WinrLabsWeb3GamesProvider = ({ children, config }: WinrLabsWeb3GamesProviderProps) => {
   const { address } = useCurrentAccount();
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
@@ -42,10 +36,7 @@ export const WinrLabsWeb3GamesProvider = ({
   const balanceAsDollar = balance * priceFeed[selectedToken.priceKey];
 
   return (
-    <ContractConfigProvider
-      wagmiConfig={config.wagmiConfig}
-      config={config.contracts}
-    >
+    <ContractConfigProvider wagmiConfig={config.wagmiConfig} config={config.contracts}>
       <GameProvider
         options={{
           currency: {
@@ -61,10 +52,7 @@ export const WinrLabsWeb3GamesProvider = ({
           },
         }}
       >
-        <GameSocketProvider
-          network={config.network}
-          bundlerWsUrl={config.bundlerWsUrl}
-        >
+        <GameSocketProvider network={config.network} bundlerWsUrl={config.bundlerWsUrl}>
           {children}
         </GameSocketProvider>
       </GameProvider>

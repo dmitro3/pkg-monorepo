@@ -1,14 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgTrustWallet = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={20}
-    height={20}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
     <g fill="#fff" clipPath="url(#trust-wallet_svg__a)">
       <path d="M1.667 5.898a4.232 4.232 0 0 1 4.232-4.231h8.203a4.232 4.232 0 0 1 4.231 4.231v8.203a4.232 4.232 0 0 1-4.231 4.232H5.899a4.232 4.232 0 0 1-4.232-4.232V5.898Z" />
       <path

@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
-import { genNumberArray } from "../../../../utils/number";
+import { genNumberArray } from '../../../../utils/number';
 
 interface PlinkoDotRowsProps {
   size: number;

@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface State {
   freeSpins: number;
@@ -31,9 +31,9 @@ export const useBonanzaGameStore = create<BonanzaGameStore>((set) => ({
   currentPayoutAmount: 0,
   isLoggedIn: false,
   isInFreeSpinMode: false,
-  gameUrl: "",
+  gameUrl: '',
 
-  prevWidth: typeof window !== "undefined" ? window.innerWidth : 0,
+  prevWidth: typeof window !== 'undefined' ? window.innerWidth : 0,
 
   setGameUrl: (gameUrl) => set({ gameUrl }),
   setPrevWidth: (prevWidth) => set({ prevWidth }),

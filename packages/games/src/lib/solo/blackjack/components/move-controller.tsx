@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { useGameOptions } from "../../../game-provider";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { Button } from "../../../ui/button";
-import { cn } from "../../../utils/style";
-import { ActiveGameHands, GameStruct } from "..";
+import { useGameOptions } from '../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { Button } from '../../../ui/button';
+import { cn } from '../../../utils/style';
+import { ActiveGameHands, GameStruct } from '..';
 
 export interface MoveControllerProps {
   isDistributionCompleted: boolean;
   isControllerDisabled: boolean;
-  activeHandByIndex: ActiveGameHands["firstHand"];
+  activeHandByIndex: ActiveGameHands['firstHand'];
   activeGameData: GameStruct;
   activeHandChipAmount: number | undefined;
   wager: number;
@@ -69,9 +69,9 @@ export const MoveController: React.FC<MoveControllerProps> = ({
             onHit(activeGameData.activeHandIndex);
           }}
           className={cn(
-            "wr-flex wr-h-[55px] wr-w-[55px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-bg-green-500 wr-text-center wr-text-[12px] wr-font-semibold wr-transition-all wr-duration-300 hover:wr-bg-green-500",
+            'wr-flex wr-h-[55px] wr-w-[55px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-bg-green-500 wr-text-center wr-text-[12px] wr-font-semibold wr-transition-all wr-duration-300 hover:wr-bg-green-500',
             {
-              "wr-pointer-events-none wr-cursor-default wr-bg-unity-white-5 wr-text-unity-white-50":
+              'wr-pointer-events-none wr-cursor-default wr-bg-unity-white-5 wr-text-unity-white-50':
                 !isDistributionCompleted || isControllerDisabled,
             }
           )}
@@ -84,9 +84,9 @@ export const MoveController: React.FC<MoveControllerProps> = ({
             onStand(activeGameData.activeHandIndex);
           }}
           className={cn(
-            "wr-flex wr-h-[55px] wr-w-[55px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-bg-red-600 wr-text-center wr-text-[12px] wr-font-semibold wr-transition-all wr-duration-300 hover:wr-bg-red-700",
+            'wr-flex wr-h-[55px] wr-w-[55px] wr-cursor-pointer wr-items-center wr-justify-center wr-rounded-full wr-bg-red-600 wr-text-center wr-text-[12px] wr-font-semibold wr-transition-all wr-duration-300 hover:wr-bg-red-700',
             {
-              "wr-pointer-events-none wr-cursor-default wr-bg-unity-white-5 wr-text-unity-white-50":
+              'wr-pointer-events-none wr-cursor-default wr-bg-unity-white-5 wr-text-unity-white-50':
                 !isDistributionCompleted || isControllerDisabled,
             }
           )}

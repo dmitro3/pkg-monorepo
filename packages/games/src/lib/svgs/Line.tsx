@@ -1,14 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgLine = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={22}
-    height={20}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={22} height={20} fill="none" {...props}>
     <path
       fill="#00B900"
       d="M21.032 8.141C21.032 3.652 16.532 0 11 0 5.469 0 .968 3.652.968 8.141c0 4.025 3.569 7.395 8.39 8.032.327.07.771.216.884.495.1.254.066.651.032.907l-.143.859c-.044.254-.202.992.869.54 1.07-.45 5.777-3.401 7.882-5.824 1.454-1.594 2.15-3.212 2.15-5.009Z"

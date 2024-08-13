@@ -1,4 +1,4 @@
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from 'react-hook-form';
 
 export enum CardStatus {
   CLOSED = 0,
@@ -10,11 +10,7 @@ export interface VideoPokerFormFields {
   cardsToSend: CardStatus[];
 }
 
-export type VideoPokerForm = UseFormReturn<
-  VideoPokerFormFields,
-  any,
-  undefined
->;
+export type VideoPokerForm = UseFormReturn<VideoPokerFormFields, any, undefined>;
 
 export enum Value {
   two = 0,
@@ -40,15 +36,15 @@ export enum Suit {
 }
 
 export const VideoPokerResultNames = [
-  "Jacks or better",
-  "Two pair",
-  "Three of a kind",
-  "Straight",
-  "Flush",
-  "Full house",
-  "Four of a kind",
-  "Straight flush",
-  "Royal flush",
+  'Jacks or better',
+  'Two pair',
+  'Three of a kind',
+  'Straight',
+  'Flush',
+  'Full house',
+  'Four of a kind',
+  'Straight flush',
+  'Royal flush',
 ] as const;
 
 export class Card {
@@ -60,16 +56,16 @@ export class Card {
   get value(): string {
     switch (this._value) {
       case Value.jack:
-        return "J";
+        return 'J';
 
       case Value.queen:
-        return "Q";
+        return 'Q';
 
       case Value.king:
-        return "K";
+        return 'K';
 
       case Value.ace:
-        return "A";
+        return 'A';
 
       default:
         return (2 + this._value).toString();
@@ -79,19 +75,19 @@ export class Card {
   get className(): string {
     switch (this._suit) {
       case Suit.hearts:
-        return "hearts";
+        return 'hearts';
 
       case Suit.diamonds:
-        return "diamonds";
+        return 'diamonds';
 
       case Suit.clubs:
-        return "clubs";
+        return 'clubs';
 
       case Suit.spades:
-        return "spades";
+        return 'spades';
 
       default:
-        return "";
+        return '';
     }
   }
 }

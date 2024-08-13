@@ -1,4 +1,4 @@
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from 'react-hook-form';
 
 export interface BaccaratFormFields {
   wager: number;
@@ -32,10 +32,10 @@ export enum BaccaratCardValue {
 }
 
 export enum BaccaratSuit {
-  HEARTS = "hearts",
-  DIAMONDS = "diamonds",
-  CLUBS = "clubs",
-  SPADES = "spades",
+  HEARTS = 'hearts',
+  DIAMONDS = 'diamonds',
+  CLUBS = 'clubs',
+  SPADES = 'spades',
 }
 
 export interface BaccaratGameSettledResult {

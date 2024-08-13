@@ -1,12 +1,12 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { LimboGameResult } from "../types";
+import { LimboGameResult } from '../types';
 
 interface LimboState {
   lastBets: LimboGameResult[];
   limboGameResults: LimboGameResult[];
-  gameStatus: "IDLE" | "PLAYING" | "ENDED";
+  gameStatus: 'IDLE' | 'PLAYING' | 'ENDED';
   currentAnimationCount: number;
 }
 
@@ -16,7 +16,7 @@ interface LimboActions {
   removeLastBet: (index: number) => void;
   clearStore: () => void;
   updateLimboGameResults: (item: LimboGameResult[]) => void;
-  updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
+  updateGameStatus: (status: 'IDLE' | 'PLAYING' | 'ENDED') => void;
   updateCurrentAnimationCount: (count: number) => void;
 }
 
@@ -26,9 +26,8 @@ export const limboStore = create<LimboStore>()((set) => ({
   lastBets: [],
   limboGameResults: [],
   currentAnimationCount: 0,
-  gameStatus: "IDLE",
-  addLastBet: (item) =>
-    set((state) => ({ lastBets: [...state.lastBets, item] })),
+  gameStatus: 'IDLE',
+  addLastBet: (item) => set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
   removeLastBet: (index) =>
     set((state) => {
@@ -43,12 +42,11 @@ export const limboStore = create<LimboStore>()((set) => ({
     set({
       lastBets: [],
       limboGameResults: [],
-      gameStatus: "IDLE",
+      gameStatus: 'IDLE',
       currentAnimationCount: 0,
     }),
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
-  updateCurrentAnimationCount: (count) =>
-    set(() => ({ currentAnimationCount: count })),
+  updateCurrentAnimationCount: (count) => set(() => ({ currentAnimationCount: count })),
 }));
 
 export const useLimboGameStore = <T extends keyof LimboStore>(keys: T[]) =>

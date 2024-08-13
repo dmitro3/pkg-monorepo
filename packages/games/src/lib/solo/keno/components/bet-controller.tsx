@@ -1,24 +1,24 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext } from 'react-hook-form';
 
-import { Advanced } from "../../../common/advanced";
-import { AudioController } from "../../../common/audio-controller";
-import { BetControllerContainer } from "../../../common/containers";
+import { Advanced } from '../../../common/advanced';
+import { AudioController } from '../../../common/audio-controller';
+import { BetControllerContainer } from '../../../common/containers';
 import {
   BetControllerTitle,
   BetCountFormField,
   StopGainFormField,
   StopLossFormField,
   WagerFormField,
-} from "../../../common/controller";
-import { PreBetButton } from "../../../common/pre-bet-button";
-import { TotalWager, WagerCurrencyIcon } from "../../../common/wager";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { IconMagicStick, IconTrash } from "../../../svgs";
-import { Button } from "../../../ui/button";
-import { FormLabel } from "../../../ui/form";
-import { cn } from "../../../utils/style";
-import useKenoGameStore from "../store";
-import { KenoForm } from "../types";
+} from '../../../common/controller';
+import { PreBetButton } from '../../../common/pre-bet-button';
+import { TotalWager, WagerCurrencyIcon } from '../../../common/wager';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { IconMagicStick, IconTrash } from '../../../svgs';
+import { Button } from '../../../ui/button';
+import { FormLabel } from '../../../ui/form';
+import { cn } from '../../../utils/style';
+import useKenoGameStore from '../store';
+import { KenoForm } from '../types';
 
 type Props = {
   minWager: number;
@@ -30,15 +30,15 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
   const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
 
-  const selections = form.watch("selections");
+  const selections = form.watch('selections');
 
-  const { gameStatus } = useKenoGameStore(["gameStatus"]);
+  const { gameStatus } = useKenoGameStore(['gameStatus']);
 
   const maxPayout = 10;
 
   const clearBetHandler = () => {
     digitalClickEffect.play();
-    form.setValue("selections", []);
+    form.setValue('selections', []);
   };
 
   const getRandomNumber = (min: number, max: number) => {
@@ -61,11 +61,10 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
       randomNumbers.push(randomNumber);
     }
 
-    form.setValue("selections", randomNumbers);
+    form.setValue('selections', randomNumbers);
   };
 
-  const isFormInProgress =
-    form.formState.isSubmitting || form.formState.isLoading;
+  const isFormInProgress = form.formState.isSubmitting || form.formState.isLoading;
 
   return (
     <BetControllerContainer>
@@ -74,32 +73,23 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           <BetControllerTitle>Keno</BetControllerTitle>
         </div>
 
-        <WagerFormField
-          minWager={minWager}
-          maxWager={maxWager}
-          isDisabled={isFormInProgress}
-        />
+        <WagerFormField minWager={minWager} maxWager={maxWager} isDisabled={isFormInProgress} />
         <BetCountFormField maxValue={3} isDisabled={isFormInProgress} hideSm />
         <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
           <div>
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]"
+                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
-                ${maxPayout}
-              </span>
+              <span className={cn('wr-font-semibold wr-text-zinc-100')}>${maxPayout}</span>
             </div>
           </div>
           <div>
             <FormLabel>Total Wager</FormLabel>
-            <TotalWager
-              betCount={form.getValues().betCount}
-              wager={form.getValues().wager}
-            />
+            <TotalWager betCount={form.getValues().betCount} wager={form.getValues().wager} />
           </div>
         </div>
 
@@ -113,8 +103,8 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
         </div>
         <div className="wr-mb-3 lg:wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
           <Button
-            size={"xl"}
-            variant={"secondary"}
+            size={'xl'}
+            variant={'secondary'}
             type="button"
             disabled={isFormInProgress}
             onClick={autoPickHandler}
@@ -123,8 +113,8 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             Auto Pick
           </Button>
           <Button
-            size={"xl"}
-            variant={"secondary"}
+            size={'xl'}
+            variant={'secondary'}
             type="button"
             onClick={clearBetHandler}
             disabled={isFormInProgress}
@@ -136,9 +126,9 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
         <PreBetButton>
           <Button
             type="submit"
-            variant={"success"}
+            variant={'success'}
             className="wr-w-full max-lg:wr-mb-1"
-            size={"xl"}
+            size={'xl'}
             onClick={() => clickEffect.play()}
             isLoading={isFormInProgress}
             disabled={
@@ -146,7 +136,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
               form.formState.isSubmitting ||
               form.formState.isLoading ||
               selections.length === 0 ||
-              gameStatus == "PLAYING"
+              gameStatus == 'PLAYING'
             }
           >
             Bet

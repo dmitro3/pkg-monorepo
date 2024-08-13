@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import * as Progress from "@radix-ui/react-progress";
-import React from "react";
-import { useFormContext } from "react-hook-form";
-import { Unity } from "react-unity-webgl";
+import * as Progress from '@radix-ui/react-progress';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
+import { Unity } from 'react-unity-webgl';
 
-import { useListenUnityEvent } from "../../../hooks/use-listen-unity-event";
-import { toFormatted } from "../../../utils/web3";
-import { Plinko3d } from "..";
-import { useUnityPlinko } from "../hooks/use-unity-plinko";
-import usePlinko3dGameStore from "../store";
-import { Plinko3dForm } from "../types";
-import { Plinko3dGameProps } from "./game";
+import { useListenUnityEvent } from '../../../hooks/use-listen-unity-event';
+import { toFormatted } from '../../../utils/web3';
+import { Plinko3d } from '..';
+import { useUnityPlinko } from '../hooks/use-unity-plinko';
+import usePlinko3dGameStore from '../store';
+import { Plinko3dForm } from '../types';
+import { Plinko3dGameProps } from './game';
 
-const UnityScoreEvent = "Score";
+const UnityScoreEvent = 'Score';
 
 type PlinkoSceneProps = Plinko3dGameProps & {
   count: number;
@@ -35,7 +35,7 @@ export const PlinkoScene = ({
 
   const percentageRef = React.useRef(0);
 
-  const plinkoSize = form.watch("plinkoSize");
+  const plinkoSize = form.watch('plinkoSize');
 
   const {
     updateGameStatus,
@@ -43,10 +43,10 @@ export const PlinkoScene = ({
     plinkoGameResults: gameResults,
     updatePlinkoGameResults,
   } = usePlinko3dGameStore([
-    "updateGameStatus",
-    "addLastBet",
-    "plinkoGameResults",
-    "updatePlinkoGameResults",
+    'updateGameStatus',
+    'addLastBet',
+    'plinkoGameResults',
+    'updatePlinkoGameResults',
   ]);
 
   const {
@@ -81,7 +81,7 @@ export const PlinkoScene = ({
     onAnimationStep && onAnimationStep(count);
 
     if (unityEvent.name === UnityScoreEvent) {
-      console.log("multiplier", unityEvent.strParam);
+      console.log('multiplier', unityEvent.strParam);
 
       addLastBet({
         isWon: Number(unityEvent.strParam) > 1,
@@ -101,7 +101,7 @@ export const PlinkoScene = ({
       onAnimationCompleted && onAnimationCompleted(gameResults);
 
       setTimeout(() => {
-        updateGameStatus("ENDED");
+        updateGameStatus('ENDED');
 
         setCount(0);
 
@@ -131,7 +131,7 @@ export const PlinkoScene = ({
           />
           <span
             style={{
-              textShadow: "0 0 5px black, 0 0 5px black",
+              textShadow: '0 0 5px black, 0 0 5px black',
             }}
             className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
           >
@@ -140,7 +140,7 @@ export const PlinkoScene = ({
           <Progress.Root
             className="wr-radius-[1000px] wr-relative wr-z-50 wr-h-[25px] wr-w-[320px] wr-overflow-hidden wr-rounded-md wr-bg-black"
             style={{
-              transform: "translateZ(0)",
+              transform: 'translateZ(0)',
             }}
             value={percentageRef.current}
           >
@@ -148,13 +148,13 @@ export const PlinkoScene = ({
               className="wr-h-full wr-w-full wr-bg-gradient-to-t wr-from-unity-horse-race-blue-400 wr-to-unity-horse-race-blue-600"
               style={{
                 transform: `translateX(-${100 - percentageRef.current}%)`,
-                transition: "transform 660ms cubic-bezier(0.65, 0, 0.35, 1)",
+                transition: 'transform 660ms cubic-bezier(0.65, 0, 0.35, 1)',
               }}
             />
           </Progress.Root>
           <span
             style={{
-              textShadow: "0 0 5px black, 0 0 5px black",
+              textShadow: '0 0 5px black, 0 0 5px black',
             }}
             className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
           >

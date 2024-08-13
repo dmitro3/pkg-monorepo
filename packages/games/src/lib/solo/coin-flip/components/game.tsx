@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { useGameSkip } from "../../../game-provider";
-import { useCoinFlipGameStore } from "..";
-import { CoinFlipGameResult } from "../types";
+import { useGameSkip } from '../../../game-provider';
+import { useCoinFlipGameStore } from '..';
+import { CoinFlipGameResult } from '../types';
 
-export type CoinFlipGameProps = React.ComponentProps<"div"> & {
+export type CoinFlipGameProps = React.ComponentProps<'div'> & {
   gameResults: CoinFlipGameResult[];
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
@@ -13,8 +13,8 @@ export type CoinFlipGameProps = React.ComponentProps<"div"> & {
 
 export const CoinFlipGame = ({ gameResults, children }: CoinFlipGameProps) => {
   const { updateCoinFlipGameResults, updateGameStatus } = useCoinFlipGameStore([
-    "updateCoinFlipGameResults",
-    "updateGameStatus",
+    'updateCoinFlipGameResults',
+    'updateGameStatus',
   ]);
 
   const { updateSkipAnimation } = useGameSkip();
@@ -23,7 +23,7 @@ export const CoinFlipGame = ({ gameResults, children }: CoinFlipGameProps) => {
     if (gameResults.length) {
       updateSkipAnimation(false);
       updateCoinFlipGameResults(gameResults);
-      updateGameStatus("PLAYING");
+      updateGameStatus('PLAYING');
     }
   }, [gameResults]);
 

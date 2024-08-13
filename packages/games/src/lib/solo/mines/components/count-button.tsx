@@ -1,7 +1,7 @@
-import { CDN_URL } from "../../../constants";
-import { Button } from "../../../ui/button";
-import { cn } from "../../../utils/style";
-import { MinesForm } from "../types";
+import { CDN_URL } from '../../../constants';
+import { Button } from '../../../ui/button';
+import { cn } from '../../../utils/style';
+import { MinesForm } from '../types';
 
 const MinesCountButton: React.FC<{
   value: number;
@@ -11,12 +11,12 @@ const MinesCountButton: React.FC<{
 }> = ({ value, minesCount, form, isDisabbled }) => {
   return (
     <Button
-      variant={value === minesCount ? "default" : "secondary"}
+      variant={value === minesCount ? 'default' : 'secondary'}
       className="wr-relative wr-h-10 wr-w-[42px] wr-transition-all"
       type="button"
       disabled={isDisabbled}
       onClick={() => {
-        form.setValue("minesCount", value);
+        form.setValue('minesCount', value);
       }}
     >
       <span className="wr-z-1">{value}</span>
@@ -27,9 +27,9 @@ const MinesCountButton: React.FC<{
         alt="small_icon"
         src={`${CDN_URL}/mines/mine-count-image.png`}
         className={cn(
-          "wr-absolute wr-bottom-0 wr-right-0 wr-z-0 wr-opacity-0 wr-transition-all wr-duration-150",
+          'wr-absolute wr-bottom-0 wr-right-0 wr-z-0 wr-opacity-0 wr-transition-all wr-duration-150',
           {
-            "wr-opacity-100": value === minesCount,
+            'wr-opacity-100': value === minesCount,
           }
         )}
       />

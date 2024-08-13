@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { UnityGameContainer } from "../../../common/containers";
-import { Form } from "../../../ui/form";
-import { Plinko3d, Plinko3dFormFields } from "..";
-import { Plinko3dGameProps } from "./game";
+import { UnityGameContainer } from '../../../common/containers';
+import { Form } from '../../../ui/form';
+import { Plinko3d, Plinko3dFormFields } from '..';
+import { Plinko3dGameProps } from './game';
 
 const MIN_BET_COUNT = 1 as const;
 
@@ -48,9 +48,9 @@ export function PlinkoGame({ ...props }: TemplateProps) {
       }),
     betCount: z
       .number()
-      .min(MIN_BET_COUNT, { message: "Minimum bet count is 1" })
+      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 1' })
       .max(MAX_BET_COUNT, {
-        message: "Maximum bet count is 100",
+        message: 'Maximum bet count is 100',
       }),
     stopGain: z.number(),
     stopLoss: z.number(),
@@ -61,7 +61,7 @@ export function PlinkoGame({ ...props }: TemplateProps) {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "onSubmit",
+    mode: 'onSubmit',
     defaultValues: {
       wager: props?.minWager || 1,
       betCount: 1,

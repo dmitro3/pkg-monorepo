@@ -1,14 +1,11 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext } from 'react-hook-form';
 
-import { CDN_URL } from "../../../../constants";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import { Button } from "../../../../ui/button";
-import { NUMBER_INDEX_COUNT } from "../../constants";
-import { RouletteForm } from "../../types";
-import { cn } from "../../../../utils/style";
+import { CDN_URL } from '../../../../constants';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { Button } from '../../../../ui/button';
+import { cn } from '../../../../utils/style';
+import { NUMBER_INDEX_COUNT } from '../../constants';
+import { RouletteForm } from '../../types';
 
 export const MobileController: React.FC<{
   undoBet: () => void;
@@ -21,10 +18,9 @@ export const MobileController: React.FC<{
   return (
     <div
       className={cn(
-        "wr-flex wr-flex-col md:wr-hidden wr-absolute wr-right-2 wr-gap-2 wr-top-1/2 -wr-translate-y-1/2 wr-transition-all wr-duration-200",
+        'wr-flex wr-flex-col md:wr-hidden wr-absolute wr-right-2 wr-gap-2 wr-top-1/2 -wr-translate-y-1/2 wr-transition-all wr-duration-200',
         {
-          "wr-blur-[4px] wr-select-none wr-pointer-events-none wr-z-0":
-            isPrepared,
+          'wr-blur-[4px] wr-select-none wr-pointer-events-none wr-z-0': isPrepared,
         }
       )}
     >
@@ -69,10 +65,7 @@ export const MobileController: React.FC<{
         disabled={isPrepared}
         onClick={() => {
           digitalClickEffect.play();
-          form.setValue(
-            "selectedNumbers",
-            new Array(NUMBER_INDEX_COUNT).fill(0)
-          );
+          form.setValue('selectedNumbers', new Array(NUMBER_INDEX_COUNT).fill(0));
         }}
       >
         <img

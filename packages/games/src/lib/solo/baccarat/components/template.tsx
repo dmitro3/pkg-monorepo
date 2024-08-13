@@ -1,32 +1,28 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { Chip } from "../../../common/chip-controller/types";
-import { GameContainer, SceneContainer } from "../../../common/containers";
-import { WinAnimation } from "../../../common/win-animation";
-import { CDN_URL } from "../../../constants";
-import { SoundEffects, useAudioEffect } from "../../../hooks/use-audio-effect";
-import { Form } from "../../../ui/form";
-import {
-  MULTIPLIER_BANKER,
-  MULTIPLIER_PLAYER,
-  MULTIPLIER_TIE,
-} from "../constants";
+import { Chip } from '../../../common/chip-controller/types';
+import { GameContainer, SceneContainer } from '../../../common/containers';
+import { WinAnimation } from '../../../common/win-animation';
+import { CDN_URL } from '../../../constants';
+import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { Form } from '../../../ui/form';
+import { MULTIPLIER_BANKER, MULTIPLIER_PLAYER, MULTIPLIER_TIE } from '../constants';
 import {
   BaccaratBetType,
   BaccaratFormFields,
   BaccaratGameProps,
   BaccaratGameResult,
   BaccaratGameSettledResult,
-} from "../types";
-import { BaccaratScene } from "./baccarat-scene";
-import { BetController } from "./bet-controller";
-import Control from "./control";
+} from '../types';
+import { BaccaratScene } from './baccarat-scene';
+import { BetController } from './bet-controller';
+import Control from './control';
 
 type TemplateProps = BaccaratGameProps & {
   minWager?: number;
@@ -60,8 +56,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
 
   const [selectedChip, setSelectedChip] = React.useState<Chip>(Chip.ONE);
   const [results, setResults] = React.useState<BaccaratGameResult | null>(null);
-  const [settled, setSettled] =
-    React.useState<BaccaratGameSettledResult | null>(null);
+  const [settled, setSettled] = React.useState<BaccaratGameSettledResult | null>(null);
 
   const formSchema = z.object({
     wager: z
@@ -112,13 +107,13 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
 
   const chipEffect = useAudioEffect(SoundEffects.CHIP_EFFECT);
 
-  const wager = form.watch("wager");
+  const wager = form.watch('wager');
 
-  const tieWager = form.watch("tieWager");
+  const tieWager = form.watch('tieWager');
 
-  const bankerWager = form.watch("bankerWager");
+  const bankerWager = form.watch('bankerWager');
 
-  const playerWager = form.watch("playerWager");
+  const playerWager = form.watch('playerWager');
 
   const addWager = (wager: Chip, betType: BaccaratBetType) => {
     const _lastSelections = lastSelections;
@@ -126,21 +121,21 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
 
     switch (betType) {
       case BaccaratBetType.TIE:
-        form.setValue("tieWager", tieWager + wager);
+        form.setValue('tieWager', tieWager + wager);
 
         _lastSelections.push({ type: BaccaratBetType.TIE, wager });
 
         break;
 
       case BaccaratBetType.BANKER:
-        form.setValue("bankerWager", bankerWager + wager);
+        form.setValue('bankerWager', bankerWager + wager);
 
         _lastSelections.push({ type: BaccaratBetType.BANKER, wager });
 
         break;
 
       case BaccaratBetType.PLAYER:
-        form.setValue("playerWager", playerWager + wager);
+        form.setValue('playerWager', playerWager + wager);
 
         _lastSelections.push({ type: BaccaratBetType.PLAYER, wager });
 
@@ -160,15 +155,15 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
 
     // call selected numbers and remove last wager
     if (lastSelection?.type === BaccaratBetType.TIE) {
-      form.setValue("tieWager", tieWager - lastSelection.wager);
+      form.setValue('tieWager', tieWager - lastSelection.wager);
     }
 
     if (lastSelection?.type === BaccaratBetType.BANKER) {
-      form.setValue("bankerWager", bankerWager - lastSelection.wager);
+      form.setValue('bankerWager', bankerWager - lastSelection.wager);
     }
 
     if (lastSelection?.type === BaccaratBetType.PLAYER) {
-      form.setValue("playerWager", playerWager - lastSelection.wager);
+      form.setValue('playerWager', playerWager - lastSelection.wager);
     }
 
     // remove last selection
@@ -186,10 +181,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
 
     if (tieMaxPayout > bankerMaxPayout && tieMaxPayout > playerMaxPayout)
       setMaxPayout(tieMaxPayout);
-    else if (
-      bankerMaxPayout > tieMaxPayout &&
-      bankerMaxPayout > playerMaxPayout
-    )
+    else if (bankerMaxPayout > tieMaxPayout && bankerMaxPayout > playerMaxPayout)
       setMaxPayout(bankerMaxPayout);
     else setMaxPayout(playerMaxPayout);
   }, [bankerWager, playerWager, tieWager, wager]);
@@ -199,7 +191,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     setSettled(null);
     setIsGamePlaying(true);
 
-    console.log("SUBMITTING!!!!!!");
+    console.log('SUBMITTING!!!!!!');
 
     onSubmitGameForm(data);
   };

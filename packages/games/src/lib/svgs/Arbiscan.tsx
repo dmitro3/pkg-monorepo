@@ -1,14 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgArbiscan = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={20}
-    height={20}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
     <mask
       id="arbiscan_svg__a"
       width={16}
@@ -17,7 +11,7 @@ const SvgArbiscan = (props: SVGProps<SVGSVGElement>) => (
       y={1}
       maskUnits="userSpaceOnUse"
       style={{
-        maskType: "luminance",
+        maskType: 'luminance',
       }}
     >
       <path fill="#fff" d="M17.11 1.667H2.333v16.667h14.775V1.667Z" />
@@ -35,10 +29,7 @@ const SvgArbiscan = (props: SVGProps<SVGSVGElement>) => (
         fill="#9DCCED"
         d="M9.722 2.7c.04 0 .079.01.115.03l6.124 3.536a.23.23 0 0 1 .115.198v7.07a.229.229 0 0 1-.115.198l-6.124 3.536a.227.227 0 0 1-.115.03c-.04 0-.08-.01-.115-.03l-6.125-3.533a.23.23 0 0 1-.115-.198V6.465c0-.082.044-.157.115-.198L9.607 2.73a.23.23 0 0 1 .115-.031Zm0-1.033a1.26 1.26 0 0 0-.632.17L2.966 5.37a1.263 1.263 0 0 0-.632 1.094v7.07c0 .452.24.869.632 1.095l6.125 3.536a1.27 1.27 0 0 0 1.264 0l6.125-3.536c.391-.226.632-.643.632-1.095v-7.07c0-.451-.24-.868-.632-1.094l-6.126-3.534a1.26 1.26 0 0 0-.632-.17Z"
       />
-      <path
-        fill="#213147"
-        d="m5.67 16.191.564-1.543 1.134.943-1.06.968-.638-.368Z"
-      />
+      <path fill="#213147" d="m5.67 16.191.564-1.543 1.134.943-1.06.968-.638-.368Z" />
       <path
         fill="#fff"
         d="M9.206 5.959H7.653a.276.276 0 0 0-.26.182l-3.329 9.123 1.607.928L9.336 6.145a.138.138 0 0 0-.13-.186ZM11.924 5.959H10.37a.276.276 0 0 0-.26.182l-3.8 10.417 1.606.927 4.137-11.34a.139.139 0 0 0-.13-.186Z"

@@ -1,5 +1,5 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgCoinGecko = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -18,24 +18,16 @@ const SvgCoinGecko = (props: SVGProps<SVGSVGElement>) => (
       y={1}
       maskUnits="userSpaceOnUse"
       style={{
-        maskType: "alpha",
+        maskType: 'alpha',
       }}
     >
       <circle cx={9.999} cy={10} r={8.333} fill="#D9D9D9" />
     </mask>
     <g mask="url(#coin-gecko_svg__a)">
-      <path
-        fill="url(#coin-gecko_svg__b)"
-        d="M1.666 1.464h60.976v17.073H1.666z"
-      />
+      <path fill="url(#coin-gecko_svg__b)" d="M1.666 1.464h60.976v17.073H1.666z" />
     </g>
     <defs>
-      <pattern
-        id="coin-gecko_svg__b"
-        width={1}
-        height={1}
-        patternContentUnits="objectBoundingBox"
-      >
+      <pattern id="coin-gecko_svg__b" width={1} height={1} patternContentUnits="objectBoundingBox">
         <use xlinkHref="#coin-gecko_svg__c" transform="scale(.00333 .0119)" />
       </pattern>
       <image

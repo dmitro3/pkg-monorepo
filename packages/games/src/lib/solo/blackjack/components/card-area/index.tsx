@@ -1,32 +1,26 @@
-import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
+import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
 
-import { CDN_URL } from "../../../../constants";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import { genNumberArray } from "../../../../utils/number";
-import { cn } from "../../../../utils/style";
+import { CDN_URL } from '../../../../constants';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { genNumberArray } from '../../../../utils/number';
+import { cn } from '../../../../utils/style';
 import {
   ActiveGameHands,
   BlackjackGameResult,
   BlackjackHandIndex,
   BlackjackHandStatus,
   GameStruct,
-} from "../..";
-import { BlackjackCard, calcTotalAmounts } from "../../utils";
-import { Card } from "../card";
-import styles from "./card-area.module.css";
+} from '../..';
+import { BlackjackCard, calcTotalAmounts } from '../../utils';
+import { Card } from '../card';
+import styles from './card-area.module.css';
 
 interface CardAreaProps {
   handType: BlackjackHandIndex;
   uiCards: (BlackjackCard | null)[];
   splittedCard?: BlackjackCard | null;
-  hand:
-    | ActiveGameHands["firstHand"]
-    | ActiveGameHands["secondHand"]
-    | ActiveGameHands["thirdHand"];
+  hand: ActiveGameHands['firstHand'] | ActiveGameHands['secondHand'] | ActiveGameHands['thirdHand'];
   activeGameData: GameStruct;
   isDistributionCompleted: boolean;
   isLastDistributionCompleted: boolean;
@@ -45,11 +39,9 @@ export const CardArea: React.FC<CardAreaProps> = ({
   const { cards: cardData, settledResult } = hand;
   const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
 
-  const [isCompletedAndBusted, setIsCompletedAndBusted] =
-    React.useState<boolean>(false);
+  const [isCompletedAndBusted, setIsCompletedAndBusted] = React.useState<boolean>(false);
 
-  const [isSplittedWithDelay, setIsSplittedWithDelay] =
-    React.useState<boolean>(false);
+  const [isSplittedWithDelay, setIsSplittedWithDelay] = React.useState<boolean>(false);
 
   const [delayedCardAmounts, setDelayedCardAmounts] = React.useState({
     amount: 0,
@@ -98,8 +90,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
 
     if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_WIN) return true;
 
-    if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_BLACKJACK)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_BLACKJACK) return true;
     else return false;
   }, [settledResult, isLastDistributionCompleted]);
 
@@ -108,8 +99,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
 
     if (!_result || !isLastDistributionCompleted) return false;
 
-    if (_result === BlackjackGameResult.DEALER_BLACKJACK_PLAYER_LOST)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_BLACKJACK_PLAYER_LOST) return true;
 
     if (_result === BlackjackGameResult.DEALER_BUST_PLAYER_LOST) return true;
 
@@ -124,8 +114,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
 
     if (_result === BlackjackGameResult.DEALER_STAND_HAND_PUSH) return true;
 
-    if (Number(_result) == BlackjackGameResult.DEALER_BLACKJACK_HAND_PUSH)
-      return true;
+    if (Number(_result) == BlackjackGameResult.DEALER_BLACKJACK_HAND_PUSH) return true;
     else return false;
   }, [settledResult, isLastDistributionCompleted]);
 
@@ -134,8 +123,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
 
     if (!_result || !isLastDistributionCompleted) return false;
 
-    if (_result === BlackjackGameResult.DEALER_BLACKJACK_PLAYER_INSURED)
-      return true;
+    if (_result === BlackjackGameResult.DEALER_BLACKJACK_PLAYER_INSURED) return true;
     else return false;
   }, [settledResult, isLastDistributionCompleted]);
 
@@ -156,17 +144,14 @@ export const CardArea: React.FC<CardAreaProps> = ({
     if (isWinner) winEffect.play();
   }, [isWinner]);
 
-  console.log(settledResult, "settledres");
+  console.log(settledResult, 'settledres');
 
   return (
     <div
       className={cn(styles.cardArea, {
-        [styles[`firstHand--${uiCards.length}`] as any]:
-          BlackjackHandIndex.FIRST === handType,
-        [styles[`secondHand--${uiCards.length}`] as any]:
-          BlackjackHandIndex.SECOND === handType,
-        [styles[`thirdHand--${uiCards.length}`] as any]:
-          BlackjackHandIndex.THIRD === handType,
+        [styles[`firstHand--${uiCards.length}`] as any]: BlackjackHandIndex.FIRST === handType,
+        [styles[`secondHand--${uiCards.length}`] as any]: BlackjackHandIndex.SECOND === handType,
+        [styles[`thirdHand--${uiCards.length}`] as any]: BlackjackHandIndex.THIRD === handType,
       })}
     >
       {genNumberArray(6).map((n) => (
@@ -224,9 +209,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
           {delayedCardAmounts.softHandAmount < 22 ? (
             cardData?.isSoftHand ? (
               <span>
-                {delayedCardAmounts.softHandAmount === 21
-                  ? ""
-                  : delayedCardAmounts.amount + "/"}
+                {delayedCardAmounts.softHandAmount === 21 ? '' : delayedCardAmounts.amount + '/'}
                 {delayedCardAmounts.softHandAmount}
               </span>
             ) : (
@@ -237,7 +220,7 @@ export const CardArea: React.FC<CardAreaProps> = ({
           )}
         </div>
       ) : (
-        ""
+        ''
       )}
 
       <AnimatedText
@@ -299,16 +282,16 @@ const AnimatedText: React.FC<{
           exit={{ opacity: 0.0, translateY: -30, scaleY: 0.4 }}
         >
           <span
-            className={cn(styles.text, "font-furore", {
+            className={cn(styles.text, 'font-furore', {
               [styles.loser as any]: isLoser || isBusted,
               [styles.push as any]: isPush || isInsured,
             })}
           >
-            {isWinner && showAnimation && "Win!"}
-            {isLoser && !isInsured && showAnimation && "Lost!"}
-            {isPush && showAnimation && "Push!"}
-            {isInsured && showAnimation && "Insured!"}
-            {isBusted && showAnimation && "Bust!"}
+            {isWinner && showAnimation && 'Win!'}
+            {isLoser && !isInsured && showAnimation && 'Lost!'}
+            {isPush && showAnimation && 'Push!'}
+            {isInsured && showAnimation && 'Insured!'}
+            {isBusted && showAnimation && 'Bust!'}
           </span>
         </motion.div>
       </AnimatePresence>

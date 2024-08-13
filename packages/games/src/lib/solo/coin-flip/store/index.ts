@@ -1,12 +1,12 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { CoinFlipGameResult } from "../types";
+import { CoinFlipGameResult } from '../types';
 
 interface CoinFlipGameState {
   lastBets: CoinFlipGameResult[];
   coinFlipGameResults: CoinFlipGameResult[];
-  gameStatus: "IDLE" | "PLAYING" | "ENDED";
+  gameStatus: 'IDLE' | 'PLAYING' | 'ENDED';
   currentAnimationCount: number;
 }
 
@@ -16,7 +16,7 @@ interface CoinFlipGameStateActions {
   removeLastBet: (index: number) => void;
   clearStore: () => void;
   updateCoinFlipGameResults: (item: CoinFlipGameResult[]) => void;
-  updateGameStatus: (status: "IDLE" | "PLAYING" | "ENDED") => void;
+  updateGameStatus: (status: 'IDLE' | 'PLAYING' | 'ENDED') => void;
   updateCurrentAnimationCount: (count: number) => void;
 }
 
@@ -26,8 +26,7 @@ export const coinFlipResultStore = create<CoinFlipGameStore>()((set) => ({
   lastBets: [],
   coinFlipGameResults: [],
   currentAnimationCount: 0,
-  addLastBet: (item) =>
-    set((state) => ({ lastBets: [...state.lastBets, item] })),
+  addLastBet: (item) => set((state) => ({ lastBets: [...state.lastBets, item] })),
   updateLastBets: (item) => set(() => ({ lastBets: item })),
   removeLastBet: (index) =>
     set((state) => {
@@ -37,24 +36,20 @@ export const coinFlipResultStore = create<CoinFlipGameStore>()((set) => ({
 
       return { lastBets };
     }),
-  updateCoinFlipGameResults: (item) =>
-    set(() => ({ coinFlipGameResults: item })),
+  updateCoinFlipGameResults: (item) => set(() => ({ coinFlipGameResults: item })),
   clearStore: () =>
     set({
       lastBets: [],
       coinFlipGameResults: [],
-      gameStatus: "IDLE",
+      gameStatus: 'IDLE',
       currentAnimationCount: 0,
     }),
-  gameStatus: "IDLE",
+  gameStatus: 'IDLE',
   updateGameStatus: (status) => set(() => ({ gameStatus: status })),
-  updateCurrentAnimationCount: (count) =>
-    set(() => ({ currentAnimationCount: count })),
+  updateCurrentAnimationCount: (count) => set(() => ({ currentAnimationCount: count })),
 }));
 
-export const useCoinFlipGameStore = <T extends keyof CoinFlipGameStore>(
-  keys: T[]
-) =>
+export const useCoinFlipGameStore = <T extends keyof CoinFlipGameStore>(keys: T[]) =>
   coinFlipResultStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];

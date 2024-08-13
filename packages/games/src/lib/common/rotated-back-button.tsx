@@ -1,5 +1,6 @@
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import { Button } from "../ui/button";
+import { ArrowLeftIcon } from '@radix-ui/react-icons';
+
+import { Button } from '../ui/button';
 
 export const RotatedBackButton = () => {
   return (

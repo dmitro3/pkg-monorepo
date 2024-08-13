@@ -43,7 +43,7 @@ export const useListenUnityEvent = () => {
   };
 }; */
 
-"use client";
+'use client';
 
 declare global {
   interface Window {
@@ -51,7 +51,7 @@ declare global {
   }
 }
 
-import { useCallback,useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
 // Assuming UnityEventData is properly defined elsewhere
 type UnityEventData = {
@@ -60,48 +60,37 @@ type UnityEventData = {
 };
 
 const unityEventDefaultValue: UnityEventData = {
-  name: "",
-  strParam: "",
+  name: '',
+  strParam: '',
 };
 
 export const useListenUnityEvent = () => {
-  const [unityEvent, setUnityEvent] = useState<UnityEventData>(
-    unityEventDefaultValue
-  );
+  const [unityEvent, setUnityEvent] = useState<UnityEventData>(unityEventDefaultValue);
 
   // Wrap the listener in a useCallback
-  const handleMessageFromUnity = useCallback(
-    (name: string, strParam: string) => {
-      const obj: UnityEventData = {
-        name,
-        strParam,
-      };
+  const handleMessageFromUnity = useCallback((name: string, strParam: string) => {
+    const obj: UnityEventData = {
+      name,
+      strParam,
+    };
 
-      setTimeout(() => {
-        console.log("Unity Event", obj);
+    setTimeout(() => {
+      console.log('Unity Event', obj);
 
-        setUnityEvent(obj);
-      }, 10);
-    },
-    []
-  );
+      setUnityEvent(obj);
+    }, 10);
+  }, []);
 
   useEffect(() => {
     // Check if GetMessageFromUnity is not already defined to avoid overwriting
-    if (
-      typeof window !== "undefined" &&
-      typeof window.GetMessageFromUnity === "undefined"
-    ) {
+    if (typeof window !== 'undefined' && typeof window.GetMessageFromUnity === 'undefined') {
       // Assign the listener to the window object
       window.GetMessageFromUnity = handleMessageFromUnity;
     }
 
     // Cleanup function to remove the listener
     return () => {
-      if (
-        typeof window !== "undefined" &&
-        window.GetMessageFromUnity === handleMessageFromUnity
-      ) {
+      if (typeof window !== 'undefined' && window.GetMessageFromUnity === handleMessageFromUnity) {
         delete window.GetMessageFromUnity;
       }
     };

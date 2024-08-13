@@ -1,11 +1,11 @@
-"use client";
+'use client';
 import {
   BetHistoryTemplate,
   GameType,
   HoldemPokerActiveGame,
   HoldemPokerFormFields,
   HoldemPokerTemplate,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   controllerAbi,
   holdemPokerAbi,
@@ -16,33 +16,23 @@ import {
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import React from "react";
-import { useDebounce } from "use-debounce";
-import {
-  Address,
-  encodeAbiParameters,
-  encodeFunctionData,
-  formatUnits,
-} from "viem";
-import { useReadContract } from "wagmi";
+} from '@winrlabs/web3';
+import React from 'react';
+import { useDebounce } from 'use-debounce';
+import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
+import { useReadContract } from 'wagmi';
 
-import {
-  useBetHistory,
-  useGetBadges,
-  useListenGameEvent,
-  usePlayerGameStatus,
-} from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { DecodedEvent, prepareGameTransaction } from "../utils";
+import { useBetHistory, useGetBadges, useListenGameEvent, usePlayerGameStatus } from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { DecodedEvent, prepareGameTransaction } from '../utils';
 import {
   HOLDEM_POKER_EVENT_TYPES,
   HoldemPokerContractStatus,
   HoldemPokerGameDealtEvent,
   HoldemPokerSettledEvent,
   HoldemPokerSideBetSettledEvent,
-} from "./types";
-import { checkPairOfAcesOrBetter } from "./utils";
+} from './types';
+import { checkPairOfAcesOrBetter } from './utils';
 
 interface TemplateWithWeb3Props {
   minWager?: number;
@@ -74,38 +64,27 @@ const defaultActiveGame: HoldemPokerActiveGame = {
 };
 
 export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
-  const [activeGame, setActiveGame] =
-    React.useState<HoldemPokerActiveGame>(defaultActiveGame);
+  const [activeGame, setActiveGame] = React.useState<HoldemPokerActiveGame>(defaultActiveGame);
   const [formValues, setFormValues] = React.useState<HoldemPokerFormFields>({
     aaBonus: 0,
     ante: 0,
     wager: props.minWager || 1,
   });
 
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.holdemPoker,
-    gameType: GameType.HOLDEM_POKER,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.holdemPoker,
+      gameType: GameType.HOLDEM_POKER,
+      wagmiConfig,
+    });
 
   const currentAccount = useCurrentAccount();
 
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
 
   const { selectedToken } = useTokenStore((s) => ({
@@ -121,7 +100,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x0000000",
+    owner: currentAccount.address || '0x0000000',
     spender: cashierAddress,
     tokenAddress: selectedToken.address,
     showDefaultToasts: false,
@@ -138,21 +117,21 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "anteChipAmount_", type: "uint16" },
-        { name: "sideBetChipAmount_", type: "uint16" },
-        { name: "wager_", type: "uint128" },
+        { name: 'anteChipAmount_', type: 'uint16' },
+        { name: 'sideBetChipAmount_', type: 'uint16' },
+        { name: 'wager_', type: 'uint128' },
       ],
       [ante, aaBonus, wagerInWei]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.holdemPoker as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -171,19 +150,16 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
   ]);
 
   const encodedFinalizeParams = React.useMemo(() => {
-    const encodedGameData = encodeAbiParameters(
-      [{ name: "fold", type: "bool" }],
-      [false]
-    );
+    const encodedGameData = encodeAbiParameters([{ name: 'fold', type: 'bool' }], [false]);
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.holdemPoker as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "decide",
+        'decide',
         encodedGameData,
       ],
     });
@@ -195,19 +171,16 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
   }, [selectedToken.address]);
 
   const encodedFinalizeFoldParams = React.useMemo(() => {
-    const encodedGameData = encodeAbiParameters(
-      [{ name: "fold", type: "bool" }],
-      [true]
-    );
+    const encodedGameData = encodeAbiParameters([{ name: 'fold', type: 'bool' }], [true]);
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.holdemPoker as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "decide",
+        'decide',
         encodedGameData,
       ],
     });
@@ -218,15 +191,15 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     };
   }, [selectedToken.address]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.holdemPoker,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedBetParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -235,15 +208,15 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedBetParams.encodedTxData,
   });
 
-  const handleFinalizeTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleFinalizeTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.holdemPoker,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "decide",
+        'decide',
         encodedFinalizeParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -252,15 +225,15 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedFinalizeParams.encodedTxData,
   });
 
-  const handleFinalizeFoldTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleFinalizeFoldTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.holdemPoker,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "decide",
+        'decide',
         encodedFinalizeFoldParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -270,11 +243,11 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
   });
 
   const handleDeal = async () => {
-    console.log("SUBMITTING!");
+    console.log('SUBMITTING!');
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -287,7 +260,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
       await handleTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
   };
@@ -296,7 +269,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -309,7 +282,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
       await handleFinalizeTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
       refetchPlayerGameStatus();
     }
   };
@@ -318,7 +291,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
 
@@ -328,7 +301,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     try {
       await handleFinalizeFoldTx.mutateAsync();
     } catch (e: any) {
-      console.log("error", e);
+      console.log('error', e);
     }
   };
 
@@ -336,8 +309,8 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     config: wagmiConfig,
     abi: holdemPokerAbi,
     address: gameAddresses.holdemPoker,
-    functionName: "getPlayerStatus",
-    args: [currentAccount.address || "0x"],
+    functionName: 'getPlayerStatus',
+    args: [currentAccount.address || '0x'],
     query: {
       enabled: !!currentAccount.address,
       refetchOnWindowFocus: false,
@@ -349,16 +322,14 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     if (!gameDataRead.data) return;
-    console.log(gameDataRead.data, "initial");
+    console.log(gameDataRead.data, 'initial');
     if (
       gameDataRead.data.state == HoldemPokerContractStatus.NONE ||
       gameDataRead.data.state == HoldemPokerContractStatus.RESOLVED
     )
       return;
 
-    const initialToken = tokens.find(
-      (t) => t.bankrollIndex == gameDataRead.data.bankroll
-    ) as Token;
+    const initialToken = tokens.find((t) => t.bankrollIndex == gameDataRead.data.bankroll) as Token;
     const initialWagerAsDollar =
       Number(formatUnits(gameDataRead.data.wager, initialToken.decimals)) *
       priceFeed[initialToken.priceKey];
@@ -406,8 +377,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
         break;
       }
       case HOLDEM_POKER_EVENT_TYPES.SideBetSettled: {
-        const result = gameEvent.program[0]
-          ?.data as HoldemPokerSideBetSettledEvent;
+        const result = gameEvent.program[0]?.data as HoldemPokerSideBetSettledEvent;
 
         setActiveGame((prev) => ({
           ...prev,
@@ -422,16 +392,12 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       case HOLDEM_POKER_EVENT_TYPES.Settled: {
         const result = gameEvent.program[0]?.data as HoldemPokerSettledEvent;
 
-        const token = tokens.find(
-          (t) => t.bankrollIndex == result.game.bankroll
-        ) as Token;
+        const token = tokens.find((t) => t.bankrollIndex == result.game.bankroll) as Token;
 
         const paybackAmountAsDollar =
-          Number(formatUnits(result.payback, token.decimals)) *
-          priceFeed[token.priceKey];
+          Number(formatUnits(result.payback, token.decimals)) * priceFeed[token.priceKey];
         const payoutAmountAsDollar =
-          Number(formatUnits(result.payout, token.decimals)) *
-          priceFeed[token.priceKey];
+          Number(formatUnits(result.payout, token.decimals)) * priceFeed[token.priceKey];
 
         setActiveGame((prev) => ({
           ...prev,
@@ -456,20 +422,15 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     }
   };
 
-  const {
-    betHistory,
-    isHistoryLoading,
-    mapHistoryTokens,
-    setHistoryFilter,
-    refetchHistory,
-  } = useBetHistory({
-    gameType: GameType.HOLDEM_POKER,
-    options: {
-      enabled: !props.hideBetHistory,
-    },
-  });
+  const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
+    useBetHistory({
+      gameType: GameType.HOLDEM_POKER,
+      options: {
+        enabled: !props.hideBetHistory,
+      },
+    });
 
-  const onGameCompleted = (move: "fold" | "call") => {
+  const onGameCompleted = (move: 'fold' | 'call') => {
     props.onGameCompleted && props.onGameCompleted();
     refetchPlayerGameStatus();
     refetchHistory();
@@ -477,8 +438,8 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     const { ante, aaBonus, wager } = formValues;
     let totalWager = 0;
 
-    if (move == "fold") totalWager = wager * (ante + aaBonus);
-    else if (move == "call") totalWager = wager * (ante + aaBonus + ante * 2);
+    if (move == 'fold') totalWager = wager * (ante + aaBonus);
+    else if (move == 'call') totalWager = wager * (ante + aaBonus + ante * 2);
 
     handleGetBadges({
       totalWager,

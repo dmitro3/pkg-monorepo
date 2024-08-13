@@ -1,35 +1,24 @@
-import * as Radio from "@radix-ui/react-radio-group";
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import * as Radio from '@radix-ui/react-radio-group';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { AudioController } from "../../../../common/audio-controller";
-import { BetControllerContainer } from "../../../../common/containers";
-import {
-  BetControllerTitle,
-  WagerFormField,
-} from "../../../../common/controller";
-import { PreBetButton } from "../../../../common/pre-bet-button";
-import { WagerCurrencyIcon } from "../../../../common/wager";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
-import useCountdown from "../../../../hooks/use-time-left";
+import { AudioController } from '../../../../common/audio-controller';
+import { BetControllerContainer } from '../../../../common/containers';
+import { BetControllerTitle, WagerFormField } from '../../../../common/controller';
+import { PreBetButton } from '../../../../common/pre-bet-button';
+import { WagerCurrencyIcon } from '../../../../common/wager';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import useCountdown from '../../../../hooks/use-time-left';
 // import useWheelGameStore from "../../_store/game-info-store";
 // import useCountdown from "@/hooks/use-time-left";
-import { Button } from "../../../../ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "../../../../ui/form";
-import { cn } from "../../../../utils/style";
-import { toDecimals } from "../../../../utils/web3";
-import { MultiplayerGameStatus } from "../../../core/type";
-import { colorMultipliers, WheelColor } from "../../constants";
-import { useWheelGameStore } from "../../store";
-import { WheelForm } from "../../types";
+import { Button } from '../../../../ui/button';
+import { FormControl, FormField, FormItem, FormLabel } from '../../../../ui/form';
+import { cn } from '../../../../utils/style';
+import { toDecimals } from '../../../../utils/web3';
+import { MultiplayerGameStatus } from '../../../core/type';
+import { colorMultipliers, WheelColor } from '../../constants';
+import { useWheelGameStore } from '../../store';
+import { WheelForm } from '../../types';
 
 interface Props {
   minWager: number;
@@ -45,12 +34,12 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
     isGamblerParticipant,
     setIsGamblerParticipant,
   } = useWheelGameStore([
-    "cooldownFinish",
-    "status",
-    "resetState",
-    "resetWheelParticipant",
-    "isGamblerParticipant",
-    "setIsGamblerParticipant",
+    'cooldownFinish',
+    'status',
+    'resetState',
+    'resetWheelParticipant',
+    'isGamblerParticipant',
+    'setIsGamblerParticipant',
   ]);
 
   const form = useFormContext() as WheelForm;
@@ -58,14 +47,12 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   const betClickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
-  const chosenColor = form.watch("color");
+  const chosenColor = form.watch('color');
 
-  const currentWager = form.watch("wager");
+  const currentWager = form.watch('wager');
 
   const maxPayout = React.useMemo(() => {
-    return toDecimals(
-      colorMultipliers[chosenColor as WheelColor] * currentWager
-    );
+    return toDecimals(colorMultipliers[chosenColor as WheelColor] * currentWager);
   }, [chosenColor, currentWager]);
 
   const timeLeft = useCountdown(cooldownFinish, () => {
@@ -92,9 +79,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             name="color"
             render={({ field }) => (
               <FormItem className="wr-mb-0">
-                <FormLabel className="wr-text-white/50 lg:!wr-block wr-hidden">
-                  Choose
-                </FormLabel>
+                <FormLabel className="wr-text-white/50 lg:!wr-block wr-hidden">Choose</FormLabel>
                 <FormControl>
                   <Radio.RadioGroup
                     onValueChange={(e) => {
@@ -108,7 +93,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-white/25 wr-text-zinc-200 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-white  data-[state=checked]:wr-text-zinc-600 wr-font-semibold"
+                            'wr-h-full wr-w-full wr-rounded-md wr-bg-white/25 wr-text-zinc-200 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-white  data-[state=checked]:wr-text-zinc-600 wr-font-semibold'
                           )}
                           value={WheelColor.GREY}
                         >
@@ -120,7 +105,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-blue-500/25 wr-text-blue-400 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-blue-500 data-[state=checked]:wr-text-zinc-100 wr-font-semibold"
+                            'wr-h-full wr-w-full wr-rounded-md wr-bg-blue-500/25 wr-text-blue-400 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-blue-500 data-[state=checked]:wr-text-zinc-100 wr-font-semibold'
                           )}
                           value={WheelColor.BLUE}
                         >
@@ -132,7 +117,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/25  wr-text-green-500 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-green-500 data-[state=checked]:wr-text-zinc-100 wr-font-semibold"
+                            'wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/25  wr-text-green-500 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-green-500 data-[state=checked]:wr-text-zinc-100 wr-font-semibold'
                           )}
                           value={WheelColor.GREEN}
                         >
@@ -144,7 +129,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
                       <FormControl>
                         <Radio.Item
                           className={cn(
-                            "wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/25 wr-text-red-600  wr-transition-all wr-ease-in data-[state=checked]:wr-bg-red-600 data-[state=checked]:wr-text-zinc-100 wr-font-semibold"
+                            'wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/25 wr-text-red-600  wr-transition-all wr-ease-in data-[state=checked]:wr-bg-red-600 data-[state=checked]:wr-text-zinc-100 wr-font-semibold'
                           )}
                           value={WheelColor.RED}
                         >
@@ -164,31 +149,27 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             <FormLabel>Max Payout</FormLabel>
             <div
               className={cn(
-                "wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]"
+                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
               )}
             >
               <WagerCurrencyIcon />
-              <span className={cn("wr-font-semibold wr-text-zinc-100")}>
-                ${maxPayout}
-              </span>
+              <span className={cn('wr-font-semibold wr-text-zinc-100')}>${maxPayout}</span>
             </div>
           </div>
         </div>
         <PreBetButton>
           <Button
             type="submit"
-            variant={"success"}
+            variant={'success'}
             className="wr-w-full"
-            size={"xl"}
+            size={'xl'}
             onClick={() => betClickEffect.play()}
             isLoading={form.formState.isSubmitting || form.formState.isLoading}
             disabled={
               !form.formState.isValid ||
               form.formState.isSubmitting ||
               form.formState.isLoading ||
-              (timeLeft > 0 &&
-                status === MultiplayerGameStatus.Wait &&
-                isGamblerParticipant) ||
+              (timeLeft > 0 && status === MultiplayerGameStatus.Wait && isGamblerParticipant) ||
               isGamblerParticipant ||
               (timeLeft > 0 && status === MultiplayerGameStatus.Finish) ||
               chosenColor === WheelColor.IDLE
@@ -197,8 +178,8 @@ const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             {timeLeft >= 0 && status === MultiplayerGameStatus.Finish
               ? `Next game in ${timeLeft} seconds`
               : chosenColor !== WheelColor.IDLE
-                ? "BET"
-                : "CHOOSE COLOR"}
+                ? 'BET'
+                : 'CHOOSE COLOR'}
           </Button>
         </PreBetButton>
       </div>

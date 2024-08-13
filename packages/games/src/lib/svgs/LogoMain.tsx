@@ -1,14 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgLogoMain = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={32}
-    height={36}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={32} height={36} fill="none" {...props}>
     <path
       fill="#fff"
       d="m.143 12.99 12.81 5.908c.878.402 1.43 1.214 1.43 2.1V32.54c0 1.301-1.172 2.356-2.617 2.356-.43 0-.854-.096-1.234-.279l-6.93-3.333C1.472 30.259.143 28.262.143 26.09v-4.764l2.485 1.293c.606.316.98.898.98 1.53v1.59c0 .84.497 1.616 1.304 2.037l5.908 3.087v-9.176l-8.51-3.872C.96 17.223.164 16.048.164 14.697c0-.742-.022-1.707-.022-1.707Z"

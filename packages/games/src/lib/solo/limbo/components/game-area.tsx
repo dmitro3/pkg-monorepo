@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { useGameSkip } from "../../../game-provider";
-import useLimboGameStore from "../store";
-import { LimboGameResult } from "../types";
-import { cn } from "../../../utils/style";
+import { useGameSkip } from '../../../game-provider';
+import { cn } from '../../../utils/style';
+import useLimboGameStore from '../store';
+import { LimboGameResult } from '../types';
 
 export interface GameAreaProps {
   onAnimationStep?: (step: number) => void;
@@ -31,14 +31,14 @@ const GameArea: React.FC<GameAreaProps> = ({
     updateCurrentAnimationCount,
     lastBets,
   } = useLimboGameStore([
-    "addLastBet",
-    "removeLastBet",
-    "updateLastBets",
-    "limboGameResults",
-    "updateGameStatus",
-    "updateLimboGameResults",
-    "updateCurrentAnimationCount",
-    "lastBets",
+    'addLastBet',
+    'removeLastBet',
+    'updateLastBets',
+    'limboGameResults',
+    'updateGameStatus',
+    'updateLimboGameResults',
+    'updateCurrentAnimationCount',
+    'lastBets',
   ]);
 
   React.useEffect(() => {
@@ -73,7 +73,7 @@ const GameArea: React.FC<GameAreaProps> = ({
           onAnimationCompleted && onAnimationCompleted(limboGameResults);
           updateCurrentAnimationCount(0);
           updateLimboGameResults([]);
-          updateGameStatus("ENDED");
+          updateGameStatus('ENDED');
         } else {
           setTimeout(() => turn(curr), 350);
         }
@@ -87,7 +87,7 @@ const GameArea: React.FC<GameAreaProps> = ({
     onAnimationSkipped(limboGameResults);
     setTimeout(() => {
       updateLimboGameResults([]);
-      updateGameStatus("ENDED");
+      updateGameStatus('ENDED');
     }, 50);
   };
 
@@ -102,9 +102,9 @@ const GameArea: React.FC<GameAreaProps> = ({
   return (
     <div
       className={cn(
-        "wr-relative wr-h-full wr-w-full wr-flex wr-justify-between wr-flex-col wr-transition-all wr-duration-200",
+        'wr-relative wr-h-full wr-w-full wr-flex wr-justify-between wr-flex-col wr-transition-all wr-duration-200',
         {
-          "wr-pt-5 lg:wr-pt-0": lastBets.length,
+          'wr-pt-5 lg:wr-pt-0': lastBets.length,
         }
       )}
     >

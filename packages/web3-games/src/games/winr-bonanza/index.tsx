@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   BetHistoryTemplate,
@@ -6,7 +6,7 @@ import {
   ReelSpinSettled,
   WinrBonanzaFormFields,
   WinrBonanzaTemplate,
-} from "@winrlabs/games";
+} from '@winrlabs/games';
 import {
   controllerAbi,
   useCurrentAccount,
@@ -16,20 +16,15 @@ import {
   useTokenBalances,
   useTokenStore,
   winrBonanzaAbi,
-} from "@winrlabs/web3";
-import React from "react";
-import {
-  Address,
-  encodeAbiParameters,
-  encodeFunctionData,
-  formatUnits,
-} from "viem";
-import { useReadContract } from "wagmi";
+} from '@winrlabs/web3';
+import React from 'react';
+import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
+import { useReadContract } from 'wagmi';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from "../hooks";
-import { useContractConfigContext } from "../hooks/use-contract-config";
-import { useListenGameEvent } from "../hooks/use-listen-game-event";
-import { prepareGameTransaction } from "../utils";
+import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { useContractConfigContext } from '../hooks/use-contract-config';
+import { useListenGameEvent } from '../hooks/use-listen-game-event';
+import { prepareGameTransaction } from '../utils';
 
 interface TemplateWithWeb3Props {
   buildedGameUrl: string;
@@ -42,25 +37,15 @@ export default function WinrBonanzaTemplateWithWeb3({
   buildedGameUrlMobile,
   hideBetHistory,
 }: TemplateWithWeb3Props) {
-  const {
-    gameAddresses,
-    controllerAddress,
-    cashierAddress,
-    uiOperatorAddress,
-    wagmiConfig,
-  } = useContractConfigContext();
+  const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
+    useContractConfigContext();
 
-  const {
-    isPlayerHalted,
-    isReIterable,
-    playerLevelUp,
-    playerReIterate,
-    refetchPlayerGameStatus,
-  } = usePlayerGameStatus({
-    gameAddress: gameAddresses.winrBonanza,
-    gameType: GameType.WINR_BONANZA,
-    wagmiConfig,
-  });
+  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+    usePlayerGameStatus({
+      gameAddress: gameAddresses.winrBonanza,
+      gameType: GameType.WINR_BONANZA,
+      wagmiConfig,
+    });
 
   const [formValues, setFormValues] = React.useState<WinrBonanzaFormFields>({
     betAmount: 1,
@@ -76,16 +61,15 @@ export default function WinrBonanzaTemplateWithWeb3({
   const { priceFeed } = usePriceFeed();
 
   const [settledResult, setSettledResult] = React.useState<ReelSpinSettled>();
-  const [previousFreeSpinCount, setPreviousFreeSpinCount] =
-    React.useState<number>(0);
+  const [previousFreeSpinCount, setPreviousFreeSpinCount] = React.useState<number>(0);
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || "0x",
+    account: currentAccount.address || '0x',
   });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
-    owner: currentAccount.address || "0x",
+    owner: currentAccount.address || '0x',
     spender: cashierAddress,
     tokenAddress: selectedToken.address,
     showDefaultToasts: false,
@@ -100,20 +84,20 @@ export default function WinrBonanzaTemplateWithWeb3({
 
     const encodedGameData = encodeAbiParameters(
       [
-        { name: "wager", type: "uint128" },
-        { name: "isDoubleChance", type: "bool" },
+        { name: 'wager', type: 'uint128' },
+        { name: 'isDoubleChance', type: 'bool' },
       ],
       [wagerInWei, formValues.isDoubleChance]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.winrBonanza as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedGameData,
       ],
     });
@@ -137,19 +121,16 @@ export default function WinrBonanzaTemplateWithWeb3({
       lastPrice: priceFeed[selectedToken.priceKey],
     });
 
-    const encodedGameData = encodeAbiParameters(
-      [{ name: "wager", type: "uint128" }],
-      [wagerInWei]
-    );
+    const encodedGameData = encodeAbiParameters([{ name: 'wager', type: 'uint128' }], [wagerInWei]);
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.winrBonanza as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "buyFreeSpins",
+        'buyFreeSpins',
         encodedGameData,
       ],
     });
@@ -159,11 +140,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       encodedGameData,
       encodedTxData: encodedData,
     };
-  }, [
-    formValues.betAmount,
-    selectedToken.address,
-    priceFeed[selectedToken.priceKey],
-  ]);
+  }, [formValues.betAmount, selectedToken.address, priceFeed[selectedToken.priceKey]]);
 
   const encodedFreeSpinParams = React.useMemo(() => {
     const { tokenAddress } = prepareGameTransaction({
@@ -174,13 +151,13 @@ export default function WinrBonanzaTemplateWithWeb3({
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.winrBonanza as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "freeSpin",
-        "0x",
+        'freeSpin',
+        '0x',
       ],
     });
 
@@ -188,21 +165,17 @@ export default function WinrBonanzaTemplateWithWeb3({
       tokenAddress,
       encodedTxData: encodedData,
     };
-  }, [
-    formValues.betAmount,
-    selectedToken.address,
-    priceFeed[selectedToken.priceKey],
-  ]);
+  }, [formValues.betAmount, selectedToken.address, priceFeed[selectedToken.priceKey]]);
 
-  const handleTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.winrBonanza as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "bet",
+        'bet',
         encodedParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -211,15 +184,15 @@ export default function WinrBonanzaTemplateWithWeb3({
     encodedTxData: encodedParams.encodedTxData,
   });
 
-  const handleBuyFeatureTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleBuyFeatureTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.winrBonanza as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "buyFreeSpins",
+        'buyFreeSpins',
         encodedBuyFreeSpinParams.encodedGameData,
       ],
       address: controllerAddress as Address,
@@ -228,15 +201,15 @@ export default function WinrBonanzaTemplateWithWeb3({
     encodedTxData: encodedBuyFreeSpinParams.encodedTxData,
   });
 
-  const handleFreeSpinTx = useHandleTx<typeof controllerAbi, "perform">({
+  const handleFreeSpinTx = useHandleTx<typeof controllerAbi, 'perform'>({
     writeContractVariables: {
       abi: controllerAbi,
-      functionName: "perform",
+      functionName: 'perform',
       args: [
         gameAddresses.winrBonanza as Address,
         selectedToken.bankrollIndex,
         uiOperatorAddress as Address,
-        "freeSpin",
+        'freeSpin',
         encodedFreeSpinParams.encodedTxData,
       ],
       address: controllerAddress as Address,
@@ -246,7 +219,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   });
 
   const handleBet = async (errorCount = 0) => {
-    console.log("spin button called!");
+    console.log('spin button called!');
 
     // if (!allowance.hasAllowance) {
     //   const handledAllowance = await allowance.handleAllowance({
@@ -258,7 +231,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     //   if (!handledAllowance) return;
     // }
 
-    console.log("allowance available");
+    console.log('allowance available');
 
     // await handleTx.mutateAsync();
 
@@ -278,12 +251,12 @@ export default function WinrBonanzaTemplateWithWeb3({
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log("error", e);
+          console.log('error', e);
         },
       });
       if (!handledAllowance) return;
     }
-    console.log("buy feature");
+    console.log('buy feature');
     try {
       if (isPlayerHalted) await playerLevelUp();
       if (isReIterable) await playerReIterate();
@@ -304,7 +277,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     //   if (!handledAllowance) return;
     // }
 
-    console.log("handleFreeSpintx called");
+    console.log('handleFreeSpintx called');
 
     try {
       if (isPlayerHalted) await playerLevelUp();
@@ -321,8 +294,8 @@ export default function WinrBonanzaTemplateWithWeb3({
     config: wagmiConfig,
     abi: winrBonanzaAbi,
     address: gameAddresses.winrBonanza as `0x${string}`,
-    functionName: "getPlayerStatus",
-    args: [currentAccount.address || "0x0000000"],
+    functionName: 'getPlayerStatus',
+    args: [currentAccount.address || '0x0000000'],
     query: {
       enabled: !!currentAccount.address,
     },
@@ -337,16 +310,12 @@ export default function WinrBonanzaTemplateWithWeb3({
   }, [gameDataRead.data]);
 
   React.useEffect(() => {
-    console.log(gameEvent, "GAME EVENT!!");
+    console.log(gameEvent, 'GAME EVENT!!');
 
-    if (
-      gameEvent?.program[0]?.type == "Game" &&
-      gameEvent?.program[0].data?.state == 2
-    ) {
+    if (gameEvent?.program[0]?.type == 'Game' && gameEvent?.program[0].data?.state == 2) {
       const data = gameEvent.program[0].data;
       const betAmount =
-        Number(formatUnits(data.wager, selectedToken.decimals)) *
-        priceFeed[selectedToken.priceKey];
+        Number(formatUnits(data.wager, selectedToken.decimals)) * priceFeed[selectedToken.priceKey];
 
       setSettledResult({
         betAmount: betAmount,
@@ -355,24 +324,19 @@ export default function WinrBonanzaTemplateWithWeb3({
         freeSpinsLeft: data.freeSpinCount,
         payoutMultiplier: data.result.payoutMultiplier / 100,
         grid: data.result.outcomes,
-        type: "Game",
+        type: 'Game',
         spinType: data.spinType,
       });
     }
   }, [gameEvent]);
 
-  const {
-    betHistory,
-    isHistoryLoading,
-    mapHistoryTokens,
-    setHistoryFilter,
-    refetchHistory,
-  } = useBetHistory({
-    gameType: GameType.WINR_BONANZA,
-    options: {
-      enabled: !hideBetHistory,
-    },
-  });
+  const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
+    useBetHistory({
+      gameType: GameType.WINR_BONANZA,
+      options: {
+        enabled: !hideBetHistory,
+      },
+    });
 
   const { handleGetBadges } = useGetBadges();
 

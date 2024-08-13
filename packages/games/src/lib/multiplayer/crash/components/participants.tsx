@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { Coins } from "../../../svgs";
-import useCrashGameStore from "../store";
-import { Participant } from "../types";
-import CrashParticipantDetail from "./participant-detail";
+import { Coins } from '../../../svgs';
+import useCrashGameStore from '../store';
+import { Participant } from '../types';
+import CrashParticipantDetail from './participant-detail';
 
 const CrashParticipant = () => {
-  const { participants } = useCrashGameStore(["participants"]);
+  const { participants } = useCrashGameStore(['participants']);
 
   const showParticipants = (participants: Participant[]) => {
     if (participants.length > 10) {

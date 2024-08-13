@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
+import { create } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
-import { HorseRaceMultiplier, HorseRaceStatus } from "../constants";
+import { HorseRaceMultiplier, HorseRaceStatus } from '../constants';
 
 type BetData = {
   name: string;
@@ -15,11 +15,11 @@ export type HorseRaceMultiplierArray = {
 };
 
 const defaultSelectedHorse: HorseRaceMultiplierArray = {
-  "2x": [],
-  "3x": [],
-  "8x": [],
-  "15x": [],
-  "60x": [],
+  '2x': [],
+  '3x': [],
+  '8x': [],
+  '15x': [],
+  '60x': [],
 };
 
 export type HorseRaceGameState = {
@@ -50,8 +50,7 @@ export const horseRaceGameStore = create<HorseRaceGameStore>()((set) => ({
   startTime: 0,
   winnerHorse: 0,
   lastBets: [],
-  addLastBet: (item) =>
-    set((state) => ({ ...state, lastBets: [...state.lastBets, item] })),
+  addLastBet: (item) => set((state) => ({ ...state, lastBets: [...state.lastBets, item] })),
   updateState: (state) => set((s) => ({ ...s, ...state })),
   resetState: () =>
     set({
@@ -68,15 +67,12 @@ export const horseRaceGameStore = create<HorseRaceGameStore>()((set) => ({
         [multiplier]: [...state.selectedHorse[multiplier], data],
       },
     })),
-  resetSelectedHorse: () =>
-    set((state) => ({ ...state, selectedHorse: defaultSelectedHorse })),
+  resetSelectedHorse: () => set((state) => ({ ...state, selectedHorse: defaultSelectedHorse })),
   isParticipantsOpen: false,
   setIsParticipantsOpen: (isOpen) => set({ isParticipantsOpen: isOpen }),
 }));
 
-export const useHorseRaceGameStore = <T extends keyof HorseRaceGameStore>(
-  keys: T[]
-) =>
+export const useHorseRaceGameStore = <T extends keyof HorseRaceGameStore>(keys: T[]) =>
   horseRaceGameStore((state) => {
     const x = keys.reduce((acc, cur) => {
       acc[cur] = state[cur];

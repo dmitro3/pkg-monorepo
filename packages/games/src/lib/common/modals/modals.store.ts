@@ -1,14 +1,11 @@
-"use client";
+'use client';
 
-import { create, SetState } from "zustand";
+import { create, SetState } from 'zustand';
 
-import { Web3GamesModalsStore, Web3GamesModalsStoreActions } from "./types";
+import { Web3GamesModalsStore, Web3GamesModalsStoreActions } from './types';
 
-const actions = (
-  set: SetState<Web3GamesModalsStore>
-): Web3GamesModalsStoreActions => ({
-  openModal: (modal, props) =>
-    set((state) => ({ ...state, modal: modal, props })),
+const actions = (set: SetState<Web3GamesModalsStore>): Web3GamesModalsStoreActions => ({
+  openModal: (modal, props) => set((state) => ({ ...state, modal: modal, props })),
   closeModal: () =>
     set((state) => ({
       ...state,
@@ -25,5 +22,4 @@ const modalsStore = (set: SetState<Web3GamesModalsStore>) => ({
   ...actions(set),
 });
 
-export const useWeb3GamesModalsStore =
-  create<Web3GamesModalsStore>(modalsStore);
+export const useWeb3GamesModalsStore = create<Web3GamesModalsStore>(modalsStore);

@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { create } from "zustand";
+import { useEffect } from 'react';
+import { create } from 'zustand';
 
-import { createSelectors } from "../../utils/store";
-import { toDecimals } from "../../utils/web3";
+import { createSelectors } from '../../utils/store';
+import { toDecimals } from '../../utils/web3';
 
 export interface Result {
   won: boolean;
@@ -21,13 +21,7 @@ export interface LiveResultState {
 
 export interface LiveResultActions {
   addResult: (item: Result) => void;
-  updateGame: ({
-    wager,
-    betCount,
-  }: {
-    wager: number;
-    betCount?: number;
-  }) => void;
+  updateGame: ({ wager, betCount }: { wager: number; betCount?: number }) => void;
   skipAll: (allResults: Result[]) => void;
   clear: () => void;
   setIsMultiplayer: (isMultiplayer: boolean) => void;
@@ -54,9 +48,7 @@ export const liveResultStore = create<LiveResultStore>()((set, get) => ({
     set((state) => {
       const currentProfit = get()?.currentProfit;
 
-      const newProfit = item.won
-        ? currentProfit + item.payout
-        : currentProfit - get()?.wager;
+      const newProfit = item.won ? currentProfit + item.payout : currentProfit - get()?.wager;
 
       return {
         ...state,
@@ -114,7 +106,7 @@ export const useLiveResultStore = createSelectors(liveResultStore);
  * This hook is used to configure the store for multiplayer games.
  */
 export const useConfigureMultiplayerLiveResultStore = () => {
-  const { setIsMultiplayer } = useLiveResultStore(["setIsMultiplayer"]);
+  const { setIsMultiplayer } = useLiveResultStore(['setIsMultiplayer']);
   useEffect(() => {
     setIsMultiplayer(true);
     return () => setIsMultiplayer(false);

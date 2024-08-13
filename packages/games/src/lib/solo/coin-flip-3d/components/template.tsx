@@ -1,16 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import debounce from "debounce";
-import React from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import debounce from 'debounce';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
 
-import { UnityGameContainer } from "../../../common/containers";
-import { Form } from "../../../ui/form";
-import { CoinFlip3D } from "..";
-import { COIN_SIDE, MAX_BET_COUNT_3D, MIN_BET_COUNT_3D } from "../constants";
-import { CoinFlip3dFormFields } from "../types";
-import { BetController } from "./bet-controller";
-import { CoinFlip3dGameProps } from "./game";
+import { UnityGameContainer } from '../../../common/containers';
+import { Form } from '../../../ui/form';
+import { CoinFlip3D } from '..';
+import { COIN_SIDE, MAX_BET_COUNT_3D, MIN_BET_COUNT_3D } from '../constants';
+import { CoinFlip3dFormFields } from '../types';
+import { BetController } from './bet-controller';
+import { CoinFlip3dGameProps } from './game';
 
 type TemplateOptions = {
   scene?: {
@@ -42,9 +42,9 @@ export const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       }),
     betCount: z
       .number()
-      .min(MIN_BET_COUNT_3D, { message: "Minimum bet count is 1" })
+      .min(MIN_BET_COUNT_3D, { message: 'Minimum bet count is 1' })
       .max(MAX_BET_COUNT_3D, {
-        message: "Maximum bet count is 100",
+        message: 'Maximum bet count is 100',
       }),
     stopGain: z.number(),
     stopLoss: z.number(),
@@ -55,7 +55,7 @@ export const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
     resolver: zodResolver(formSchema, {
       async: true,
     }),
-    mode: "all",
+    mode: 'all',
     defaultValues: {
       wager: props?.minWager || 1,
       betCount: 1,
@@ -83,14 +83,11 @@ export const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
             maxWager={props?.maxWager || 2000}
             minWager={props?.minWager || 1}
             winMultiplier={props?.winMultiplier || 1}
-            logo={props.options.scene?.logo || ""}
+            logo={props.options.scene?.logo || ''}
           />
           <CoinFlip3D.Game {...props}>
             <CoinFlip3D.LastBets />
-            <CoinFlip3D.Scene
-              loader={props.options.scene?.loader || ""}
-              {...props}
-            />
+            <CoinFlip3D.Scene loader={props.options.scene?.loader || ''} {...props} />
             <div className="wr-hidden lg:wr-block">
               <CoinFlip3D.Controller />
             </div>

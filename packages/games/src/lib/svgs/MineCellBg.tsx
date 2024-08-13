@@ -1,13 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgMineCellBg = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 120 120"
-    fill="currentColor"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="currentColor" {...props}>
     <rect width={120} height={120} fill="url(#mine-cell-bg_svg__a)" rx={16} />
     <path
       fill="currentColor"

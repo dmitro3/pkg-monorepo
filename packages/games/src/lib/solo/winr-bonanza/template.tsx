@@ -1,21 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Unity } from "react-unity-webgl";
-import { useDebounce } from "use-debounce";
+import React from 'react';
+import { Unity } from 'react-unity-webgl';
+import { useDebounce } from 'use-debounce';
 
-import { UnityGameContainer } from "../../common/containers";
-import { useGameOptions } from "../../game-provider";
-import { wait } from "../../utils/promise";
-import { toDecimals, toFormatted } from "../../utils/web3";
-import { useUnityBonanza } from "./hooks/use-bonanza-unity";
-import { useBonanzaGameStore } from "./store";
-import {
-  Bonanza_Unity_Events,
-  ReelSpinSettled,
-  SpinType,
-  WinrBonanzaFormFields,
-} from "./types";
+import { UnityGameContainer } from '../../common/containers';
+import { useGameOptions } from '../../game-provider';
+import { wait } from '../../utils/promise';
+import { toDecimals, toFormatted } from '../../utils/web3';
+import { useUnityBonanza } from './hooks/use-bonanza-unity';
+import { useBonanzaGameStore } from './store';
+import { Bonanza_Unity_Events, ReelSpinSettled, SpinType, WinrBonanzaFormFields } from './types';
 
 interface TemplateProps {
   onRefresh: () => void;
@@ -43,8 +38,8 @@ type UnityEventData = {
 };
 
 const unityEventDefaultValue: UnityEventData = {
-  name: "",
-  strParam: "",
+  name: '',
+  strParam: '',
 };
 
 export const WinrBonanzaTemplate = ({
@@ -101,7 +96,7 @@ export const WinrBonanzaTemplate = ({
   const [wonFreeSpins, setWonFreeSpins] = React.useState(false);
 
   const [currentAction, setCurrentAction] = React.useState<
-    "submit" | "initialAutoplay" | "buyFeature" | "freeSpin" | "autoPlay"
+    'submit' | 'initialAutoplay' | 'buyFeature' | 'freeSpin' | 'autoPlay'
   >();
 
   const currentBalanceInDollar = React.useMemo(
@@ -109,9 +104,7 @@ export const WinrBonanzaTemplate = ({
     [account?.balanceAsDollar]
   );
 
-  const actualBetAmount = isDoubleChance
-    ? betAmount + betAmount * 0.5
-    : betAmount;
+  const actualBetAmount = isDoubleChance ? betAmount + betAmount * 0.5 : betAmount;
 
   // Wrap the listener in a useCallback
   const handleMessageFromUnity = React.useCallback(
@@ -130,18 +123,18 @@ export const WinrBonanzaTemplate = ({
           }
         }
 
-        if (obj.name === "M3_OnActiveAutoSpinMode") {
-          console.log("ACTIVATE AUTOPLAY");
+        if (obj.name === 'M3_OnActiveAutoSpinMode') {
+          console.log('ACTIVATE AUTOPLAY');
 
           handleInitialAutoPlay();
 
           setIsInAutoPlay(true);
         }
 
-        if (obj.name === "M3_ScatterMatch") {
-          console.log("SCATTER MATCH");
+        if (obj.name === 'M3_ScatterMatch') {
+          console.log('SCATTER MATCH');
 
-          if (currentAction == "buyFeature") {
+          if (currentAction == 'buyFeature') {
             handleEnterFreespinWithoutScatter();
           }
 
@@ -158,13 +151,13 @@ export const WinrBonanzaTemplate = ({
           }
         }
 
-        if (obj.name === "M3_OnDeactiveAutoSpinMode") {
-          console.log("DEACTIVATE AUTOPLAY");
+        if (obj.name === 'M3_OnDeactiveAutoSpinMode') {
+          console.log('DEACTIVATE AUTOPLAY');
 
           setIsInAutoPlay(false);
         }
 
-        if (obj.name === "M3_WelcomeSpinClick") {
+        if (obj.name === 'M3_WelcomeSpinClick') {
           handleLogin();
 
           setIsLoggedIn(true);
@@ -175,11 +168,11 @@ export const WinrBonanzaTemplate = ({
         }
 
         if (obj.name === Bonanza_Unity_Events.DOUBLE_CHANCE_CLICK) {
-          console.log("DOUBLE CHANCE CLICK", obj.strParam);
+          console.log('DOUBLE CHANCE CLICK', obj.strParam);
 
-          console.log("DOUBLE CHANCE CLICK VAL", obj.strParam === "true");
+          console.log('DOUBLE CHANCE CLICK VAL', obj.strParam === 'true');
 
-          setIsDoubleChance(obj.strParam === "true");
+          setIsDoubleChance(obj.strParam === 'true');
         }
         /* 
         if (obj.name === "M3_EnterFreeSpinAnimEnd") {
@@ -187,14 +180,10 @@ export const WinrBonanzaTemplate = ({
         } */
 
         if (obj.name === Bonanza_Unity_Events.GRID_ANIMATION_FINISHED) {
-          console.log("GRID ANIMATION FINISHED");
+          console.log('GRID ANIMATION FINISHED');
 
           if (isInFreeSpinMode) {
-            sendMessage(
-              "WebGLHandler",
-              "ReceiveMessage",
-              `M3_SetFreeSpinCount|${freeSpins}`
-            );
+            sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SetFreeSpinCount|${freeSpins}`);
 
             if (freeSpins === 0) {
               setTimeout(() => {
@@ -203,12 +192,9 @@ export const WinrBonanzaTemplate = ({
                 setIsInFreeSpinMode(false);
 
                 sendMessage(
-                  "WebGLHandler",
-                  "ReceiveMessage",
-                  `M3_OpenCongForEndFreeSpin|${toDecimals(
-                    freeSpinWinAmount,
-                    2
-                  )}`
+                  'WebGLHandler',
+                  'ReceiveMessage',
+                  `M3_OpenCongForEndFreeSpin|${toDecimals(freeSpinWinAmount, 2)}`
                 );
 
                 handleUnlockUi();
@@ -217,7 +203,7 @@ export const WinrBonanzaTemplate = ({
               handleFreespin();
             }
           } else if (isInAutoPlay && !wonFreeSpins) {
-            console.log("GRID ANIMATION FINISHED AND CALLED AUTOPLAY");
+            console.log('GRID ANIMATION FINISHED AND CALLED AUTOPLAY');
 
             handleAutoPlay();
           } else if (!wonFreeSpins) {
@@ -244,30 +230,23 @@ export const WinrBonanzaTemplate = ({
         }
 
         if (obj.name === Bonanza_Unity_Events.CLOSED_CONGRATULATIONS_PANEL) {
-          if (
-            isInFreeSpinMode &&
-            initialBuyEvent &&
-            initialBuyEvent?.freeSpinsLeft > 0
-          ) {
+          if (isInFreeSpinMode && initialBuyEvent && initialBuyEvent?.freeSpinsLeft > 0) {
             const event = initialBuyEvent;
 
-            sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
+            sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SpinClickAction`);
 
             handleSendGrid(event.grid);
 
             setFreeSpins(event.freeSpinsLeft);
 
             sendMessage(
-              "WebGLHandler",
-              "ReceiveMessage",
+              'WebGLHandler',
+              'ReceiveMessage',
               `M3_SetFreeSpinCount|${event.freeSpinsLeft}`
             );
 
             if (event.payoutMultiplier > 0) {
-              const payout = toDecimals(
-                event.payoutMultiplier * event.betAmount,
-                2
-              );
+              const payout = toDecimals(event.payoutMultiplier * event.betAmount, 2);
 
               setCurrentPayoutAmount(payout);
 
@@ -303,12 +282,12 @@ export const WinrBonanzaTemplate = ({
   );
 
   const handleFreespin = async () => {
-    console.log("FREESPIN");
+    console.log('FREESPIN');
     await wait(300);
     setCurrentPayoutAmount(0);
     setWonFreeSpins(false);
     setInitialBuyEvent(undefined);
-    setCurrentAction("freeSpin");
+    setCurrentAction('freeSpin');
 
     try {
       await freeSpin();
@@ -319,12 +298,12 @@ export const WinrBonanzaTemplate = ({
 
   const handleBuy = async () => {
     setCurrentPayoutAmount(0);
-    handleUpdateWinText("0");
+    handleUpdateWinText('0');
     setFreeSpinWinAmount(0);
     setInitialBuyEvent(undefined);
     setWonFreeSpins(false);
 
-    setCurrentAction("buyFeature");
+    setCurrentAction('buyFeature');
 
     try {
       await buyFreeSpins();
@@ -346,11 +325,11 @@ export const WinrBonanzaTemplate = ({
     setInitialBuyEvent(undefined);
     hideFreeSpinText();
     setCurrentPayoutAmount(0);
-    handleUpdateWinText("0");
+    handleUpdateWinText('0');
     setFreeSpinWinAmount(0);
     setWonFreeSpins(false);
     // for event handling
-    setCurrentAction("submit");
+    setCurrentAction('submit');
 
     try {
       await bet();
@@ -367,10 +346,10 @@ export const WinrBonanzaTemplate = ({
     if (!isInAutoPlay) return;
 
     setCurrentPayoutAmount(0);
-    handleUpdateWinText("0");
+    handleUpdateWinText('0');
     setFreeSpinWinAmount(0);
     setWonFreeSpins(false);
-    setCurrentAction("autoPlay");
+    setCurrentAction('autoPlay');
 
     try {
       await bet();
@@ -381,18 +360,18 @@ export const WinrBonanzaTemplate = ({
   };
 
   const handleInitialAutoPlay = async () => {
-    console.log("INITIAL AUTOPLAY");
+    console.log('INITIAL AUTOPLAY');
 
     setInitialBuyEvent(undefined);
 
     if (isInFreeSpinMode) return;
 
     setCurrentPayoutAmount(0);
-    handleUpdateWinText("0");
+    handleUpdateWinText('0');
     setFreeSpinWinAmount(0);
     setWonFreeSpins(false);
 
-    setCurrentAction("initialAutoplay");
+    setCurrentAction('initialAutoplay');
 
     try {
       await bet();
@@ -403,11 +382,11 @@ export const WinrBonanzaTemplate = ({
   };
 
   React.useEffect(() => {
-    if (currentAction == "submit" && gameEvent?.type == "Game") {
+    if (currentAction == 'submit' && gameEvent?.type == 'Game') {
       handleSendGrid(gameEvent.grid);
 
       onFormChange({ betAmount, actualBetAmount, isDoubleChance });
-      console.log("SUBMIT gameEvent", gameEvent);
+      console.log('SUBMIT gameEvent', gameEvent);
 
       if (gameEvent.freeSpinsLeft > 0) {
         setWonFreeSpins(true);
@@ -418,7 +397,7 @@ export const WinrBonanzaTemplate = ({
       if (gameEvent.payoutMultiplier > 0) {
         let _wager = gameEvent.betAmount;
 
-        console.log("betamount", gameEvent.betAmount);
+        console.log('betamount', gameEvent.betAmount);
 
         if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
           _wager = (gameEvent.betAmount * 2) / 3;
@@ -426,7 +405,7 @@ export const WinrBonanzaTemplate = ({
           _wager = gameEvent.betAmount;
         }
 
-        console.log("WAGER", _wager);
+        console.log('WAGER', _wager);
 
         const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
@@ -436,19 +415,19 @@ export const WinrBonanzaTemplate = ({
       onRefresh();
     }
 
-    if (currentAction == "buyFeature" && gameEvent?.type == "Game") {
+    if (currentAction == 'buyFeature' && gameEvent?.type == 'Game') {
       if (
         !window.GetMessageFromUnity ||
-        typeof window.GetMessageFromUnity === "undefined" ||
-        typeof window.GetMessageFromUnity !== "function"
+        typeof window.GetMessageFromUnity === 'undefined' ||
+        typeof window.GetMessageFromUnity !== 'function'
       ) {
         window.GetMessageFromUnity = handleMessageFromUnity;
       }
 
-      console.log("buy feature event", gameEvent.grid);
-      console.log("grid", JSON.stringify(gameEvent.grid).replace(/,/g, ", "));
+      console.log('buy feature event', gameEvent.grid);
+      console.log('grid', JSON.stringify(gameEvent.grid).replace(/,/g, ', '));
 
-      sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
+      sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SpinClickAction`);
 
       handleSendGrid(gameEvent.grid);
 
@@ -459,38 +438,31 @@ export const WinrBonanzaTemplate = ({
       setFreeSpins(gameEvent.freeSpinsLeft);
     }
 
-    if (currentAction == "freeSpin" && gameEvent?.type == "Game") {
+    if (currentAction == 'freeSpin' && gameEvent?.type == 'Game') {
       const _betAmount = toDecimals(gameEvent.betAmount, 2);
 
       if (
         !window.GetMessageFromUnity ||
-        typeof window.GetMessageFromUnity === "undefined" ||
-        typeof window.GetMessageFromUnity !== "function"
+        typeof window.GetMessageFromUnity === 'undefined' ||
+        typeof window.GetMessageFromUnity !== 'function'
       ) {
         window.GetMessageFromUnity = handleMessageFromUnity;
       }
 
-      sendMessage(
-        "WebGLHandler",
-        "ReceiveMessage",
-        `M3_SetBetValue|${_betAmount}`
-      );
+      sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SetBetValue|${_betAmount}`);
 
-      sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
+      sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SpinClickAction`);
 
-      console.log("free spin event", gameEvent);
+      console.log('free spin event', gameEvent);
 
-      console.log("grid", JSON.stringify(gameEvent.grid).replace(/,/g, ", "));
+      console.log('grid', JSON.stringify(gameEvent.grid).replace(/,/g, ', '));
 
       handleSendGrid(gameEvent.grid);
 
       setFreeSpins(gameEvent.freeSpinsLeft);
 
       if (gameEvent.payoutMultiplier > 0) {
-        const payout = toDecimals(
-          gameEvent.payoutMultiplier * gameEvent.betAmount,
-          2
-        );
+        const payout = toDecimals(gameEvent.payoutMultiplier * gameEvent.betAmount, 2);
 
         setCurrentPayoutAmount(payout);
 
@@ -498,18 +470,18 @@ export const WinrBonanzaTemplate = ({
       }
     }
 
-    if (currentAction == "autoPlay" && gameEvent?.type == "Game") {
-      console.log("AUTOPLAY SUCCESS");
+    if (currentAction == 'autoPlay' && gameEvent?.type == 'Game') {
+      console.log('AUTOPLAY SUCCESS');
 
       if (
         !window.GetMessageFromUnity ||
-        typeof window.GetMessageFromUnity === "undefined" ||
-        typeof window.GetMessageFromUnity !== "function"
+        typeof window.GetMessageFromUnity === 'undefined' ||
+        typeof window.GetMessageFromUnity !== 'function'
       ) {
         window.GetMessageFromUnity = handleMessageFromUnity;
       }
 
-      sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
+      sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SpinClickAction`);
 
       if (gameEvent.freeSpinsLeft > 0) {
         setWonFreeSpins(true);
@@ -522,7 +494,7 @@ export const WinrBonanzaTemplate = ({
       if (gameEvent.payoutMultiplier > 0) {
         let _wager = gameEvent.betAmount;
 
-        console.log("betamount", gameEvent.betAmount);
+        console.log('betamount', gameEvent.betAmount);
 
         if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
           _wager = (gameEvent.betAmount * 2) / 3;
@@ -530,7 +502,7 @@ export const WinrBonanzaTemplate = ({
           _wager = gameEvent.betAmount;
         }
 
-        console.log("WAGER", _wager);
+        console.log('WAGER', _wager);
 
         const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
@@ -540,18 +512,18 @@ export const WinrBonanzaTemplate = ({
       onRefresh();
     }
 
-    if (currentAction == "initialAutoplay" && gameEvent?.type == "Game") {
+    if (currentAction == 'initialAutoplay' && gameEvent?.type == 'Game') {
       if (
         !window.GetMessageFromUnity ||
-        typeof window.GetMessageFromUnity === "undefined" ||
-        typeof window.GetMessageFromUnity !== "function"
+        typeof window.GetMessageFromUnity === 'undefined' ||
+        typeof window.GetMessageFromUnity !== 'function'
       ) {
         window.GetMessageFromUnity = handleMessageFromUnity;
       }
 
-      sendMessage("WebGLHandler", "ReceiveMessage", `M3_SpinClickAction`);
+      sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SpinClickAction`);
 
-      console.log("INITIAL AUTOPLAY RESULT");
+      console.log('INITIAL AUTOPLAY RESULT');
 
       handleSendGrid(gameEvent.grid);
 
@@ -564,7 +536,7 @@ export const WinrBonanzaTemplate = ({
       if (gameEvent.payoutMultiplier > 0) {
         let _wager = gameEvent.betAmount;
 
-        console.log("betamount", gameEvent.betAmount);
+        console.log('betamount', gameEvent.betAmount);
 
         if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
           _wager = (gameEvent.betAmount * 2) / 3;
@@ -572,7 +544,7 @@ export const WinrBonanzaTemplate = ({
           _wager = gameEvent.betAmount;
         }
 
-        console.log("WAGER", _wager);
+        console.log('WAGER', _wager);
 
         const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
@@ -585,20 +557,14 @@ export const WinrBonanzaTemplate = ({
 
   React.useEffect(() => {
     // Check if GetMessageFromUnity is not already defined to avoid overwriting
-    if (
-      typeof window !== "undefined" &&
-      typeof window.GetMessageFromUnity === "undefined"
-    ) {
+    if (typeof window !== 'undefined' && typeof window.GetMessageFromUnity === 'undefined') {
       // Assign the listener to the window object
       window.GetMessageFromUnity = handleMessageFromUnity;
     }
 
     // Cleanup function to remove the listener
     return () => {
-      if (
-        typeof window !== "undefined" &&
-        window.GetMessageFromUnity === handleMessageFromUnity
-      ) {
+      if (typeof window !== 'undefined' && window.GetMessageFromUnity === handleMessageFromUnity) {
         delete window.GetMessageFromUnity;
       }
     };
@@ -639,11 +605,7 @@ export const WinrBonanzaTemplate = ({
     if (previousFreeSpinCount > 0) {
       setFreeSpins(previousFreeSpinCount || 0);
 
-      sendMessage(
-        "WebGLHandler",
-        "ReceiveMessage",
-        `M3_SetFreeSpinCount|${freeSpins}`
-      );
+      sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SetFreeSpinCount|${freeSpins}`);
     }
   }, [previousFreeSpinCount]);
 

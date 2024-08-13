@@ -1,8 +1,8 @@
-import invariant from "tiny-invariant";
+import invariant from 'tiny-invariant';
 
-const ReturnSymbol = Symbol("proxy return");
-const ResolveSymbol = Symbol("proxy resolve");
-const MockSymbol = Symbol("mock");
+const ReturnSymbol = Symbol('proxy return');
+const ResolveSymbol = Symbol('proxy resolve');
+const MockSymbol = Symbol('mock');
 const DEFAULT_PROMISE_DEPTH = 20;
 
 /**
@@ -23,9 +23,7 @@ export const deepMock = (promiseDepth: number = DEFAULT_PROMISE_DEPTH): any => {
    */
   const cache: Record<string | symbol, any> = {
     [MockSymbol]: jest.fn(() =>
-      ReturnSymbol in cache
-        ? cache[ReturnSymbol]
-        : (cache[ReturnSymbol] = deepMock())
+      ReturnSymbol in cache ? cache[ReturnSymbol] : (cache[ReturnSymbol] = deepMock())
     ),
   };
 
@@ -34,22 +32,21 @@ export const deepMock = (promiseDepth: number = DEFAULT_PROMISE_DEPTH): any => {
       if (prop in cache) {
         return cache[prop];
       }
-      if (prop === Symbol.toPrimitive || prop === "toString") {
-        return () => "<mock>";
+      if (prop === Symbol.toPrimitive || prop === 'toString') {
+        return () => '<mock>';
       }
-      if (prop === "then" && promiseDepth === 0) {
+      if (prop === 'then' && promiseDepth === 0) {
         return undefined;
       }
       return (cache[prop] =
-        prop === "then"
-          ? (resolve: Function) =>
-              resolve((cache[ResolveSymbol] ??= deepMock(promiseDepth - 1)))
+        prop === 'then'
+          ? (resolve: Function) => resolve((cache[ResolveSymbol] ??= deepMock(promiseDepth - 1)))
           : deepMock());
     },
     apply: (target, thisArg, args) => cache[MockSymbol](...args),
     construct: () => deepMock(),
     has: (target, prop) => {
-      if (prop === "then" && promiseDepth === 0) {
+      if (prop === 'then' && promiseDepth === 0) {
         return false;
       }
       return true;
@@ -61,9 +58,7 @@ export const deepMock = (promiseDepth: number = DEFAULT_PROMISE_DEPTH): any => {
  * Access the Jest mock function that's wrapping the given deeply mocked function.
  * @param func the target function. It needs to be deeply mocked.
  */
-export const mocked = <T extends (...args: any[]) => any>(
-  func: T
-): jest.Mock => {
+export const mocked = <T extends (...args: any[]) => any>(func: T): jest.Mock => {
   invariant(MockSymbol in func);
   const mock = func[MockSymbol];
   invariant(jest.isMockFunction(mock));
@@ -74,9 +69,7 @@ export const mocked = <T extends (...args: any[]) => any>(
  * Access the cached return value of the given deeply mocked function.
  * @param func the target function. It needs to be deeply mocked.
  */
-export const returnValueOf = <T extends (...args: any[]) => any>(
-  func: T
-): any => {
+export const returnValueOf = <T extends (...args: any[]) => any>(func: T): any => {
   invariant(ReturnSymbol in func);
   return func[ReturnSymbol];
 };

@@ -1,12 +1,8 @@
-import { Token, BalanceMap } from "@winrlabs/types";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "../../../ui/select";
-import { buttonVariants } from "../../../ui/button";
-import { cn } from "../../../utils/style";
+import { BalanceMap,Token } from '@winrlabs/types';
+
+import { buttonVariants } from '../../../ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '../../../ui/select';
+import { cn } from '../../../utils/style';
 
 export const CurrencySelect = ({
   currencyList,
@@ -32,10 +28,7 @@ export const CurrencySelect = ({
         value={selectedCurrency.address}
       >
         <SelectTrigger
-          className={cn(
-            buttonVariants({ variant: "third" }),
-            "wr-border-0 px-2 wr-gap-2"
-          )}
+          className={cn(buttonVariants({ variant: 'third' }), 'wr-border-0 px-2 wr-gap-2')}
         >
           <img
             src={selectedCurrency.icon}

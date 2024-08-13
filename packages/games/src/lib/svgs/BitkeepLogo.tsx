@@ -1,14 +1,8 @@
-import type { SVGProps } from "react";
-import * as React from "react";
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgBitkeepLogo = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={20}
-    height={20}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
     <path
       fill="#495BFF"
       d="m12.49 18.074-7.615-4.406c-.287-.143-.43-.43-.43-.766v-8.86c0-.144-.144-.24-.24-.144l-1.58.91a1.932 1.932 0 0 0-.958 1.677v7.423c0 .67.383 1.293.957 1.676l6.418 3.736a1.95 1.95 0 0 0 1.916 0l1.58-.91c.096-.144.096-.288-.048-.336Z"

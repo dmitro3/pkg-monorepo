@@ -1,22 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import { useGameOptions } from "../../../../game-provider";
-import {
-  SoundEffects,
-  useAudioEffect,
-} from "../../../../hooks/use-audio-effect";
+import { useGameOptions } from '../../../../game-provider';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import {
   CountdownContextState,
   CountdownProvider,
   Minutes,
   Seconds,
-} from "../../../../ui/countdown";
-import { cn } from "../../../../utils/style";
-import { MultiplayerGameStatus } from "../../../core/type";
-import { colorMultipliers, WheelUnits } from "../../constants";
-import { useWheelGameStore } from "../../store";
-import { Wheel } from "./wheel";
-import styles from "./wheel-scene.module.css";
+} from '../../../../ui/countdown';
+import { cn } from '../../../../utils/style';
+import { MultiplayerGameStatus } from '../../../core/type';
+import { colorMultipliers, WheelUnits } from '../../constants';
+import { useWheelGameStore } from '../../store';
+import { Wheel } from './wheel';
+import styles from './wheel-scene.module.css';
 
 export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
   const {
@@ -28,13 +25,13 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
     wheelParticipants,
     setShowResult,
   } = useWheelGameStore([
-    "winnerAngle",
-    "winnerColor",
-    "joiningFinish",
-    "status",
-    "showResult",
-    "setShowResult",
-    "wheelParticipants",
+    'winnerAngle',
+    'winnerColor',
+    'joiningFinish',
+    'status',
+    'showResult',
+    'setShowResult',
+    'wheelParticipants',
   ]);
   const multiplier = colorMultipliers[winnerColor];
   const countdownEffect = useAudioEffect(SoundEffects.COUNTDOWN);
@@ -89,9 +86,7 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
         <Wheel
           units={WheelUnits}
           spin={status === MultiplayerGameStatus.Finish}
-          degree={
-            status === MultiplayerGameStatus.Finish ? winnerAngle : undefined
-          }
+          degree={status === MultiplayerGameStatus.Finish ? winnerAngle : undefined}
           onComplete={() => {
             setShowResult(true);
             onComplete && onComplete();

@@ -1,15 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { CDN_URL } from "../../../../constants";
-import { cn } from "../../../../utils/style";
-import {
-  BlackjackCard,
-  BlackjackSuit,
-  getBlackjackIcon,
-} from "../../../blackjack";
-import styles from "./single-card.module.css";
+import { CDN_URL } from '../../../../constants';
+import { cn } from '../../../../utils/style';
+import { BlackjackCard, BlackjackSuit, getBlackjackIcon } from '../../../blackjack';
+import styles from './single-card.module.css';
 
 interface CardProps {
   card: BlackjackCard | null;
@@ -44,26 +40,23 @@ export const Card: React.FC<CardProps> = ({
 
   return (
     <div
-      data-state={flippedWithDelay ? "flipped" : "unflipped"}
+      data-state={flippedWithDelay ? 'flipped' : 'unflipped'}
       className={cn(styles.card, className && className)}
     >
       <div className={styles.innerWrapper}>
         <div
           className={cn(styles.front, isWinner && styles.winner, {
-            "wr-animate-blackjack-highlight": isTurn,
+            'wr-animate-blackjack-highlight': isTurn,
           })}
         >
           <div className={styles.cardSuitArea}>
             <CardValue
               suit={card?.suit || BlackjackSuit.CLUBS}
-              value={card?.renderValue || ""}
+              value={card?.renderValue || ''}
               isUpsideDown={false}
             />
             <div className={styles.logo}>
-              <img
-                src={`${CDN_URL}/blackjack/card-front-logo.svg`}
-                alt="Justbet Blackjack"
-              />
+              <img src={`${CDN_URL}/blackjack/card-front-logo.svg`} alt="Justbet Blackjack" />
             </div>
           </div>
           <div
@@ -76,14 +69,11 @@ export const Card: React.FC<CardProps> = ({
           </div>
           <div className={styles.cardSuitArea}>
             <div className={styles.logo}>
-              <img
-                src={`${CDN_URL}/blackjack/card-front-logo.svg`}
-                alt="Justbet Blackjack"
-              />
+              <img src={`${CDN_URL}/blackjack/card-front-logo.svg`} alt="Justbet Blackjack" />
             </div>
             <CardValue
               suit={card?.suit || BlackjackSuit.CLUBS}
-              value={card?.renderValue || ""}
+              value={card?.renderValue || ''}
               isUpsideDown={true}
             />
           </div>
@@ -106,8 +96,8 @@ export const CardValue = ({
   suit,
   isUpsideDown,
 }: {
-  value: BlackjackCard["renderValue"];
-  suit: BlackjackCard["suit"];
+  value: BlackjackCard['renderValue'];
+  suit: BlackjackCard['suit'];
   isUpsideDown: boolean;
 }) => {
   return (
