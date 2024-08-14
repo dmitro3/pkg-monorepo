@@ -3,7 +3,6 @@
 import React from 'react';
 import { useDebounce } from 'use-debounce';
 
-import { AudioController } from '../../../common/audio-controller';
 import { ChipFixed } from '../../../common/chip-controller-fixed/types';
 import { GameContainer, SceneContainer } from '../../../common/containers';
 import { RotatedBackButton } from '../../../common/rotated-back-button';
@@ -640,7 +639,6 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
             'wr-relative wr-flex wr-h-[675px] wr-border-0 wr-bg-center !wr-p-0'
           )}
         >
-          <AudioController className="wr-absolute wr-left-3 wr-top-3 wr-z-[999] wr-hidden lg:wr-block" />
           {/* canvas start */}
           <div
             className={cn(

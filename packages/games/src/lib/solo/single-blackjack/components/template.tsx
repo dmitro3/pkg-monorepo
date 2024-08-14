@@ -295,10 +295,10 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
   });
 
   // this effects used for get initial betAmounts
-  React.useEffect(() => {
-    if (initialDataFetched)
-      form.setValue('wager', activeGameHands.firstHand.hand?.chipsAmount || 0);
-  }, [activeGameHands.firstHand.hand?.chipsAmount, initialDataFetched]);
+  // React.useEffect(() => {
+  //   if (initialDataFetched)
+  //     form.setValue('wager', 0);
+  // }, [activeGameHands.firstHand.hand?.chipsAmount, initialDataFetched]);
 
   React.useEffect(() => {
     if (isLastDistributionCompleted) onGameCompleted();

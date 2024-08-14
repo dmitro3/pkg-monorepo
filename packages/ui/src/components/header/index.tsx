@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
 import {
-  FastOrVerifiedOption,
   delay,
   erc20Abi,
+  FastOrVerifiedOption,
   useCurrentAccount,
   useFastOrVerifiedStore,
   useHandleTx,
   useTokenBalances,
   useTokenStore,
-} from "@winrlabs/web3";
-import React from "react";
-import { encodeFunctionData, parseUnits } from "viem";
-import { Config, useConnectors, useDisconnect } from "wagmi";
+} from '@winrlabs/web3';
+import React from 'react';
+import { encodeFunctionData, parseUnits } from 'viem';
+import { Config, useConnectors, useDisconnect } from 'wagmi';
 
-import { useWagmiConfig } from "../../providers/wagmi-config";
-import { LogoMain, Wallet } from "../../svgs";
-import { cn } from "../../utils";
-import { Button } from "../button";
-import { Chat } from "../chat";
-import useModalsStore from "../modals/modals.store";
-import { Skeleton } from "../skeleton";
-import { Spinner } from "../spinner";
-import { SelectGameCurrency } from "../wallet/token-dropdown";
+import { useWagmiConfig } from '../../providers/wagmi-config';
+import { LogoMain, Wallet } from '../../svgs';
+import { cn } from '../../utils';
+import { Button } from '../button';
+import { Chat } from '../chat';
+import useModalsStore from '../modals/modals.store';
+import { Skeleton } from '../skeleton';
+import { Spinner } from '../spinner';
+import { SelectGameCurrency } from '../wallet/token-dropdown';
 
 export interface HeaderProps {
   appLogo?: React.ReactNode;
@@ -42,12 +42,7 @@ const Connecting = () => {
   );
 };
 
-export const Header = ({
-  appLogo,
-  leftSideComponents,
-  chat,
-  containerClassName,
-}: HeaderProps) => {
+export const Header = ({ appLogo, leftSideComponents, chat, containerClassName }: HeaderProps) => {
   const modalStore = useModalsStore();
   const account = useCurrentAccount();
   const { wagmiConfig } = useWagmiConfig();
@@ -72,11 +67,8 @@ export const Header = ({
 
     const encodedData: `0x${string}` = encodeFunctionData({
       abi: erc20Abi,
-      functionName: "mint",
-      args: [
-        account.address as `0x${string}`,
-        parseUnits("100", selectedToken.decimals),
-      ],
+      functionName: 'mint',
+      args: [account.address as `0x${string}`, parseUnits('100', selectedToken.decimals)],
     });
 
     return encodedData;
@@ -86,20 +78,17 @@ export const Header = ({
     writeContractVariables: {
       abi: erc20Abi,
       address: selectedToken.address,
-      functionName: "mint",
-      args: [
-        account.address as `0x${string}`,
-        parseUnits("100", selectedToken.decimals),
-      ],
+      functionName: 'mint',
+      args: [account.address as `0x${string}`, parseUnits('100', selectedToken.decimals)],
     },
-    encodedTxData: encodedTxData || "0x0",
+    encodedTxData: encodedTxData || '0x0',
     options: {},
   });
 
   return (
     <header
       className={cn(
-        "wr-sticky -wr-top-6 wr-z-40 wr-mx-auto wr-max-w-[1140px] wr-bg-zinc-950  wr-pb-[22px] wr-pt-[18px] lg:wr-top-0",
+        'wr-sticky -wr-top-6 wr-z-40 wr-mx-auto wr-max-w-[1140px] wr-bg-zinc-950  wr-pb-[22px] wr-pt-[18px] lg:wr-top-0',
         containerClassName
       )}
     >
@@ -113,9 +102,7 @@ export const Header = ({
 
           {leftSideComponents &&
             leftSideComponents.length &&
-            leftSideComponents.map((component, index) => (
-              <div key={index}>{component}</div>
-            ))}
+            leftSideComponents.map((component, index) => <div key={index}>{component}</div>)}
         </section>
         {account.isGettingAddress && <Skeleton className="wr-h-10 wr-w-24" />}
         {account.address && !account.isGettingAddress && (
@@ -123,9 +110,9 @@ export const Header = ({
             <section className="wr-flex wr-gap-2">
               <div
                 className={cn(
-                  "wr-p-2 wr-rounded-lg wr-transition-all wr-duration-200 wr-text-center wr-font-bold wr-cursor-pointer",
+                  'wr-p-2 wr-rounded-lg wr-transition-all wr-duration-200 wr-text-center wr-font-bold wr-cursor-pointer',
                   {
-                    "wr-bg-green-500": option == FastOrVerifiedOption.FAST,
+                    'wr-bg-green-500': option == FastOrVerifiedOption.FAST,
                   }
                 )}
                 onClick={() => updateOption(FastOrVerifiedOption.FAST)}
@@ -134,9 +121,9 @@ export const Header = ({
               </div>
               <div
                 className={cn(
-                  "wr-p-2 wr-rounded-lg wr-transition-all wr-duration-200 wr-text-center wr-font-bold wr-cursor-pointer",
+                  'wr-p-2 wr-rounded-lg wr-transition-all wr-duration-200 wr-text-center wr-font-bold wr-cursor-pointer',
                   {
-                    "wr-bg-green-500": option == FastOrVerifiedOption.VERIFIED,
+                    'wr-bg-green-500': option == FastOrVerifiedOption.VERIFIED,
                   }
                 )}
                 onClick={() => updateOption(FastOrVerifiedOption.VERIFIED)}
@@ -149,12 +136,12 @@ export const Header = ({
               <SelectGameCurrency />
               <Button
                 isLoading={mintTx.isPending}
-                variant={"success"}
+                variant={'success'}
                 onClick={async () => {
                   try {
                     await mintTx.mutateAsync();
                   } catch (e: any) {
-                    console.log("error", e);
+                    console.log('error', e);
                   }
                 }}
               >
@@ -174,7 +161,7 @@ export const Header = ({
                   localStorage.clear();
                   account?.resetCurrentAccount?.();
                 } catch (error) {
-                  console.error("Error during disconnect:", error);
+                  console.error('Error during disconnect:', error);
                 }
               }}
               isLoading={isPending}
@@ -187,12 +174,12 @@ export const Header = ({
           <section className="wr-ml-6 wr-flex wr-gap-2">
             <Button
               onClick={() => {
-                modalStore.openModal("login");
+                modalStore.openModal('login');
               }}
               withIcon
               variant="success"
               className="wr-flex  wr-items-center wr-gap-2"
-              style={{ flex: "0 0 auto" }}
+              style={{ flex: '0 0 auto' }}
             >
               <Wallet className="wr-h-5 wr-w-5" /> Log In
             </Button>

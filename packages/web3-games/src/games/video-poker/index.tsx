@@ -117,7 +117,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedParams.encodedTxData,
   });
@@ -174,7 +174,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedFinishParams.encodedTxData,
   });

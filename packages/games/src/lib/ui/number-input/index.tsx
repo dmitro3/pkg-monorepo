@@ -229,7 +229,7 @@ const Input: React.FC<{
   return (
     <NumericFormat
       placeholder={placeholder}
-      value={value}
+      value={value || ''}
       decimalScale={decimalScale}
       displayType="input"
       autoComplete="off"

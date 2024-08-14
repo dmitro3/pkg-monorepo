@@ -52,7 +52,7 @@ export const BetController: React.FC<Props> = ({
   ]);
 
   return (
-    <BetControllerContainer className="wr-z-40">
+    <BetControllerContainer className="wr-z-30">
       <div className="wr-flex-col wr-flex lg:wr-block lg:wr-flex-row">
         <div className="lg:wr-mb-3">
           <BetControllerTitle>Coin Flip</BetControllerTitle>

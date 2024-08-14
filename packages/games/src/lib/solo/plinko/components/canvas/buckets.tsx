@@ -30,8 +30,6 @@ const Bucket: React.FC<PlinkoBucketProps> = ({ multiplier, value }) => {
   const plinkoFiveEffect = useAudioEffect(SoundEffects.PLINKO_5);
   const plinkoSixEffect = useAudioEffect(SoundEffects.PLINKO_6);
   const plinkoSevenEffect = useAudioEffect(SoundEffects.PLINKO_7);
-  const midWinEffect = useAudioEffect(SoundEffects.PLINKO_MID);
-  const bigWinEffect = useAudioEffect(SoundEffects.PLINKO_BIG);
 
   useEffect(() => {
     if (value) {

@@ -166,7 +166,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedParams.encodedTxData,
   });
@@ -306,8 +306,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       status,
       joiningFinish,
       joiningStart,
-      // TODO: cooldownFinish is too early. need to fix it.
-      cooldownFinish: cooldownFinish + 5,
+      cooldownFinish: cooldownFinish,
       winnerColor: result as unknown as WheelColor,
       winnerAngle: Number(angle) / 100000 / ANGLE_SCALE,
     });
