@@ -404,14 +404,25 @@ const config: Omit<Config, 'content'> = {
             opacity: '0.7',
           },
         },
+        'dice-scale': {
+          '0%': {
+            transform: 'scale(1)',
+          },
+          '50%': {
+            transform: 'scale(1.15)',
+          },
+          '100%': {
+            transform: 'scale(1)',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'timer-progress': 'timer-progress linear',
         'dice-shake': 'dice-shake 0.2s',
-        'left-to-right': 'left-to-right .5s linear ',
-        'right-to-left': 'right-to-left 1.5s ease-out forwards ',
+        'left-to-right': 'left-to-right .5s linear',
+        'right-to-left': 'right-to-left 1.5s ease-out forwards',
         'roulette-rotation': 'roulette-rotation 20s linear infinite',
         'playing-roulette-rotation': 'roulette-rotation 4s ease-out forwards',
         'roulette-ball-spin': 'roulette-ball-spin 4s forwards',
@@ -420,6 +431,7 @@ const config: Omit<Config, 'content'> = {
         'keno-gem-flip': 'keno-gem-flip .5s linear forwards',
         'blackjack-highlight': 'blackjack-highlight 2s linear infinite',
         'mines-pulse': 'mines-pulse 2s linear infinite',
+        'dice-scale': 'dice-scale 500ms ease-out forwards',
       },
       fontSize: {
         small: '13px',

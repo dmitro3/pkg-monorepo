@@ -70,10 +70,15 @@ export const RangeGame = ({
 
     if (isAnimationFinished) {
       setTimeout(() => {
-        updateCurrentAnimationCount(0);
         onAnimationCompleted(diceGameResults);
       }, 500);
-      updateDiceGameResults([]);
+
+      setTimeout(() => {
+        if (diceGameResults.length > 1) {
+          updateDiceGameResults([]);
+          updateCurrentAnimationCount(0);
+        }
+      }, 10);
 
       clearInterval(intervalRef.current!);
       intervalRef.current = null;
@@ -116,10 +121,6 @@ export const RangeGame = ({
       if (isSingleGame) {
         stepTrigger();
         onAnimationCompleted(diceGameResults);
-
-        lastBetClearRef.current = setTimeout(() => {
-          updateDiceGameResults([]);
-        }, 500);
       } else {
         intervalRef.current = setInterval(stepTrigger, 650);
       }
@@ -133,6 +134,7 @@ export const RangeGame = ({
       intervalRef.current && clearInterval(intervalRef.current);
       lastBetClearRef.current && clearTimeout(lastBetClearRef.current);
       updateGameStatus('IDLE');
+      updateDiceGameResults([]);
       updateLastBets([]);
     };
   }, []);
@@ -140,6 +142,7 @@ export const RangeGame = ({
   const onSkip = () => {
     updateLastBets(diceGameResults);
     clearInterval(intervalRef.current as NodeJS.Timeout);
+    clearTimeout(lastBetClearRef.current as NodeJS.Timeout);
     setTimeout(() => {
       updateGameStatus('ENDED');
       onAnimationSkipped(diceGameResults);

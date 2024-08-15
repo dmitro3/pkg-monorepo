@@ -2,65 +2,78 @@
 import * as React from 'react';
 
 import { cn } from '../../../../lib/utils/style';
+import { CDN_URL } from '../../../constants';
 import useDiceGameStore from '../store';
+import { DiceGameResult } from '../types';
+
+const WIDTH = 96;
+const HEIGHT = 96;
+
+const defaultResult: DiceGameResult = {
+  resultNumber: -1,
+  payout: 0,
+  payoutInUsd: 0,
+};
 
 export const TextRandomizer = () => {
-  const { diceGameResults, currentAnimationCount, gameStatus } = useDiceGameStore([
+  const { diceGameResults, currentAnimationCount } = useDiceGameStore([
     'diceGameResults',
     'currentAnimationCount',
     'gameStatus',
   ]);
 
-  const currentResult = diceGameResults.length > 0 ? diceGameResults[currentAnimationCount] : null;
+  const currentResult =
+    (diceGameResults.length > 0 ? diceGameResults[currentAnimationCount] : defaultResult) ||
+    defaultResult;
 
-  const [resetAnimation, setResetAnimation] = React.useState(false);
-
-  React.useEffect(() => {
-    if (diceGameResults.length === 0) {
-      return;
-    } else {
-      setResetAnimation(false);
-    }
-  }, [diceGameResults]);
+  const [isScalable, setIsScalable] = React.useState(false);
 
   React.useEffect(() => {
-    setResetAnimation(true);
+    setIsScalable(false);
 
     setTimeout(() => {
-      setResetAnimation(false);
-    }, 500);
-  }, [diceGameResults]);
+      setIsScalable(true);
+    }, 125);
+  }, [currentResult]);
 
   return (
-    <div className="wr-relative wr-w-full">
+    <div className="wr-relative wr-w-[calc(100%_-_35px)] wr-mx-auto wr-border-transparent">
       <div>
-        {currentResult ? (
+        <div
+          className={cn({
+            'wr-opacity-0': currentResult.resultNumber == -1,
+            'wr-opacity-100': diceGameResults.length === 1,
+          })}
+        >
           <div
-            className={cn('', {
-              'wr-opacity-0 delay-1000':
-                currentAnimationCount + 1 === diceGameResults.length && gameStatus !== 'PLAYING',
-              'wr-opacity-0': resetAnimation,
-              'wr-opacity-100 wr-delay-100': diceGameResults.length === 1,
-            })}
+            className={cn(
+              'wr-absolute -wr-bottom-7 wr-z-10 wr-text-2xl wr-font-bold wr-transition-all wr-duration-100 wr-flex wr-justify-center wr-items-center',
+              {
+                'wr-animate-dice-scale': isScalable,
+              }
+            )}
+            style={{
+              left: `calc(${currentResult.resultNumber}% - ${WIDTH}px / 2)`,
+              width: WIDTH,
+              height: HEIGHT,
+            }}
           >
+            <img
+              className="wr-absolute wr-top-1/2 wr-left-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2"
+              src={`${CDN_URL}/dice/randomizer-dice.svg`}
+              width={WIDTH}
+              height={HEIGHT}
+            />
             <span
-              className={cn(
-                'wr-absolute wr-bottom-6 wr-z-10 -wr-translate-x-1/2 wr-rounded-lg wr-p-2 wr-text-3xl wr-font-bold wr-transition-all wr-duration-75',
-                {
-                  'wr-bg-lime-600': currentResult?.payout > 0,
-                  'wr-bg-red-600': currentResult?.payout <= 0,
-                }
-              )}
-              style={{ left: `${currentResult.resultNumber}%` }}
+              className={cn('wr-relative', {
+                'wr-text-lime-600': currentResult?.payout > 0,
+                'wr-text-red-600': currentResult?.payout <= 0,
+              })}
             >
               {currentResult.resultNumber}
             </span>
-            <Polygon
-              result={currentResult?.payout || 0 > 0 ? 'win' : 'loss'}
-              resultNumber={currentResult.resultNumber}
-            />
           </div>
-        ) : null}
+        </div>
       </div>
     </div>
   );

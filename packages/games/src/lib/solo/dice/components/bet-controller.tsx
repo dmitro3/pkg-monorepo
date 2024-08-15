@@ -116,7 +116,7 @@ export const BetController: React.FC<Props> = ({
             </div>
           </Advanced>
         </div>
-        {!(diceGameResults.length > 3) && (
+        {(!(diceGameResults.length > 3) || !diceGameResults.length) && (
           <PreBetButton>
             <Button
               type="submit"

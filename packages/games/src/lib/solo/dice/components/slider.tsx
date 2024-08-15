@@ -44,7 +44,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
         control={form.control}
         name="rollValue"
         render={({ field }) => (
-          <FormItem className="wr-mb-0">
+          <FormItem className="wr-mb-0 wr-border-[7px] wr-p-3 wr-border-zinc-800 wr-rounded-lg">
             <FormControl>
               <SliderPrimitive.Root
                 className={cn(
@@ -110,7 +110,7 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
           </FormItem>
         )}
       />
-      <div className="wr-mt-[22px] wr-flex wr-justify-between wr-text-[15px] wr-font-bold">
+      <div className="wr-mt-[22px] wr-flex wr-justify-between wr-text-[15px] wr-font-bold wr-mx-4">
         {[0, 25, 50, 75, 100].map((value) => (
           <span
             key={value}
