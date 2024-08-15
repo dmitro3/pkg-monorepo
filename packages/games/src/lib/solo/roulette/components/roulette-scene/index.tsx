@@ -135,14 +135,16 @@ export const RouletteScene: React.FC<{
 
       turn(0);
     }
+  }, [rouletteResult]);
 
+  React.useEffect(() => {
     return () => {
       clearTimeout(timeoutRef.current);
       updateGameStatus('IDLE');
       updateLastBets([]);
       updateRouletteGameResults([]);
     };
-  }, [rouletteResult]);
+  }, []);
 
   const calculatePayout = (): {
     multiplier: number;

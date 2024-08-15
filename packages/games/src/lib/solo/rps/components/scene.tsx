@@ -103,14 +103,16 @@ const Scene: React.FC<GameAreaProps> = ({
       setWinnerAnimation(false);
     };
     turn();
+  }, [rpsGameResults]);
 
+  React.useEffect(() => {
     return () => {
       clearTimeout(timeoutRef.current);
       updateGameStatus('IDLE');
       updateLastBets([]);
       updateRpsGameResults([]);
     };
-  }, [rpsGameResults]);
+  }, []);
 
   const onSkip = () => {
     updateLastBets(rpsGameResults);

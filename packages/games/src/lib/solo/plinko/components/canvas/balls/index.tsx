@@ -103,10 +103,6 @@ const Ball: React.FC<PlinkoBallProps> = ({ path, order, isSkipped, onAnimationEn
         }
       }
     }
-
-    return () => {
-      clearTimeout(timeoutRef.current);
-    };
   }, [path]);
 
   return (

@@ -108,14 +108,16 @@ export const GameArea: React.FC<GameAreaProps> = ({
       }, 500);
     };
     turn();
+  }, [rollGameResults]);
 
+  React.useEffect(() => {
     return () => {
       updateGameStatus('IDLE');
       updateRollGameResults([]);
       updateLastBets([]);
       clearTimeout(timeoutRef.current);
     };
-  }, [rollGameResults]);
+  }, []);
 
   const onSkip = () => {
     updateLastBets(rollGameResults);

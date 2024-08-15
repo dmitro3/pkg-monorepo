@@ -89,7 +89,9 @@ export const Canvas: React.FC<CanvasProps> = ({
       dispatch({ type: PlinkoResultActions.CLEAR });
       setPaths(plinkoGameResults.map((r) => r.outcomes));
     }
+  }, [plinkoGameResults]);
 
+  React.useEffect(() => {
     return () => {
       dispatch({
         type: PlinkoResultActions.CLEAR,
@@ -99,10 +101,10 @@ export const Canvas: React.FC<CanvasProps> = ({
       updateLastBets([]);
       updateGameStatus('IDLE');
     };
-  }, [plinkoGameResults]);
+  }, []);
 
   const handleAnimationEnd = (order: number, skipped = false) => {
-    if (!paths) {
+    if (!paths.length) {
       return;
     }
 
