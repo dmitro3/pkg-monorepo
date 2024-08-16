@@ -1,6 +1,7 @@
 import { CDN_URL } from '../../../constants';
 import { cn } from '../../../utils/style';
 import { CoinFlipGameResult, CoinSide, useCoinFlipGameStore } from '..';
+import useMediaQuery from '../../../hooks/use-media-query';
 
 const LastBet = ({ result }: { result: CoinFlipGameResult }) => {
   return (
@@ -26,7 +27,8 @@ const LastBet = ({ result }: { result: CoinFlipGameResult }) => {
 
 export const CoinFlipLastBets: React.FC = () => {
   const { lastBets } = useCoinFlipGameStore(['lastBets']);
-  const lastFiveBets = lastBets?.slice(-5);
+  const isMobile = useMediaQuery('(max-width:1024px)');
+  const lastFiveBets = lastBets?.slice(isMobile ? -4 : -8);
 
   return (
     <section className="wr-absolute wr-left-1/2 wr-top-3 lg:wr-top-5 wr-flex wr-max-w-[400px] -wr-translate-x-1/2 wr-items-center wr-justify-end wr-gap-[6px] wr-overflow-hidden max-md:wr-scale-75">

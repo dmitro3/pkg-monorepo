@@ -6,14 +6,14 @@ import usePlinkoLastBetsStore from '../store';
 export const Plinko3dLastBets = () => {
   const { lastBets } = usePlinkoLastBetsStore(['lastBets']);
   const isMobile = useMediaQuery('(max-width:1024px)');
-  const lastFiveBets = lastBets?.slice(isMobile ? -4 : -5);
+  const lastFiveBets = lastBets?.slice(isMobile ? -4 : -8);
 
   return (
     <LastBetsContainer
       className="wr-absolute wr-right-5 wr-left-[unset] wr-top-5 wr-flex-col wr-max-w-[unset] "
       dir="vertical"
     >
-      {lastBets?.map((result, index) => {
+      {lastFiveBets.map((result, index) => {
         return (
           <div
             key={index}

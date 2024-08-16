@@ -8,7 +8,7 @@ import useLimboGameStore from '../store';
 const LastBets = () => {
   const { lastBets } = useLimboGameStore(['lastBets']);
   const isMobile = useMediaQuery('(max-width:1024px)');
-  const lastFiveBets = lastBets?.slice(isMobile ? -4 : -5);
+  const lastFiveBets = lastBets?.slice(isMobile ? -4 : -8);
 
   return (
     <LastBetsContainer>

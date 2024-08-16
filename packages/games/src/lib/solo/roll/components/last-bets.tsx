@@ -12,7 +12,7 @@ type DiceResultIndex = 0 | 1 | 2 | 3 | 4 | 5;
 export const LastBets = () => {
   const { lastBets } = useRollGameStore(['lastBets']);
   const isMobile = useMediaQuery('(max-width:1024px)');
-  const lastFiveBets = lastBets?.slice(isMobile ? -4 : -5);
+  const lastFiveBets = lastBets?.slice(isMobile ? -4 : -8);
 
   return (
     <LastBetsContainer className="h-12">
