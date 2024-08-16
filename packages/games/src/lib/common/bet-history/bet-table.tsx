@@ -65,10 +65,10 @@ const BetTable = ({
   return (
     <>
       <AnimatePresence>
-        <Table className="max-lg:wr-max-w-full max-md:wr-overflow-scroll max-md:wr-scrollbar-none wr-overflow-y-hidden">
-          <TableHeader className="wr-bg-black wr-relative wr-z-10">
+        <Table className="max-lg:wr-max-w-full max-md:wr-overflow-scroll max-md:wr-scrollbar-none wr-overflow-y-hidden wr-border-separate wr-border-spacing-x-0 wr-border-spacing-y-[6px]">
+          <TableHeader className="wr-bg-zinc-900 wr-relative wr-z-10">
             <TableRow>
-              <TableHead className="wr-w-[50px] lg:wr-w-[150px] wr-text-left">
+              <TableHead className="wr-pl-4 wr-rounded-[9px_0_0_9px] wr-w-[50px] lg:wr-w-[150px] wr-text-left">
                 {isMobile ? 'TX' : 'Transaction'}
               </TableHead>
               <TableHead className="wr-text-center lg:wr-text-left wr-table-cell lg:wr-hidden">
@@ -76,10 +76,14 @@ const BetTable = ({
               </TableHead>
               <TableHead className="wr-text-center lg:wr-text-left">Player</TableHead>
               <TableHead className="wr-hidden lg:wr-table-cell">Wager</TableHead>
-              <TableHead className="wr-hidden lg:wr-table-cell wr-text-left">Payout</TableHead>
               <TableHead className="wr-hidden lg:wr-table-cell">Multiplier</TableHead>
-              <TableHead className="wr-text-right lg:wr-text-left">Profit</TableHead>
-              <TableHead className="wr-hidden lg:wr-table-cell wr-w-16 wr-text-right">
+              <TableHead className="wr-text-right lg:wr-text-left wr-pr-4 lg:wr-pr-0 wr-rounded-[0_9px_9px_0] lg:wr-rounded-none">
+                Payout
+              </TableHead>
+              {/* <TableHead className="wr-text-right lg:wr-text-left wr-pr-4 lg:wr-pr-0">
+                Profit
+              </TableHead> */}
+              <TableHead className="wr-w-[80px] wr-hidden lg:wr-table-cell wr-pr-4 wr-text-right wr-rounded-[0_9px_9px_0]">
                 Currency
               </TableHead>
               {/* <TableHead className="wr-hidden lg:wr-table-cell wr-w-12 wr-text-right">
@@ -92,12 +96,12 @@ const BetTable = ({
               items.map((bet, i) => {
                 return (
                   <TableRow
-                    className={`wr-transition-transform wr-duration-500 wr-ease-out ${
+                    className={`wr-border-black wr-bg-zinc-900 wr-transition-transform wr-duration-500 wr-ease-out ${
                       isAnimating ? 'wr-animate-slide-down-first' : ''
                     }`}
                     key={i}
                   >
-                    <TableCell className="wr-w-[50px] lg:wr-w-[150px]">
+                    <TableCell className="wr-w-[50px] lg:wr-w-[150px] wr-pl-4 wr-rounded-[9px_0_0_9px]">
                       {/* TODO: ADD DYNAMIC ROUTE TO EXPLORER */}
                       <a target="_blank" href={`https://explorer.winr.games/tx/${bet.hash}`}>
                         <div className="wr-flex wr-gap-2 wr-items-center wr-justify-start">
@@ -121,15 +125,12 @@ const BetTable = ({
                     <TableCell className="wr-hidden lg:wr-table-cell">
                       ${toFormatted(bet.wagerInDollar, 2)}
                     </TableCell>
-                    <TableCell className="wr-hidden lg:wr-table-cell wr-text-center lg:wr-text-left">
-                      ${toFormatted(bet.payoutInDollar, 2)}
-                    </TableCell>
                     <TableCell className="wr-hidden lg:wr-table-cell">
                       <div
                         className={cn(
                           'wr-w-max wr-rounded-full wr-bg-zinc-700 wr-px-2 wr-py-[6px] wr-font-semibold wr-leading-4',
                           {
-                            'wr-bg-green-500': bet.multiplier >= 2,
+                            'wr-bg-green-500': bet.multiplier > 1,
                           }
                         )}
                       >
@@ -137,6 +138,16 @@ const BetTable = ({
                       </div>
                     </TableCell>
                     <TableCell
+                      className={cn(
+                        'wr-text-right lg:wr-text-left wr-pr-4 lg:wr-pr-0 wr-rounded-[0_9px_9px_0] lg:wr-rounded-none',
+                        {
+                          'wr-text-green-500': bet.payoutInDollar > 0,
+                        }
+                      )}
+                    >
+                      ${toFormatted(bet.payoutInDollar, 2)}
+                    </TableCell>
+                    {/* <TableCell
                       className={cn('wr-text-right lg:wr-text-left', {
                         'wr-text-green-500': bet.won === true,
                         'wr-text-red-600': bet.won === false,
@@ -146,8 +157,8 @@ const BetTable = ({
                         bet.won ? bet.profitInDollar : bet.lossInDollar,
                         2
                       )}`}
-                    </TableCell>
-                    <TableCell className="wr-hidden lg:wr-table-cell wr-w-12 wr-text-right">
+                    </TableCell> */}
+                    <TableCell className="wr-hidden lg:wr-table-cell wr-w-12 wr-text-right wr-pr-4 wr-rounded-[0_9px_9px_0]">
                       <div className="wr-flex wr-items-center wr-justify-end">
                         <img
                           src={currencyList[bet.token]?.icon}
