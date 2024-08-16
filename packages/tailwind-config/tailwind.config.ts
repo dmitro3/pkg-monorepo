@@ -415,6 +415,25 @@ const config: Omit<Config, 'content'> = {
             transform: 'scale(1)',
           },
         },
+        'slide-down-first': {
+          '0%': {
+            transform: 'translateY(-100%)',
+            opacity: '1',
+          },
+          '100%': {
+            transform: 'translateY(0)',
+            opacity: '1',
+          },
+        },
+        'slide-down-last': {
+          '0%': {
+            transform: 'translateY(0%)',
+          },
+          '100%': {
+            transform: 'translateY(100%)',
+            opacity: '0',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -432,6 +451,8 @@ const config: Omit<Config, 'content'> = {
         'blackjack-highlight': 'blackjack-highlight 2s linear infinite',
         'mines-pulse': 'mines-pulse 2s linear infinite',
         'dice-scale': 'dice-scale 500ms ease-out forwards',
+        'slide-down-first': 'slide-down-first .5s ease-out',
+        'slide-down-last': 'slide-down-last .5s ease-out',
       },
       fontSize: {
         small: '13px',

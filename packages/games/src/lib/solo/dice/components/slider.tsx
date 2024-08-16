@@ -93,16 +93,16 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                   />
                 </SliderPrimitive.Track>
                 <SliderPrimitive.Thumb
-                  className="wr-relative wr-grid wr-size-12 wr-place-items-center wr-rounded-[10px] wr-bg-gradient-to-b wr-from-white wr-to-[#C5C5CC] wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
+                  className="wr-relative wr-grid wr-size-11 wr-place-items-center wr-rounded-[10px] wr-bg-gradient-to-b wr-from-white wr-to-[#C5C5CC] wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
                   aria-label="Volume"
                 >
-                  <div className="wr-absolute -wr-top-[50px] wr-text-4xl wr-font-bold">
+                  {/* <div className="wr-absolute -wr-top-[50px] wr-text-4xl wr-font-bold">
                     {toDecimals(rollValue <= MAX_VALUE ? rollValue : MIN_VALUE, 2)}
-                  </div>
-                  <div className="wr-flex wr-gap-[6px]">
-                    <div className="wr-h-[34px] wr-w-[6px] wr-rounded-[2px] wr-bg-zinc-400" />
-                    <div className="wr-h-[34px] wr-w-[6px] wr-rounded-[2px] wr-bg-zinc-400" />
-                    <div className="wr-h-[34px] wr-w-[6px] wr-rounded-[2px] wr-bg-zinc-400" />
+                  </div> */}
+                  <div className="wr-grid wr-grid-cols-3 wr-gap-[5px] wr-w-[21px]">
+                    <div className="wr-h-[22px] wr-w-[4px] wr-rounded-[2px] wr-bg-zinc-400" />
+                    <div className="wr-h-[22px] wr-w-[4px] wr-rounded-[2px] wr-bg-zinc-400" />
+                    <div className="wr-h-[22px] wr-w-[4px] wr-rounded-[2px] wr-bg-zinc-400" />
                   </div>
                 </SliderPrimitive.Thumb>
               </SliderPrimitive.Root>

@@ -35,7 +35,7 @@ type TemplateProps = RangeGameProps & {
 const defaultOptions: TemplateOptions = {
   slider: {
     track: {
-      color: '#a1a1aa',
+      color: '#DC2626',
       activeColor: '#22c55e',
     },
   },
