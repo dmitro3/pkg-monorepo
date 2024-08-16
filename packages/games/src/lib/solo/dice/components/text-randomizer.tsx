@@ -59,7 +59,7 @@ export const TextRandomizer = () => {
             }}
           >
             <img
-              className="wr-absolute wr-top-1/2 wr-left-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2"
+              className="wr-absolute wr-top-1/2 wr-left-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-pointer-events-none wr-select-none"
               src={`${CDN_URL}/dice/randomizer-dice.svg`}
               width={WIDTH}
               height={HEIGHT}
@@ -79,21 +79,21 @@ export const TextRandomizer = () => {
   );
 };
 
-const Polygon = ({ result, resultNumber }: { result: 'win' | 'loss'; resultNumber?: number }) => {
-  return (
-    <svg
-      width="21"
-      height="15"
-      viewBox="0 0 21 15"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="wr-absolute wr-bottom-[9px] wr-z-10 -wr-translate-x-1/2  wr-transition-all wr-duration-75"
-      style={{ left: `${resultNumber}%` }}
-    >
-      <path
-        d="M12.196 13.2864C11.4127 14.5397 9.58734 14.5397 8.804 13.2864L0.500001 -1.58893e-07L20.5 -1.90735e-06L12.196 13.2864Z"
-        fill={result === 'win' ? '#65A30D' : '#DC2626'}
-      />
-    </svg>
-  );
-};
+// const Polygon = ({ result, resultNumber }: { result: 'win' | 'loss'; resultNumber?: number }) => {
+//   return (
+//     <svg
+//       width="21"
+//       height="15"
+//       viewBox="0 0 21 15"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//       className="wr-absolute wr-bottom-[9px] wr-z-10 -wr-translate-x-1/2  wr-transition-all wr-duration-75"
+//       style={{ left: `${resultNumber}%` }}
+//     >
+//       <path
+//         d="M12.196 13.2864C11.4127 14.5397 9.58734 14.5397 8.804 13.2864L0.500001 -1.58893e-07L20.5 -1.90735e-06L12.196 13.2864Z"
+//         fill={result === 'win' ? '#65A30D' : '#DC2626'}
+//       />
+//     </svg>
+//   );
+// };

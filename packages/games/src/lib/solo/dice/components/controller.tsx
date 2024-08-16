@@ -27,7 +27,7 @@ export const Controller: React.FC<RangeControllerProps> = ({ winMultiplier, disa
       <FormItem className="!wr-mb-0 wr-flex-1">
         <FormControl>
           <NumberInput.Root
-            className="wr-opacity-100"
+            className="wr-opacity-100 wr-pointer-events-none wr-cursor-default"
             value={winMultiplier}
             onChange={(val) => null}
           >
@@ -43,9 +43,9 @@ export const Controller: React.FC<RangeControllerProps> = ({ winMultiplier, disa
                   'wr-border-none wr-bg-transparent wr-px-2 wr-py-2 wr-font-semibold wr-leading-5 wr-outline-none focus-visible:wr-ring-0 focus-visible:wr-ring-transparent focus-visible:wr-ring-offset-0'
                 )}
               />
-              <InputAppend>
+              {/* <InputAppend>
                 <IconCloseCircle className="wr-h-5 wr-w-" />
-              </InputAppend>
+              </InputAppend> */}
             </NumberInput.Container>
           </NumberInput.Root>
         </FormControl>
@@ -136,7 +136,7 @@ export const Controller: React.FC<RangeControllerProps> = ({ winMultiplier, disa
         control={form.control}
         name="winChance"
         render={({ field }) => (
-          <FormItem className="!wr-mb-0 wr-flex-1">
+          <FormItem className="!wr-mb-0 wr-flex-1 wr-relative">
             <FormControl>
               <NumberInput.Root
                 {...field}

@@ -26,7 +26,11 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
   const form = useFormContext() as DiceForm;
   const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
 
-  const { gameStatus } = useDiceGameStore(['gameStatus']);
+  const { gameStatus, updateCurrentAnimationCount, updateDiceGameResults } = useDiceGameStore([
+    'gameStatus',
+    'updateCurrentAnimationCount',
+    'updateDiceGameResults',
+  ]);
 
   const rollValue = form.watch('rollValue');
 
@@ -93,7 +97,14 @@ export const Slider = ({ isLoading, disabled, track }: SliderProps) => {
                   />
                 </SliderPrimitive.Track>
                 <SliderPrimitive.Thumb
-                  className="wr-relative wr-grid wr-size-11 wr-place-items-center wr-rounded-[10px] wr-bg-gradient-to-b wr-from-white wr-to-[#C5C5CC] wr-shadow-[0_1px_5px] focus:wr-shadow-[0_2px_10px] focus:wr-outline-none focus:wr-ring-0"
+                  onFocus={() => {
+                    if (gameStatus == 'ENDED') {
+                      console.log('focus');
+                      updateCurrentAnimationCount(0);
+                      updateDiceGameResults([]);
+                    }
+                  }}
+                  className="wr-relative wr-grid wr-size-11 wr-place-items-center wr-rounded-[10px] wr-bg-gradient-to-b wr-from-white wr-to-[#C5C5CC] focus:wr-outline-none focus:wr-ring-0"
                   aria-label="Volume"
                 >
                   {/* <div className="wr-absolute -wr-top-[50px] wr-text-4xl wr-font-bold">

@@ -136,6 +136,11 @@ const Scene: React.FC<GameAreaProps> = ({
     }
   }, [isAnimationSkipped]);
 
+  React.useEffect(() => {
+    setWinner(undefined);
+    setWinnerAnimation(false);
+  }, [form.getValues('rpsChoice')]);
+
   return (
     <div className="wr-relative wr-flex wr-h-full wr-w-full  ">
       <div className="wr-relative wr-basis-1/2 ">
@@ -328,6 +333,9 @@ const Scene: React.FC<GameAreaProps> = ({
                   onValueChange={(e) => {
                     field.onChange(e);
                     digitalClickEffect.play();
+
+                    updateGameStatus('IDLE');
+                    updateLastBets([]);
                   }}
                 >
                   {ALL_RPS_CHOICES.map((item) => (
