@@ -24,6 +24,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
 import {
+  Badge,
   useBetHistory,
   useGetBadges,
   useListenMultiplayerGameEvent,
@@ -46,6 +47,11 @@ interface TemplateWithWeb3Props {
   hideBetHistory?: boolean;
   buildedGameUrl: string;
   onAnimationCompleted?: (result: []) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 const HorseRaceGame = (props: TemplateWithWeb3Props) => {
@@ -57,6 +63,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       gameAddress: gameAddresses.horseRace,
       gameType: GameType.HORSE_RACE,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
   const selectedToken = useTokenStore((s) => s.selectedToken);
@@ -83,7 +90,9 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
 
   const gameEvent = useListenMultiplayerGameEvent(GAME_HUB_GAMES.horse_race);
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   console.log('gameEvent', gameEvent);
 

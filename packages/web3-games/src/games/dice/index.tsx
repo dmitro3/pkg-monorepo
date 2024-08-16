@@ -23,7 +23,7 @@ import {
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import {
@@ -44,6 +44,11 @@ interface TemplateWithWeb3Props {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: DiceGameResult[]) => void;
   onAnimationSkipped?: (result: DiceGameResult[]) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 export default function DiceGame(props: TemplateWithWeb3Props) {
@@ -55,9 +60,12 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       gameAddress: gameAddresses.dice,
       gameType: GameType.RANGE,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const {
     addResult,

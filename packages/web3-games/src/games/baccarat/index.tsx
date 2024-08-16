@@ -21,7 +21,7 @@ import {
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import { BaccaratSettledEvent, GAME_HUB_EVENT_TYPES, prepareGameTransaction } from '../utils';
@@ -32,6 +32,11 @@ interface TemplateWithWeb3Props {
   hideBetHistory?: boolean;
 
   onAnimationCompleted?: (result: BaccaratGameSettledResult) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 export default function BaccaratGame(props: TemplateWithWeb3Props) {
@@ -43,6 +48,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
       gameAddress: gameAddresses.baccarat,
       gameType: GameType.BACCARAT,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
   const [formValues, setFormValues] = useState<BaccaratFormFields>({
@@ -69,7 +75,9 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
   });
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,

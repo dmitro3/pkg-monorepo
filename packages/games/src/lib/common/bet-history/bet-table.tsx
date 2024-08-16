@@ -1,17 +1,16 @@
 import { GameControllerBetHistoryResponse } from '@winrlabs/api';
 import dayjs from 'dayjs';
+import { AnimatePresence } from 'framer-motion';
+import React from 'react';
 
 import { GameType } from '../../constants';
 import useMediaQuery from '../../hooks/use-media-query';
-import { Eye, LinkIcon } from '../../svgs';
-import { Button } from '../../ui/button';
+import { LinkIcon } from '../../svgs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../ui/table';
 import { shorter } from '../../utils/string';
 import { cn } from '../../utils/style';
 import { toDecimals, toFormatted } from '../../utils/web3';
 import { BetHistoryCurrencyList } from '.';
-import React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 
 const gameMap: Record<GameType, string> = {
   [GameType.BACCARAT]: 'Baccarat',

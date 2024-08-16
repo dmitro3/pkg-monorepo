@@ -36,7 +36,13 @@ import {
   BlackjackSettledEvent,
   BlackjackStandOffEvent,
 } from '../blackjack/types';
-import { useBetHistory, useGetBadges, useListenGameEvent, usePlayerGameStatus } from '../hooks';
+import {
+  Badge,
+  useBetHistory,
+  useGetBadges,
+  useListenGameEvent,
+  usePlayerGameStatus,
+} from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { DecodedEvent, prepareGameTransaction } from '../utils';
 
@@ -52,6 +58,11 @@ interface TemplateWithWeb3Props {
   maxWager?: number;
   hideBetHistory?: boolean;
   onGameCompleted?: (payout: number) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 const defaultActiveGameHands: SingleBJActiveGameHands = {
@@ -85,6 +96,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
       gameAddress: gameAddresses.singleBlackjack,
       gameType: GameType.ONE_HAND_BLACKJACK,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
   const { selectedToken } = useTokenStore((s) => ({
@@ -981,7 +993,9 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
       },
     });
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const totalWager = React.useMemo(() => {
     let totalChipAmount = 0;

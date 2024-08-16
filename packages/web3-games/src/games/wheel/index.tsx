@@ -31,6 +31,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
 import {
+  Badge,
   useBetHistory,
   useGetBadges,
   useListenMultiplayerGameEvent,
@@ -52,6 +53,11 @@ interface TemplateWithWeb3Props {
   hideBetHistory?: boolean;
 
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 export default function WheelGame(props: TemplateWithWeb3Props) {
@@ -63,6 +69,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
       gameAddress: gameAddresses.wheel,
       gameType: GameType.WHEEL,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
   const selectedToken = useTokenStore((s) => s.selectedToken);
@@ -369,7 +376,9 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     },
   });
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const onWheelCompleted = () => {
     refetchBetHistory();

@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  TransactionResponse,
   useRankControllerTakeLevelupSnapshot,
   useRefundControllerRefundGame,
   useRefundControllerReIterate,
@@ -13,11 +14,17 @@ import { Address } from 'viem';
 import { Config, useReadContract } from 'wagmi';
 
 import { useContractConfigContext } from '../use-contract-config';
+import { Badge } from '../use-get-badges';
 
 interface IUsePlayerStatusParams {
   gameAddress: Address;
   gameType: GameType;
   wagmiConfig: Config;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 enum SessionStatus {
@@ -31,6 +38,7 @@ export const usePlayerGameStatus = ({
   gameAddress,
   gameType,
   wagmiConfig,
+  onPlayerStatusUpdate,
 }: IUsePlayerStatusParams) => {
   const [sessionStatus, setSessionStatus] = React.useState<SessionStatus>(SessionStatus.Idle);
   const [lastSeen, setLastSeen] = React.useState<number>(0);
@@ -122,7 +130,6 @@ export const usePlayerGameStatus = ({
 
     const passedTime = getPassedTime(lastSeen);
     console.log(sessionStatus, 'session status');
-    console.log;
     return passedTime > refundCooldown && sessionStatus === SessionStatus.Wait;
   }, [lastSeen, refundCooldown, sessionStatus, sessionRead.dataUpdatedAt]);
 
@@ -138,12 +145,20 @@ export const usePlayerGameStatus = ({
   const playerRefund = useRefundControllerRefundGame({});
   const playerReIterate = useRefundControllerReIterate({});
 
-  const handlePlayerLevelUp = async () =>
-    await playerLevelUp.mutateAsync({
+  const handlePlayerLevelUp = async () => {
+    const mutation = (await playerLevelUp.mutateAsync({
       body: {
         player: currentAccount.address || '0x',
       },
-    });
+    })) as unknown as TransactionResponse;
+
+    if (mutation?.success && onPlayerStatusUpdate)
+      onPlayerStatusUpdate({
+        type: 'levelUp',
+        level: (playerLevelStatusRead.data?.level || 0) + 1,
+        awardBadges: undefined,
+      });
+  };
 
   const handlePlayerRefund = async () => {
     const refund = await playerRefund.mutateAsync({

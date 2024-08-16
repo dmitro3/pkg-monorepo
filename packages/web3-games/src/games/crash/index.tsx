@@ -23,6 +23,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
 import {
+  Badge,
   useBetHistory,
   useGetBadges,
   useListenMultiplayerGameEvent,
@@ -44,6 +45,11 @@ interface CrashTemplateProps {
   maxWager?: number;
   hideBetHistory?: boolean;
   onAnimationCompleted?: (result: []) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
   gameUrl?: string;
 }
 
@@ -56,6 +62,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       gameAddress: gameAddresses.crash,
       gameType: GameType.MOON,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
   const currentAccount = useCurrentAccount();
@@ -82,7 +89,9 @@ const CrashGame = (props: CrashTemplateProps) => {
     clear: clearLiveResults,
   } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const [formValues, setFormValues] = useState<CrashFormFields>({
     multiplier: 1,
@@ -157,7 +166,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedParams.encodedTxData,
   });

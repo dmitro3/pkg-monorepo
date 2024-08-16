@@ -21,7 +21,7 @@ import React from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
 import { useReadContract } from 'wagmi';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import { prepareGameTransaction } from '../utils';
@@ -30,12 +30,18 @@ interface TemplateWithWeb3Props {
   buildedGameUrl: string;
   buildedGameUrlMobile: string;
   hideBetHistory?: boolean;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 export default function WinrBonanzaTemplateWithWeb3({
   buildedGameUrl,
   buildedGameUrlMobile,
   hideBetHistory,
+  onPlayerStatusUpdate,
 }: TemplateWithWeb3Props) {
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
@@ -45,6 +51,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       gameAddress: gameAddresses.winrBonanza,
       gameType: GameType.WINR_BONANZA,
       wagmiConfig,
+      onPlayerStatusUpdate,
     });
 
   const [formValues, setFormValues] = React.useState<WinrBonanzaFormFields>({
@@ -181,7 +188,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedParams.encodedTxData,
   });
@@ -200,7 +207,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedBuyFreeSpinParams.encodedTxData,
   });
@@ -219,7 +226,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedFreeSpinParams.encodedTxData,
   });
@@ -344,7 +351,9 @@ export default function WinrBonanzaTemplateWithWeb3({
       },
     });
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate,
+  });
 
   const handleRefresh = async () => {
     refetchHistory();

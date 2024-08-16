@@ -22,7 +22,13 @@ import React from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 import { useReadContract } from 'wagmi';
 
-import { useBetHistory, useGetBadges, useListenGameEvent, usePlayerGameStatus } from '../hooks';
+import {
+  Badge,
+  useBetHistory,
+  useGetBadges,
+  useListenGameEvent,
+  usePlayerGameStatus,
+} from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { prepareGameTransaction } from '../utils';
 
@@ -31,6 +37,11 @@ interface TemplateWithWeb3Props {
   maxWager?: number;
   hideBetHistory?: boolean;
   onAnimationCompleted?: (payout: number) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 export default function VideoPokerGame(props: TemplateWithWeb3Props) {
@@ -42,6 +53,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       gameAddress: gameAddresses.videoPoker,
       gameType: GameType.VIDEO_POKER,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
   const [formValues, setFormValues] = React.useState<VideoPokerFormFields>({
@@ -273,7 +285,9 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       },
     });
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const onGameCompleted = (payout: number) => {
     props.onAnimationCompleted && props.onAnimationCompleted(payout);

@@ -10,8 +10,6 @@ import {
   useLiveResultStore,
 } from '@winrlabs/games';
 import {
-  EventLogic,
-  FastOrVerifiedOption,
   controllerAbi,
   useCurrentAccount,
   useFastOrVerified,
@@ -24,7 +22,7 @@ import {
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import {
@@ -49,6 +47,11 @@ interface TemplateWithWeb3Props {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
   onAnimationSkipped?: (result: CoinFlipGameResult[]) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 export default function CoinFlipGame(props: TemplateWithWeb3Props) {
@@ -60,7 +63,12 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       gameAddress: gameAddresses.coinFlip,
       gameType: GameType.COINFLIP,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
+
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const {
     addResult,
@@ -87,8 +95,6 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     selectedToken: s.selectedToken,
   }));
   const { priceFeed } = usePriceFeed();
-
-  const { handleGetBadges } = useGetBadges();
 
   const [coinFlipResult, setCoinFlipResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const currentAccount = useCurrentAccount();
@@ -230,7 +236,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       finalResult?.logic == eventLogic &&
       finalResult?.program[0]?.type == GAME_HUB_EVENT_TYPES.Settled
     ) {
-      console.log(eventLogic, "curr event log");
+      console.log(eventLogic, 'curr event log');
 
       setCoinFlipResult(finalResult);
       updateGame({

@@ -27,7 +27,7 @@ import React, { useEffect, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
 import { useReadContract } from 'wagmi';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import { prepareGameTransaction } from '../utils';
@@ -44,6 +44,11 @@ interface TemplateWithWeb3Props {
   maxWager?: number;
   hideBetHistory?: boolean;
   onAnimationCompleted?: (result: MinesGameResultOnComplete) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
@@ -55,6 +60,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       gameAddress: gameAddresses.mines,
       gameType: GameType.MINES,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
   const { priceFeed } = usePriceFeed();
@@ -422,7 +428,9 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       },
     });
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const onGameCompleted = (result: MinesGameResultOnComplete) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);

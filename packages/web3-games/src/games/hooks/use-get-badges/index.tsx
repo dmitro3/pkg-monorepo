@@ -1,7 +1,7 @@
 import { useBadgeControllerAwardBadge } from '@winrlabs/api';
 import { useCurrentAccount } from '@winrlabs/web3';
 
-enum Badge {
+export enum Badge {
   LuckyWinner = 'LuckyWinner',
   BettingBuddy = 'BettingBuddy',
   BankrollBooster = 'BankrollBooster',
@@ -28,7 +28,15 @@ enum Badge {
   LuckyRoller = 'LuckyRoller',
 }
 
-export const useGetBadges = () => {
+interface IUseGetBadgesParams {
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
+}
+
+export const useGetBadges = ({ onPlayerStatusUpdate }: IUseGetBadgesParams) => {
   const { mutateAsync: getBadgeMutation } = useBadgeControllerAwardBadge({});
   const currentAccount = useCurrentAccount();
 
@@ -42,37 +50,57 @@ export const useGetBadges = () => {
     const multiplier = totalPayout / totalWager;
     const totalProfit = totalPayout - totalWager;
     console.log(multiplier, totalProfit, totalWager, totalPayout);
+    const awardBadges = [];
 
-    if (totalWager >= 1000)
-      getBadgeMutation({
+    if (totalWager >= 1000) {
+      const mutation = await getBadgeMutation({
         body: {
           type: Badge.HighRoller,
           player: currentAccount.address || '0x',
         },
       });
 
-    if (totalProfit <= -1000)
-      getBadgeMutation({
+      if (mutation.awarded) awardBadges.push(Badge.HighRoller);
+    }
+
+    if (totalProfit <= -1000) {
+      const mutation = await getBadgeMutation({
         body: {
           type: Badge.LossLegend,
           player: currentAccount.address || '0x',
         },
       });
 
-    if (multiplier >= 10)
-      getBadgeMutation({
+      if (mutation.awarded) awardBadges.push(Badge.LossLegend);
+    }
+
+    if (multiplier >= 10) {
+      const mutation = await getBadgeMutation({
         body: {
           type: Badge.LuckyRoller,
           player: currentAccount.address || '0x',
         },
       });
 
-    if (multiplier >= 1000)
-      getBadgeMutation({
+      if (mutation.awarded) awardBadges.push(Badge.LuckyRoller);
+    }
+
+    if (multiplier >= 1000) {
+      const mutation = await getBadgeMutation({
         body: {
           type: Badge.BettingTitan,
           player: currentAccount.address || '0x',
         },
+      });
+
+      if (mutation.awarded) awardBadges.push(Badge.BettingTitan);
+    }
+
+    if (awardBadges.length && onPlayerStatusUpdate)
+      onPlayerStatusUpdate({
+        type: 'badgeUp',
+        awardBadges,
+        level: undefined,
       });
   };
 
@@ -80,10 +108,3 @@ export const useGetBadges = () => {
     handleGetBadges,
   };
 };
-
-// profit, multiplier, totalWager
-
-// high roller 1000$ single tx
-// loss legend $1000 loss single tx
-// lucky roller 10x multiplier
-// betting titan 1000x multiplier

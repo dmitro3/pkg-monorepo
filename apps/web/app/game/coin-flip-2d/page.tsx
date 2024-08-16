@@ -1,10 +1,6 @@
-"use client";
+'use client';
 
-import {
-  CoinFlipGame,
-  LiveResults,
-  Web3GamesModals,
-} from "@winrlabs/web3-games";
+import { CoinFlipGame, LiveResults, Web3GamesModals } from '@winrlabs/web3-games';
 
 export default function CoinFlipPage() {
   return (
@@ -12,11 +8,14 @@ export default function CoinFlipPage() {
       <CoinFlipGame
         options={{
           scene: {
-            backgroundImage: "url(/coin-flip/coin-flip-bg.png)",
+            backgroundImage: 'url(/coin-flip/coin-flip-bg.png)',
           },
         }}
         minWager={0.1}
         maxWager={2000}
+        onPlayerStatusUpdate={(d) => {
+          console.log(d, 'DATA DATA DATA');
+        }}
       />
       <LiveResults />
       <Web3GamesModals />

@@ -22,7 +22,7 @@ import {
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
-import { useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
+import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import {
@@ -46,6 +46,11 @@ interface TemplateWithWeb3Props {
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: KenoGameResult[]) => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 export default function KenoGame(props: TemplateWithWeb3Props) {
@@ -57,6 +62,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       gameAddress: gameAddresses.keno,
       gameType: GameType.KENO,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
   const [formValues, setFormValues] = useState<KenoFormField>({
@@ -189,7 +195,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedParams.encodedTxData,
   });
@@ -241,7 +247,9 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       },
     });
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const onGameCompleted = (result: KenoGameResult[]) => {
     props.onAnimationCompleted && props.onAnimationCompleted(result);

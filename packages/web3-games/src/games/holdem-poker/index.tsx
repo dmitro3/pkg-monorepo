@@ -22,7 +22,13 @@ import { useDebounce } from 'use-debounce';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
 import { useReadContract } from 'wagmi';
 
-import { useBetHistory, useGetBadges, useListenGameEvent, usePlayerGameStatus } from '../hooks';
+import {
+  Badge,
+  useBetHistory,
+  useGetBadges,
+  useListenGameEvent,
+  usePlayerGameStatus,
+} from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { DecodedEvent, prepareGameTransaction } from '../utils';
 import {
@@ -40,6 +46,11 @@ interface TemplateWithWeb3Props {
   hideBetHistory?: boolean;
   buildedGameUrl: string;
   onGameCompleted?: () => void;
+  onPlayerStatusUpdate?: (d: {
+    type: 'levelUp' | 'badgeUp';
+    awardBadges: Badge[] | undefined;
+    level: number | undefined;
+  }) => void;
 }
 
 const defaultActiveGame: HoldemPokerActiveGame = {
@@ -79,6 +90,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       gameAddress: gameAddresses.holdemPoker,
       gameType: GameType.HOLDEM_POKER,
       wagmiConfig,
+      onPlayerStatusUpdate: props.onPlayerStatusUpdate,
     });
 
   const currentAccount = useCurrentAccount();
@@ -96,7 +108,9 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
   const gameEvent = useListenGameEvent();
 
-  const { handleGetBadges } = useGetBadges();
+  const { handleGetBadges } = useGetBadges({
+    onPlayerStatusUpdate: props.onPlayerStatusUpdate,
+  });
 
   const allowance = useTokenAllowance({
     amountToApprove: 999,
@@ -205,7 +219,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedBetParams.encodedTxData,
   });
@@ -224,7 +238,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedFinalizeParams.encodedTxData,
   });
@@ -243,7 +257,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
       address: controllerAddress as Address,
     },
     options: {
-      method: "sendGameOperation",
+      method: 'sendGameOperation',
     },
     encodedTxData: encodedFinalizeFoldParams.encodedTxData,
   });
