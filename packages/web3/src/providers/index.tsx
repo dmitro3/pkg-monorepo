@@ -20,6 +20,7 @@ export const WinrLabsWeb3Provider = ({
     entryPointAddress: `0x${string}`;
     factoryAddress: `0x${string}`;
     network: BundlerNetwork;
+    paymasterAddress: `0x${string}`;
   };
   tokens: Token[];
   selectedToken: Token;
@@ -32,6 +33,7 @@ export const WinrLabsWeb3Provider = ({
       <SmartAccountApiProvider
         entryPointAddress={smartAccountConfig.entryPointAddress}
         factoryAddress={smartAccountConfig.factoryAddress}
+        paymasterAddress={smartAccountConfig.paymasterAddress}
       >
         <TokenProvider tokens={tokens} selectedToken={selectedToken}>
           <CurrentAccountProvider>{children}</CurrentAccountProvider>

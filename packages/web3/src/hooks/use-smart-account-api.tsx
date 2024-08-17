@@ -1,28 +1,23 @@
-"use client";
+'use client';
 
-import { JSONRPCClient } from "json-rpc-2.0";
-import React from "react";
-import { useAccount, usePublicClient, useWalletClient } from "wagmi";
+import { JSONRPCClient } from 'json-rpc-2.0';
+import React from 'react';
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 
-import { SmartWalletConnectorWagmiType } from "../config/smart-wallet-connectors";
-import {
-  PaymasterAPI,
-  PaymasterParams,
-  SimpleAccountAPI,
-  UserOperation,
-} from "../smart-wallet";
-import { useBundlerClient } from "./use-bundler-client";
+import { SmartWalletConnectorWagmiType } from '../config/smart-wallet-connectors';
+import { PaymasterAPI, PaymasterParams, SimpleAccountAPI, UserOperation } from '../smart-wallet';
+import { useBundlerClient } from './use-bundler-client';
 
 class Paymaster implements PaymasterAPI {
   client: JSONRPCClient;
+  paymasterAddress: `0x${string}`;
 
-  constructor(client: JSONRPCClient) {
+  constructor(client: JSONRPCClient, paymasterAddress: `0x${string}`) {
     this.client = client;
+    this.paymasterAddress = paymasterAddress;
   }
 
-  async getPaymasterData(
-    userOp: Partial<UserOperation>
-  ): Promise<PaymasterParams> {
+  async getPaymasterData(userOp: Partial<UserOperation>): Promise<PaymasterParams> {
     try {
       // const paymasterParams = await this.client.request(
       //   "preparePaymasterAndData",
@@ -32,13 +27,13 @@ class Paymaster implements PaymasterAPI {
       // );
 
       return {
-        paymaster: "0x79E55774E08c64171Df3F8AF5C858cd01AEc4085",
-        paymasterData: "0x",
+        paymaster: this.paymasterAddress,
+        paymasterData: '0x',
         paymasterVerificationGasLimit: BigInt(200000),
         paymasterPostOpGasLimit: BigInt(0),
       };
     } catch (err) {
-      console.log("PAYMASTER ERROR", err);
+      console.log('PAYMASTER ERROR', err);
 
       return null as unknown as PaymasterParams;
     }
@@ -63,7 +58,8 @@ export const SmartAccountApiProvider: React.FC<{
   children: React.ReactNode;
   entryPointAddress: `0x${string}`;
   factoryAddress: `0x${string}`;
-}> = ({ children, entryPointAddress, factoryAddress }) => {
+  paymasterAddress: `0x${string}`;
+}> = ({ children, entryPointAddress, factoryAddress, paymasterAddress }) => {
   const { address, connector } = useAccount();
 
   const { client } = useBundlerClient();
@@ -72,9 +68,7 @@ export const SmartAccountApiProvider: React.FC<{
 
   const { data: signer } = useWalletClient();
 
-  const [accountApi, setAccountApi] = React.useState<
-    SimpleAccountAPI | undefined
-  >(undefined);
+  const [accountApi, setAccountApi] = React.useState<SimpleAccountAPI | undefined>(undefined);
 
   React.useEffect(() => {
     if (!client || !address || !signer || !publicClient) return;
@@ -86,12 +80,12 @@ export const SmartAccountApiProvider: React.FC<{
         factoryAddress,
         owner: signer,
         index: BigInt(0),
-        paymasterAPI: new Paymaster(client),
+        paymasterAPI: new Paymaster(client, paymasterAddress),
         overheads: {
           // perUserOp: 100000
         },
       });
-      console.log("CREATE SMART ACCOUNT API", _accountApi);
+      console.log('CREATE SMART ACCOUNT API', _accountApi);
 
       setAccountApi(_accountApi);
     };
