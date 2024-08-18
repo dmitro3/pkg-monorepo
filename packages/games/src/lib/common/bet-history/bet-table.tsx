@@ -32,7 +32,7 @@ const gameMap: Record<GameType, string> = {
   [GameType.SLOT]: 'Slot',
   [GameType.VIDEO_POKER]: 'Video Poker',
   [GameType.WHEEL]: 'Wheel',
-  [GameType.WINR_BONANZA]: 'Winr Bonanza',
+  [GameType.WINR_BONANZA]: 'WINR Bonanza',
 };
 
 const BetTable = ({
@@ -66,7 +66,7 @@ const BetTable = ({
     <>
       <AnimatePresence>
         <Table className="max-lg:wr-max-w-full max-md:wr-overflow-scroll max-md:wr-scrollbar-none wr-overflow-y-hidden wr-border-separate wr-border-spacing-x-0 wr-border-spacing-y-[6px]">
-          <TableHeader className="wr-bg-zinc-900 wr-relative wr-z-10">
+          <TableHeader className="wr-bg-zinc-900 wr-bg-opacity-70 wr-relative wr-z-10">
             <TableRow>
               <TableHead className="wr-pl-4 wr-rounded-[9px_0_0_9px] wr-w-[50px] lg:wr-w-[150px] wr-text-left">
                 {isMobile ? 'TX' : 'Transaction'}
@@ -96,7 +96,7 @@ const BetTable = ({
               items.map((bet, i) => {
                 return (
                   <TableRow
-                    className={`wr-border-black wr-bg-zinc-900 wr-transition-transform wr-duration-500 wr-ease-out ${
+                    className={`wr-border-black wr-bg-zinc-900 wr-bg-opacity-70 wr-transition-transform wr-duration-500 wr-ease-out ${
                       isAnimating ? 'wr-animate-slide-down-first' : ''
                     }`}
                     key={i}
@@ -127,12 +127,9 @@ const BetTable = ({
                     </TableCell>
                     <TableCell className="wr-hidden lg:wr-table-cell">
                       <div
-                        className={cn(
-                          'wr-w-max wr-rounded-full wr-bg-zinc-700 wr-px-2 wr-py-[6px] wr-font-semibold wr-leading-4',
-                          {
-                            'wr-bg-green-500': bet.multiplier > 1,
-                          }
-                        )}
+                        className={cn('wr-w-max wr-font-semibold wr-leading-4', {
+                          'wr-text-green-500': bet.multiplier > 1,
+                        })}
                       >
                         x{toDecimals(bet.multiplier, 2)}
                       </div>

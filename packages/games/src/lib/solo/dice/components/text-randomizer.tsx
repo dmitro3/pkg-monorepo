@@ -3,11 +3,9 @@ import * as React from 'react';
 
 import { cn } from '../../../../lib/utils/style';
 import { CDN_URL } from '../../../constants';
+import useMediaQuery from '../../../hooks/use-media-query';
 import useDiceGameStore from '../store';
 import { DiceGameResult } from '../types';
-
-const WIDTH = 96;
-const HEIGHT = 96;
 
 const defaultResult: DiceGameResult = {
   resultNumber: -1,
@@ -21,6 +19,13 @@ export const TextRandomizer = () => {
     'currentAnimationCount',
     'gameStatus',
   ]);
+
+  const isMobile = useMediaQuery('(max-width:1024px)');
+
+  const textRandomizerStyle = {
+    width: isMobile ? 75 : 96,
+    height: isMobile ? 75 : 96,
+  };
 
   const currentResult =
     (diceGameResults.length > 0 ? diceGameResults[currentAnimationCount] : defaultResult) ||
@@ -53,16 +58,15 @@ export const TextRandomizer = () => {
               }
             )}
             style={{
-              left: `calc(${currentResult.resultNumber}% - ${WIDTH}px / 2)`,
-              width: WIDTH,
-              height: HEIGHT,
+              left: `calc(${currentResult.resultNumber}% - ${textRandomizerStyle.width}px / 2)`,
+              ...textRandomizerStyle,
             }}
           >
             <img
               className="wr-absolute wr-top-1/2 wr-left-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-pointer-events-none wr-select-none"
               src={`${CDN_URL}/dice/randomizer-dice.svg`}
-              width={WIDTH}
-              height={HEIGHT}
+              width={textRandomizerStyle.width}
+              height={textRandomizerStyle.height}
             />
             <span
               className={cn('wr-relative', {

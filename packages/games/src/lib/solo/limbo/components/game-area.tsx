@@ -71,9 +71,11 @@ const GameArea: React.FC<GameAreaProps> = ({
       } else if (limboGameResults.length === curr) {
         onAnimationCompleted && onAnimationCompleted(limboGameResults);
         updateCurrentAnimationCount(0);
-        // removed for last state stay in the screen
-        // updateLimboGameResults([]);
         updateGameStatus('ENDED');
+
+        if (limboGameResults.length > 1) {
+          updateLimboGameResults([]);
+        }
       } else {
         timeoutRef.current = setTimeout(() => turn(curr), 750);
       }
@@ -89,6 +91,7 @@ const GameArea: React.FC<GameAreaProps> = ({
     updateLastBets(limboGameResults);
     onAnimationSkipped(limboGameResults);
     setTimeout(() => {
+      updateCurrentAnimationCount(0);
       updateLimboGameResults([]);
       updateGameStatus('ENDED');
     }, 50);

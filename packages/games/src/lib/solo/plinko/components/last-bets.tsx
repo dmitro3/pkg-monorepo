@@ -9,7 +9,7 @@ export const PlinkoLastBets = () => {
   const lastFiveBets = lastBets?.slice(isMobile ? -4 : -8);
 
   return (
-    <LastBetsContainer className="wr-absolute wr-right-5 wr-top-5 wr-w-full max-md:wr-max-w-[290px]">
+    <LastBetsContainer className="wr-absolute wr-right-5 wr-top-5 wr-w-full wr-max-w-full">
       {lastFiveBets?.map((result, index) => {
         return (
           <div

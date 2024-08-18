@@ -65,7 +65,7 @@ export function Providers(props: { children: ReactNode }) {
             network,
             entryPointAddress,
             factoryAddress,
-            paymasterAddress: '0x79E55774E08c64171Df3F8AF5C858cd01AEc4085',
+            paymasterAddress: '0xBADAF26D86c10c508bC014121fA621846Be361CF',
           }}
           tokens={[
             {

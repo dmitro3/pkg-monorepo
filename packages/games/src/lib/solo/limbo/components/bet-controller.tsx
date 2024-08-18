@@ -144,7 +144,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager, winMultipli
           </Advanced>
         </div>
 
-        {!(limboGameResults.length > 3) && (
+        {(!(limboGameResults.length > 3) || !limboGameResults.length) && (
           <PreBetButton>
             <Button
               type="submit"

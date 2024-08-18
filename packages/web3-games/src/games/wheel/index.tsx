@@ -80,7 +80,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
         game: GameType.WHEEL,
         // TODO: swagger does not include the pagination params. ask be to fix it.
         // @ts-ignore
-        limit: 2,
+        limit: 8,
       },
     });
   const { updateState, setWheelParticipant, setIsGamblerParticipant } = useWheelGameStore([
