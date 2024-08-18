@@ -23,6 +23,7 @@ import {
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
+import { BaseGameProps } from '../../type';
 import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
@@ -35,7 +36,7 @@ import {
 
 type TemplateOptions = {};
 
-interface TemplateWithWeb3Props {
+interface TemplateWithWeb3Props extends BaseGameProps {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
@@ -225,6 +226,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       setIsGettingResults(false);
       refetchPlayerGameStatus();
       updateGameStatus('ENDED');
+      props.onError && props.onError(e);
     }
   };
 

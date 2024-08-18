@@ -21,12 +21,13 @@ import {
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
+import { BaseGameProps } from '../../type';
 import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import { BaccaratSettledEvent, GAME_HUB_EVENT_TYPES, prepareGameTransaction } from '../utils';
 
-interface TemplateWithWeb3Props {
+interface TemplateWithWeb3Props extends BaseGameProps {
   minWager?: number;
   maxWager?: number;
   hideBetHistory?: boolean;
@@ -190,6 +191,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
+      props.onError && props.onError(e);
     }
   };
 

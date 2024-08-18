@@ -30,6 +30,7 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
+import { BaseGameProps } from '../../type';
 import {
   Badge,
   useBetHistory,
@@ -46,7 +47,7 @@ type TemplateOptions = {
   };
 };
 
-interface TemplateWithWeb3Props {
+interface TemplateWithWeb3Props extends BaseGameProps {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
@@ -271,6 +272,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
+      props.onError && props.onError(e);
     }
 
     console.log('BET TX COMPLETED');

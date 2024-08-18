@@ -21,12 +21,13 @@ import React from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
 import { useReadContract } from 'wagmi';
 
+import { BaseGameProps } from '../../type';
 import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import { prepareGameTransaction } from '../utils';
 
-interface TemplateWithWeb3Props {
+interface TemplateWithWeb3Props extends BaseGameProps {
   buildedGameUrl: string;
   buildedGameUrlMobile: string;
   hideBetHistory?: boolean;
@@ -42,6 +43,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   buildedGameUrlMobile,
   hideBetHistory,
   onPlayerStatusUpdate,
+  onError,
 }: TemplateWithWeb3Props) {
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
@@ -256,6 +258,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     } catch (e: any) {
       refetchPlayerGameStatus();
       if (errorCount < 10) handleBet(errorCount + 1);
+      onError && onError(e);
       throw new Error(e);
     }
   };
@@ -275,8 +278,9 @@ export default function WinrBonanzaTemplateWithWeb3({
       if (isReIterable) await playerReIterate();
 
       await handleBuyFeatureTx.mutateAsync();
-    } catch {
+    } catch (e) {
       refetchPlayerGameStatus();
+      onError && onError(e);
     }
   };
 

@@ -22,6 +22,7 @@ import {
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
+import { BaseGameProps } from '../../type';
 import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
@@ -38,7 +39,7 @@ type TemplateOptions = {
   };
 };
 
-interface TemplateWithWeb3Props {
+interface TemplateWithWeb3Props extends BaseGameProps {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
@@ -225,6 +226,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       console.log('error', e);
       refetchPlayerGameStatus();
       setIsLoading(false); // Set loading state to false
+      props.onError && props.onError(e);
     }
   };
 

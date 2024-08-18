@@ -27,6 +27,7 @@ import React, { useEffect, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
 import { useReadContract } from 'wagmi';
 
+import { BaseGameProps } from '../../type';
 import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
@@ -39,7 +40,7 @@ enum Status {
   Final = 3, // Game ended
 }
 
-interface TemplateWithWeb3Props {
+interface TemplateWithWeb3Props extends BaseGameProps {
   minWager?: number;
   maxWager?: number;
   hideBetHistory?: boolean;
@@ -329,6 +330,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       console.log('error', e);
       refetchPlayerGameStatus();
       setIsWaitingResponse(false);
+      props.onError && props.onError(e);
     }
   };
 

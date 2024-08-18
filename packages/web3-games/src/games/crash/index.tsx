@@ -22,6 +22,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
+import { BaseGameProps } from '../../type';
 import {
   Badge,
   useBetHistory,
@@ -39,7 +40,7 @@ type TemplateOptions = {
   };
 };
 
-interface CrashTemplateProps {
+interface CrashTemplateProps extends BaseGameProps {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
@@ -255,6 +256,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     } catch (e: any) {
       console.log('handleTx error', e);
       refetchPlayerGameStatus();
+      props.onError && props.onError(e);
     }
   };
 

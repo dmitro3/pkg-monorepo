@@ -22,6 +22,7 @@ import { useDebounce } from 'use-debounce';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
 import { useReadContract } from 'wagmi';
 
+import { BaseGameProps } from '../../type';
 import {
   Badge,
   useBetHistory,
@@ -40,7 +41,7 @@ import {
 } from './types';
 import { checkPairOfAcesOrBetter } from './utils';
 
-interface TemplateWithWeb3Props {
+interface TemplateWithWeb3Props extends BaseGameProps {
   minWager?: number;
   maxWager?: number;
   hideBetHistory?: boolean;
@@ -282,6 +283,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
+      props.onError && props.onError(e);
     }
   };
 
