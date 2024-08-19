@@ -60,25 +60,16 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
         <WagerFormField
           minWager={minWager}
           maxWager={maxWager}
-          isDisabled={
-            // form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
-            plinkoGameResults.length > 1 && gameStatus == 'PLAYING'
-          }
+          isDisabled={plinkoGameResults.length > 1 && gameStatus == 'PLAYING'}
         />
         <BetCountFormField
-          isDisabled={
-            // form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
-            plinkoGameResults.length > 1 && gameStatus == 'PLAYING'
-          }
+          isDisabled={plinkoGameResults.length > 1 && gameStatus == 'PLAYING'}
           hideSm
         />
         <PlinkoRowFormField
           minValue={6}
           maxValue={12}
-          isDisabled={
-            // form.formState.isSubmitting || form.formState.isLoading ||
-            plinkoGameResults.length > 1 && gameStatus == 'PLAYING'
-          }
+          isDisabled={plinkoGameResults.length > 1 && gameStatus == 'PLAYING'}
         />
         <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
           <div>
@@ -122,7 +113,7 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
               type="submit"
               variant={'success'}
               className={cn(
-                'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-75 wr-select-none',
+                'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
                 {
                   'wr-cursor-default wr-pointer-events-none':
                     !form.formState.isValid ||
@@ -132,10 +123,6 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
               )}
               size={'xl'}
               onClick={() => clickEffect.play()}
-              // isLoading={form.formState.isSubmitting || form.formState.isLoading}
-              // disabled={
-              //   !form.formState.isValid || form.formState.isSubmitting || form.formState.isLoading
-              // }
             >
               Bet
             </Button>

@@ -61,7 +61,8 @@ export const BetController: React.FC<BetControllerProps> = ({
   const { rpsGameResults, gameStatus } = useRpsGameStore(['rpsGameResults', 'gameStatus']);
 
   const isFormInProgress =
-    form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING';
+    rpsGameResults.length > 1 &&
+    (form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING');
 
   const maxPayout = React.useMemo(() => {
     const { wager, betCount } = form.getValues();
@@ -138,16 +139,20 @@ export const BetController: React.FC<BetControllerProps> = ({
             <Button
               type="submit"
               variant={'success'}
-              className="wr-w-full wr-uppercase"
+              className={cn(
+                'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
+                {
+                  'wr-cursor-default wr-pointer-events-none':
+                    !form.formState.isValid ||
+                    form.formState.isSubmitting ||
+                    form.formState.isLoading ||
+                    (gameStatus == 'PLAYING' &&
+                      rpsGameResults.length < 4 &&
+                      rpsGameResults.length > 1),
+                }
+              )}
               size={'xl'}
               onClick={() => clickEffect.play()}
-              isLoading={form.formState.isSubmitting || form.formState.isLoading}
-              disabled={
-                !form.formState.isValid ||
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                gameStatus == 'PLAYING'
-              }
             >
               Bet
             </Button>

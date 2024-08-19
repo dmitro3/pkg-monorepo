@@ -19,6 +19,7 @@ import { Button } from '../../../../ui/button';
 import { NUMBER_INDEX_COUNT } from '../../constants';
 import useRouletteGameStore from '../../store';
 import { RouletteForm } from '../../types';
+import { cn } from '../../../../utils/style';
 
 export interface Props {
   isPrepared: boolean;
@@ -138,14 +139,16 @@ export const BetController: React.FC<Props> = ({
                 variant="success"
                 size="xl"
                 onClick={() => clickEffect.play()}
-                disabled={
-                  form.getValues().totalWager === 0 ||
-                  form.formState.isSubmitting ||
-                  form.formState.isLoading ||
-                  isPrepared
-                }
-                isLoading={form.formState.isSubmitting || form.formState.isLoading}
-                className="wr-w-full wr-uppercase"
+                className={cn(
+                  'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
+                  {
+                    'wr-cursor-default wr-pointer-events-none':
+                      form.getValues().totalWager === 0 ||
+                      form.formState.isSubmitting ||
+                      form.formState.isLoading ||
+                      isPrepared,
+                  }
+                )}
               >
                 Bet
               </Button>

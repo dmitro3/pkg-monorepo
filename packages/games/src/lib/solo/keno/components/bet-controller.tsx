@@ -35,9 +35,10 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
   const wager = form.watch('wager');
   const selections = form.watch('selections');
 
-  const { gameStatus, updateKenoGameResults } = useKenoGameStore([
+  const { gameStatus, kenoGameResults, updateKenoGameResults } = useKenoGameStore([
     'gameStatus',
     'updateKenoGameResults',
+    'kenoGameResults',
   ]);
 
   const currentMultipliers = kenoMultipliers[selections.length] || [];
@@ -73,7 +74,8 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
     form.setValue('selections', randomNumbers);
   };
 
-  const isFormInProgress = form.formState.isSubmitting || form.formState.isLoading;
+  const isFormInProgress =
+    kenoGameResults.length > 1 && (form.formState.isSubmitting || form.formState.isLoading);
 
   return (
     <BetControllerContainer>
@@ -138,17 +140,20 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           <Button
             type="submit"
             variant={'success'}
-            className="wr-w-full max-lg:wr-mb-1 wr-uppercase"
+            className={cn(
+              'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none max-lg:wr-mb-1',
+              {
+                'wr-cursor-default wr-pointer-events-none':
+                  !form.formState.isValid ||
+                  form.formState.isSubmitting ||
+                  form.formState.isLoading ||
+                  (gameStatus == 'PLAYING' &&
+                    kenoGameResults.length < 4 &&
+                    kenoGameResults.length > 1),
+              }
+            )}
             size={'xl'}
             onClick={() => clickEffect.play()}
-            isLoading={isFormInProgress}
-            disabled={
-              !form.formState.isValid ||
-              form.formState.isSubmitting ||
-              form.formState.isLoading ||
-              selections.length === 0 ||
-              gameStatus == 'PLAYING'
-            }
           >
             Bet
           </Button>
