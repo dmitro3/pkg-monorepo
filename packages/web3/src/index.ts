@@ -15,3 +15,4 @@ export * from "./providers/balance";
 export * from "./providers/token";
 export * from "./hooks/use-web3-auth-account";
 export * from "./hooks/use-fast-or-verified";
+export * from './smart-wallet';
