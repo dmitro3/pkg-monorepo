@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useMutation } from "@tanstack/react-query";
-import { Abi, Address, ContractFunctionArgs, ContractFunctionName } from "viem";
-import { Config } from "wagmi";
-import { WriteContractVariables } from "wagmi/query";
+import { useMutation } from '@tanstack/react-query';
+import { Abi, Address, ContractFunctionArgs, ContractFunctionName } from 'viem';
+import { Config } from 'wagmi';
+import { WriteContractVariables } from 'wagmi/query';
 
-import { SimpleAccountAPI } from "../smart-wallet";
-import { useBundlerClient, WinrBundlerClient } from "./use-bundler-client";
-import { useCurrentAccount } from "./use-current-address";
-import { useSmartAccountApi } from "./use-smart-account-api";
+import { SimpleAccountAPI } from '../smart-wallet';
+import { useBundlerClient, WinrBundlerClient } from './use-bundler-client';
+import { useCurrentAccount } from './use-current-address';
+import { useSmartAccountApi } from './use-smart-account-api';
 
 export interface UseHandleTxOptions {
   successMessage?: string;
@@ -18,33 +18,31 @@ export interface UseHandleTxOptions {
   showDefaultToasts?: boolean;
   refetchInterval?: number;
   unauthRedirectionCb?: () => void;
-  method?: "sendUserOperation" | "sendGameOperation";
+  method?: 'sendUserOperation' | 'sendGameOperation';
   client?: WinrBundlerClient;
+  accountApi?: SimpleAccountAPI;
 }
 
 interface UseHandleTxParams<
   abi extends Abi | readonly unknown[],
-  functionName extends ContractFunctionName<abi, "nonpayable" | "payable">,
+  functionName extends ContractFunctionName<abi, 'nonpayable' | 'payable'>,
 > {
   writeContractVariables: WriteContractVariables<
     abi,
-    ContractFunctionName<abi, "nonpayable" | "payable">,
-    ContractFunctionArgs<abi, "nonpayable" | "payable", functionName>,
+    ContractFunctionName<abi, 'nonpayable' | 'payable'>,
+    ContractFunctionArgs<abi, 'nonpayable' | 'payable', functionName>,
     Config,
-    Config["chains"][number]["id"]
+    Config['chains'][number]['id']
   >;
   options: UseHandleTxOptions;
   encodedTxData: `0x${string}`;
 }
 
-const getCachedSignature = async <
+export const createUserOp = async <
   abi extends Abi | readonly unknown[],
-  functionName extends ContractFunctionName<abi, "nonpayable" | "payable">,
+  functionName extends ContractFunctionName<abi, 'nonpayable' | 'payable'>,
 >(
-  writeContractVariables: UseHandleTxParams<
-    abi,
-    functionName
-  >["writeContractVariables"],
+  writeContractVariables: UseHandleTxParams<abi, functionName>['writeContractVariables'],
   encodedData: `0x${string}`,
   accountApi?: SimpleAccountAPI
 ) => {
@@ -61,14 +59,14 @@ const getCachedSignature = async <
 
 export const useHandleTx = <
   abi extends Abi | readonly unknown[],
-  functionName extends ContractFunctionName<abi, "nonpayable" | "payable">,
+  functionName extends ContractFunctionName<abi, 'nonpayable' | 'payable'>,
 >(
   params: UseHandleTxParams<abi, functionName>
 ) => {
   const { writeContractVariables, options, encodedTxData } = params;
-  const { method = "sendUserOperation" } = options;
+  const { method = 'sendUserOperation' } = options;
   const { address } = useCurrentAccount();
-  const { accountApi } = useSmartAccountApi();
+  const { accountApi: defaultAccountApi } = useSmartAccountApi();
   const { client: defaultClient } = useBundlerClient();
 
   const handleTxMutation = useMutation({
@@ -81,16 +79,14 @@ export const useHandleTx = <
 
       let client = options.client ? options.client : defaultClient;
 
+      let accountApi = options.accountApi ? options.accountApi : defaultAccountApi;
+
       if (!client) return;
 
-      const userOp = await getCachedSignature(
-        writeContractVariables,
-        encodedTxData,
-        accountApi
-      );
+      const userOp = await createUserOp(writeContractVariables, encodedTxData, accountApi);
 
       if (!userOp) {
-        throw new Error("No cached signature found");
+        throw new Error('No cached signature found');
       }
 
       const { status, hash } = await client.request(method, {
@@ -107,20 +103,20 @@ export const useHandleTx = <
         paymaster: userOp.paymaster,
         paymasterVerificationGasLimit: userOp.paymasterVerificationGasLimit
           ? userOp.paymasterVerificationGasLimit.toString()
-          : "",
+          : '',
         paymasterPostOpGasLimit: userOp.paymasterPostOpGasLimit
           ? userOp.paymasterPostOpGasLimit.toString()
-          : "",
+          : '',
         paymasterData: userOp.paymasterData,
         signature: userOp.signature,
       });
 
-      if (status !== "success") {
+      if (status !== 'success') {
         throw new Error(status);
       } else {
-        console.log(accountApi?.cachedNonce, "cached nonce");
+        console.log(accountApi?.cachedNonce, 'cached nonce');
         accountApi?.cachedNonce && accountApi.increaseNonce();
-        console.log(accountApi?.cachedNonce, "cached nonce updated");
+        console.log(accountApi?.cachedNonce, 'cached nonce updated');
       }
 
       return { status, hash };

@@ -8,7 +8,7 @@ import { SmartWalletConnectorWagmiType } from '../config/smart-wallet-connectors
 import { PaymasterAPI, PaymasterParams, SimpleAccountAPI, UserOperation } from '../smart-wallet';
 import { useBundlerClient } from './use-bundler-client';
 
-class Paymaster implements PaymasterAPI {
+export class Paymaster implements PaymasterAPI {
   client: JSONRPCClient;
   paymasterAddress: `0x${string}`;
 
