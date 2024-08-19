@@ -40,7 +40,8 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager, winMultipli
 
   const { rollGameResults, gameStatus } = useRollGameStore(['rollGameResults', 'gameStatus']);
   const isFormInProgress =
-    form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING';
+    rollGameResults.length > 1 &&
+    (form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING');
 
   const maxPayout = React.useMemo(() => {
     return toDecimals(wager * betCount * winMultiplier, 2);
@@ -89,16 +90,20 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager, winMultipli
             <Button
               type="submit"
               variant={'success'}
-              className="wr-w-full wr-uppercase"
+              className={cn(
+                'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
+                {
+                  'wr-cursor-default wr-pointer-events-none':
+                    !form.formState.isValid ||
+                    form.formState.isSubmitting ||
+                    form.formState.isLoading ||
+                    (gameStatus == 'PLAYING' &&
+                      rollGameResults.length < 4 &&
+                      rollGameResults.length > 1),
+                }
+              )}
               size={'xl'}
               onClick={() => clickEffect.play()}
-              isLoading={form.formState.isSubmitting || form.formState.isLoading}
-              disabled={
-                !form.formState.isValid ||
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                gameStatus == 'PLAYING'
-              }
             >
               Bet
             </Button>

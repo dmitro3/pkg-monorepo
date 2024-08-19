@@ -40,7 +40,8 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager, winMultipli
   const { limboGameResults, gameStatus } = useLimboGameStore(['limboGameResults', 'gameStatus']);
 
   const isFormInProgress =
-    form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING';
+    limboGameResults.length > 1 &&
+    (form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING');
 
   const maxPayout = React.useMemo(() => {
     const { wager, betCount } = form.getValues();
@@ -149,18 +150,20 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager, winMultipli
             <Button
               type="submit"
               variant={'success'}
-              className="wr-w-full wr-uppercase"
+              className={cn(
+                'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
+                {
+                  'wr-cursor-default wr-pointer-events-none':
+                    !form.formState.isValid ||
+                    form.formState.isSubmitting ||
+                    form.formState.isLoading ||
+                    (gameStatus == 'PLAYING' &&
+                      limboGameResults.length < 4 &&
+                      limboGameResults.length > 1),
+                }
+              )}
               size={'xl'}
               onClick={() => clickEffect.play()}
-              isLoading={form.formState.isSubmitting || form.formState.isLoading}
-              disabled={
-                !form.formState.isValid ||
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                (gameStatus == 'PLAYING' &&
-                  limboGameResults.length < 4 &&
-                  limboGameResults.length > 1)
-              }
             >
               Bet
             </Button>

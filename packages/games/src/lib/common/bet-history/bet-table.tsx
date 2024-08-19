@@ -47,8 +47,8 @@ const BetTable = ({
   const [isAnimating, setIsAnimating] = React.useState(false);
 
   React.useEffect(() => {
-    if (betHistory.data && betHistory.data.length) updateItems(betHistory?.data || []);
-  }, [betHistory.data]);
+    if (betHistory?.data && betHistory.data.length) updateItems(betHistory?.data || []);
+  }, [betHistory?.data]);
 
   const updateItems = (newItems: GameControllerBetHistoryResponse['data']) => {
     if (!newItems) return;
