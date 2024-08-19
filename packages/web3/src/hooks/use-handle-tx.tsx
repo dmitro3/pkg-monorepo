@@ -1,7 +1,14 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
-import { Abi, Address, ContractFunctionArgs, ContractFunctionName } from 'viem';
+import {
+  Abi,
+  Address,
+  ContractFunctionArgs,
+  ContractFunctionName,
+  encodeFunctionData,
+  EncodeFunctionDataParameters,
+} from 'viem';
 import { Config } from 'wagmi';
 import { WriteContractVariables } from 'wagmi/query';
 
@@ -35,7 +42,7 @@ interface UseHandleTxParams<
     Config['chains'][number]['id']
   >;
   options: UseHandleTxOptions;
-  encodedTxData: `0x${string}`;
+  encodedTxData?: `0x${string}`;
 }
 
 export const createUserOp = async <
@@ -81,9 +88,17 @@ export const useHandleTx = <
 
       let accountApi = options.accountApi ? options.accountApi : defaultAccountApi;
 
+      let encodedData = encodedTxData
+        ? encodedTxData
+        : encodeFunctionData<abi, functionName>({
+            abi: writeContractVariables.abi,
+            functionName: writeContractVariables.functionName,
+            args: writeContractVariables.args,
+          } as EncodeFunctionDataParameters<abi, functionName>);
+
       if (!client) return;
 
-      const userOp = await createUserOp(writeContractVariables, encodedTxData, accountApi);
+      const userOp = await createUserOp(writeContractVariables, encodedData, accountApi);
 
       if (!userOp) {
         throw new Error('No cached signature found');
