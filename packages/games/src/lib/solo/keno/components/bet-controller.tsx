@@ -1,15 +1,8 @@
 import { useFormContext } from 'react-hook-form';
 
-import { Advanced } from '../../../common/advanced';
 import { AudioController } from '../../../common/audio-controller';
 import { BetControllerContainer } from '../../../common/containers';
-import {
-  BetControllerTitle,
-  BetCountFormField,
-  StopGainFormField,
-  StopLossFormField,
-  WagerFormField,
-} from '../../../common/controller';
+import { BetControllerTitle, BetCountFormField, WagerFormField } from '../../../common/controller';
 import { PreBetButton } from '../../../common/pre-bet-button';
 import { TotalWager, WagerCurrencyIcon } from '../../../common/wager';
 import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
@@ -104,15 +97,6 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
             <FormLabel>Total Wager</FormLabel>
             <TotalWager betCount={form.getValues().betCount} wager={form.getValues().wager} />
           </div>
-        </div>
-
-        <div className="wr-hidden">
-          <Advanced>
-            <div className="wr-grid grid-cols-2 gap-2">
-              <StopGainFormField isDisabled={isFormInProgress} />
-              <StopLossFormField isDisabled={isFormInProgress} />
-            </div>
-          </Advanced>
         </div>
         <div className="wr-mb-3 lg:wr-mb-6 wr-grid wr-grid-cols-2 wr-gap-2">
           <Button

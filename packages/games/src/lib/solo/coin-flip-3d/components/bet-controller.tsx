@@ -2,13 +2,10 @@ import * as Slider from '@radix-ui/react-slider';
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Advanced } from '../../../common/advanced';
 import { UnityAudioController } from '../../../common/audio-controller';
 import { UnityBetControllerContainer } from '../../../common/containers';
 import {
   BetControllerTitle,
-  StopGainFormField,
-  StopLossFormField,
   UnityBetCountFormField,
   UnityWagerFormField,
 } from '../../../common/controller';
@@ -113,30 +110,6 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager, winMultipli
           </div>
         </div>
 
-        <div className="wr-hidden">
-          <Advanced>
-            <div className="wr-grid wr-grid-cols-2 wr-gap-2">
-              <StopGainFormField
-                labelClassName="wr-text-unity-white-50"
-                inputContainerClassName={cn(
-                  'wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md'
-                )}
-                isDisabled={
-                  form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
-                }
-              />
-              <StopLossFormField
-                labelClassName="wr-text-unity-white-50"
-                inputContainerClassName={cn(
-                  'wr-border wr-border-solid wr-border-unity-white-15 wr-bg-unity-white-15 wr-backdrop-blur-md'
-                )}
-                isDisabled={
-                  form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
-                }
-              />
-            </div>
-          </Advanced>
-        </div>
         <PreBetButton>
           <Button
             type="submit"

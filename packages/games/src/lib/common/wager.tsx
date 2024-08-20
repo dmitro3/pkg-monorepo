@@ -50,6 +50,7 @@ export const WagerCurrency = ({ className }: Props) => {
 interface WagerInputProps extends Props, INumberInputContext {
   containerClassName?: string;
   hasError?: boolean;
+  showWagerSetter?: boolean;
   minWager: number;
   maxWager: number;
   form: any;
@@ -62,6 +63,7 @@ export const WagerInput = ({
   minWager,
   maxWager,
   form,
+  showWagerSetter,
   ...rest
 }: WagerInputProps) => {
   const clickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
@@ -87,9 +89,17 @@ export const WagerInput = ({
             className
           )}
         />
-        <WagerCurrencyIcon className="wr-hidden lg:!wr-block" />
+        <WagerCurrencyIcon
+          className={cn('wr-hidden lg:!wr-block', {
+            'wr-mr-3': showWagerSetter,
+          })}
+        />
 
-        <div className="wr-z-10 wr-flex -wr-m-[6px] wr-gap-[2px] lg:!wr-hidden">
+        <div
+          className={cn('wr-z-10 wr-flex -wr-m-[6px] wr-gap-[2px] lg:wr-hidden', {
+            'lg:wr-flex wr-flex': showWagerSetter,
+          })}
+        >
           <Button
             className={cn('wr-w-14 wr-font-[600] wr-text-base', className)}
             type="button"
@@ -121,21 +131,23 @@ export const WagerInput = ({
           >
             2x
           </Button>
-          <Button
-            className={cn('wr-w-14 wr-font-[600] wr-text-base', className)}
-            type="button"
-            disabled={rest.isDisabled}
-            variant={'secondary'}
-            onClick={() => {
-              clickEffect.play();
-              const betCount = form?.getValues('betCount') ?? 1;
-              const maxAmount =
-                (maxWager > balanceAsDollar ? balanceAsDollar - SLIPPAGE : maxWager) / betCount;
-              form.setValue('wager', maxAmount);
-            }}
-          >
-            MAX
-          </Button>
+          {!showWagerSetter && (
+            <Button
+              className={cn('wr-w-14 wr-font-[600] wr-text-base', className)}
+              type="button"
+              disabled={rest.isDisabled}
+              variant={'secondary'}
+              onClick={() => {
+                clickEffect.play();
+                const betCount = form?.getValues('betCount') ?? 1;
+                const maxAmount =
+                  (maxWager > balanceAsDollar ? balanceAsDollar - SLIPPAGE : maxWager) / betCount;
+                form.setValue('wager', maxAmount);
+              }}
+            >
+              MAX
+            </Button>
+          )}
         </div>
       </NumberInput.Container>
     </NumberInput.Root>

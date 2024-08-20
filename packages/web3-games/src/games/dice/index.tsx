@@ -154,13 +154,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
         { name: 'count', type: 'uint8' },
         { name: 'data', type: 'bytes' },
       ],
-      [
-        wagerInWei,
-        stopGainInWei as bigint,
-        stopLossInWei as bigint,
-        formValues.betCount,
-        encodedChoice,
-      ]
+      [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({

@@ -4,16 +4,9 @@ import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useDebounce } from 'use-debounce';
 
-import { Advanced } from '../../../common/advanced';
 import { AudioController } from '../../../common/audio-controller';
 import { BetControllerContainer } from '../../../common/containers';
-import {
-  BetControllerTitle,
-  BetCountFormField,
-  StopGainFormField,
-  StopLossFormField,
-  WagerFormField,
-} from '../../../common/controller';
+import { BetControllerTitle, BetCountFormField, WagerFormField } from '../../../common/controller';
 import { PreBetButton } from '../../../common/pre-bet-button';
 import { SkipButton } from '../../../common/skip-button';
 import { TotalWager, WagerCurrencyIcon } from '../../../common/wager';
@@ -91,22 +84,6 @@ export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
           </div>
         </div>
 
-        <div className="wr-hidden">
-          <Advanced>
-            <div className="wr-grid wr-grid-cols-2 wr-gap-2">
-              <StopGainFormField
-                isDisabled={
-                  form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
-                }
-              />
-              <StopLossFormField
-                isDisabled={
-                  form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
-                }
-              />
-            </div>
-          </Advanced>
-        </div>
         {!(plinkoGameResults.length > 3) && (
           <PreBetButton>
             <Button

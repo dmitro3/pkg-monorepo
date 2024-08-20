@@ -9,6 +9,7 @@ import { BetCount } from './bet-count';
 import { BetCountSlider } from './containers';
 import { StopGainLossInput } from './stop-gain-loss-input';
 import { WagerBalance, WagerCurrency, WagerInput, WagerSetterButtons } from './wager';
+import { IncreaseByInput } from './increase-by-input';
 
 interface WagerFormFieldProps {
   customLabel?: string;
@@ -65,7 +66,35 @@ export const BetCountFormField: React.FC<{
   );
 };
 
-export const StopGainFormField = ({
+export const AutoBetCountFormField: React.FC<{
+  isDisabled?: boolean;
+  maxValue?: number;
+}> = ({ isDisabled = false, maxValue = 100 }) => {
+  const form = useFormContext();
+
+  return (
+    <>
+      <FormField
+        control={form.control}
+        name="betCount"
+        render={({ field }) => (
+          <FormItem className={cn('wr-mb-3')}>
+            <FormLabel className={cn('wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6')}>
+              Number of Bets
+            </FormLabel>
+
+            <FormControl>
+              <BetCount isDisabled={isDisabled} maxValue={maxValue} {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </>
+  );
+};
+
+export const AutoBetStopGainFormField = ({
   inputContainerClassName,
   labelClassName,
   isDisabled = false,
@@ -81,9 +110,8 @@ export const StopGainFormField = ({
       control={form.control}
       name="stopGain"
       render={({ field }) => (
-        <FormItem>
-          <FormLabel className={cn(labelClassName)}>Stop Gain</FormLabel>
-
+        <FormItem className="wr-mb-3">
+          <FormLabel className={cn(labelClassName)}>Stop on Profit</FormLabel>
           <FormControl>
             <StopGainLossInput
               {...field}
@@ -99,7 +127,7 @@ export const StopGainFormField = ({
   );
 };
 
-export const StopLossFormField = ({
+export const AutoBetStopLossFormField = ({
   inputContainerClassName,
   labelClassName,
   isDisabled = false,
@@ -115,9 +143,8 @@ export const StopLossFormField = ({
       control={form.control}
       name="stopLoss"
       render={({ field }) => (
-        <FormItem>
-          <FormLabel className={cn(labelClassName)}>Stop Loss</FormLabel>
-
+        <FormItem className="wr-mb-3">
+          <FormLabel className={cn(labelClassName)}>Stop on Loss</FormLabel>
           <FormControl>
             <StopGainLossInput
               {...field}
@@ -125,6 +152,82 @@ export const StopLossFormField = ({
               hasError={!!form.formState.errors.stopLoss}
               containerClassName={cn(inputContainerClassName)}
             />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+export const AutoBetIncreaseOnWin = ({
+  inputContainerClassName,
+  labelClassName,
+  isDisabled = false,
+}: {
+  inputContainerClassName?: string;
+  labelClassName?: string;
+  isDisabled?: boolean;
+}) => {
+  const form = useFormContext();
+  return (
+    <FormField
+      control={form.control}
+      name="increaseOnWin"
+      render={({ field }) => (
+        <FormItem className="wr-mb-3">
+          <FormLabel className={cn(labelClassName)}>On Win</FormLabel>
+          <FormControl>
+            <div className="wr-flex wr-w-full wr-bg-zinc-800 wr-rounded-md wr-py-0.5 wr-px-2 wr-pr-0.5 wr-items-center">
+              <span className="wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[120px]">
+                <img src={`${CDN_URL}/icons/icon-spin.svg`} width={22} height={22} />
+                Increase By:
+              </span>
+              <IncreaseByInput
+                {...field}
+                isDisabled={isDisabled}
+                containerClassName={cn(inputContainerClassName)}
+                className="wr-w-full wr-max-w-full"
+              />
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+export const AutoBetIncreaseOnLoss = ({
+  inputContainerClassName,
+  labelClassName,
+  isDisabled = false,
+}: {
+  inputContainerClassName?: string;
+  labelClassName?: string;
+  isDisabled?: boolean;
+}) => {
+  const form = useFormContext();
+  return (
+    <FormField
+      control={form.control}
+      name="increaseOnLoss"
+      render={({ field }) => (
+        <FormItem className="wr-mb-3">
+          <FormLabel className={cn(labelClassName)}>On Loss</FormLabel>
+          <FormControl>
+            <div className="wr-flex wr-w-full wr-bg-zinc-800 wr-rounded-md wr-py-0.5 wr-px-2 wr-pr-0.5 wr-items-center">
+              <span className="wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[120px]">
+                <img src={`${CDN_URL}/icons/icon-spin.svg`} width={22} height={22} />
+                Increase By:
+              </span>
+              <IncreaseByInput
+                {...field}
+                isDisabled={isDisabled}
+                containerClassName={cn(inputContainerClassName)}
+                className="wr-w-full wr-max-w-full"
+              />
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -173,6 +276,49 @@ export const WagerFormField: React.FC<WagerFormFieldProps> = ({
                 minWager={minWager}
                 maxWager={maxWager}
                 currentWager={field.value}
+              />
+            </>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+export const AutoBetWagerFormField: React.FC<WagerFormFieldProps> = ({
+  customLabel,
+  minWager,
+  maxWager,
+  isDisabled,
+  className,
+}) => {
+  const form = useFormContext();
+
+  return (
+    <FormField
+      control={form.control}
+      name="wager"
+      render={({ field }) => (
+        <FormItem className={cn(className, 'wr-mb-3 lg:wr-mb-6')}>
+          <FormLabel className={cn('wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6')}>
+            {customLabel ? customLabel : 'Wager'}
+            <div>
+              <WagerBalance maxWager={maxWager} className="wr-text-zinc-100" />
+              <WagerCurrency />
+            </div>
+          </FormLabel>
+
+          <FormControl>
+            <>
+              <WagerInput
+                {...field}
+                hasError={!!form.formState.errors.wager}
+                isDisabled={isDisabled}
+                minWager={minWager}
+                maxWager={maxWager}
+                form={form}
+                showWagerSetter
               />
             </>
           </FormControl>
