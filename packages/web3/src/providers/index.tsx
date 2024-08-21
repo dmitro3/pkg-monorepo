@@ -1,5 +1,6 @@
 "use client";
 
+import { Config } from "wagmi";
 import {
   BundlerClientProvider,
   BundlerNetwork,
@@ -13,6 +14,7 @@ export const WinrLabsWeb3Provider = ({
   smartAccountConfig,
   tokens,
   selectedToken,
+  wagmiConfig
 }: {
   children: React.ReactNode;
   smartAccountConfig: {
@@ -22,6 +24,7 @@ export const WinrLabsWeb3Provider = ({
     network: BundlerNetwork;
     paymasterAddress: `0x${string}`;
   };
+  wagmiConfig?: Config;
   tokens: Token[];
   selectedToken: Token;
 }) => {
@@ -36,7 +39,7 @@ export const WinrLabsWeb3Provider = ({
         paymasterAddress={smartAccountConfig.paymasterAddress}
       >
         <TokenProvider tokens={tokens} selectedToken={selectedToken}>
-          <CurrentAccountProvider>{children}</CurrentAccountProvider>
+          <CurrentAccountProvider config={wagmiConfig}>{children}</CurrentAccountProvider>
         </TokenProvider>
       </SmartAccountApiProvider>
     </BundlerClientProvider>
