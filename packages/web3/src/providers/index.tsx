@@ -37,6 +37,7 @@ export const WinrLabsWeb3Provider = ({
         entryPointAddress={smartAccountConfig.entryPointAddress}
         factoryAddress={smartAccountConfig.factoryAddress}
         paymasterAddress={smartAccountConfig.paymasterAddress}
+        config={wagmiConfig}
       >
         <TokenProvider tokens={tokens} selectedToken={selectedToken}>
           <CurrentAccountProvider config={wagmiConfig}>{children}</CurrentAccountProvider>

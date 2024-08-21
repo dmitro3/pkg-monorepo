@@ -2,7 +2,7 @@
 
 import { JSONRPCClient } from 'json-rpc-2.0';
 import React from 'react';
-import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
+import { Config, useAccount, usePublicClient, useWalletClient } from 'wagmi';
 
 import { SmartWalletConnectorWagmiType } from '../config/smart-wallet-connectors';
 import { PaymasterAPI, PaymasterParams, SimpleAccountAPI, UserOperation } from '../smart-wallet';
@@ -59,14 +59,15 @@ export const SmartAccountApiProvider: React.FC<{
   entryPointAddress: `0x${string}`;
   factoryAddress: `0x${string}`;
   paymasterAddress: `0x${string}`;
-}> = ({ children, entryPointAddress, factoryAddress, paymasterAddress }) => {
-  const { address, connector } = useAccount();
+  config?: Config;
+}> = ({ children, entryPointAddress, factoryAddress, paymasterAddress, config }) => {
+  const { address } = useAccount({ config });
 
   const { client } = useBundlerClient();
 
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({ config });
 
-  const { data: signer } = useWalletClient();
+  const { data: signer } = useWalletClient({ config });
 
   const [accountApi, setAccountApi] = React.useState<SimpleAccountAPI | undefined>(undefined);
 
