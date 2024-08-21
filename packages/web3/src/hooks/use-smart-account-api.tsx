@@ -61,13 +61,13 @@ export const SmartAccountApiProvider: React.FC<{
   paymasterAddress: `0x${string}`;
   config?: Config;
 }> = ({ children, entryPointAddress, factoryAddress, paymasterAddress, config }) => {
-  const { address } = useAccount({ config });
+  const { address } = useAccount();
 
   const { client } = useBundlerClient();
 
-  const publicClient = usePublicClient({ config });
+  const publicClient = usePublicClient();
 
-  const { data: signer } = useWalletClient({ config });
+  const { data: signer } = useWalletClient();
 
   const [accountApi, setAccountApi] = React.useState<SimpleAccountAPI | undefined>(undefined);
 

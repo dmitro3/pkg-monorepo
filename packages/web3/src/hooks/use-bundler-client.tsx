@@ -105,7 +105,7 @@ export const BundlerClientProvider: React.FC<{
   initialNetwork?: BundlerNetwork;
   config?: Config;
 }> = ({ children, rpcUrl, initialNetwork = BundlerNetwork.WINR, config }) => {
-  const { address } = useAccount({ config });
+  const { address } = useAccount();
 
   const [network, setNetwork] = React.useState<BundlerNetwork>(initialNetwork);
 

@@ -44,9 +44,7 @@ export const CurrentAccountProvider: React.FC<{
   children: React.ReactNode;
   config?: Config;
 }> = ({ children, config = undefined }) => {
-  const { address, connector, isConnecting, status } = useAccount({
-    config: config,
-  });
+  const { address, connector, isConnecting, status } = useAccount();
 
   const { accountApi } = useSmartAccountApi();
   const [currentAccount, setCurrentAccount] = useState<UseCurrentAccount>(initalState);
