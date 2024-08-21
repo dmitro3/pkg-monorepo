@@ -118,7 +118,7 @@ const BetTable = ({
                       {gameMap[bet.game]}
                     </TableCell>
                     <TableCell className="wr-text-center lg:wr-text-left">
-                      <a href={`/profile/${bet.username}`}>
+                      <a href={`/profile/${bet.player}`}>
                         {bet.username.length > 41 ? shorter(bet.username, 2) : bet.username}
                       </a>
                     </TableCell>
