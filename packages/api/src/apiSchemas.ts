@@ -22,26 +22,26 @@ export type PaginatedResonse = {
 export type GameResultDto = {
   id: string;
   game:
-    | "COINFLIP"
-    | "RANGE"
-    | "WHEEL"
-    | "PLINKO"
-    | "MOON"
-    | "LOTTERY"
-    | "RPS"
-    | "DICE"
-    | "LIMBO"
-    | "SLOT"
-    | "ROULETTE"
-    | "MINES"
-    | "VIDEO_POKER"
-    | "KENO"
-    | "BACCARAT"
-    | "HORSE_RACE"
-    | "BLACKJACK"
-    | "HOLDEM_POKER"
-    | "WINR_BONANZA"
-    | "ONE_HAND_BLACKJACK";
+    | 'COINFLIP'
+    | 'RANGE'
+    | 'WHEEL'
+    | 'PLINKO'
+    | 'MOON'
+    | 'LOTTERY'
+    | 'RPS'
+    | 'DICE'
+    | 'LIMBO'
+    | 'SLOT'
+    | 'ROULETTE'
+    | 'MINES'
+    | 'VIDEO_POKER'
+    | 'KENO'
+    | 'BACCARAT'
+    | 'HORSE_RACE'
+    | 'BLACKJACK'
+    | 'HOLDEM_POKER'
+    | 'WINR_BONANZA'
+    | 'ONE_HAND_BLACKJACK';
   /**
    * @default 0
    */
@@ -93,6 +93,7 @@ export type GameResultDto = {
    * @default null
    */
   hash?: string | null;
+  level: number;
   createdAt: number;
 };
 
@@ -118,6 +119,7 @@ export type UsernameObject = {
   username?: string | null;
   activeSince?: number | null;
   avatar?: number | null;
+  level?: number;
 };
 
 export type MultiplayerGameHistoryObject = {
@@ -129,26 +131,26 @@ export type MultiplayerGameHistoryObject = {
 
 export type LiveWinsDto = {
   game:
-    | "COINFLIP"
-    | "RANGE"
-    | "WHEEL"
-    | "PLINKO"
-    | "MOON"
-    | "LOTTERY"
-    | "RPS"
-    | "DICE"
-    | "LIMBO"
-    | "SLOT"
-    | "ROULETTE"
-    | "MINES"
-    | "VIDEO_POKER"
-    | "KENO"
-    | "BACCARAT"
-    | "HORSE_RACE"
-    | "BLACKJACK"
-    | "HOLDEM_POKER"
-    | "WINR_BONANZA"
-    | "ONE_HAND_BLACKJACK";
+    | 'COINFLIP'
+    | 'RANGE'
+    | 'WHEEL'
+    | 'PLINKO'
+    | 'MOON'
+    | 'LOTTERY'
+    | 'RPS'
+    | 'DICE'
+    | 'LIMBO'
+    | 'SLOT'
+    | 'ROULETTE'
+    | 'MINES'
+    | 'VIDEO_POKER'
+    | 'KENO'
+    | 'BACCARAT'
+    | 'HORSE_RACE'
+    | 'BLACKJACK'
+    | 'HOLDEM_POKER'
+    | 'WINR_BONANZA'
+    | 'ONE_HAND_BLACKJACK';
   player: string;
   username: string | null;
   /**
@@ -159,26 +161,26 @@ export type LiveWinsDto = {
 
 export type BigWinsDto = {
   game:
-    | "COINFLIP"
-    | "RANGE"
-    | "WHEEL"
-    | "PLINKO"
-    | "MOON"
-    | "LOTTERY"
-    | "RPS"
-    | "DICE"
-    | "LIMBO"
-    | "SLOT"
-    | "ROULETTE"
-    | "MINES"
-    | "VIDEO_POKER"
-    | "KENO"
-    | "BACCARAT"
-    | "HORSE_RACE"
-    | "BLACKJACK"
-    | "HOLDEM_POKER"
-    | "WINR_BONANZA"
-    | "ONE_HAND_BLACKJACK";
+    | 'COINFLIP'
+    | 'RANGE'
+    | 'WHEEL'
+    | 'PLINKO'
+    | 'MOON'
+    | 'LOTTERY'
+    | 'RPS'
+    | 'DICE'
+    | 'LIMBO'
+    | 'SLOT'
+    | 'ROULETTE'
+    | 'MINES'
+    | 'VIDEO_POKER'
+    | 'KENO'
+    | 'BACCARAT'
+    | 'HORSE_RACE'
+    | 'BLACKJACK'
+    | 'HOLDEM_POKER'
+    | 'WINR_BONANZA'
+    | 'ONE_HAND_BLACKJACK';
   player: string;
   username: string | null;
   /**
@@ -189,26 +191,26 @@ export type BigWinsDto = {
 
 export type LuckyWinsDto = {
   game:
-    | "COINFLIP"
-    | "RANGE"
-    | "WHEEL"
-    | "PLINKO"
-    | "MOON"
-    | "LOTTERY"
-    | "RPS"
-    | "DICE"
-    | "LIMBO"
-    | "SLOT"
-    | "ROULETTE"
-    | "MINES"
-    | "VIDEO_POKER"
-    | "KENO"
-    | "BACCARAT"
-    | "HORSE_RACE"
-    | "BLACKJACK"
-    | "HOLDEM_POKER"
-    | "WINR_BONANZA"
-    | "ONE_HAND_BLACKJACK";
+    | 'COINFLIP'
+    | 'RANGE'
+    | 'WHEEL'
+    | 'PLINKO'
+    | 'MOON'
+    | 'LOTTERY'
+    | 'RPS'
+    | 'DICE'
+    | 'LIMBO'
+    | 'SLOT'
+    | 'ROULETTE'
+    | 'MINES'
+    | 'VIDEO_POKER'
+    | 'KENO'
+    | 'BACCARAT'
+    | 'HORSE_RACE'
+    | 'BLACKJACK'
+    | 'HOLDEM_POKER'
+    | 'WINR_BONANZA'
+    | 'ONE_HAND_BLACKJACK';
   player: string;
   username: string | null;
   /**
@@ -254,26 +256,26 @@ export type PlayerRankObject = {
 
 export type RefundInput = {
   game:
-    | "COINFLIP"
-    | "RANGE"
-    | "WHEEL"
-    | "PLINKO"
-    | "MOON"
-    | "LOTTERY"
-    | "RPS"
-    | "DICE"
-    | "LIMBO"
-    | "SLOT"
-    | "ROULETTE"
-    | "MINES"
-    | "VIDEO_POKER"
-    | "KENO"
-    | "BACCARAT"
-    | "HORSE_RACE"
-    | "BLACKJACK"
-    | "HOLDEM_POKER"
-    | "WINR_BONANZA"
-    | "ONE_HAND_BLACKJACK";
+    | 'COINFLIP'
+    | 'RANGE'
+    | 'WHEEL'
+    | 'PLINKO'
+    | 'MOON'
+    | 'LOTTERY'
+    | 'RPS'
+    | 'DICE'
+    | 'LIMBO'
+    | 'SLOT'
+    | 'ROULETTE'
+    | 'MINES'
+    | 'VIDEO_POKER'
+    | 'KENO'
+    | 'BACCARAT'
+    | 'HORSE_RACE'
+    | 'BLACKJACK'
+    | 'HOLDEM_POKER'
+    | 'WINR_BONANZA'
+    | 'ONE_HAND_BLACKJACK';
   player: string;
 };
 
@@ -321,6 +323,7 @@ export type DashboardStats = {
 };
 
 export type LeaderboardVolumeObject = {
+  rank: number;
   username: string;
   player: string;
   won: number;
@@ -329,7 +332,13 @@ export type LeaderboardVolumeObject = {
   volume: number;
 };
 
+export type LeaderboardVolumeResponse = {
+  leaderboard: LeaderboardVolumeObject[];
+  playerStats: LeaderboardVolumeObject;
+};
+
 export type LeaderboardProfitObject = {
+  rank: number;
   username: string;
   player: string;
   won: number;
@@ -338,14 +347,37 @@ export type LeaderboardProfitObject = {
   profit: number;
 };
 
+export type LeaderboardProfitResponse = {
+  leaderboard: LeaderboardProfitObject[];
+  playerStats: LeaderboardProfitObject;
+};
+
 export type LeaderboardLuckyWinnerObject = {
   username: string;
   player: string;
-  won: number;
-  bet: number;
-  winRate: number;
-  volume: number;
+  profit: number;
   multiplier: number;
+  game:
+    | 'COINFLIP'
+    | 'RANGE'
+    | 'WHEEL'
+    | 'PLINKO'
+    | 'MOON'
+    | 'LOTTERY'
+    | 'RPS'
+    | 'DICE'
+    | 'LIMBO'
+    | 'SLOT'
+    | 'ROULETTE'
+    | 'MINES'
+    | 'VIDEO_POKER'
+    | 'KENO'
+    | 'BACCARAT'
+    | 'HORSE_RACE'
+    | 'BLACKJACK'
+    | 'HOLDEM_POKER'
+    | 'WINR_BONANZA'
+    | 'ONE_HAND_BLACKJACK';
 };
 
 export type LeaderboardBigWinsObject = {
@@ -354,35 +386,41 @@ export type LeaderboardBigWinsObject = {
   profit: number;
   multiplier: number;
   game:
-    | "COINFLIP"
-    | "RANGE"
-    | "WHEEL"
-    | "PLINKO"
-    | "MOON"
-    | "LOTTERY"
-    | "RPS"
-    | "DICE"
-    | "LIMBO"
-    | "SLOT"
-    | "ROULETTE"
-    | "MINES"
-    | "VIDEO_POKER"
-    | "KENO"
-    | "BACCARAT"
-    | "HORSE_RACE"
-    | "BLACKJACK"
-    | "HOLDEM_POKER"
-    | "WINR_BONANZA"
-    | "ONE_HAND_BLACKJACK";
+    | 'COINFLIP'
+    | 'RANGE'
+    | 'WHEEL'
+    | 'PLINKO'
+    | 'MOON'
+    | 'LOTTERY'
+    | 'RPS'
+    | 'DICE'
+    | 'LIMBO'
+    | 'SLOT'
+    | 'ROULETTE'
+    | 'MINES'
+    | 'VIDEO_POKER'
+    | 'KENO'
+    | 'BACCARAT'
+    | 'HORSE_RACE'
+    | 'BLACKJACK'
+    | 'HOLDEM_POKER'
+    | 'WINR_BONANZA'
+    | 'ONE_HAND_BLACKJACK';
 };
 
 export type LeaderboardLossLegendsObject = {
+  rank: number;
   username: string;
   player: string;
   bet: number;
   winRate: number;
   volume: number;
-  loss: number;
+  profit: number;
+};
+
+export type LeaderboardLossLegendsResponse = {
+  leaderboard: LeaderboardLossLegendsObject[];
+  playerStats: LeaderboardLossLegendsObject;
 };
 
 export type VaultOutput = {
@@ -466,30 +504,30 @@ export type CodesVolumeAndReward = {
 
 export type AwardBadge = {
   type?:
-    | "LuckyWinner"
-    | "BettingBuddy"
-    | "BankrollBooster"
-    | "StakingStar"
-    | "VolumeUp"
-    | "StakingTycoon"
-    | "ReferralBadge"
-    | "BetVeteran"
-    | "BankrollHyperBooster"
-    | "BettingTitan"
-    | "LuckyStriker"
-    | "WeeklyClaimer"
-    | "LossLegend"
-    | "WinrChainKingpin"
-    | "BankrollCashCow"
-    | "StakingSage"
-    | "JackpotJamboree"
-    | "VolumeWinner"
-    | "LuckyStreak"
-    | "GamblingGuru"
-    | "DailyStreak"
-    | "WinrChainer"
-    | "HighRoller"
-    | "LuckyRoller";
+    | 'LuckyWinner'
+    | 'BettingBuddy'
+    | 'BankrollBooster'
+    | 'StakingStar'
+    | 'VolumeUp'
+    | 'StakingTycoon'
+    | 'ReferralBadge'
+    | 'BetVeteran'
+    | 'BankrollHyperBooster'
+    | 'BettingTitan'
+    | 'LuckyStriker'
+    | 'WeeklyClaimer'
+    | 'LossLegend'
+    | 'WinrChainKingpin'
+    | 'BankrollCashCow'
+    | 'StakingSage'
+    | 'JackpotJamboree'
+    | 'VolumeWinner'
+    | 'LuckyStreak'
+    | 'GamblingGuru'
+    | 'DailyStreak'
+    | 'WinrChainer'
+    | 'HighRoller'
+    | 'LuckyRoller';
   /**
    * The player address to award the badge to
    *
@@ -502,30 +540,30 @@ export type AwardBadgeResponse = {
   awarded: boolean;
   player?: string;
   badge?:
-    | "LuckyWinner"
-    | "BettingBuddy"
-    | "BankrollBooster"
-    | "StakingStar"
-    | "VolumeUp"
-    | "StakingTycoon"
-    | "ReferralBadge"
-    | "BetVeteran"
-    | "BankrollHyperBooster"
-    | "BettingTitan"
-    | "LuckyStriker"
-    | "WeeklyClaimer"
-    | "LossLegend"
-    | "WinrChainKingpin"
-    | "BankrollCashCow"
-    | "StakingSage"
-    | "JackpotJamboree"
-    | "VolumeWinner"
-    | "LuckyStreak"
-    | "GamblingGuru"
-    | "DailyStreak"
-    | "WinrChainer"
-    | "HighRoller"
-    | "LuckyRoller";
+    | 'LuckyWinner'
+    | 'BettingBuddy'
+    | 'BankrollBooster'
+    | 'StakingStar'
+    | 'VolumeUp'
+    | 'StakingTycoon'
+    | 'ReferralBadge'
+    | 'BetVeteran'
+    | 'BankrollHyperBooster'
+    | 'BettingTitan'
+    | 'LuckyStriker'
+    | 'WeeklyClaimer'
+    | 'LossLegend'
+    | 'WinrChainKingpin'
+    | 'BankrollCashCow'
+    | 'StakingSage'
+    | 'JackpotJamboree'
+    | 'VolumeWinner'
+    | 'LuckyStreak'
+    | 'GamblingGuru'
+    | 'DailyStreak'
+    | 'WinrChainer'
+    | 'HighRoller'
+    | 'LuckyRoller';
 };
 
 export type WeeklyClaimer = {
@@ -547,30 +585,30 @@ export type BadgeResponse = {
   awarded: boolean;
   player?: string;
   badge?:
-    | "LuckyWinner"
-    | "BettingBuddy"
-    | "BankrollBooster"
-    | "StakingStar"
-    | "VolumeUp"
-    | "StakingTycoon"
-    | "ReferralBadge"
-    | "BetVeteran"
-    | "BankrollHyperBooster"
-    | "BettingTitan"
-    | "LuckyStriker"
-    | "WeeklyClaimer"
-    | "LossLegend"
-    | "WinrChainKingpin"
-    | "BankrollCashCow"
-    | "StakingSage"
-    | "JackpotJamboree"
-    | "VolumeWinner"
-    | "LuckyStreak"
-    | "GamblingGuru"
-    | "DailyStreak"
-    | "WinrChainer"
-    | "HighRoller"
-    | "LuckyRoller";
+    | 'LuckyWinner'
+    | 'BettingBuddy'
+    | 'BankrollBooster'
+    | 'StakingStar'
+    | 'VolumeUp'
+    | 'StakingTycoon'
+    | 'ReferralBadge'
+    | 'BetVeteran'
+    | 'BankrollHyperBooster'
+    | 'BettingTitan'
+    | 'LuckyStriker'
+    | 'WeeklyClaimer'
+    | 'LossLegend'
+    | 'WinrChainKingpin'
+    | 'BankrollCashCow'
+    | 'StakingSage'
+    | 'JackpotJamboree'
+    | 'VolumeWinner'
+    | 'LuckyStreak'
+    | 'GamblingGuru'
+    | 'DailyStreak'
+    | 'WinrChainer'
+    | 'HighRoller'
+    | 'LuckyRoller';
 };
 
 export type SummaryResponse = {

@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 
-import { GameType } from '../../constants';
+import { GameType, profileLevels } from '../../constants';
 import useMediaQuery from '../../hooks/use-media-query';
 import { LinkIcon } from '../../svgs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../ui/table';
@@ -118,7 +118,13 @@ const BetTable = ({
                       {gameMap[bet.game]}
                     </TableCell>
                     <TableCell className="wr-text-center lg:wr-text-left">
-                      <a href={`/profile/${bet.player}`}>
+                      <a
+                        href={`/profile/${bet.player}`}
+                        style={{
+                          // @ts-ignore - BE TYPE MISMATCH
+                          color: profileLevels[bet.level - 1]?.levelColor || 'inherit',
+                        }}
+                      >
                         {bet.username.length > 41 ? shorter(bet.username, 2) : bet.username}
                       </a>
                     </TableCell>
