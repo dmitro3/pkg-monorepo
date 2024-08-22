@@ -5,16 +5,17 @@ import * as React from 'react';
 import { AnimatedTabContent } from '../../../../common/animated-tab-content';
 import { AudioController } from '../../../../common/audio-controller';
 import { BetControllerContainer } from '../../../../common/containers';
-import { BetControllerTitle } from '../../../../common/controller';
-import { ManualController } from './manual-controller';
 import { cn } from '../../../../utils/style';
 import { AutoController } from './auto-controller';
+import { ManualController } from './manual-controller';
 
 interface Props {
   minWager: number;
   maxWager: number;
   winMultiplier: number;
   isGettingResults?: boolean;
+  isAutoBetMode: boolean;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const BetController: React.FC<Props> = (props) => {
@@ -35,6 +36,7 @@ export const BetController: React.FC<Props> = (props) => {
             <Tabs.Trigger
               className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
                 'wr-bg-zinc-800 wr-text-grey-500': tab !== 'manual',
+                'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
               })}
               value="manual"
             >
@@ -43,6 +45,7 @@ export const BetController: React.FC<Props> = (props) => {
             <Tabs.Trigger
               className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
                 'wr-bg-zinc-800 wr-text-grey-500': tab !== 'auto',
+                'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
               })}
               value="auto"
             >

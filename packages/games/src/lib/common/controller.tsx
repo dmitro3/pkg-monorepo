@@ -84,7 +84,14 @@ export const AutoBetCountFormField: React.FC<{
             </FormLabel>
 
             <FormControl>
-              <BetCount isDisabled={isDisabled} maxValue={maxValue} {...field} />
+              <div className="wr-relative wr-w-full">
+                <BetCount isDisabled={isDisabled} maxValue={maxValue} {...field} />
+                {form.getValues('betCount') == 0 && (
+                  <span className="wr-absolute wr-right-3 wr-text-3xl wr-text-zinc-500 -wr-translate-y-1/2 wr-top-1/2 wr-font-bold">
+                    ∞
+                  </span>
+                )}
+              </div>
             </FormControl>
             <FormMessage />
           </FormItem>

@@ -15,7 +15,6 @@ import { PreBetButton } from '../../../../common/pre-bet-button';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import { Button } from '../../../../ui/button';
 import { cn } from '../../../../utils/style';
-import useDiceGameStore from '../../store';
 import { DiceForm } from '../../types';
 
 interface AutoControllerProps {
@@ -23,13 +22,18 @@ interface AutoControllerProps {
   isGettingResults?: boolean;
   minWager: number;
   maxWager: number;
+  isAutoBetMode: boolean;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AutoController = ({ isGettingResults, minWager, maxWager }: AutoControllerProps) => {
+export const AutoController = ({
+  minWager,
+  maxWager,
+  isAutoBetMode,
+  onAutoBetModeChange,
+}: AutoControllerProps) => {
   const form = useFormContext() as DiceForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
-
-  const { gameStatus, diceGameResults } = useDiceGameStore(['gameStatus', 'diceGameResults']);
 
   return (
     <>
@@ -37,44 +41,47 @@ export const AutoController = ({ isGettingResults, minWager, maxWager }: AutoCon
         minWager={minWager}
         maxWager={maxWager}
         className="lg:!wr-mb-3"
-        isDisabled={
-          form.formState.isSubmitting ||
-          form.formState.isLoading ||
-          gameStatus == 'PLAYING' ||
-          isGettingResults
-        }
+        isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
       />
 
-      <AutoBetCountFormField />
-      <AutoBetIncreaseOnWin />
-      <AutoBetIncreaseOnLoss />
+      <AutoBetCountFormField
+        isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+      />
+      <AutoBetIncreaseOnWin
+        isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+      />
+      <AutoBetIncreaseOnLoss
+        isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+      />
 
       <div className="wr-flex wr-gap-3">
-        <AutoBetStopGainFormField />
-        <AutoBetStopLossFormField />
+        <AutoBetStopGainFormField
+          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+        />
+        <AutoBetStopLossFormField
+          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+        />
       </div>
 
       <PreBetButton>
         <Button
-          type="submit"
+          type={!isAutoBetMode ? 'button' : 'submit'}
           variant={'success'}
           className={cn(
             'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
             {
               'wr-cursor-default wr-pointer-events-none':
-                !form.formState.isValid ||
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                (gameStatus == 'PLAYING' &&
-                  diceGameResults.length < 4 &&
-                  diceGameResults.length > 1) ||
-                isGettingResults,
+                !form.formState.isValid || form.formState.isSubmitting || form.formState.isLoading,
             }
           )}
           size={'xl'}
-          onClick={() => clickEffect.play()}
+          onClick={() => {
+            clickEffect.play();
+            if (!isAutoBetMode) onAutoBetModeChange(true);
+            if (isAutoBetMode) onAutoBetModeChange(false);
+          }}
         >
-          Start Autobet
+          {isAutoBetMode ? 'Stop Autobet' : 'Start Autobet'}
         </Button>
       </PreBetButton>
     </>

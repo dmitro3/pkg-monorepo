@@ -21,6 +21,7 @@ export const factoryAddress = process.env.NEXT_PUBLIC_FACTORY_ADDRESS as Address
 export const controllerAddress = process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS as Address;
 export const cashierAddress = process.env.NEXT_PUBLIC_CASHIER_ADDRESS as Address;
 export const uiOperatorAddress = process.env.NEXT_PUBLIC_UI_OPERATOR_ADDRESS as Address;
+export const strategyStoreAddress = process.env.NEXT_PUBLIC_STRATEGY_STORE_ADDRESS as Address;
 
 export const rankMiddlewareAddress = process.env.NEXT_PUBLIC_RANK_MIDDLEWARE_ADDRESS as Address;
 

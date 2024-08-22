@@ -3,54 +3,35 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { BetCountFormField, WagerFormField } from '../../../../common/controller';
+import { WagerFormField } from '../../../../common/controller';
 import { PreBetButton } from '../../../../common/pre-bet-button';
-import { SkipButton } from '../../../../common/skip-button';
 import { TotalWager, WagerCurrencyIcon } from '../../../../common/wager';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import { Button } from '../../../../ui/button';
 import { FormLabel } from '../../../../ui/form';
 import { cn } from '../../../../utils/style';
 import { toDecimals, toFormatted } from '../../../../utils/web3';
-import useDiceGameStore from '../../store';
 import { DiceForm } from '../../types';
 
 interface ManualControllerProps {
   winMultiplier: number;
-  isGettingResults?: boolean;
   minWager: number;
   maxWager: number;
 }
 
-export const ManualController = ({
-  winMultiplier,
-  isGettingResults,
-  minWager,
-  maxWager,
-}: ManualControllerProps) => {
+export const ManualController = ({ winMultiplier, minWager, maxWager }: ManualControllerProps) => {
   const form = useFormContext() as DiceForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   const maxPayout = React.useMemo(() => {
-    const { wager, betCount } = form.getValues();
+    const { wager } = form.getValues();
 
-    return toDecimals(wager * betCount * winMultiplier, 2);
-  }, [form.getValues().wager, form.getValues().betCount, winMultiplier]);
-
-  const { gameStatus, diceGameResults } = useDiceGameStore(['gameStatus', 'diceGameResults']);
+    return toDecimals(wager * winMultiplier, 2);
+  }, [form.getValues().wager, winMultiplier]);
 
   return (
     <>
-      <WagerFormField
-        minWager={minWager}
-        maxWager={maxWager}
-        isDisabled={
-          form.formState.isSubmitting ||
-          form.formState.isLoading ||
-          gameStatus == 'PLAYING' ||
-          isGettingResults
-        }
-      />
+      <WagerFormField minWager={minWager} maxWager={maxWager} />
       <div className="wr-mb-6 lg:!wr-grid wr-grid-cols-2 wr-gap-2 wr-hidden">
         <div>
           <FormLabel>Max Payout</FormLabel>
@@ -78,13 +59,7 @@ export const ManualController = ({
             'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
             {
               'wr-cursor-default wr-pointer-events-none':
-                !form.formState.isValid ||
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                (gameStatus == 'PLAYING' &&
-                  diceGameResults.length < 4 &&
-                  diceGameResults.length > 1) ||
-                isGettingResults,
+                !form.formState.isValid || form.formState.isSubmitting || form.formState.isLoading,
             }
           )}
           size={'xl'}

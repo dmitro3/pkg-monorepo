@@ -1,4 +1,4 @@
-export const MIN_BET_COUNT = 1 as const;
+export const MIN_BET_COUNT = 0 as const;
 
 export const MAX_BET_COUNT = 100 as const;
 

@@ -29,7 +29,6 @@ type TemplateProps = RangeGameProps & {
   maxWager?: number;
   onSubmitGameForm: (data: DiceFormFields) => void;
   onFormChange: (fields: DiceFormFields) => void;
-  isGettingResult?: boolean;
 };
 
 const defaultOptions: TemplateOptions = {
@@ -43,6 +42,7 @@ const defaultOptions: TemplateOptions = {
 
 const DiceTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...defaultOptions, ...props.options };
+  const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
 
   const formSchema = z.object({
     wager: z
@@ -75,7 +75,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
     mode: 'onSubmit',
     defaultValues: {
       wager: props?.minWager || 1,
-      betCount: 1,
+      betCount: 0,
       stopGain: 0,
       stopLoss: 0,
       increaseOnWin: 0,
@@ -110,12 +110,17 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
             minWager={props.minWager || 1}
             maxWager={props.maxWager || 2000}
             winMultiplier={winMultiplier}
-            isGettingResults={props.isGettingResult}
+            isAutoBetMode={isAutoBetMode}
+            onAutoBetModeChange={setIsAutoBetMode}
           />
           <SceneContainer
             className={cn('wr-h-[640px]  max-md:wr-h-auto max-md:wr-pt-[130px] lg:wr-py-12')}
           >
-            <Dice.Game {...props}>
+            <Dice.Game
+              {...props}
+              isAutoBetMode={isAutoBetMode}
+              onAutoBetModeChange={setIsAutoBetMode}
+            >
               {/* last bets */}
               <div />
               <Dice.Body>
@@ -123,7 +128,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
                 <Dice.TextRandomizer />
                 <Dice.Slider track={options?.slider?.track} />
               </Dice.Body>
-              <Dice.Controller winMultiplier={winMultiplier} />
+              <Dice.Controller disabled={isAutoBetMode} winMultiplier={winMultiplier} />
             </Dice.Game>
           </SceneContainer>
         </GameContainer>
