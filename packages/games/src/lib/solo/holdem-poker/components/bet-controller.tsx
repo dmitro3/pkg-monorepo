@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { RotatedBackButton } from '../../../common/rotated-back-button';
 import { WagerBalance, WagerCurrency, WagerInput } from '../../../common/wager';
 import { useGameOptions } from '../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
@@ -63,61 +64,66 @@ const WagerSetterButtons: React.FC<{
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
   return (
-    <div className="wr-flex wr-items-center wr-gap-1 wr-mt-1.5">
-      <Button
-        className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
-        type="button"
-        disabled={isDisabled}
-        variant={'secondary'}
-        onClick={() => {
-          setWager(minWager);
-        }}
-      >
-        MIN
-      </Button>
-      <Button
-        className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
-        type="button"
-        disabled={isDisabled}
-        variant={'secondary'}
-        onClick={() => {
-          const newValue = wager / 2;
+    <>
+      <div className="lg:wr-hidden">
+        <RotatedBackButton />
+      </div>
+      <div className="wr-flex wr-items-center wr-gap-1 wr-mt-1.5">
+        <Button
+          className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
+          type="button"
+          disabled={isDisabled}
+          variant={'secondary'}
+          onClick={() => {
+            setWager(minWager);
+          }}
+        >
+          MIN
+        </Button>
+        <Button
+          className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
+          type="button"
+          disabled={isDisabled}
+          variant={'secondary'}
+          onClick={() => {
+            const newValue = wager / 2;
 
-          if (newValue < minWager) setWager(minWager);
-          else setWager(newValue);
-        }}
-      >
-        1/2
-      </Button>
-      <Button
-        className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
-        type="button"
-        disabled={isDisabled}
-        variant={'secondary'}
-        onClick={() => {
-          clickEffect.play();
-          const newValue = wager * 2;
-          const maxAmount = maxWager > balanceAsDollar ? balanceAsDollar : maxWager;
+            if (newValue < minWager) setWager(minWager);
+            else setWager(newValue);
+          }}
+        >
+          1/2
+        </Button>
+        <Button
+          className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
+          type="button"
+          disabled={isDisabled}
+          variant={'secondary'}
+          onClick={() => {
+            clickEffect.play();
+            const newValue = wager * 2;
+            const maxAmount = maxWager > balanceAsDollar ? balanceAsDollar : maxWager;
 
-          if (newValue > maxAmount) setWager(maxAmount);
-          else setWager(newValue);
-        }}
-      >
-        2x
-      </Button>
-      <Button
-        className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
-        type="button"
-        disabled={isDisabled}
-        variant={'secondary'}
-        onClick={() => {
-          clickEffect.play();
-          const maxAmount = maxWager > balanceAsDollar ? balanceAsDollar : maxWager;
-          setWager(maxAmount);
-        }}
-      >
-        MAX
-      </Button>
-    </div>
+            if (newValue > maxAmount) setWager(maxAmount);
+            else setWager(newValue);
+          }}
+        >
+          2x
+        </Button>
+        <Button
+          className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
+          type="button"
+          disabled={isDisabled}
+          variant={'secondary'}
+          onClick={() => {
+            clickEffect.play();
+            const maxAmount = maxWager > balanceAsDollar ? balanceAsDollar : maxWager;
+            setWager(maxAmount);
+          }}
+        >
+          MAX
+        </Button>
+      </div>
+    </>
   );
 };
