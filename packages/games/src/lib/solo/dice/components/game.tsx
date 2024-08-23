@@ -26,18 +26,21 @@ export const RangeGame = ({
   onAnimationCompleted = () => {},
   onSubmitGameForm,
   onAutoBetModeChange,
+  processStrategy,
   gameResults,
   isAutoBetMode,
   children,
 }: RangeGameProps & {
   isAutoBetMode: boolean;
   onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: DiceGameResult[]) => void;
 }) => {
   const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
   const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
 
   const form = useFormContext() as DiceForm;
   const betCount = form.watch('betCount');
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
 
   const {
     diceGameResults,
@@ -66,7 +69,6 @@ export const RangeGame = ({
   }, [gameResults]);
 
   const animCallback = async (curr = 0) => {
-    console.log(curr, 'curr', diceGameResults.length);
     const isAnimationFinished = curr + 1 === diceGameResults.length;
 
     const currResult = diceGameResults[curr] as DiceGameResult;
@@ -77,14 +79,12 @@ export const RangeGame = ({
     onAnimationStep(curr);
 
     if (isAnimationFinished) {
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         onAnimationCompleted(diceGameResults);
         if (isAutoBetMode) {
           const newBetCount = betCount - 1;
 
           betCount !== 0 && form.setValue('betCount', betCount - 1);
-
-          console.log(newBetCount, 'newBetcoUNT');
 
           if (betCount >= 0 && newBetCount != 0) {
             onSubmitGameForm(form.getValues());
@@ -93,14 +93,14 @@ export const RangeGame = ({
             onAutoBetModeChange(false);
           }
         }
-        console.log('animation completed');
-      }, 300);
+      }, 150);
     }
   };
 
   React.useEffect(() => {
     if (diceGameResults.length === 0) return;
     updateGameStatus('ENDED');
+    processStrategy(diceGameResults);
     let curr = currentAnimationCount;
 
     const stepTrigger = () => {
@@ -117,14 +117,18 @@ export const RangeGame = ({
     };
 
     stepTrigger();
-    onAnimationCompleted(diceGameResults);
   }, [diceGameResults]);
+
+  React.useEffect(() => {
+    if (!isAutoBetMode) clearTimeout(timeoutRef.current);
+  }, [isAutoBetMode]);
 
   React.useEffect(() => {
     return () => {
       updateGameStatus('IDLE');
       updateDiceGameResults([]);
       updateLastBets([]);
+      clearTimeout(timeoutRef.current);
     };
   }, []);
 
