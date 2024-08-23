@@ -8,6 +8,8 @@ export interface DiceFormFields {
   rollValue: number;
   winChance: number;
   rollType: 'OVER' | 'UNDER';
+  increaseOnWin: number;
+  increaseOnLoss: number;
 }
 export type DiceForm = UseFormReturn<DiceFormFields, any, undefined>;
 

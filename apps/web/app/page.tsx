@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { useCurrentAccount, useWeb3AuthAccount } from "@winrlabs/web3";
-import React from "react";
-import { smartWalletConnectors } from "./wagmi";
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useCurrentAccount, useGameStrategy, useWeb3AuthAccount } from '@winrlabs/web3';
+import React from 'react';
+import { smartWalletConnectors } from './wagmi';
 
 function App() {
   const account = useAccount();
@@ -13,13 +13,15 @@ function App() {
   const currentAA = useCurrentAccount();
 
   const { data } = useWeb3AuthAccount({
-    currentConnectorName: account.connector?.name || "",
+    currentConnectorName: account.connector?.name || '',
     smartWalletConnectors: smartWalletConnectors.connectors,
   });
 
-  console.log("account", account);
+  const { createStrategy } = useGameStrategy();
 
-  console.log("data", currentAcc);
+  console.log('account', account);
+
+  console.log('data', currentAcc);
 
   /*   const currentConnector = smartWalletConnectors.connectors.find(
     (c) => c.loginProvider === account.connector?.name
@@ -39,7 +41,11 @@ function App() {
     getUserInfo();  
   }, [currentConnector]); */
 
-  return <></>;
+  return (
+    <>
+      <div onClick={() => createStrategy()}>CREATE STRATEGY!</div>
+    </>
+  );
 }
 
 export default App;

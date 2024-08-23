@@ -1,20 +1,19 @@
-"use client";
+'use client';
 
-import { Config } from "wagmi";
-import {
-  BundlerClientProvider,
-  BundlerNetwork,
-} from "../hooks/use-bundler-client";
-import { CurrentAccountProvider } from "../hooks/use-current-address";
-import { SmartAccountApiProvider } from "../hooks/use-smart-account-api";
-import { Token, TokenProvider } from "./token";
+import { Config } from 'wagmi';
+
+import { BundlerClientProvider, BundlerNetwork } from '../hooks/use-bundler-client';
+import { CurrentAccountProvider } from '../hooks/use-current-address';
+import { GameStrategyProvider } from '../hooks/use-game-strategy';
+import { SmartAccountApiProvider } from '../hooks/use-smart-account-api';
+import { Token, TokenProvider } from './token';
 
 export const WinrLabsWeb3Provider = ({
   children,
   smartAccountConfig,
   tokens,
   selectedToken,
-  wagmiConfig
+  wagmiConfig,
 }: {
   children: React.ReactNode;
   smartAccountConfig: {
@@ -39,9 +38,11 @@ export const WinrLabsWeb3Provider = ({
         paymasterAddress={smartAccountConfig.paymasterAddress}
         config={wagmiConfig}
       >
-        <TokenProvider tokens={tokens} selectedToken={selectedToken}>
-          <CurrentAccountProvider config={wagmiConfig}>{children}</CurrentAccountProvider>
-        </TokenProvider>
+        <GameStrategyProvider strategyStoreAddress="0x890C99909E04253ff826A714fe1Ca58d36b11F1F">
+          <TokenProvider tokens={tokens} selectedToken={selectedToken}>
+            <CurrentAccountProvider config={wagmiConfig}>{children}</CurrentAccountProvider>
+          </TokenProvider>
+        </GameStrategyProvider>
       </SmartAccountApiProvider>
     </BundlerClientProvider>
   );

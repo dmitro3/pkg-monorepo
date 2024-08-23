@@ -2,14 +2,11 @@
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Advanced } from '../../../../common/advanced';
 import { AudioController } from '../../../../common/audio-controller';
 import { BetControllerContainer } from '../../../../common/containers';
 import {
   BetControllerTitle,
   BetCountFormField,
-  StopGainFormField,
-  StopLossFormField,
   WagerFormField,
 } from '../../../../common/controller';
 import { PreBetButton } from '../../../../common/pre-bet-button';
@@ -97,29 +94,6 @@ export const BetController: React.FC<Props> = ({
             <FormLabel>Total Wager</FormLabel>
             <TotalWager betCount={form.getValues().betCount} wager={form.getValues().wager} />
           </div>
-        </div>
-
-        <div className="wr-hidden">
-          <Advanced>
-            <div className="wr-grid wr-grid-cols-2 wr-gap-2">
-              <StopGainFormField
-                isDisabled={
-                  form.formState.isSubmitting ||
-                  form.formState.isLoading ||
-                  gameStatus == 'PLAYING' ||
-                  isGettingResults
-                }
-              />
-              <StopLossFormField
-                isDisabled={
-                  form.formState.isSubmitting ||
-                  form.formState.isLoading ||
-                  gameStatus == 'PLAYING' ||
-                  isGettingResults
-                }
-              />
-            </div>
-          </Advanced>
         </div>
         {!(coinFlipGameResults.length > 3) && (
           <PreBetButton>

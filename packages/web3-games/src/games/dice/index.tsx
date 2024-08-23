@@ -44,7 +44,6 @@ interface TemplateWithWeb3Props extends BaseGameProps {
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: DiceGameResult[]) => void;
-  onAnimationSkipped?: (result: DiceGameResult[]) => void;
   onPlayerStatusUpdate?: (d: {
     type: 'levelUp' | 'badgeUp';
     awardBadges: Badge[] | undefined;
@@ -71,20 +70,20 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   const {
     addResult,
     updateGame,
-    skipAll,
     clear: clearLiveResults,
-  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame']);
   const { updateGameStatus } = useDiceGameStore(['updateGameStatus']);
-  const [isGettingResults, setIsGettingResults] = useState(false);
 
   const [formValues, setFormValues] = useState<DiceFormFields>({
-    betCount: 1,
+    betCount: 0,
     stopGain: 0,
     stopLoss: 0,
     wager: props?.minWager || 1,
     rollValue: 50,
     rollType: 'UNDER',
     winChance: 50,
+    increaseOnLoss: 0,
+    increaseOnWin: 0,
   });
 
   const gameEvent = useListenGameEvent();
@@ -154,13 +153,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
         { name: 'count', type: 'uint8' },
         { name: 'data', type: 'bytes' },
       ],
-      [
-        wagerInWei,
-        stopGainInWei as bigint,
-        stopLossInWei as bigint,
-        formValues.betCount,
-        encodedChoice,
-      ]
+      [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
@@ -214,8 +207,6 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       if (!handledAllowance) return;
     }
 
-    setIsGettingResults(true);
-
     try {
       if (isPlayerHalted) await playerLevelUp();
       if (isReIterable) await playerReIterate();
@@ -223,7 +214,6 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log('error', e);
-      setIsGettingResults(false);
       refetchPlayerGameStatus();
       updateGameStatus('ENDED');
       props.onError && props.onError(e);
@@ -233,16 +223,16 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   React.useEffect(() => {
     const finalResult = gameEvent;
 
+    console.log(eventLogic, 'eventlog', finalResult?.logic);
     if (
       finalResult?.logic == eventLogic &&
       finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled
     ) {
+      console.log('settled result');
       setDiceResult(finalResult);
       updateGame({
         wager: formValues.wager || 0,
-        betCount: formValues.betCount || 0,
       });
-      setIsGettingResults(false);
     }
   }, [gameEvent]);
 
@@ -260,7 +250,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     refetchPlayerGameStatus();
     updateBalances();
 
-    const totalWager = formValues.wager * formValues.betCount;
+    const totalWager = formValues.wager;
     const totalPayout = result.reduce((acc, cur) => acc + cur.payoutInUsd, 0);
     handleGetBadges({ totalWager, totalPayout });
   };
@@ -281,29 +271,14 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     [diceResult]
   );
 
-  const onAnimationSkipped = React.useCallback(
-    (result: DiceGameResult[]) => {
-      onGameCompleted(result);
-      skipAll(
-        result.map((value) => ({
-          won: value.payout > 0,
-          payout: value.payoutInUsd,
-        }))
-      );
-    },
-    [diceResult]
-  );
-
   return (
     <>
       <DiceTemplate
         {...props}
-        isGettingResult={isGettingResults}
         onSubmitGameForm={onGameSubmit}
         gameResults={diceSteps}
         onAnimationCompleted={onGameCompleted}
         onAnimationStep={onAnimationStep}
-        onAnimationSkipped={onAnimationSkipped}
         onFormChange={(val) => {
           setFormValues(val);
         }}

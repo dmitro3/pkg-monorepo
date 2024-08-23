@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 
 import { cn } from '../../../../lib/utils/style';
-import { IconCloseCircle, IconPercentageCircle, IconSwitchHorizontal } from '../../../svgs';
+import { IconPercentageCircle, IconSwitchHorizontal } from '../../../svgs';
 import { Button } from '../../../ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../ui/form';
 import { NumberInput } from '../../../ui/number-input';

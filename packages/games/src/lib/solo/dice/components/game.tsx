@@ -1,14 +1,16 @@
 'use client';
 
 import * as React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { useGameSkip } from '../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
 import useRangeGameStore from '../store';
-import { DiceGameResult } from '../types';
+import { DiceForm, DiceFormFields, DiceGameResult } from '../types';
 
 export type RangeGameProps = React.ComponentProps<'div'> & {
   gameResults?: DiceGameResult[];
+
+  onSubmitGameForm: (f: DiceFormFields) => void;
   /**
    * Runs on each animation step
    */
@@ -17,20 +19,28 @@ export type RangeGameProps = React.ComponentProps<'div'> & {
    * Runs when the animation is completed
    */
   onAnimationCompleted?: (result: DiceGameResult[]) => void;
-  onAnimationSkipped?: (result: DiceGameResult[]) => void;
 };
 
 export const RangeGame = ({
   onAnimationStep = () => {},
   onAnimationCompleted = () => {},
-  onAnimationSkipped = () => {},
+  onSubmitGameForm,
+  onAutoBetModeChange,
+  processStrategy,
   gameResults,
+  isAutoBetMode,
   children,
-}: RangeGameProps) => {
+}: RangeGameProps & {
+  isAutoBetMode: boolean;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: DiceGameResult[]) => void;
+}) => {
   const sliderEffect = useAudioEffect(SoundEffects.SPIN_TICK_1X);
   const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
 
-  const { isAnimationSkipped, updateSkipAnimation } = useGameSkip();
+  const form = useFormContext() as DiceForm;
+  const betCount = form.watch('betCount');
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
 
   const {
     diceGameResults,
@@ -56,34 +66,10 @@ export const RangeGame = ({
     if (gameResults) {
       updateDiceGameResults(gameResults);
     }
-
-    if (gameResults?.length) {
-      updateSkipAnimation(false);
-    }
   }, [gameResults]);
 
-  const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
-  const lastBetClearRef = React.useRef<NodeJS.Timeout | null>(null);
-
   const animCallback = async (curr = 0) => {
-    const isAnimationFinished = curr === diceGameResults.length;
-
-    if (isAnimationFinished) {
-      setTimeout(() => {
-        onAnimationCompleted(diceGameResults);
-      }, 500);
-
-      setTimeout(() => {
-        if (diceGameResults.length > 1) {
-          updateDiceGameResults([]);
-          updateCurrentAnimationCount(0);
-        }
-      }, 10);
-
-      clearInterval(intervalRef.current!);
-      intervalRef.current = null;
-      return;
-    }
+    const isAnimationFinished = curr + 1 === diceGameResults.length;
 
     const currResult = diceGameResults[curr] as DiceGameResult;
     if (currResult.payout > 0) winEffect.play();
@@ -91,65 +77,60 @@ export const RangeGame = ({
     sliderEffect.play();
     updateCurrentAnimationCount(curr);
     onAnimationStep(curr);
+
+    if (isAnimationFinished) {
+      timeoutRef.current = setTimeout(() => {
+        onAnimationCompleted(diceGameResults);
+        if (isAutoBetMode) {
+          const newBetCount = betCount - 1;
+
+          betCount !== 0 && form.setValue('betCount', betCount - 1);
+
+          if (betCount >= 0 && newBetCount != 0) {
+            onSubmitGameForm(form.getValues());
+          } else {
+            console.log('auto bet finished!');
+            onAutoBetModeChange(false);
+          }
+        }
+      }, 150);
+    }
   };
 
   React.useEffect(() => {
     if (diceGameResults.length === 0) return;
-    lastBetClearRef.current && clearTimeout(lastBetClearRef.current);
-    const isSingleGame = diceGameResults.length == 1;
+    updateGameStatus('ENDED');
+    processStrategy(diceGameResults);
+    let curr = currentAnimationCount;
 
-    if (isSingleGame) {
-      updateGameStatus('ENDED');
-    }
+    const stepTrigger = () => {
+      const isGameEnded = curr === diceGameResults.length;
 
-    if (!isAnimationSkipped) {
-      let curr = currentAnimationCount;
-
-      const stepTrigger = () => {
-        const isGameEnded = curr === diceGameResults.length;
-
-        if (isGameEnded) {
-          updateGameStatus('ENDED');
-        }
-
-        animCallback(curr);
-        diceGameResults[curr] && addLastBet(diceGameResults[curr] as DiceGameResult);
-        updateCurrentAnimationCount(curr);
-        curr += 1;
-      };
-
-      if (isSingleGame) {
-        stepTrigger();
-        onAnimationCompleted(diceGameResults);
-      } else {
-        intervalRef.current = setInterval(stepTrigger, 650);
+      if (isGameEnded) {
+        updateGameStatus('ENDED');
       }
-    } else {
-      onSkip();
-    }
-  }, [diceGameResults, isAnimationSkipped]);
+
+      animCallback(curr);
+      diceGameResults[curr] && addLastBet(diceGameResults[curr] as DiceGameResult);
+      updateCurrentAnimationCount(curr);
+      curr += 1;
+    };
+
+    stepTrigger();
+  }, [diceGameResults]);
+
+  React.useEffect(() => {
+    if (!isAutoBetMode) clearTimeout(timeoutRef.current);
+  }, [isAutoBetMode]);
 
   React.useEffect(() => {
     return () => {
-      intervalRef.current && clearInterval(intervalRef.current);
-      lastBetClearRef.current && clearTimeout(lastBetClearRef.current);
       updateGameStatus('IDLE');
       updateDiceGameResults([]);
       updateLastBets([]);
+      clearTimeout(timeoutRef.current);
     };
   }, []);
-
-  const onSkip = () => {
-    updateLastBets(diceGameResults);
-    clearInterval(intervalRef.current as NodeJS.Timeout);
-    clearTimeout(lastBetClearRef.current as NodeJS.Timeout);
-    setTimeout(() => {
-      updateGameStatus('ENDED');
-      onAnimationSkipped(diceGameResults);
-      updateDiceGameResults([]);
-      updateCurrentAnimationCount(0);
-    }, 700);
-  };
 
   return <>{children}</>;
 };

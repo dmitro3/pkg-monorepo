@@ -220,10 +220,11 @@ const Container: React.FC<{
 const Input: React.FC<{
   placeholder?: string;
   decimalScale?: number;
+  allowNegative?: boolean;
   className: string;
   id?: string;
   prefix?: string;
-}> = ({ placeholder, decimalScale = 4, className, id, prefix = '' }) => {
+}> = ({ placeholder, decimalScale = 4, className, id, prefix = '', allowNegative = false }) => {
   const { value, onChange, isDisabled } = useNumberInput();
 
   return (
@@ -236,7 +237,7 @@ const Input: React.FC<{
       onValueChange={(valueObj) => {
         onChange(valueObj.floatValue || 0);
       }}
-      allowNegative={false}
+      allowNegative={allowNegative}
       disabled={isDisabled}
       id={id}
       thousandSeparator=","
