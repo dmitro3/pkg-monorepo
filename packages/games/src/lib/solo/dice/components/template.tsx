@@ -134,7 +134,11 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
       return;
     }
 
-    if (newWager < (props.minWager || 0) || balanceAsDollar < newWager) {
+    if (
+      newWager < (props.minWager || 0) ||
+      balanceAsDollar < newWager ||
+      newWager > (props.maxWager || 0)
+    ) {
       setIsAutoBetMode(false);
       return;
     }
