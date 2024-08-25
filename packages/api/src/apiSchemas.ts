@@ -153,6 +153,7 @@ export type LiveWinsDto = {
     | 'ONE_HAND_BLACKJACK';
   player: string;
   username: string | null;
+  id: string;
   /**
    * @default 0
    */
@@ -183,6 +184,7 @@ export type BigWinsDto = {
     | 'ONE_HAND_BLACKJACK';
   player: string;
   username: string | null;
+  id: string;
   /**
    * @default 0
    */
@@ -213,6 +215,7 @@ export type LuckyWinsDto = {
     | 'ONE_HAND_BLACKJACK';
   player: string;
   username: string | null;
+  id: string;
   /**
    * @default 0
    */
@@ -330,6 +333,7 @@ export type LeaderboardVolumeObject = {
   bet: number;
   winRate: number;
   volume: number;
+  level: number;
 };
 
 export type LeaderboardVolumeResponse = {
@@ -345,6 +349,7 @@ export type LeaderboardProfitObject = {
   bet: number;
   winRate: number;
   profit: number;
+  level: number;
 };
 
 export type LeaderboardProfitResponse = {
@@ -357,6 +362,7 @@ export type LeaderboardLuckyWinnerObject = {
   player: string;
   profit: number;
   multiplier: number;
+  level: number;
   game:
     | 'COINFLIP'
     | 'RANGE'
@@ -406,6 +412,7 @@ export type LeaderboardBigWinsObject = {
     | 'HOLDEM_POKER'
     | 'WINR_BONANZA'
     | 'ONE_HAND_BLACKJACK';
+  level: number;
 };
 
 export type LeaderboardLossLegendsObject = {
@@ -416,12 +423,15 @@ export type LeaderboardLossLegendsObject = {
   winRate: number;
   volume: number;
   profit: number;
+  level: number;
 };
 
 export type LeaderboardLossLegendsResponse = {
   leaderboard: LeaderboardLossLegendsObject[];
   playerStats: LeaderboardLossLegendsObject;
 };
+
+export type WagerResponse = {};
 
 export type VaultOutput = {
   bankrollTokenAddress: string;
@@ -631,6 +641,8 @@ export type BridgeWithdrawDto = {
   amount: string;
 };
 
-export type BridgeHistoryDto = {
+export type BridgeHistoryResponse = {
   player: string;
+  amount: string;
+  status: string;
 };

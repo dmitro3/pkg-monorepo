@@ -9,7 +9,7 @@ import {
   AutoBetIncreaseOnWin,
   AutoBetStopGainFormField,
   AutoBetStopLossFormField,
-  AutoBetWagerFormField,
+  WagerFormField,
 } from '../../../../common/controller';
 import { PreBetButton } from '../../../../common/pre-bet-button';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
@@ -37,22 +37,24 @@ export const AutoController = ({
 
   return (
     <>
-      <AutoBetWagerFormField
+      <WagerFormField
         minWager={minWager}
         maxWager={maxWager}
         className="lg:!wr-mb-3"
         isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
       />
 
-      <AutoBetCountFormField
-        isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-      />
-      <AutoBetIncreaseOnWin
-        isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-      />
-      <AutoBetIncreaseOnLoss
-        isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-      />
+      <div className="wr-flex wr-gap-2 lg:wr-flex-col lg:wr-gap-0">
+        <AutoBetCountFormField
+          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+        />
+        <AutoBetIncreaseOnWin
+          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+        />
+        <AutoBetIncreaseOnLoss
+          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+        />
+      </div>
 
       <div className="wr-flex wr-gap-3">
         <AutoBetStopGainFormField

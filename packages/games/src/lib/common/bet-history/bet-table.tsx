@@ -1,4 +1,4 @@
-import { GameControllerBetHistoryResponse } from '@winrlabs/api';
+import { GameControllerGlobalBetHistoryResponse } from '@winrlabs/api';
 import dayjs from 'dayjs';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
@@ -39,18 +39,18 @@ const BetTable = ({
   betHistory,
   currencyList,
 }: {
-  betHistory: GameControllerBetHistoryResponse;
+  betHistory: GameControllerGlobalBetHistoryResponse;
   currencyList: BetHistoryCurrencyList;
 }) => {
   const isMobile = useMediaQuery('(max-width:1024px)');
-  const [items, setItems] = React.useState<GameControllerBetHistoryResponse['data']>([]);
+  const [items, setItems] = React.useState<GameControllerGlobalBetHistoryResponse>([]);
   const [isAnimating, setIsAnimating] = React.useState(false);
 
   React.useEffect(() => {
-    if (betHistory?.data && betHistory.data.length) updateItems(betHistory?.data || []);
-  }, [betHistory?.data]);
+    if (betHistory && betHistory?.length) updateItems(betHistory || []);
+  }, [betHistory]);
 
-  const updateItems = (newItems: GameControllerBetHistoryResponse['data']) => {
+  const updateItems = (newItems: GameControllerGlobalBetHistoryResponse) => {
     if (!newItems) return;
 
     const updatedItems = [...newItems.slice(0, 10)];
@@ -62,18 +62,18 @@ const BetTable = ({
     }, 500);
   };
 
+  console.log(betHistory, 'bethis');
+
   return (
     <>
       <AnimatePresence>
         <Table className="max-lg:wr-max-w-full max-md:wr-overflow-scroll max-md:wr-scrollbar-none wr-overflow-y-hidden wr-border-separate wr-border-spacing-x-0 wr-border-spacing-y-[6px]">
           <TableHeader className="wr-bg-zinc-900 wr-bg-opacity-70 wr-relative wr-z-10">
             <TableRow>
-              <TableHead className="wr-pl-4 wr-rounded-[9px_0_0_9px] wr-w-[50px] lg:wr-w-[150px] wr-text-left">
+              <TableHead className="wr-pl-4 wr-rounded-[9px_0_0_9px] wr-w-[50px] lg:wr-w-[200px] wr-text-left">
                 {isMobile ? 'TX' : 'Transaction'}
               </TableHead>
-              <TableHead className="wr-text-center lg:wr-text-left wr-table-cell lg:wr-hidden">
-                Game
-              </TableHead>
+              <TableHead className="wr-text-center lg:wr-text-left wr-table-cell">Game</TableHead>
               <TableHead className="wr-text-center lg:wr-text-left">Player</TableHead>
               <TableHead className="wr-hidden lg:wr-table-cell">Wager</TableHead>
               <TableHead className="wr-hidden lg:wr-table-cell">Multiplier</TableHead>
@@ -114,7 +114,7 @@ const BetTable = ({
                         </div>
                       </a>
                     </TableCell>
-                    <TableCell className="wr-text-center lg:wr-text-left wr-table-cell lg:wr-hidden">
+                    <TableCell className="wr-text-center lg:wr-text-left wr-table-cell">
                       {gameMap[bet.game]}
                     </TableCell>
                     <TableCell className="wr-text-center lg:wr-text-left">
@@ -125,7 +125,7 @@ const BetTable = ({
                           color: profileLevels[bet.level - 1]?.levelColor || 'inherit',
                         }}
                       >
-                        {bet.username.length > 41 ? shorter(bet.username, 2) : bet.username}
+                        {!bet.username ? shorter(bet.player, 2) : bet.username}
                       </a>
                     </TableCell>
                     <TableCell className="wr-hidden lg:wr-table-cell">

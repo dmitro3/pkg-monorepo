@@ -10,6 +10,7 @@ import { BetCountSlider } from './containers';
 import { StopGainLossInput } from './stop-gain-loss-input';
 import { WagerBalance, WagerCurrency, WagerInput, WagerSetterButtons } from './wager';
 import { IncreaseByInput } from './increase-by-input';
+import useMediaQuery from '../hooks/use-media-query';
 
 interface WagerFormFieldProps {
   customLabel?: string;
@@ -71,6 +72,7 @@ export const AutoBetCountFormField: React.FC<{
   maxValue?: number;
 }> = ({ isDisabled = false, maxValue = 100 }) => {
   const form = useFormContext();
+  const isMobile = useMediaQuery('(max-width:768px)');
 
   return (
     <>
@@ -79,9 +81,7 @@ export const AutoBetCountFormField: React.FC<{
         name="betCount"
         render={({ field }) => (
           <FormItem className={cn('wr-mb-3')}>
-            <FormLabel className={cn('wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6')}>
-              Number of Bets
-            </FormLabel>
+            <FormLabel>{isMobile ? '#' : 'Number'} of Bets</FormLabel>
 
             <FormControl>
               <div className="wr-relative wr-w-full">
@@ -177,6 +177,8 @@ export const AutoBetIncreaseOnWin = ({
   isDisabled?: boolean;
 }) => {
   const form = useFormContext();
+  const isMobile = useMediaQuery('(max-width:768px)');
+
   return (
     <FormField
       control={form.control}
@@ -186,14 +188,26 @@ export const AutoBetIncreaseOnWin = ({
           <FormLabel className={cn(labelClassName)}>On Win</FormLabel>
           <FormControl>
             <div className="wr-flex wr-w-full wr-bg-zinc-800 wr-rounded-md wr-py-0.5 wr-px-2 wr-pr-0.5 wr-items-center">
-              <span className="wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[120px]">
-                <img src={`${CDN_URL}/icons/icon-spin.svg`} width={22} height={22} />
-                Increase By:
+              <span
+                className={
+                  'wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[15px] md:wr-max-w-[120px]'
+                }
+              >
+                {!isMobile ? (
+                  <>
+                    <img src={`${CDN_URL}/icons/icon-spin.svg`} width={22} height={22} />
+                    Increase By:
+                  </>
+                ) : (
+                  '+'
+                )}
               </span>
               <IncreaseByInput
                 {...field}
+                minValue={-100}
+                maxValue={100}
                 isDisabled={isDisabled}
-                containerClassName={cn(inputContainerClassName)}
+                containerClassName={cn('wr-h-[36px] md:wr-h-[40px]', inputContainerClassName)}
                 className="wr-w-full wr-max-w-full"
               />
             </div>
@@ -215,6 +229,8 @@ export const AutoBetIncreaseOnLoss = ({
   isDisabled?: boolean;
 }) => {
   const form = useFormContext();
+  const isMobile = useMediaQuery('(max-width:768px)');
+
   return (
     <FormField
       control={form.control}
@@ -224,14 +240,26 @@ export const AutoBetIncreaseOnLoss = ({
           <FormLabel className={cn(labelClassName)}>On Loss</FormLabel>
           <FormControl>
             <div className="wr-flex wr-w-full wr-bg-zinc-800 wr-rounded-md wr-py-0.5 wr-px-2 wr-pr-0.5 wr-items-center">
-              <span className="wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[120px]">
-                <img src={`${CDN_URL}/icons/icon-spin.svg`} width={22} height={22} />
-                Increase By:
+              <span
+                className={
+                  'wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[15px] md:wr-max-w-[120px]'
+                }
+              >
+                {!isMobile ? (
+                  <>
+                    <img src={`${CDN_URL}/icons/icon-spin.svg`} width={22} height={22} />
+                    Increase By:
+                  </>
+                ) : (
+                  '+'
+                )}
               </span>
               <IncreaseByInput
                 {...field}
+                minValue={-100}
+                maxValue={100}
                 isDisabled={isDisabled}
-                containerClassName={cn(inputContainerClassName)}
+                containerClassName={cn('wr-h-[36px] md:wr-h-[40px]', inputContainerClassName)}
                 className="wr-w-full wr-max-w-full"
               />
             </div>
@@ -244,56 +272,6 @@ export const AutoBetIncreaseOnLoss = ({
 };
 
 export const WagerFormField: React.FC<WagerFormFieldProps> = ({
-  customLabel,
-  minWager,
-  maxWager,
-  isDisabled,
-  className,
-}) => {
-  const form = useFormContext();
-
-  return (
-    <FormField
-      control={form.control}
-      name="wager"
-      render={({ field }) => (
-        <FormItem className={cn(className, 'wr-mb-3 lg:wr-mb-6')}>
-          <FormLabel className={cn('wr-leading-4 wr-mb-3 lg:wr-mb-[6px] lg:wr-leading-6')}>
-            {customLabel ? customLabel : 'Wager'}
-            <div>
-              <WagerBalance maxWager={maxWager} className="wr-text-zinc-100" />
-              <WagerCurrency />
-            </div>
-          </FormLabel>
-
-          <FormControl>
-            <>
-              <WagerInput
-                {...field}
-                hasError={!!form.formState.errors.wager}
-                isDisabled={isDisabled}
-                minWager={minWager}
-                maxWager={maxWager}
-                form={form}
-              />
-              <WagerSetterButtons
-                className="wr-hidden lg:!wr-block"
-                isDisabled={isDisabled}
-                form={form}
-                minWager={minWager}
-                maxWager={maxWager}
-                currentWager={field.value}
-              />
-            </>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
-};
-
-export const AutoBetWagerFormField: React.FC<WagerFormFieldProps> = ({
   customLabel,
   minWager,
   maxWager,

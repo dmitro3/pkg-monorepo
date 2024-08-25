@@ -93,7 +93,7 @@ export const RangeGame = ({
             onAutoBetModeChange(false);
           }
         }
-      }, 150);
+      }, 250);
     }
   };
 

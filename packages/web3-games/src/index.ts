@@ -1,4 +1,3 @@
-export { default as BetHistory } from './components/bet-history';
 export { default as LiveResults } from './components/live-results';
 export { default as Web3GamesModals } from './components/web3-games-modals';
 export { default as BaccaratGame } from './games/baccarat';

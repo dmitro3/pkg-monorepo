@@ -1,6 +1,9 @@
 'use client';
 
-import { GameControllerBetHistoryResponse, useGameControllerBetHistory } from '@winrlabs/api';
+import {
+  GameControllerGlobalBetHistoryResponse,
+  useGameControllerGlobalBetHistory,
+} from '@winrlabs/api';
 import { GameType } from '@winrlabs/games';
 import { BetHistoryCurrencyList, BetHistoryFilter } from '@winrlabs/games';
 import { useCurrentAccount, useTokenStore } from '@winrlabs/web3';
@@ -21,11 +24,11 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
   const { address } = useCurrentAccount();
 
   const defaultParams = {
-    game: gameType,
     limit: 10,
     page: 1,
   };
-  const { data, isLoading, refetch } = useGameControllerBetHistory(
+
+  const { data, isLoading, refetch } = useGameControllerGlobalBetHistory(
     {
       queryParams:
         filter.type === 'player'
@@ -53,7 +56,7 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
   }, [tokens]);
 
   return {
-    betHistory: data as GameControllerBetHistoryResponse,
+    betHistory: data as GameControllerGlobalBetHistoryResponse,
     isHistoryLoading: isLoading,
     mapHistoryTokens: mapTokens,
     historyFilter: filter,

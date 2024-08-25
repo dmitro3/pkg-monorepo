@@ -1,5 +1,5 @@
 import * as Tabs from '@radix-ui/react-tabs';
-import { GameControllerBetHistoryResponse } from '@winrlabs/api';
+import { GameControllerGlobalBetHistoryResponse } from '@winrlabs/api';
 import React, { useEffect, useState } from 'react';
 
 import { Document, Person } from '../../svgs';
@@ -21,7 +21,7 @@ export type BetHistoryFilter = {
 };
 
 type BetHistoryTemplateProps = {
-  betHistory: GameControllerBetHistoryResponse;
+  betHistory: GameControllerGlobalBetHistoryResponse;
   loading?: boolean;
   onChangeFilter?: (filter: BetHistoryFilter) => void;
   currencyList: BetHistoryCurrencyList;

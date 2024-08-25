@@ -145,6 +145,54 @@ export const useGameControllerBetHistory = <TData = GameControllerBetHistoryResp
   });
 };
 
+export type GameControllerGlobalBetHistoryError = Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerGlobalBetHistoryResponse = Schemas.GameResultDto[];
+
+export type GameControllerGlobalBetHistoryVariables = ApiContext['fetcherOptions'];
+
+export const fetchGameControllerGlobalBetHistory = (
+  variables: GameControllerGlobalBetHistoryVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<
+    GameControllerGlobalBetHistoryResponse,
+    GameControllerGlobalBetHistoryError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: '/game/global-bet-history', method: 'get', ...variables, signal });
+
+export const useGameControllerGlobalBetHistory = <TData = GameControllerGlobalBetHistoryResponse,>(
+  variables: GameControllerGlobalBetHistoryVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GameControllerGlobalBetHistoryResponse,
+      GameControllerGlobalBetHistoryError,
+      TData
+    >,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    GameControllerGlobalBetHistoryResponse,
+    GameControllerGlobalBetHistoryError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: '/game/global-bet-history',
+      operationId: 'gameControllerGlobalBetHistory',
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerGlobalBetHistory({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type GameControllerGetChartQueryParams = {
   period: 'DAY' | 'WEEK' | 'MONTH' | 'UNRECOGNIZED';
 };
@@ -736,6 +784,42 @@ export const useGameControllerGetStatsByPlayer = <TData = Schemas.PlayerRankObje
   });
 };
 
+export type GameControllerSseLiveWinsError = Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerSseLiveWinsVariables = ApiContext['fetcherOptions'];
+
+export const fetchGameControllerSseLiveWins = (
+  variables: GameControllerSseLiveWinsVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<undefined, GameControllerSseLiveWinsError, undefined, {}, {}, {}>({
+    url: '/game/sse-live-wins',
+    method: 'get',
+    ...variables,
+    signal,
+  });
+
+export const useGameControllerSseLiveWins = <TData = undefined,>(
+  variables: GameControllerSseLiveWinsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<undefined, GameControllerSseLiveWinsError, TData>,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<undefined, GameControllerSseLiveWinsError, TData>({
+    queryKey: queryKeyFn({
+      path: '/game/sse-live-wins',
+      operationId: 'gameControllerSseLiveWins',
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerSseLiveWins({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type RefundControllerRefundGameError = Fetcher.ErrorWrapper<undefined>;
 
 export type RefundControllerRefundGameVariables = {
@@ -1319,6 +1403,54 @@ export const useBankrollControllerUpdateSingleSidedPoolsNotify = <TData = undefi
   );
 };
 
+export type BankrollControllerGetWagerInfoError = Fetcher.ErrorWrapper<undefined>;
+
+export type BankrollControllerGetWagerInfoResponse = Schemas.WagerResponse[];
+
+export type BankrollControllerGetWagerInfoVariables = ApiContext['fetcherOptions'];
+
+export const fetchBankrollControllerGetWagerInfo = (
+  variables: BankrollControllerGetWagerInfoVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<
+    BankrollControllerGetWagerInfoResponse,
+    BankrollControllerGetWagerInfoError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: '/bankroll/wager-info', method: 'get', ...variables, signal });
+
+export const useBankrollControllerGetWagerInfo = <TData = BankrollControllerGetWagerInfoResponse,>(
+  variables: BankrollControllerGetWagerInfoVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      BankrollControllerGetWagerInfoResponse,
+      BankrollControllerGetWagerInfoError,
+      TData
+    >,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    BankrollControllerGetWagerInfoResponse,
+    BankrollControllerGetWagerInfoError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: '/bankroll/wager-info',
+      operationId: 'bankrollControllerGetWagerInfo',
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchBankrollControllerGetWagerInfo({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type BankrollControllerGetSingleSidedPoolsQueryParams = {
   /**
    * comma separated
@@ -1886,10 +2018,16 @@ export const useBridgeControllerWithdraw = (
   });
 };
 
+export type BridgeControllerHistoryPathParams = {
+  player: string;
+};
+
 export type BridgeControllerHistoryError = Fetcher.ErrorWrapper<undefined>;
 
+export type BridgeControllerHistoryResponse = any[];
+
 export type BridgeControllerHistoryVariables = {
-  body: Schemas.BridgeHistoryDto;
+  pathParams: BridgeControllerHistoryPathParams;
 } & ApiContext['fetcherOptions'];
 
 export const fetchBridgeControllerHistory = (
@@ -1897,40 +2035,43 @@ export const fetchBridgeControllerHistory = (
   signal?: AbortSignal
 ) =>
   apiFetch<
-    Schemas.BridgeHistoryDto,
+    BridgeControllerHistoryResponse,
     BridgeControllerHistoryError,
-    Schemas.BridgeHistoryDto,
+    undefined,
     {},
     {},
-    {}
-  >({ url: '/history', method: 'post', ...variables, signal });
+    BridgeControllerHistoryPathParams
+  >({ url: '/history', method: 'get', ...variables, signal });
 
-export const useBridgeControllerHistory = (
+export const useBridgeControllerHistory = <TData = BridgeControllerHistoryResponse,>(
+  variables: BridgeControllerHistoryVariables,
   options?: Omit<
-    reactQuery.UseMutationOptions<
-      Schemas.BridgeHistoryDto,
+    reactQuery.UseQueryOptions<
+      BridgeControllerHistoryResponse,
       BridgeControllerHistoryError,
-      BridgeControllerHistoryVariables
+      TData
     >,
-    'mutationFn'
+    'queryKey' | 'queryFn' | 'initialData'
   >
 ) => {
-  const { fetcherOptions } = useApiContext();
-  return reactQuery.useMutation<
-    Schemas.BridgeHistoryDto,
-    BridgeControllerHistoryError,
-    BridgeControllerHistoryVariables
-  >({
-    mutationFn: (variables: BridgeControllerHistoryVariables) =>
-      fetchBridgeControllerHistory({ ...fetcherOptions, ...variables }),
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<BridgeControllerHistoryResponse, BridgeControllerHistoryError, TData>({
+    queryKey: queryKeyFn({ path: '/history', operationId: 'bridgeControllerHistory', variables }),
+    queryFn: ({ signal }) =>
+      fetchBridgeControllerHistory({ ...fetcherOptions, ...variables }, signal),
     ...options,
+    ...queryOptions,
   });
+};
+
+export type BridgeControllerLatestPathParams = {
+  player: string;
 };
 
 export type BridgeControllerLatestError = Fetcher.ErrorWrapper<undefined>;
 
 export type BridgeControllerLatestVariables = {
-  body: Schemas.BridgeHistoryDto;
+  pathParams: BridgeControllerLatestPathParams;
 } & ApiContext['fetcherOptions'];
 
 export const fetchBridgeControllerLatest = (
@@ -1938,33 +2079,28 @@ export const fetchBridgeControllerLatest = (
   signal?: AbortSignal
 ) =>
   apiFetch<
-    Schemas.BridgeHistoryDto,
+    Schemas.BridgeHistoryResponse,
     BridgeControllerLatestError,
-    Schemas.BridgeHistoryDto,
+    undefined,
     {},
     {},
-    {}
-  >({ url: '/latest', method: 'post', ...variables, signal });
+    BridgeControllerLatestPathParams
+  >({ url: '/latest', method: 'get', ...variables, signal });
 
-export const useBridgeControllerLatest = (
+export const useBridgeControllerLatest = <TData = Schemas.BridgeHistoryResponse,>(
+  variables: BridgeControllerLatestVariables,
   options?: Omit<
-    reactQuery.UseMutationOptions<
-      Schemas.BridgeHistoryDto,
-      BridgeControllerLatestError,
-      BridgeControllerLatestVariables
-    >,
-    'mutationFn'
+    reactQuery.UseQueryOptions<Schemas.BridgeHistoryResponse, BridgeControllerLatestError, TData>,
+    'queryKey' | 'queryFn' | 'initialData'
   >
 ) => {
-  const { fetcherOptions } = useApiContext();
-  return reactQuery.useMutation<
-    Schemas.BridgeHistoryDto,
-    BridgeControllerLatestError,
-    BridgeControllerLatestVariables
-  >({
-    mutationFn: (variables: BridgeControllerLatestVariables) =>
-      fetchBridgeControllerLatest({ ...fetcherOptions, ...variables }),
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<Schemas.BridgeHistoryResponse, BridgeControllerLatestError, TData>({
+    queryKey: queryKeyFn({ path: '/latest', operationId: 'bridgeControllerLatest', variables }),
+    queryFn: ({ signal }) =>
+      fetchBridgeControllerLatest({ ...fetcherOptions, ...variables }, signal),
     ...options,
+    ...queryOptions,
   });
 };
 
@@ -1978,6 +2114,11 @@ export type QueryOperation =
       path: '/game/bet-history';
       operationId: 'gameControllerBetHistory';
       variables: GameControllerBetHistoryVariables;
+    }
+  | {
+      path: '/game/global-bet-history';
+      operationId: 'gameControllerGlobalBetHistory';
+      variables: GameControllerGlobalBetHistoryVariables;
     }
   | {
       path: '/game/chart';
@@ -2030,6 +2171,11 @@ export type QueryOperation =
       variables: GameControllerGetStatsByPlayerVariables;
     }
   | {
+      path: '/game/sse-live-wins';
+      operationId: 'gameControllerSseLiveWins';
+      variables: GameControllerSseLiveWinsVariables;
+    }
+  | {
       path: '/statistic/stats';
       operationId: 'statisticControllerGetStats';
       variables: StatisticControllerGetStatsVariables;
@@ -2075,6 +2221,11 @@ export type QueryOperation =
       variables: BankrollControllerUpdateSingleSidedPoolsNotifyVariables;
     }
   | {
+      path: '/bankroll/wager-info';
+      operationId: 'bankrollControllerGetWagerInfo';
+      variables: BankrollControllerGetWagerInfoVariables;
+    }
+  | {
       path: '/bankroll/single-sided-pools';
       operationId: 'bankrollControllerGetSingleSidedPools';
       variables: BankrollControllerGetSingleSidedPoolsVariables;
@@ -2103,4 +2254,14 @@ export type QueryOperation =
       path: '/stake/summary';
       operationId: 'stakeControllerSummary';
       variables: StakeControllerSummaryVariables;
+    }
+  | {
+      path: '/history';
+      operationId: 'bridgeControllerHistory';
+      variables: BridgeControllerHistoryVariables;
+    }
+  | {
+      path: '/latest';
+      operationId: 'bridgeControllerLatest';
+      variables: BridgeControllerLatestVariables;
     };
