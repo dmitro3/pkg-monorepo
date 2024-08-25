@@ -40,6 +40,7 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
     },
     {
       enabled: options?.enabled,
+      refetchInterval: 7500,
     }
   );
 

@@ -62,8 +62,6 @@ const BetTable = ({
     }, 500);
   };
 
-  console.log(betHistory, 'bethis');
-
   return (
     <>
       <AnimatePresence>
