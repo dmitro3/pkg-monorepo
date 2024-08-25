@@ -8,7 +8,6 @@ export type CoinFlipGameProps = React.ComponentProps<'div'> & {
   gameResults: CoinFlipGameResult[];
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
-  onAnimationSkipped?: (result: CoinFlipGameResult[]) => void;
 };
 
 export const CoinFlipGame = ({ gameResults, children }: CoinFlipGameProps) => {

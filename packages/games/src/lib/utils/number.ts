@@ -19,3 +19,10 @@ export const numberShorter = (num: number): string => {
     return num.toString();
   }
 };
+
+export function parseToBigInt(floatValue: number, precision: number) {
+  const scaledValue = floatValue * Math.pow(10, precision);
+  const integerValue = Math.round(scaledValue);
+
+  return BigInt(integerValue);
+}

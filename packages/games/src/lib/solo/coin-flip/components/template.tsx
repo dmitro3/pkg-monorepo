@@ -1,15 +1,17 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import debounce from 'debounce';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
 import { GameContainer, SceneContainer } from '../../../common/containers';
+import { useGameOptions } from '../../../game-provider';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { cn } from '../../../utils/style';
-import { CoinFlip, CoinFlipFormFields } from '..';
+import { CoinFlip, CoinFlipFormFields, CoinFlipGameResult } from '..';
 import { CoinSide, MAX_BET_COUNT, MIN_BET_COUNT, WIN_MULTIPLIER } from '../constants';
 import { BetController } from './bet-controller';
 import { CoinFlipGameProps } from './game';
@@ -31,6 +33,9 @@ type TemplateProps = CoinFlipGameProps & {
 
 const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
+  const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
+  const { account } = useGameOptions();
+  const balanceAsDollar = account?.balanceAsDollar || 0;
 
   const formSchema = z.object({
     wager: z
@@ -43,12 +48,14 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       }),
     betCount: z
       .number()
-      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 1' })
+      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 0' })
       .max(MAX_BET_COUNT, {
         message: 'Maximum bet count is 100',
       }),
     stopGain: z.number(),
     stopLoss: z.number(),
+    increaseOnWin: z.number(),
+    increaseOnLoss: z.number(),
     coinSide: z.nativeEnum(CoinSide),
   });
 
@@ -59,22 +66,59 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
     mode: 'onSubmit',
     defaultValues: {
       wager: props?.minWager || 1,
-      betCount: 1,
+      betCount: 0,
       stopGain: 0,
       stopLoss: 0,
+      increaseOnWin: 0,
+      increaseOnLoss: 0,
       coinSide: CoinSide.HEADS,
     },
   });
 
   React.useEffect(() => {
-    const debouncedCb = debounce((formFields) => {
+    const cb = (formFields: any) => {
       props?.onFormChange && props.onFormChange(formFields);
-    }, 400);
+    };
 
-    const subscription = form.watch(debouncedCb);
+    const subscription = form.watch(cb);
 
     return () => subscription.unsubscribe();
   }, [form.watch]);
+
+  // strategy
+  const wager = form.watch('wager');
+  const increasePercentageOnWin = form.watch('increaseOnWin');
+  const increasePercentageOnLoss = form.watch('increaseOnLoss');
+  const stopProfit = form.watch('stopGain');
+  const stopLoss = form.watch('stopLoss');
+
+  const strategist = useStrategist({
+    wager,
+    increasePercentageOnLoss,
+    increasePercentageOnWin,
+    stopLoss,
+    stopProfit,
+  });
+
+  const processStrategy = (result: CoinFlipGameResult[]) => {
+    const payout = result[0]?.payoutInUsd || 0;
+    console.log(result, 'result');
+    const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
+    const newWager = Number(p.wager) / 1e8;
+    if (p.action && !p.action.isStop()) {
+      form.setValue('wager', newWager);
+    }
+
+    if (p.action && p.action.isStop()) {
+      setIsAutoBetMode(false);
+      return;
+    }
+
+    if (newWager < (props.minWager || 0) || balanceAsDollar < newWager) {
+      setIsAutoBetMode(false);
+      return;
+    }
+  };
 
   return (
     <Form {...form}>
@@ -84,7 +128,8 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
             minWager={props.minWager || 1}
             maxWager={props.maxWager || 2000}
             winMultiplier={WIN_MULTIPLIER}
-            isGettingResults={props.isGettingResult}
+            isAutoBetMode={isAutoBetMode}
+            onAutoBetModeChange={setIsAutoBetMode}
           />
           <SceneContainer
             className={cn(
@@ -97,7 +142,12 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
             <CoinFlip.Body>
               <CoinFlip.Game {...props}>
                 <CoinFlip.LastBets />
-                <CoinFlip.Coin {...props} />
+                <CoinFlip.Coin
+                  {...props}
+                  processStrategy={processStrategy}
+                  isAutoBetMode={isAutoBetMode}
+                  onAutoBetModeChange={setIsAutoBetMode}
+                />
               </CoinFlip.Game>
             </CoinFlip.Body>
           </SceneContainer>

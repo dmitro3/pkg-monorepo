@@ -47,7 +47,6 @@ interface TemplateWithWeb3Props extends BaseGameProps {
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
-  onAnimationSkipped?: (result: CoinFlipGameResult[]) => void;
   onPlayerStatusUpdate?: (d: {
     type: 'levelUp' | 'badgeUp';
     awardBadges: Badge[] | undefined;
@@ -83,7 +82,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [formValues, setFormValues] = useState<CoinFlipFormFields>({
-    betCount: 1,
+    betCount: 0,
     coinSide: CoinSide.HEADS,
     stopGain: 0,
     stopLoss: 0,
@@ -148,13 +147,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
         { name: 'count', type: 'uint8' },
         { name: 'data', type: 'bytes' },
       ],
-      [
-        wagerInWei,
-        stopGainInWei as bigint,
-        stopLossInWei as bigint,
-        formValues.betCount,
-        encodedChoice,
-      ]
+      [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
@@ -175,7 +168,6 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       encodedTxData: encodedData,
     };
   }, [
-    formValues.betCount,
     formValues.coinSide,
     formValues.stopGain,
     formValues.stopLoss,
@@ -243,7 +235,6 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       setCoinFlipResult(finalResult);
       updateGame({
         wager: formValues.wager || 0,
-        betCount: formValues.betCount || 0,
       });
       setIsLoading(false);
     }
@@ -263,7 +254,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     refetchPlayerGameStatus();
     updateBalances();
 
-    const totalWager = formValues.wager * formValues.betCount;
+    const totalWager = formValues.wager;
     const totalPayout = result.reduce((acc, cur) => acc + cur.payoutInUsd, 0);
     handleGetBadges({ totalWager, totalPayout });
   };
@@ -284,19 +275,6 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     [coinFlipResult]
   );
 
-  const onAnimationSkipped = React.useCallback(
-    (result: CoinFlipGameResult[]) => {
-      onGameCompleted(result);
-      skipAll(
-        result.map((value) => ({
-          won: value.payout > 0,
-          payout: value.payoutInUsd,
-        }))
-      );
-    },
-    [coinFlipResult]
-  );
-
   return (
     <>
       <CoinFlipTemplate
@@ -309,7 +287,6 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
           setFormValues(val);
         }}
         onAnimationStep={onAnimationStep}
-        onAnimationSkipped={onAnimationSkipped}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate
