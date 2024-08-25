@@ -41,6 +41,7 @@ export const RangeGame = ({
   const form = useFormContext() as DiceForm;
   const betCount = form.watch('betCount');
   const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const isAutoBetModeRef = React.useRef<boolean>();
 
   const {
     diceGameResults,
@@ -81,7 +82,7 @@ export const RangeGame = ({
     if (isAnimationFinished) {
       timeoutRef.current = setTimeout(() => {
         onAnimationCompleted(diceGameResults);
-        if (isAutoBetMode) {
+        if (isAutoBetModeRef.current) {
           const newBetCount = betCount - 1;
 
           betCount !== 0 && form.setValue('betCount', betCount - 1);
@@ -120,6 +121,7 @@ export const RangeGame = ({
   }, [diceGameResults]);
 
   React.useEffect(() => {
+    isAutoBetModeRef.current = isAutoBetMode;
     if (!isAutoBetMode) clearTimeout(timeoutRef.current);
   }, [isAutoBetMode]);
 

@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -11,7 +9,8 @@ import { Button } from '../../../../ui/button';
 import { FormLabel } from '../../../../ui/form';
 import { cn } from '../../../../utils/style';
 import { toDecimals, toFormatted } from '../../../../utils/web3';
-import { DiceForm } from '../../types';
+import { CoinFlipForm } from '../../types';
+import { CoinFlipController } from './controller';
 
 interface ManualControllerProps {
   winMultiplier: number;
@@ -20,7 +19,7 @@ interface ManualControllerProps {
 }
 
 export const ManualController = ({ winMultiplier, minWager, maxWager }: ManualControllerProps) => {
-  const form = useFormContext() as DiceForm;
+  const form = useFormContext() as CoinFlipForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   const maxPayout = React.useMemo(() => {
@@ -32,12 +31,13 @@ export const ManualController = ({ winMultiplier, minWager, maxWager }: ManualCo
   return (
     <>
       <WagerFormField minWager={minWager} maxWager={maxWager} />
-      <div className="wr-mb-6 lg:!wr-grid wr-grid-cols-2 wr-gap-2 wr-hidden">
+      <CoinFlipController />
+      <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
         <div>
           <FormLabel>Max Payout</FormLabel>
           <div
             className={cn(
-              'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
+              'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
             )}
           >
             <WagerCurrencyIcon />

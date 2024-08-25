@@ -15,7 +15,8 @@ import { PreBetButton } from '../../../../common/pre-bet-button';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import { Button } from '../../../../ui/button';
 import { cn } from '../../../../utils/style';
-import { DiceForm } from '../../types';
+import { CoinFlipForm } from '../../types';
+import { CoinFlipController } from './controller';
 
 interface AutoControllerProps {
   winMultiplier: number;
@@ -32,7 +33,7 @@ export const AutoController = ({
   isAutoBetMode,
   onAutoBetModeChange,
 }: AutoControllerProps) => {
-  const form = useFormContext() as DiceForm;
+  const form = useFormContext() as CoinFlipForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   return (
@@ -43,6 +44,8 @@ export const AutoController = ({
         className="wr-order-0 lg:!wr-mb-3"
         isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
       />
+
+      <CoinFlipController className="wr-mb-3" />
 
       <div className="wr-order-2 lg:wr-order-none wr-flex wr-gap-2 lg:wr-flex-col lg:wr-gap-0">
         <AutoBetCountFormField

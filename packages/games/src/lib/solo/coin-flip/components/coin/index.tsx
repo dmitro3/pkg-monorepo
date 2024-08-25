@@ -2,7 +2,6 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { useGameSkip } from '../../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import useMediaQuery from '../../../../hooks/use-media-query';
 import { cn } from '../../../../utils/style';
@@ -15,12 +14,15 @@ import CoinConfetti from './lottie/coins-confetti.json';
 export const Coin: React.FC<CoinProps> = ({
   width,
   height,
+  isAutoBetMode,
+  onAutoBetModeChange,
+  processStrategy,
+  onSubmitGameForm,
   onAnimationCompleted,
   onAnimationStep,
-  onAnimationSkipped = () => {},
 }) => {
   const isMobile = useMediaQuery('(max-width:768px)');
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const isAutoBetModeRef = React.useRef<boolean>();
 
   const [coinRotate] = useState<CoinRotate>(new CoinRotate());
   const handleLoad = (canvas: CoinCanvas) => {
@@ -37,26 +39,19 @@ export const Coin: React.FC<CoinProps> = ({
     updateCoinFlipGameResults,
     updateGameStatus,
     addLastBet,
-    updateLastBets,
   } = useCoinFlipGameStore([
     'gameStatus',
     'coinFlipGameResults',
     'updateCoinFlipGameResults',
     'updateGameStatus',
     'addLastBet',
-    'updateLastBets',
     'lastBets',
   ]);
 
   const form = useFormContext() as CoinFlipForm;
-
   const coinSide = form.watch('coinSide');
-
+  const betCount = form.watch('betCount');
   const lottieRef = React.useRef<any>(null);
-
-  const skipRef = React.useRef<boolean>(false);
-
-  const { isAnimationSkipped } = useGameSkip();
 
   React.useEffect(() => {
     if (coinFlipGameResults.length == 0) return;
@@ -65,9 +60,10 @@ export const Coin: React.FC<CoinProps> = ({
       const side = Number(coinFlipGameResults[i]?.coinSide) || 0;
       const payout = coinFlipGameResults[i]?.payout || 0;
       const payoutInUsd = coinFlipGameResults[i]?.payoutInUsd || 0;
+      processStrategy(coinFlipGameResults);
       flipEffect.play();
 
-      coinRotate.finish(side, 750).then(() => {
+      coinRotate.finish(side, 500).then(() => {
         const curr = i + 1;
 
         onAnimationStep && onAnimationStep(curr);
@@ -83,43 +79,37 @@ export const Coin: React.FC<CoinProps> = ({
           winEffect.play();
         }
 
-        if (skipRef.current) {
-          onSkip();
-        } else if (coinFlipGameResults.length === curr) {
+        if (coinFlipGameResults.length === curr) {
           updateCoinFlipGameResults([]);
           onAnimationCompleted && onAnimationCompleted(coinFlipGameResults);
 
-          const delay =
-            coinFlipGameResults[coinFlipGameResults.length - 1]?.coinSide == coinSide ? 400 : 0;
+          updateGameStatus('ENDED');
+          if (isAutoBetModeRef.current) {
+            const newBetCount = betCount - 1;
 
-          setTimeout(() => updateGameStatus('ENDED'), delay);
-        } else {
-          timeoutRef.current = setTimeout(() => turn(curr), 350);
+            betCount !== 0 && form.setValue('betCount', betCount - 1);
+
+            if (betCount >= 0 && newBetCount != 0) {
+              onSubmitGameForm(form.getValues());
+            } else {
+              console.log('auto bet finished!');
+              onAutoBetModeChange(false);
+            }
+          }
         }
       });
     };
 
     turn();
-
-    return () => {
-      clearTimeout(timeoutRef.current);
-    };
   }, [coinFlipGameResults]);
-
-  const onSkip = () => {
-    updateLastBets(coinFlipGameResults);
-    updateCoinFlipGameResults([]);
-    onAnimationSkipped(coinFlipGameResults);
-    setTimeout(() => updateGameStatus('ENDED'), 50);
-  };
 
   useEffect(() => {
     coinRotate.flipTo(coinSide, 1000);
   }, [coinSide]);
 
-  useEffect(() => {
-    skipRef.current = isAnimationSkipped;
-  }, [isAnimationSkipped]);
+  React.useEffect(() => {
+    isAutoBetModeRef.current = isAutoBetMode;
+  }, [isAutoBetMode]);
 
   return (
     <>

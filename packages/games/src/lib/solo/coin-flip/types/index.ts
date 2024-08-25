@@ -28,9 +28,12 @@ export interface CoinCanvasProps {
 export interface CoinProps {
   width?: number;
   height?: number;
+  isAutoBetMode: boolean;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: CoinFlipGameResult[]) => void;
+  onSubmitGameForm: (data: CoinFlipFormFields) => void;
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: CoinFlipGameResult[]) => void;
-  onAnimationSkipped?: (result: CoinFlipGameResult[]) => void;
 }
 
 export interface CoinSpeedArgs {

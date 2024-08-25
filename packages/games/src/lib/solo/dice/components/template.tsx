@@ -8,10 +8,9 @@ import z from 'zod';
 import { cn } from '../../../../lib/utils/style';
 import { GameContainer, SceneContainer } from '../../../common/containers';
 import { useGameOptions } from '../../../game-provider';
-import * as Strategist from '../../../strategist';
-import * as Action from '../../../strategist/items/action';
-import * as Profit from '../../../strategist/items/profit';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { toDecimals } from '../../../utils/web3';
 import { LUCK_MULTIPLIER, MAX_BET_COUNT, MAX_VALUE, MIN_BET_COUNT, MIN_VALUE } from '../constant';
 import { Dice } from '../index';
@@ -19,13 +18,6 @@ import { DiceFormFields, DiceGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RangeGameProps } from './game';
 import { SliderTrackOptions } from './slider';
-
-function parseToBigInt(floatValue: number, precision: number) {
-  const scaledValue = floatValue * Math.pow(10, precision);
-  const integerValue = Math.round(scaledValue);
-
-  return BigInt(integerValue);
-}
 
 type TemplateOptions = {
   slider?: {
@@ -67,7 +59,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
       }),
     betCount: z
       .number()
-      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 1' })
+      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 0' })
       .max(MAX_BET_COUNT, {
         message: 'Maximum bet count is 100',
       }),
@@ -121,95 +113,13 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
   const stopProfit = form.watch('stopGain');
   const stopLoss = form.watch('stopLoss');
 
-  const strategist = React.useMemo(() => {
-    const stopStrategyItems = [];
-    // stop action and conditions
-    const stopOnProfitCondition = Profit.toCondition({
-      type: Profit.ProfitType.Profit,
-      term: Profit.ProfitTerm.GreaterThanOrEqualTo,
-      amount: parseToBigInt(stopProfit, 8),
-    });
-
-    const stopOnLossCondition = Profit.toCondition({
-      type: Profit.ProfitType.Lost,
-      term: Profit.ProfitTerm.GreaterThan,
-      amount: parseToBigInt(stopLoss, 8),
-    });
-
-    const stopAction = Action.toAction({
-      amount: 0n,
-      option: Action.Option.Stop,
-    });
-
-    stopProfit > 0 &&
-      stopStrategyItems.push({
-        condition: stopOnProfitCondition,
-        action: stopAction,
-      });
-    stopLoss > 0 &&
-      stopStrategyItems.push({
-        condition: stopOnLossCondition,
-        action: stopAction,
-      });
-
-    // profit on win condition and action
-    const profitOnWin = Profit.toCondition({
-      type: Profit.ProfitType.Profit,
-      term: Profit.ProfitTerm.GreaterThan,
-      amount: 0n,
-    });
-    const profitOnWinAction = Action.toAction({
-      amount: parseToBigInt(
-        increasePercentageOnWin < 0 ? increasePercentageOnWin * -1 : increasePercentageOnWin,
-        6
-      ),
-      option:
-        increasePercentageOnWin < 0
-          ? Action.Option.DecreaseByPercentage
-          : Action.Option.IncreaseByPercentage,
-    });
-
-    // profit on loss condition and action
-    const profitOnLoss = Profit.toCondition({
-      type: Profit.ProfitType.Lost,
-      term: Profit.ProfitTerm.GreaterThan,
-      amount: 0n,
-    });
-
-    const profitOnLossAction = Action.toAction({
-      amount: parseToBigInt(
-        increasePercentageOnLoss < 0 ? increasePercentageOnLoss * -1 : increasePercentageOnLoss,
-        6
-      ),
-      option:
-        increasePercentageOnLoss < 0
-          ? Action.Option.DecreaseByPercentage
-          : Action.Option.IncreaseByPercentage,
-    });
-
-    return Strategist.load({
-      items: [
-        ...stopStrategyItems,
-        {
-          condition: profitOnWin,
-          action: profitOnWinAction,
-        },
-        {
-          condition: profitOnLoss,
-          action: profitOnLossAction,
-        },
-      ],
-      wager: parseToBigInt(wager, 8),
-      balance: parseToBigInt(balanceAsDollar, 8),
-    });
-  }, [
-    increasePercentageOnWin,
-    increasePercentageOnLoss,
+  const strategist = useStrategist({
     wager,
-    balanceAsDollar,
-    stopProfit,
+    increasePercentageOnLoss,
+    increasePercentageOnWin,
     stopLoss,
-  ]);
+    stopProfit,
+  });
 
   const processStrategy = (result: DiceGameResult[]) => {
     const payout = result[0]?.payoutInUsd || 0;
