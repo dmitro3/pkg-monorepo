@@ -87,8 +87,7 @@ export const AutoController = ({
           size={'xl'}
           onClick={() => {
             clickEffect.play();
-            if (!isAutoBetMode) onAutoBetModeChange(true);
-            if (isAutoBetMode) onAutoBetModeChange(false);
+            onAutoBetModeChange(!isAutoBetMode);
           }}
         >
           {isAutoBetMode ? 'Stop Autobet' : 'Start Autobet'}
