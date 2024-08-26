@@ -1,11 +1,11 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
-import { SimpleAccountAPI } from '../../smart-wallet';
-import { Address, Hex } from 'viem';
-import { useBundlerClient, WinrBundlerClient } from '../use-bundler-client';
-import { useSmartAccountApi } from '../use-smart-account-api';
+import { Hex } from 'viem';
+
 import { MutationHook } from '../../utils/types';
+import { useBundlerClient } from '../use-bundler-client';
+import { useSmartAccountApi } from '../use-smart-account-api';
 import {
   AccountApiNotFoundError,
   BundlerClientNotFoundError,
@@ -14,7 +14,7 @@ import {
 } from './error';
 import { CreateUserOpRequest, SocialAccountTxRequest } from './types';
 
-export const createUserOp = async (request: CreateUserOpRequest) => {
+export const createUserOperation = async (request: CreateUserOpRequest) => {
   const { target, encodedData, accountApi, value } = request;
   if (!accountApi) {
     throw new AccountApiNotFoundError();
@@ -47,7 +47,7 @@ export const useSocialAccountTx: MutationHook<
         throw new BundlerClientNotFoundError();
       }
 
-      const userOp = await createUserOp({
+      const userOp = await createUserOperation({
         target: request.target!,
         encodedData: request.encodedTxData!,
         accountApi,

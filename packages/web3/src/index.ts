@@ -2,6 +2,8 @@
 
 export * from './abis';
 export * from './config/smart-wallet-connectors';
+export * from './hooks/session';
+export * from './hooks/transaction';
 export * from './hooks/use-bundler-client';
 export * from './hooks/use-current-address';
 export * from './hooks/use-fast-or-verified';
@@ -9,7 +11,6 @@ export * from './hooks/use-game-strategy';
 export * from './hooks/use-handle-tx';
 export * from './hooks/use-handle-tx-uncached';
 export * from './hooks/use-price-feed';
-export * from './hooks/session/use-session';
 export * from './hooks/use-smart-account-api';
 export * from './hooks/use-token-allowance';
 export * from './hooks/use-token-balances';
