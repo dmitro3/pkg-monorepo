@@ -48,7 +48,6 @@ interface TemplateWithWeb3Props extends BaseGameProps {
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: LimboGameResult[]) => void;
-  onAnimationSkipped?: (result: LimboGameResult[]) => void;
   onPlayerStatusUpdate?: (d: {
     type: 'levelUp' | 'badgeUp';
     awardBadges: Badge[] | undefined;
@@ -69,10 +68,12 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     });
 
   const [formValues, setFormValues] = useState<LimboFormField>({
-    betCount: 1,
+    betCount: 0,
     limboMultiplier: 1.1,
     stopGain: 0,
     stopLoss: 0,
+    increaseOnLoss: 0,
+    increaseOnWin: 0,
     wager: props?.minWager || 1,
   });
 
@@ -145,13 +146,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
         { name: 'count', type: 'uint8' },
         { name: 'data', type: 'bytes' },
       ],
-      [
-        wagerInWei,
-        stopGainInWei as bigint,
-        stopLossInWei as bigint,
-        formValues.betCount,
-        encodedChoice,
-      ]
+      [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
@@ -172,7 +167,6 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
       encodedTxData: encodedData,
     };
   }, [
-    formValues.betCount,
     formValues.limboMultiplier,
     formValues.stopGain,
     formValues.stopLoss,
@@ -235,7 +229,6 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
       setLimboResult(finalResult);
       updateGame({
         wager: formValues.wager || 0,
-        betCount: formValues.betCount || 0,
       });
     }
   }, [gameEvent]);
@@ -258,7 +251,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     refetchPlayerGameStatus();
     updateBalances();
 
-    const totalWager = formValues.wager * formValues.betCount;
+    const totalWager = formValues.wager;
     const totalPayout = result.reduce((acc, cur) => acc + cur.payoutInUsd, 0);
     handleGetBadges({ totalWager, totalPayout });
   };
@@ -279,19 +272,6 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     [limboResult]
   );
 
-  const onAnimationSkipped = React.useCallback(
-    (result: LimboGameResult[]) => {
-      onGameCompleted(result);
-      skipAll(
-        result.map((value) => ({
-          won: value.payout > 0,
-          payout: value.payoutInUsd,
-        }))
-      );
-    },
-    [limboResult]
-  );
-
   return (
     <>
       <LimboTemplate
@@ -300,7 +280,6 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
         gameResults={limboSteps}
         onAnimationCompleted={onGameCompleted}
         onAnimationStep={onAnimationStep}
-        onAnimationSkipped={onAnimationSkipped}
         onFormChange={(val) => {
           setFormValues(val);
         }}

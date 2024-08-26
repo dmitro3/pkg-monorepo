@@ -6,9 +6,12 @@ import z from 'zod';
 
 import { GameContainer, SceneContainer } from '../../../common/containers';
 import { Form } from '../../../ui/form';
-import { Limbo, LimboFormField } from '..';
+import { Limbo, LimboFormField, LimboGameResult } from '..';
 import { BetController } from './bet-controller';
 import { LimboGameProps } from './game';
+import { useStrategist } from '../../../hooks/use-strategist';
+import { parseToBigInt } from '../../../utils/number';
+import { useGameOptions } from '../../../game-provider';
 
 type TemplateOptions = {
   scene?: {};
@@ -23,6 +26,10 @@ type TemplateProps = LimboGameProps & {
 };
 
 const LimboTemplate = ({ ...props }: TemplateProps) => {
+  const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
+  const { account } = useGameOptions();
+  const balanceAsDollar = account?.balanceAsDollar || 0;
+
   const formSchema = z.object({
     wager: z
       .number()
@@ -32,11 +39,11 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
       .max(props?.maxWager || 2000, {
         message: `Maximum wager is ${props?.maxWager}`,
       }),
-    betCount: z.number().min(1, { message: 'Minimum bet count is 1' }).max(100, {
-      message: 'Maximum bet count is 100',
-    }),
+    betCount: z.number().min(0, { message: 'Minimum bet count is 0' }),
     stopGain: z.number(),
     stopLoss: z.number(),
+    increaseOnWin: z.number(),
+    increaseOnLoss: z.number(),
     limboMultiplier: z.number().min(1.1).max(100),
   });
 
@@ -47,9 +54,11 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
     mode: 'all',
     defaultValues: {
       wager: props?.minWager || 1,
-      betCount: 1,
+      betCount: 0,
       stopGain: 0,
       stopLoss: 0,
+      increaseOnWin: 0,
+      increaseOnLoss: 0,
       limboMultiplier: 1.1,
     },
   });
@@ -57,14 +66,53 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
   const multiplier = form.watch('limboMultiplier');
 
   React.useEffect(() => {
-    const debouncedCb = debounce((formFields) => {
+    const cb = (formFields: any) => {
       props?.onFormChange && props.onFormChange(formFields);
-    }, 400);
+    };
 
-    const subscription = form.watch(debouncedCb);
+    const subscription = form.watch(cb);
 
     return () => subscription.unsubscribe();
   }, [form.watch]);
+
+  // strategy
+  const wager = form.watch('wager');
+  const increasePercentageOnWin = form.watch('increaseOnWin');
+  const increasePercentageOnLoss = form.watch('increaseOnLoss');
+  const stopProfit = form.watch('stopGain');
+  const stopLoss = form.watch('stopLoss');
+
+  const strategist = useStrategist({
+    wager,
+    increasePercentageOnLoss,
+    increasePercentageOnWin,
+    stopLoss,
+    stopProfit,
+  });
+
+  const processStrategy = (result: LimboGameResult[]) => {
+    const payout = result[0]?.payoutInUsd || 0;
+    console.log(result, 'result');
+    const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
+    const newWager = Number(p.wager) / 1e8;
+    if (p.action && !p.action.isStop()) {
+      form.setValue('wager', newWager);
+    }
+
+    if (p.action && p.action.isStop()) {
+      setIsAutoBetMode(false);
+      return;
+    }
+
+    if (
+      newWager < (props.minWager || 0) ||
+      balanceAsDollar < newWager ||
+      newWager > (props.maxWager || 0)
+    ) {
+      setIsAutoBetMode(false);
+      return;
+    }
+  };
 
   return (
     <Form {...form}>
@@ -74,10 +122,17 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
             maxWager={props?.maxWager || 2000}
             minWager={props?.minWager || 1}
             winMultiplier={multiplier}
+            isAutoBetMode={isAutoBetMode}
+            onAutoBetModeChange={setIsAutoBetMode}
           />
-          <SceneContainer className="md:wr-h-[640px] wr-h-[200px] wr-overflow-hidden  !wr-p-0">
+          <SceneContainer className="md:wr-h-[640px] wr-h-[200px] wr-overflow-hidden !wr-p-0">
             <Limbo.Game {...props}>
-              <Limbo.GameArea {...props}>
+              <Limbo.GameArea
+                {...props}
+                processStrategy={processStrategy}
+                isAutoBetMode={isAutoBetMode}
+                onAutoBetModeChange={setIsAutoBetMode}
+              >
                 <Limbo.LastBets />
                 <Limbo.Result />
               </Limbo.GameArea>

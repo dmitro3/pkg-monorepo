@@ -10,6 +10,8 @@ export interface LimboFormField {
   wager: number;
   stopGain: number;
   stopLoss: number;
+  increaseOnWin: number;
+  increaseOnLoss: number;
   betCount: number;
   limboMultiplier: number;
 }

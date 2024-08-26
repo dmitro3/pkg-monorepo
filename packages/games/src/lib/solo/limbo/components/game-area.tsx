@@ -1,46 +1,45 @@
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
-import { useGameSkip } from '../../../game-provider';
 import { cn } from '../../../utils/style';
 import useLimboGameStore from '../store';
-import { LimboGameResult } from '../types';
+import { LimboForm, LimboFormField, LimboGameResult } from '../types';
 
 export interface GameAreaProps {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: LimboGameResult[]) => void;
-  onAnimationSkipped?: (result: LimboGameResult[]) => void;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: LimboGameResult[]) => void;
+  onSubmitGameForm: (data: LimboFormField) => void;
+  isAutoBetMode: boolean;
   children: React.ReactNode;
 }
 
 const GameArea: React.FC<GameAreaProps> = ({
   onAnimationCompleted,
   onAnimationStep,
-  onAnimationSkipped = () => {},
+  processStrategy,
+  onAutoBetModeChange,
+  onSubmitGameForm,
+  isAutoBetMode,
   children,
 }) => {
-  const skipRef = React.useRef<boolean>(false);
+  const isAutoBetModeRef = React.useRef<boolean>();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const form = useFormContext() as LimboForm;
+  const betCount = form.watch('betCount');
 
-  const { isAnimationSkipped } = useGameSkip();
-
-  const {
-    addLastBet,
-    updateLastBets,
-    limboGameResults,
-    updateGameStatus,
-    updateLimboGameResults,
-    updateCurrentAnimationCount,
-    lastBets,
-  } = useLimboGameStore([
-    'addLastBet',
-    'removeLastBet',
-    'updateLastBets',
-    'limboGameResults',
-    'updateGameStatus',
-    'updateLimboGameResults',
-    'updateCurrentAnimationCount',
-    'lastBets',
-  ]);
+  const { addLastBet, limboGameResults, updateGameStatus, updateCurrentAnimationCount, lastBets } =
+    useLimboGameStore([
+      'addLastBet',
+      'removeLastBet',
+      'updateLastBets',
+      'limboGameResults',
+      'updateGameStatus',
+      'updateLimboGameResults',
+      'updateCurrentAnimationCount',
+      'lastBets',
+    ]);
 
   React.useEffect(() => {
     if (limboGameResults.length === 0) return;
@@ -49,10 +48,7 @@ const GameArea: React.FC<GameAreaProps> = ({
       const resultNumber = Number(limboGameResults[i]?.number) || 0;
       const payout = limboGameResults[i]?.payout || 0;
       const payoutInUsd = limboGameResults[i]?.payoutInUsd || 0;
-
-      if (skipRef.current) {
-        return;
-      }
+      processStrategy(limboGameResults);
 
       const curr = i + 1;
 
@@ -66,50 +62,31 @@ const GameArea: React.FC<GameAreaProps> = ({
         payoutInUsd,
       });
 
-      if (skipRef.current) {
-        onSkip();
-      } else if (limboGameResults.length === curr) {
+      if (limboGameResults.length === curr) {
         onAnimationCompleted && onAnimationCompleted(limboGameResults);
         updateCurrentAnimationCount(0);
         updateGameStatus('ENDED');
+        if (isAutoBetModeRef.current) {
+          const newBetCount = betCount - 1;
 
-        if (limboGameResults.length > 1) {
-          updateLimboGameResults([]);
+          betCount !== 0 && form.setValue('betCount', betCount - 1);
+
+          if (betCount >= 0 && newBetCount != 0) {
+            timeoutRef.current = setTimeout(() => onSubmitGameForm(form.getValues()), 200);
+          } else {
+            console.log('auto bet finished!');
+            onAutoBetModeChange(false);
+          }
         }
-      } else {
-        timeoutRef.current = setTimeout(() => turn(curr), 750);
       }
     };
     turn();
-
-    return () => {
-      clearTimeout(timeoutRef.current);
-    };
   }, [limboGameResults]);
 
-  const onSkip = () => {
-    updateLastBets(limboGameResults);
-    onAnimationSkipped(limboGameResults);
-    setTimeout(() => {
-      updateCurrentAnimationCount(0);
-      updateLimboGameResults([]);
-      updateGameStatus('ENDED');
-    }, 50);
-  };
-
   React.useEffect(() => {
-    skipRef.current = isAnimationSkipped;
-
-    if (isAnimationSkipped) {
-      onSkip();
-    }
-  }, [isAnimationSkipped]);
-
-  React.useEffect(() => {
-    return () => {
-      onSkip();
-    };
-  }, []);
+    isAutoBetModeRef.current = isAutoBetMode;
+    if (!isAutoBetMode) clearTimeout(timeoutRef.current);
+  }, [isAutoBetMode]);
 
   return (
     <div

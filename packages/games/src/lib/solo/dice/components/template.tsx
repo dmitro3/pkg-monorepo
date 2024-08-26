@@ -57,12 +57,7 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
       .max(props?.maxWager || 2000, {
         message: `Maximum wager is ${props?.maxWager}`,
       }),
-    betCount: z
-      .number()
-      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 0' })
-      .max(MAX_BET_COUNT, {
-        message: 'Maximum bet count is 100',
-      }),
+    betCount: z.number().min(MIN_BET_COUNT, { message: 'Minimum bet count is 0' }),
     stopGain: z.number(),
     stopLoss: z.number(),
     increaseOnWin: z.number(),

@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React from "react";
-import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import React from 'react';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 export enum FastOrVerifiedOption {
-  FAST = "fast",
-  VERIFIED = "verified",
+  FAST = 'fast',
+  VERIFIED = 'verified',
 }
 
 export enum EventLogic {
-  PSEUDO = "pseudo",
-  ONCHAIN = "onchain",
+  PSEUDO = 'pseudo',
+  ONCHAIN = 'onchain',
 }
 
 const eventLogicMap = {
@@ -27,11 +27,11 @@ interface FastOrVerifiedState {
 export const useFastOrVerifiedStore = create<FastOrVerifiedState>()(
   persist(
     (set) => ({
-      option: FastOrVerifiedOption.FAST,
+      option: FastOrVerifiedOption.VERIFIED,
       updateOption: (option: FastOrVerifiedOption) => set({ option }),
     }),
     {
-      name: "fast-or-verified-store",
+      name: 'fast-or-verified-store',
       storage: createJSONStorage(() => localStorage),
     }
   )

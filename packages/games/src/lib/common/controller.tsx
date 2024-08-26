@@ -171,10 +171,12 @@ export const AutoBetIncreaseOnWin = ({
   inputContainerClassName,
   labelClassName,
   isDisabled = false,
+  showSm = false,
 }: {
   inputContainerClassName?: string;
   labelClassName?: string;
   isDisabled?: boolean;
+  showSm?: boolean;
 }) => {
   const form = useFormContext();
   const isMobile = useMediaQuery('(max-width:768px)');
@@ -189,17 +191,20 @@ export const AutoBetIncreaseOnWin = ({
           <FormControl>
             <div className="wr-flex wr-w-full wr-bg-zinc-800 wr-rounded-md wr-py-0.5 wr-px-2 wr-pr-0.5 wr-items-center">
               <span
-                className={
-                  'wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[15px] md:wr-max-w-[120px]'
-                }
+                className={cn(
+                  'wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[15px] md:wr-max-w-[120px]',
+                  {
+                    'wr-max-w-[15px] md:wr-max-w-[15px]': showSm,
+                  }
+                )}
               >
-                {!isMobile ? (
+                {isMobile || showSm ? (
+                  '+'
+                ) : (
                   <>
                     <img src={`${CDN_URL}/icons/icon-spin.svg`} width={22} height={22} />
                     Increase By:
                   </>
-                ) : (
-                  '+'
                 )}
               </span>
               <IncreaseByInput
@@ -207,7 +212,9 @@ export const AutoBetIncreaseOnWin = ({
                 minValue={-100}
                 maxValue={100}
                 isDisabled={isDisabled}
-                containerClassName={cn('wr-h-[36px] md:wr-h-[40px]', inputContainerClassName)}
+                containerClassName={cn('wr-h-[36px] md:wr-h-[40px]', inputContainerClassName, {
+                  'wr-h-[36px] md:wr-h-[36px]': showSm,
+                })}
                 className="wr-w-full wr-max-w-full"
               />
             </div>
@@ -223,10 +230,12 @@ export const AutoBetIncreaseOnLoss = ({
   inputContainerClassName,
   labelClassName,
   isDisabled = false,
+  showSm = false,
 }: {
   inputContainerClassName?: string;
   labelClassName?: string;
   isDisabled?: boolean;
+  showSm?: boolean;
 }) => {
   const form = useFormContext();
   const isMobile = useMediaQuery('(max-width:768px)');
@@ -241,17 +250,20 @@ export const AutoBetIncreaseOnLoss = ({
           <FormControl>
             <div className="wr-flex wr-w-full wr-bg-zinc-800 wr-rounded-md wr-py-0.5 wr-px-2 wr-pr-0.5 wr-items-center">
               <span
-                className={
-                  'wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[15px] md:wr-max-w-[120px]'
-                }
+                className={cn(
+                  'wr-flex wr-items-center wr-gap-1.5 wr-font-semibold wr-w-full wr-text-zinc-500 wr-max-w-[15px] md:wr-max-w-[120px]',
+                  {
+                    'wr-max-w-[15px] md:wr-max-w-[15px]': showSm,
+                  }
+                )}
               >
-                {!isMobile ? (
+                {isMobile || showSm ? (
+                  '+'
+                ) : (
                   <>
                     <img src={`${CDN_URL}/icons/icon-spin.svg`} width={22} height={22} />
                     Increase By:
                   </>
-                ) : (
-                  '+'
                 )}
               </span>
               <IncreaseByInput
@@ -259,7 +271,9 @@ export const AutoBetIncreaseOnLoss = ({
                 minValue={-100}
                 maxValue={100}
                 isDisabled={isDisabled}
-                containerClassName={cn('wr-h-[36px] md:wr-h-[40px]', inputContainerClassName)}
+                containerClassName={cn('wr-h-[36px] md:wr-h-[40px]', inputContainerClassName, {
+                  'wr-h-[36px] md:wr-h-[36px]': showSm,
+                })}
                 className="wr-w-full wr-max-w-full"
               />
             </div>
