@@ -19,6 +19,8 @@ export interface RpsFormFields {
   betCount: number;
   stopGain: number;
   stopLoss: number;
+  increaseOnWin: number;
+  increaseOnLoss: number;
   rpsChoice: RockPaperScissors;
 }
 
@@ -27,5 +29,8 @@ export type RPSForm = UseFormReturn<RpsFormFields, any, undefined>;
 export interface GameAreaProps {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: RPSGameResult[]) => void;
-  onAnimationSkipped?: (result: RPSGameResult[]) => void;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: RPSGameResult[]) => void;
+  onSubmitGameForm: (data: RpsFormFields) => void;
+  isAutoBetMode: boolean;
 }

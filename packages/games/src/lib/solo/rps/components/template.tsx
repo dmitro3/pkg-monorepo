@@ -9,9 +9,12 @@ import z from 'zod';
 import { GameContainer, SceneContainer } from '../../../common/containers';
 import { Form } from '../../../ui/form';
 import { Rps } from '..';
-import { RockPaperScissors, RpsFormFields } from '../types';
+import { RockPaperScissors, RpsFormFields, RPSGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RpsGameProps } from './game';
+import { useStrategist } from '../../../hooks/use-strategist';
+import { parseToBigInt } from '../../../utils/number';
+import { useGameOptions } from '../../../game-provider';
 
 type TemplateOptions = {
   scene?: {
@@ -29,6 +32,9 @@ type TemplateProps = RpsGameProps & {
 
 const RpsTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
+  const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
+  const { account } = useGameOptions();
+  const balanceAsDollar = account?.balanceAsDollar || 0;
 
   const formSchema = z.object({
     wager: z
@@ -39,11 +45,11 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
       .max(props?.maxWager || 2000, {
         message: `Maximum wager is ${props?.maxWager}`,
       }),
-    betCount: z.number().min(1, { message: 'Minimum bet count is 1' }).max(100, {
-      message: 'Maximum bet count is 100',
-    }),
+    betCount: z.number().min(0, { message: 'Minimum bet count is 0' }),
     stopGain: z.number(),
     stopLoss: z.number(),
+    increaseOnWin: z.number(),
+    increaseOnLoss: z.number(),
     rpsChoice: z.nativeEnum(RockPaperScissors),
   });
 
@@ -54,22 +60,64 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
     mode: 'all',
     defaultValues: {
       wager: props?.minWager || 1,
-      betCount: 1,
+      betCount: 0,
       stopGain: 0,
       stopLoss: 0,
+      increaseOnWin: 0,
+      increaseOnLoss: 0,
       rpsChoice: RockPaperScissors.ROCK,
     },
   });
 
   React.useEffect(() => {
-    const debouncedCb = debounce((formFields) => {
+    const cb = (formFields: any) => {
       props?.onFormChange && props.onFormChange(formFields);
-    }, 400);
+    };
 
-    const subscription = form.watch(debouncedCb);
+    const subscription = form.watch(cb);
 
     return () => subscription.unsubscribe();
   }, [form.watch]);
+
+  // strategy
+  const wager = form.watch('wager');
+  const increasePercentageOnWin = form.watch('increaseOnWin');
+  const increasePercentageOnLoss = form.watch('increaseOnLoss');
+  const stopProfit = form.watch('stopGain');
+  const stopLoss = form.watch('stopLoss');
+
+  const strategist = useStrategist({
+    wager,
+    increasePercentageOnLoss,
+    increasePercentageOnWin,
+    stopLoss,
+    stopProfit,
+  });
+
+  const processStrategy = (result: RPSGameResult[]) => {
+    const payout = result[0]?.payoutInUsd || 0;
+    console.log(result, 'result');
+    const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
+    const newWager = Number(p.wager) / 1e8;
+    if (p.action && !p.action.isStop()) {
+      form.setValue('wager', newWager);
+    }
+
+    if (p.action && p.action.isStop()) {
+      setIsAutoBetMode(false);
+      return;
+    }
+
+    if (newWager < (props.minWager || 0) || newWager > (props.maxWager || 0)) {
+      console.log('not ENOUGH BALANCWE!');
+      setIsAutoBetMode(false);
+      return;
+    }
+  };
+
+  React.useEffect(() => {
+    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+  }, [wager, balanceAsDollar]);
 
   return (
     <Form {...form}>
@@ -79,6 +127,8 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
             maxWager={props?.maxWager || 2000}
             minWager={props?.minWager || 1}
             winMultiplier={1.96}
+            isAutoBetMode={isAutoBetMode}
+            onAutoBetModeChange={setIsAutoBetMode}
           />
           <SceneContainer
             className="wr-relative wr-h-[640px] wr-overflow-hidden !wr-p-0 max-md:wr-h-[300px]"
@@ -88,7 +138,12 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
           >
             <Rps.Game {...props}>
               <Rps.LastBets />
-              <Rps.Scene {...props} />
+              <Rps.Scene
+                {...props}
+                processStrategy={processStrategy}
+                isAutoBetMode={isAutoBetMode}
+                onAutoBetModeChange={setIsAutoBetMode}
+              />
             </Rps.Game>
           </SceneContainer>
         </GameContainer>

@@ -51,12 +51,16 @@ export const AutoController = ({
         <AutoBetCountFormField
           isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
         />
-        <AutoBetIncreaseOnWin
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-        />
-        <AutoBetIncreaseOnLoss
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-        />
+        <div className="wr-flex wr-gap-2 md:wr-gap-3">
+          <AutoBetIncreaseOnWin
+            isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+            showSm
+          />
+          <AutoBetIncreaseOnLoss
+            isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+            showSm
+          />
+        </div>
       </div>
 
       <div className="wr-order-3 lg:wr-order-none wr-flex wr-gap-3">

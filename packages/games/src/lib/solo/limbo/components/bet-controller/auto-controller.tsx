@@ -48,7 +48,7 @@ export const AutoController = ({
         control={form.control}
         name="limboMultiplier"
         render={({ field }) => (
-          <FormItem className="wr-mb-3 lg:wr-mb-6">
+          <FormItem className="wr-mb-3 lg:wr-mb-3">
             <FormLabel>Multiplier (1.1-{100}) </FormLabel>
 
             <FormControl>

@@ -1,17 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import debounce from 'debounce';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
 import { GameContainer, SceneContainer } from '../../../common/containers';
+import { useGameOptions } from '../../../game-provider';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { Limbo, LimboFormField, LimboGameResult } from '..';
 import { BetController } from './bet-controller';
 import { LimboGameProps } from './game';
-import { useStrategist } from '../../../hooks/use-strategist';
-import { parseToBigInt } from '../../../utils/number';
-import { useGameOptions } from '../../../game-provider';
 
 type TemplateOptions = {
   scene?: {};
@@ -113,6 +112,10 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
       return;
     }
   };
+
+  React.useEffect(() => {
+    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+  }, [wager, balanceAsDollar]);
 
   return (
     <Form {...form}>

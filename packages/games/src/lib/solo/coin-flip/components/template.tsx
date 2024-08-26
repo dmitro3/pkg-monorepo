@@ -119,6 +119,10 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
     }
   };
 
+  React.useEffect(() => {
+    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+  }, [wager, balanceAsDollar]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>

@@ -3,19 +3,21 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { CDN_URL } from '../../../constants';
-import { useGameSkip } from '../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
 import { FormControl, FormField, FormItem } from '../../../ui/form';
 import { cn } from '../../../utils/style';
 import { ALL_RPS_CHOICES } from '../constant';
 import useRpsGameStore from '../store';
 import { GameAreaProps, RockPaperScissors, RPSForm, RPSGameResult } from '../types';
-import { RPSChoiceRadio } from './bet-controller';
+import { RPSChoiceRadio } from './bet-controller/manual-controller';
 
 const Scene: React.FC<GameAreaProps> = ({
+  isAutoBetMode,
   onAnimationCompleted,
   onAnimationStep,
-  onAnimationSkipped = () => {},
+  onAutoBetModeChange,
+  onSubmitGameForm,
+  processStrategy,
 }) => {
   const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
   const playingEffect = useAudioEffect(SoundEffects.LIMBO_SPIN_1);
@@ -24,9 +26,10 @@ const Scene: React.FC<GameAreaProps> = ({
   const form = useFormContext() as RPSForm;
 
   const rpsChoice = form.watch('rpsChoice');
+  const betCount = form.watch('betCount');
 
-  const skipRef = React.useRef<boolean>(false);
   const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const isAutoBetModeRef = React.useRef<boolean>();
 
   const [winnerAnimation, setWinnerAnimation] = React.useState(false);
 
@@ -48,8 +51,6 @@ const Scene: React.FC<GameAreaProps> = ({
     'addLastBet',
   ]);
 
-  const { isAnimationSkipped } = useGameSkip();
-
   React.useEffect(() => {
     if (rpsGameResults.length === 0) return;
 
@@ -64,12 +65,8 @@ const Scene: React.FC<GameAreaProps> = ({
       playingEffect.play();
 
       timeoutRef.current = setTimeout(() => {
-        if (skipRef.current) {
-          clearTimeout(timeoutRef.current);
-          return;
-        }
-
         const curr = i + 1;
+        processStrategy(rpsGameResults);
 
         setWinner({
           rps,
@@ -91,12 +88,19 @@ const Scene: React.FC<GameAreaProps> = ({
         if (rpsGameResults.length === curr) {
           updateRpsGameResults([]);
           onAnimationCompleted && onAnimationCompleted(rpsGameResults);
-          // setTimeout(() => {
-          //   setWinnerAnimation(false);
-          //   updateGameStatus('ENDED');
-          // }, 750);
-        } else {
-          setTimeout(() => turn(curr), 500);
+
+          if (isAutoBetModeRef.current) {
+            const newBetCount = betCount - 1;
+
+            betCount !== 0 && form.setValue('betCount', betCount - 1);
+
+            if (betCount >= 0 && newBetCount != 0) {
+              timeoutRef.current = setTimeout(() => onSubmitGameForm(form.getValues()), 300);
+            } else {
+              console.log('auto bet finished!');
+              onAutoBetModeChange(false);
+            }
+          }
         }
         setWinnerAnimation(true);
       }, 500);
@@ -106,6 +110,11 @@ const Scene: React.FC<GameAreaProps> = ({
   }, [rpsGameResults]);
 
   React.useEffect(() => {
+    isAutoBetModeRef.current = isAutoBetMode;
+    if (!isAutoBetMode) clearTimeout(timeoutRef.current);
+  }, [isAutoBetMode]);
+
+  React.useEffect(() => {
     return () => {
       clearTimeout(timeoutRef.current);
       updateGameStatus('IDLE');
@@ -113,28 +122,6 @@ const Scene: React.FC<GameAreaProps> = ({
       updateRpsGameResults([]);
     };
   }, []);
-
-  const onSkip = () => {
-    updateLastBets(rpsGameResults);
-    updateRpsGameResults([]);
-    onAnimationSkipped(rpsGameResults);
-    setTimeout(() => {
-      setWinnerAnimation(false);
-      updateGameStatus('ENDED');
-    }, 50);
-  };
-
-  React.useEffect(() => {
-    console.log(gameStatus, rpsGameResults);
-  }, [gameStatus, rpsGameResults]);
-
-  React.useEffect(() => {
-    skipRef.current = isAnimationSkipped;
-
-    if (isAnimationSkipped) {
-      onSkip();
-    }
-  }, [isAnimationSkipped]);
 
   React.useEffect(() => {
     setWinner(undefined);
