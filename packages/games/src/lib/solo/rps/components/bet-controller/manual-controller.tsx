@@ -119,10 +119,7 @@ export const ManualController: React.FC<BetControllerProps> = ({
             'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
             {
               'wr-cursor-default wr-pointer-events-none':
-                !form.formState.isValid ||
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                (gameStatus == 'PLAYING' && rpsGameResults.length < 4 && rpsGameResults.length > 1),
+                !form.formState.isValid || form.formState.isSubmitting || form.formState.isLoading,
             }
           )}
           size={'xl'}

@@ -22,6 +22,8 @@ export interface RollFormFields {
   betCount: number;
   stopGain: number;
   stopLoss: number;
+  increaseOnWin: number;
+  increaseOnLoss: number;
   dices: DICE[];
 }
 

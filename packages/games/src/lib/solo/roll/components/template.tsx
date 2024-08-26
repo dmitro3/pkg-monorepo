@@ -1,18 +1,20 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import debounce from 'debounce';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
 import { GameContainer, SceneContainer } from '../../../common/containers';
+import { useGameOptions } from '../../../game-provider';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { cn } from '../../../utils/style';
 import { toDecimals } from '../../../utils/web3';
 import { Roll } from '..';
-import { ALL_DICES, LUCK_MULTIPLIER, MAX_BET_COUNT, MIN_BET_COUNT } from '../constant';
-import { DICE, RollFormFields } from '../types';
+import { ALL_DICES, LUCK_MULTIPLIER, MIN_BET_COUNT } from '../constant';
+import { DICE, RollFormFields, RollGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RollGameProps } from './game';
 
@@ -32,6 +34,9 @@ type TemplateProps = RollGameProps & {
 
 const RollTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
+  const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
+  const { account } = useGameOptions();
+  const balanceAsDollar = account?.balanceAsDollar || 0;
 
   const formSchema = z.object({
     wager: z
@@ -42,14 +47,11 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
       .max(props?.maxWager || 2000, {
         message: `Maximum wager is ${props?.maxWager}`,
       }),
-    betCount: z
-      .number()
-      .min(MIN_BET_COUNT, { message: 'Minimum bet count is 1' })
-      .max(MAX_BET_COUNT, {
-        message: 'Maximum bet count is 100',
-      }),
+    betCount: z.number().min(MIN_BET_COUNT, { message: 'Minimum bet count is 0' }),
     stopGain: z.number(),
     stopLoss: z.number(),
+    increaseOnWin: z.number(),
+    increaseOnLoss: z.number(),
     dices: z
       .array(z.nativeEnum(DICE))
       .nonempty()
@@ -68,9 +70,11 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
     mode: 'all',
     defaultValues: {
       wager: props?.minWager || 1,
-      betCount: 1,
+      betCount: 0,
       stopGain: 0,
       stopLoss: 0,
+      increaseOnWin: 0,
+      increaseOnLoss: 0,
       dices: [],
     },
   });
@@ -91,14 +95,57 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
   }, [dices]);
 
   React.useEffect(() => {
-    const debouncedCb = debounce((formFields) => {
+    const cb = (formFields: any) => {
       props?.onFormChange && props.onFormChange(formFields);
-    }, 400);
+    };
 
-    const subscription = form.watch(debouncedCb);
+    const subscription = form.watch(cb);
 
     return () => subscription.unsubscribe();
   }, [form.watch]);
+
+  // strategy
+  const wager = form.watch('wager');
+  const increasePercentageOnWin = form.watch('increaseOnWin');
+  const increasePercentageOnLoss = form.watch('increaseOnLoss');
+  const stopProfit = form.watch('stopGain');
+  const stopLoss = form.watch('stopLoss');
+
+  const strategist = useStrategist({
+    wager,
+    increasePercentageOnLoss,
+    increasePercentageOnWin,
+    stopLoss,
+    stopProfit,
+  });
+
+  const processStrategy = (result: RollGameResult[]) => {
+    const payout = result[0]?.payoutInUsd || 0;
+    console.log(result, 'result');
+    const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
+    const newWager = Number(p.wager) / 1e8;
+    if (p.action && !p.action.isStop()) {
+      form.setValue('wager', newWager);
+    }
+
+    if (p.action && p.action.isStop()) {
+      setIsAutoBetMode(false);
+      return;
+    }
+
+    if (
+      newWager < (props.minWager || 0) ||
+      balanceAsDollar < newWager ||
+      newWager > (props.maxWager || 0)
+    ) {
+      setIsAutoBetMode(false);
+      return;
+    }
+  };
+
+  React.useEffect(() => {
+    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+  }, [wager, balanceAsDollar]);
 
   return (
     <Form {...form}>
@@ -108,6 +155,8 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
             maxWager={props?.maxWager || 2000}
             minWager={props?.minWager || 1}
             winMultiplier={winMultiplier}
+            isAutoBetMode={isAutoBetMode}
+            onAutoBetModeChange={setIsAutoBetMode}
           />
 
           <SceneContainer
@@ -118,7 +167,12 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
           >
             <Roll.Game {...props}>
               <Roll.LastBets />
-              <Roll.GameArea {...props} />
+              <Roll.GameArea
+                {...props}
+                processStrategy={processStrategy}
+                isAutoBetMode={isAutoBetMode}
+                onAutoBetModeChange={setIsAutoBetMode}
+              />
               <Roll.RollController multiplier={winMultiplier} winChance={winChance} />
             </Roll.Game>
           </SceneContainer>

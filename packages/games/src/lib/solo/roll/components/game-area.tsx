@@ -7,28 +7,36 @@ import { FormField, FormItem, FormMessage } from '../../../ui/form';
 import { cn } from '../../../utils/style';
 import { ALL_DICES } from '../constant';
 import useRollGameStore from '../store';
-import { RollForm, RollGameResult } from '../types';
+import { RollForm, RollFormFields, RollGameResult } from '../types';
 import Dice from './dice';
 
 export interface GameAreaProps {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: RollGameResult[]) => void;
   onAnimationSkipped?: (result: RollGameResult[]) => void;
+  onSubmitGameForm: (f: RollFormFields) => void;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: RollGameResult[]) => void;
+  isAutoBetMode: boolean;
 }
 
 export const GameArea: React.FC<GameAreaProps> = ({
   onAnimationCompleted,
   onAnimationStep,
   onAnimationSkipped = () => {},
+  onSubmitGameForm,
+  onAutoBetModeChange,
+  processStrategy,
+  isAutoBetMode,
 }) => {
   const form = useFormContext() as RollForm;
 
   const selectedDices = form.watch('dices');
+  const betCount = form.watch('betCount');
 
-  const skipRef = React.useRef<boolean>(false);
+  const endTimeoutRef = React.useRef<NodeJS.Timeout>();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
-
-  const { isAnimationSkipped } = useGameSkip();
+  const isAutoBetModeRef = React.useRef<boolean>();
 
   const flipEffect = useAudioEffect(SoundEffects.ROLLING_DICE);
 
@@ -67,15 +75,12 @@ export const GameArea: React.FC<GameAreaProps> = ({
       const dice = Number(rollGameResults[i]?.dice) || 0;
       const payout = rollGameResults[i]?.payout || 0;
       const payoutInUsd = rollGameResults[i]?.payoutInUsd || 0;
+      processStrategy(rollGameResults);
 
       flipEffect.play();
 
       setLoading(true);
       timeoutRef.current = setTimeout(() => {
-        if (skipRef.current) {
-          clearTimeout(timeoutRef.current);
-          return;
-        }
         const curr = i + 1;
 
         onAnimationStep && onAnimationStep(i);
@@ -92,20 +97,27 @@ export const GameArea: React.FC<GameAreaProps> = ({
           winEffect.play();
         }
 
-        if (skipRef.current) {
-          onSkip();
-        } else if (rollGameResults.length === curr) {
+        if (rollGameResults.length === curr) {
           updateRollGameResults([]);
           onAnimationCompleted && onAnimationCompleted(rollGameResults);
-          setTimeout(() => {
+          endTimeoutRef.current = setTimeout(() => {
             updateGameStatus('ENDED');
-          }, 200);
-        } else {
-          setTimeout(() => turn(curr), 150);
-        }
+            if (isAutoBetModeRef.current) {
+              const newBetCount = betCount - 1;
 
+              betCount !== 0 && form.setValue('betCount', betCount - 1);
+
+              if (betCount >= 0 && newBetCount != 0) {
+                onSubmitGameForm(form.getValues());
+              } else {
+                console.log('auto bet finished!');
+                onAutoBetModeChange(false);
+              }
+            }
+          }, 200);
+        }
         setLoading(false);
-      }, 500);
+      }, 350);
     };
     turn();
   }, [rollGameResults]);
@@ -116,26 +128,17 @@ export const GameArea: React.FC<GameAreaProps> = ({
       updateRollGameResults([]);
       updateLastBets([]);
       clearTimeout(timeoutRef.current);
+      clearTimeout(endTimeoutRef.current);
     };
   }, []);
 
-  const onSkip = () => {
-    updateLastBets(rollGameResults);
-    onAnimationSkipped(rollGameResults);
-    setTimeout(() => {
-      updateRollGameResults([]);
-      updateCurrentAnimationCount(0);
-      updateGameStatus('ENDED');
-    }, 50);
-  };
-
   React.useEffect(() => {
-    skipRef.current = isAnimationSkipped;
-
-    if (isAnimationSkipped) {
-      onSkip();
+    isAutoBetModeRef.current = isAutoBetMode;
+    if (!isAutoBetMode) {
+      clearTimeout(timeoutRef.current);
+      clearTimeout(endTimeoutRef.current);
     }
-  }, [isAnimationSkipped]);
+  }, [isAutoBetMode]);
 
   React.useEffect(() => {
     updateCurrentAnimationCount(0);
@@ -163,7 +166,9 @@ export const GameArea: React.FC<GameAreaProps> = ({
                   currentAnimationCount === 0 ? undefined : lastBets[lastBets.length - 1]?.dice
                 }
                 isBetting={gameStatus === 'PLAYING' ? true : false}
-                isDisabled={form.formState.isLoading || form.formState.isSubmitting}
+                isDisabled={
+                  form.formState.isLoading || form.formState.isSubmitting || isAutoBetMode
+                }
               />
             ))}
           </FormItem>

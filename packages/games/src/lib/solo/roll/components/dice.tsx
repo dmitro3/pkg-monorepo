@@ -99,7 +99,7 @@ const Dice: React.FC<Props> = ({ item, winner, isBetting = false, isDisabled = f
                     'wr-bg-white': field.value?.includes(item),
                     'wr-bg-green-500': field.value?.includes(item) && item + 1 === winner,
                     'wr-bg-red-600': !field.value?.includes(item) && item + 1 === winner,
-                    'wr-pointer-events-none wr-cursor-default': isBetting,
+                    'wr-pointer-events-none wr-cursor-default': isBetting || isDisabled,
                   }
                 )}
                 checked={field.value?.includes(item)}
@@ -113,7 +113,6 @@ const Dice: React.FC<Props> = ({ item, winner, isBetting = false, isDisabled = f
                   boxShadow:
                     '5.778px 5.778px 8.667px 0px rgba(255, 255, 255, 0.30) inset, -5.778px -5.778px 8.667px 0px rgba(0, 0, 0, 0.40) inset',
                 }}
-                disabled={isDisabled}
               >
                 {dotPosition[item].map((dot, i) => (
                   <Dot className={dot} key={i} selected={field.value?.includes(item)} />
