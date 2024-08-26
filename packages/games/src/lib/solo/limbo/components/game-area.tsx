@@ -72,7 +72,7 @@ const GameArea: React.FC<GameAreaProps> = ({
           betCount !== 0 && form.setValue('betCount', betCount - 1);
 
           if (betCount >= 0 && newBetCount != 0) {
-            timeoutRef.current = setTimeout(() => onSubmitGameForm(form.getValues()), 200);
+            timeoutRef.current = setTimeout(() => onSubmitGameForm(form.getValues()), 300);
           } else {
             console.log('auto bet finished!');
             onAutoBetModeChange(false);

@@ -6,6 +6,8 @@ export interface PlinkoFormFields {
   stopGain: number;
   stopLoss: number;
   plinkoSize: number;
+  increaseOnWin: number;
+  increaseOnLoss: number;
 }
 
 export type PlinkoForm = UseFormReturn<PlinkoFormFields, any, undefined>;
