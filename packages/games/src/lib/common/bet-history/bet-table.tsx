@@ -123,7 +123,7 @@ const BetTable = ({
                           color: profileLevels[bet.level - 1]?.levelColor || 'inherit',
                         }}
                       >
-                        {bet.username ? bet.username : shorter(bet.player)}
+                        {bet.username ? bet.username : shorter(bet.player, 2)}
                       </a>
                     </TableCell>
                     <TableCell className="wr-hidden lg:wr-table-cell">
