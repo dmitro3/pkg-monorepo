@@ -129,15 +129,15 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
       return;
     }
 
-    if (
-      newWager < (props.minWager || 0) ||
-      balanceAsDollar < newWager ||
-      newWager > (props.maxWager || 0)
-    ) {
+    if (newWager < (props.minWager || 0) || newWager > (props.maxWager || 0)) {
       setIsAutoBetMode(false);
       return;
     }
   };
+
+  React.useEffect(() => {
+    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+  }, [wager, balanceAsDollar]);
 
   return (
     <Form {...form}>

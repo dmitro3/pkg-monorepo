@@ -68,10 +68,12 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
     });
 
   const [formValues, setFormValues] = useState<RpsFormFields>({
-    betCount: 1,
+    betCount: 0,
     rpsChoice: RockPaperScissors.ROCK,
     stopGain: 0,
     stopLoss: 0,
+    increaseOnLoss: 0,
+    increaseOnWin: 0,
     wager: props?.minWager || 1,
   });
 
@@ -142,13 +144,7 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
         { name: 'count', type: 'uint8' },
         { name: 'data', type: 'bytes' },
       ],
-      [
-        wagerInWei,
-        stopGainInWei as bigint,
-        stopLossInWei as bigint,
-        formValues.betCount,
-        encodedChoice,
-      ]
+      [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
@@ -169,7 +165,6 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
       encodedTxData: encodedData,
     };
   }, [
-    formValues.betCount,
     formValues.rpsChoice,
     formValues.stopGain,
     formValues.stopLoss,
@@ -232,7 +227,6 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
       setRpsResult(finalResult);
       updateGame({
         wager: formValues.wager || 0,
-        betCount: formValues.betCount || 0,
       });
     }
   }, [gameEvent]);
@@ -255,7 +249,7 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
     refetchPlayerGameStatus();
     updateBalances();
 
-    const totalWager = formValues.wager * formValues.betCount;
+    const totalWager = formValues.wager;
     const totalPayout = result.reduce((acc, cur) => acc + cur.payoutInUsd, 0);
     handleGetBadges({ totalWager, totalPayout });
   };

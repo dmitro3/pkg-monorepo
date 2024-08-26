@@ -44,6 +44,7 @@ export const AutoController = ({
       <PlinkoRowFormField
         minValue={6}
         maxValue={12}
+        className="wr-mb-3 lg:wr-mb-3"
         isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
       />
 

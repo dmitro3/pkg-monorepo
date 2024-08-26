@@ -85,7 +85,8 @@ export const PlinkoRowFormField: React.FC<{
   isDisabled?: boolean;
   minValue?: number;
   maxValue?: number;
-}> = ({ isDisabled, minValue, maxValue }) => {
+  className?: string;
+}> = ({ isDisabled, minValue, maxValue, className }) => {
   const form = useFormContext();
 
   return (
@@ -94,7 +95,7 @@ export const PlinkoRowFormField: React.FC<{
         control={form.control}
         name="plinkoSize"
         render={({ field }) => (
-          <FormItem className="wr-mb-3 lg:wr-mb-6">
+          <FormItem className={cn('wr-mb-3 lg:wr-mb-6', className)}>
             <FormLabel className="wr-leading-4 lg:wr-leading-6 wr-mb-3 lg:wr-mb-[6px]">
               Plinko Row
             </FormLabel>
