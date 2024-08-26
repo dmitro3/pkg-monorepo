@@ -140,6 +140,7 @@ export const useHandleTx = <
       });
 
       if (status !== 'success') {
+        accountApi && accountApi.refreshNonce();
         throw new Error(status);
       } else {
         console.log(accountApi?.cachedNonce, 'cached nonce');

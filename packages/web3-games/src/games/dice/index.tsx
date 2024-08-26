@@ -194,7 +194,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedParams.encodedTxData,
   });
 
-  const onGameSubmit = async () => {
+  const onGameSubmit = async (f: DiceFormFields, errorCount = 0) => {
     clearLiveResults();
     updateGameStatus('PLAYING');
     if (!allowance.hasAllowance) {
@@ -217,6 +217,8 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       refetchPlayerGameStatus();
       updateGameStatus('ENDED');
       props.onError && props.onError(e);
+
+      if (errorCount < 2) onGameSubmit(f, errorCount + 1);
     }
   };
 
