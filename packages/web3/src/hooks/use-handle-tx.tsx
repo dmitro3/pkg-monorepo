@@ -97,6 +97,19 @@ export const useHandleTx = <
           } as EncodeFunctionDataParameters<abi, functionName>);
 
       if (!client) return;
+      /* 
+      if (!isSocialLogin) {
+        return await client?.request('call', {
+          call: {
+            dest: writeContractVariables.address as Address,
+            data: encodedData,
+            value: 0,
+          },
+          owner: address!,
+          part: variables?.part ?? '0x',
+          permit: variables?.permit ?? '0x',
+        });
+      } */
 
       const userOp = await createUserOp(writeContractVariables, encodedData, accountApi);
 

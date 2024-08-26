@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { JSONRPCClient, TypedJSONRPCClient } from 'json-rpc-2.0';
 import React, { createContext, ReactNode, useContext } from 'react';
-import { Hex } from 'viem';
+import { Address, Hex } from 'viem';
 import { Config, useAccount } from 'wagmi';
 
 import { UserOperation } from '../smart-wallet';
@@ -18,6 +18,22 @@ const BundlerClientContext = createContext<UseBundlerClient>({
 export const useBundlerClient = () => {
   return useContext(BundlerClientContext);
 };
+
+interface CallParams {
+  owner: Address;
+  permit: Hex;
+  part: Hex;
+  call: {
+    dest: Address;
+    value: bigint | number;
+    data: Hex;
+  };
+}
+
+interface CreateSessionParams {
+  owner: Address;
+  until: number;
+}
 
 export type BundlerMethods = {
   'preparePaymasterAndData'(params: { callData?: Hex }): {
@@ -35,6 +51,28 @@ export type BundlerMethods = {
   'sendGameOperation'(params: Partial<UserOperation>): {
     hash: Hex;
     status: string;
+  };
+
+  'call'(params: CallParams): {
+    hash: Hex;
+    status: string;
+  };
+
+  'createSession'(params: CreateSessionParams): {
+    status: string;
+  };
+
+  'destroySession'(params: { owner: Address }): {
+    status: string;
+  };
+
+  'permit'(params: { owner: Address; signature: Hex }): {
+    pubKey: Hex;
+    hashKey: Hex;
+  }
+
+  'permitTypedMessage'(params: { owner: Address; }): {
+    typedMessage: Hex;
   };
 };
 
