@@ -4,117 +4,84 @@ import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useDebounce } from 'use-debounce';
 
-import { AudioController } from '../../../common/audio-controller';
-import { BetControllerContainer } from '../../../common/containers';
-import { BetControllerTitle, BetCountFormField, WagerFormField } from '../../../common/controller';
-import { PreBetButton } from '../../../common/pre-bet-button';
-import { SkipButton } from '../../../common/skip-button';
-import { TotalWager, WagerCurrencyIcon } from '../../../common/wager';
-import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
-import { Button } from '../../../ui/button';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../ui/form';
-import { INumberInputContext, NumberInput } from '../../../ui/number-input';
-import { cn } from '../../../utils/style';
-import { toDecimals, toFormatted } from '../../../utils/web3';
-import { rowMultipliers } from '../constants';
-import usePlinkoGameStore from '../store';
-import { PlinkoForm } from '../types';
+import { WagerFormField } from '../../../../common/controller';
+import { PreBetButton } from '../../../../common/pre-bet-button';
+import { TotalWager, WagerCurrencyIcon } from '../../../../common/wager';
+import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
+import { Button } from '../../../../ui/button';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../../ui/form';
+import { INumberInputContext, NumberInput } from '../../../../ui/number-input';
+import { cn } from '../../../../utils/style';
+import { toDecimals, toFormatted } from '../../../../utils/web3';
+import { rowMultipliers } from '../../constants';
+import { PlinkoForm } from '../../types';
 
 interface Props {
   minWager: number;
   maxWager: number;
 }
 
-export const BetController: React.FC<Props> = ({ minWager, maxWager }) => {
+export const ManualController: React.FC<Props> = ({ minWager, maxWager }) => {
   const form = useFormContext() as PlinkoForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   const rowSize = form.watch('plinkoSize');
   const wager = form.watch('wager');
-  const betCount = form.watch('betCount');
 
   const maxPayout = React.useMemo(() => {
     const maxMultiplier = isNaN(rowMultipliers?.[rowSize]?.[0] as number)
       ? 0
       : (rowMultipliers?.[rowSize]?.[0] as number);
 
-    return toDecimals(wager * betCount * maxMultiplier, 2);
-  }, [betCount, wager, rowSize]);
-
-  const { plinkoGameResults, gameStatus } = usePlinkoGameStore(['plinkoGameResults', 'gameStatus']);
+    return toDecimals(wager * maxMultiplier, 2);
+  }, [wager, rowSize]);
 
   return (
-    <BetControllerContainer>
-      <div className="wr-max-lg:flex wr-max-lg:flex-col">
-        <div className="lg:wr-mb-3">
-          <BetControllerTitle>Plinko</BetControllerTitle>
-        </div>
-
-        <WagerFormField
-          minWager={minWager}
-          maxWager={maxWager}
-          isDisabled={plinkoGameResults.length > 1 && gameStatus == 'PLAYING'}
-        />
-        <BetCountFormField
-          isDisabled={plinkoGameResults.length > 1 && gameStatus == 'PLAYING'}
-          hideSm
-        />
-        <PlinkoRowFormField
-          minValue={6}
-          maxValue={12}
-          isDisabled={plinkoGameResults.length > 1 && gameStatus == 'PLAYING'}
-        />
-        <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
-          <div>
-            <FormLabel>Max Payout</FormLabel>
-            <div
-              className={cn(
-                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
-              )}
-            >
-              <WagerCurrencyIcon />
-              <span className={cn('wr-font-semibold wr-text-zinc-100')}>
-                ${toFormatted(maxPayout, 2)}
-              </span>
-            </div>
-          </div>
-          <div>
-            <FormLabel>Total Wager</FormLabel>
-            <TotalWager betCount={form.getValues().betCount} wager={form.getValues().wager} />
+    <>
+      <WagerFormField minWager={minWager} maxWager={maxWager} />
+      <PlinkoRowFormField minValue={6} maxValue={12} />
+      <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
+        <div>
+          <FormLabel>Max Payout</FormLabel>
+          <div
+            className={cn(
+              'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
+            )}
+          >
+            <WagerCurrencyIcon />
+            <span className={cn('wr-font-semibold wr-text-zinc-100')}>
+              ${toFormatted(maxPayout, 2)}
+            </span>
           </div>
         </div>
-
-        {!(plinkoGameResults.length > 3) && (
-          <PreBetButton>
-            <Button
-              type="submit"
-              variant={'success'}
-              className={cn(
-                'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
-                {
-                  'wr-cursor-default wr-pointer-events-none':
-                    !form.formState.isValid ||
-                    form.formState.isSubmitting ||
-                    form.formState.isLoading,
-                }
-              )}
-              size={'xl'}
-              onClick={() => clickEffect.play()}
-            >
-              Bet
-            </Button>
-          </PreBetButton>
-        )}
-        {plinkoGameResults.length > 3 && gameStatus == 'PLAYING' && <SkipButton />}
+        <div>
+          <FormLabel>Total Wager</FormLabel>
+          <TotalWager betCount={1} wager={form.getValues().wager} />
+        </div>
       </div>
-      <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
-        <AudioController />
-      </footer>
-    </BetControllerContainer>
+
+      <PreBetButton>
+        <Button
+          type="submit"
+          variant={'success'}
+          className={cn(
+            'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
+            {
+              'wr-cursor-default wr-pointer-events-none':
+                !form.formState.isValid || form.formState.isSubmitting || form.formState.isLoading,
+            }
+          )}
+          size={'xl'}
+          onClick={() => clickEffect.play()}
+        >
+          Bet
+        </Button>
+      </PreBetButton>
+    </>
   );
 };
 
-const PlinkoRowFormField: React.FC<{
+export const PlinkoRowFormField: React.FC<{
   isDisabled?: boolean;
   minValue?: number;
   maxValue?: number;

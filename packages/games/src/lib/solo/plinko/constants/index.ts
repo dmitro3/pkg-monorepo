@@ -8,6 +8,6 @@ export const rowMultipliers: { [key: number]: number[] } = {
   12: [70, 16, 3, 2, 0.9, 0.6, 0.4, 0.6, 0.9, 2, 3, 16, 70],
 };
 
-export const MIN_BET_COUNT = 1;
+export const MIN_BET_COUNT = 0;
 
 export const MAX_BET_COUNT = 100;

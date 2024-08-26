@@ -126,23 +126,10 @@ interface PlinkoBallsProps {
 
 export const Balls: React.FC<PlinkoBallsProps> = ({ count, paths, onAnimationEnd }) => {
   const calls = useRef<number[]>([]);
-  const { isAnimationSkipped } = useGameSkip();
-
-  const skipRef = React.useRef<boolean>(false);
 
   useEffect(() => {
     calls.current = [];
   }, [paths]);
-
-  React.useEffect(() => {
-    if (isAnimationSkipped) {
-      onAnimationEnd(0, true);
-    }
-  }, [isAnimationSkipped]);
-
-  React.useEffect(() => {
-    skipRef.current = isAnimationSkipped;
-  }, [isAnimationSkipped]);
 
   return (
     <div
@@ -157,7 +144,7 @@ export const Balls: React.FC<PlinkoBallsProps> = ({ count, paths, onAnimationEnd
             key={i}
             order={i}
             path={path as number[]}
-            isSkipped={isAnimationSkipped}
+            isSkipped={false}
             onAnimationEnd={(order, skipped) => {
               if (calls.current.includes(order)) return;
               calls.current.push(order);

@@ -9,6 +9,7 @@ import { useFormContext } from 'react-hook-form';
 
 import {
   PlinkoForm,
+  PlinkoFormFields,
   PlinkoGameResult,
   PlinkoLastBet,
   PlinkoResultActions,
@@ -45,14 +46,24 @@ export interface CanvasProps {
   onAnimationStep?: (step: number, multiplier: number) => void;
   onAnimationCompleted?: (result: PlinkoLastBet[]) => void;
   onAnimationSkipped?: (result: PlinkoLastBet[]) => void;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: PlinkoGameResult[]) => void;
+  onSubmitGameForm: (data: PlinkoFormFields) => void;
+  isAutoBetMode: boolean;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({
   onAnimationStep = () => {},
   onAnimationCompleted = () => {},
   onAnimationSkipped = () => {},
+  onAutoBetModeChange,
+  processStrategy,
+  onSubmitGameForm,
+  isAutoBetMode,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const isAutoBetModeRef = React.useRef<boolean>();
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
 
   const form = useFormContext() as PlinkoForm;
   const {
@@ -68,8 +79,8 @@ export const Canvas: React.FC<CanvasProps> = ({
     'updateLastBets',
     'addLastBet',
   ]);
-
   const betCount = form.watch('betCount');
+
   const plinkoSize = useMemo(() => {
     const _ps = form.watch('plinkoSize');
     if (_ps < 6) return 6;
@@ -85,11 +96,30 @@ export const Canvas: React.FC<CanvasProps> = ({
     if (plinkoGameResults[0] && plinkoGameResults.length === 1) {
       const newOutcomes = plinkoGameResults[0].outcomes;
       setPaths((prev) => [...prev, newOutcomes]);
+
+      if (isAutoBetModeRef.current) {
+        const newBetCount = betCount - 1;
+
+        betCount !== 0 && form.setValue('betCount', betCount - 1);
+
+        if (betCount >= 0 && newBetCount != 0) {
+          processStrategy(plinkoGameResults);
+          timeoutRef.current = setTimeout(() => onSubmitGameForm(form.getValues()), 200);
+        } else {
+          console.log('auto bet finished!');
+          onAutoBetModeChange(false);
+        }
+      }
     } else {
       dispatch({ type: PlinkoResultActions.CLEAR });
       setPaths(plinkoGameResults.map((r) => r.outcomes));
     }
   }, [plinkoGameResults]);
+
+  React.useEffect(() => {
+    isAutoBetModeRef.current = isAutoBetMode;
+    if (!isAutoBetMode) clearTimeout(timeoutRef.current);
+  }, [isAutoBetMode]);
 
   React.useEffect(() => {
     return () => {
@@ -145,29 +175,28 @@ export const Canvas: React.FC<CanvasProps> = ({
       });
     }
 
-    if (betCount === 1) {
-      onAnimationCompleted(lastBets);
-      updateGameStatus('ENDED');
+    console.log('animaton completed!');
+    onAnimationCompleted(lastBets);
+    updateGameStatus('ENDED');
 
-      return;
-    }
+    return;
 
-    if (!skipped && order === paths.length - 1 && betCount > 1) {
-      onAnimationCompleted(lastBets);
-      updatePlinkoGameResults([]);
-      updateGameStatus('ENDED');
+    // if (!skipped && order === paths.length - 1) {
+    //   onAnimationCompleted(lastBets);
+    //   updatePlinkoGameResults([]);
+    //   updateGameStatus('ENDED');
 
-      // TO ENABLE THE BUCKET ANIMATION
-      setTimeout(() => {
-        dispatch({ type: PlinkoResultActions.CLEAR });
-      }, 300);
-    }
+    //   // TO ENABLE THE BUCKET ANIMATION
+    //   setTimeout(() => {
+    //     dispatch({ type: PlinkoResultActions.CLEAR });
+    //   }, 300);
+    // }
   };
 
   return (
     <div className="wr-w-full wr-h-full wr-flex wr-justify-center wr-items-center max-md:wr-max-w-[280px] max-md:wr-mx-auto">
       <div className="wr-relative wr-pt-[5px] max-md:wr-pt-[2px]">
-        <Balls count={betCount} paths={paths} onAnimationEnd={handleAnimationEnd} />
+        <Balls count={1} paths={paths} onAnimationEnd={handleAnimationEnd} />
         <DotRows size={plinkoSize} />
         <Buckets size={plinkoSize} multipliers={multipliers} values={state.results} />
       </div>

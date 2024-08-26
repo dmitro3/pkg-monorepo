@@ -46,7 +46,6 @@ interface TemplateWithWeb3Props extends BaseGameProps {
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: PlinkoGameResult[]) => void;
-  onAnimationSkipped?: (result: PlinkoGameResult[]) => void;
   onPlayerStatusUpdate?: (d: {
     type: 'levelUp' | 'badgeUp';
     awardBadges: Badge[] | undefined;
@@ -67,9 +66,11 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     });
 
   const [formValues, setFormValues] = useState<PlinkoFormFields>({
-    betCount: 1,
+    betCount: 0,
     stopGain: 0,
     stopLoss: 0,
+    increaseOnLoss: 0,
+    increaseOnWin: 0,
     wager: props.minWager || 1,
     plinkoSize: 10,
   });
@@ -77,9 +78,8 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
   const {
     addResult,
     updateGame,
-    skipAll,
     clear: clearLiveResults,
-  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame']);
 
   const gameEvent = useListenGameEvent();
 
@@ -142,13 +142,7 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
         { name: 'count', type: 'uint8' },
         { name: 'data', type: 'bytes' },
       ],
-      [
-        wagerInWei,
-        stopGainInWei as bigint,
-        stopLossInWei as bigint,
-        formValues.betCount,
-        encodedChoice,
-      ]
+      [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
@@ -169,7 +163,6 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
       encodedTxData: encodedData,
     };
   }, [
-    formValues.betCount,
     formValues.plinkoSize,
     formValues.stopGain,
     formValues.stopLoss,
@@ -232,7 +225,6 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
 
       updateGame({
         wager: formValues.wager || 0,
-        betCount: formValues.betCount || 0,
       });
     }
   }, [gameEvent]);
@@ -255,7 +247,7 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     refetchPlayerGameStatus();
     updateBalances();
 
-    const totalWager = formValues.wager * formValues.betCount;
+    const totalWager = formValues.wager;
     const totalPayout = result.reduce((acc, cur) => acc + cur.payoutInUsd, 0);
     handleGetBadges({ totalWager, totalPayout });
   };
@@ -278,19 +270,6 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     [plinkoResult]
   );
 
-  const onAnimationSkipped = React.useCallback(
-    (result: PlinkoGameResult[]) => {
-      onGameCompleted(result);
-      skipAll(
-        result.map((value) => ({
-          won: value.payout > 0,
-          payout: value.payoutInUsd,
-        }))
-      );
-    },
-    [plinkoResult]
-  );
-
   return (
     <>
       <PlinkoTemplate
@@ -302,7 +281,6 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
           setFormValues(val);
         }}
         onAnimationStep={onAnimationStep}
-        onAnimationSkipped={onAnimationSkipped}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate
