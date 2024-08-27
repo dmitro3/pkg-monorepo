@@ -1,22 +1,16 @@
-import { useFormContext } from 'react-hook-form';
+'use client';
+import * as Tabs from '@radix-ui/react-tabs';
+import * as React from 'react';
 
+import { AnimatedTabContent } from '../../../../common/animated-tab-content';
 import { AudioController } from '../../../../common/audio-controller';
-import { ChipController } from '../../../../common/chip-controller';
 import { Chip } from '../../../../common/chip-controller/types';
 import { BetControllerContainer } from '../../../../common/containers';
-import { BetControllerTitle, WagerFormField } from '../../../../common/controller';
-import { PreBetButton } from '../../../../common/pre-bet-button';
-import { TotalWager, WagerCurrencyIcon } from '../../../../common/wager';
-import { useGameOptions } from '../../../../game-provider';
-import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
-import { Button } from '../../../../ui/button';
-import { FormLabel } from '../../../../ui/form';
 import { cn } from '../../../../utils/style';
-import { toFormatted } from '../../../../utils/web3';
-import { BaccaratForm } from '../../types';
-import Control from '../control';
+import { AutoController } from './auto-controller';
+import { ManualController } from './manual-controller';
 
-export interface Props {
+interface Props {
   totalWager: number;
   maxPayout: number;
   selectedChip: Chip;
@@ -25,93 +19,52 @@ export interface Props {
   maxWager: number;
   onSelectedChipChange: (chip: Chip) => void;
   undoBet: () => void;
+  isAutoBetMode: boolean;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const BetController: React.FC<Props> = ({
-  minWager,
-  maxWager,
-  isDisabled,
-  totalWager,
-  selectedChip,
-  maxPayout,
-  onSelectedChipChange,
-  undoBet,
-}) => {
-  const { account } = useGameOptions();
-  const form = useFormContext() as BaccaratForm;
-  const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
-
-  const wager = form.watch('wager');
+export const BetController: React.FC<Props> = (props) => {
+  const [tab, setTab] = React.useState<string>('manual');
 
   return (
     <BetControllerContainer>
-      <div className="wr-flex-col wr-flex lg:wr-block lg:wr-flex-row">
-        <div className="lg:wr-mb-3">
-          <BetControllerTitle>Baccarat</BetControllerTitle>
-        </div>
-
-        <WagerFormField
-          customLabel="Chip Value"
-          minWager={minWager}
-          maxWager={maxWager}
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isDisabled}
-        />
-
-        <ChipController
-          chipAmount={wager}
-          totalWager={totalWager}
-          balance={account?.balanceAsDollar || 0}
-          isDisabled={isDisabled}
-          selectedChip={selectedChip}
-          onSelectedChipChange={onSelectedChipChange}
-        />
-
-        <Control
-          totalWager={totalWager}
-          isDisabled={isDisabled}
-          undoBet={undoBet}
-          reset={form.reset}
-        />
-        <div className="wr-mb-6 lg:!wr-grid wr-hidden wr-grid-cols-2 wr-gap-2">
-          <div>
-            <FormLabel>Max Payout</FormLabel>
-            <div
-              className={cn(
-                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
-              )}
+      <div className="wr-max-lg:flex wr-max-lg:flex-col">
+        <Tabs.Root
+          defaultValue="manual"
+          value={tab}
+          onValueChange={(v) => {
+            if (!v) return;
+            setTab(v);
+          }}
+        >
+          <Tabs.List className="wr-flex wr-w-full wr-justify-between wr-items-center wr-gap-2 wr-font-semibold wr-mb-3">
+            <Tabs.Trigger
+              className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
+                'wr-bg-zinc-800 wr-text-grey-500': tab !== 'manual',
+                'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
+              })}
+              value="manual"
             >
-              <WagerCurrencyIcon />
-              <span className={cn('wr-font-semibold wr-text-zinc-100')}>
-                ${toFormatted(maxPayout, 2)}
-              </span>
-            </div>
-          </div>
-          <div>
-            <FormLabel>Total Wager</FormLabel>
-            <TotalWager betCount={1} wager={totalWager} />
-          </div>
-        </div>
-
-        <div className="wr-w-full lg:wr-order-none lg:wr-mb-6">
-          <PreBetButton>
-            <Button
-              type="submit"
-              variant="success"
-              size="xl"
-              onClick={() => clickEffect.play()}
-              disabled={
-                totalWager === 0 ||
-                form.formState.isSubmitting ||
-                form.formState.isLoading ||
-                isDisabled
-              }
-              isLoading={form.formState.isSubmitting || form.formState.isLoading}
-              className="wr-w-full wr-uppercase"
+              Manual
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
+                'wr-bg-zinc-800 wr-text-grey-500': tab !== 'auto',
+                'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
+              })}
+              value="auto"
             >
-              Deal
-            </Button>
-          </PreBetButton>
-        </div>
+              Auto
+            </Tabs.Trigger>
+          </Tabs.List>
+
+          <AnimatedTabContent value="manual">
+            <ManualController {...props} />
+          </AnimatedTabContent>
+          <AnimatedTabContent value="auto">
+            <AutoController {...props} />
+          </AnimatedTabContent>
+        </Tabs.Root>
       </div>
       <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />

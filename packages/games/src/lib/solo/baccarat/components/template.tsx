@@ -23,6 +23,9 @@ import {
 import { BaccaratScene } from './baccarat-scene';
 import { BetController } from './bet-controller';
 import Control from './control';
+import { parseToBigInt } from '../../../utils/number';
+import { useGameOptions } from '../../../game-provider';
+import { useStrategist } from '../../../hooks/use-strategist';
 
 type TemplateProps = BaccaratGameProps & {
   minWager?: number;
@@ -43,7 +46,11 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   onSubmitGameForm,
   onFormChange,
 }) => {
+  const { account } = useGameOptions();
+  const balanceAsDollar = account?.balanceAsDollar || 0;
+
   const [maxPayout, setMaxPayout] = React.useState<number>(0);
+  const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
 
   const [isGamePlaying, setIsGamePlaying] = React.useState<boolean>(false);
 
@@ -91,6 +98,11 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
       .max(maxWager || 2000, {
         message: `Maximum wager is ${maxWager || 2000}`,
       }),
+    betCount: z.number().min(0, { message: 'Minimum bet count is 0' }),
+    stopGain: z.number(),
+    stopLoss: z.number(),
+    increaseOnWin: z.number(),
+    increaseOnLoss: z.number(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -102,6 +114,11 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
       playerWager: 0,
       bankerWager: 0,
       tieWager: 0,
+      betCount: 0,
+      increaseOnWin: 0,
+      increaseOnLoss: 0,
+      stopGain: 0,
+      stopLoss: 0,
     },
   });
 
@@ -190,9 +207,6 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     setResults(null);
     setSettled(null);
     setIsGamePlaying(true);
-
-    console.log('SUBMITTING!!!!!!');
-
     onSubmitGameForm(data);
   };
 
@@ -205,16 +219,53 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   }, [baccaratSettledResults]);
 
   React.useEffect(() => {
-    const debouncedCb = debounce((formFields) => {
+    const cb = (formFields: any) => {
       onFormChange && onFormChange(formFields);
-    }, 400);
+    };
 
-    const subscription = form.watch(debouncedCb);
+    const subscription = form.watch(cb);
 
     return () => subscription.unsubscribe();
   }, [form.watch]);
 
   const totalWager = (bankerWager + tieWager + playerWager) * wager;
+
+  // strategy
+  const increasePercentageOnWin = form.watch('increaseOnWin');
+  const increasePercentageOnLoss = form.watch('increaseOnLoss');
+  const stopProfit = form.watch('stopGain');
+  const stopLoss = form.watch('stopLoss');
+
+  const strategist = useStrategist({
+    wager,
+    increasePercentageOnLoss,
+    increasePercentageOnWin,
+    stopLoss,
+    stopProfit,
+  });
+
+  const processStrategy = (result: BaccaratGameSettledResult) => {
+    const payout = result.payout;
+    const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
+    const newWager = Number(p.wager) / 1e8;
+    if (p.action && !p.action.isStop()) {
+      form.setValue('wager', newWager);
+    }
+
+    if (p.action && p.action.isStop()) {
+      setIsAutoBetMode(false);
+      return;
+    }
+
+    if (newWager < (minWager || 0) || newWager > (maxWager || 0)) {
+      setIsAutoBetMode(false);
+      return;
+    }
+  };
+
+  React.useEffect(() => {
+    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+  }, [wager, balanceAsDollar]);
 
   return (
     <Form {...form}>
@@ -229,6 +280,8 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
             selectedChip={selectedChip}
             undoBet={undoBet}
             onSelectedChipChange={setSelectedChip}
+            isAutoBetMode={isAutoBetMode}
+            onAutoBetModeChange={setIsAutoBetMode}
           />
           <SceneContainer
             className="wr-relative wr-flex wr-h-[340px] lg:wr-h-[640px] wr-overflow-hidden"
@@ -244,6 +297,10 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
               addWager={addWager}
               selectedChip={selectedChip}
               onAnimationCompleted={onAnimationCompleted}
+              processStrategy={processStrategy}
+              onSubmitGameForm={prepareSubmit}
+              isAutoBetMode={isAutoBetMode}
+              onAutoBetModeChange={setIsAutoBetMode}
             />
             <Control
               totalWager={totalWager}

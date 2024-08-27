@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import debounce from 'debounce';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -12,7 +11,9 @@ import { WinAnimation } from '../../../common/win-animation';
 import { CDN_URL } from '../../../constants';
 import { useGameOptions } from '../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { Roulette } from '..';
 import {
   chunkMinWagerIndexes,
@@ -23,8 +24,6 @@ import {
 } from '../constants';
 import { RouletteFormFields, RouletteGameProps, RouletteGameResult } from '../types';
 import { MobileController } from './mobile-controller';
-import { useStrategist } from '../../../hooks/use-strategist';
-import { parseToBigInt } from '../../../utils/number';
 
 type TemplateProps = RouletteGameProps & {
   minWager?: number;

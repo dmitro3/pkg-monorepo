@@ -8,6 +8,7 @@ interface ControlProps {
   isDisabled: boolean;
   undoBet: () => void;
   reset: () => void;
+  className?: string;
   variant?: 'overlay' | 'inline';
 }
 
@@ -16,13 +17,14 @@ export default function Control({
   isDisabled,
   undoBet,
   reset,
+  className,
   variant = 'inline',
 }: ControlProps) {
   const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
 
   return (
     <div
-      className={cn('wr-w-full wr-items-center wr-gap-2 wr-mb-6', {
+      className={cn('wr-w-full wr-items-center wr-gap-2 wr-mb-6', className, {
         'lg:wr-flex wr-hidden': variant === 'inline',
         'wr-absolute wr-left-0 wr-bottom-0 wr-w-full wr-flex wr-mb-0 lg:wr-hidden':
           variant === 'overlay',

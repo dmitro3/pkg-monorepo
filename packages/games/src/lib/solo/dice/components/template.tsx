@@ -12,7 +12,7 @@ import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
 import { parseToBigInt } from '../../../utils/number';
 import { toDecimals } from '../../../utils/web3';
-import { LUCK_MULTIPLIER, MAX_BET_COUNT, MAX_VALUE, MIN_BET_COUNT, MIN_VALUE } from '../constant';
+import { LUCK_MULTIPLIER, MAX_VALUE, MIN_BET_COUNT, MIN_VALUE } from '../constant';
 import { Dice } from '../index';
 import { DiceFormFields, DiceGameResult } from '../types';
 import { BetController } from './bet-controller';

@@ -6,7 +6,12 @@ import { renderChipIcon } from '../../../../common/chip-controller/utils';
 import { CDN_URL } from '../../../../constants';
 import { numberShorter } from '../../../../utils/number';
 import { cn } from '../../../../utils/style';
-import { BaccaratBetType, BaccaratGameResult, BaccaratGameSettledResult } from '../../types';
+import {
+  BaccaratBetType,
+  BaccaratFormFields,
+  BaccaratGameResult,
+  BaccaratGameSettledResult,
+} from '../../types';
 import { CardArea } from '../baccarat-card-area';
 import styles from './baccarat-scene.module.css';
 
@@ -18,10 +23,14 @@ export interface BaccaratSceneProps {
   baccaratResults: BaccaratGameResult | null;
   baccaratSettled: BaccaratGameSettledResult | null;
   isDisabled: boolean;
+  isAutoBetMode: boolean;
+  selectedChip: Chip;
   setIsDisabled: (b: boolean) => void;
   addWager: (wager: Chip, betType: BaccaratBetType) => void;
-  selectedChip: Chip;
   onAnimationCompleted: (r: BaccaratGameSettledResult) => void;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: BaccaratGameSettledResult) => void;
+  onSubmitGameForm: (data: BaccaratFormFields) => void;
 }
 
 export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
@@ -32,6 +41,10 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
   setIsDisabled,
   selectedChip,
   onAnimationCompleted,
+  isAutoBetMode,
+  processStrategy,
+  onSubmitGameForm,
+  onAutoBetModeChange,
 }) => {
   const form = useFormContext();
 
@@ -215,6 +228,10 @@ export const BaccaratScene: React.FC<BaccaratSceneProps> = ({
           baccaratSettled={baccaratSettled}
           setWinner={setWinner}
           onAnimationCompleted={onAnimationCompleted}
+          processStrategy={processStrategy}
+          onSubmitGameForm={onSubmitGameForm}
+          isAutoBetMode={isAutoBetMode}
+          onAutoBetModeChange={onAutoBetModeChange}
         />
       </div>
     </div>

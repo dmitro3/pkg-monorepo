@@ -117,7 +117,7 @@ export const AutoBetStopGainFormField = ({
       control={form.control}
       name="stopGain"
       render={({ field }) => (
-        <FormItem className="wr-mb-3">
+        <FormItem className="lg:wr-mb-3 wr-mb-0">
           <FormLabel className={cn(labelClassName)}>Stop on Profit</FormLabel>
           <FormControl>
             <StopGainLossInput
@@ -150,7 +150,7 @@ export const AutoBetStopLossFormField = ({
       control={form.control}
       name="stopLoss"
       render={({ field }) => (
-        <FormItem className="wr-mb-3">
+        <FormItem className="lg:wr-mb-3 wr-mb-0">
           <FormLabel className={cn(labelClassName)}>Stop on Loss</FormLabel>
           <FormControl>
             <StopGainLossInput

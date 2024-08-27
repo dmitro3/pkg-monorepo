@@ -5,6 +5,11 @@ export interface BaccaratFormFields {
   playerWager: number;
   bankerWager: number;
   tieWager: number;
+  betCount: number;
+  increaseOnWin: number;
+  increaseOnLoss: number;
+  stopGain: number;
+  stopLoss: number;
 }
 
 export type BaccaratForm = UseFormReturn<BaccaratFormFields, any, undefined>;

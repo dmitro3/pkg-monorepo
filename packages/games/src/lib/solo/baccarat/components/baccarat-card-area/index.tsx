@@ -12,6 +12,7 @@ import { wait } from '../../../../utils/promise';
 import { cn } from '../../../../utils/style';
 import {
   BaccaratForm,
+  BaccaratFormFields,
   BaccaratGameResult,
   BaccaratGameSettledResult,
   BaccaratSuit,
@@ -36,24 +37,33 @@ export interface BaccaratCardAreaProps {
   hands: BaccaratGameResult | null;
   baccaratSettled: BaccaratGameSettledResult | null;
   isDisabled: boolean;
+  isAutoBetMode: boolean;
   setIsDisabled: (b: boolean) => void;
   setWinner: (banker: number, player: number) => void;
   onAnimationCompleted: (r: BaccaratGameSettledResult) => void;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: BaccaratGameSettledResult) => void;
+  onSubmitGameForm: (data: BaccaratFormFields) => void;
 }
 
 export const CardArea: React.FC<BaccaratCardAreaProps> = ({
   hands,
   baccaratSettled,
+  isAutoBetMode,
   setIsDisabled,
   setWinner,
   onAnimationCompleted,
+  onAutoBetModeChange,
+  onSubmitGameForm,
+  processStrategy,
 }) => {
   const flipEffect = useAudioEffect(SoundEffects.FLIP_CARD);
   const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
-  const { showWinAnimation } = useWinAnimation();
+  const { showWinAnimation, closeWinAnimation } = useWinAnimation();
 
   const form = useFormContext() as BaccaratForm;
   const wager = form.watch('wager');
+  const betCount = form.watch('betCount');
   const playerChipAmount = form.watch('playerWager');
   const bankerChipAmount = form.watch('bankerWager');
   const tieChipAmount = form.watch('tieWager');
@@ -100,6 +110,7 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
   const animate = async () => {
     if (!hands) return;
+    setTimeout(() => closeWinAnimation(), 250);
 
     const { playerHand, bankerHand } = hands;
 
@@ -195,7 +206,6 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
       setIsAnimationCompleted(true);
 
       setIsDisabled(false);
-
       // finish game
     }, TIMEOUT + 350);
   };
@@ -235,13 +245,28 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
 
   React.useEffect(() => {
     if (isAnimationCompleted && baccaratSettled) {
+      const multiplier = baccaratSettled.payout / totalWager;
+      const payout = baccaratSettled.payout;
+
+      if (isAutoBetMode) {
+        processStrategy(baccaratSettled);
+        const newBetCount = betCount - 1;
+
+        betCount !== 0 && form.setValue('betCount', betCount - 1);
+
+        if (betCount >= 0 && newBetCount != 0) {
+          onSubmitGameForm(form.getValues());
+        } else {
+          console.log('auto bet finished!');
+          onAutoBetModeChange(false);
+        }
+      }
       // on animation completed
       if (baccaratSettled.won) {
         winEffect.play();
-        const multiplier = baccaratSettled.payout / totalWager;
-        const payout = baccaratSettled.payout;
         setTimeout(() => showWinAnimation({ payout, multiplier }), 750);
       }
+      console.log('GAME COMPLETED!');
       onAnimationCompleted(baccaratSettled);
     }
   }, [isAnimationCompleted, baccaratSettled]);

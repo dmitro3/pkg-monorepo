@@ -10,6 +10,7 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
+  delay,
   useCurrentAccount,
   useFastOrVerified,
   useHandleTx,
@@ -57,6 +58,11 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     playerWager: 0,
     bankerWager: 0,
     tieWager: 0,
+    betCount: 0,
+    increaseOnWin: 0,
+    increaseOnLoss: 0,
+    stopGain: 0,
+    stopLoss: 0,
   });
 
   const gameEvent = useListenGameEvent();
@@ -171,7 +177,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedParams.encodedTxData,
   });
 
-  const onGameSubmit = async () => {
+  const onGameSubmit = async (f: BaccaratFormFields, errorCount = 0) => {
     console.log('SUBMITTING!');
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
@@ -192,6 +198,11 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
       console.log('error', e);
       refetchPlayerGameStatus();
       props.onError && props.onError(e);
+
+      if (errorCount < 2) {
+        await delay(150);
+        onGameSubmit(f, errorCount + 1);
+      }
     }
   };
 
