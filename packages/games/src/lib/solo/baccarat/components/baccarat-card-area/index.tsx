@@ -73,8 +73,8 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
     [wager, playerChipAmount, bankerChipAmount, tieChipAmount]
   );
   const playerLottieRef = React.useRef<any>(null);
-
   const bankerLottieRef = React.useRef<any>(null);
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
 
   const [playerFirstCard, setPlayerFirstCard] = React.useState<BaccaratCard | null>(null);
 
@@ -248,19 +248,21 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
       const multiplier = baccaratSettled.payout / totalWager;
       const payout = baccaratSettled.payout;
 
-      if (isAutoBetMode) {
-        processStrategy(baccaratSettled);
-        const newBetCount = betCount - 1;
+      timeoutRef.current = setTimeout(() => {
+        if (isAutoBetMode) {
+          processStrategy(baccaratSettled);
+          const newBetCount = betCount - 1;
 
-        betCount !== 0 && form.setValue('betCount', betCount - 1);
+          betCount !== 0 && form.setValue('betCount', betCount - 1);
 
-        if (betCount >= 0 && newBetCount != 0) {
-          onSubmitGameForm(form.getValues());
-        } else {
-          console.log('auto bet finished!');
-          onAutoBetModeChange(false);
+          if (betCount >= 0 && newBetCount != 0) {
+            onSubmitGameForm(form.getValues());
+          } else {
+            console.log('auto bet finished!');
+            onAutoBetModeChange(false);
+          }
         }
-      }
+      }, 1000);
       // on animation completed
       if (baccaratSettled.won) {
         winEffect.play();
@@ -270,6 +272,10 @@ export const CardArea: React.FC<BaccaratCardAreaProps> = ({
       onAnimationCompleted(baccaratSettled);
     }
   }, [isAnimationCompleted, baccaratSettled]);
+
+  React.useEffect(() => {
+    if (!isAutoBetMode) clearTimeout(timeoutRef.current);
+  }, [isAutoBetMode]);
 
   React.useEffect(() => {
     if (isPlayerWinner) setTimeout(() => playerLottieRef.current.play(), 100);
