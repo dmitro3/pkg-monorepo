@@ -5,34 +5,118 @@ import React from 'react';
 
 import { GameType, profileLevels } from '../../constants';
 import useMediaQuery from '../../hooks/use-media-query';
-import { LinkIcon } from '../../svgs';
+import {
+  IconBaccarat,
+  IconCoinFlip,
+  IconCrash,
+  IconDice,
+  IconHorseRace,
+  IconKeno,
+  IconLimbo,
+  IconMines,
+  IconPlinko,
+  IconRange,
+  IconRoulette,
+  IconRps,
+  IconSlot,
+  IconSweetBonanza,
+  IconVideoPoker,
+  IconWheel,
+  LinkIcon,
+} from '../../svgs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../ui/table';
 import { shorter } from '../../utils/string';
 import { cn } from '../../utils/style';
 import { toDecimals, toFormatted } from '../../utils/web3';
 import { BetHistoryCurrencyList } from '.';
 
-const gameMap: Record<GameType, string> = {
-  [GameType.BACCARAT]: 'Baccarat',
-  [GameType.BLACKJACK]: 'Blackjack',
-  [GameType.COINFLIP]: 'Coin Flip',
-  [GameType.DICE]: 'Roll',
-  [GameType.HOLDEM_POKER]: 'Holdem Poker',
-  [GameType.HORSE_RACE]: 'Horse Race',
-  [GameType.KENO]: 'Keno',
-  [GameType.LIMBO]: 'Limbo',
-  [GameType.LOTTERY]: 'Lottery',
-  [GameType.MINES]: 'Mines',
-  [GameType.MOON]: 'Crash',
-  [GameType.ONE_HAND_BLACKJACK]: 'Blackjack',
-  [GameType.PLINKO]: 'Plinko',
-  [GameType.RANGE]: 'Dice',
-  [GameType.ROULETTE]: 'Roulette',
-  [GameType.RPS]: 'RPS',
-  [GameType.SLOT]: 'Slot',
-  [GameType.VIDEO_POKER]: 'Video Poker',
-  [GameType.WHEEL]: 'Wheel',
-  [GameType.WINR_BONANZA]: 'WINR Bonanza',
+const gameMap: Record<
+  GameType,
+  {
+    title: string;
+    icon: React.ReactNode;
+  }
+> = {
+  [GameType.BACCARAT]: {
+    title: 'Baccarat',
+    icon: <IconBaccarat />,
+  },
+  [GameType.BLACKJACK]: {
+    title: 'Blackjack',
+    icon: <IconVideoPoker />,
+  },
+  [GameType.COINFLIP]: {
+    title: 'Coin Flip',
+    icon: <IconCoinFlip />,
+  },
+  [GameType.DICE]: {
+    title: 'Roll',
+    icon: <IconDice />,
+  },
+  [GameType.HOLDEM_POKER]: {
+    title: 'Holdem Poker',
+    icon: <IconVideoPoker />,
+  },
+  [GameType.HORSE_RACE]: {
+    title: 'Horse Race',
+    icon: <IconHorseRace />,
+  },
+  [GameType.KENO]: {
+    title: 'Keno',
+    icon: <IconKeno />,
+  },
+  [GameType.LIMBO]: {
+    title: 'Limbo',
+    icon: <IconLimbo />,
+  },
+  [GameType.LOTTERY]: {
+    title: 'Lottery',
+    icon: <IconVideoPoker />,
+  },
+  [GameType.MINES]: {
+    title: 'Mines',
+    icon: <IconMines />,
+  },
+  [GameType.MOON]: {
+    title: 'Crash',
+    icon: <IconCrash />,
+  },
+  [GameType.ONE_HAND_BLACKJACK]: {
+    title: 'Blackjack',
+    icon: <IconVideoPoker />,
+  },
+  [GameType.PLINKO]: {
+    title: 'Plinko',
+    icon: <IconPlinko />,
+  },
+  [GameType.RANGE]: {
+    title: 'Dice',
+    icon: <IconRange />,
+  },
+  [GameType.ROULETTE]: {
+    title: 'Roulette',
+    icon: <IconRoulette />,
+  },
+  [GameType.RPS]: {
+    title: 'RPS',
+    icon: <IconRps />,
+  },
+  [GameType.SLOT]: {
+    title: 'Slot',
+    icon: <IconSlot />,
+  },
+  [GameType.VIDEO_POKER]: {
+    title: 'Video Poker',
+    icon: <IconVideoPoker />,
+  },
+  [GameType.WHEEL]: {
+    title: 'Wheel',
+    icon: <IconWheel />,
+  },
+  [GameType.WINR_BONANZA]: {
+    title: 'WINR Bonanza',
+    icon: <IconSweetBonanza />,
+  },
 };
 
 const BetTable = ({
@@ -113,7 +197,10 @@ const BetTable = ({
                       </a>
                     </TableCell>
                     <TableCell className="wr-text-center lg:wr-text-left wr-table-cell">
-                      {gameMap[bet.game]}
+                      <div className="wr-flex wr-items-center wr-gap-1.5">
+                        {gameMap[bet.game].icon}
+                        {gameMap[bet.game].title}
+                      </div>
                     </TableCell>
                     <TableCell className="wr-text-center lg:wr-text-left">
                       <a
