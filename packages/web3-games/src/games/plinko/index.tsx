@@ -190,7 +190,7 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedParams.encodedTxData,
   });
 
-  const onGameSubmit = async () => {
+  const onGameSubmit = async (f: PlinkoFormFields, errorCount = 0) => {
     clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
@@ -211,6 +211,8 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
       console.log('error', e);
       refetchPlayerGameStatus();
       props.onError && props.onError(e);
+
+      if (errorCount < 2) onGameSubmit(f, errorCount + 1);
     }
   };
 

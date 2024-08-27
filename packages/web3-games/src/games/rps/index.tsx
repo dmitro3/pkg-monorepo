@@ -192,7 +192,7 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedParams.encodedTxData,
   });
 
-  const onGameSubmit = async () => {
+  const onGameSubmit = async (f: RpsFormFields, errorCount = 0) => {
     clearLiveResults();
 
     if (!allowance.hasAllowance) {
@@ -214,6 +214,8 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
       console.log('error', e);
       refetchPlayerGameStatus();
       props.onError && props.onError(e);
+
+      if (errorCount < 2) onGameSubmit(f, errorCount + 1);
     }
   };
 
