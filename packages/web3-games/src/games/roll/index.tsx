@@ -214,7 +214,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
       refetchPlayerGameStatus();
       props.onError && props.onError(e);
 
-      if (errorCount < 2) {
+      if (errorCount < 3) {
         await delay(150);
         onGameSubmit(f, errorCount + 1);
       }

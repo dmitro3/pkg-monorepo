@@ -11,6 +11,7 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
+  delay,
   useCurrentAccount,
   useFastOrVerified,
   useHandleTx,
@@ -196,7 +197,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedParams.encodedTxData,
   });
 
-  const onGameSubmit = async () => {
+  const onGameSubmit = async (f: KenoFormField, errorCount = 0) => {
     clearLiveResults();
     updateGameStatus('PLAYING');
     if (!allowance.hasAllowance) {
@@ -218,6 +219,11 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       console.log('error', e);
       refetchPlayerGameStatus();
       props.onError && props.onError(e);
+
+      if (errorCount < 3) {
+        await delay(150);
+        onGameSubmit(f, errorCount + 1);
+      }
     }
   };
 
