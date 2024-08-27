@@ -1,21 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import debounce from 'debounce';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 import { GameContainer, SceneContainer } from '../../../common/containers';
+import { useGameOptions } from '../../../game-provider';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { cn } from '../../../utils/style';
 import { Plinko } from '..';
 import { MIN_BET_COUNT } from '../constants';
 import { PlinkoFormFields, PlinkoGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { PlinkoGameProps } from './game';
-import { useStrategist } from '../../../hooks/use-strategist';
-import { parseToBigInt } from '../../../utils/number';
-import { useGameOptions } from '../../../game-provider';
-import { useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   scene?: {
@@ -34,7 +32,6 @@ type TemplateProps = PlinkoGameProps & {
 const PlinkoTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
-  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -126,11 +123,8 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     if (balanceAsDollar < wager) {
       setIsAutoBetMode(false);
-      toast({
-        title: 'Oops, you are out of funds.',
-        description: 'Deposit more funds to continue playing.',
-        variant: 'error',
-      });
+      props?.onError &&
+        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
     }
   }, [wager, balanceAsDollar]);
 

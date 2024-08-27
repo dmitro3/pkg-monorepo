@@ -1,20 +1,18 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import debounce from 'debounce';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
 import { GameContainer, SceneContainer } from '../../../common/containers';
 import { WinAnimation } from '../../../common/win-animation';
+import { useGameOptions } from '../../../game-provider';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { Keno, KenoFormField, KenoGameResult } from '..';
 import { KenoGameProps } from './game';
-import { useStrategist } from '../../../hooks/use-strategist';
-import { parseToBigInt } from '../../../utils/number';
-import { useGameOptions } from '../../../game-provider';
-import { useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   scene?: {
@@ -32,7 +30,6 @@ type TemplateProps = KenoGameProps & {
 
 const KenoTemplate = ({ ...props }: TemplateProps) => {
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
-  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -123,11 +120,8 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     if (balanceAsDollar < wager) {
       setIsAutoBetMode(false);
-      toast({
-        title: 'Oops, you are out of funds.',
-        description: 'Deposit more funds to continue playing.',
-        variant: 'error',
-      });
+      props?.onError &&
+        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
     }
   }, [wager, balanceAsDollar]);
 

@@ -14,7 +14,6 @@ import { Rps } from '..';
 import { RockPaperScissors, RpsFormFields, RPSGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RpsGameProps } from './game';
-import { useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   scene?: {
@@ -33,7 +32,6 @@ type TemplateProps = RpsGameProps & {
 const RpsTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
-  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -124,11 +122,8 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     if (balanceAsDollar < wager) {
       setIsAutoBetMode(false);
-      toast({
-        title: 'Oops, you are out of funds.',
-        description: 'Deposit more funds to continue playing.',
-        variant: 'error',
-      });
+      props?.onError &&
+        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
     }
   }, [wager, balanceAsDollar]);
 

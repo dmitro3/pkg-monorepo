@@ -18,7 +18,6 @@ import { DiceFormFields, DiceGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RangeGameProps } from './game';
 import { SliderTrackOptions } from './slider';
-import { toast, useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   slider?: {
@@ -46,7 +45,6 @@ const defaultOptions: TemplateOptions = {
 const DiceTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...defaultOptions, ...props.options };
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
-  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -146,11 +144,8 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     if (balanceAsDollar < wager) {
       setIsAutoBetMode(false);
-      toast({
-        title: 'Oops, you are out of funds.',
-        description: 'Deposit more funds to continue playing.',
-        variant: 'error',
-      });
+      props?.onError &&
+        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
     }
   }, [wager, balanceAsDollar]);
 

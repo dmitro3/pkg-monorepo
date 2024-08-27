@@ -11,7 +11,6 @@ import { parseToBigInt } from '../../../utils/number';
 import { Limbo, LimboFormField, LimboGameResult } from '..';
 import { BetController } from './bet-controller';
 import { LimboGameProps } from './game';
-import { useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   scene?: {};
@@ -27,7 +26,6 @@ type TemplateProps = LimboGameProps & {
 
 const LimboTemplate = ({ ...props }: TemplateProps) => {
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
-  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -120,11 +118,8 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     if (balanceAsDollar < wager) {
       setIsAutoBetMode(false);
-      toast({
-        title: 'Oops, you are out of funds.',
-        description: 'Deposit more funds to continue playing.',
-        variant: 'error',
-      });
+      props?.onError &&
+        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
     }
   }, [wager, balanceAsDollar]);
 

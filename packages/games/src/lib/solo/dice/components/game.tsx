@@ -19,6 +19,8 @@ export type RangeGameProps = React.ComponentProps<'div'> & {
    * Runs when the animation is completed
    */
   onAnimationCompleted?: (result: DiceGameResult[]) => void;
+
+  onError?: (e: any) => void;
 };
 
 export const RangeGame = ({

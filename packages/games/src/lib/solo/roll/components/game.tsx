@@ -9,6 +9,7 @@ export type RollGameProps = React.ComponentProps<'div'> & {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: RollGameResult[]) => void;
   onAnimationSkipped?: (result: RollGameResult[]) => void;
+  onError?: (e: any) => void;
 };
 
 export const RollGame = ({ gameResults, children }: RollGameProps) => {

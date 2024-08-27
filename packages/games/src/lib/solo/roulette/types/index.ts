@@ -31,4 +31,5 @@ export interface RouletteGameProps {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: RouletteGameResult[]) => void;
   onAnimationSkipped?: (result: RouletteGameResult[]) => void;
+  onError?: (e: any) => void;
 }

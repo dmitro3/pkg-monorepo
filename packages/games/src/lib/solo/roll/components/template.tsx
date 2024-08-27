@@ -17,7 +17,6 @@ import { ALL_DICES, LUCK_MULTIPLIER, MIN_BET_COUNT } from '../constant';
 import { DICE, RollFormFields, RollGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RollGameProps } from './game';
-import { useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   scene?: {
@@ -36,7 +35,6 @@ type TemplateProps = RollGameProps & {
 const RollTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
-  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -150,11 +148,8 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     if (balanceAsDollar < wager) {
       setIsAutoBetMode(false);
-      toast({
-        title: 'Oops, you are out of funds.',
-        description: 'Deposit more funds to continue playing.',
-        variant: 'error',
-      });
+      props?.onError &&
+        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
     }
   }, [wager, balanceAsDollar]);
 
