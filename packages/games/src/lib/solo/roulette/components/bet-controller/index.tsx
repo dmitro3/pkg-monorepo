@@ -1,163 +1,70 @@
-import React from 'react';
-import { useFormContext } from 'react-hook-form';
+'use client';
+import * as Tabs from '@radix-ui/react-tabs';
+import * as React from 'react';
 
+import { AnimatedTabContent } from '../../../../common/animated-tab-content';
 import { AudioController } from '../../../../common/audio-controller';
-import { ChipController } from '../../../../common/chip-controller';
 import { Chip } from '../../../../common/chip-controller/types';
 import { BetControllerContainer } from '../../../../common/containers';
-import {
-  BetControllerTitle,
-  BetCountFormField,
-  WagerFormField,
-} from '../../../../common/controller';
-import { PreBetButton } from '../../../../common/pre-bet-button';
-import { SkipButton } from '../../../../common/skip-button';
-import { CDN_URL } from '../../../../constants';
-import { useGameOptions } from '../../../../game-provider';
-import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
-import { Button } from '../../../../ui/button';
 import { cn } from '../../../../utils/style';
-import { NUMBER_INDEX_COUNT } from '../../constants';
-import useRouletteGameStore from '../../store';
-import { RouletteForm } from '../../types';
+import { AutoController } from './auto-controller';
+import { ManualController } from './manual-controller';
 
 export interface Props {
   isPrepared: boolean;
   selectedChip: Chip;
   minWager: number;
   maxWager: number;
+  isAutoBetMode: boolean;
+
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
   onSelectedChipChange: (c: Chip) => void;
   undoBet: () => void;
 }
 
-export const BetController: React.FC<Props> = ({
-  isPrepared,
-  selectedChip,
-  minWager,
-  maxWager,
-  onSelectedChipChange,
-  undoBet,
-}) => {
-  const { account } = useGameOptions();
-  const form = useFormContext() as RouletteForm;
-  const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
-  const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
-
-  const wager = form.watch('wager');
-  const selectedNumbers = form.watch('selectedNumbers');
-  const totalWager = React.useMemo(() => {
-    const totalChipCount = selectedNumbers.reduce((acc, cur) => acc + cur, 0);
-    return totalChipCount * wager;
-  }, [selectedNumbers, wager]);
-
-  const { rouletteGameResults, gameStatus } = useRouletteGameStore([
-    'rouletteGameResults',
-    'gameStatus',
-  ]);
+export const BetController: React.FC<Props> = (props) => {
+  const [tab, setTab] = React.useState<string>('manual');
 
   return (
-    <BetControllerContainer>
-      <div className="wr-flex-col wr-flex lg:wr-block lg:wr-flex-row">
-        <div className="lg:wr-mb-3">
-          <BetControllerTitle>Roulette</BetControllerTitle>
-        </div>
+    <BetControllerContainer className="wr-z-30">
+      <div className="wr-max-lg:flex wr-max-lg:flex-col">
+        <Tabs.Root
+          defaultValue="manual"
+          value={tab}
+          onValueChange={(v) => {
+            if (!v) return;
+            setTab(v);
+          }}
+        >
+          <Tabs.List className="wr-flex wr-w-full wr-justify-between wr-items-center wr-gap-2 wr-font-semibold wr-mb-3">
+            <Tabs.Trigger
+              className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
+                'wr-bg-zinc-800 wr-text-grey-500': tab !== 'manual',
+                'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
+              })}
+              value="manual"
+            >
+              Manual
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
+                'wr-bg-zinc-800 wr-text-grey-500': tab !== 'auto',
+                'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
+              })}
+              value="auto"
+            >
+              Auto
+            </Tabs.Trigger>
+          </Tabs.List>
 
-        <WagerFormField
-          customLabel="Chip Value"
-          minWager={minWager}
-          maxWager={maxWager}
-          isDisabled={
-            form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
-          }
-        />
-
-        <ChipController
-          chipAmount={wager}
-          totalWager={totalWager}
-          balance={account?.balanceAsDollar || 0}
-          isDisabled={isPrepared}
-          selectedChip={selectedChip}
-          onSelectedChipChange={onSelectedChipChange}
-          className="lg:wr-mb-6"
-        />
-
-        <div className="wr-hidden lg:wr-flex wr-w-full wr-items-center wr-gap-2 wr-mb-6">
-          <Button
-            type="button"
-            disabled={isPrepared || form.getValues().totalWager === 0}
-            onClick={() => {
-              undoBet();
-              digitalClickEffect.play();
-            }}
-            variant="secondary"
-            size="xl"
-            className="wr-flex wr-w-full wr-items-center wr-gap-1"
-          >
-            <img
-              src={`${CDN_URL}/icons/icon-undo.svg`}
-              width={20}
-              height={20}
-              alt="Justbet Decentralized Casino"
-            />
-            <span className="max-lg:wr-hidden">Undo</span>
-          </Button>
-
-          <Button
-            type="button"
-            variant="secondary"
-            size="xl"
-            className="wr-flex wr-w-full wr-items-center wr-gap-1"
-            disabled={isPrepared}
-            onClick={() => {
-              digitalClickEffect.play();
-              form.setValue('selectedNumbers', new Array(NUMBER_INDEX_COUNT).fill(0));
-            }}
-          >
-            <img
-              src={`${CDN_URL}/icons/icon-trash.svg`}
-              width={20}
-              height={20}
-              alt="Justbet Decentralized Casino"
-            />
-            <span className="max-lg:wr-hidden">Clear</span>
-          </Button>
-        </div>
-
-        <div className="wr-hidden lg:wr-block">
-          <BetCountFormField
-            isDisabled={
-              form.formState.isSubmitting || form.formState.isLoading || gameStatus == 'PLAYING'
-            }
-          />
-        </div>
-
-        <div className="wr-w-full lg:wr-mb-6">
-          {!(rouletteGameResults.length > 3) && (
-            <PreBetButton totalWager={totalWager}>
-              <Button
-                type="submit"
-                variant="success"
-                size="xl"
-                onClick={() => clickEffect.play()}
-                className={cn(
-                  'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none',
-                  {
-                    'wr-cursor-default wr-pointer-events-none':
-                      form.getValues().totalWager === 0 ||
-                      form.formState.isSubmitting ||
-                      form.formState.isLoading ||
-                      isPrepared,
-                  }
-                )}
-              >
-                Bet
-              </Button>
-            </PreBetButton>
-          )}
-          {rouletteGameResults.length > 3 && gameStatus == 'PLAYING' && <SkipButton />}
-        </div>
+          <AnimatedTabContent value="manual">
+            <ManualController {...props} />
+          </AnimatedTabContent>
+          <AnimatedTabContent value="auto">
+            <AutoController {...props} />
+          </AnimatedTabContent>
+        </Tabs.Root>
       </div>
-
       <footer className="wr-flex wr-items-center wr-justify-between lg:wr-mt-4">
         <AudioController />
       </footer>
