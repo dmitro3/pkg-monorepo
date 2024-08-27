@@ -8,6 +8,8 @@ export interface KenoFormField {
   selections: number[];
   stopGain: number;
   stopLoss: number;
+  increaseOnWin: number;
+  increaseOnLoss: number;
 }
 
 export type KenoForm = UseFormReturn<KenoFormField, any, undefined>;
