@@ -10,6 +10,7 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
+  delay,
   useCurrentAccount,
   useFastOrVerified,
   useHandleTx,
@@ -213,7 +214,10 @@ export default function RollGame(props: TemplateWithWeb3Props) {
       refetchPlayerGameStatus();
       props.onError && props.onError(e);
 
-      if (errorCount < 2) onGameSubmit(f, errorCount + 1);
+      if (errorCount < 2) {
+        await delay(150);
+        onGameSubmit(f, errorCount + 1);
+      }
     }
   };
 

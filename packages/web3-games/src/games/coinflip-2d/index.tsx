@@ -11,6 +11,7 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
+  delay,
   useCurrentAccount,
   useFastOrVerified,
   useHandleTx,
@@ -220,7 +221,10 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       setIsLoading(false); // Set loading state to false
       props.onError && props.onError(e);
 
-      if (errorCount < 2) onGameSubmit(f, errorCount + 1);
+      if (errorCount < 2) {
+        await delay(150);
+        onGameSubmit(f, errorCount + 1);
+      }
     }
   };
 

@@ -2,31 +2,37 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { CDN_URL } from '../../../../constants';
-import { useGameSkip } from '../../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import { useWinAnimation } from '../../../../hooks/use-win-animation';
 import { wait } from '../../../../utils/promise';
 import { cn } from '../../../../utils/style';
 import { rouletteWheelNumbers } from '../../constants';
 import useRouletteGameStore from '../../store';
-import { RouletteForm, RouletteGameResult } from '../../types';
+import { RouletteForm, RouletteFormFields, RouletteGameResult } from '../../types';
 import { RouletteWheel } from '../roulette-wheel';
 
 const ANIMATION_TIMEOUT = 5000;
 
 export const RouletteScene: React.FC<{
   isPrepared: boolean;
+  isAutoBetMode: boolean;
   setIsPrepared: (p: boolean) => void;
 
   onAnimationCompleted?: (result: RouletteGameResult[]) => void;
   onAnimationStep?: (step: number) => void;
   onAnimationSkipped?: (result: RouletteGameResult[]) => void;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: RouletteGameResult[]) => void;
+  onSubmitGameForm: (data: RouletteFormFields) => void;
 }> = ({
   isPrepared,
+  isAutoBetMode,
+  onAutoBetModeChange,
+  onSubmitGameForm,
+  processStrategy,
   setIsPrepared,
   onAnimationCompleted = () => {},
   onAnimationStep = () => {},
-  onAnimationSkipped = () => {},
 }) => {
   const {
     addLastBet,
@@ -43,7 +49,7 @@ export const RouletteScene: React.FC<{
     'rouletteGameResults',
   ]);
 
-  const { showWinAnimation } = useWinAnimation();
+  const { showWinAnimation, closeWinAnimation } = useWinAnimation();
   const form = useFormContext() as RouletteForm;
 
   const selectedNumbers = form.watch('selectedNumbers');
@@ -66,21 +72,19 @@ export const RouletteScene: React.FC<{
   const ballEffect = useAudioEffect(SoundEffects.ROULETTE);
   const winEffect = useAudioEffect(SoundEffects.WIN_COIN_DIGITAL);
 
-  const { isAnimationSkipped } = useGameSkip();
-
-  const skipRef = React.useRef<boolean>(false);
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const isAutoBetModeRef = React.useRef<boolean>();
 
   const totalWager = React.useMemo(() => {
     const totalChipCount = selectedNumbers.reduce((acc, cur) => acc + cur, 0);
-    return totalChipCount * wager * betCount;
-  }, [selectedNumbers, wager, betCount]);
+    return totalChipCount * wager;
+  }, [selectedNumbers, wager]);
 
   React.useEffect(() => {
     if (rouletteResult && rouletteResult.length) {
       console.log('animation started');
 
       const turn = async (i = 0) => {
+        closeWinAnimation();
         const order = i + 1;
 
         const idxValue = rouletteWheelNumbers.findIndex(
@@ -93,28 +97,20 @@ export const RouletteScene: React.FC<{
 
         setIsAnimating(true);
 
-        if (!skipRef.current) {
-          ballEffect.play();
+        ballEffect.play();
 
-          await wait(ANIMATION_TIMEOUT);
+        await wait(ANIMATION_TIMEOUT);
 
-          onAnimationStep(order);
+        onAnimationStep(order);
 
-          rouletteResult[order - 1]?.won && winEffect.play();
-        }
+        rouletteResult[order - 1]?.won && winEffect.play();
 
         addLastBet(rouletteResult[order - 1] as RouletteGameResult);
 
         setIsAnimating(false);
 
-        if (skipRef.current) {
-          setIsAnimating(false);
-
-          setIsPrepared(false);
-          onSkip();
-
-          return;
-        } else if (rouletteResult.length === order) {
+        if (rouletteResult.length === order) {
+          processStrategy(rouletteResult);
           setIsPrepared(false);
           updateRouletteGameResults([]);
           onAnimationCompleted(rouletteResult);
@@ -127,9 +123,19 @@ export const RouletteScene: React.FC<{
 
           updateGameStatus('ENDED');
 
+          if (isAutoBetModeRef.current) {
+            const newBetCount = betCount - 1;
+
+            betCount !== 0 && form.setValue('betCount', betCount - 1);
+
+            if (betCount >= 0 && newBetCount != 0) {
+              onSubmitGameForm(form.getValues());
+            } else {
+              console.log('auto bet finished!');
+              onAutoBetModeChange(false);
+            }
+          }
           return;
-        } else {
-          timeoutRef.current = setTimeout(() => turn(order), 100);
         }
       };
 
@@ -138,8 +144,11 @@ export const RouletteScene: React.FC<{
   }, [rouletteResult]);
 
   React.useEffect(() => {
+    isAutoBetModeRef.current = isAutoBetMode;
+  }, [isAutoBetMode]);
+
+  React.useEffect(() => {
     return () => {
-      clearTimeout(timeoutRef.current);
       updateGameStatus('IDLE');
       updateLastBets([]);
       updateRouletteGameResults([]);
@@ -159,19 +168,6 @@ export const RouletteScene: React.FC<{
       payout: totalPayout,
     };
   };
-
-  const onSkip = () => {
-    updateLastBets(rouletteResult as RouletteGameResult[]);
-    updateRouletteGameResults([]);
-    onAnimationSkipped(rouletteResult as RouletteGameResult[]);
-    setTimeout(() => updateGameStatus('ENDED'), 50);
-  };
-
-  React.useEffect(() => {
-    skipRef.current = isAnimationSkipped;
-
-    console.log(isAnimationSkipped, 'is');
-  }, [isAnimationSkipped]);
 
   return (
     <div

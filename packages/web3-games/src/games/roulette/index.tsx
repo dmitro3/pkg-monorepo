@@ -10,6 +10,7 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
+  delay,
   useCurrentAccount,
   useFastOrVerified,
   useHandleTx,
@@ -69,8 +70,12 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   const [formValues, setFormValues] = useState<RouletteFormFields>({
     wager: props.minWager || 1,
     totalWager: 0,
-    betCount: 1,
+    betCount: 0,
     selectedNumbers: new Array(145).fill(0),
+    increaseOnLoss: 0,
+    increaseOnWin: 0,
+    stopGain: 0,
+    stopLoss: 0,
   });
 
   const {
@@ -141,13 +146,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
         { name: 'count', type: 'uint8' },
         { name: 'data', type: 'bytes' },
       ],
-      [
-        wagerInWei,
-        stopGainInWei as bigint,
-        stopLossInWei as bigint,
-        formValues.betCount,
-        encodedChoice,
-      ]
+      [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
     const encodedData: `0x${string}` = encodeFunctionData({
@@ -168,7 +167,6 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
       encodedTxData: encodedData,
     };
   }, [
-    formValues.betCount,
     formValues.selectedNumbers,
     formValues.wager,
     selectedToken.address,
@@ -194,7 +192,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedParams.encodedTxData,
   });
 
-  const onGameSubmit = async () => {
+  const onGameSubmit = async (f: RouletteFormFields, errorCount = 0) => {
     clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
@@ -215,6 +213,11 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
       console.log('error', e);
       refetchPlayerGameStatus();
       props.onError && props.onError(e);
+
+      if (errorCount < 2) {
+        await delay(150);
+        onGameSubmit(f, errorCount + 1);
+      }
     }
   };
 
@@ -229,7 +232,6 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
       updateGame({
         wager: formValues.wager || 0,
-        betCount: formValues.betCount || 0,
       });
     }
   }, [gameEvent]);
@@ -285,7 +287,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     refetchPlayerGameStatus();
     updateBalances();
 
-    const totalWager = formValues.wager * formValues.betCount;
+    const totalWager = formValues.wager;
     const totalPayout = result.reduce((acc, cur) => acc + cur.payoutInUsd, 0);
     handleGetBadges({ totalWager, totalPayout });
   };

@@ -109,7 +109,6 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
     }
 
     if (newWager < (props.minWager || 0) || newWager > (props.maxWager || 0)) {
-      console.log('not ENOUGH BALANCWE!');
       setIsAutoBetMode(false);
       return;
     }

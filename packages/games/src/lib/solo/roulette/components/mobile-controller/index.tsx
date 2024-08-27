@@ -10,7 +10,8 @@ import { RouletteForm } from '../../types';
 export const MobileController: React.FC<{
   undoBet: () => void;
   isPrepared: boolean;
-}> = ({ undoBet, isPrepared }) => {
+  isAutoBetMode: boolean;
+}> = ({ undoBet, isPrepared, isAutoBetMode }) => {
   const digitalClickEffect = useAudioEffect(SoundEffects.BUTTON_CLICK_DIGITAL);
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
   const form = useFormContext() as RouletteForm;
@@ -20,7 +21,7 @@ export const MobileController: React.FC<{
       className={cn(
         'wr-flex wr-flex-col md:wr-hidden wr-absolute wr-right-2 wr-gap-2 wr-top-1/2 -wr-translate-y-1/2 wr-transition-all wr-duration-200',
         {
-          'wr-blur-[4px] wr-select-none wr-pointer-events-none wr-z-0': isPrepared,
+          'wr-blur-[4px] wr-select-none wr-pointer-events-none wr-z-0': isPrepared || isAutoBetMode,
         }
       )}
     >
@@ -28,7 +29,7 @@ export const MobileController: React.FC<{
         type="button"
         variant="third"
         className="wr-w-[44px] wr-h-[44px] wr-rounded-full"
-        disabled={isPrepared || form.getValues().totalWager === 0}
+        disabled={isPrepared || isAutoBetMode || form.getValues().totalWager === 0}
         onClick={() => {
           undoBet();
           digitalClickEffect.play();
@@ -51,7 +52,8 @@ export const MobileController: React.FC<{
           form.getValues().totalWager === 0 ||
           form.formState.isSubmitting ||
           form.formState.isLoading ||
-          isPrepared
+          isPrepared ||
+          isAutoBetMode
         }
         isLoading={form.formState.isSubmitting || form.formState.isLoading}
       >
@@ -62,7 +64,7 @@ export const MobileController: React.FC<{
         variant="third"
         className="wr-w-[44px] wr-h-[44px] wr-rounded-full"
         size="xl"
-        disabled={isPrepared}
+        disabled={isPrepared || isAutoBetMode}
         onClick={() => {
           digitalClickEffect.play();
           form.setValue('selectedNumbers', new Array(NUMBER_INDEX_COUNT).fill(0));

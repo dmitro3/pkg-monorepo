@@ -21,8 +21,10 @@ import {
   minWagerMultiplierForSideBets,
   NUMBER_INDEX_COUNT,
 } from '../constants';
-import { RouletteFormFields, RouletteGameProps } from '../types';
+import { RouletteFormFields, RouletteGameProps, RouletteGameResult } from '../types';
 import { MobileController } from './mobile-controller';
+import { useStrategist } from '../../../hooks/use-strategist';
+import { parseToBigInt } from '../../../utils/number';
 
 type TemplateProps = RouletteGameProps & {
   minWager?: number;
@@ -50,7 +52,9 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
     }[]
   >([]);
 
+  const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
   const { account } = useGameOptions();
+  const balanceAsDollar = account?.balanceAsDollar || 0;
   const chipEffect = useAudioEffect(SoundEffects.CHIP_EFFECT);
 
   const formSchema = z.object({
@@ -71,6 +75,10 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
       .max(2000, {
         message: `Maximum wager is ${maxWager}`,
       }),
+    stopGain: z.number(),
+    stopLoss: z.number(),
+    increaseOnWin: z.number(),
+    increaseOnLoss: z.number(),
     betCount: z
       .number()
       .min(MIN_BET_COUNT, { message: `Minimum bet count is ${MIN_BET_COUNT}` })
@@ -86,7 +94,11 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
     defaultValues: {
       wager: minWager || 1,
       totalWager: 0,
-      betCount: 1,
+      betCount: 0,
+      stopGain: 0,
+      stopLoss: 0,
+      increaseOnWin: 0,
+      increaseOnLoss: 0,
       selectedNumbers: new Array(NUMBER_INDEX_COUNT).fill(0),
     },
   });
@@ -168,14 +180,53 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
   };
 
   React.useEffect(() => {
-    const debouncedCb = debounce((formFields) => {
+    const cb = (formFields: any) => {
       onFormChange && onFormChange(formFields);
-    }, 400);
+    };
 
-    const subscription = form.watch(debouncedCb);
+    const subscription = form.watch(cb);
 
     return () => subscription.unsubscribe();
   }, [form.watch]);
+
+  // strategy
+  const wager = form.watch('wager');
+  const increasePercentageOnWin = form.watch('increaseOnWin');
+  const increasePercentageOnLoss = form.watch('increaseOnLoss');
+  const stopProfit = form.watch('stopGain');
+  const stopLoss = form.watch('stopLoss');
+
+  const strategist = useStrategist({
+    wager,
+    increasePercentageOnLoss,
+    increasePercentageOnWin,
+    stopLoss,
+    stopProfit,
+  });
+
+  const processStrategy = (result: RouletteGameResult[]) => {
+    const payout = result[0]?.payoutInUsd || 0;
+    console.log(result, 'result');
+    const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
+    const newWager = Number(p.wager) / 1e8;
+    if (p.action && !p.action.isStop()) {
+      form.setValue('wager', newWager);
+    }
+
+    if (p.action && p.action.isStop()) {
+      setIsAutoBetMode(false);
+      return;
+    }
+
+    if (newWager < (minWager || 0) || newWager > (maxWager || 0)) {
+      setIsAutoBetMode(false);
+      return;
+    }
+  };
+
+  React.useEffect(() => {
+    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+  }, [wager, balanceAsDollar]);
 
   return (
     <Form {...form}>
@@ -188,6 +239,8 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
             undoBet={undoBet}
             minWager={minWager || 1}
             maxWager={maxWager || 2000}
+            isAutoBetMode={isAutoBetMode}
+            onAutoBetModeChange={setIsAutoBetMode}
           />
           <SceneContainer
             style={{
@@ -202,15 +255,23 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
                 onAnimationCompleted={onAnimationCompleted}
                 onAnimationSkipped={onAnimationSkipped}
                 onAnimationStep={onAnimationStep}
+                processStrategy={processStrategy}
+                onSubmitGameForm={prepareSubmit}
+                isAutoBetMode={isAutoBetMode}
+                onAutoBetModeChange={setIsAutoBetMode}
               />
               <Roulette.Table
                 addWager={addWager}
                 winningNumber={null}
                 selectedChip={selectedChip}
-                isPrepared={isPrepared}
+                isPrepared={isPrepared || isAutoBetMode}
               />
               <Roulette.LastBets />
-              <MobileController isPrepared={isPrepared} undoBet={undoBet} />
+              <MobileController
+                isPrepared={isPrepared}
+                undoBet={undoBet}
+                isAutoBetMode={isAutoBetMode}
+              />
             </Roulette.Game>
             <WinAnimation />
           </SceneContainer>
