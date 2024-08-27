@@ -12,10 +12,9 @@ import { Form } from '../../../ui/form';
 import { parseToBigInt } from '../../../utils/number';
 import { cn } from '../../../utils/style';
 import { CoinFlip, CoinFlipFormFields, CoinFlipGameResult } from '..';
-import { CoinSide, MAX_BET_COUNT, MIN_BET_COUNT, WIN_MULTIPLIER } from '../constants';
+import { CoinSide, MIN_BET_COUNT, WIN_MULTIPLIER } from '../constants';
 import { BetController } from './bet-controller';
 import { CoinFlipGameProps } from './game';
-import { useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   scene?: {
@@ -35,7 +34,6 @@ type TemplateProps = CoinFlipGameProps & {
 const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
-  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -126,11 +124,8 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     if (balanceAsDollar < wager) {
       setIsAutoBetMode(false);
-      toast({
-        title: 'Oops, you are out of funds.',
-        description: 'Deposit more funds to continue playing.',
-        variant: 'error',
-      });
+      props?.onError &&
+        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
     }
   }, [wager, balanceAsDollar]);
 

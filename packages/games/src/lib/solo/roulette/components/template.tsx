@@ -24,7 +24,6 @@ import {
 } from '../constants';
 import { RouletteFormFields, RouletteGameProps, RouletteGameResult } from '../types';
 import { MobileController } from './mobile-controller';
-import { useToast } from '../../../hooks/use-toast';
 
 type TemplateProps = RouletteGameProps & {
   minWager?: number;
@@ -42,6 +41,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
   onAnimationCompleted,
   onAnimationSkipped,
   onAnimationStep,
+  onError,
 }) => {
   const [selectedChip, setSelectedChip] = React.useState<Chip>(Chip.ONE);
   const [isPrepared, setIsPrepared] = React.useState<boolean>(false);
@@ -53,7 +53,6 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
   >([]);
 
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
-  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
   const chipEffect = useAudioEffect(SoundEffects.CHIP_EFFECT);
@@ -234,11 +233,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
   React.useEffect(() => {
     if (balanceAsDollar < wager) {
       setIsAutoBetMode(false);
-      toast({
-        title: 'Oops, you are out of funds.',
-        description: 'Deposit more funds to continue playing.',
-        variant: 'error',
-      });
+      onError && onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
     }
   }, [wager, balanceAsDollar]);
 

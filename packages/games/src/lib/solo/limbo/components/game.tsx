@@ -9,6 +9,7 @@ export type LimboGameProps = React.ComponentProps<'div'> & {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: LimboGameResult[]) => void;
   onAnimationSkipped?: (result: LimboGameResult[]) => void;
+  onError?: (e: any) => void;
 };
 
 export const LimboGame = ({ gameResults, children }: LimboGameProps) => {

@@ -8,6 +8,7 @@ export type KenoGameProps = React.ComponentProps<'div'> & {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: KenoGameResult[]) => void;
   onAnimationSkipped?: (result: KenoGameResult[]) => void;
+  onError?: (e: any) => void;
 };
 
 export const KenoGame = ({ gameResults, children }: KenoGameProps) => {

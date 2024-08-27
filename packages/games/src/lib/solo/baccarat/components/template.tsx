@@ -25,7 +25,6 @@ import {
 import { BaccaratScene } from './baccarat-scene';
 import { BetController } from './bet-controller';
 import Control from './control';
-import { useToast } from '../../../hooks/use-toast';
 
 type TemplateProps = BaccaratGameProps & {
   minWager?: number;
@@ -33,6 +32,7 @@ type TemplateProps = BaccaratGameProps & {
 
   onSubmitGameForm: (data: BaccaratFormFields) => void;
   onFormChange?: (fields: BaccaratFormFields) => void;
+  onError?: (e: any) => void;
 };
 
 const BaccaratTemplate: React.FC<TemplateProps> = ({
@@ -45,8 +45,8 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   onAnimationCompleted = () => {},
   onSubmitGameForm,
   onFormChange,
+  onError,
 }) => {
-  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -273,11 +273,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   React.useEffect(() => {
     if (balanceAsDollar < wager) {
       setIsAutoBetMode(false);
-      toast({
-        title: 'Oops, you are out of funds.',
-        description: 'Deposit more funds to continue playing.',
-        variant: 'error',
-      });
+      onError && onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
     }
   }, [wager, balanceAsDollar]);
 

@@ -197,7 +197,7 @@ const BetTable = ({
                       </a>
                     </TableCell>
                     <TableCell className="wr-text-center lg:wr-text-left wr-table-cell">
-                      <div className="wr-flex wr-items-center wr-gap-2">
+                      <div className="wr-flex wr-items-center wr-gap-2 md:wr-justify-normal wr-justify-center">
                         {gameMap[bet.game].icon}
                         {gameMap[bet.game].title}
                       </div>

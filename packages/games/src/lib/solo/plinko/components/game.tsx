@@ -9,6 +9,7 @@ export type PlinkoGameProps = React.ComponentProps<'div'> & {
   onAnimationStep?: (step: number, multiplier: number) => void;
   onAnimationCompleted?: (result: PlinkoLastBet[]) => void;
   onAnimationSkipped?: (result: PlinkoLastBet[]) => void;
+  onError?: (e: any) => void;
 };
 
 export const PlinkoGame = ({ gameResults, children }: PlinkoGameProps) => {
