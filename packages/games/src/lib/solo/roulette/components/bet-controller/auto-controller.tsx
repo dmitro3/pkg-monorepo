@@ -147,7 +147,10 @@ export const AutoController = ({
             'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none wr-mb-3 lg:wr-mb-0 wr-order-1 lg:wr-order-none',
             {
               'wr-cursor-default wr-pointer-events-none':
-                !form.formState.isValid || form.formState.isSubmitting || form.formState.isLoading,
+                form.getValues().totalWager === 0 ||
+                form.formState.isSubmitting ||
+                form.formState.isLoading ||
+                isAutoBetMode,
             }
           )}
           size={'xl'}
