@@ -195,7 +195,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedParams.encodedTxData,
   });
 
-  const onGameSubmit = async () => {
+  const onGameSubmit = async (f: CoinFlipFormFields, errorCount = 0) => {
     clearLiveResults();
 
     if (!allowance.hasAllowance) {
@@ -219,6 +219,8 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       refetchPlayerGameStatus();
       setIsLoading(false); // Set loading state to false
       props.onError && props.onError(e);
+
+      if (errorCount < 2) onGameSubmit(f, errorCount + 1);
     }
   };
 
