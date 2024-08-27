@@ -28,7 +28,7 @@ export const ManualController: React.FC<Props> = ({ minWager, maxWager }) => {
   const wager = form.watch('wager');
   const selections = form.watch('selections');
 
-  const { kenoGameResults, updateKenoGameResults } = useKenoGameStore([
+  const { updateKenoGameResults } = useKenoGameStore([
     'gameStatus',
     'updateKenoGameResults',
     'kenoGameResults',
