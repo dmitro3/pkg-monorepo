@@ -10,19 +10,34 @@ import { cn } from '../../../../utils/style';
 import { Keno } from '../..';
 import { initialKenoCells } from '../../constants';
 import useKenoGameStore from '../../store';
-import { KenoForm, KenoGameResult } from '../../types';
+import { KenoForm, KenoFormField, KenoGameResult } from '../../types';
 import styles from './scene.module.css';
 
 export type KenoSceneProps = {
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: KenoGameResult[]) => void;
+  onSubmitGameForm: (f: KenoFormField) => void;
+  isAutoBetMode: boolean;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  processStrategy: (result: KenoGameResult[]) => void;
 };
 
-export const KenoScene: React.FC<KenoSceneProps> = ({ onAnimationStep, onAnimationCompleted }) => {
+export const KenoScene: React.FC<KenoSceneProps> = ({
+  onAnimationStep,
+  onAnimationCompleted,
+  isAutoBetMode,
+  processStrategy,
+  onAutoBetModeChange,
+  onSubmitGameForm,
+}) => {
   const form = useFormContext() as KenoForm;
 
   const pickEffect = useAudioEffect(SoundEffects.LIMBO_TICK);
   const outComeEffect = useAudioEffect(SoundEffects.WIN_CLAIM_SOUND);
+  const betCount = form.watch('betCount');
+
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const isAutoBetModeRef = React.useRef<boolean>();
 
   const { showWinAnimation, closeWinAnimation } = useWinAnimation();
 
@@ -36,6 +51,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({ onAnimationStep, onAnimati
     if (kenoGameResults.length == 0) return;
 
     const turn = (i = 0) => {
+      closeWinAnimation();
       const curr = i + 1;
       setCurrentNumbers([]);
 
@@ -61,17 +77,34 @@ export const KenoScene: React.FC<KenoSceneProps> = ({ onAnimationStep, onAnimati
           multiplier,
         });
 
-        setTimeout(() => {
+        processStrategy(kenoGameResults);
+
+        timeoutRef.current = setTimeout(() => {
           // setCurrentNumbers([]);
           updateGameStatus('ENDED');
+          if (isAutoBetModeRef.current) {
+            const newBetCount = betCount - 1;
+
+            betCount !== 0 && form.setValue('betCount', betCount - 1);
+
+            if (betCount >= 0 && newBetCount != 0) {
+              onSubmitGameForm(form.getValues());
+            } else {
+              console.log('auto bet finished!');
+              onAutoBetModeChange(false);
+            }
+          }
         }, 250);
-      } else {
-        setTimeout(() => turn(curr), 1500);
       }
     };
 
     turn();
   }, [kenoGameResults]);
+
+  React.useEffect(() => {
+    isAutoBetModeRef.current = isAutoBetMode;
+    if (!isAutoBetMode) clearTimeout(timeoutRef.current);
+  }, [isAutoBetMode]);
 
   const calculatePayout = (): {
     multiplier: number;
