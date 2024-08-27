@@ -18,6 +18,7 @@ import { DiceFormFields, DiceGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RangeGameProps } from './game';
 import { SliderTrackOptions } from './slider';
+import { toast, useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   slider?: {
@@ -45,6 +46,7 @@ const defaultOptions: TemplateOptions = {
 const DiceTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...defaultOptions, ...props.options };
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
+  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -120,6 +122,17 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
     const payout = result[0]?.payoutInUsd || 0;
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
+
+    if (newWager < (props.minWager || 0)) {
+      form.setValue('wager', props.minWager || 0);
+      return;
+    }
+
+    if (newWager > (props.maxWager || 0)) {
+      form.setValue('wager', props.maxWager || 0);
+      return;
+    }
+
     if (p.action && !p.action.isStop()) {
       form.setValue('wager', newWager);
     }
@@ -128,15 +141,17 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
       setIsAutoBetMode(false);
       return;
     }
-
-    if (newWager < (props.minWager || 0) || newWager > (props.maxWager || 0)) {
-      setIsAutoBetMode(false);
-      return;
-    }
   };
 
   React.useEffect(() => {
-    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+    if (balanceAsDollar < wager) {
+      setIsAutoBetMode(false);
+      toast({
+        title: 'Oops, you are out of funds.',
+        description: 'Deposit more funds to continue playing.',
+        variant: 'error',
+      });
+    }
   }, [wager, balanceAsDollar]);
 
   return (

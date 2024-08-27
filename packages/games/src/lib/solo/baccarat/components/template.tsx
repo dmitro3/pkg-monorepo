@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import debounce from 'debounce';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -10,8 +9,11 @@ import { Chip } from '../../../common/chip-controller/types';
 import { GameContainer, SceneContainer } from '../../../common/containers';
 import { WinAnimation } from '../../../common/win-animation';
 import { CDN_URL } from '../../../constants';
+import { useGameOptions } from '../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { MULTIPLIER_BANKER, MULTIPLIER_PLAYER, MULTIPLIER_TIE } from '../constants';
 import {
   BaccaratBetType,
@@ -23,9 +25,7 @@ import {
 import { BaccaratScene } from './baccarat-scene';
 import { BetController } from './bet-controller';
 import Control from './control';
-import { parseToBigInt } from '../../../utils/number';
-import { useGameOptions } from '../../../game-provider';
-import { useStrategist } from '../../../hooks/use-strategist';
+import { useToast } from '../../../hooks/use-toast';
 
 type TemplateProps = BaccaratGameProps & {
   minWager?: number;
@@ -46,6 +46,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   onSubmitGameForm,
   onFormChange,
 }) => {
+  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -248,6 +249,17 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     const payout = result.payout;
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
+
+    if (newWager < (minWager || 0)) {
+      form.setValue('wager', minWager || 0);
+      return;
+    }
+
+    if (newWager > (maxWager || 0)) {
+      form.setValue('wager', maxWager || 0);
+      return;
+    }
+
     if (p.action && !p.action.isStop()) {
       form.setValue('wager', newWager);
     }
@@ -256,15 +268,17 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
       setIsAutoBetMode(false);
       return;
     }
-
-    if (newWager < (minWager || 0) || newWager > (maxWager || 0)) {
-      setIsAutoBetMode(false);
-      return;
-    }
   };
 
   React.useEffect(() => {
-    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+    if (balanceAsDollar < wager) {
+      setIsAutoBetMode(false);
+      toast({
+        title: 'Oops, you are out of funds.',
+        description: 'Deposit more funds to continue playing.',
+        variant: 'error',
+      });
+    }
   }, [wager, balanceAsDollar]);
 
   return (

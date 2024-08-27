@@ -15,6 +15,7 @@ import { CoinFlip, CoinFlipFormFields, CoinFlipGameResult } from '..';
 import { CoinSide, MAX_BET_COUNT, MIN_BET_COUNT, WIN_MULTIPLIER } from '../constants';
 import { BetController } from './bet-controller';
 import { CoinFlipGameProps } from './game';
+import { useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   scene?: {
@@ -34,6 +35,7 @@ type TemplateProps = CoinFlipGameProps & {
 const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
+  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -100,6 +102,17 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
     console.log(result, 'result');
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
+
+    if (newWager < (props.minWager || 0)) {
+      form.setValue('wager', props.minWager || 0);
+      return;
+    }
+
+    if (newWager > (props.maxWager || 0)) {
+      form.setValue('wager', props.maxWager || 0);
+      return;
+    }
+
     if (p.action && !p.action.isStop()) {
       form.setValue('wager', newWager);
     }
@@ -108,19 +121,17 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
       setIsAutoBetMode(false);
       return;
     }
-
-    if (
-      newWager < (props.minWager || 0) ||
-      balanceAsDollar < newWager ||
-      newWager > (props.maxWager || 0)
-    ) {
-      setIsAutoBetMode(false);
-      return;
-    }
   };
 
   React.useEffect(() => {
-    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+    if (balanceAsDollar < wager) {
+      setIsAutoBetMode(false);
+      toast({
+        title: 'Oops, you are out of funds.',
+        description: 'Deposit more funds to continue playing.',
+        variant: 'error',
+      });
+    }
   }, [wager, balanceAsDollar]);
 
   return (

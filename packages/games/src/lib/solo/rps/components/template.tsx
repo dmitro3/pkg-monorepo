@@ -1,20 +1,20 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import debounce from 'debounce';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
 import { GameContainer, SceneContainer } from '../../../common/containers';
+import { useGameOptions } from '../../../game-provider';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { Rps } from '..';
 import { RockPaperScissors, RpsFormFields, RPSGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RpsGameProps } from './game';
-import { useStrategist } from '../../../hooks/use-strategist';
-import { parseToBigInt } from '../../../utils/number';
-import { useGameOptions } from '../../../game-provider';
+import { useToast } from '../../../hooks/use-toast';
 
 type TemplateOptions = {
   scene?: {
@@ -33,6 +33,7 @@ type TemplateProps = RpsGameProps & {
 const RpsTemplate = ({ ...props }: TemplateProps) => {
   const options = { ...props.options };
   const [isAutoBetMode, setIsAutoBetMode] = React.useState<boolean>(false);
+  const { toast } = useToast();
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
@@ -99,6 +100,17 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
     console.log(result, 'result');
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
+
+    if (newWager < (props.minWager || 0)) {
+      form.setValue('wager', props.minWager || 0);
+      return;
+    }
+
+    if (newWager > (props.maxWager || 0)) {
+      form.setValue('wager', props.maxWager || 0);
+      return;
+    }
+
     if (p.action && !p.action.isStop()) {
       form.setValue('wager', newWager);
     }
@@ -107,15 +119,17 @@ const RpsTemplate = ({ ...props }: TemplateProps) => {
       setIsAutoBetMode(false);
       return;
     }
-
-    if (newWager < (props.minWager || 0) || newWager > (props.maxWager || 0)) {
-      setIsAutoBetMode(false);
-      return;
-    }
   };
 
   React.useEffect(() => {
-    if (balanceAsDollar < wager) setIsAutoBetMode(false);
+    if (balanceAsDollar < wager) {
+      setIsAutoBetMode(false);
+      toast({
+        title: 'Oops, you are out of funds.',
+        description: 'Deposit more funds to continue playing.',
+        variant: 'error',
+      });
+    }
   }, [wager, balanceAsDollar]);
 
   return (

@@ -39,83 +39,83 @@ const gameMap: Record<
 > = {
   [GameType.BACCARAT]: {
     title: 'Baccarat',
-    icon: <IconBaccarat />,
+    icon: <IconBaccarat className="wr-h-4 wr-w-4" />,
   },
   [GameType.BLACKJACK]: {
     title: 'Blackjack',
-    icon: <IconVideoPoker />,
+    icon: <IconVideoPoker className="wr-h-4 wr-w-4" />,
   },
   [GameType.COINFLIP]: {
     title: 'Coin Flip',
-    icon: <IconCoinFlip />,
+    icon: <IconCoinFlip className="wr-h-4 wr-w-4" />,
   },
   [GameType.DICE]: {
     title: 'Roll',
-    icon: <IconDice />,
+    icon: <IconDice className="wr-h-4 wr-w-4" />,
   },
   [GameType.HOLDEM_POKER]: {
     title: 'Holdem Poker',
-    icon: <IconVideoPoker />,
+    icon: <IconVideoPoker className="wr-h-4 wr-w-4" />,
   },
   [GameType.HORSE_RACE]: {
     title: 'Horse Race',
-    icon: <IconHorseRace />,
+    icon: <IconHorseRace className="wr-h-4 wr-w-4" />,
   },
   [GameType.KENO]: {
     title: 'Keno',
-    icon: <IconKeno />,
+    icon: <IconKeno className="wr-h-4 wr-w-4" />,
   },
   [GameType.LIMBO]: {
     title: 'Limbo',
-    icon: <IconLimbo />,
+    icon: <IconLimbo className="wr-h-4 wr-w-4" />,
   },
   [GameType.LOTTERY]: {
     title: 'Lottery',
-    icon: <IconVideoPoker />,
+    icon: <IconVideoPoker className="wr-h-4 wr-w-4" />,
   },
   [GameType.MINES]: {
     title: 'Mines',
-    icon: <IconMines />,
+    icon: <IconMines className="wr-h-4 wr-w-4" />,
   },
   [GameType.MOON]: {
     title: 'Crash',
-    icon: <IconCrash />,
+    icon: <IconCrash className="wr-h-4 wr-w-4" />,
   },
   [GameType.ONE_HAND_BLACKJACK]: {
     title: 'Blackjack',
-    icon: <IconVideoPoker />,
+    icon: <IconVideoPoker className="wr-h-4 wr-w-4" />,
   },
   [GameType.PLINKO]: {
     title: 'Plinko',
-    icon: <IconPlinko />,
+    icon: <IconPlinko className="wr-h-4 wr-w-4" />,
   },
   [GameType.RANGE]: {
     title: 'Dice',
-    icon: <IconRange />,
+    icon: <IconRange className="wr-h-4 wr-w-4" />,
   },
   [GameType.ROULETTE]: {
     title: 'Roulette',
-    icon: <IconRoulette />,
+    icon: <IconRoulette className="wr-h-4 wr-w-4" />,
   },
   [GameType.RPS]: {
     title: 'RPS',
-    icon: <IconRps />,
+    icon: <IconRps className="wr-h-4 wr-w-4" />,
   },
   [GameType.SLOT]: {
     title: 'Slot',
-    icon: <IconSlot />,
+    icon: <IconSlot className="wr-h-4 wr-w-4" />,
   },
   [GameType.VIDEO_POKER]: {
     title: 'Video Poker',
-    icon: <IconVideoPoker />,
+    icon: <IconVideoPoker className="wr-h-4 wr-w-4" />,
   },
   [GameType.WHEEL]: {
     title: 'Wheel',
-    icon: <IconWheel />,
+    icon: <IconWheel className="wr-h-4 wr-w-4" />,
   },
   [GameType.WINR_BONANZA]: {
     title: 'WINR Bonanza',
-    icon: <IconSweetBonanza />,
+    icon: <IconSweetBonanza className="wr-h-4 wr-w-4" />,
   },
 };
 
@@ -197,7 +197,7 @@ const BetTable = ({
                       </a>
                     </TableCell>
                     <TableCell className="wr-text-center lg:wr-text-left wr-table-cell">
-                      <div className="wr-flex wr-items-center wr-gap-1.5">
+                      <div className="wr-flex wr-items-center wr-gap-2">
                         {gameMap[bet.game].icon}
                         {gameMap[bet.game].title}
                       </div>
