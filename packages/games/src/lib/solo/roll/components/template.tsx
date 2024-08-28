@@ -128,6 +128,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
 
     if (currentBalance < wager) {
       setIsAutoBetMode(false);
+      props.onAnimationCompleted && props.onAnimationCompleted(result);
       props?.onError &&
         props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
       return;

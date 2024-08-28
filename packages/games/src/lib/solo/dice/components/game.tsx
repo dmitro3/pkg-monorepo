@@ -82,8 +82,8 @@ export const RangeGame = ({
     onAnimationStep(curr);
 
     if (isAnimationFinished) {
+      onAnimationCompleted(diceGameResults);
       timeoutRef.current = setTimeout(() => {
-        onAnimationCompleted(diceGameResults);
         if (isAutoBetModeRef.current) {
           const newBetCount = betCount - 1;
 

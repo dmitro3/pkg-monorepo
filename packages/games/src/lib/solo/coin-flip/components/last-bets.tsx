@@ -18,7 +18,7 @@ export const CoinFlipLastBets: React.FC = () => {
     if (newBet) {
       setDisplayBets((prev) => {
         const updatedBets = [
-          ...prev.map((bet) => ({ ...bet, animation: '' })),
+          ...prev.map((bet) => ({ ...bet, random: Math.random(), animation: '' })),
           { ...newBet, animation: 'fade-in' },
         ];
         if (updatedBets.length > maxItems) {
@@ -35,7 +35,7 @@ export const CoinFlipLastBets: React.FC = () => {
       {displayBets?.map((result, index) => {
         return (
           <div
-            key={`${index}-${result.coinSide}`}
+            key={`${index}-${result.random}`}
             className={cn(
               'wr-flex wr-h-7 wr-w-[75px] wr-flex-shrink-0 wr-items-center wr-justify-center wr-rounded-[1000px] wr-bg-zinc-700 wr-font-semibold wr-text-zinc-100 wr-transition-all wr-duration-500',
               {
