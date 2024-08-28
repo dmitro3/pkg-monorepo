@@ -196,7 +196,6 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: DiceFormFields, errorCount = 0) => {
-    clearLiveResults();
     updateGameStatus('PLAYING');
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
@@ -276,6 +275,12 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     },
     [diceResult]
   );
+
+  React.useEffect(() => {
+    return () => {
+      clearLiveResults();
+    };
+  }, []);
 
   return (
     <>

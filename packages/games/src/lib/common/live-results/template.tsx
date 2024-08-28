@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import Draggable from 'react-draggable';
 
-import { Close } from '../../svgs';
+import { Close, IconStats } from '../../svgs';
 import { Button } from '../../ui/button';
 import { Card, CardHeader } from '../../ui/card';
 import { cn } from '../../utils/style';
@@ -97,8 +97,9 @@ const LiveResultsTemplate = () => {
                   </svg>
                 </motion.div>
 
-                <motion.span className="mt-0" layoutId="title">
-                  Bet & Win
+                <motion.span className="mt-0 wr-flex wr-gap-2 wr-items-center" layoutId="title">
+                  <IconStats />
+                  Live Stats
                 </motion.span>
                 <motion.div className="div">
                   <Close className="wr-cursor-pointer" onClick={() => setIsHidden(true)} />

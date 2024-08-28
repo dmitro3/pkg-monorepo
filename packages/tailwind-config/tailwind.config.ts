@@ -434,6 +434,14 @@ const config: Omit<Config, 'content'> = {
             opacity: '0',
           },
         },
+        'fade-in': {
+          '0%': { transform: 'translateX(50%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        'fade-out': {
+          '0%': { transform: 'translateX(0)', opacity: '1' },
+          '100%': { transform: 'translateX(-50%)', opacity: '0' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -453,6 +461,8 @@ const config: Omit<Config, 'content'> = {
         'dice-scale': 'dice-scale 500ms ease-out forwards',
         'slide-down-first': 'slide-down-first .5s ease-out',
         'slide-down-last': 'slide-down-last .5s ease-out',
+        'fade-in': 'fade-in .5s ease-out forwards',
+        'fade-out': 'fade-out .5s ease-out forwards',
       },
       fontSize: {
         small: '13px',

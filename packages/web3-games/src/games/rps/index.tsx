@@ -194,8 +194,6 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: RpsFormFields, errorCount = 0) => {
-    clearLiveResults();
-
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -288,6 +286,12 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
     },
     [rpsResult]
   );
+
+  React.useEffect(() => {
+    return () => {
+      clearLiveResults();
+    };
+  }, []);
 
   return (
     <>

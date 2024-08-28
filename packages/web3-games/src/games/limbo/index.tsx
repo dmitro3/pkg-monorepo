@@ -81,9 +81,8 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   const {
     addResult,
     updateGame,
-    skipAll,
     clear: clearLiveResults,
-  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame']);
 
   const { updateGameStatus } = useLimboGameStore(['updateGameStatus']);
 
@@ -197,8 +196,6 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
 
   const onGameSubmit = async (f: LimboFormField, errorCount = 0) => {
     updateGameStatus('PLAYING');
-
-    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -277,6 +274,12 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     },
     [limboResult]
   );
+
+  React.useEffect(() => {
+    return () => {
+      clearLiveResults();
+    };
+  }, []);
 
   return (
     <>

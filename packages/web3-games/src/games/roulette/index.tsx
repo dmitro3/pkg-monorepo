@@ -193,7 +193,6 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: RouletteFormFields, errorCount = 0) => {
-    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -291,6 +290,12 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     const totalPayout = result.reduce((acc, cur) => acc + cur.payoutInUsd, 0);
     handleGetBadges({ totalWager, totalPayout });
   };
+
+  React.useEffect(() => {
+    return () => {
+      clearLiveResults();
+    };
+  }, []);
 
   return (
     <>

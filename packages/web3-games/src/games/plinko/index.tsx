@@ -192,7 +192,6 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: PlinkoFormFields, errorCount = 0) => {
-    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -275,6 +274,12 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     },
     [plinkoResult]
   );
+
+  React.useEffect(() => {
+    return () => {
+      clearLiveResults();
+    };
+  }, []);
 
   return (
     <>

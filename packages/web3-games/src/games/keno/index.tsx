@@ -81,7 +81,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
     addResult,
     updateGame,
     clear: clearLiveResults,
-  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame']);
 
   const { updateGameStatus } = useKenoGameStore(['updateGameStatus']);
 
@@ -198,7 +198,6 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: KenoFormField, errorCount = 0) => {
-    clearLiveResults();
     updateGameStatus('PLAYING');
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
@@ -279,6 +278,12 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
     },
     [kenoResult]
   );
+
+  React.useEffect(() => {
+    return () => {
+      clearLiveResults();
+    };
+  }, []);
 
   return (
     <>

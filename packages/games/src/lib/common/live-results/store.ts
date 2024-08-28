@@ -11,6 +11,7 @@ export interface Result {
 
 export interface LiveResultState {
   wager: number;
+  totalWager: number;
   betCount: number;
   results: Result[];
   currentProfit: number;
@@ -31,6 +32,7 @@ export type LiveResultStore = LiveResultState & LiveResultActions;
 
 export const liveResultStore = create<LiveResultStore>()((set, get) => ({
   wager: 0,
+  totalWager: 0,
   betCount: 0,
   currentProfit: 0,
   wonCount: 0,
@@ -41,6 +43,7 @@ export const liveResultStore = create<LiveResultStore>()((set, get) => ({
     set((state) => ({
       ...state,
       wager,
+      totalWager: toDecimals(state.totalWager + wager, 2),
       betCount,
     }));
   },
@@ -85,6 +88,7 @@ export const liveResultStore = create<LiveResultStore>()((set, get) => ({
   clear: () => {
     set({
       wager: 0,
+      totalWager: 0,
       betCount: 0,
       results: [],
       currentProfit: 0,

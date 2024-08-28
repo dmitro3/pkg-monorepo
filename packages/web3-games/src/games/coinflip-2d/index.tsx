@@ -74,9 +74,8 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   const {
     addResult,
     updateGame,
-    skipAll,
     clear: clearLiveResults,
-  } = useLiveResultStore(['addResult', 'clear', 'updateGame', 'skipAll']);
+  } = useLiveResultStore(['addResult', 'clear', 'updateGame']);
 
   const { eventLogic } = useFastOrVerified();
 
@@ -197,8 +196,6 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: CoinFlipFormFields, errorCount = 0) => {
-    clearLiveResults();
-
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -280,6 +277,12 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     },
     [coinFlipResult]
   );
+
+  React.useEffect(() => {
+    return () => {
+      clearLiveResults();
+    };
+  }, []);
 
   return (
     <>

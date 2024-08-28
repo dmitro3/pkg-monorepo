@@ -193,7 +193,6 @@ export default function RollGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: RollFormFields, errorCount = 0) => {
-    clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
@@ -286,6 +285,12 @@ export default function RollGame(props: TemplateWithWeb3Props) {
     },
     [rollResult]
   );
+
+  React.useEffect(() => {
+    return () => {
+      clearLiveResults();
+    };
+  }, []);
 
   return (
     <>
