@@ -12,20 +12,42 @@ type DiceResultIndex = 0 | 1 | 2 | 3 | 4 | 5;
 export const LastBets = () => {
   const { lastBets } = useRollGameStore(['lastBets']);
   const isMobile = useMediaQuery('(max-width:1024px)');
-  const lastFiveBets = lastBets?.slice(isMobile ? -4 : -8);
+  const maxItems = isMobile ? 5 : 9;
+  const [displayBets, setDisplayBets] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    const newBet = lastBets?.[lastBets.length - 1];
+
+    if (newBet) {
+      setDisplayBets((prev) => {
+        const updatedBets = [
+          ...prev.map((bet) => ({ ...bet, animation: '' })),
+          { ...newBet, animation: 'fade-in' },
+        ];
+        if (updatedBets.length > maxItems) {
+          updatedBets.shift();
+        }
+
+        return updatedBets;
+      });
+    }
+  }, [lastBets, maxItems]);
 
   return (
     <LastBetsContainer className="h-12">
-      {lastFiveBets?.map((result, index) => {
+      {displayBets?.map((result, index) => {
         return (
           <div
             className={cn(
-              'wr-relative wr-aspect-square wr-h-9 wr-w-9 wr-rounded-md wr-border-2 wr-border-zinc-800 wr-bg-black',
+              'wr-relative wr-aspect-square wr-h-9 wr-w-9 wr-rounded-md wr-border-2 wr-border-zinc-800 wr-bg-black wr-transition-all wr-duration-500',
               {
                 'wr-bg-green-500': result.payout > 0,
+                'wr-animate-fade-in': result.animation === 'fade-in',
+                'wr-animate-fade-out':
+                  (isMobile ? displayBets.length == 5 : displayBets.length == 9) && index == 0,
               }
             )}
-            key={`dot-${index}`}
+            key={`dot-${index}-${result.dice}`}
           >
             {miniDotPosition?.[(result.dice - 1) as DiceResultIndex]?.map((dot, i) => (
               <div

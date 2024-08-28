@@ -2,6 +2,7 @@
 
 import {
   GameControllerGlobalBetHistoryResponse,
+  useGameControllerBetHistory,
   useGameControllerGlobalBetHistory,
 } from '@winrlabs/api';
 import { GameType } from '@winrlabs/games';
@@ -44,6 +45,26 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
     }
   );
 
+  const {
+    data: myBetsData,
+    isLoading: myBetsIsLoading,
+    refetch: refetchMyBets,
+  } = useGameControllerBetHistory(
+    {
+      queryParams:
+        filter.type === 'player'
+          ? {
+              player: address,
+              ...defaultParams,
+            }
+          : defaultParams,
+    },
+    {
+      enabled: options?.enabled,
+      refetchInterval: 7500,
+    }
+  );
+
   const tokens = useTokenStore((s) => s.tokens);
 
   const mapTokens = React.useMemo(() => {
@@ -57,11 +78,16 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
   }, [tokens]);
 
   return {
-    betHistory: data as GameControllerGlobalBetHistoryResponse,
-    isHistoryLoading: isLoading,
+    betHistory: (filter.type == 'player'
+      ? myBetsData?.data
+      : data) as GameControllerGlobalBetHistoryResponse,
+    isHistoryLoading: isLoading || myBetsIsLoading,
     mapHistoryTokens: mapTokens,
     historyFilter: filter,
     setHistoryFilter: setFilter,
-    refetchHistory: refetch,
+    refetchHistory: () => {
+      refetch();
+      refetchMyBets();
+    },
   };
 };

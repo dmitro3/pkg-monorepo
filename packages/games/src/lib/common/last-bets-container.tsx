@@ -12,7 +12,7 @@ export const LastBetsContainer: React.FC<{
   return (
     <div
       className={cn(
-        'wr-absolute wr-top-5 wr-left-1/2 -wr-translate-x-1/2 wr-flex wr-max-w-[350px] wr-items-center wr-justify-center wr-gap-[6px] wr-overflow-hidden',
+        'wr-px-4 wr-w-full wr-max-w-full wr-absolute wr-top-5 wr-left-1/2 -wr-translate-x-1/2 wr-flex wr-items-center wr-justify-end wr-gap-[6px] wr-overflow-hidden',
         {
           'wr-max-h-[calc(100%-40px)]': dir === 'vertical',
         },
