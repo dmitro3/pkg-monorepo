@@ -479,7 +479,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
-      props.onError && props.onError(e);
+      // props.onError && props.onError(e);
     }
     setIsLoading(false); // Set loading state to false
   };

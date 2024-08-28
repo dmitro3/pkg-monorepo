@@ -330,7 +330,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       console.log('error', e);
       refetchPlayerGameStatus();
       setIsWaitingResponse(false);
-      props.onError && props.onError(e);
+      // props.onError && props.onError(e);
     }
   };
 

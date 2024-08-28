@@ -120,6 +120,14 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
     const payout = result[0]?.payoutInUsd || 0;
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
+    const currentBalance = balanceAsDollar - wager + payout;
+
+    if (currentBalance < wager) {
+      setIsAutoBetMode(false);
+      props?.onError &&
+        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
+      return;
+    }
 
     if (newWager < (props.minWager || 0)) {
       form.setValue('wager', props.minWager || 0);
@@ -140,14 +148,6 @@ const DiceTemplate = ({ ...props }: TemplateProps) => {
       return;
     }
   };
-
-  React.useEffect(() => {
-    if (balanceAsDollar < wager) {
-      setIsAutoBetMode(false);
-      props?.onError &&
-        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
-    }
-  }, [wager, balanceAsDollar]);
 
   return (
     <Form {...form}>

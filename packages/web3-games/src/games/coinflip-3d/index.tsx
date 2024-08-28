@@ -194,7 +194,7 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
-      props.onError && props.onError(e);
+      // props.onError && props.onError(e);
     }
   };
 

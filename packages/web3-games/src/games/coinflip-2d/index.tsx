@@ -219,7 +219,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
       console.log('error', e);
       refetchPlayerGameStatus();
       setIsLoading(false); // Set loading state to false
-      props.onError && props.onError(e);
+      // props.onError && props.onError(e);
 
       if (errorCount < 3) {
         await delay(150);

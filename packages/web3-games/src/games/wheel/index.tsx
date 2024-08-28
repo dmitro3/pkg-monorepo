@@ -272,7 +272,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
-      props.onError && props.onError(e);
+      // props.onError && props.onError(e);
     }
 
     console.log('BET TX COMPLETED');

@@ -191,6 +191,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
 
   // strategy
   const wager = form.watch('wager');
+  const totalWager = form.watch('totalWager');
   const increasePercentageOnWin = form.watch('increaseOnWin');
   const increasePercentageOnLoss = form.watch('increaseOnLoss');
   const stopProfit = form.watch('stopGain');
@@ -209,6 +210,13 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
     console.log(result, 'result');
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
+    const currentBalance = balanceAsDollar - totalWager + payout;
+
+    if (currentBalance < totalWager) {
+      setIsAutoBetMode(false);
+      onError && onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
+      return;
+    }
 
     if (newWager < (minWager || 0)) {
       form.setValue('wager', minWager || 0);
@@ -229,13 +237,6 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
       return;
     }
   };
-
-  React.useEffect(() => {
-    if (balanceAsDollar < wager) {
-      setIsAutoBetMode(false);
-      onError && onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
-    }
-  }, [wager, balanceAsDollar]);
 
   return (
     <Form {...form}>

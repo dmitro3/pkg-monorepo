@@ -88,7 +88,7 @@ export const ManualController: React.FC<Props> = ({
       </div>
 
       <div className="wr-w-full lg:wr-order-none lg:wr-mb-6">
-        <PreBetButton>
+        <PreBetButton totalWager={totalWager}>
           <Button
             type="submit"
             variant="success"

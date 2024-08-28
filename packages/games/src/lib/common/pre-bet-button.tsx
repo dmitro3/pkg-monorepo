@@ -19,15 +19,9 @@ export const PreBetButton = ({
 
   const { account } = useGameOptions();
 
-  let _betCount = 1;
-
-  const betCount = form?.watch('betCount');
-
   const wager = form?.watch('wager');
 
-  !betCount ? (_betCount = 1) : (_betCount = betCount);
-
-  const _totalWager = totalWager ? totalWager : wager * _betCount;
+  const _totalWager = totalWager ? totalWager : wager;
 
   if (!account?.isLoggedIn)
     return (

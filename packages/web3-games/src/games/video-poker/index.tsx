@@ -212,7 +212,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
-      props.onError && props.onError(e);
+      // props.onError && props.onError(e);
     }
   };
 
@@ -236,7 +236,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
-      props.onError && props.onError(e);
+      // props.onError && props.onError(e);
     }
   };
 

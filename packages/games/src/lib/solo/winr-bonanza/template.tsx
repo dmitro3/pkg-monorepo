@@ -291,9 +291,7 @@ export const WinrBonanzaTemplate = ({
 
     try {
       await freeSpin();
-    } catch (e: any) {
-      onError && onError(e);
-    }
+    } catch (e: any) {}
   };
 
   const handleBuy = async () => {
@@ -313,8 +311,6 @@ export const WinrBonanzaTemplate = ({
       handleFreespinAmount(0);
       hideFreeSpinText();
       setIsInFreeSpinMode(false);
-
-      onError && onError(e);
     }
   };
 
@@ -335,7 +331,6 @@ export const WinrBonanzaTemplate = ({
       await bet();
     } catch (e: any) {
       handleUnlockUi();
-      onError && onError(e);
     }
   };
 
@@ -355,7 +350,6 @@ export const WinrBonanzaTemplate = ({
       await bet();
     } catch (e: any) {
       handleUnlockUi();
-      onError && onError(e);
     }
   };
 
@@ -377,7 +371,6 @@ export const WinrBonanzaTemplate = ({
       await bet();
     } catch (e: any) {
       handleUnlockUi();
-      onError && onError(e);
     }
   };
 

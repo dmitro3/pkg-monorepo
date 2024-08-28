@@ -1,11 +1,18 @@
-"use client";
+'use client';
 
-import { DiceGame, LiveResults, Web3GamesModals } from "@winrlabs/web3-games";
+import { DiceGame, LiveResults, Web3GamesModals } from '@winrlabs/web3-games';
 
 export default function DicePage() {
   return (
     <>
-      <DiceGame options={{}} minWager={0.1} maxWager={2000} />
+      <DiceGame
+        options={{}}
+        minWager={0.1}
+        maxWager={2000}
+        onError={(d) => {
+          console.log(d, 'error');
+        }}
+      />
       <LiveResults />
       <Web3GamesModals />
     </>

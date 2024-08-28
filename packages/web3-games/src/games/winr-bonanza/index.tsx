@@ -258,7 +258,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     } catch (e: any) {
       refetchPlayerGameStatus();
       if (errorCount < 10) handleBet(errorCount + 1);
-      onError && onError(e);
+      // onError && onError(e);
       throw new Error(e);
     }
   };
@@ -280,7 +280,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       await handleBuyFeatureTx.mutateAsync();
     } catch (e) {
       refetchPlayerGameStatus();
-      onError && onError(e);
+      // onError && onError(e);
     }
   };
 

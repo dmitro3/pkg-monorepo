@@ -256,7 +256,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     } catch (e: any) {
       console.log('handleTx error', e);
       refetchPlayerGameStatus();
-      props.onError && props.onError(e);
+      // props.onError && props.onError(e);
     }
   };
 

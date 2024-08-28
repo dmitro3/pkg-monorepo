@@ -217,7 +217,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       console.log('error', e);
       refetchPlayerGameStatus();
       updateGameStatus('ENDED');
-      props.onError && props.onError(e);
+      // props.onError && props.onError(e);
 
       if (errorCount < 3) {
         await delay(150);
