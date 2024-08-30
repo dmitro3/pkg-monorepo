@@ -266,10 +266,10 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
       if (!currentStepResult) return;
 
       const isWon = currentStepResult.payout > formValues.wager;
-
       addResult({
         won: isWon,
         payout: currentStepResult.payout,
+        gameType: GameType.PLINKO,
       });
     },
     [plinkoResult]
