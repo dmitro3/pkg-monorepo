@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Hex } from 'viem';
 
 import { MutationHook } from '../../utils/types';
+import { useCreateSession, useSessionStore } from '../session';
 import { useBundlerClient } from '../use-bundler-client';
 import { useCurrentAccount } from '../use-current-address';
 import { BundlerClientNotFoundError } from './error';
@@ -11,27 +12,43 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
   options = {}
 ) => {
   const { client: defaultClient } = useBundlerClient();
-
-  const { address: userAddress } = useCurrentAccount();
+  const { rootAddress: userAddress } = useCurrentAccount();
+  const sessionStore = useSessionStore();
+  const createSession = useCreateSession();
 
   return useMutation({
     ...options,
-    mutationFn: async (request) => {
-      let client = request.customBundlerClient ? request.customBundlerClient : defaultClient;
+    mutationFn: async ({
+      customBundlerClient,
+      target = '0x0',
+      encodedTxData = '0x0',
+      value = 0,
+    }) => {
+      const client = customBundlerClient || defaultClient;
+      if (!client) throw new BundlerClientNotFoundError();
 
-      if (!client) {
-        throw new BundlerClientNotFoundError();
+      let _part = sessionStore.part;
+      let _permit = sessionStore.permit;
+
+      if (!_part || !_permit) {
+        const session = await createSession.mutateAsync({
+          customClient: client,
+          signerAddress: userAddress!,
+          untilInHours: 24,
+        });
+
+        sessionStore.setPart(session.part);
+        sessionStore.setPermit(session.permit);
+
+        _part = session.part;
+        _permit = session.permit;
       }
 
-      return await client.request('call', {
-        call: {
-          dest: request.target ?? '0x0',
-          data: request.encodedTxData ?? '0x0',
-          value: request.value ?? 0,
-        },
+      return client.request('call', {
+        call: { dest: target, data: encodedTxData, value },
         owner: userAddress!,
-        part: request.part ?? '0x',
-        permit: request.permit ?? '0x',
+        part: _part,
+        permit: _permit,
       });
     },
   });

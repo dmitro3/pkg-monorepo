@@ -19,16 +19,8 @@ export const useSendTx: MutationHook<SendTxRequest, { status: string; hash: Hex 
   return useMutation({
     ...options,
     mutationFn: async (request) => {
-      const {
-        part,
-        permit,
-        method,
-        target,
-        encodedTxData,
-        customAccountApi,
-        value,
-        customBundlerClient,
-      } = request;
+      const { method, target, encodedTxData, customAccountApi, value, customBundlerClient } =
+        request;
 
       if (isSocialLogin) {
         return await sendSocialAccountTx({
@@ -42,8 +34,6 @@ export const useSendTx: MutationHook<SendTxRequest, { status: string; hash: Hex 
       }
 
       return await sendWeb3AccountTx({
-        part,
-        permit,
         customAccountApi,
         customBundlerClient,
         target,

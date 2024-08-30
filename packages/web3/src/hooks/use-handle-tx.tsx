@@ -16,6 +16,7 @@ import { SimpleAccountAPI } from '../smart-wallet';
 import { useBundlerClient, WinrBundlerClient } from './use-bundler-client';
 import { useCurrentAccount } from './use-current-address';
 import { useSmartAccountApi } from './use-smart-account-api';
+import { useCreateSession, useSessionStore } from './session';
 
 export interface UseHandleTxOptions {
   successMessage?: string;
@@ -72,9 +73,13 @@ export const useHandleTx = <
 ) => {
   const { writeContractVariables, options, encodedTxData } = params;
   const { method = 'sendUserOperation' } = options;
-  const { address } = useCurrentAccount();
+  const { address, isSocialLogin, rootAddress } = useCurrentAccount();
   const { accountApi: defaultAccountApi } = useSmartAccountApi();
   const { client: defaultClient } = useBundlerClient();
+
+  const createSession = useCreateSession();
+
+  const sessionStore = useSessionStore();
 
   const handleTxMutation = useMutation({
     mutationFn: async () => {
@@ -97,19 +102,36 @@ export const useHandleTx = <
           } as EncodeFunctionDataParameters<abi, functionName>);
 
       if (!client) return;
-      /* 
+
       if (!isSocialLogin) {
+        let _part = sessionStore.part;
+        let _permit = sessionStore.permit;
+
+        if (!_part || !_permit) {
+          const session = await createSession.mutateAsync({
+            customClient: client,
+            signerAddress: rootAddress!,
+            untilInHours: 24,
+          });
+
+          sessionStore.setPart(session.part);
+          sessionStore.setPermit(session.permit);
+
+          _part = session.part;
+          _permit = session.permit;
+        }
+
         return await client?.request('call', {
           call: {
             dest: writeContractVariables.address as Address,
             data: encodedData,
             value: 0,
           },
-          owner: address!,
-          part: variables?.part ?? '0x',
-          permit: variables?.permit ?? '0x',
+          owner: rootAddress!,
+          part: _part ?? '0x',
+          permit: _permit ?? '0x',
         });
-      } */
+      }
 
       const userOp = await createUserOp(writeContractVariables, encodedData, accountApi);
 
