@@ -281,6 +281,12 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     showDefaultToasts: false,
   });
 
+  const isPlayerHaltedRef = React.useRef<boolean>(false);
+
+  React.useEffect(() => {
+    isPlayerHaltedRef.current = isPlayerHalted;
+  }, [isPlayerHalted]);
+
   const onGameSubmit = async (values: MinesFormField) => {
     setIsWaitingResponse(true);
     console.log(values, 'form values');
@@ -296,7 +302,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         if (!handledAllowance) return;
       }
       console.log('submit Type:', submitType);
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       if (submitType === MINES_SUBMIT_TYPE.FIRST_REVEAL) {

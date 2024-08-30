@@ -245,6 +245,12 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedClaimParams.encodedClaimTxData,
   });
 
+  const isPlayerHaltedRef = React.useRef<boolean>(false);
+
+  React.useEffect(() => {
+    isPlayerHaltedRef.current = isPlayerHalted;
+  }, [isPlayerHalted]);
+
   const onGameSubmit = async () => {
     clearLiveResults();
     if (!allowance.hasAllowance) {
@@ -265,7 +271,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     console.log('cLAIM TX SUCCESS, TRYING BET TX');
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleTx.mutateAsync();

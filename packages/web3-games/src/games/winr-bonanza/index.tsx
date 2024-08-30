@@ -233,6 +233,12 @@ export default function WinrBonanzaTemplateWithWeb3({
     encodedTxData: encodedFreeSpinParams.encodedTxData,
   });
 
+  const isPlayerHaltedRef = React.useRef<boolean>(false);
+
+  React.useEffect(() => {
+    isPlayerHaltedRef.current = isPlayerHalted;
+  }, [isPlayerHalted]);
+
   const handleBet = async (errorCount = 0) => {
     console.log('spin button called!');
 
@@ -251,7 +257,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     // await handleTx.mutateAsync();
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleTx.mutateAsync();
@@ -274,7 +280,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     }
     console.log('buy feature');
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleBuyFeatureTx.mutateAsync();
@@ -297,7 +303,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     console.log('handleFreeSpintx called');
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleFreeSpinTx.mutateAsync();

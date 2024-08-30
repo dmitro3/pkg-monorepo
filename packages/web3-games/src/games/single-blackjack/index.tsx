@@ -445,6 +445,12 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedBuyInsuranceParams.encodedTxData,
   });
 
+  const isPlayerHaltedRef = React.useRef<boolean>(false);
+
+  React.useEffect(() => {
+    isPlayerHaltedRef.current = isPlayerHalted;
+  }, [isPlayerHalted]);
+
   const handleStart = async () => {
     setIsLoading(true); // Set loading state to true
     if (!allowance.hasAllowance) {
@@ -458,7 +464,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     }
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleBetTx.mutateAsync();
@@ -472,7 +478,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   const handleHit = async () => {
     setIsLoading(true); // Set loading state to true
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleHitTx.mutateAsync();
@@ -497,7 +503,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   const handleDoubleDown = async () => {
     setIsLoading(true); // Set loading state to true
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleDoubleTx.mutateAsync();
@@ -521,7 +527,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     }
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleSplitTx.mutateAsync();

@@ -19,7 +19,7 @@ import {
   useTokenBalances,
   useTokenStore,
 } from '@winrlabs/web3';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
 import { BaseGameProps } from '../../type';
@@ -230,6 +230,12 @@ const CrashGame = (props: CrashTemplateProps) => {
     encodedTxData: encodedClaimParams.encodedClaimTxData,
   });
 
+  const isPlayerHaltedRef = React.useRef<boolean>(false);
+
+  React.useEffect(() => {
+    isPlayerHaltedRef.current = isPlayerHalted;
+  }, [isPlayerHalted]);
+
   const onGameSubmit = async () => {
     clearLiveResults();
     if (!allowance.hasAllowance) {
@@ -248,7 +254,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     }
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleTx.mutateAsync();

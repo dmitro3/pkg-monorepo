@@ -263,6 +263,12 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedFinalizeFoldParams.encodedTxData,
   });
 
+  const isPlayerHaltedRef = React.useRef<boolean>(false);
+
+  React.useEffect(() => {
+    isPlayerHaltedRef.current = isPlayerHalted;
+  }, [isPlayerHalted]);
+
   const handleDeal = async () => {
     console.log('SUBMITTING!');
     if (!allowance.hasAllowance) {
@@ -276,7 +282,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     }
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleTx.mutateAsync();
@@ -299,7 +305,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
     }
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleFinalizeTx.mutateAsync();

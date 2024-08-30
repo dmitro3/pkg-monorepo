@@ -192,6 +192,12 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     encodedTxData: encodedFinishParams.encodedTxData,
   });
 
+  const isPlayerHaltedRef = React.useRef<boolean>(false);
+
+  React.useEffect(() => {
+    isPlayerHaltedRef.current = isPlayerHalted;
+  }, [isPlayerHalted]);
+
   const handleStartGame = async () => {
     console.log('SUBMITTING!');
     if (!allowance.hasAllowance) {
@@ -205,7 +211,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     }
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleTx.mutateAsync();
@@ -229,7 +235,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     }
 
     try {
-      if (isPlayerHalted) await playerLevelUp();
+      if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
       await handleFinishTx.mutateAsync();
