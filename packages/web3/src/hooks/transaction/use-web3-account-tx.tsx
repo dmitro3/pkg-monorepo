@@ -30,7 +30,7 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
       let _part = sessionStore.part;
       let _permit = sessionStore.permit;
 
-      if (!_part || !_permit) {
+      const getNewSession = async () => {
         const session = await createSession.mutateAsync({
           customClient: client,
           signerAddress: userAddress!,
@@ -40,16 +40,29 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
         sessionStore.setPart(session.part);
         sessionStore.setPermit(session.permit);
 
-        _part = session.part;
-        _permit = session.permit;
+        return { part: session.part, permit: session.permit };
+      };
+
+      if (!_part || !_permit) {
+        ({ part: _part, permit: _permit } = await getNewSession());
       }
 
-      return client.request('call', {
-        call: { dest: target, data: encodedTxData, value },
-        owner: userAddress!,
-        part: _part,
-        permit: _permit,
-      });
+      try {
+        return await client.request('call', {
+          call: { dest: target, data: encodedTxData, value },
+          owner: userAddress!,
+          part: _part,
+          permit: _permit,
+        });
+      } catch (error) {
+        ({ part: _part, permit: _permit } = await getNewSession());
+        return client.request('call', {
+          call: { dest: target, data: encodedTxData, value },
+          owner: userAddress!,
+          part: _part,
+          permit: _permit,
+        });
+      }
     },
   });
 };

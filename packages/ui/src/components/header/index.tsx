@@ -146,9 +146,9 @@ export const Header = ({ appLogo, leftSideComponents, chat, containerClassName }
                 variant={'success'}
                 onClick={async () => {
                   try {
-                    await mintTx.mutateAsync();
+                    // await mintTx.mutateAsync();
 
-                    /*                     await send.mutateAsync({
+                    await send.mutateAsync({
                       encodedTxData: encodeFunctionData({
                         abi: erc20Abi,
                         functionName: 'mint',
@@ -158,7 +158,7 @@ export const Header = ({ appLogo, leftSideComponents, chat, containerClassName }
                         ],
                       }),
                       target: selectedToken.address,
-                    }); */
+                    });
                   } catch (e: any) {
                     console.log('error', e);
                   }

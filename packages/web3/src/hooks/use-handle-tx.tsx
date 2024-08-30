@@ -107,7 +107,7 @@ export const useHandleTx = <
         let _part = sessionStore.part;
         let _permit = sessionStore.permit;
 
-        if (!_part || !_permit) {
+        const getNewSession = async () => {
           const session = await createSession.mutateAsync({
             customClient: client,
             signerAddress: rootAddress!,
@@ -117,20 +117,39 @@ export const useHandleTx = <
           sessionStore.setPart(session.part);
           sessionStore.setPermit(session.permit);
 
-          _part = session.part;
-          _permit = session.permit;
+          return { part: session.part, permit: session.permit };
+        };
+
+        if (!_part || !_permit) {
+          ({ part: _part, permit: _permit } = await getNewSession());
         }
 
-        return await client?.request('call', {
-          call: {
-            dest: writeContractVariables.address as Address,
-            data: encodedData,
-            value: 0,
-          },
-          owner: rootAddress!,
-          part: _part ?? '0x',
-          permit: _permit ?? '0x',
-        });
+        try {
+          return await client?.request('call', {
+            call: {
+              dest: writeContractVariables.address as Address,
+              data: encodedData,
+              value: 0,
+            },
+            owner: rootAddress!,
+            part: _part ?? '0x',
+            permit: _permit ?? '0x',
+          });
+        } catch (error) {
+          // If the first attempt fails, get a new session and try again
+          ({ part: _part, permit: _permit } = await getNewSession());
+          
+          return client?.request('call', {
+            call: {
+              dest: writeContractVariables.address as Address,
+              data: encodedData,
+              value: 0,
+            },
+            owner: rootAddress!,
+            part: _part ?? '0x',
+            permit: _permit ?? '0x',
+          });
+        }
       }
 
       const userOp = await createUserOp(writeContractVariables, encodedData, accountApi);
