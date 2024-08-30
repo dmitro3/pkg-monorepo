@@ -35,6 +35,7 @@ interface TemplateProps {
   handleStartGame: (data: VideoPokerFormFields) => Promise<void>;
   onFormChange?: (fields: VideoPokerFormFields) => void;
   onAnimationCompleted?: (payout: number) => void;
+  onLogin?: () => void;
 }
 
 const VideoPokerTemplate = ({
@@ -47,6 +48,7 @@ const VideoPokerTemplate = ({
   handleFinishGame,
   handleStartGame,
   onAnimationCompleted,
+  onLogin,
 }: TemplateProps) => {
   const [currentCards, setCurrentCards] = React.useState<any[]>(new Array(5).fill(0));
 
@@ -181,6 +183,7 @@ const VideoPokerTemplate = ({
               maxPayout={maxPayout}
               maxWager={maxWager || 2000}
               minWager={minWager || 1}
+              onLogin={onLogin}
             />
             <SceneContainer
               className="wr-relative max-lg:wr-h-[420px] wr-h-[640px] lg:!wr-justify-start wr-overflow-hidden lg:wr-pb-0 lg:wr-pt-0 wr-flex wr-justify-end"

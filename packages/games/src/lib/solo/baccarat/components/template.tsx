@@ -32,7 +32,9 @@ type TemplateProps = BaccaratGameProps & {
 
   onSubmitGameForm: (data: BaccaratFormFields) => void;
   onFormChange?: (fields: BaccaratFormFields) => void;
+
   onError?: (e: any) => void;
+  onLogin?: () => void;
 };
 
 const BaccaratTemplate: React.FC<TemplateProps> = ({
@@ -46,6 +48,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
   onSubmitGameForm,
   onFormChange,
   onError,
+  onLogin,
 }) => {
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
@@ -292,6 +295,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
             onSelectedChipChange={setSelectedChip}
             isAutoBetMode={isAutoBetMode}
             onAutoBetModeChange={setIsAutoBetMode}
+            onLogin={onLogin}
           />
           <SceneContainer
             className="wr-relative wr-flex wr-h-[340px] lg:wr-h-[640px] wr-overflow-hidden"

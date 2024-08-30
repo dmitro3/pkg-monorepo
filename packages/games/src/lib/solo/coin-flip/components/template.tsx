@@ -26,9 +26,12 @@ type TemplateProps = CoinFlipGameProps & {
   options: TemplateOptions;
   minWager?: number;
   maxWager?: number;
+  isGettingResult?: boolean;
   onSubmitGameForm: (data: CoinFlipFormFields) => void;
   onFormChange?: (fields: CoinFlipFormFields) => void;
-  isGettingResult?: boolean;
+
+  onError?: (error: any) => void;
+  onLogin?: () => void;
 };
 
 const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
@@ -139,6 +142,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
             winMultiplier={WIN_MULTIPLIER}
             isAutoBetMode={isAutoBetMode}
             onAutoBetModeChange={setIsAutoBetMode}
+            onLogin={props.onLogin}
           />
           <SceneContainer
             className={cn(

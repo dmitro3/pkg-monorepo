@@ -22,6 +22,7 @@ type TemplateProps = LimboGameProps & {
   maxWager?: number;
   onSubmitGameForm: (props: LimboFormField) => void;
   onFormChange?: (fields: LimboFormField) => void;
+  onLogin?: () => void;
 };
 
 const LimboTemplate = ({ ...props }: TemplateProps) => {
@@ -133,6 +134,7 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
             winMultiplier={multiplier}
             isAutoBetMode={isAutoBetMode}
             onAutoBetModeChange={setIsAutoBetMode}
+            onLogin={props.onLogin}
           />
           <SceneContainer className="md:wr-h-[640px] wr-h-[200px] wr-overflow-hidden !wr-p-0">
             <Limbo.Game {...props}>

@@ -31,6 +31,7 @@ type TemplateProps = Plinko3dGameProps & {
   buildedGameUrl: string;
   onSubmitGameForm: (data: Plinko3dFormFields) => void;
   onFormChange?: (fields: Plinko3dFormFields) => void;
+  onLogin?: () => void;
 };
 
 export function PlinkoGame({ ...props }: TemplateProps) {
@@ -91,6 +92,7 @@ export function PlinkoGame({ ...props }: TemplateProps) {
               maxWager={props?.maxWager || 2000}
               minWager={props?.minWager || 1}
               logo={props.options.betController.logo}
+              onLogin={props.onLogin}
             />
             <Plinko3d.Scene
               {...props}

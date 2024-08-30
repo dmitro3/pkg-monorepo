@@ -30,6 +30,7 @@ type TemplateProps = RollGameProps & {
   maxWager?: number;
   onSubmitGameForm: (data: RollFormFields) => void;
   onFormChange?: (fields: RollFormFields) => void;
+  onLogin?: () => void;
 };
 
 const RollTemplate = ({ ...props }: TemplateProps) => {
@@ -164,6 +165,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
             winMultiplier={winMultiplier}
             isAutoBetMode={isAutoBetMode}
             onAutoBetModeChange={setIsAutoBetMode}
+            onLogin={props.onLogin}
           />
 
           <SceneContainer

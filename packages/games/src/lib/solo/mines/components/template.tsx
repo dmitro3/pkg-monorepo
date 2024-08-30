@@ -21,6 +21,7 @@ type TemplateProps = MinesGameProps & {
   onSubmitGameForm: (data: MinesFormField) => void;
   onFormChange?: (fields: MinesFormField) => void;
   formSetValue?: FormSetValue;
+  onLogin?: () => void;
 };
 
 const MinesTemplate = ({ ...props }: TemplateProps) => {

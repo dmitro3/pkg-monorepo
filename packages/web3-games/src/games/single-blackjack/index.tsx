@@ -1030,6 +1030,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   return (
     <>
       <SingleBlackjackTemplate
+        {...props}
         activeGameData={activeGameData}
         activeGameHands={activeGameHands}
         initialDataFetched={initialDataFetched}

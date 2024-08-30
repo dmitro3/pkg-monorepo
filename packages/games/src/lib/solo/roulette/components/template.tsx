@@ -30,6 +30,8 @@ type TemplateProps = RouletteGameProps & {
   maxWager?: number;
   onSubmitGameForm: (data: RouletteFormFields) => void;
   onFormChange?: (fields: RouletteFormFields) => void;
+  onError?: (e: any) => void;
+  onLogin?: () => void;
 };
 
 const RouletteTemplate: React.FC<TemplateProps> = ({
@@ -42,6 +44,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
   onAnimationSkipped,
   onAnimationStep,
   onError,
+  onLogin,
 }) => {
   const [selectedChip, setSelectedChip] = React.useState<Chip>(Chip.ONE);
   const [isPrepared, setIsPrepared] = React.useState<boolean>(false);
@@ -251,6 +254,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
             maxWager={maxWager || 2000}
             isAutoBetMode={isAutoBetMode}
             onAutoBetModeChange={setIsAutoBetMode}
+            onLogin={onLogin}
           />
           <SceneContainer
             style={{

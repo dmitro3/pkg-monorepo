@@ -1277,6 +1277,7 @@ export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) 
   return (
     <>
       <BlackjackTemplate
+        {...props}
         activeGameData={activeGameData}
         activeGameHands={activeGameHands}
         initialDataFetched={initialDataFetched}

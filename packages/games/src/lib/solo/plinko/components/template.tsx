@@ -27,6 +27,7 @@ type TemplateProps = PlinkoGameProps & {
   maxWager?: number;
   onSubmitGameForm: (data: PlinkoFormFields) => void;
   onFormChange?: (fields: PlinkoFormFields) => void;
+  onLogin?: () => void;
 };
 
 const PlinkoTemplate = ({ ...props }: TemplateProps) => {
@@ -137,6 +138,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
             maxWager={props.maxWager || 2000}
             isAutoBetMode={isAutoBetMode}
             onAutoBetModeChange={setIsAutoBetMode}
+            onLogin={props.onLogin}
           />
           <SceneContainer
             className={cn(

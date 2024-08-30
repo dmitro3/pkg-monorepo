@@ -307,6 +307,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   return (
     <>
       <VideoPokerTemplate
+        {...props}
         minWager={props.minWager || 1}
         maxWager={props.maxWager || 2000}
         handleStartGame={handleStartGame}

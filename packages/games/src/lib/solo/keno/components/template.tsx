@@ -26,6 +26,7 @@ type TemplateProps = KenoGameProps & {
   maxWager?: number;
   onSubmitGameForm: (data: KenoFormField) => void;
   onFormChange?: (fields: KenoFormField) => void;
+  onLogin?: () => void;
 };
 
 const KenoTemplate = ({ ...props }: TemplateProps) => {
@@ -135,6 +136,7 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
               minWager={props?.minWager || 1}
               isAutoBetMode={isAutoBetMode}
               onAutoBetModeChange={setIsAutoBetMode}
+              onLogin={props.onLogin}
             />
             <SceneContainer className="wr-relative md:wr-h-[750px] lg:wr-px-[14px] lg:wr-pb-[14px] max-lg:!wr-border-0 max-lg:!wr-p-0">
               <Keno.Scene
