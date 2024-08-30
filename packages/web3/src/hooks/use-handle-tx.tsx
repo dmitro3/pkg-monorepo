@@ -120,36 +120,34 @@ export const useHandleTx = <
           return { part: session.part, permit: session.permit };
         };
 
-        if (!_part || !_permit) {
-          ({ part: _part, permit: _permit } = await getNewSession());
-        }
+        let retryCount = 0;
+        const maxRetries = 1;
 
-        try {
-          return await client?.request('call', {
-            call: {
-              dest: writeContractVariables.address as Address,
-              data: encodedData,
-              value: 0,
-            },
-            owner: rootAddress!,
-            part: _part ?? '0x',
-            permit: _permit ?? '0x',
-          });
-        } catch (error) {
-          // If the first attempt fails, get a new session and try again
-          ({ part: _part, permit: _permit } = await getNewSession());
-          
-          return client?.request('call', {
-            call: {
-              dest: writeContractVariables.address as Address,
-              data: encodedData,
-              value: 0,
-            },
-            owner: rootAddress!,
-            part: _part ?? '0x',
-            permit: _permit ?? '0x',
-          });
-        }
+        const makeRequest = async () => {
+          try {
+            return await client?.request('call', {
+              call: {
+                dest: writeContractVariables.address as Address,
+                data: encodedData,
+                value: 0,
+              },
+              owner: rootAddress!,
+              part: _part ?? '0x',
+              permit: _permit ?? '0x',
+            });
+          } catch (error) {
+            if (retryCount < maxRetries) {
+              retryCount++;
+              // If the first attempt fails, get a new session and try again
+              ({ part: _part, permit: _permit } = await getNewSession());
+              return makeRequest();
+            } else {
+              throw error; // Rethrow the error if max retries reached
+            }
+          }
+        };
+
+        return makeRequest();
       }
 
       const userOp = await createUserOp(writeContractVariables, encodedData, accountApi);
