@@ -9,6 +9,37 @@ import type * as Fetcher from './apiFetcher';
 import { apiFetch } from './apiFetcher';
 import type * as Schemas from './apiSchemas';
 
+export type AppControllerStatusError = Fetcher.ErrorWrapper<undefined>;
+
+export type AppControllerStatusVariables = ApiContext['fetcherOptions'];
+
+export const fetchAppControllerStatus = (
+  variables: AppControllerStatusVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<undefined, AppControllerStatusError, undefined, {}, {}, {}>({
+    url: '/',
+    method: 'get',
+    ...variables,
+    signal,
+  });
+
+export const useAppControllerStatus = <TData = undefined,>(
+  variables: AppControllerStatusVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<undefined, AppControllerStatusError, TData>,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<undefined, AppControllerStatusError, TData>({
+    queryKey: queryKeyFn({ path: '/', operationId: 'appControllerStatus', variables }),
+    queryFn: ({ signal }) => fetchAppControllerStatus({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type CurrencyControllerGetLastPriceFeedError = Fetcher.ErrorWrapper<undefined>;
 
 export type CurrencyControllerGetLastPriceFeedResponse = Schemas.PriceResponse[];
@@ -784,6 +815,71 @@ export const useGameControllerGetStatsByPlayer = <TData = Schemas.PlayerRankObje
   });
 };
 
+export type GameControllerGetWagerInfoQueryParams = {
+  game:
+    | 'COINFLIP'
+    | 'RANGE'
+    | 'WHEEL'
+    | 'PLINKO'
+    | 'MOON'
+    | 'LOTTERY'
+    | 'RPS'
+    | 'DICE'
+    | 'LIMBO'
+    | 'SLOT'
+    | 'ROULETTE'
+    | 'MINES'
+    | 'VIDEO_POKER'
+    | 'KENO'
+    | 'BACCARAT'
+    | 'HORSE_RACE'
+    | 'BLACKJACK'
+    | 'HOLDEM_POKER'
+    | 'WINR_BONANZA'
+    | 'ONE_HAND_BLACKJACK';
+  bankroll: string;
+};
+
+export type GameControllerGetWagerInfoError = Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerGetWagerInfoVariables = {
+  queryParams: GameControllerGetWagerInfoQueryParams;
+} & ApiContext['fetcherOptions'];
+
+export const fetchGameControllerGetWagerInfo = (
+  variables: GameControllerGetWagerInfoVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<
+    Schemas.WagerInfoResponse,
+    GameControllerGetWagerInfoError,
+    undefined,
+    {},
+    GameControllerGetWagerInfoQueryParams,
+    {}
+  >({ url: '/game/wager-info', method: 'get', ...variables, signal });
+
+export const useGameControllerGetWagerInfo = <TData = Schemas.WagerInfoResponse,>(
+  variables: GameControllerGetWagerInfoVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.WagerInfoResponse, GameControllerGetWagerInfoError, TData>,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<Schemas.WagerInfoResponse, GameControllerGetWagerInfoError, TData>({
+    queryKey: queryKeyFn({
+      path: '/game/wager-info',
+      operationId: 'gameControllerGetWagerInfo',
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerGetWagerInfo({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type GameControllerSseLiveWinsError = Fetcher.ErrorWrapper<undefined>;
 
 export type GameControllerSseLiveWinsVariables = ApiContext['fetcherOptions'];
@@ -815,6 +911,254 @@ export const useGameControllerSseLiveWins = <TData = undefined,>(
     }),
     queryFn: ({ signal }) =>
       fetchGameControllerSseLiveWins({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type GameControllerSseGlobalBetHistoryError = Fetcher.ErrorWrapper<undefined>;
+
+export type GameControllerSseGlobalBetHistoryVariables = ApiContext['fetcherOptions'];
+
+export const fetchGameControllerSseGlobalBetHistory = (
+  variables: GameControllerSseGlobalBetHistoryVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<undefined, GameControllerSseGlobalBetHistoryError, undefined, {}, {}, {}>({
+    url: '/game/sse-global-bet-history',
+    method: 'get',
+    ...variables,
+    signal,
+  });
+
+export const useGameControllerSseGlobalBetHistory = <TData = undefined,>(
+  variables: GameControllerSseGlobalBetHistoryVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<undefined, GameControllerSseGlobalBetHistoryError, TData>,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<undefined, GameControllerSseGlobalBetHistoryError, TData>({
+    queryKey: queryKeyFn({
+      path: '/game/sse-global-bet-history',
+      operationId: 'gameControllerSseGlobalBetHistory',
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGameControllerSseGlobalBetHistory({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type BankrollControllerUpdateSingleSidedPoolsNotifyQueryParams = {
+  /**
+   * comma separated
+   */
+  bankrollIndexes: string;
+};
+
+export type BankrollControllerUpdateSingleSidedPoolsNotifyError = Fetcher.ErrorWrapper<undefined>;
+
+export type BankrollControllerUpdateSingleSidedPoolsNotifyVariables = {
+  queryParams: BankrollControllerUpdateSingleSidedPoolsNotifyQueryParams;
+} & ApiContext['fetcherOptions'];
+
+export const fetchBankrollControllerUpdateSingleSidedPoolsNotify = (
+  variables: BankrollControllerUpdateSingleSidedPoolsNotifyVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<
+    undefined,
+    BankrollControllerUpdateSingleSidedPoolsNotifyError,
+    undefined,
+    {},
+    BankrollControllerUpdateSingleSidedPoolsNotifyQueryParams,
+    {}
+  >({ url: '/bankroll/update-notify-single-sided-pools', method: 'get', ...variables, signal });
+
+export const useBankrollControllerUpdateSingleSidedPoolsNotify = <TData = undefined,>(
+  variables: BankrollControllerUpdateSingleSidedPoolsNotifyVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      undefined,
+      BankrollControllerUpdateSingleSidedPoolsNotifyError,
+      TData
+    >,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<undefined, BankrollControllerUpdateSingleSidedPoolsNotifyError, TData>(
+    {
+      queryKey: queryKeyFn({
+        path: '/bankroll/update-notify-single-sided-pools',
+        operationId: 'bankrollControllerUpdateSingleSidedPoolsNotify',
+        variables,
+      }),
+      queryFn: ({ signal }) =>
+        fetchBankrollControllerUpdateSingleSidedPoolsNotify(
+          { ...fetcherOptions, ...variables },
+          signal
+        ),
+      ...options,
+      ...queryOptions,
+    }
+  );
+};
+
+export type BankrollControllerGetWagerInfoError = Fetcher.ErrorWrapper<undefined>;
+
+export type BankrollControllerGetWagerInfoResponse = Schemas.WagerResponse[];
+
+export type BankrollControllerGetWagerInfoVariables = ApiContext['fetcherOptions'];
+
+export const fetchBankrollControllerGetWagerInfo = (
+  variables: BankrollControllerGetWagerInfoVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<
+    BankrollControllerGetWagerInfoResponse,
+    BankrollControllerGetWagerInfoError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: '/bankroll/wager-info', method: 'get', ...variables, signal });
+
+export const useBankrollControllerGetWagerInfo = <TData = BankrollControllerGetWagerInfoResponse,>(
+  variables: BankrollControllerGetWagerInfoVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      BankrollControllerGetWagerInfoResponse,
+      BankrollControllerGetWagerInfoError,
+      TData
+    >,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    BankrollControllerGetWagerInfoResponse,
+    BankrollControllerGetWagerInfoError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: '/bankroll/wager-info',
+      operationId: 'bankrollControllerGetWagerInfo',
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchBankrollControllerGetWagerInfo({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type BankrollControllerGetSingleSidedPoolsQueryParams = {
+  /**
+   * comma separated
+   */
+  bankrollIndexes: string;
+  player?: string;
+};
+
+export type BankrollControllerGetSingleSidedPoolsError = Fetcher.ErrorWrapper<undefined>;
+
+export type BankrollControllerGetSingleSidedPoolsResponse = Schemas.VaultOutput[];
+
+export type BankrollControllerGetSingleSidedPoolsVariables = {
+  queryParams: BankrollControllerGetSingleSidedPoolsQueryParams;
+} & ApiContext['fetcherOptions'];
+
+export const fetchBankrollControllerGetSingleSidedPools = (
+  variables: BankrollControllerGetSingleSidedPoolsVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<
+    BankrollControllerGetSingleSidedPoolsResponse,
+    BankrollControllerGetSingleSidedPoolsError,
+    undefined,
+    {},
+    BankrollControllerGetSingleSidedPoolsQueryParams,
+    {}
+  >({ url: '/bankroll/single-sided-pools', method: 'get', ...variables, signal });
+
+export const useBankrollControllerGetSingleSidedPools = <
+  TData = BankrollControllerGetSingleSidedPoolsResponse,
+>(
+  variables: BankrollControllerGetSingleSidedPoolsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      BankrollControllerGetSingleSidedPoolsResponse,
+      BankrollControllerGetSingleSidedPoolsError,
+      TData
+    >,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    BankrollControllerGetSingleSidedPoolsResponse,
+    BankrollControllerGetSingleSidedPoolsError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: '/bankroll/single-sided-pools',
+      operationId: 'bankrollControllerGetSingleSidedPools',
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchBankrollControllerGetSingleSidedPools({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type BankrollControllerGetPoolListError = Fetcher.ErrorWrapper<undefined>;
+
+export type BankrollControllerGetPoolListResponse = Schemas.PoolOutput[];
+
+export type BankrollControllerGetPoolListVariables = ApiContext['fetcherOptions'];
+
+export const fetchBankrollControllerGetPoolList = (
+  variables: BankrollControllerGetPoolListVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<
+    BankrollControllerGetPoolListResponse,
+    BankrollControllerGetPoolListError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: '/bankroll/pool-list', method: 'get', ...variables, signal });
+
+export const useBankrollControllerGetPoolList = <TData = BankrollControllerGetPoolListResponse,>(
+  variables: BankrollControllerGetPoolListVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      BankrollControllerGetPoolListResponse,
+      BankrollControllerGetPoolListError,
+      TData
+    >,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<
+    BankrollControllerGetPoolListResponse,
+    BankrollControllerGetPoolListError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: '/bankroll/pool-list',
+      operationId: 'bankrollControllerGetPoolList',
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchBankrollControllerGetPoolList({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
@@ -1347,218 +1691,6 @@ export const useStatisticControllerGetLeaderboardListLossLegends = <
   });
 };
 
-export type BankrollControllerUpdateSingleSidedPoolsNotifyQueryParams = {
-  /**
-   * comma separated
-   */
-  bankrollIndexes: string;
-};
-
-export type BankrollControllerUpdateSingleSidedPoolsNotifyError = Fetcher.ErrorWrapper<undefined>;
-
-export type BankrollControllerUpdateSingleSidedPoolsNotifyVariables = {
-  queryParams: BankrollControllerUpdateSingleSidedPoolsNotifyQueryParams;
-} & ApiContext['fetcherOptions'];
-
-export const fetchBankrollControllerUpdateSingleSidedPoolsNotify = (
-  variables: BankrollControllerUpdateSingleSidedPoolsNotifyVariables,
-  signal?: AbortSignal
-) =>
-  apiFetch<
-    undefined,
-    BankrollControllerUpdateSingleSidedPoolsNotifyError,
-    undefined,
-    {},
-    BankrollControllerUpdateSingleSidedPoolsNotifyQueryParams,
-    {}
-  >({ url: '/bankroll/update-notify-single-sided-pools', method: 'get', ...variables, signal });
-
-export const useBankrollControllerUpdateSingleSidedPoolsNotify = <TData = undefined,>(
-  variables: BankrollControllerUpdateSingleSidedPoolsNotifyVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      undefined,
-      BankrollControllerUpdateSingleSidedPoolsNotifyError,
-      TData
-    >,
-    'queryKey' | 'queryFn' | 'initialData'
-  >
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<undefined, BankrollControllerUpdateSingleSidedPoolsNotifyError, TData>(
-    {
-      queryKey: queryKeyFn({
-        path: '/bankroll/update-notify-single-sided-pools',
-        operationId: 'bankrollControllerUpdateSingleSidedPoolsNotify',
-        variables,
-      }),
-      queryFn: ({ signal }) =>
-        fetchBankrollControllerUpdateSingleSidedPoolsNotify(
-          { ...fetcherOptions, ...variables },
-          signal
-        ),
-      ...options,
-      ...queryOptions,
-    }
-  );
-};
-
-export type BankrollControllerGetWagerInfoError = Fetcher.ErrorWrapper<undefined>;
-
-export type BankrollControllerGetWagerInfoResponse = Schemas.WagerResponse[];
-
-export type BankrollControllerGetWagerInfoVariables = ApiContext['fetcherOptions'];
-
-export const fetchBankrollControllerGetWagerInfo = (
-  variables: BankrollControllerGetWagerInfoVariables,
-  signal?: AbortSignal
-) =>
-  apiFetch<
-    BankrollControllerGetWagerInfoResponse,
-    BankrollControllerGetWagerInfoError,
-    undefined,
-    {},
-    {},
-    {}
-  >({ url: '/bankroll/wager-info', method: 'get', ...variables, signal });
-
-export const useBankrollControllerGetWagerInfo = <TData = BankrollControllerGetWagerInfoResponse,>(
-  variables: BankrollControllerGetWagerInfoVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      BankrollControllerGetWagerInfoResponse,
-      BankrollControllerGetWagerInfoError,
-      TData
-    >,
-    'queryKey' | 'queryFn' | 'initialData'
-  >
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    BankrollControllerGetWagerInfoResponse,
-    BankrollControllerGetWagerInfoError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: '/bankroll/wager-info',
-      operationId: 'bankrollControllerGetWagerInfo',
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchBankrollControllerGetWagerInfo({ ...fetcherOptions, ...variables }, signal),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export type BankrollControllerGetSingleSidedPoolsQueryParams = {
-  /**
-   * comma separated
-   */
-  bankrollIndexes: string;
-  player?: string;
-};
-
-export type BankrollControllerGetSingleSidedPoolsError = Fetcher.ErrorWrapper<undefined>;
-
-export type BankrollControllerGetSingleSidedPoolsResponse = Schemas.VaultOutput[];
-
-export type BankrollControllerGetSingleSidedPoolsVariables = {
-  queryParams: BankrollControllerGetSingleSidedPoolsQueryParams;
-} & ApiContext['fetcherOptions'];
-
-export const fetchBankrollControllerGetSingleSidedPools = (
-  variables: BankrollControllerGetSingleSidedPoolsVariables,
-  signal?: AbortSignal
-) =>
-  apiFetch<
-    BankrollControllerGetSingleSidedPoolsResponse,
-    BankrollControllerGetSingleSidedPoolsError,
-    undefined,
-    {},
-    BankrollControllerGetSingleSidedPoolsQueryParams,
-    {}
-  >({ url: '/bankroll/single-sided-pools', method: 'get', ...variables, signal });
-
-export const useBankrollControllerGetSingleSidedPools = <
-  TData = BankrollControllerGetSingleSidedPoolsResponse,
->(
-  variables: BankrollControllerGetSingleSidedPoolsVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      BankrollControllerGetSingleSidedPoolsResponse,
-      BankrollControllerGetSingleSidedPoolsError,
-      TData
-    >,
-    'queryKey' | 'queryFn' | 'initialData'
-  >
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    BankrollControllerGetSingleSidedPoolsResponse,
-    BankrollControllerGetSingleSidedPoolsError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: '/bankroll/single-sided-pools',
-      operationId: 'bankrollControllerGetSingleSidedPools',
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchBankrollControllerGetSingleSidedPools({ ...fetcherOptions, ...variables }, signal),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export type BankrollControllerGetPoolListError = Fetcher.ErrorWrapper<undefined>;
-
-export type BankrollControllerGetPoolListResponse = Schemas.PoolOutput[];
-
-export type BankrollControllerGetPoolListVariables = ApiContext['fetcherOptions'];
-
-export const fetchBankrollControllerGetPoolList = (
-  variables: BankrollControllerGetPoolListVariables,
-  signal?: AbortSignal
-) =>
-  apiFetch<
-    BankrollControllerGetPoolListResponse,
-    BankrollControllerGetPoolListError,
-    undefined,
-    {},
-    {},
-    {}
-  >({ url: '/bankroll/pool-list', method: 'get', ...variables, signal });
-
-export const useBankrollControllerGetPoolList = <TData = BankrollControllerGetPoolListResponse,>(
-  variables: BankrollControllerGetPoolListVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      BankrollControllerGetPoolListResponse,
-      BankrollControllerGetPoolListError,
-      TData
-    >,
-    'queryKey' | 'queryFn' | 'initialData'
-  >
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    BankrollControllerGetPoolListResponse,
-    BankrollControllerGetPoolListError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: '/bankroll/pool-list',
-      operationId: 'bankrollControllerGetPoolList',
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchBankrollControllerGetPoolList({ ...fetcherOptions, ...variables }, signal),
-    ...options,
-    ...queryOptions,
-  });
-};
-
 export type ReferralControllerGetReferralHistoryByPlayerPathParams = {
   /**
    * User wallet address
@@ -1859,6 +1991,50 @@ export const useBadgeControllerWeeklyClaimer = (
   });
 };
 
+export type RewardControllerSummaryQueryParams = {
+  player?: string;
+};
+
+export type RewardControllerSummaryError = Fetcher.ErrorWrapper<undefined>;
+
+export type RewardControllerSummaryVariables = {
+  queryParams?: RewardControllerSummaryQueryParams;
+} & ApiContext['fetcherOptions'];
+
+export const fetchRewardControllerSummary = (
+  variables: RewardControllerSummaryVariables,
+  signal?: AbortSignal
+) =>
+  apiFetch<
+    Schemas.RewardSummary,
+    RewardControllerSummaryError,
+    undefined,
+    {},
+    RewardControllerSummaryQueryParams,
+    {}
+  >({ url: '/reward/summary', method: 'get', ...variables, signal });
+
+export const useRewardControllerSummary = <TData = Schemas.RewardSummary,>(
+  variables: RewardControllerSummaryVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.RewardSummary, RewardControllerSummaryError, TData>,
+    'queryKey' | 'queryFn' | 'initialData'
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
+  return reactQuery.useQuery<Schemas.RewardSummary, RewardControllerSummaryError, TData>({
+    queryKey: queryKeyFn({
+      path: '/reward/summary',
+      operationId: 'rewardControllerSummary',
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchRewardControllerSummary({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type StakeControllerSummaryError = Fetcher.ErrorWrapper<undefined>;
 
 export type StakeControllerSummaryVariables = ApiContext['fetcherOptions'];
@@ -1932,88 +2108,6 @@ export const useRankControllerTakeLevelupSnapshot = (
   >({
     mutationFn: (variables: RankControllerTakeLevelupSnapshotVariables) =>
       fetchRankControllerTakeLevelupSnapshot({ ...fetcherOptions, ...variables }),
-    ...options,
-  });
-};
-
-export type BridgeControllerDepositError = Fetcher.ErrorWrapper<undefined>;
-
-export type BridgeControllerDepositVariables = {
-  body: Schemas.BridgeDepositDto;
-} & ApiContext['fetcherOptions'];
-
-export const fetchBridgeControllerDeposit = (
-  variables: BridgeControllerDepositVariables,
-  signal?: AbortSignal
-) =>
-  apiFetch<
-    Schemas.BridgeDepositDto,
-    BridgeControllerDepositError,
-    Schemas.BridgeDepositDto,
-    {},
-    {},
-    {}
-  >({ url: '/deposit', method: 'post', ...variables, signal });
-
-export const useBridgeControllerDeposit = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      Schemas.BridgeDepositDto,
-      BridgeControllerDepositError,
-      BridgeControllerDepositVariables
-    >,
-    'mutationFn'
-  >
-) => {
-  const { fetcherOptions } = useApiContext();
-  return reactQuery.useMutation<
-    Schemas.BridgeDepositDto,
-    BridgeControllerDepositError,
-    BridgeControllerDepositVariables
-  >({
-    mutationFn: (variables: BridgeControllerDepositVariables) =>
-      fetchBridgeControllerDeposit({ ...fetcherOptions, ...variables }),
-    ...options,
-  });
-};
-
-export type BridgeControllerWithdrawError = Fetcher.ErrorWrapper<undefined>;
-
-export type BridgeControllerWithdrawVariables = {
-  body: Schemas.BridgeWithdrawDto;
-} & ApiContext['fetcherOptions'];
-
-export const fetchBridgeControllerWithdraw = (
-  variables: BridgeControllerWithdrawVariables,
-  signal?: AbortSignal
-) =>
-  apiFetch<
-    Schemas.BridgeWithdrawDto,
-    BridgeControllerWithdrawError,
-    Schemas.BridgeWithdrawDto,
-    {},
-    {},
-    {}
-  >({ url: '/withdraw', method: 'post', ...variables, signal });
-
-export const useBridgeControllerWithdraw = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      Schemas.BridgeWithdrawDto,
-      BridgeControllerWithdrawError,
-      BridgeControllerWithdrawVariables
-    >,
-    'mutationFn'
-  >
-) => {
-  const { fetcherOptions } = useApiContext();
-  return reactQuery.useMutation<
-    Schemas.BridgeWithdrawDto,
-    BridgeControllerWithdrawError,
-    BridgeControllerWithdrawVariables
-  >({
-    mutationFn: (variables: BridgeControllerWithdrawVariables) =>
-      fetchBridgeControllerWithdraw({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
@@ -2106,6 +2200,11 @@ export const useBridgeControllerLatest = <TData = Schemas.BridgeHistoryResponse,
 
 export type QueryOperation =
   | {
+      path: '/';
+      operationId: 'appControllerStatus';
+      variables: AppControllerStatusVariables;
+    }
+  | {
       path: '/currency/get-last-prices';
       operationId: 'currencyControllerGetLastPriceFeed';
       variables: CurrencyControllerGetLastPriceFeedVariables;
@@ -2171,9 +2270,39 @@ export type QueryOperation =
       variables: GameControllerGetStatsByPlayerVariables;
     }
   | {
+      path: '/game/wager-info';
+      operationId: 'gameControllerGetWagerInfo';
+      variables: GameControllerGetWagerInfoVariables;
+    }
+  | {
       path: '/game/sse-live-wins';
       operationId: 'gameControllerSseLiveWins';
       variables: GameControllerSseLiveWinsVariables;
+    }
+  | {
+      path: '/game/sse-global-bet-history';
+      operationId: 'gameControllerSseGlobalBetHistory';
+      variables: GameControllerSseGlobalBetHistoryVariables;
+    }
+  | {
+      path: '/bankroll/update-notify-single-sided-pools';
+      operationId: 'bankrollControllerUpdateSingleSidedPoolsNotify';
+      variables: BankrollControllerUpdateSingleSidedPoolsNotifyVariables;
+    }
+  | {
+      path: '/bankroll/wager-info';
+      operationId: 'bankrollControllerGetWagerInfo';
+      variables: BankrollControllerGetWagerInfoVariables;
+    }
+  | {
+      path: '/bankroll/single-sided-pools';
+      operationId: 'bankrollControllerGetSingleSidedPools';
+      variables: BankrollControllerGetSingleSidedPoolsVariables;
+    }
+  | {
+      path: '/bankroll/pool-list';
+      operationId: 'bankrollControllerGetPoolList';
+      variables: BankrollControllerGetPoolListVariables;
     }
   | {
       path: '/statistic/stats';
@@ -2216,26 +2345,6 @@ export type QueryOperation =
       variables: StatisticControllerGetLeaderboardListLossLegendsVariables;
     }
   | {
-      path: '/bankroll/update-notify-single-sided-pools';
-      operationId: 'bankrollControllerUpdateSingleSidedPoolsNotify';
-      variables: BankrollControllerUpdateSingleSidedPoolsNotifyVariables;
-    }
-  | {
-      path: '/bankroll/wager-info';
-      operationId: 'bankrollControllerGetWagerInfo';
-      variables: BankrollControllerGetWagerInfoVariables;
-    }
-  | {
-      path: '/bankroll/single-sided-pools';
-      operationId: 'bankrollControllerGetSingleSidedPools';
-      variables: BankrollControllerGetSingleSidedPoolsVariables;
-    }
-  | {
-      path: '/bankroll/pool-list';
-      operationId: 'bankrollControllerGetPoolList';
-      variables: BankrollControllerGetPoolListVariables;
-    }
-  | {
       path: '/referral/referral-history/{wallet}';
       operationId: 'referralControllerGetReferralHistoryByPlayer';
       variables: ReferralControllerGetReferralHistoryByPlayerVariables;
@@ -2249,6 +2358,11 @@ export type QueryOperation =
       path: '/referral/code-volume-and-rewards';
       operationId: 'referralControllerCodesVolumeAndRewardAmounts';
       variables: ReferralControllerCodesVolumeAndRewardAmountsVariables;
+    }
+  | {
+      path: '/reward/summary';
+      operationId: 'rewardControllerSummary';
+      variables: RewardControllerSummaryVariables;
     }
   | {
       path: '/stake/summary';
