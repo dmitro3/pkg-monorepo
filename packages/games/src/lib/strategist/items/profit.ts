@@ -103,11 +103,15 @@ export const toCondition = (input: Input) => {
     }
 
     if (input.type == ProfitType.CumulativeProfit) {
-      return profit(cumulativeProfit);
+      const totalProfit = Number(cumulativeProfit) - Number(cumulativeLoss);
+      const totalGain = totalProfit < 0 ? BigInt(0) : BigInt(totalProfit);
+      return profit(totalGain);
     }
 
     if (input.type == ProfitType.CumulativeLost) {
-      return lost(cumulativeLoss);
+      const totalProfit = Number(cumulativeProfit) - Number(cumulativeLoss);
+      const totalLoss = totalProfit < 0 ? BigInt(totalProfit * -1) : BigInt(0);
+      return lost(totalLoss);
     }
 
     return false;
