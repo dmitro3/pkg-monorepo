@@ -707,16 +707,33 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
     switch (gameEvent.program[0]?.type) {
       case BJ_EVENT_TYPES.Settled: {
         const status = Number(gameEvent.program[0].data.game.status);
+        const playerCardsEvent = gameEvent.program[2]?.data as BlackjackPlayerCardsEvent;
 
         // handle events by game status
         if (status == BlackjackGameStatus.FINISHED) {
-          console.log('game finished');
-          handleGameFinalizeEvent(gameEvent);
+          if (
+            gameEvent.program[2]?.type == 'PlayerCards' &&
+            playerCardsEvent.cards.amountCards == 2 &&
+            playerCardsEvent.cards.totalCount == 21
+          ) {
+            console.log('edge case');
+            setInitialDataFetched(true);
+            handleFirstBlackjackDistribution(gameEvent);
+            setTimeout(() => {
+              setInitialDataFetched(false);
+            }, 1000);
+          } else {
+            console.log('game finished');
+            handleGameFinalizeEvent(gameEvent);
+          }
         }
 
         console.log(activeMove, 'ACTIVE MOVE!');
+        console.log(playerCardsEvent);
         // handle events by active move
-        if (activeMove == 'Created') {
+        if (activeMove == 'Created' && playerCardsEvent.cards.totalCount !== 21) {
+          console.log('created event');
+
           setTimeout(() => {
             gameDataRead.refetch();
           }, 200);
@@ -772,6 +789,59 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   };
 
   // event handlers
+  const handleFirstBlackjackDistribution = (results: DecodedEvent<any, any>) => {
+    const settledEvent = results.program[0]?.data as BlackjackSettledEvent;
+    const playerCardsEvent = results.program[2]?.data as BlackjackPlayerCardsEvent;
+    const dealerCardsEvent = results.program[3]?.data as BlackjackPlayerCardsEvent;
+
+    const newPlayerHand = {
+      cards: {
+        cards: playerCardsEvent.cards.cards,
+        amountCards: playerCardsEvent.cards.cards.filter((n) => n !== 0).length,
+        totalCount: playerCardsEvent.cards.totalCount,
+        isSoftHand: playerCardsEvent.cards.isSoftHand,
+        canSplit: playerCardsEvent.cards?.canSplit || false,
+      },
+      hand: {
+        chipsAmount: 0,
+        isInsured: false,
+        status: BlackjackHandStatus.BLACKJACK,
+        isDouble: false,
+        isSplitted: false,
+        splittedHandIndex: null,
+      },
+      handId: playerCardsEvent.handIndex,
+    };
+
+    const newDealerHand = {
+      cards: {
+        cards: dealerCardsEvent.cards.cards,
+        amountCards: dealerCardsEvent.cards.cards.filter((n) => n !== 0).length,
+        totalCount: dealerCardsEvent.cards.totalCount,
+        isSoftHand: dealerCardsEvent.cards.isSoftHand,
+        canSplit: dealerCardsEvent.cards?.canSplit || false,
+      },
+      hand: {
+        chipsAmount: 0,
+        isInsured: false,
+        status: BlackjackHandStatus.BLACKJACK,
+        isDouble: false,
+        isSplitted: false,
+        splittedHandIndex: null,
+      },
+      handId: playerCardsEvent.handIndex,
+    };
+
+    setActiveGameHands((prev) => ({ ...prev, firstHand: newPlayerHand, dealer: newDealerHand }));
+
+    // set new game data
+    setActiveGameData((prev) => ({
+      ...prev,
+      activeHandIndex: Number(settledEvent.game.activeHandIndex),
+      status: Number(settledEvent.game.status),
+    }));
+  };
+
   const handlePlayerEvent = (results: DecodedEvent<any, any>) => {
     const hitCardEvent = results.program[0]?.data as BlackjackSettledEvent;
     const playerCardsEvent = results.program[2]?.data as BlackjackPlayerCardsEvent;
@@ -803,7 +873,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
       },
       hand: {
         chipsAmount: prevHand.hand?.chipsAmount || 0,
-        isInsured: playerHandEvent.isInsured,
+        isInsured: playerHandEvent?.isInsured || false,
         status: playerHandEvent.status,
         isDouble: playerHandEvent.isDouble,
         isSplitted: prevHand.hand?.isSplitted || false,
@@ -1022,6 +1092,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   }, [activeGameHands, formValues.wager]);
 
   const onGameCompleted = () => {
+    console.log('on game completed');
     props.onGameCompleted && props.onGameCompleted(activeGameData.payout || 0);
     refetchHistory();
     refetchPlayerGameStatus();
@@ -1032,6 +1103,10 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
       totalPayout: (activeGameData.payout || 0) + (activeGameData.payback || 0),
     });
   };
+
+  React.useEffect(() => {
+    console.log(activeGameData, 'activeGameData', activeGameHands, 'activegaMEhaNDS');
+  }, [activeGameData, activeGameHands]);
 
   return (
     <>
