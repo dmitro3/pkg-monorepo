@@ -26,4 +26,5 @@ export interface Web3AccountTxRequest extends TxRequest {}
 
 export interface SendTxRequest extends TxRequest {
   method?: 'sendUserOperation' | 'sendGameOperation';
+  networkId?: number;
 }

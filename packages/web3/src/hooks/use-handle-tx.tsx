@@ -8,8 +8,9 @@ import {
   ContractFunctionName,
   encodeFunctionData,
   EncodeFunctionDataParameters,
+  SwitchChainError,
 } from 'viem';
-import { Config } from 'wagmi';
+import { Config, useSwitchChain } from 'wagmi';
 import { WriteContractVariables } from 'wagmi/query';
 
 import { SimpleAccountAPI } from '../smart-wallet';
@@ -76,15 +77,17 @@ export const useHandleTx = <
   const { address, isSocialLogin, rootAddress } = useCurrentAccount();
   const { accountApi: defaultAccountApi } = useSmartAccountApi();
   const { client: defaultClient } = useBundlerClient();
+  const { switchChainAsync } = useSwitchChain();
 
   const createSession = useCreateSession();
 
   const sessionStore = useSessionStore();
-
   const handleTxMutation = useMutation({
-    mutationFn: async () => {
-      if (!address && params.options.unauthRedirectionCb) {
-        params.options.unauthRedirectionCb();
+    mutationFn: async (params: { networkId?: number } | void) => {
+      const networkId = params && 'networkId' in params ? params.networkId : 777777;
+
+      if (!address && options.unauthRedirectionCb) {
+        options.unauthRedirectionCb();
 
         return;
       }
@@ -104,6 +107,12 @@ export const useHandleTx = <
       if (!client) return;
 
       if (!isSocialLogin) {
+        try {
+          await switchChainAsync({ chainId: networkId! });
+        } catch (error) {
+          throw new SwitchChainError(error as Error);
+        }
+
         let _part = sessionStore.part;
         let _permit = sessionStore.permit;
 
