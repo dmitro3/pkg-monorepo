@@ -154,6 +154,7 @@ export type LiveWinsDto = {
   player: string;
   username: string | null;
   id: string;
+  level: number;
   /**
    * @default 0
    */
@@ -185,6 +186,7 @@ export type BigWinsDto = {
   player: string;
   username: string | null;
   id: string;
+  level: number;
   /**
    * @default 0
    */
@@ -216,6 +218,7 @@ export type LuckyWinsDto = {
   player: string;
   username: string | null;
   id: string;
+  level: number;
   /**
    * @default 0
    */
@@ -255,6 +258,51 @@ export type PlayerRankObject = {
    * @default 0
    */
   refPlayerCount: number;
+};
+
+export type WagerInfoResponse = {
+  minWager: number;
+  maxWager: number;
+};
+
+export type WagerResponse = {};
+
+export type VaultOutput = {
+  bankrollTokenAddress: string;
+  liquidityManagerAddress: string;
+  shareTokenAddress: string;
+  vaultAddress: string;
+  price: number;
+  wallet: number;
+  poolSupply: number;
+  weeklyProfit: number;
+  allTimeProfit: number;
+  apr: number;
+};
+
+export type VaultDetailOutput = {
+  vaultIndex: string;
+  bankrollBytesIdentifier: string;
+  vaultAddress: string;
+  bankrollTokenAddress: string;
+  shareTokenAddress: string;
+  controllerAddress: string;
+  liquidityManagerAddress: string;
+};
+
+export type VaultAmountOutput = {
+  bankrollAmount: string;
+  shareTokenAmount: string;
+  epochAmount: string;
+  totalAmount: string;
+  bankrollTokenPrice: string;
+  isProfitEpcoh: number;
+  isProfitTotal: number;
+};
+
+export type PoolOutput = {
+  detail: VaultDetailOutput;
+  amount: VaultAmountOutput;
 };
 
 export type RefundInput = {
@@ -431,46 +479,6 @@ export type LeaderboardLossLegendsResponse = {
   playerStats: LeaderboardLossLegendsObject;
 };
 
-export type WagerResponse = {};
-
-export type VaultOutput = {
-  bankrollTokenAddress: string;
-  liquidityManagerAddress: string;
-  shareTokenAddress: string;
-  vaultAddress: string;
-  price: number;
-  wallet: number;
-  poolSupply: number;
-  weeklyProfit: number;
-  allTimeProfit: number;
-  apr: number;
-};
-
-export type VaultDetailOutput = {
-  vaultIndex: string;
-  bankrollBytesIdentifier: string;
-  vaultAddress: string;
-  bankrollTokenAddress: string;
-  shareTokenAddress: string;
-  controllerAddress: string;
-  liquidityManagerAddress: string;
-};
-
-export type VaultAmountOutput = {
-  bankrollAmount: string;
-  shareTokenAmount: string;
-  epochAmount: string;
-  totalAmount: string;
-  bankrollTokenPrice: string;
-  isProfitEpcoh: number;
-  isProfitTotal: number;
-};
-
-export type PoolOutput = {
-  detail: VaultDetailOutput;
-  amount: VaultAmountOutput;
-};
-
 export type ReferralRewardEntity = {
   /**
    * UUIDv4
@@ -621,6 +629,59 @@ export type BadgeResponse = {
     | 'LuckyRoller';
 };
 
+export type NewPlayers = {
+  count: number;
+};
+
+export type TopPlayersByVolume = {
+  rank: number;
+  reward: number;
+  username: string;
+  address: string;
+};
+
+export type TopPlayersByBet = {
+  rank: number;
+  reward: number;
+  username: string;
+  address: string;
+};
+
+export type HighRollerPlayers = {
+  rank: number;
+  reward: number;
+  username: string;
+  address: string;
+};
+
+export type BadLuckPlayers = {
+  rank: number;
+  reward: number;
+  username: string;
+  address: string;
+};
+
+export type LotteryWinners = {
+  username: string;
+  address: string;
+};
+
+export type PlayerEpochStats = {
+  loss: string;
+  profit: string;
+  volume: string;
+};
+
+export type RewardSummary = {
+  newPlayers: NewPlayers;
+  topPlayersByVolume: TopPlayersByVolume[];
+  topPlayersByBet: TopPlayersByBet[];
+  highRollerPlayers: HighRollerPlayers[];
+  badLuckPlayers: BadLuckPlayers[];
+  lotteryWinners: LotteryWinners[];
+  playerEpochStat: PlayerEpochStats;
+};
+
 export type SummaryResponse = {
   totalEarnings: number;
   totalWINRLocked: number;
@@ -629,16 +690,6 @@ export type SummaryResponse = {
 
 export type TakeLevelupSnapshotInput = {
   player: string;
-};
-
-export type BridgeDepositDto = {
-  player: string;
-  amount: string;
-};
-
-export type BridgeWithdrawDto = {
-  player: string;
-  amount: string;
 };
 
 export type BridgeHistoryResponse = {
