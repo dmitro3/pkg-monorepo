@@ -54,17 +54,15 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
   }, [data]);
 
   useEffect(() => {
-    const es = new EventSource(baseUrl + '/game/sse-live-wins');
+    const es = new EventSource(baseUrl + '/game/sse-global-bet-history');
 
     es.onmessage = (event) => {
       if (!event.data) return;
 
-      console.log('event.data', event.data);
-
       const newData = JSON.parse(String(event.data));
 
       setGlobalBets((prev) => {
-        return [newData, ...prev.slice(0, 30)];
+        return [newData.payload, ...prev.slice(0, 30)];
       });
     };
 
