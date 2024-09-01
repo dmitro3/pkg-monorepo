@@ -254,3 +254,8 @@ export const initialBoard = [
 ];
 
 export const MAX_MINE_AMOUNT = 24;
+
+export const MINES_MODES = {
+  MANUAL: 'manual',
+  AUTO: 'auto',
+} as const;

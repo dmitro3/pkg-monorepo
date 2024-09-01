@@ -4,6 +4,7 @@ export interface MinesFormField {
   wager: number;
   minesCount: number;
   selectedCells: boolean[];
+  betCount: number;
 }
 
 export type MinesForm = UseFormReturn<MinesFormField, any, undefined>;

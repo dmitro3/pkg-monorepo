@@ -6,13 +6,16 @@ import z from 'zod';
 
 import { GameContainer, SceneContainer } from '../../../common/containers';
 import { WinAnimation } from '../../../common/win-animation';
+import { useGameOptions } from '../../../game-provider';
+import { useStrategist } from '../../../hooks/use-strategist';
 import { Form } from '../../../ui/form';
+import { parseToBigInt } from '../../../utils/number';
 import { toDecimals } from '../../../utils/web3';
 import { Mines } from '..';
-import { initialBoard } from '../constants';
+import { initialBoard, MINES_MODES } from '../constants';
 import mineMultipliers from '../constants/mines-multipliers.json';
 import { useMinesGameStateStore } from '../store';
-import { FormSetValue, MINES_GAME_STATUS, MinesFormField } from '../types';
+import { FormSetValue, MINES_GAME_STATUS, MinesFormField, MinesGameResult } from '../types';
 import { MinesGameProps } from './game';
 
 type TemplateProps = MinesGameProps & {
@@ -22,10 +25,15 @@ type TemplateProps = MinesGameProps & {
   onFormChange?: (fields: MinesFormField) => void;
   formSetValue?: FormSetValue;
   onLogin?: () => void;
+  onError?: (error: string) => void;
 };
 
 const MinesTemplate = ({ ...props }: TemplateProps) => {
   const { board, gameStatus } = useMinesGameStateStore(['board', 'gameStatus']);
+  const [isAutoBetMode, setIsAutoBetMode] = React.useState(false);
+  const [mode, setMode] = React.useState<(typeof MINES_MODES)[keyof typeof MINES_MODES]>(
+    MINES_MODES.MANUAL
+  );
 
   const formSchema = z.object({
     wager: z
@@ -38,6 +46,11 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
       }),
     minesCount: z.number().max(24).min(1),
     selectedCells: z.array(z.boolean()).length(25),
+    betCount: z.number().min(0, { message: 'Minimum bet count is 0' }),
+    stopGain: z.number(),
+    stopLoss: z.number(),
+    increaseOnWin: z.number(),
+    increaseOnLoss: z.number(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,6 +62,11 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
       wager: props?.minWager || 1,
       minesCount: 1,
       selectedCells: initialBoard.map((mine) => mine.isSelected),
+      betCount: 0,
+      stopGain: 0,
+      stopLoss: 0,
+      increaseOnWin: 0,
+      increaseOnLoss: 0,
     },
   });
 
@@ -98,6 +116,8 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   }, [props.formSetValue]);
 
   React.useEffect(() => {
+    if (mode === MINES_MODES.AUTO) return;
+
     const values = form.getValues();
 
     if (values.selectedCells.some((c) => c === true && gameStatus !== MINES_GAME_STATUS.ENDED))
@@ -116,17 +136,71 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
     }
   }, [gameStatus]);
 
+  const wager = form.watch('wager');
+  const increasePercentageOnWin = form.watch('increaseOnWin');
+  const increasePercentageOnLoss = form.watch('increaseOnLoss');
+  const stopProfit = form.watch('stopGain');
+  const stopLoss = form.watch('stopLoss');
+
+  const strategist = useStrategist({
+    wager,
+    increasePercentageOnLoss,
+    increasePercentageOnWin,
+    stopLoss,
+    stopProfit,
+    isAutoBetMode,
+  });
+  const { account } = useGameOptions();
+  const balanceAsDollar = account?.balanceAsDollar || 0;
+
+  const processStrategy = (result: MinesGameResult[]) => {
+    const payout = result[0]?.payout || 0;
+    const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
+    const newWager = Number(p.wager) / 1e8;
+    const currentBalance = balanceAsDollar - wager + payout;
+
+    if (currentBalance < wager) {
+      setIsAutoBetMode(false);
+      props?.onError &&
+        props.onError(`Oops, you are out of funds. \n Deposit more funds to continue playing.`);
+      return;
+    }
+
+    if (newWager < (props.minWager || 0)) {
+      form.setValue('wager', props.minWager || 0);
+      return;
+    }
+
+    if (newWager > (props.maxWager || 0)) {
+      form.setValue('wager', props.maxWager || 0);
+      return;
+    }
+
+    if (p.action && !p.action.isStop()) {
+      form.setValue('wager', newWager);
+    }
+
+    if (p.action && p.action.isStop()) {
+      setIsAutoBetMode(false);
+      return;
+    }
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
-          <Mines.Game {...props}>
+          <Mines.Game {...props} processStrategy={processStrategy}>
             <Mines.Controller
               {...props}
               currentCashoutAmount={currentCashoutAmount}
               maxWager={props?.maxWager || 2000}
               minWager={props?.minWager || 2}
               currentMultiplier={currentMultiplier}
+              isAutoBetMode={isAutoBetMode}
+              onAutoBetModeChange={setIsAutoBetMode}
+              mode={mode}
+              onModeChange={setMode}
             />
             <SceneContainer className="lg:wr-h-[740px] lg:wr-py-10 max-lg:!wr-border-0 max-lg:!wr-p-0">
               <Mines.Scene currentMultiplier={currentMultiplier} isLoading={props.isLoading} />

@@ -1,4 +1,4 @@
-import { MinesBetController } from './components/bet-controller';
+import MinesBetController from './components/bet-controller';
 import MineCell from './components/cell';
 import MinesCountButton from './components/count-button';
 import MinesCountDisplay from './components/count-display';
