@@ -7,6 +7,7 @@ import {
   horseRaceParticipantMapWithStore,
   HorseRaceStatus,
   HorseRaceTemplate,
+  toDecimals,
   useConfigureMultiplayerLiveResultStore,
   useHorseRaceGameStore,
   useLiveResultStore,
@@ -55,6 +56,15 @@ interface TemplateWithWeb3Props extends BaseGameProps {
   }) => void;
 }
 
+const selectionMultipliers = {
+  [Horse.IDLE]: 1,
+  [Horse.ONE]: 2,
+  [Horse.TWO]: 3,
+  [Horse.THREE]: 8,
+  [Horse.FOUR]: 15,
+  [Horse.FIVE]: 60,
+};
+
 const HorseRaceGame = (props: TemplateWithWeb3Props) => {
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
@@ -75,6 +85,11 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     horse: Horse.IDLE,
     wager: props.minWager || 1,
   });
+
+  const maxWagerBySelection = toDecimals(
+    (props.maxWager || 100) / selectionMultipliers[formValues.horse],
+    2
+  );
 
   useConfigureMultiplayerLiveResultStore();
   const {
@@ -373,6 +388,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     <>
       <HorseRaceTemplate
         {...props}
+        maxWager={maxWagerBySelection}
         currentAccount={currentAccount.address as `0x${string}`}
         buildedGameUrl={props.buildedGameUrl}
         onSubmitGameForm={onGameSubmit}

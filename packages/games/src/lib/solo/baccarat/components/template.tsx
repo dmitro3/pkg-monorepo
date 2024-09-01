@@ -73,34 +73,34 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
     wager: z
       .number()
       .min(minWager || 1, {
-        message: `Minimum wager is ${minWager || 1}`,
+        message: `Minimum wager is $${minWager || 1}`,
       })
       .max(maxWager || 2000, {
-        message: `Maximum wager is ${maxWager || 2000}`,
+        message: `Maximum wager is $${maxWager || 2000}`,
       }),
     playerWager: z
       .number()
       .min(0, {
-        message: `Minimum wager is ${minWager || 1}`,
+        message: `Minimum wager is $${minWager || 1}`,
       })
       .max(maxWager || 2000, {
-        message: `Maximum wager is ${maxWager || 2000}`,
+        message: `Maximum wager is $${maxWager || 2000}`,
       }),
     bankerWager: z
       .number()
       .min(0, {
-        message: `Minimum wager is ${minWager || 1}`,
+        message: `Minimum wager is $${minWager || 1}`,
       })
       .max(maxWager || 2000, {
-        message: `Maximum wager is ${maxWager || 2000}`,
+        message: `Maximum wager is $${maxWager || 2000}`,
       }),
     tieWager: z
       .number()
       .min(0, {
-        message: `Minimum wager is ${minWager || 1}`,
+        message: `Minimum wager is $${minWager || 1}`,
       })
       .max(maxWager || 2000, {
-        message: `Maximum wager is ${maxWager || 2000}`,
+        message: `Maximum wager is $${maxWager || 2000}`,
       }),
     betCount: z.number().min(0, { message: 'Minimum bet count is 0' }),
     stopGain: z.number(),

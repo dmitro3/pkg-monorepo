@@ -58,10 +58,10 @@ const VideoPokerTemplate = ({
     wager: z
       .number()
       .min(minWager || 1, {
-        message: `Minimum wager is ${minWager || 1}`,
+        message: `Minimum wager is $${minWager || 1}`,
       })
       .max(maxWager || 2000, {
-        message: `Maximum wager is ${maxWager || 2000}`,
+        message: `Maximum wager is $${maxWager || 2000}`,
       }),
     cardsToSend: z.array(z.nativeEnum(CardStatus)).length(5),
   });

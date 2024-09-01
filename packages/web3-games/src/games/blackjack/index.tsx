@@ -10,6 +10,7 @@ import {
   BlackjackTemplate,
   GameStruct,
   GameType,
+  toDecimals,
 } from '@winrlabs/games';
 import {
   blackjackReaderAbi,
@@ -105,7 +106,11 @@ const defaultGameData = {
   payback: 0,
 };
 
+const MAX_WAGER_MULTIPLIER = 3;
+
 export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) {
+  const maxWager = toDecimals((props?.maxWager || 100) / MAX_WAGER_MULTIPLIER, 2);
+
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
 
@@ -1356,7 +1361,7 @@ export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) 
         activeGameHands={activeGameHands}
         initialDataFetched={initialDataFetched}
         minWager={props.minWager}
-        maxWager={props.maxWager}
+        maxWager={maxWager}
         onFormChange={(v) => setFormValues(v)}
         onGameCompleted={onGameCompleted}
         isControllerDisabled={isLoading}
