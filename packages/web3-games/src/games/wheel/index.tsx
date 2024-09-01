@@ -273,17 +273,16 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
-
+      setIsGamblerParticipant(true);
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
+      setIsGamblerParticipant(false);
       // props.onError && props.onError(e);
     }
 
     console.log('BET TX COMPLETED');
-
-    setIsGamblerParticipant(true);
   };
 
   React.useEffect(() => {

@@ -262,6 +262,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     } catch (e: any) {
       console.log('handleTx error', e);
       refetchPlayerGameStatus();
+      setIsGamblerParticipant(false);
       // props.onError && props.onError(e);
     }
   };
