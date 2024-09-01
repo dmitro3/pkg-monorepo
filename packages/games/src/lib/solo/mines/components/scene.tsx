@@ -9,9 +9,11 @@ import MineCell from './cell';
 export const MinesScene = ({
   currentMultiplier,
   isLoading,
+  isAutoBetMode,
 }: {
   currentMultiplier: number;
   isLoading?: boolean;
+  isAutoBetMode: boolean;
 }) => {
   const form = useFormContext() as MinesForm;
 
@@ -25,7 +27,15 @@ export const MinesScene = ({
         render={() => (
           <FormItem className="wr-mb-0 lg:wr-mb-1 wr-grid wr-aspect-square wr-grid-cols-5 wr-grid-rows-5 wr-items-center wr-justify-center lg:wr-gap-2 wr-gap-1 lg:wr-aspect-auto">
             {board.map((mine, idx) => {
-              return <MineCell isLoading={isLoading} idx={idx} mineCell={mine} key={idx} />;
+              return (
+                <MineCell
+                  isLoading={isLoading}
+                  idx={idx}
+                  mineCell={mine}
+                  key={idx}
+                  isAutoBetMode={isAutoBetMode}
+                />
+              );
             })}
           </FormItem>
         )}

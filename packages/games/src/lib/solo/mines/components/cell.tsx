@@ -8,14 +8,15 @@ import { FormControl, FormField, FormItem } from '../../../ui/form';
 import { cn } from '../../../utils/style';
 import { boardsSchema, initialBoard } from '../constants';
 import { useMinesGameStateStore } from '../store';
-import { MINES_GAME_STATUS, MinesForm } from '../types';
+import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from '../types';
 import { MineCellBg } from './mine-cell-bg';
 
 const MineCell: React.FC<{
   mineCell: (typeof initialBoard)['0'];
   idx: number;
   isLoading?: boolean;
-}> = ({ mineCell, idx, isLoading }) => {
+  isAutoBetMode?: boolean;
+}> = ({ mineCell, idx, isLoading, isAutoBetMode }) => {
   const form = useFormContext() as MinesForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
   const bombEffect = useAudioEffect(SoundEffects.MINES_BOMB);
@@ -50,11 +51,15 @@ const MineCell: React.FC<{
 
                   clickEffect.play();
 
+                  if (isAutoBetMode) {
+                    return;
+                  }
+
                   updateMinesGameState({
-                    // submitType:
-                    //   gameStatus === MINES_GAME_STATUS.IDLE
-                    //     ? MINES_SUBMIT_TYPE.FIRST_REVEAL
-                    //     : MINES_SUBMIT_TYPE.REVEAL,
+                    submitType:
+                      gameStatus === MINES_GAME_STATUS.IDLE
+                        ? MINES_SUBMIT_TYPE.FIRST_REVEAL
+                        : MINES_SUBMIT_TYPE.REVEAL,
                   });
                 }}
                 checked={field.value[idx]}
