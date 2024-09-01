@@ -85,7 +85,6 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   });
 
   const [isWaitingResponse, setIsWaitingResponse] = React.useState<boolean>(false);
-
   const gameEvent = useListenGameEvent();
 
   const currentAccount = useCurrentAccount();
@@ -99,6 +98,12 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     'board',
     'gameStatus',
   ]);
+
+  const currentSubmitType = React.useRef<MINES_SUBMIT_TYPE>(submitType);
+
+  useEffect(() => {
+    currentSubmitType.current = submitType;
+  }, [submitType]);
 
   const { data, dataUpdatedAt } = useReadContract({
     abi: minesAbi,
@@ -153,33 +158,35 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   });
 
   const handleCashout = async () => {
-    const encodedTxData: `0x${string}` = encodeFunctionData({
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.mines as Address,
-        selectedTokenAddress.bankrollIndex,
-        uiOperatorAddress as Address,
-        'endGame',
-        '0x',
-      ],
-    });
-
-    await handlePerformTx.mutateAsync({
-      encodedTxData,
-      writeContractVariables: {
+    try {
+      const encodedTxData: `0x${string}` = encodeFunctionData({
         abi: controllerAbi,
         functionName: 'perform',
         args: [
-          gameAddresses.mines,
+          gameAddresses.mines as Address,
           selectedTokenAddress.bankrollIndex,
           uiOperatorAddress as Address,
           'endGame',
           '0x',
         ],
-        address: controllerAddress as Address,
-      },
-    });
+      });
+
+      await handlePerformTx.mutateAsync({
+        encodedTxData,
+        writeContractVariables: {
+          abi: controllerAbi,
+          functionName: 'perform',
+          args: [
+            gameAddresses.mines,
+            selectedTokenAddress.bankrollIndex,
+            uiOperatorAddress as Address,
+            'endGame',
+            '0x',
+          ],
+          address: controllerAddress as Address,
+        },
+      });
+    } catch (error) {}
   };
 
   const handleFirstReveal = async (values: MinesFormField) => {
@@ -202,7 +209,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         wagerInWei,
         values.minesCount,
         values.selectedCells.length ? values.selectedCells : (Array(25).fill(false) as any),
-        submitType === MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT ? true : false,
+        currentSubmitType.current === MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT ? true : false,
       ]
     );
 
@@ -245,7 +252,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       ],
       [
         revealCells.length ? revealCells : (Array(25).fill(false) as any),
-        submitType === MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT ? true : false,
+        currentSubmitType.current === MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT ? true : false,
       ]
     );
 
@@ -306,18 +313,18 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
 
         if (!handledAllowance) return;
       }
-      console.log('submit Type:', submitType);
+      console.log('submit Type:', currentSubmitType);
       if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
-      if (submitType === MINES_SUBMIT_TYPE.FIRST_REVEAL) {
+      if (currentSubmitType.current === MINES_SUBMIT_TYPE.FIRST_REVEAL) {
         await handleFirstReveal(values);
 
         updateMinesGameState({
           gameStatus: MINES_GAME_STATUS.IN_PROGRESS,
         });
         updateBalances();
-      } else if (submitType === MINES_SUBMIT_TYPE.REVEAL) {
+      } else if (currentSubmitType.current === MINES_SUBMIT_TYPE.REVEAL) {
         const revealedCells = board.map((cell, idx) => {
           return cell.isRevealed ? false : values.selectedCells[idx];
         });
@@ -330,12 +337,29 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
           gameStatus: MINES_GAME_STATUS.IN_PROGRESS,
         });
         updateBalances();
-      } else if (submitType === MINES_SUBMIT_TYPE.CASHOUT) {
+      } else if (currentSubmitType.current === MINES_SUBMIT_TYPE.CASHOUT) {
         await handleCashout();
 
         updateMinesGameState({
           gameStatus: MINES_GAME_STATUS.ENDED,
         });
+      } else if (currentSubmitType.current === MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT) {
+        await handleFirstReveal(values);
+
+        updateMinesGameState({
+          gameStatus: MINES_GAME_STATUS.IN_PROGRESS,
+        });
+
+        setTimeout(async () => {
+          updateMinesGameState({
+            submitType: MINES_SUBMIT_TYPE.CASHOUT,
+          });
+          await handleCashout();
+
+          updateMinesGameState({
+            gameStatus: MINES_GAME_STATUS.ENDED,
+          });
+        }, 1000);
       }
     } catch (e: any) {
       console.log('error', e);

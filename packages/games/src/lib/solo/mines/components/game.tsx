@@ -30,18 +30,19 @@ export const MinesGame = ({
   onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmitGameForm: (data: MinesFormField) => void;
 }) => {
-  const { updateMinesGameResults, updateGameStatus, minesGameResults, updateMinesGameState } =
+  const { updateMinesGameResults, updateGameStatus, updateMinesGameState, gameStatus } =
     useMinesGameStateStore([
       'updateMinesGameResults',
       'updateGameStatus',
-      'minesGameResults',
       'updateMinesGameState',
+      'gameStatus',
     ]);
 
+  const isAutoBetModeRef = React.useRef(isAutoBetMode);
+
+  const timeoutRef = React.useRef<NodeJS.Timeout>();
   const form = useFormContext() as MinesForm;
   const betCount = form.watch('betCount');
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
-  const isAutoBetModeRef = React.useRef<boolean>();
 
   React.useEffect(() => {
     if (gameResults.length) {
@@ -51,31 +52,27 @@ export const MinesGame = ({
   }, [gameResults]);
 
   React.useEffect(() => {
-    if (!gameResults.length) return;
+    if (isAutoBetMode && gameStatus === MINES_GAME_STATUS.ENDED) {
+      updateMinesGameState({
+        submitType: MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT,
+      });
 
-    processStrategy(gameResults);
-    isAutoBetModeRef.current = isAutoBetMode;
-    onAutoBetModeChange(isAutoBetMode);
-    timeoutRef.current = setTimeout(() => {
-      if (isAutoBetModeRef.current) {
-        const newBetCount = betCount - 1;
+      timeoutRef.current = setTimeout(() => {
+        if (isAutoBetModeRef.current) {
+          const newBetCount = betCount - 1;
 
-        betCount !== 0 && form.setValue('betCount', betCount - 1);
+          betCount !== 0 && form.setValue('betCount', betCount - 1);
 
-        updateMinesGameState({
-          submitType: MINES_SUBMIT_TYPE.CASHOUT,
-        });
-
-        console.log('mines.bet', betCount);
-
-        if (betCount >= 0 && newBetCount != 0) {
-          onSubmitGameForm(form.getValues());
-        } else {
-          onAutoBetModeChange(false);
+          if (betCount >= 0 && newBetCount != 0) {
+            onSubmitGameForm(form.getValues());
+          } else {
+            console.log('auto bet finished!');
+            onAutoBetModeChange(false);
+          }
         }
-      }
-    }, 250);
-  }, [gameResults]);
+      }, 1000);
+    }
+  }, [gameStatus]);
 
   React.useEffect(() => {
     isAutoBetModeRef.current = isAutoBetMode;

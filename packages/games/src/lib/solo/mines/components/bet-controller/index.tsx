@@ -11,7 +11,7 @@ import { useWinAnimation } from '../../../../hooks/use-win-animation';
 import { cn } from '../../../../utils/style';
 import { initialBoard, MINES_MODES } from '../../constants';
 import useMinesGameStateStore from '../../store';
-import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from '../../types';
+import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm, MinesFormField } from '../../types';
 import { AutoController } from './auto-controller';
 // import { AutoController } from './auto-controller';
 import { ManualController } from './manual-controller';
@@ -29,6 +29,7 @@ export interface MinesBetControllerProps {
   onModeChange: React.Dispatch<
     React.SetStateAction<(typeof MINES_MODES)[keyof typeof MINES_MODES]>
   >;
+  onGameSubmit: (values: MinesFormField) => void;
 }
 
 const MinesBetController: React.FC<MinesBetControllerProps> = (props) => {
@@ -59,14 +60,22 @@ const MinesBetController: React.FC<MinesBetControllerProps> = (props) => {
       }
 
       setTimeout(() => {
-        updateMinesGameState({
-          gameStatus: MINES_GAME_STATUS.IDLE,
-          submitType: MINES_SUBMIT_TYPE.IDLE,
-        });
-        form.resetField('selectedCells');
-        updateMinesGameState({
-          board: initialBoard,
-        });
+        if (props.mode == MINES_MODES.AUTO) {
+          updateMinesGameState({
+            board: board.map((c) => ({ ...c, isRevealed: false, isBomb: false })),
+            gameStatus: MINES_GAME_STATUS.IN_PROGRESS,
+            minesGameResults: [],
+          });
+        } else {
+          updateMinesGameState({
+            gameStatus: MINES_GAME_STATUS.IDLE,
+            submitType: MINES_SUBMIT_TYPE.IDLE,
+          });
+          form.resetField('selectedCells');
+          updateMinesGameState({
+            board: initialBoard,
+          });
+        }
 
         closeWinAnimation();
       }, 1000);

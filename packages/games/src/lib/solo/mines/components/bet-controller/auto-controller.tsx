@@ -19,8 +19,9 @@ import { Button } from '../../../../ui/button';
 import { FormField, FormItem, FormLabel, FormMessage } from '../../../../ui/form';
 import { NumberInput } from '../../../../ui/number-input';
 import { cn } from '../../../../utils/style';
+import { initialBoard } from '../../constants';
 import useMinesGameStateStore from '../../store';
-import { MINES_GAME_STATUS, MinesForm } from '../../types';
+import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm, MinesFormField } from '../../types';
 import MinesCountButton from '../count-button';
 
 interface AutoControllerProps {
@@ -30,6 +31,7 @@ interface AutoControllerProps {
   isAutoBetMode: boolean;
   onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
   onLogin?: () => void;
+  onGameSubmit: (values: MinesFormField) => void;
 }
 
 export const AutoController = ({
@@ -38,13 +40,18 @@ export const AutoController = ({
   isAutoBetMode,
   onAutoBetModeChange,
   onLogin,
+  onGameSubmit,
 }: AutoControllerProps) => {
   const form = useFormContext() as MinesForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   const isDisabled = form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode;
 
-  const { gameStatus } = useMinesGameStateStore(['updateMinesGameState', 'gameStatus', 'board']);
+  const { gameStatus, updateMinesGameState } = useMinesGameStateStore([
+    'updateMinesGameState',
+    'gameStatus',
+    'board',
+  ]);
 
   const { account } = useGameOptions();
 
@@ -151,7 +158,6 @@ export const AutoController = ({
 
       <PreBetButton onLogin={onLogin} className="wr-mb-3 lg:wr-mb-0">
         <Button
-          type={!isAutoBetMode ? 'button' : 'submit'}
           variant={'success'}
           className={cn(
             'wr-w-full wr-uppercase wr-transition-all wr-duration-300 active:wr-scale-[85%] wr-select-none wr-mb-3 lg:wr-mb-0 wr-order-1 lg:wr-order-none',
@@ -164,6 +170,19 @@ export const AutoController = ({
           onClick={() => {
             clickEffect.play();
             onAutoBetModeChange(!isAutoBetMode);
+            if (!isAutoBetMode) {
+              updateMinesGameState({
+                submitType: MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT,
+              });
+              onGameSubmit(form.getValues());
+            } else {
+              updateMinesGameState({
+                submitType: MINES_SUBMIT_TYPE.IDLE,
+                gameStatus: MINES_GAME_STATUS.IDLE,
+                board: initialBoard,
+              });
+              form.reset();
+            }
           }}
         >
           {isAutoBetMode ? 'Stop Autobet' : 'Start Autobet'}

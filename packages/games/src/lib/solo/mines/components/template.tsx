@@ -206,6 +206,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
               onAutoBetModeChange={setIsAutoBetMode}
               mode={mode}
               onModeChange={setMode}
+              onGameSubmit={props.onSubmitGameForm}
             />
             <SceneContainer className="lg:wr-h-[740px] lg:wr-py-10 max-lg:!wr-border-0 max-lg:!wr-p-0">
               <Mines.Scene currentMultiplier={currentMultiplier} isLoading={props.isLoading} />
