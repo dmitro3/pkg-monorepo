@@ -5,6 +5,10 @@ export interface MinesFormField {
   minesCount: number;
   selectedCells: boolean[];
   betCount: number;
+  stopGain: number;
+  stopLoss: number;
+  increaseOnWin: number;
+  increaseOnLoss: number;
 }
 
 export type MinesForm = UseFormReturn<MinesFormField, any, undefined>;

@@ -14,11 +14,7 @@ import {
 export type MinesGameProps = React.ComponentProps<'div'> & {
   gameResults: MinesGameResult[];
   isLoading?: boolean;
-  isAutoBetMode: boolean;
   onAnimationCompleted?: (result: MinesGameResultOnComplete) => void;
-  processStrategy: (result: MinesGameResult[]) => void;
-  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmitGameForm: (data: MinesFormField) => void;
 };
 
 export const MinesGame = ({
@@ -28,7 +24,12 @@ export const MinesGame = ({
   isAutoBetMode,
   onAutoBetModeChange,
   onSubmitGameForm,
-}: MinesGameProps) => {
+}: MinesGameProps & {
+  isAutoBetMode: boolean;
+  processStrategy: (result: MinesGameResult[]) => void;
+  onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onSubmitGameForm: (data: MinesFormField) => void;
+}) => {
   const { updateMinesGameResults, updateGameStatus, minesGameResults, updateMinesGameState } =
     useMinesGameStateStore([
       'updateMinesGameResults',

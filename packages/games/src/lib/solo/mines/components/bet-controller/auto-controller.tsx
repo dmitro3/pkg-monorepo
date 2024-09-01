@@ -51,10 +51,15 @@ export const AutoController = ({
   return (
     <div className="wr-flex wr-flex-col">
       <WagerFormField
-        className="wr-mb-3 lg:wr-mb-6"
+        className="lg:!wr-mb-3"
         minWager={minWager}
         maxWager={maxWager}
-        isDisabled={gameStatus !== MINES_GAME_STATUS.IDLE}
+        isDisabled={
+          form.formState.isSubmitting ||
+          form.formState.isLoading ||
+          isAutoBetMode ||
+          gameStatus !== MINES_GAME_STATUS.IDLE
+        }
       />
 
       <FormField
@@ -64,8 +69,8 @@ export const AutoController = ({
           return (
             <FormItem
               className={cn({
-                'wr-mb-0 lg:wr-mb-6': account?.isLoggedIn || !!account?.balanceAsDollar,
-                'wr-mb-3 lg:wr-mb-6': !account?.isLoggedIn || !account?.balanceAsDollar,
+                'wr-mb-0 lg:wr-mb-3': account?.isLoggedIn || !!account?.balanceAsDollar,
+                'wr-mb-3 lg:wr-mb-3': !account?.isLoggedIn || !account?.balanceAsDollar,
               })}
             >
               <FormLabel className="wr-mb-3 lg:wr-mb-[6px] wr-leading-4 lg:wr-leading-6">

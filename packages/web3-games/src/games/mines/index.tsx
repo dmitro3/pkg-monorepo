@@ -77,6 +77,11 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
     wager: props?.minWager || 1,
     minesCount: 1,
     selectedCells: [],
+    betCount: 0,
+    stopGain: 0,
+    stopLoss: 0,
+    increaseOnWin: 0,
+    increaseOnLoss: 0,
   });
 
   const [isWaitingResponse, setIsWaitingResponse] = React.useState<boolean>(false);

@@ -190,7 +190,12 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
         <GameContainer>
-          <Mines.Game {...props} processStrategy={processStrategy}>
+          <Mines.Game
+            {...props}
+            processStrategy={processStrategy}
+            isAutoBetMode={isAutoBetMode}
+            onAutoBetModeChange={setIsAutoBetMode}
+          >
             <Mines.Controller
               {...props}
               currentCashoutAmount={currentCashoutAmount}
