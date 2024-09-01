@@ -3,13 +3,13 @@
 import {
   baseUrl,
   GameControllerGlobalBetHistoryResponse,
-  useGameControllerBetHistory,
   useGameControllerGlobalBetHistory,
+  useGameControllerBetHistory,
 } from '@winrlabs/api';
 import { GameType } from '@winrlabs/games';
 import { BetHistoryCurrencyList, BetHistoryFilter } from '@winrlabs/games';
 import { useCurrentAccount, useTokenStore } from '@winrlabs/web3';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 interface IUseBetHistory {
   gameType: GameType;
@@ -19,7 +19,7 @@ interface IUseBetHistory {
 }
 
 export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
-  const [filter, setFilter] = React.useState<BetHistoryFilter>({
+  const [filter, setFilter] = useState<BetHistoryFilter>({
     type: 'bets',
   });
 
@@ -30,9 +30,10 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
     page: 1,
   };
 
-  const [globalBets, setGlobalBets] = React.useState<GameControllerGlobalBetHistoryResponse>([]);
+  const [globalBets, setGlobalBets] = useState<GameControllerGlobalBetHistoryResponse>([]);
+  const sseBuffer = useRef<GameControllerGlobalBetHistoryResponse>([]);
 
-  const { data, isLoading, refetch } = useGameControllerGlobalBetHistory(
+  const { data: initialData, isLoading } = useGameControllerGlobalBetHistory(
     {
       queryParams:
         filter.type === 'player'
@@ -48,10 +49,10 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
   );
 
   useEffect(() => {
-    if (data) {
-      setGlobalBets(data);
+    if (initialData) {
+      setGlobalBets(initialData);
     }
-  }, [data]);
+  }, [initialData]);
 
   useEffect(() => {
     const es = new EventSource(baseUrl + '/game/sse-global-bet-history');
@@ -61,13 +62,26 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
 
       const newData = JSON.parse(String(event.data));
 
-      setGlobalBets((prev) => {
-        return [newData.payload, ...prev.slice(0, 30)];
-      });
+      sseBuffer.current = [newData.payload, ...sseBuffer.current].slice(0, 30);
     };
 
     return () => {
       es.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setGlobalBets((prev) => {
+        const updatedBets = [...sseBuffer.current, ...prev].slice(0, 30);
+        sseBuffer.current = [];
+
+        return updatedBets;
+      });
+    }, 2000);
+
+    return () => {
+      clearInterval(intervalId);
     };
   }, []);
 
@@ -112,7 +126,6 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
     historyFilter: filter,
     setHistoryFilter: setFilter,
     refetchHistory: () => {
-      refetch();
       refetchMyBets();
     },
   };
