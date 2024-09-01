@@ -277,7 +277,7 @@ export const HoldemPokerScene = ({
 
   React.useEffect(() => {
     if (wager <= 0 && !isUnityLoaded) return;
-    sendMessage('WebGLHandler', 'ReceiveMessage', `HP_SetWager|${wager}`);
+    sendMessage('WebGLHandler', 'ReceiveMessage', `HP_SetWager|${wager || 0.01}`);
   }, [wager, isUnityLoaded]);
 
   const formFields = React.useMemo(() => ({ ante, aaBonus, wager }), [ante, aaBonus, wager]);
