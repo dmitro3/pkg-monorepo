@@ -70,7 +70,7 @@ export function Providers(props: { children: ReactNode }) {
           }}
           tokens={[
             {
-              address: '0xaF31A7E835fA24f13ae1e0be8EB1fb56F906BE11',
+              address: '0x59edbB343991D30f77dcdBad94003777e9B09BA9',
               bankrollIndex: '0x0000000000000000000000000000000000000001',
               displayDecimals: 2,
               decimals: 6,
@@ -80,7 +80,7 @@ export function Providers(props: { children: ReactNode }) {
               priceKey: 'usdc',
             },
             {
-              address: '0xd777657B9a81a4E869458d52402e16C0dE187e3a',
+              address: '0x0381132632E9E27A8f37F1bc56bd5a62d21a382B',
               bankrollIndex: '0x0000000000000000000000000000000000000002',
               displayDecimals: 2,
               decimals: 6,
@@ -90,7 +90,7 @@ export function Providers(props: { children: ReactNode }) {
               priceKey: 'usdt',
             },
             {
-              address: '0xE0C1448f7C7af53C1DADFCEa67637c1193288F94',
+              address: '0x44BD533C211C78e01f0F738826e8b18Bb9b936f5',
               bankrollIndex: '0x0000000000000000000000000000000000000003',
               displayDecimals: 6,
               decimals: 8,
@@ -100,7 +100,7 @@ export function Providers(props: { children: ReactNode }) {
               priceKey: 'btc',
             },
             {
-              address: '0x20Bc56F6476d92AF81a7152cc7a6bdD69fB2ef51',
+              address: '0xE60256921AE414D7B35d6e881e47931f45E027cf',
               bankrollIndex: '0x0000000000000000000000000000000000000004',
               displayDecimals: 6,
               decimals: 18,
@@ -109,16 +109,26 @@ export function Providers(props: { children: ReactNode }) {
               playable: true,
               priceKey: 'weth',
             },
+            {
+              address: '0x372B5997502E668B8804D11d1569eB28F51a7e4e',
+              bankrollIndex: '0x0000000000000000000000000000000000000007',
+              displayDecimals: 2,
+              decimals: 18,
+              icon: '/tokens/usdc.png',
+              symbol: 'MCK',
+              playable: true,
+              priceKey: 'mock token',
+            },
           ]}
           selectedToken={{
-            address: '0x20Bc56F6476d92AF81a7152cc7a6bdD69fB2ef51',
-            bankrollIndex: '0x0000000000000000000000000000000000000004',
-            displayDecimals: 6,
+            address: '0x372B5997502E668B8804D11d1569eB28F51a7e4e',
+            bankrollIndex: '0x0000000000000000000000000000000000000007',
+            displayDecimals: 2,
             decimals: 18,
-            icon: '/tokens/weth.png',
-            symbol: 'ETH',
+            icon: '/tokens/usdc.png',
+            symbol: 'MCK',
             playable: true,
-            priceKey: 'weth',
+            priceKey: 'mock token',
           }}
         >
           <AppUiProviders wagmiConfig={config}>
