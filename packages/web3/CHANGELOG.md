@@ -1,5 +1,37 @@
 # @winrlabs/web3
 
+## 0.10.94
+
+### Patch Changes
+
+- 273eac2: bet history update
+
+## 0.10.93
+
+### Patch Changes
+
+- 0cd776a: fix
+
+## 0.10.92
+
+### Patch Changes
+
+- 2133fb8: max wager
+
+## 0.10.91
+
+### Patch Changes
+
+- b401541: fix
+- Updated dependencies [b401541]
+  - @winrlabs/api@1.3.7
+
+## 0.10.90
+
+### Patch Changes
+
+- 0cd4321: fixes
+
 ## 0.10.89
 
 ### Patch Changes

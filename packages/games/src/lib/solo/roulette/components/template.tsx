@@ -64,19 +64,19 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
     wager: z
       .number()
       .min(minWager || 1, {
-        message: `Minimum wager is ${minWager || 1}`,
+        message: `Minimum wager is $${minWager || 1}`,
       })
       .max(maxWager || 2000, {
-        message: `Maximum wager is ${maxWager || 2000}`,
+        message: `Maximum wager is $${maxWager || 2000}`,
       }),
     selectedNumbers: z.array(z.number()),
     totalWager: z
       .number()
       .min(1, {
-        message: `Minimum wager is ${minWager}`,
+        message: `Minimum wager is $${minWager}`,
       })
       .max(2000, {
-        message: `Maximum wager is ${maxWager}`,
+        message: `Maximum wager is $${maxWager}`,
       }),
     stopGain: z.number(),
     stopLoss: z.number(),

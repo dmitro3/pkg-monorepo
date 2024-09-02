@@ -631,7 +631,7 @@ export const WinrBonanzaTemplate = ({
         <Unity
           unityProvider={unityProvider}
           devicePixelRatio={2}
-          className="wr-h-full wr-w-full wr-rounded-t-md wr-bg-zinc-900 max-md:wr-h-[360px] lg:wr-rounded-md"
+          className="wr-h-full wr-w-full wr-rounded-t-md wr-bg-zinc-900 max-md:wr-h-[575px] lg:wr-rounded-md"
         />
       </div>
     </UnityGameContainer>

@@ -10,6 +10,7 @@ import {
   MultiplayerGameStatus,
   Multiplier,
   participantMapWithStore,
+  toDecimals,
   toFormatted,
   useConfigureMultiplayerLiveResultStore,
   useLiveResultStore,
@@ -61,6 +62,14 @@ interface TemplateWithWeb3Props extends BaseGameProps {
   }) => void;
 }
 
+const selectionMultipliers = {
+  [WheelColor.IDLE]: 1,
+  [WheelColor.GREY]: 2,
+  [WheelColor.BLUE]: 3,
+  [WheelColor.GREEN]: 6,
+  [WheelColor.RED]: 48,
+};
+
 export default function WheelGame(props: TemplateWithWeb3Props) {
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
@@ -94,6 +103,11 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     color: WheelColor.IDLE,
     wager: props?.minWager || 1,
   });
+
+  const maxWagerBySelection = toDecimals(
+    (props.maxWager || 100) / selectionMultipliers[formValues.color],
+    2
+  );
 
   useConfigureMultiplayerLiveResultStore();
   const {
@@ -273,17 +287,16 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
-
+      setIsGamblerParticipant(true);
       await handleTx.mutateAsync();
     } catch (e: any) {
       console.log('error', e);
       refetchPlayerGameStatus();
+      setIsGamblerParticipant(false);
       // props.onError && props.onError(e);
     }
 
     console.log('BET TX COMPLETED');
-
-    setIsGamblerParticipant(true);
   };
 
   React.useEffect(() => {
@@ -409,6 +422,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
     <>
       <WheelTemplate
         {...props}
+        maxWager={maxWagerBySelection}
         onSubmitGameForm={onGameSubmit}
         onFormChange={(val) => {
           setFormValues(val);

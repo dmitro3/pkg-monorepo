@@ -101,20 +101,31 @@ export const HoldemPokerScene = ({
       setLastMove('call');
     }
 
-    if (unityEvent.name === UnityPlayerHandWin) {
+    // if (unityEvent.name === UnityPlayerHandWin) {
+    //   console.log(activeGameData.payoutAmount, 'PAYOUT');
+
+    //   sendMessage(
+    //     'WebGLHandler',
+    //     'ReceiveMessage',
+    //     `HP_SetResult|${toDecimals(activeGameData.payoutAmount, 2)}`
+    //   );
+    // }
+
+    if (unityEvent.name === UnityWaitForResult) {
+      sendMessage(
+        'WebGLHandler',
+        'ReceiveMessage',
+        `HP_SetWinResult|${toDecimals(activeGameData.result, 2)}`
+      );
+
+      console.log(activeGameData.payoutAmount, 'PAYOUT');
+
       sendMessage(
         'WebGLHandler',
         'ReceiveMessage',
         `HP_SetResult|${toDecimals(activeGameData.payoutAmount, 2)}`
       );
     }
-
-    if (unityEvent.name === UnityWaitForResult)
-      sendMessage(
-        'WebGLHandler',
-        'ReceiveMessage',
-        `HP_SetWinResult|${toDecimals(activeGameData.result, 2)}`
-      );
 
     if (unityEvent.name === UnityNextGameAvailable) {
       onRefresh();
@@ -158,7 +169,7 @@ export const HoldemPokerScene = ({
   const handleFinalizeEvent = async () => {
     await handleFinalize();
 
-    sendMessage('WebGLHandler', 'ReceiveMessage', `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnPlay}`);
+    // sendMessage('WebGLHandler', 'ReceiveMessage', `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnIdle}`);
     setStatus(HOLDEM_POKER_GAME_STATUS.OnIdle);
     onRefresh();
   };
@@ -167,7 +178,7 @@ export const HoldemPokerScene = ({
     await handleFinalizeFold();
 
     sendMessage('WebGLHandler', 'ReceiveMessage', 'FoldPermission|true');
-    sendMessage('WebGLHandler', 'ReceiveMessage', `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnPlay}`);
+    // sendMessage('WebGLHandler', 'ReceiveMessage', `ChangeState|${HOLDEM_POKER_GAME_STATUS.OnIdle}`);
     setStatus(HOLDEM_POKER_GAME_STATUS.OnIdle);
     onRefresh();
   };
@@ -266,7 +277,7 @@ export const HoldemPokerScene = ({
 
   React.useEffect(() => {
     if (wager <= 0 && !isUnityLoaded) return;
-    sendMessage('WebGLHandler', 'ReceiveMessage', `HP_SetWager|${wager}`);
+    sendMessage('WebGLHandler', 'ReceiveMessage', `HP_SetWager|${wager || 0.01}`);
   }, [wager, isUnityLoaded]);
 
   const formFields = React.useMemo(() => ({ ante, aaBonus, wager }), [ante, aaBonus, wager]);

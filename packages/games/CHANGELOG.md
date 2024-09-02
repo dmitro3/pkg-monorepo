@@ -1,5 +1,36 @@
 # @winrlabs/games
 
+## 2.16.59
+
+### Patch Changes
+
+- 273eac2: bet history update
+
+## 2.16.58
+
+### Patch Changes
+
+- 0cd776a: fix
+
+## 2.16.57
+
+### Patch Changes
+
+- 2133fb8: max wager
+
+## 2.16.56
+
+### Patch Changes
+
+- b401541: fix
+
+## 2.16.55
+
+### Patch Changes
+
+- 0cd4321: fixes
+- 1656fc8: sse for global bets
+
 ## 2.16.54
 
 ### Patch Changes

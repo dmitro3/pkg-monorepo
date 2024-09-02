@@ -1,5 +1,57 @@
 # @winrlabs/web3-games
 
+## 9.0.46
+
+### Patch Changes
+
+- 273eac2: bet history update
+- Updated dependencies [273eac2]
+  - @winrlabs/games@2.16.59
+  - @winrlabs/web3@0.10.94
+  - @winrlabs/web3-games@9.0.46
+
+## 9.0.45
+
+### Patch Changes
+
+- 0cd776a: fix
+- Updated dependencies [0cd776a]
+  - @winrlabs/games@2.16.58
+  - @winrlabs/web3@0.10.93
+  - @winrlabs/web3-games@9.0.45
+
+## 9.0.44
+
+### Patch Changes
+
+- 2133fb8: max wager
+- Updated dependencies [2133fb8]
+  - @winrlabs/games@2.16.57
+  - @winrlabs/web3@0.10.92
+  - @winrlabs/web3-games@9.0.44
+
+## 9.0.43
+
+### Patch Changes
+
+- b401541: fix
+- Updated dependencies [b401541]
+  - @winrlabs/api@1.3.7
+  - @winrlabs/games@2.16.56
+  - @winrlabs/web3@0.10.91
+  - @winrlabs/web3-games@9.0.43
+
+## 9.0.42
+
+### Patch Changes
+
+- 0cd4321: fixes
+- Updated dependencies [0cd4321]
+- Updated dependencies [1656fc8]
+  - @winrlabs/games@2.16.55
+  - @winrlabs/web3@0.10.90
+  - @winrlabs/web3-games@9.0.42
+
 ## 9.0.41
 
 ### Patch Changes

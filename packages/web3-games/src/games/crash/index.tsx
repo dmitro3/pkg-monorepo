@@ -99,6 +99,8 @@ const CrashGame = (props: CrashTemplateProps) => {
     wager: 1,
   });
 
+  const maxWagerBySelection = toDecimals((props.maxWager || 100) / formValues.multiplier, 2);
+
   const { updateState, addParticipant, setIsGamblerParticipant } = useCrashGameStore([
     'updateState',
     'addParticipant',
@@ -262,6 +264,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     } catch (e: any) {
       console.log('handleTx error', e);
       refetchPlayerGameStatus();
+      setIsGamblerParticipant(false);
       // props.onError && props.onError(e);
     }
   };
@@ -376,6 +379,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     <>
       <CrashTemplate
         {...props}
+        maxWager={maxWagerBySelection}
         onComplete={onComplete}
         onSubmitGameForm={onGameSubmit}
         onFormChange={(val) => {

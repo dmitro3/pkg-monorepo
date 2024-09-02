@@ -78,6 +78,8 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     wager: props?.minWager || 1,
   });
 
+  const maxWagerBySelection = toDecimals((props.maxWager || 100) / formValues.limboMultiplier, 2);
+
   const {
     addResult,
     updateGame,
@@ -291,6 +293,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     <>
       <LimboTemplate
         {...props}
+        maxWager={maxWagerBySelection}
         onSubmitGameForm={onGameSubmit}
         gameResults={limboSteps}
         onAnimationCompleted={onGameCompleted}

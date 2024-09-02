@@ -39,10 +39,10 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
     wager: z
       .number()
       .min(props?.minWager || 1, {
-        message: `Minimum wager is ${props?.minWager}`,
+        message: `Minimum wager is $${props?.minWager}`,
       })
       .max(props?.maxWager || 2000, {
-        message: `Maximum wager is ${props?.maxWager}`,
+        message: `Maximum wager is $${props?.maxWager}`,
       }),
     minesCount: z.number().max(24).min(1),
     selectedCells: z.array(z.boolean()).length(25),
