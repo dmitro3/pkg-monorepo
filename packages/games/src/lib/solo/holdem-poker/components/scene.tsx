@@ -5,6 +5,7 @@ import React from 'react';
 import { Unity, useUnityContext } from 'react-unity-webgl';
 import { useDebounce } from 'use-debounce';
 
+import { RotatedBackButton } from '../../../common/rotated-back-button';
 import { CDN_URL } from '../../../constants';
 import { useListenUnityEvent } from '../../../hooks/use-listen-unity-event';
 import { useEqualizeUnitySound } from '../../../hooks/use-unity-sound';
@@ -341,6 +342,9 @@ export const HoldemPokerScene = ({
         maxWager={maxWager || 2000}
         status={status}
       />
+      <div className="lg:wr-hidden">
+        <RotatedBackButton />
+      </div>
     </>
   );
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { RotatedBackButton } from '../../../common/rotated-back-button';
 import { WagerBalance, WagerCurrency, WagerInput } from '../../../common/wager';
 import { useGameOptions } from '../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../hooks/use-audio-effect';
@@ -65,9 +64,6 @@ const WagerSetterButtons: React.FC<{
 
   return (
     <>
-      <div className="lg:wr-hidden">
-        <RotatedBackButton />
-      </div>
       <div className="wr-flex wr-items-center wr-gap-1 wr-mt-1.5">
         <Button
           className="wr-w-full wr-font-[500] wr-bg-unity-white-15 wr-backdrop-blur-md"
