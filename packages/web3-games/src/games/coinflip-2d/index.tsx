@@ -205,6 +205,12 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     isPlayerHaltedRef.current = isPlayerHalted;
   }, [isPlayerHalted]);
 
+  const nativeWinr = useNativeTokenBalance({ account: currentAccount.address || '0x' });
+  const wrapWinrTx = useWrapWinr({
+    account: currentAccount.address || '0x',
+    amount: nativeWinr.balance,
+  });
+
   const onGameSubmit = async (f: CoinFlipFormFields, errorCount = 0) => {
     if (nativeWinr.balance > 0.1 && selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL)
       await wrapWinrTx();
@@ -297,20 +303,8 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     };
   }, []);
 
-  const nativeWinr = useNativeTokenBalance({ account: currentAccount.address || '0x' });
-  const wrapWinrTx = useWrapWinr({
-    account: currentAccount.address || '0x',
-    amount: nativeWinr.balance,
-  });
-
-  const unwrapWinr = useUnWrapWinr({
-    account: currentAccount.address!,
-  });
-
   return (
     <>
-      <div onClick={() => wrapWinrTx()}>WRAP!</div>
-      <div onClick={() => unwrapWinr()}>UNWRAP</div>
       <CoinFlipTemplate
         {...props}
         isGettingResult={isLoading}
