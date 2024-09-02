@@ -135,9 +135,12 @@ export const HoldemPokerScene = ({
     }
 
     if (unityEvent.name == UnitySlotBetValue) {
-      const param = JSON.parse(unityEvent.strParam);
-
-      handleUnityChipEvent(param);
+      try {
+        const param = JSON.parse(unityEvent.strParam);
+        handleUnityChipEvent(param);
+      } catch (error) {
+        console.log('HOLDEM POKER HANDLE CHIP EVENT ERROR', error);
+      }
     }
   }, [unityEvent]);
 
