@@ -206,7 +206,6 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
     amount: nativeWinr.balance,
-    spender: cashierAddress,
   });
 
   const onGameSubmit = async (f: RpsFormFields, errorCount = 0) => {

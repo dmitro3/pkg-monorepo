@@ -276,7 +276,6 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
     amount: nativeWinr.balance,
-    spender: cashierAddress,
   });
 
   const handleDeal = async () => {

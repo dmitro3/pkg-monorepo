@@ -205,7 +205,6 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
     amount: nativeWinr.balance,
-    spender: cashierAddress,
   });
 
   const onGameSubmit = async (f: RouletteFormFields, errorCount = 0) => {

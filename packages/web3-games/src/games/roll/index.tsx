@@ -205,7 +205,6 @@ export default function RollGame(props: TemplateWithWeb3Props) {
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
     amount: nativeWinr.balance,
-    spender: cashierAddress,
   });
 
   const onGameSubmit = async (f: RollFormFields, errorCount = 0) => {

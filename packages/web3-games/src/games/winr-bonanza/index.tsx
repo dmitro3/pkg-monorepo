@@ -246,7 +246,6 @@ export default function WinrBonanzaTemplateWithWeb3({
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
     amount: nativeWinr.balance,
-    spender: cashierAddress,
   });
 
   const handleBet = async (errorCount = 0) => {
