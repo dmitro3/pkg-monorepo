@@ -208,7 +208,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   });
 
   const handleStartGame = async () => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     console.log('SUBMITTING!');
     if (!allowance.hasAllowance) {

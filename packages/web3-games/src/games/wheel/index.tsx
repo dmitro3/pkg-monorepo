@@ -275,7 +275,7 @@ export default function WheelGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async () => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     clearLiveResults();
     if (!allowance.hasAllowance) {

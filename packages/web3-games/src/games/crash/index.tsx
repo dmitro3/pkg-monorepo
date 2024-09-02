@@ -248,7 +248,7 @@ const CrashGame = (props: CrashTemplateProps) => {
   });
 
   const onGameSubmit = async () => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     clearLiveResults();
     if (!allowance.hasAllowance) {

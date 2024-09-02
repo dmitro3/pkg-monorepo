@@ -208,7 +208,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: RouletteFormFields, errorCount = 0) => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({

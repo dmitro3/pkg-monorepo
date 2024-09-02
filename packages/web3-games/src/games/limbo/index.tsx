@@ -212,7 +212,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: LimboFormField, errorCount = 0) => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     updateGameStatus('PLAYING');
     if (!allowance.hasAllowance) {

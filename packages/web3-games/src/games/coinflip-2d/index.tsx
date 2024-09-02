@@ -212,7 +212,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: CoinFlipFormFields, errorCount = 0) => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({

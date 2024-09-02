@@ -211,7 +211,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: DiceFormFields, errorCount = 0) => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     updateGameStatus('PLAYING');
     if (!allowance.hasAllowance) {

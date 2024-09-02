@@ -207,7 +207,7 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
   });
 
   const onGameSubmit = async (f: PlinkoFormFields, errorCount = 0) => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({

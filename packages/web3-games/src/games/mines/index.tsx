@@ -297,7 +297,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   });
 
   const onGameSubmit = async (values: MinesFormField) => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     setIsWaitingResponse(true);
     console.log(values, 'form values');

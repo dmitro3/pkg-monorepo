@@ -466,7 +466,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   });
 
   const handleStart = async () => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     setIsLoading(true); // Set loading state to true
     if (!allowance.hasAllowance) {

@@ -279,7 +279,7 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
   });
 
   const handleDeal = async () => {
-    if (nativeWinr.balance > 0) await wrapWinrTx();
+    if (nativeWinr.balance > 0.1) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
