@@ -17,7 +17,7 @@ export const WagerBetController: React.FC<{
   className?: string;
 }> = ({ status, wager, setWager, minWager, maxWager, className }) => {
   return (
-    <fieldset className={cn(className)}>
+    <fieldset className={cn('max-lg:wr-scale-75 max-lg:wr-origin-bottom-right', className)}>
       <label className="wr-text-unity-white-50 wr-flex wr-justify-between wr-mb-1">
         Wager
         <div>

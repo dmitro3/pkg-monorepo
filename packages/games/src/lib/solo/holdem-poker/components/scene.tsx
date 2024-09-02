@@ -15,7 +15,6 @@ import {
   UnityDealEvent,
   UnityFoldEvent,
   UnityNextGameAvailable,
-  UnityPlayerHandWin,
   UnitySlotBetValue,
   UnityWaitForResult,
 } from '../constants';
@@ -331,7 +330,7 @@ export const HoldemPokerScene = ({
       )}
       <Unity
         unityProvider={unityProvider}
-        devicePixelRatio={1}
+        devicePixelRatio={1.5}
         className={cn('wr-h-full wr-w-full wr-rounded-md wr-bg-zinc-900')}
       />
       <WagerBetController
