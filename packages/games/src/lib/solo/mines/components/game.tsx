@@ -4,7 +4,6 @@ import { useFormContext } from 'react-hook-form';
 import { useMinesGameStateStore } from '../store';
 import {
   MINES_GAME_STATUS,
-  MINES_SUBMIT_TYPE,
   MinesForm,
   MinesFormField,
   MinesGameResult,
@@ -53,24 +52,21 @@ export const MinesGame = ({
 
   React.useEffect(() => {
     if (isAutoBetMode && gameStatus === MINES_GAME_STATUS.ENDED) {
-      updateMinesGameState({
-        submitType: MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT,
-      });
-
-      timeoutRef.current = setTimeout(() => {
-        if (isAutoBetModeRef.current) {
-          const newBetCount = betCount - 1;
-
-          betCount !== 0 && form.setValue('betCount', betCount - 1);
-
-          if (betCount >= 0 && newBetCount != 0) {
-            onSubmitGameForm(form.getValues());
-          } else {
-            console.log('auto bet finished!');
-            onAutoBetModeChange(false);
-          }
-        }
-      }, 1000);
+      // updateMinesGameState({
+      //   submitType: MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT,
+      // });
+      // timeoutRef.current = setTimeout(() => {
+      //   if (isAutoBetModeRef.current) {
+      //     const newBetCount = betCount - 1;
+      //     betCount !== 0 && form.setValue('betCount', betCount - 1);
+      //     if (betCount >= 0 && newBetCount != 0) {
+      //       onSubmitGameForm(form.getValues());
+      //     } else {
+      //       console.log('auto bet finished!');
+      //       onAutoBetModeChange(false);
+      //     }
+      //   }
+      // }, 1000);
     }
   }, [gameStatus]);
 

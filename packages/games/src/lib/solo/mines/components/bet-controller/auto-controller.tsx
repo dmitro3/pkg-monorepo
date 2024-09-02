@@ -167,6 +167,7 @@ export const AutoController = ({
             }
           )}
           size={'xl'}
+          type="button"
           onClick={() => {
             clickEffect.play();
             onAutoBetModeChange(!isAutoBetMode);
@@ -174,7 +175,10 @@ export const AutoController = ({
               updateMinesGameState({
                 submitType: MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT,
               });
-              onGameSubmit(form.getValues());
+
+              setTimeout(() => {
+                onGameSubmit(form.getValues());
+              });
             } else {
               updateMinesGameState({
                 submitType: MINES_SUBMIT_TYPE.IDLE,

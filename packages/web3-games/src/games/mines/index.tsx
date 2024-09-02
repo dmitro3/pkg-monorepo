@@ -350,16 +350,16 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
           gameStatus: MINES_GAME_STATUS.IN_PROGRESS,
         });
 
-        setTimeout(async () => {
-          updateMinesGameState({
-            submitType: MINES_SUBMIT_TYPE.CASHOUT,
-          });
-          await handleCashout();
+        // setTimeout(async () => {
+        //   updateMinesGameState({
+        //     submitType: MINES_SUBMIT_TYPE.CASHOUT,
+        //   });
+        //   await handleCashout();
 
-          updateMinesGameState({
-            gameStatus: MINES_GAME_STATUS.ENDED,
-          });
-        }, 1000);
+        //   updateMinesGameState({
+        //     gameStatus: MINES_GAME_STATUS.ENDED,
+        //   });
+        // }, 1000);
       }
     } catch (e: any) {
       console.log('error', e);
