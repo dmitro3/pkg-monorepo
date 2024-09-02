@@ -138,7 +138,7 @@ export const useHandleTx = <
               call: {
                 dest: writeContractVariables.address as Address,
                 data: encodedData,
-                value: 0,
+                value: Number(writeContractVariables.value || 0),
               },
               owner: rootAddress!,
               part: _part ?? '0x',
