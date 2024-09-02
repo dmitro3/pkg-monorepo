@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { MinesGame, Web3GamesModals } from "@winrlabs/web3-games";
-import React from "react";
+import { MinesGame, Web3GamesModals } from '@winrlabs/web3-games';
+import React from 'react';
 
 const MinesPage = () => {
   return (
     <>
       <MinesGame
         maxWager={100}
-        minWager={1}
+        minWager={0.01}
         onAnimationCompleted={() => {
-          console.log("game completed");
+          console.log('game completed');
         }}
       />
       <Web3GamesModals />

@@ -77,7 +77,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   const [revealCells, setRevealCells] = useState<boolean[]>([]);
 
   const [formValues, setFormValues] = useState<MinesFormField>({
-    wager: props?.minWager || 1,
+    wager: props?.minWager || 0.01,
     minesCount: 1,
     selectedCells: [],
   });
@@ -177,6 +177,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         ],
         address: controllerAddress as Address,
       },
+      params: {},
     });
   };
 
@@ -230,6 +231,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         ],
         address: controllerAddress as Address,
       },
+      params: {},
     });
   };
 
@@ -273,6 +275,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         ],
         address: controllerAddress as Address,
       },
+      params: {},
     });
   };
 
@@ -478,7 +481,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
         onFormChange={(val) => {
           setFormValues(val);
         }}
-        minWager={props.minWager}
+        minWager={props?.minWager || 0.01}
         maxWager={props.maxWager}
         isLoading={isWaitingResponse}
       />

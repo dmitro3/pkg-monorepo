@@ -30,7 +30,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 1, {
+      .min(props?.minWager || 0.01, {
         message: `Minimum wager is $${props?.minWager}`,
       })
       .max(props?.maxWager || 2000, {
@@ -46,7 +46,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: 'all',
     defaultValues: {
-      wager: props?.minWager || 1,
+      wager: props?.minWager || 0.01,
       minesCount: 1,
       selectedCells: initialBoard.map((mine) => mine.isSelected),
     },
@@ -125,7 +125,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
               {...props}
               currentCashoutAmount={currentCashoutAmount}
               maxWager={props?.maxWager || 2000}
-              minWager={props?.minWager || 2}
+              minWager={props?.minWager || 0.01}
               currentMultiplier={currentMultiplier}
             />
             <SceneContainer className="lg:wr-h-[740px] lg:wr-py-10 max-lg:!wr-border-0 max-lg:!wr-p-0">
