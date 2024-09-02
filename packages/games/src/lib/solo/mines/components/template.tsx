@@ -26,10 +26,16 @@ type TemplateProps = MinesGameProps & {
   formSetValue?: FormSetValue;
   onLogin?: () => void;
   onError?: (error: string) => void;
+  gameResults: MinesGameResult[];
 };
 
 const MinesTemplate = ({ ...props }: TemplateProps) => {
-  const { board, gameStatus } = useMinesGameStateStore(['board', 'gameStatus']);
+  const { board, gameStatus, updateMinesGameState } = useMinesGameStateStore([
+    'board',
+    'gameStatus',
+    'updateMinesGameState',
+  ]);
+  // TODO: move it into the store, check refs
   const [isAutoBetMode, setIsAutoBetMode] = React.useState(false);
   const [mode, setMode] = React.useState<(typeof MINES_MODES)[keyof typeof MINES_MODES]>(
     MINES_MODES.MANUAL
@@ -118,10 +124,12 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   React.useEffect(() => {
     if (mode === MINES_MODES.AUTO) return;
 
-    const values = form.getValues();
+    setTimeout(() => {
+      const values = form.getValues();
 
-    if (values.selectedCells.some((c) => c === true && gameStatus !== MINES_GAME_STATUS.ENDED))
-      props.onSubmitGameForm(values);
+      if (values.selectedCells.some((c) => c === true && gameStatus !== MINES_GAME_STATUS.ENDED))
+        props.onSubmitGameForm(values);
+    });
   }, [form.getValues('selectedCells')]);
 
   React.useEffect(() => {
@@ -135,6 +143,12 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
         });
     }
   }, [gameStatus]);
+
+  React.useEffect(() => {
+    updateMinesGameState({
+      board: initialBoard,
+    });
+  }, [mode]);
 
   const wager = form.watch('wager');
   const increasePercentageOnWin = form.watch('increaseOnWin');
@@ -153,8 +167,8 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   const { account } = useGameOptions();
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
-  const processStrategy = (result: MinesGameResult[]) => {
-    const payout = result[0]?.payout || 0;
+  const processStrategy = () => {
+    const payout = currentCashoutAmount || 0;
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
     const currentBalance = balanceAsDollar - wager + payout;

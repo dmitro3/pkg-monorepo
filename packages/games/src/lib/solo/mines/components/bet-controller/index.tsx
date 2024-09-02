@@ -50,7 +50,7 @@ const MinesBetController: React.FC<MinesBetControllerProps> = (props) => {
 
   React.useEffect(() => {
     if (gameStatus == MINES_GAME_STATUS.ENDED) {
-      if (!board.some((v) => v.isBomb == true)) {
+      if (!board.some((v) => v.isBomb == true) && props.currentCashoutAmount > 0) {
         showWinAnimation({
           payout: props.currentCashoutAmount,
           multiplier: props.currentMultiplier,
@@ -63,7 +63,9 @@ const MinesBetController: React.FC<MinesBetControllerProps> = (props) => {
         if (props.mode == MINES_MODES.AUTO) {
           updateMinesGameState({
             board: board.map((c) => ({ ...c, isRevealed: false, isBomb: false })),
-            gameStatus: MINES_GAME_STATUS.IN_PROGRESS,
+            gameStatus: !props.isAutoBetMode
+              ? MINES_GAME_STATUS.IDLE
+              : MINES_GAME_STATUS.IN_PROGRESS,
             minesGameResults: [],
           });
         } else {
@@ -104,6 +106,7 @@ const MinesBetController: React.FC<MinesBetControllerProps> = (props) => {
                 'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
               })}
               value={MINES_MODES.MANUAL}
+              disabled={gameStatus === MINES_GAME_STATUS.IN_PROGRESS}
             >
               Manual
             </Tabs.Trigger>
@@ -113,6 +116,7 @@ const MinesBetController: React.FC<MinesBetControllerProps> = (props) => {
                 'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
               })}
               value="auto"
+              disabled={gameStatus === MINES_GAME_STATUS.IN_PROGRESS}
             >
               Auto
             </Tabs.Trigger>

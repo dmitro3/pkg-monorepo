@@ -61,12 +61,7 @@ export const AutoController = ({
         className="lg:!wr-mb-3"
         minWager={minWager}
         maxWager={maxWager}
-        isDisabled={
-          form.formState.isSubmitting ||
-          form.formState.isLoading ||
-          isAutoBetMode ||
-          gameStatus !== MINES_GAME_STATUS.IDLE
-        }
+        isDisabled={isDisabled}
       />
 
       <FormField
@@ -87,7 +82,7 @@ export const AutoController = ({
                 {...field}
                 errorClassName="wr-hidden lg:wr-block"
                 className="wr-relative wr-flex wr-items-center wr-gap-2"
-                isDisabled={gameStatus !== MINES_GAME_STATUS.IDLE}
+                isDisabled={isDisabled}
               >
                 <NumberInput.Container className="wr-bg-zinc-950">
                   <img
@@ -103,25 +98,25 @@ export const AutoController = ({
                     value={3}
                     minesCount={field.value}
                     form={form}
-                    isDisabbled={gameStatus !== MINES_GAME_STATUS.IDLE}
+                    isDisabbled={isDisabled}
                   />
                   <MinesCountButton
                     value={5}
                     minesCount={field.value}
                     form={form}
-                    isDisabbled={gameStatus !== MINES_GAME_STATUS.IDLE}
+                    isDisabbled={isDisabled}
                   />
                   <MinesCountButton
                     value={10}
                     minesCount={field.value}
                     form={form}
-                    isDisabbled={gameStatus !== MINES_GAME_STATUS.IDLE}
+                    isDisabbled={isDisabled}
                   />
                   <MinesCountButton
                     value={20}
                     minesCount={field.value}
                     form={form}
-                    isDisabbled={gameStatus !== MINES_GAME_STATUS.IDLE}
+                    isDisabbled={isDisabled}
                   />
                 </div>
                 <FormMessage className="wr-absolute wr-left-0 wr-top-12" />
@@ -132,28 +127,16 @@ export const AutoController = ({
       />
 
       <div className="wr-order-2 lg:wr-order-none wr-flex wr-gap-2 lg:wr-flex-col lg:wr-gap-0">
-        <AutoBetCountFormField
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-        />
+        <AutoBetCountFormField isDisabled={isDisabled} />
         <div className="wr-flex wr-gap-2 md:wr-gap-3">
-          <AutoBetIncreaseOnWin
-            isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-            showSm
-          />
-          <AutoBetIncreaseOnLoss
-            isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-            showSm
-          />
+          <AutoBetIncreaseOnWin isDisabled={isDisabled} showSm />
+          <AutoBetIncreaseOnLoss isDisabled={isDisabled} showSm />
         </div>
       </div>
 
       <div className="wr-order-3 lg:wr-order-none wr-flex wr-gap-3">
-        <AutoBetStopGainFormField
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-        />
-        <AutoBetStopLossFormField
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-        />
+        <AutoBetStopGainFormField isDisabled={isDisabled} />
+        <AutoBetStopLossFormField isDisabled={isDisabled} />
       </div>
 
       <PreBetButton onLogin={onLogin} className="wr-mb-3 lg:wr-mb-0">
@@ -170,8 +153,10 @@ export const AutoController = ({
           type="button"
           onClick={() => {
             clickEffect.play();
-            onAutoBetModeChange(!isAutoBetMode);
-            if (!isAutoBetMode) {
+            const nextAutoBetMode = !isAutoBetMode;
+            onAutoBetModeChange(nextAutoBetMode);
+
+            if (nextAutoBetMode) {
               updateMinesGameState({
                 submitType: MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT,
               });
