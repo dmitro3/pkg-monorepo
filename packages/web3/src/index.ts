@@ -22,3 +22,4 @@ export * from './providers';
 export * from './providers/balance';
 export * from './providers/token';
 export * from './smart-wallet';
+export * from './utils/error-codes';

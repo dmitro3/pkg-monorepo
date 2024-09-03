@@ -18,6 +18,7 @@ import { useBundlerClient, WinrBundlerClient } from './use-bundler-client';
 import { useCurrentAccount } from './use-current-address';
 import { useSmartAccountApi } from './use-smart-account-api';
 import { useCreateSession, useSessionStore } from './session';
+import { ErrorCode, mmAuthSignErrCodes } from '../utils/error-codes';
 
 export interface UseHandleTxOptions {
   successMessage?: string;
@@ -144,11 +145,17 @@ export const useHandleTx = <
               part: _part ?? '0x',
               permit: _permit ?? '0x',
             });
-          } catch (error) {
+          } catch (error: any) {
             if (retryCount < maxRetries) {
               retryCount++;
               // If the first attempt fails, get a new session and try again
-              ({ part: _part, permit: _permit } = await getNewSession());
+              if (
+                error?.code !== ErrorCode.InvalidNonce &&
+                mmAuthSignErrCodes.includes(error?.message)
+              ) {
+                ({ part: _part, permit: _permit } = await getNewSession());
+              }
+
               return makeRequest();
             } else {
               throw error; // Rethrow the error if max retries reached
