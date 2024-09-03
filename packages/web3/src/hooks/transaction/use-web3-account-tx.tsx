@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { Hex } from 'viem';
+import { Address, Hex } from 'viem';
 
+import { ErrorCode, mmAuthSignErrCodes } from '../../utils/error-codes';
 import { MutationHook } from '../../utils/types';
 import { useCreateSession, useSessionStore } from '../session';
 import { useBundlerClient } from '../use-bundler-client';
@@ -43,26 +44,40 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
         return { part: session.part, permit: session.permit };
       };
 
-      if (!_part || !_permit) {
-        ({ part: _part, permit: _permit } = await getNewSession());
-      }
+      let retryCount = 0;
+      const maxRetries = 1;
 
-      try {
-        return await client.request('call', {
-          call: { dest: target, data: encodedTxData, value },
-          owner: userAddress!,
-          part: _part,
-          permit: _permit,
-        });
-      } catch (error) {
-        ({ part: _part, permit: _permit } = await getNewSession());
-        return client.request('call', {
-          call: { dest: target, data: encodedTxData, value },
-          owner: userAddress!,
-          part: _part,
-          permit: _permit,
-        });
-      }
+      const makeRequest = async () => {
+        try {
+          return await client.request('call', {
+            call: {
+              dest: target as Address,
+              data: encodedTxData,
+              value: Number(value),
+            },
+            owner: userAddress!,
+            part: _part ?? '0x',
+            permit: _permit ?? '0x',
+          });
+        } catch (error: any) {
+          if (retryCount < maxRetries) {
+            retryCount++;
+
+            if (
+              error?.code !== ErrorCode.InvalidNonce &&
+              mmAuthSignErrCodes.includes(error?.message)
+            ) {
+              ({ part: _part, permit: _permit } = await getNewSession());
+            }
+
+            return makeRequest();
+          } else {
+            throw error;
+          }
+        }
+      };
+
+      return makeRequest();
     },
   });
 };
