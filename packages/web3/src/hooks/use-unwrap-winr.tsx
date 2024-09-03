@@ -1,11 +1,12 @@
 import React from 'react';
-import { useHandleTx } from './use-handle-tx';
-import { useTokenBalances, WRAPPED_WINR_BANKROLL } from './use-token-balances';
-import { useTokenStore } from '../providers/token';
 import { Address, encodeFunctionData, parseUnits } from 'viem';
+
 import { wrappedWinrAbi } from '../abis';
-import { useNativeTokenBalance } from './use-native-token-balance';
 import { useBalanceStore } from '../providers/balance';
+import { useTokenStore } from '../providers/token';
+import { useHandleTx } from './use-handle-tx';
+import { useNativeTokenBalance } from './use-native-token-balance';
+import { useTokenBalances, WRAPPED_WINR_BANKROLL } from './use-token-balances';
 
 interface IUseUnwrapWinr {
   account: Address;
@@ -25,7 +26,7 @@ export const useUnWrapWinr = ({ account }: IUseUnwrapWinr) => {
   const amount =
     wrappedWinrBalance - nativeWinr.balance < 0
       ? '0'
-      : (wrappedWinrBalance - nativeWinr.balance).toFixed(2);
+      : ((wrappedWinrBalance - nativeWinr.balance) * 0.9999).toFixed(6);
 
   const encodedTxData = React.useMemo(() => {
     return encodeFunctionData({

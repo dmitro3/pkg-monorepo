@@ -31,7 +31,7 @@ export const useWrapWinr = ({ amount, account }: IUseWrapWinr) => {
       abi: wrappedWinrAbi,
       address: wrappedWinr?.address || '0x0',
       functionName: 'deposit',
-      value: parseUnits(String(toDecimals(amount, 6)), wrappedWinr?.decimals || 18) as any,
+      value: parseUnits((amount * 0.9999).toFixed(6), wrappedWinr?.decimals || 18) as any,
     },
     encodedTxData: encodedTxData,
     options: {},
