@@ -3,7 +3,6 @@ import { Address, encodeFunctionData, parseUnits } from 'viem';
 
 import { wrappedWinrAbi } from '../abis';
 import { useTokenStore } from '../providers/token';
-import { toDecimals } from '../utils/number';
 import { useHandleTx } from './use-handle-tx';
 import { useNativeTokenBalance } from './use-native-token-balance';
 import { WRAPPED_WINR_BANKROLL } from './use-token-balances';
@@ -31,7 +30,7 @@ export const useWrapWinr = ({ amount, account }: IUseWrapWinr) => {
       abi: wrappedWinrAbi,
       address: wrappedWinr?.address || '0x0',
       functionName: 'deposit',
-      value: parseUnits((amount * 0.9999).toFixed(6), wrappedWinr?.decimals || 18) as any,
+      value: parseUnits((amount * 0.99999).toFixed(6), wrappedWinr?.decimals || 18) as any,
     },
     encodedTxData: encodedTxData,
     options: {},

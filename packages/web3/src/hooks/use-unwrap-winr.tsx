@@ -26,7 +26,7 @@ export const useUnWrapWinr = ({ account }: IUseUnwrapWinr) => {
   const amount =
     wrappedWinrBalance - nativeWinr.balance < 0
       ? '0'
-      : ((wrappedWinrBalance - nativeWinr.balance) * 0.9999).toFixed(6);
+      : ((wrappedWinrBalance - nativeWinr.balance) * 0.99999).toFixed(6);
 
   const encodedTxData = React.useMemo(() => {
     return encodeFunctionData({
