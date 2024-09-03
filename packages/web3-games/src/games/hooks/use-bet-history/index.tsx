@@ -35,16 +35,11 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
 
   const { data: initialData, isLoading } = useGameControllerGlobalBetHistory(
     {
-      queryParams:
-        filter.type === 'player'
-          ? {
-              player: address,
-              ...defaultParams,
-            }
-          : defaultParams,
+      queryParams: defaultParams,
     },
     {
       enabled: options?.enabled,
+      retry: false,
     }
   );
 
@@ -100,7 +95,8 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
           : defaultParams,
     },
     {
-      enabled: options?.enabled,
+      enabled: options?.enabled && filter.type == 'player' && !!address,
+      retry: false,
       refetchInterval: 7500,
     }
   );
