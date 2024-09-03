@@ -301,14 +301,8 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     };
   }, []);
 
-  const unwrapWinrTx = useUnWrapWinr({
-    account: currentAccount.address!,
-  });
-
   return (
     <>
-      <div onClick={() => wrapWinrTx()}>WRAP</div>
-      <div onClick={() => unwrapWinrTx()}>UNWRAP</div>
       <DiceTemplate
         {...props}
         onSubmitGameForm={onGameSubmit}
