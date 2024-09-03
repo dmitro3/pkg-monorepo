@@ -205,15 +205,12 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     isPlayerHaltedRef.current = isPlayerHalted;
   }, [isPlayerHalted]);
 
-  const nativeWinr = useNativeTokenBalance({ account: currentAccount.address || '0x' });
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
-    amount: nativeWinr.balance,
   });
 
   const onGameSubmit = async (f: DiceFormFields, errorCount = 0) => {
-    if (nativeWinr.balance > 0.1 && selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL)
-      await wrapWinrTx();
+    if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     updateGameStatus('PLAYING');
     if (!allowance.hasAllowance) {

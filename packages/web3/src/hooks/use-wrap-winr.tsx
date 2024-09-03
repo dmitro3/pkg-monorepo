@@ -1,21 +1,23 @@
 import React from 'react';
-import { Address, encodeFunctionData, parseUnits } from 'viem';
+import { Address, encodeFunctionData } from 'viem';
 
 import { wrappedWinrAbi } from '../abis';
 import { useTokenStore } from '../providers/token';
 import { useHandleTx } from './use-handle-tx';
 import { useNativeTokenBalance } from './use-native-token-balance';
-import { WRAPPED_WINR_BANKROLL } from './use-token-balances';
+import { useTokenBalances, WRAPPED_WINR_BANKROLL } from './use-token-balances';
 
 interface IUseWrapWinr {
-  amount: number;
   account: Address;
 }
 
-export const useWrapWinr = ({ amount, account }: IUseWrapWinr) => {
+export const useWrapWinr = ({ account }: IUseWrapWinr) => {
   const tokens = useTokenStore((s) => s.tokens);
   const wrappedWinr = tokens.find((t) => t.bankrollIndex == WRAPPED_WINR_BANKROLL);
   const nativeWinr = useNativeTokenBalance({ account });
+  const { refetch: updateBalances } = useTokenBalances({
+    account,
+  });
 
   const encodedTxData = React.useMemo(() => {
     return encodeFunctionData({
@@ -30,15 +32,18 @@ export const useWrapWinr = ({ amount, account }: IUseWrapWinr) => {
       abi: wrappedWinrAbi,
       address: wrappedWinr?.address || '0x0',
       functionName: 'deposit',
-      value: parseUnits((amount * 0.99999).toFixed(6), wrappedWinr?.decimals || 18) as any,
+      value: nativeWinr.balanceAsBigInt as any,
     },
     encodedTxData: encodedTxData,
     options: {},
   });
 
   const wrapWinr = async () => {
+    if (!nativeWinr.balanceAsBigInt || nativeWinr.balanceAsBigInt <= 0) return;
+
     await wrapTx.mutateAsync();
     nativeWinr.refetch();
+    updateBalances();
   };
 
   return wrapWinr;
