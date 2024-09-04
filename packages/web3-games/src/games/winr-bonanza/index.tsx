@@ -77,6 +77,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
 
   const allowance = useTokenAllowance({

@@ -8,6 +8,7 @@ import { useBundlerClient } from '../use-bundler-client';
 import { useCurrentAccount } from '../use-current-address';
 import { BundlerClientNotFoundError } from './error';
 import { Web3AccountTxRequest } from './types';
+import { delay } from '../use-token-allowance';
 
 export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: string; hash: Hex }> = (
   options = {}
@@ -45,7 +46,7 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
       };
 
       let retryCount = 0;
-      const maxRetries = 1;
+      const maxRetries = 3;
 
       const makeRequest = async () => {
         try {
@@ -70,8 +71,8 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
             ) {
               ({ part: _part, permit: _permit } = await getNewSession());
             }
-
-            return makeRequest();
+            await delay(200);
+            return await makeRequest();
           } else {
             throw error;
           }

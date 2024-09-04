@@ -18,7 +18,6 @@ import {
   useBalanceStore,
   useCurrentAccount,
   useHandleTx,
-  useNativeTokenBalance,
   usePriceFeed,
   useTokenAllowance,
   useTokenBalances,
@@ -165,6 +164,7 @@ export default function BlackjackTemplateWithWeb3(props: TemplateWithWeb3Props) 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
   const allowance = useTokenAllowance({
     amountToApprove: 999,

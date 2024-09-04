@@ -14,11 +14,11 @@ interface IUseUnwrapWinr {
 
 export const useUnWrapWinr = ({ account }: IUseUnwrapWinr) => {
   const tokens = useTokenStore((s) => s.tokens);
+  const wrappedWinr = tokens.find((t) => t.bankrollIndex == WRAPPED_WINR_BANKROLL);
   const { refetch: updateBalances } = useTokenBalances({
     account,
+    balancesToRead: [wrappedWinr?.address || '0x'],
   });
-
-  const wrappedWinr = tokens.find((t) => t.bankrollIndex == WRAPPED_WINR_BANKROLL);
 
   const { data: amount } = useReadContract({
     address: wrappedWinr?.address || '0x',

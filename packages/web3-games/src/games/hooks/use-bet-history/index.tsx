@@ -122,7 +122,7 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
     historyFilter: filter,
     setHistoryFilter: setFilter,
     refetchHistory: () => {
-      refetchMyBets();
+      filter.type == 'player' && refetchMyBets();
     },
   };
 };

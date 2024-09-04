@@ -84,6 +84,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
   const { handleGetBadges } = useGetBadges({
     onPlayerStatusUpdate: props.onPlayerStatusUpdate,

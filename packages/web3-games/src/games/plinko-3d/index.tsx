@@ -94,6 +94,7 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
 
   const allowance = useTokenAllowance({

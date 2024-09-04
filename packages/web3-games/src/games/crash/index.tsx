@@ -84,6 +84,7 @@ const CrashGame = (props: CrashTemplateProps) => {
     });
   const { refetch: refetchBalances } = useTokenBalances({
     account: currentAccount.address || '0x0000000',
+    balancesToRead: [selectedToken.address],
   });
 
   useConfigureMultiplayerLiveResultStore();

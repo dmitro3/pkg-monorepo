@@ -99,13 +99,15 @@ export default function HoldemPokerGame(props: TemplateWithWeb3Props) {
 
   const currentAccount = useCurrentAccount();
 
-  const { refetch: updateBalances } = useTokenBalances({
-    account: currentAccount.address || '0x',
-  });
-
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
   }));
+
+  const { refetch: updateBalances } = useTokenBalances({
+    account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
+  });
+
   const tokens = useTokenStore((s) => s.tokens);
 
   const { priceFeed } = usePriceFeed();

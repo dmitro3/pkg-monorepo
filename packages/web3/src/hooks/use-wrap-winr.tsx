@@ -17,6 +17,7 @@ export const useWrapWinr = ({ account }: IUseWrapWinr) => {
   const nativeWinr = useNativeTokenBalance({ account });
   const { refetch: updateBalances } = useTokenBalances({
     account,
+    balancesToRead: [wrappedWinr?.address || '0x'],
   });
 
   const encodedTxData = React.useMemo(() => {

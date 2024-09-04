@@ -70,6 +70,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   const { priceFeed } = usePriceFeed();
 
   const selectedTokenAddress = useTokenStore((s) => s.selectedToken);
+
   const tokens = useTokenStore((s) => s.tokens);
 
   const [formSetValue, setFormSetValue] = useState<FormSetValue>();
@@ -89,6 +90,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedTokenAddress.address],
   });
 
   const { submitType, updateMinesGameState, board, gameStatus } = useMinesGameStateStore([
@@ -296,12 +298,9 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
   });
-  const { selectedToken } = useTokenStore((s) => ({
-    selectedToken: s.selectedToken,
-  }));
 
   const onGameSubmit = async (values: MinesFormField) => {
-    if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
+    if (selectedTokenAddress.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     setIsWaitingResponse(true);
     console.log(values, 'form values');

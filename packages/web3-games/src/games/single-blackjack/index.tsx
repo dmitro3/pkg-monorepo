@@ -140,6 +140,7 @@ export default function SingleBlackjackGame(props: TemplateWithWeb3Props) {
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
   const allowance = useTokenAllowance({
     amountToApprove: 999,

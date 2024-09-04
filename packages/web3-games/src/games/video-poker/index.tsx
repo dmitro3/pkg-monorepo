@@ -79,6 +79,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
 
   const allowance = useTokenAllowance({

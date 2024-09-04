@@ -19,6 +19,7 @@ import { useSmartAccountApi } from './use-smart-account-api';
 import { useCurrentAccount } from './use-current-address';
 import { useCreateSession, useSessionStore } from './session';
 import { ErrorCode, mmAuthSessionErr, mmAuthSignErrors } from '../utils/error-codes';
+import { delay } from './use-token-allowance';
 
 export interface UseHandleTxUncachedOptions {
   successMessage?: string;
@@ -143,7 +144,7 @@ export const useHandleTxUncached = <
       };
 
       let retryCount = 0;
-      const maxRetries = 1;
+      const maxRetries = 3;
 
       const makeRequest = async () => {
         try {
@@ -168,7 +169,8 @@ export const useHandleTxUncached = <
             ) {
               ({ part: _part, permit: _permit } = await getNewSession());
             }
-            return makeRequest();
+            await delay(200);
+            return await makeRequest();
           } else {
             throw error; // Rethrow the error if max retries reached
           }
