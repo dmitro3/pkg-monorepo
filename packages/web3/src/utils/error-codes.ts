@@ -198,9 +198,12 @@ export enum ErrorCode {
 }
 
 // FIXME: TEMPORARY FIX
-export const mmAuthSignErrCodes = [
+export const mmAuthSessionErr = 'Session could not find for owner';
+
+export const mmAuthSignErrors = [
   'Permit could not verify',
   'Keys are not matched',
   'Account has been destroyed',
   'Session is destroyed. Please create new',
+  'Session could not find for owner',
 ];

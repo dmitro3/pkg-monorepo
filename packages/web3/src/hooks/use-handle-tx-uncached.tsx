@@ -18,7 +18,7 @@ import { useBundlerClient, WinrBundlerClient } from './use-bundler-client';
 import { useSmartAccountApi } from './use-smart-account-api';
 import { useCurrentAccount } from './use-current-address';
 import { useCreateSession, useSessionStore } from './session';
-import { ErrorCode, mmAuthSignErrCodes } from '../utils/error-codes';
+import { ErrorCode, mmAuthSessionErr, mmAuthSignErrors } from '../utils/error-codes';
 
 export interface UseHandleTxUncachedOptions {
   successMessage?: string;
@@ -163,7 +163,8 @@ export const useHandleTxUncached = <
             // If the first attempt fails, get a new session and try again
             if (
               error?.code !== ErrorCode.InvalidNonce &&
-              mmAuthSignErrCodes.includes(error?.message)
+              (mmAuthSignErrors.includes(error?.message) ||
+                error?.message?.includes(mmAuthSessionErr))
             ) {
               ({ part: _part, permit: _permit } = await getNewSession());
             }
