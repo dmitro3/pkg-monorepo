@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { Address, Hex } from 'viem';
 
-import { ErrorCode, mmAuthSignErrCodes } from '../../utils/error-codes';
+import { ErrorCode, mmAuthSignErrors, mmAuthSessionErr } from '../../utils/error-codes';
 import { MutationHook } from '../../utils/types';
 import { useCreateSession, useSessionStore } from '../session';
 import { useBundlerClient } from '../use-bundler-client';
@@ -65,7 +65,8 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
 
             if (
               error?.code !== ErrorCode.InvalidNonce &&
-              mmAuthSignErrCodes.includes(error?.message)
+              (mmAuthSignErrors.includes(error?.message) ||
+                error?.message?.includes(mmAuthSessionErr))
             ) {
               ({ part: _part, permit: _permit } = await getNewSession());
             }
