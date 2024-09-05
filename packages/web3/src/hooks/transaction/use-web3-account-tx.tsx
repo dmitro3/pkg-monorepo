@@ -25,6 +25,7 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
       target = '0x0',
       encodedTxData = '0x0',
       value = 0,
+      enforceSign = false,
     }) => {
       const client = customBundlerClient || defaultClient;
       if (!client) throw new BundlerClientNotFoundError();
@@ -50,7 +51,7 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
 
       const makeRequest = async () => {
         try {
-          if (!_part || !_permit) {
+          if (!_part || !_permit || enforceSign) {
             ({ part: _part, permit: _permit } = await getNewSession());
           }
           return await client.request('call', {

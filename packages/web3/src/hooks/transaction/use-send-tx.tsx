@@ -22,8 +22,15 @@ export const useSendTx: MutationHook<SendTxRequest, { status: string; hash: Hex 
   return useMutation({
     ...options,
     mutationFn: async (request) => {
-      const { method, target, encodedTxData, customAccountApi, value, customBundlerClient } =
-        request;
+      const {
+        method,
+        target,
+        encodedTxData,
+        customAccountApi,
+        value,
+        customBundlerClient,
+        enforceSign,
+      } = request;
 
       const networkId = request.networkId || 777777;
 
@@ -49,6 +56,7 @@ export const useSendTx: MutationHook<SendTxRequest, { status: string; hash: Hex 
           target,
           encodedTxData,
           value,
+          enforceSign,
         });
       }
     },
