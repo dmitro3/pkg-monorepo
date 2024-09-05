@@ -12,6 +12,10 @@ const MinesPage = () => {
         onAnimationCompleted={() => {
           console.log('game completed');
         }}
+        theme={{
+          gemImage: '/custom/mines/rev-gem.png',
+          cellImage: '/custom/mines/cell.svg',
+        }}
       />
       <Web3GamesModals />
     </>

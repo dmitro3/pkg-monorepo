@@ -3,13 +3,13 @@
 import {
   baseUrl,
   GameControllerGlobalBetHistoryResponse,
-  useGameControllerGlobalBetHistory,
   useGameControllerBetHistory,
+  useGameControllerGlobalBetHistory,
 } from '@winrlabs/api';
 import { GameType } from '@winrlabs/games';
 import { BetHistoryCurrencyList, BetHistoryFilter } from '@winrlabs/games';
 import { useCurrentAccount, useTokenStore } from '@winrlabs/web3';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface IUseBetHistory {
   gameType: GameType;

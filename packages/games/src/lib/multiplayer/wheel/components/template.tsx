@@ -7,20 +7,15 @@ import * as z from 'zod';
 import { GameContainer, SceneContainer } from '../../../common/containers';
 import { Form } from '../../../ui/form';
 import { WheelColor } from '../constants';
+import { WheelTheme, WheelThemeProvider } from '../providers/theme';
 import { WheelFormFields } from '../types';
 import BetController from './bet-controller';
 import LastBets from './last-bet';
 import WheelParticipants from './wheel-participants';
 import { WheelScene } from './wheel-scene';
 
-type TemplateOptions = {
-  scene?: {
-    backgroundImage?: string;
-  };
-};
-
 type TemplateProps = {
-  options: TemplateOptions;
+  theme?: Partial<WheelTheme>;
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: WheelFormFields) => void;
@@ -68,22 +63,24 @@ const WheelTemplate = (props: TemplateProps) => {
   }, [props.onComplete]);
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
-        <GameContainer>
-          <BetController
-            maxWager={props?.maxWager || 2000}
-            minWager={props?.minWager || 1}
-            onLogin={props.onLogin}
-          />
-          <SceneContainer className="wr-h-[640px] max-md:wr-h-[360px] lg:wr-p-[14px]">
-            <LastBets />
-            <WheelScene onComplete={onComplete} />
-            <WheelParticipants />
-          </SceneContainer>
-        </GameContainer>
-      </form>
-    </Form>
+    <WheelThemeProvider theme={props.theme}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
+          <GameContainer>
+            <BetController
+              maxWager={props?.maxWager || 2000}
+              minWager={props?.minWager || 1}
+              onLogin={props.onLogin}
+            />
+            <SceneContainer className="wr-h-[640px] max-md:wr-h-[360px] lg:wr-p-[14px]">
+              <LastBets />
+              <WheelScene onComplete={onComplete} />
+              <WheelParticipants />
+            </SceneContainer>
+          </GameContainer>
+        </form>
+      </Form>
+    </WheelThemeProvider>
   );
 };
 

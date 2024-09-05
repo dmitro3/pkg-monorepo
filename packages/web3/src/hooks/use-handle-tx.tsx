@@ -14,11 +14,11 @@ import { Config, useSwitchChain } from 'wagmi';
 import { WriteContractVariables } from 'wagmi/query';
 
 import { SimpleAccountAPI } from '../smart-wallet';
+import { ErrorCode, mmAuthSessionErr, mmAuthSignErrors } from '../utils/error-codes';
+import { useCreateSession, useSessionStore } from './session';
 import { useBundlerClient, WinrBundlerClient } from './use-bundler-client';
 import { useCurrentAccount } from './use-current-address';
 import { useSmartAccountApi } from './use-smart-account-api';
-import { useCreateSession, useSessionStore } from './session';
-import { ErrorCode, mmAuthSessionErr, mmAuthSignErrors } from '../utils/error-codes';
 import { delay } from './use-token-allowance';
 
 export interface UseHandleTxOptions {
@@ -78,7 +78,7 @@ export const useHandleTx = <
   const { method = 'sendUserOperation' } = options;
   const { address, isSocialLogin, rootAddress } = useCurrentAccount();
   const { accountApi: defaultAccountApi } = useSmartAccountApi();
-  const { client: defaultClient } = useBundlerClient();
+  const { client: defaultClient, globalChainId } = useBundlerClient();
   const { switchChainAsync } = useSwitchChain();
 
   const createSession = useCreateSession();
@@ -86,7 +86,8 @@ export const useHandleTx = <
   const sessionStore = useSessionStore();
   const handleTxMutation = useMutation({
     mutationFn: async (params: { networkId?: number } | void) => {
-      const networkId = params && 'networkId' in params ? params.networkId : 777777;
+      const networkId =
+        params && 'networkId' in params ? params.networkId : globalChainId || 777777;
 
       if (!address && options.unauthRedirectionCb) {
         options.unauthRedirectionCb();
