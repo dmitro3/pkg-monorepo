@@ -50,6 +50,9 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
 
       const makeRequest = async () => {
         try {
+          if (!_part || !_permit) {
+            ({ part: _part, permit: _permit } = await getNewSession());
+          }
           return await client.request('call', {
             call: {
               dest: target as Address,
@@ -57,8 +60,8 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
               value: Number(value),
             },
             owner: userAddress!,
-            part: _part ?? '0x',
-            permit: _permit ?? '0x',
+            part: _part,
+            permit: _permit,
           });
         } catch (error: any) {
           if (retryCount < maxRetries) {
