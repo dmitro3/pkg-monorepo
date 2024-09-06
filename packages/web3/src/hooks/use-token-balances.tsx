@@ -83,7 +83,13 @@ export const useTokenBalances = ({
       let balance = Number(formatUnits(value.result as bigint, token.decimals));
 
       if (token.bankrollIndex == WRAPPED_WINR_BANKROLL) {
-        console.log(balance, 'wrapped <- balance -> native', nativeWinr.balance);
+        console.log(
+          value.result,
+          balance,
+          'wrapped <- balance -> native',
+          nativeWinr.balance,
+          nativeWinr.balanceAsBigInt
+        );
       }
 
       if (token.bankrollIndex == WRAPPED_WINR_BANKROLL) balance += nativeWinr.balance;

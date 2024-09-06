@@ -7,6 +7,7 @@ import { useTokenStore } from '../providers/token';
 import { useHandleTx } from './use-handle-tx';
 import { useNativeTokenBalance } from './use-native-token-balance';
 import { useTokenBalances, WRAPPED_WINR_BANKROLL } from './use-token-balances';
+import { useBalanceStore } from '../providers/balance';
 
 interface IUseUnwrapWinr {
   account: Address;
@@ -19,8 +20,9 @@ export const useUnWrapWinr = ({ account }: IUseUnwrapWinr) => {
     account,
     balancesToRead: [wrappedWinr?.address || '0x'],
   });
+  const { balances } = useBalanceStore();
 
-  const { data: amount } = useReadContract({
+  const { data: amount, refetch: refetchWrappedBalance } = useReadContract({
     address: wrappedWinr?.address || '0x',
     abi: erc20Abi,
     functionName: 'balanceOf',
@@ -38,7 +40,7 @@ export const useUnWrapWinr = ({ account }: IUseUnwrapWinr) => {
     return encodeFunctionData({
       abi: wrappedWinrAbi,
       functionName: 'withdraw',
-      args: [amount],
+      args: [amount >= 10n ? amount - 10n : 1n],
     });
   }, [amount, wrappedWinr]);
 
@@ -52,8 +54,12 @@ export const useUnWrapWinr = ({ account }: IUseUnwrapWinr) => {
     options: {},
   });
 
+  React.useEffect(() => {
+    refetchWrappedBalance();
+  }, [balances[wrappedWinr?.address || '0x']]);
+
   const unwrapWinrTx = async () => {
-    if (!amount || amount <= 0) return;
+    if (!amount || amount <= 100n) return;
 
     await unwrapTx.mutateAsync();
     nativeWinr.refetch();

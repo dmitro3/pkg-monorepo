@@ -1,11 +1,12 @@
 import React from 'react';
-import { Address, encodeFunctionData } from 'viem';
+import { Address, encodeFunctionData, formatUnits, parseUnits } from 'viem';
 
 import { wrappedWinrAbi } from '../abis';
 import { useTokenStore } from '../providers/token';
 import { useHandleTx } from './use-handle-tx';
 import { useNativeTokenBalance } from './use-native-token-balance';
 import { useTokenBalances, WRAPPED_WINR_BANKROLL } from './use-token-balances';
+import { toDecimals } from '../utils/number';
 
 interface IUseWrapWinr {
   account: Address;
@@ -33,14 +34,14 @@ export const useWrapWinr = ({ account }: IUseWrapWinr) => {
       abi: wrappedWinrAbi,
       address: wrappedWinr?.address || '0x0',
       functionName: 'deposit',
-      value: nativeWinr.balanceAsBigInt as any,
+      value: parseUnits(String(toDecimals(nativeWinr.balance, 4)), 18) as any,
     },
     encodedTxData: encodedTxData,
     options: {},
   });
 
   const wrapWinr = async () => {
-    if (!nativeWinr.balanceAsBigInt || nativeWinr.balanceAsBigInt <= 0) return;
+    if (!nativeWinr.balance || nativeWinr.balance <= 0.001) return;
 
     await wrapTx.mutateAsync();
     nativeWinr.refetch();
