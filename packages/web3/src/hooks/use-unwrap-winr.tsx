@@ -1,10 +1,9 @@
-import React from 'react';
 import { Address, encodeFunctionData } from 'viem';
 import { useReadContract } from 'wagmi';
 
 import { erc20Abi, wrappedWinrAbi } from '../abis';
 import { useTokenStore } from '../providers/token';
-import { useHandleTx } from './use-handle-tx';
+import { useSendTx } from './transaction';
 import { useNativeTokenBalance } from './use-native-token-balance';
 import { useTokenBalances, WRAPPED_WINR_BANKROLL } from './use-token-balances';
 
@@ -32,30 +31,20 @@ export const useUnWrapWinr = ({ account }: IUseUnwrapWinr) => {
 
   const nativeWinr = useNativeTokenBalance({ account });
 
-  const encodedTxData = React.useMemo(() => {
-    if (!amount || !wrappedWinr) return '0x0';
-
-    return encodeFunctionData({
-      abi: wrappedWinrAbi,
-      functionName: 'withdraw',
-      args: [amount],
-    });
-  }, [amount, wrappedWinr]);
-
-  const unwrapTx = useHandleTx({
-    writeContractVariables: {
-      abi: wrappedWinrAbi,
-      address: wrappedWinr?.address || '0x0',
-      functionName: 'withdraw',
-    },
-    encodedTxData: encodedTxData,
-    options: {},
-  });
+  const sendTx = useSendTx();
 
   const unwrapWinrTx = async () => {
     if (!amount || amount <= 0) return;
 
-    await unwrapTx.mutateAsync();
+    await sendTx.mutateAsync({
+      encodedTxData: encodeFunctionData({
+        abi: wrappedWinrAbi,
+        functionName: 'withdraw',
+        args: [amount || 0n],
+      }),
+      target: wrappedWinr?.address,
+    });
+
     nativeWinr.refetch();
     updateBalances();
   };
