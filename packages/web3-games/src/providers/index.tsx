@@ -16,6 +16,7 @@ type WinrLabsWeb3GamesConfig = {
   bundlerWsUrl: string;
   network: BundlerNetwork;
   contracts: ContractConfig;
+  submitBtnText?: string;
 };
 
 type WinrLabsWeb3GamesProviderProps = {
@@ -39,6 +40,7 @@ export const WinrLabsWeb3GamesProvider = ({ children, config }: WinrLabsWeb3Game
     <ContractConfigProvider wagmiConfig={config.wagmiConfig} config={config.contracts}>
       <GameProvider
         options={{
+          submitBtnText: config?.submitBtnText,
           currency: {
             icon: selectedToken.icon,
             name: selectedToken.symbol,

@@ -7,6 +7,7 @@ import { BetControllerContainer } from '../../../../common/containers';
 import { BetControllerTitle, WagerFormField } from '../../../../common/controller';
 import { PreBetButton } from '../../../../common/pre-bet-button';
 import { WagerCurrencyIcon } from '../../../../common/wager';
+import { useGameOptions } from '../../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import useCountdown from '../../../../hooks/use-time-left';
 // import useWheelGameStore from "../../_store/game-info-store";
@@ -42,6 +43,8 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
     'isGamblerParticipant',
     'setIsGamblerParticipant',
   ]);
+
+  const { submitBtnText } = useGameOptions();
 
   const form = useFormContext() as WheelForm;
 
@@ -191,7 +194,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
             {timeLeft >= 0 && status === MultiplayerGameStatus.Finish
               ? `Next game in ${timeLeft} seconds`
               : chosenColor !== WheelColor.IDLE
-                ? 'BET'
+                ? submitBtnText
                 : 'CHOOSE COLOR'}
           </Button>
         </PreBetButton>
