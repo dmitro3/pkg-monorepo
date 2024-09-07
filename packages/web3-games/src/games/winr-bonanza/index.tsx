@@ -165,15 +165,15 @@ export default function WinrBonanzaTemplateWithWeb3({
     console.log('spin button called!');
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
-    // if (!allowance.hasAllowance) {
-    //   const handledAllowance = await allowance.handleAllowance({
-    //     errorCb: (e: any) => {
-    //       console.log("error", e);
-    //     },
-    //   });
+    if (!allowance.hasAllowance) {
+      const handledAllowance = await allowance.handleAllowance({
+        errorCb: (e: any) => {
+          console.log('error', e);
+        },
+      });
 
-    //   if (!handledAllowance) return;
-    // }
+      if (!handledAllowance) return;
+    }
 
     console.log('allowance available');
 
