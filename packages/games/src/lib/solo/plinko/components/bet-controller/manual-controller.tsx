@@ -7,6 +7,7 @@ import { useDebounce } from 'use-debounce';
 import { WagerFormField } from '../../../../common/controller';
 import { PreBetButton } from '../../../../common/pre-bet-button';
 import { TotalWager, WagerCurrencyIcon } from '../../../../common/wager';
+import { useGameOptions } from '../../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import { Button } from '../../../../ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../../ui/form';
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export const ManualController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
+  const { submitBtnText } = useGameOptions();
   const form = useFormContext() as PlinkoForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
@@ -75,7 +77,7 @@ export const ManualController: React.FC<Props> = ({ minWager, maxWager, onLogin 
           size={'xl'}
           onClick={() => clickEffect.play()}
         >
-          Bet
+          {submitBtnText}
         </Button>
       </PreBetButton>
     </>

@@ -8,7 +8,8 @@
     "lint:fix": "turbo lint:fix",
     "clean": "turbo clean",
     "format": "turbo format",
-    "publish-packages": "turbo run build && changeset version && changeset publish"
+    "publish-packages": "turbo run build && changeset version && changeset publish",
+    "dev-only-packages": "turbo dev --filter=./packages/*"
   },
   "devDependencies": {
     "@winrlabs/eslint-config": "workspace:*",
