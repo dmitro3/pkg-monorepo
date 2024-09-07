@@ -10,6 +10,7 @@ export default function WheelPage() {
         maxWager={1}
         theme={{
           wheelBackground: '#000',
+          // hideWager: true,
         }}
       />
       ;

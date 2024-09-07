@@ -21,9 +21,17 @@ interface Props {
   minWager: number;
   maxWager: number;
   onLogin?: () => void;
+  hideWager?: boolean;
+  hideTotalWagerInfo?: boolean;
 }
 
-export const ManualController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
+export const ManualController: React.FC<Props> = ({
+  minWager,
+  maxWager,
+  onLogin,
+  hideWager,
+  hideTotalWagerInfo,
+}) => {
   const { submitBtnText } = useGameOptions();
   const form = useFormContext() as PlinkoForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
@@ -41,7 +49,8 @@ export const ManualController: React.FC<Props> = ({ minWager, maxWager, onLogin 
 
   return (
     <>
-      <WagerFormField minWager={minWager} maxWager={maxWager} />
+      {!hideWager && <WagerFormField minWager={minWager} maxWager={maxWager} />}
+
       <PlinkoRowFormField minValue={6} maxValue={12} />
       <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
         <div>
@@ -57,10 +66,12 @@ export const ManualController: React.FC<Props> = ({ minWager, maxWager, onLogin 
             </span>
           </div>
         </div>
-        <div>
-          <FormLabel>Total Wager</FormLabel>
-          <TotalWager betCount={1} wager={form.getValues().wager} />
-        </div>
+        {!hideTotalWagerInfo && (
+          <div>
+            <FormLabel>Total Wager</FormLabel>
+            <TotalWager betCount={1} wager={form.getValues().wager} />
+          </div>
+        )}
       </div>
 
       <PreBetButton onLogin={onLogin}>

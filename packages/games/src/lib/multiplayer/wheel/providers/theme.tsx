@@ -4,10 +4,12 @@ import { CDN_URL } from '../../../constants';
 
 export interface WheelTheme {
   wheelBackground?: string;
+  hideWager?: boolean;
 }
 
 const defaultTheme: Partial<WheelTheme> = {
   wheelBackground: `${CDN_URL}/wheel/cursor-wheel.svg`,
+  hideWager: false,
 };
 
 const WheelThemeContext = createContext<Partial<WheelTheme>>(defaultTheme);

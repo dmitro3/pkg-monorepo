@@ -16,6 +16,10 @@ interface Props {
   isAutoBetMode: boolean;
   onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
   onLogin?: () => void;
+  hideWager?: boolean;
+  disableAuto?: boolean;
+  disableStrategy?: boolean;
+  hideTotalWagerInfo?: boolean;
 }
 
 export const BetController: React.FC<Props> = (props) => {
@@ -48,6 +52,7 @@ export const BetController: React.FC<Props> = (props) => {
                 'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
               })}
               value="auto"
+              disabled={props.disableAuto}
             >
               Auto
             </Tabs.Trigger>

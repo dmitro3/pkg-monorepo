@@ -20,6 +20,10 @@ export type PlinkoTemplateOptions = {
     backgroundImage?: string;
     backgroundColor?: string;
   };
+  hideWager?: boolean;
+  disableAuto?: boolean;
+  disableStrategy?: boolean;
+  hideTotalWagerInfo?: boolean;
 };
 
 type TemplateProps = PlinkoGameProps & {
@@ -141,6 +145,10 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
             isAutoBetMode={isAutoBetMode}
             onAutoBetModeChange={setIsAutoBetMode}
             onLogin={props.onLogin}
+            hideWager={props.options.hideWager}
+            disableAuto={props.options.disableAuto}
+            disableStrategy={props.options.disableStrategy}
+            hideTotalWagerInfo={props.options.hideTotalWagerInfo}
           />
           <SceneContainer
             className={cn(

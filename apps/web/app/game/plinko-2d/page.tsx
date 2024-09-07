@@ -10,6 +10,8 @@ export default function PlinkoPage() {
           scene: {
             backgroundImage: 'url(/plinko.png)',
           },
+          // hideWager: true,
+          // disableStrategy: true,
         }}
         minWager={0.1}
         maxWager={2000}

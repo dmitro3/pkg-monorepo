@@ -72,7 +72,10 @@ const WheelTemplate = (props: TemplateProps) => {
               minWager={props?.minWager || 1}
               onLogin={props.onLogin}
             />
-            <SceneContainer className="wr-h-[640px] max-md:wr-h-[360px] lg:wr-p-[14px]">
+            <SceneContainer
+              className="wr-h-[640px] max-md:wr-h-[360px] lg:wr-p-[14px]"
+              data-wheel-scene
+            >
               <LastBets />
               <WheelScene onComplete={onComplete} />
               <WheelParticipants />

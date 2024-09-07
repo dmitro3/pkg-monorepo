@@ -18,6 +18,7 @@ import { cn } from '../../../../utils/style';
 import { toDecimals, toFormatted } from '../../../../utils/web3';
 import { MultiplayerGameStatus } from '../../../core/type';
 import { colorMultipliers, participantMapWithStore, WheelColor } from '../../constants';
+import { useWheelTheme } from '../../providers/theme';
 import { useWheelGameStore } from '../../store';
 import { WheelForm } from '../../types';
 
@@ -45,6 +46,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
   ]);
 
   const { submitBtnText } = useGameOptions();
+  const { hideWager } = useWheelTheme();
 
   const form = useFormContext() as WheelForm;
 
@@ -66,17 +68,19 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
   });
 
   return (
-    <BetControllerContainer>
+    <BetControllerContainer data-wheel-bet-controller>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
         <div className="lg:wr-mb-3">
           <BetControllerTitle>Wheel</BetControllerTitle>
         </div>
 
-        <WagerFormField
-          minWager={minWager}
-          maxWager={maxWager}
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading}
-        />
+        {!hideWager && (
+          <WagerFormField
+            minWager={minWager}
+            maxWager={maxWager}
+            isDisabled={form.formState.isSubmitting || form.formState.isLoading}
+          />
+        )}
         <div className="wr-mb-3 lg:wr-mb-6">
           <FormField
             control={form.control}
