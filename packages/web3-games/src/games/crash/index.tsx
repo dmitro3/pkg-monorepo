@@ -12,7 +12,9 @@ import {
 import { CrashFormFields, CrashTemplate } from '@winrlabs/games';
 import {
   controllerAbi,
+  useApiOptions,
   useCurrentAccount,
+  useHandleTx,
   usePriceFeed,
   useSendTx,
   useTokenAllowance,
@@ -72,6 +74,7 @@ const CrashGame = (props: CrashTemplateProps) => {
   const allTokens = useTokenStore((s) => s.tokens);
   const selectedToken = useTokenStore((s) => s.selectedToken);
   const selectedTokenAddress = selectedToken.address;
+  const { baseUrl } = useApiOptions();
   const { data: betHistory, refetch: refetchBetHistory } =
     useGameControllerGetMultiplayerGameHistory({
       queryParams: {
@@ -80,6 +83,7 @@ const CrashGame = (props: CrashTemplateProps) => {
         // @ts-ignore
         limit: 7,
       },
+      baseUrl: baseUrl,
     });
   const { refetch: refetchBalances } = useTokenBalances({
     account: currentAccount.address || '0x0000000',
