@@ -13,8 +13,6 @@ import {
   delay,
   useCurrentAccount,
   useFastOrVerified,
-  useHandleTx,
-  useNativeTokenBalance,
   usePriceFeed,
   useSendTx,
   useTokenAllowance,

@@ -17,8 +17,6 @@ import {
   blackjackReaderAbi,
   controllerAbi,
   useCurrentAccount,
-  useHandleTx,
-  useNativeTokenBalance,
   usePriceFeed,
   useSendTx,
   useTokenAllowance,
