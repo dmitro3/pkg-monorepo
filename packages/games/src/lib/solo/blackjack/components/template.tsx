@@ -60,7 +60,7 @@ const BlackjackTemplate: React.FC<TemplateProps> = ({
   onFormChange,
   onLogin,
 }) => {
-  const [wager, setWager] = React.useState<number>(minWager || 1);
+  const [wager, setWager] = React.useState<number>(1);
   const [selectedChip, setSelectedChip] = React.useState<Chip>(Chip.ONE);
 
   const [firstHandWager, setFirstHandWager] = React.useState<number>(0);

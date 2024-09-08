@@ -64,7 +64,7 @@ export function PlinkoGame({ ...props }: TemplateProps) {
     }),
     mode: 'onSubmit',
     defaultValues: {
-      wager: props?.minWager || 1,
+      wager: 1,
       betCount: 1,
       stopGain: 0,
       stopLoss: 0,

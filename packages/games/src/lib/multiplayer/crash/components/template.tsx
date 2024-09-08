@@ -36,7 +36,7 @@ const CrashTemplate = (props: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 2, {
+      .min(props?.minWager || 0.01, {
         message: `Minimum wager is ${props?.minWager}`,
       })
       .max(props?.maxWager || 2000, {
@@ -51,7 +51,7 @@ const CrashTemplate = (props: TemplateProps) => {
     }),
     mode: 'all',
     defaultValues: {
-      wager: props?.minWager || 1,
+      wager: 1,
       multiplier: 1.01,
     },
   });

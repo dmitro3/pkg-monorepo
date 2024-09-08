@@ -47,7 +47,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: 'all',
     defaultValues: {
-      wager: props?.minWager || 0.01,
+      wager: 1,
       minesCount: 1,
       selectedCells: initialBoard.map((mine) => mine.isSelected),
     },

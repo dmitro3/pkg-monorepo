@@ -298,7 +298,7 @@ const SingleBlackjackTemplate: React.FC<TemplateProps> = ({
     }),
     mode: 'onSubmit',
     defaultValues: {
-      wager: minWager || 2,
+      wager: 1,
     },
   });
 

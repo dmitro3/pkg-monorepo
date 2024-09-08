@@ -95,7 +95,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
       async: true,
     }),
     defaultValues: {
-      wager: minWager || 1,
+      wager: 1,
       totalWager: 0,
       betCount: 0,
       stopGain: 0,

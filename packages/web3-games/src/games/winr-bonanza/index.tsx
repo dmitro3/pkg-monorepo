@@ -224,6 +224,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   };
 
   const handleFreeSpin = async (errorCount = 0) => {
+    if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
     // if (!allowance.hasAllowance) {
     //   const handledAllowance = await allowance.handleAllowance({
     //     errorCb: (e: any) => {

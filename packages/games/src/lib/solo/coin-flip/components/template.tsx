@@ -63,7 +63,7 @@ const CoinFlipTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: 'onSubmit',
     defaultValues: {
-      wager: props?.minWager || 1,
+      wager: 1,
       betCount: 0,
       stopGain: 0,
       stopLoss: 0,

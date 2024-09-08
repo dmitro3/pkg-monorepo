@@ -4,8 +4,7 @@ import { createContext, useContext, useRef } from 'react';
 import { Address } from 'viem';
 import { createStore, StoreApi, useStore } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-import { PriceFeedVariable } from '../hooks/use-price-feed';
+import { PriceFeedVariable } from '../hooks/price-feed';
 
 export interface Token {
   address: Address;

@@ -44,7 +44,7 @@ export const HoldemPokerScene = ({
 }: HoldemPokerSceneProps) => {
   const [ante, setAnte] = React.useState<number>(0);
   const [aaBonus, setAaBonus] = React.useState<number>(0);
-  const [wager, setWager] = React.useState<number>(minWager || 1);
+  const [wager, setWager] = React.useState<number>(1);
   const [lastMove, setLastMove] = React.useState<'fold' | 'call'>('call');
 
   const [status, setStatus] = React.useState<HOLDEM_POKER_GAME_STATUS>(

@@ -3,33 +3,16 @@
 import { useCurrencyControllerGetLastPriceFeed } from '@winrlabs/api';
 import React from 'react';
 
-export type PriceFeedVariable =
-  | 'winr'
-  | 'arb'
-  | 'btc'
-  | 'eth'
-  | 'usdc'
-  | 'weth'
-  | 'sol'
-  | 'usdt'
-  | 'mck';
-
-type TPriceFeed = Record<PriceFeedVariable, number>;
-
-const defaultValues: TPriceFeed = {
-  winr: 1,
-  arb: 1,
-  btc: 1,
-  eth: 1,
-  usdc: 1,
-  weth: 1,
-  sol: 1,
-  usdt: 1,
-  mck: 1,
-};
+import {
+  defaultPriceFeedValues,
+  PriceFeedVariable,
+  TPriceFeed,
+  usePriceFeedStore,
+} from './price-feed.store';
 
 export const usePriceFeed = () => {
-  const [priceFeed, setPriceFeed] = React.useState<TPriceFeed>(defaultValues);
+  const { priceFeed, updatePriceFeed } = usePriceFeedStore();
+
   const { data, dataUpdatedAt } = useCurrencyControllerGetLastPriceFeed(
     {},
     {
@@ -41,13 +24,13 @@ export const usePriceFeed = () => {
 
   React.useEffect(() => {
     if (!data) return;
-    const payload: TPriceFeed = defaultValues;
+    const payload: TPriceFeed = defaultPriceFeedValues;
 
     data.forEach((t) => {
       payload[t.token as PriceFeedVariable] = t.price;
     });
 
-    setPriceFeed({ ...payload });
+    updatePriceFeed({ ...payload });
   }, [dataUpdatedAt]);
 
   return {

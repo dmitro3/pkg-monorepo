@@ -3,6 +3,7 @@
 import React from 'react';
 import { Unity } from 'react-unity-webgl';
 import { useDebounce } from 'use-debounce';
+import * as Progress from '@radix-ui/react-progress';
 
 import { UnityGameContainer } from '../../common/containers';
 import { useGameOptions } from '../../game-provider';
@@ -11,6 +12,7 @@ import { toDecimals, toFormatted } from '../../utils/web3';
 import { useUnityBonanza } from './hooks/use-bonanza-unity';
 import { useBonanzaGameStore } from './store';
 import { Bonanza_Unity_Events, ReelSpinSettled, SpinType, WinrBonanzaFormFields } from './types';
+import { CDN_URL } from '../../constants';
 
 interface TemplateProps {
   onRefresh: () => void;
@@ -94,6 +96,7 @@ export const WinrBonanzaTemplate = ({
   const [isInAutoPlay, setIsInAutoPlay] = React.useState(false);
   const [initialBuyEvent, setInitialBuyEvent] = React.useState<any>(undefined);
   const [wonFreeSpins, setWonFreeSpins] = React.useState(false);
+  const percentageRef = React.useRef(0);
 
   const [currentAction, setCurrentAction] = React.useState<
     'submit' | 'initialAutoplay' | 'buyFeature' | 'freeSpin' | 'autoPlay'
@@ -103,6 +106,10 @@ export const WinrBonanzaTemplate = ({
     () => account?.balanceAsDollar || 0,
     [account?.balanceAsDollar]
   );
+
+  React.useEffect(() => {
+    percentageRef.current = loadingProgression * 100;
+  }, [loadingProgression]);
 
   const actualBetAmount = isDoubleChance ? betAmount + betAmount * 0.5 : betAmount;
 
@@ -628,6 +635,45 @@ export const WinrBonanzaTemplate = ({
   return (
     <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[672px]">
       <div className="wr-w-full max-lg:wr-border-b  max-lg:wr-border-zinc-800">
+        {percentageRef.current !== 100 && (
+          <div className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-flex wr-h-full wr-w-full wr-flex-col wr-items-center wr-justify-center wr-gap-4">
+            <img
+              src={`${CDN_URL}/winr-bonanza/loader.jpg`}
+              className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-h-full wr-w-full wr-rounded-md wr-object-cover"
+            />
+            <span
+              style={{
+                textShadow: '0 0 5px black, 0 0 5px black',
+              }}
+              className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
+            >
+              {toFormatted(percentageRef.current, 2)} %
+            </span>
+            <Progress.Root
+              className="wr-radius-[1000px] wr-relative wr-z-50 wr-h-[25px] wr-w-[320px] wr-overflow-hidden wr-rounded-md wr-bg-black"
+              style={{
+                transform: 'translateZ(0)',
+              }}
+              value={percentageRef.current}
+            >
+              <Progress.Indicator
+                className="wr-h-full wr-w-full wr-bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400"
+                style={{
+                  transform: `translateX(-${100 - percentageRef.current}%)`,
+                  transition: 'transform 660ms cubic-bezier(0.65, 0, 0.35, 1)',
+                }}
+              />
+            </Progress.Root>
+            <span
+              style={{
+                textShadow: '0 0 5px black, 0 0 5px black',
+              }}
+              className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
+            >
+              WINR Bonanza
+            </span>
+          </div>
+        )}
         <Unity
           unityProvider={unityProvider}
           devicePixelRatio={2}

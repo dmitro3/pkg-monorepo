@@ -53,7 +53,7 @@ const LimboTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: 'all',
     defaultValues: {
-      wager: props?.minWager || 1,
+      wager: 1,
       betCount: 0,
       stopGain: 0,
       stopLoss: 0,

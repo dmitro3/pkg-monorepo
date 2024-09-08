@@ -72,7 +72,7 @@ const VideoPokerTemplate = ({
     }),
     mode: 'onSubmit',
     defaultValues: {
-      wager: minWager || 1,
+      wager: 1,
       cardsToSend: [
         CardStatus.CLOSED,
         CardStatus.CLOSED,
