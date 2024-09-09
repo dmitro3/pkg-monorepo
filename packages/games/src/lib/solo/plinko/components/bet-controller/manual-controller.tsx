@@ -30,8 +30,7 @@ export const ManualController: React.FC<Props> = ({
   onLogin,
   hideWager,
   hideTotalWagerInfo,
-  maxPayoutLabel = 'Max Payout',
-  controllerHeader,
+  maxPayout: maxPayoutOptions,
 }) => {
   const { submitBtnText } = useGameOptions();
   const form = useFormContext() as PlinkoForm;
@@ -48,6 +47,7 @@ export const ManualController: React.FC<Props> = ({
     return toDecimals(wager * maxMultiplier, 2);
   }, [wager, rowSize]);
 
+  const maxPayoutLabel = maxPayoutOptions?.label || 'Max Payout';
   return (
     <>
       {!hideWager && <WagerFormField minWager={minWager} maxWager={maxWager} />}
@@ -61,7 +61,15 @@ export const ManualController: React.FC<Props> = ({
               'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
             )}
           >
-            <WagerCurrencyIcon />
+            {maxPayoutOptions?.icon ? (
+              <img
+                src={maxPayoutOptions.icon}
+                alt={maxPayoutLabel}
+                className="wr-mr-1 wr-h-5 wr-w-5"
+              />
+            ) : (
+              <WagerCurrencyIcon />
+            )}
             <span className={cn('wr-font-semibold wr-text-zinc-100')}>
               ${toFormatted(maxPayout, 2)}
             </span>

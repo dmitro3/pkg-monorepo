@@ -24,7 +24,11 @@ export type PlinkoTemplateOptions = {
   disableAuto?: boolean;
   disableStrategy?: boolean;
   hideTotalWagerInfo?: boolean;
-  maxPayoutLabel?: string;
+
+  maxPayout?: {
+    label?: string;
+    icon?: string;
+  };
 
   controllerHeader?: React.ReactNode;
   hideTabs?: boolean;
@@ -153,7 +157,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
             disableAuto={props.options.disableAuto}
             disableStrategy={props.options.disableStrategy}
             hideTotalWagerInfo={props.options.hideTotalWagerInfo}
-            maxPayoutLabel={props.options.maxPayoutLabel}
+            maxPayout={props.options.maxPayout}
             controllerHeader={props.options.controllerHeader}
             hideTabs={props.options.hideTabs}
           />
