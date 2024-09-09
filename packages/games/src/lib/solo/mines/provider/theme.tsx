@@ -3,12 +3,16 @@ import { createContext, useContext, useState } from 'react';
 import { CDN_URL } from '../../../constants';
 
 export interface MinesTheme {
-  gemImage: string;
-  cellImage: string;
+  gemImage?: string;
+  cellImage?: string;
+  hideWager?: boolean;
+  hideInfo?: boolean;
 }
 
 const defaultTheme: Partial<MinesTheme> = {
   gemImage: `${CDN_URL}/mines/revealed-gem.png`,
+  hideWager: false,
+  hideInfo: false,
 };
 
 const MinesThemeContext = createContext<Partial<MinesTheme>>(defaultTheme);
