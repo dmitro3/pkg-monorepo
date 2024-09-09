@@ -24,6 +24,10 @@ export type PlinkoTemplateOptions = {
   disableAuto?: boolean;
   disableStrategy?: boolean;
   hideTotalWagerInfo?: boolean;
+  maxPayoutLabel?: string;
+
+  controllerHeader?: React.ReactNode;
+  hideTabs?: boolean;
 };
 
 type TemplateProps = PlinkoGameProps & {
@@ -149,6 +153,9 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
             disableAuto={props.options.disableAuto}
             disableStrategy={props.options.disableStrategy}
             hideTotalWagerInfo={props.options.hideTotalWagerInfo}
+            maxPayoutLabel={props.options.maxPayoutLabel}
+            controllerHeader={props.options.controllerHeader}
+            hideTabs={props.options.hideTabs}
           />
           <SceneContainer
             className={cn(

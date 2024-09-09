@@ -16,13 +16,12 @@ import { cn } from '../../../../utils/style';
 import { toDecimals, toFormatted } from '../../../../utils/web3';
 import { rowMultipliers } from '../../constants';
 import { PlinkoForm } from '../../types';
+import { PlinkoTemplateOptions } from '../template';
 
-interface Props {
+interface Props extends Omit<PlinkoTemplateOptions, 'scene'> {
   minWager: number;
   maxWager: number;
   onLogin?: () => void;
-  hideWager?: boolean;
-  hideTotalWagerInfo?: boolean;
 }
 
 export const ManualController: React.FC<Props> = ({
@@ -31,6 +30,8 @@ export const ManualController: React.FC<Props> = ({
   onLogin,
   hideWager,
   hideTotalWagerInfo,
+  maxPayoutLabel = 'Max Payout',
+  controllerHeader,
 }) => {
   const { submitBtnText } = useGameOptions();
   const form = useFormContext() as PlinkoForm;
@@ -54,7 +55,7 @@ export const ManualController: React.FC<Props> = ({
       <PlinkoRowFormField minValue={6} maxValue={12} />
       <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
         <div>
-          <FormLabel>Max Payout</FormLabel>
+          <FormLabel>{maxPayoutLabel}</FormLabel>
           <div
             className={cn(
               'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'

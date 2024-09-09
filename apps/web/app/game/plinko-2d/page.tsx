@@ -12,6 +12,10 @@ export default function PlinkoPage() {
           },
           // hideWager: true,
           // disableStrategy: true,
+          maxPayoutLabel: 'Max Gems',
+          controllerHeader: <div>Plinko 2D</div>,
+          hideTabs: true,
+          hideTotalWagerInfo: true,
         }}
         minWager={0.1}
         maxWager={2000}
