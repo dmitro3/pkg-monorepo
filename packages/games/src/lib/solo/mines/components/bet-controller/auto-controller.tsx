@@ -47,10 +47,27 @@ export const AutoController = ({
 
   const isDisabled = form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode;
 
-  const { updateMinesGameState } = useMinesGameStateStore(['updateMinesGameState']);
+  const { updateMinesGameState, board } = useMinesGameStateStore(['updateMinesGameState', 'board']);
 
   const { account } = useGameOptions();
 
+  const getCleanedLastBoard = () => {
+    const _board = board;
+
+    _board.forEach((v, i) => {
+      _board[i] = {
+        isRevealed: false,
+        isBomb: false,
+        isSelected: v.isSelected,
+      };
+    });
+
+    form.setValue(
+      'selectedCells',
+      _board.map((v) => v.isSelected)
+    );
+    return _board;
+  };
   return (
     <div className="wr-flex wr-flex-col">
       <WagerFormField
@@ -156,7 +173,7 @@ export const AutoController = ({
               updateMinesGameState({
                 submitType: MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT,
                 gameStatus: MINES_GAME_STATUS.IDLE,
-                board: initialBoard,
+                board: getCleanedLastBoard(),
               });
 
               setTimeout(() => {
@@ -166,20 +183,10 @@ export const AutoController = ({
               updateMinesGameState({
                 submitType: MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT,
                 gameStatus: MINES_GAME_STATUS.IDLE,
-                board: initialBoard,
+                board: getCleanedLastBoard(),
               });
 
               form.reset();
-
-              setTimeout(() => {
-                updateMinesGameState({
-                  submitType: MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT,
-                  gameStatus: MINES_GAME_STATUS.IDLE,
-                  board: initialBoard,
-                });
-
-                form.reset();
-              }, 1250);
             }
           }}
         >

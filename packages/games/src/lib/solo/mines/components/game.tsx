@@ -31,27 +31,15 @@ export const MinesGame = ({
   onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmitGameForm: (data: MinesFormField) => void;
 }) => {
-  const { updateMinesGameResults, updateGameStatus, updateMinesGameState, gameStatus } =
-    useMinesGameStateStore([
-      'updateMinesGameResults',
-      'updateGameStatus',
-      'updateMinesGameState',
-      'gameStatus',
-    ]);
+  const { updateMinesGameState, gameStatus } = useMinesGameStateStore([
+    'updateMinesGameState',
+    'gameStatus',
+  ]);
 
   const isAutoBetModeRef = React.useRef(isAutoBetMode);
-  const gameResultRef = React.useRef(gameResults);
-
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const form = useFormContext() as MinesForm;
   const betCount = form.watch('betCount');
-
-  // React.useEffect(() => {
-  //   if (gameResults.length) {
-  //     updateMinesGameResults(gameResults);
-  //     updateGameStatus(MINES_GAME_STATUS.IN_PROGRESS);
-  //   }
-  // }, [gameResults]);
 
   React.useEffect(() => {
     if (isAutoBetMode && gameStatus === MINES_GAME_STATUS.ENDED) {
@@ -60,7 +48,6 @@ export const MinesGame = ({
       });
       timeoutRef.current = setTimeout(() => {
         if (isAutoBetModeRef.current) {
-          console.log(gameResultRef.current);
           processStrategy();
           const newBetCount = betCount - 1;
           betCount !== 0 && form.setValue('betCount', betCount - 1);
@@ -82,10 +69,14 @@ export const MinesGame = ({
     isAutoBetModeRef.current = isAutoBetMode;
     if (!isAutoBetMode) {
       clearTimeout(timeoutRef.current);
+      setTimeout(() => {
+        updateMinesGameState({
+          submitType: MINES_SUBMIT_TYPE.IDLE,
+          gameStatus: MINES_GAME_STATUS.IDLE,
+        });
+      }, 1500);
     }
   }, [isAutoBetMode]);
-
-  React.useEffect(() => {}, [gameResults]);
 
   return <>{children}</>;
 };
