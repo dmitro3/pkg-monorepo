@@ -22,9 +22,12 @@ export interface SocialAccountTxRequest extends TxRequest {
   method?: 'sendUserOperation' | 'sendGameOperation';
 }
 
-export interface Web3AccountTxRequest extends TxRequest {}
+export interface Web3AccountTxRequest extends TxRequest {
+  enforceSign?: boolean;
+}
 
 export interface SendTxRequest extends TxRequest {
   method?: 'sendUserOperation' | 'sendGameOperation';
   networkId?: number;
+  enforceSign?: boolean;
 }

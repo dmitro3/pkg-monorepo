@@ -7,6 +7,7 @@ import { BetControllerContainer } from '../../../../common/containers';
 import { BetControllerTitle, WagerFormField } from '../../../../common/controller';
 import { PreBetButton } from '../../../../common/pre-bet-button';
 import { WagerCurrencyIcon } from '../../../../common/wager';
+import { useGameOptions } from '../../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import useCountdown from '../../../../hooks/use-time-left';
 // import useWheelGameStore from "../../_store/game-info-store";
@@ -16,7 +17,8 @@ import { FormControl, FormField, FormItem, FormLabel } from '../../../../ui/form
 import { cn } from '../../../../utils/style';
 import { toDecimals, toFormatted } from '../../../../utils/web3';
 import { MultiplayerGameStatus } from '../../../core/type';
-import { colorMultipliers, WheelColor } from '../../constants';
+import { colorMultipliers, participantMapWithStore, WheelColor } from '../../constants';
+import { useWheelTheme } from '../../providers/theme';
 import { useWheelGameStore } from '../../store';
 import { WheelForm } from '../../types';
 
@@ -43,6 +45,9 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
     'setIsGamblerParticipant',
   ]);
 
+  const { submitBtnText } = useGameOptions();
+  const { hideWager } = useWheelTheme();
+
   const form = useFormContext() as WheelForm;
 
   const betClickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
@@ -63,17 +68,19 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
   });
 
   return (
-    <BetControllerContainer>
+    <BetControllerContainer data-wheel-bet-controller>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
         <div className="lg:wr-mb-3">
           <BetControllerTitle>Wheel</BetControllerTitle>
         </div>
 
-        <WagerFormField
-          minWager={minWager}
-          maxWager={maxWager}
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading}
-        />
+        {!hideWager && (
+          <WagerFormField
+            minWager={minWager}
+            maxWager={maxWager}
+            isDisabled={form.formState.isSubmitting || form.formState.isLoading}
+          />
+        )}
         <div className="wr-mb-3 lg:wr-mb-6">
           <FormField
             control={form.control}
@@ -97,6 +104,9 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
                             'wr-h-full wr-w-full wr-rounded-md wr-bg-white/25 wr-text-zinc-200 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-white  data-[state=checked]:wr-text-zinc-600 wr-font-semibold'
                           )}
                           value={WheelColor.GREY}
+                          data-wheel-controller-multiplier={
+                            participantMapWithStore[WheelColor.GREY]
+                          }
                         >
                           2x
                         </Radio.Item>
@@ -109,6 +119,9 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
                             'wr-h-full wr-w-full wr-rounded-md wr-bg-blue-500/25 wr-text-blue-400 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-blue-500 data-[state=checked]:wr-text-zinc-100 wr-font-semibold'
                           )}
                           value={WheelColor.BLUE}
+                          data-wheel-controller-multiplier={
+                            participantMapWithStore[WheelColor.BLUE]
+                          }
                         >
                           3x
                         </Radio.Item>
@@ -121,6 +134,9 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
                             'wr-h-full wr-w-full wr-rounded-md wr-bg-green-500/25  wr-text-green-500 wr-transition-all wr-ease-in data-[state=checked]:wr-bg-green-500 data-[state=checked]:wr-text-zinc-100 wr-font-semibold'
                           )}
                           value={WheelColor.GREEN}
+                          data-wheel-controller-multiplier={
+                            participantMapWithStore[WheelColor.GREEN]
+                          }
                         >
                           6x
                         </Radio.Item>
@@ -133,6 +149,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
                             'wr-h-full wr-w-full wr-rounded-md wr-bg-red-600/25 wr-text-red-600  wr-transition-all wr-ease-in data-[state=checked]:wr-bg-red-600 data-[state=checked]:wr-text-zinc-100 wr-font-semibold'
                           )}
                           value={WheelColor.RED}
+                          data-wheel-controller-multiplier={participantMapWithStore[WheelColor.RED]}
                         >
                           48x
                         </Radio.Item>
@@ -181,7 +198,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
             {timeLeft >= 0 && status === MultiplayerGameStatus.Finish
               ? `Next game in ${timeLeft} seconds`
               : chosenColor !== WheelColor.IDLE
-                ? 'BET'
+                ? submitBtnText
                 : 'CHOOSE COLOR'}
           </Button>
         </PreBetButton>

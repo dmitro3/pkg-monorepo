@@ -1,5 +1,196 @@
 # @winrlabs/games
 
+## 3.0.0
+
+### Major Changes
+
+- 1ee41ee: fix roll mobile width issue
+
+## 2.17.13
+
+### Patch Changes
+
+- fdf8bd2: debug
+
+## 2.17.12
+
+### Patch Changes
+
+- 93ef4a4: custom img support for mines cell
+
+## 2.17.11
+
+### Patch Changes
+
+- bcba371: mines hideWager and hideInfo
+- 68515bb: add global bt controller indicator
+- 894bbe5: custom plinko props
+- 811dd88: max payout obj customize
+
+## 2.17.10
+
+### Patch Changes
+
+- 960de63: price feed logic
+
+## 2.17.9
+
+### Patch Changes
+
+- 29a0c98: customize games
+
+## 2.17.8
+
+### Patch Changes
+
+- a17dfae: support submitBtnText on plinko
+
+## 2.17.7
+
+### Patch Changes
+
+- 5787e65: allow set base url for reqs
+
+## 2.17.6
+
+### Patch Changes
+
+- 06b8cb9: change all game txs
+
+## 2.17.5
+
+### Patch Changes
+
+- 15e8d86: add submitBtnText custom
+
+## 2.17.4
+
+### Patch Changes
+
+- 861cde0: wrap unwrap fix
+
+## 2.17.3
+
+### Patch Changes
+
+- 2dfdc87: :wq Please enter a summary for your changes.
+
+## 2.17.2
+
+### Patch Changes
+
+- a041c51: up
+
+## 2.17.1
+
+### Patch Changes
+
+- f114b55: up
+
+## 2.17.0
+
+### Minor Changes
+
+- e064044: custom
+
+## 2.16.75
+
+### Patch Changes
+
+- e11c4a7: session err
+
+## 2.16.74
+
+### Patch Changes
+
+- 9c9fcda: update usesendtx
+
+## 2.16.73
+
+### Patch Changes
+
+- 9eb20b4: mm auth unnecessary sign fix
+
+## 2.16.72
+
+### Patch Changes
+
+- bbabd6b: bet history fix
+
+## 2.16.71
+
+### Patch Changes
+
+- dc7122d: wrap unwrap improvement
+- ed5b338: fix
+
+## 2.16.70
+
+### Patch Changes
+
+- 4bf1693: update
+
+## 2.16.69
+
+### Patch Changes
+
+- f415b7b: wrap fix
+
+## 2.16.68
+
+### Patch Changes
+
+- f8fe052: mines fix
+
+## 2.16.67
+
+### Patch Changes
+
+- 2248db1: value fix
+
+## 2.16.66
+
+### Patch Changes
+
+- a29b735: remove allowance
+
+## 2.16.65
+
+### Patch Changes
+
+- 714191f: handle holdem parse
+- b7ce907: back btn fix
+
+## 2.16.64
+
+### Patch Changes
+
+- 4078aa7: fix
+
+## 2.16.63
+
+### Patch Changes
+
+- 83202af: holdem poker mobile
+
+## 2.16.62
+
+### Patch Changes
+
+- 5cd0bc5: native balance fix
+
+## 2.16.61
+
+### Patch Changes
+
+- 29019b0: wrap unwrap
+
+## 2.16.60
+
+### Patch Changes
+
+- 37beee5: mobile height adjust for sm devices wb
+
 ## 2.16.59
 
 ### Patch Changes

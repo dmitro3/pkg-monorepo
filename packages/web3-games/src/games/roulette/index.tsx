@@ -13,12 +13,15 @@ import {
   delay,
   useCurrentAccount,
   useFastOrVerified,
-  useHandleTx,
   usePriceFeed,
+  useSendTx,
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
+  useWrapWinr,
+  WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
+import debug from 'debug';
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
@@ -32,6 +35,8 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from '../utils';
+
+const log = debug('worker:RouletteWeb3');
 
 type TemplateOptions = {
   scene?: {
@@ -98,6 +103,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
 
   const allowance = useTokenAllowance({
@@ -119,9 +125,9 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     }));
   }, [rouletteResult]);
 
-  const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
-      wager: formValues.wager,
+  const getEncodedTxData = (v: RouletteFormFields) => {
+    const { wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
+      wager: v.wager,
       stopGain: 0,
       stopLoss: 0,
       selectedCurrency: selectedToken,
@@ -135,7 +141,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
           type: 'uint8[145]',
         },
       ],
-      [formValues.selectedNumbers]
+      [v.selectedNumbers]
     );
 
     const encodedGameData = encodeAbiParameters(
@@ -149,7 +155,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
       [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
-    const encodedData: `0x${string}` = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -160,49 +166,28 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
         encodedGameData,
       ],
     });
+  };
 
-    return {
-      tokenAddress,
-      encodedGameData,
-      encodedTxData: encodedData,
-    };
-  }, [
-    formValues.selectedNumbers,
-    formValues.wager,
-    selectedToken.address,
-    priceFeed[selectedToken.priceKey],
-  ]);
-
-  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.roulette,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'bet',
-        encodedParams.encodedGameData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {
-      method: 'sendGameOperation',
-    },
-    encodedTxData: encodedParams.encodedTxData,
-  });
-
+  const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
+  const isReIterableRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
-  }, [isPlayerHalted]);
+    isReIterableRef.current = isReIterable;
+  }, [isPlayerHalted, isReIterable]);
 
-  const onGameSubmit = async (f: RouletteFormFields, errorCount = 0) => {
+  const wrapWinrTx = useWrapWinr({
+    account: currentAccount.address || '0x',
+  });
+
+  const onGameSubmit = async (v: RouletteFormFields, errorCount = 0) => {
+    if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
+
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log('error', e);
+          log('error', e);
         },
       });
 
@@ -211,17 +196,21 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterable) await playerReIterate();
+      if (isReIterableRef.current) await playerReIterate();
 
-      await handleTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedTxData(v),
+        target: controllerAddress,
+        method: 'sendGameOperation',
+      });
     } catch (e: any) {
-      console.log('error', e);
+      log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
 
       if (errorCount < 3) {
         await delay(150);
-        onGameSubmit(f, errorCount + 1);
+        onGameSubmit(v, errorCount + 1);
       }
     }
   };
@@ -249,7 +238,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
       if (!currentStepResult) return;
 
-      console.log('step', rouletteResult?.program?.[0]?.data);
+      log('step', rouletteResult?.program?.[0]?.data);
 
       const isWon = currentStepResult.win;
 
@@ -310,9 +299,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
         onSubmitGameForm={onGameSubmit}
         gameResults={rouletteSteps || []}
         onAnimationCompleted={onGameCompleted}
-        onFormChange={(val) => {
-          setFormValues(val);
-        }}
+        onFormChange={setFormValues}
         onAnimationStep={onAnimationStep}
         onAnimationSkipped={onAnimationSkipped}
       />

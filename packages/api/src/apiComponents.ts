@@ -1008,54 +1008,6 @@ export const useBankrollControllerUpdateSingleSidedPoolsNotify = <TData = undefi
   );
 };
 
-export type BankrollControllerGetWagerInfoError = Fetcher.ErrorWrapper<undefined>;
-
-export type BankrollControllerGetWagerInfoResponse = Schemas.WagerResponse[];
-
-export type BankrollControllerGetWagerInfoVariables = ApiContext['fetcherOptions'];
-
-export const fetchBankrollControllerGetWagerInfo = (
-  variables: BankrollControllerGetWagerInfoVariables,
-  signal?: AbortSignal
-) =>
-  apiFetch<
-    BankrollControllerGetWagerInfoResponse,
-    BankrollControllerGetWagerInfoError,
-    undefined,
-    {},
-    {},
-    {}
-  >({ url: '/bankroll/wager-info', method: 'get', ...variables, signal });
-
-export const useBankrollControllerGetWagerInfo = <TData = BankrollControllerGetWagerInfoResponse,>(
-  variables: BankrollControllerGetWagerInfoVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<
-      BankrollControllerGetWagerInfoResponse,
-      BankrollControllerGetWagerInfoError,
-      TData
-    >,
-    'queryKey' | 'queryFn' | 'initialData'
-  >
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<
-    BankrollControllerGetWagerInfoResponse,
-    BankrollControllerGetWagerInfoError,
-    TData
-  >({
-    queryKey: queryKeyFn({
-      path: '/bankroll/wager-info',
-      operationId: 'bankrollControllerGetWagerInfo',
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchBankrollControllerGetWagerInfo({ ...fetcherOptions, ...variables }, signal),
-    ...options,
-    ...queryOptions,
-  });
-};
-
 export type BankrollControllerGetSingleSidedPoolsQueryParams = {
   /**
    * comma separated
@@ -1991,45 +1943,45 @@ export const useBadgeControllerWeeklyClaimer = (
   });
 };
 
-export type RewardControllerSummaryQueryParams = {
+export type RewardControllerContestQueryParams = {
   player?: string;
 };
 
-export type RewardControllerSummaryError = Fetcher.ErrorWrapper<undefined>;
+export type RewardControllerContestError = Fetcher.ErrorWrapper<undefined>;
 
-export type RewardControllerSummaryVariables = {
-  queryParams?: RewardControllerSummaryQueryParams;
+export type RewardControllerContestVariables = {
+  queryParams?: RewardControllerContestQueryParams;
 } & ApiContext['fetcherOptions'];
 
-export const fetchRewardControllerSummary = (
-  variables: RewardControllerSummaryVariables,
+export const fetchRewardControllerContest = (
+  variables: RewardControllerContestVariables,
   signal?: AbortSignal
 ) =>
   apiFetch<
     Schemas.RewardSummary,
-    RewardControllerSummaryError,
+    RewardControllerContestError,
     undefined,
     {},
-    RewardControllerSummaryQueryParams,
+    RewardControllerContestQueryParams,
     {}
-  >({ url: '/reward/summary', method: 'get', ...variables, signal });
+  >({ url: '/reward/contest', method: 'get', ...variables, signal });
 
-export const useRewardControllerSummary = <TData = Schemas.RewardSummary,>(
-  variables: RewardControllerSummaryVariables,
+export const useRewardControllerContest = <TData = Schemas.RewardSummary,>(
+  variables: RewardControllerContestVariables,
   options?: Omit<
-    reactQuery.UseQueryOptions<Schemas.RewardSummary, RewardControllerSummaryError, TData>,
+    reactQuery.UseQueryOptions<Schemas.RewardSummary, RewardControllerContestError, TData>,
     'queryKey' | 'queryFn' | 'initialData'
   >
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useApiContext(options);
-  return reactQuery.useQuery<Schemas.RewardSummary, RewardControllerSummaryError, TData>({
+  return reactQuery.useQuery<Schemas.RewardSummary, RewardControllerContestError, TData>({
     queryKey: queryKeyFn({
-      path: '/reward/summary',
-      operationId: 'rewardControllerSummary',
+      path: '/reward/contest',
+      operationId: 'rewardControllerContest',
       variables,
     }),
     queryFn: ({ signal }) =>
-      fetchRewardControllerSummary({ ...fetcherOptions, ...variables }, signal),
+      fetchRewardControllerContest({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
@@ -2290,11 +2242,6 @@ export type QueryOperation =
       variables: BankrollControllerUpdateSingleSidedPoolsNotifyVariables;
     }
   | {
-      path: '/bankroll/wager-info';
-      operationId: 'bankrollControllerGetWagerInfo';
-      variables: BankrollControllerGetWagerInfoVariables;
-    }
-  | {
       path: '/bankroll/single-sided-pools';
       operationId: 'bankrollControllerGetSingleSidedPools';
       variables: BankrollControllerGetSingleSidedPoolsVariables;
@@ -2360,9 +2307,9 @@ export type QueryOperation =
       variables: ReferralControllerCodesVolumeAndRewardAmountsVariables;
     }
   | {
-      path: '/reward/summary';
-      operationId: 'rewardControllerSummary';
-      variables: RewardControllerSummaryVariables;
+      path: '/reward/contest';
+      operationId: 'rewardControllerContest';
+      variables: RewardControllerContestVariables;
     }
   | {
       path: '/stake/summary';

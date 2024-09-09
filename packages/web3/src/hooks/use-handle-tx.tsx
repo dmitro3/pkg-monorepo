@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
+import debug from 'debug';
 import {
   Abi,
   Address,
@@ -14,10 +15,14 @@ import { Config, useSwitchChain } from 'wagmi';
 import { WriteContractVariables } from 'wagmi/query';
 
 import { SimpleAccountAPI } from '../smart-wallet';
+import { ErrorCode, mmAuthSessionErr, mmAuthSignErrors } from '../utils/error-codes';
+import { useCreateSession, useSessionStore } from './session';
 import { useBundlerClient, WinrBundlerClient } from './use-bundler-client';
 import { useCurrentAccount } from './use-current-address';
 import { useSmartAccountApi } from './use-smart-account-api';
-import { useCreateSession, useSessionStore } from './session';
+import { delay } from './use-token-allowance';
+
+const log = debug('worker:UseHandleTx');
 
 export interface UseHandleTxOptions {
   successMessage?: string;
@@ -76,7 +81,7 @@ export const useHandleTx = <
   const { method = 'sendUserOperation' } = options;
   const { address, isSocialLogin, rootAddress } = useCurrentAccount();
   const { accountApi: defaultAccountApi } = useSmartAccountApi();
-  const { client: defaultClient } = useBundlerClient();
+  const { client: defaultClient, globalChainId } = useBundlerClient();
   const { switchChainAsync } = useSwitchChain();
 
   const createSession = useCreateSession();
@@ -84,7 +89,8 @@ export const useHandleTx = <
   const sessionStore = useSessionStore();
   const handleTxMutation = useMutation({
     mutationFn: async (params: { networkId?: number } | void) => {
-      const networkId = params && 'networkId' in params ? params.networkId : 777777;
+      const networkId =
+        params && 'networkId' in params ? params.networkId : globalChainId || 777777;
 
       if (!address && options.unauthRedirectionCb) {
         options.unauthRedirectionCb();
@@ -130,7 +136,7 @@ export const useHandleTx = <
         };
 
         let retryCount = 0;
-        const maxRetries = 1;
+        const maxRetries = 3;
 
         const makeRequest = async () => {
           try {
@@ -138,18 +144,25 @@ export const useHandleTx = <
               call: {
                 dest: writeContractVariables.address as Address,
                 data: encodedData,
-                value: 0,
+                value: Number(writeContractVariables.value || 0),
               },
               owner: rootAddress!,
               part: _part ?? '0x',
               permit: _permit ?? '0x',
             });
-          } catch (error) {
+          } catch (error: any) {
             if (retryCount < maxRetries) {
               retryCount++;
               // If the first attempt fails, get a new session and try again
-              ({ part: _part, permit: _permit } = await getNewSession());
-              return makeRequest();
+              if (
+                error?.code !== ErrorCode.InvalidNonce &&
+                (mmAuthSignErrors.includes(error?.message) ||
+                  error?.message?.includes(mmAuthSessionErr))
+              ) {
+                ({ part: _part, permit: _permit } = await getNewSession());
+              }
+              await delay(200);
+              return await makeRequest();
             } else {
               throw error; // Rethrow the error if max retries reached
             }
@@ -191,9 +204,9 @@ export const useHandleTx = <
         accountApi && (await accountApi.refreshNonce());
         throw new Error(status);
       } else {
-        console.log(accountApi?.cachedNonce, 'cached nonce');
+        log(accountApi?.cachedNonce, 'cached nonce');
         accountApi?.cachedNonce && accountApi.increaseNonce();
-        console.log(accountApi?.cachedNonce, 'cached nonce updated');
+        log(accountApi?.cachedNonce, 'cached nonce updated');
       }
 
       return { status, hash };

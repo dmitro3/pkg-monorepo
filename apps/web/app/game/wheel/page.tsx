@@ -1,12 +1,19 @@
-"use client";
+'use client';
 
-import { LiveResults, Web3GamesModals, WheelGame } from "@winrlabs/web3-games";
+import { LiveResults, Web3GamesModals, WheelGame } from '@winrlabs/web3-games';
 
 export default function WheelPage() {
   return (
     <>
-      <WheelGame minWager={0.1} maxWager={2000} options={{}} />;
-      <LiveResults />
+      <WheelGame
+        minWager={1}
+        maxWager={1}
+        theme={{
+          wheelBackground: '#000',
+          // hideWager: true,
+        }}
+      />
+      ;
       <Web3GamesModals />
     </>
   );

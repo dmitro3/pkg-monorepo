@@ -14,6 +14,7 @@ import { toDecimals } from '../../../utils/web3';
 import { Mines } from '..';
 import { initialBoard, MINES_MODES } from '../constants';
 import mineMultipliers from '../constants/mines-multipliers.json';
+import { MinesTheme, MinesThemeProvider } from '../provider/theme';
 import { useMinesGameStateStore } from '../store';
 import { FormSetValue, MINES_GAME_STATUS, MinesFormField, MinesGameResult } from '../types';
 import { MinesGameProps } from './game';
@@ -27,6 +28,7 @@ type TemplateProps = MinesGameProps & {
   onLogin?: () => void;
   onError?: (error: string) => void;
   gameResults: MinesGameResult[];
+  theme?: Partial<MinesTheme>;
 };
 
 const MinesTemplate = ({ ...props }: TemplateProps) => {
@@ -44,7 +46,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   const formSchema = z.object({
     wager: z
       .number()
-      .min(props?.minWager || 1, {
+      .min(props?.minWager || 0.01, {
         message: `Minimum wager is $${props?.minWager}`,
       })
       .max(props?.maxWager || 2000, {
@@ -65,7 +67,7 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: 'all',
     defaultValues: {
-      wager: props?.minWager || 1,
+      wager: 1,
       minesCount: 1,
       selectedCells: initialBoard.map((mine) => mine.isSelected),
       betCount: 0,
@@ -168,7 +170,9 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   const balanceAsDollar = account?.balanceAsDollar || 0;
 
   const processStrategy = () => {
-    const payout = currentCashoutAmount || 0;
+    const payout = props.gameResults[0]?.payout || 0;
+    console.log(props.gameResults, 'gamesrult');
+
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
     const currentBalance = balanceAsDollar - wager + payout;
@@ -201,39 +205,41 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
-        <GameContainer>
-          <Mines.Game
-            {...props}
-            processStrategy={processStrategy}
-            isAutoBetMode={isAutoBetMode}
-            onAutoBetModeChange={setIsAutoBetMode}
-          >
-            <Mines.Controller
+    <MinesThemeProvider theme={props.theme || {}}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
+          <GameContainer>
+            <Mines.Game
               {...props}
-              currentCashoutAmount={currentCashoutAmount}
-              maxWager={props?.maxWager || 2000}
-              minWager={props?.minWager || 2}
-              currentMultiplier={currentMultiplier}
+              processStrategy={processStrategy}
               isAutoBetMode={isAutoBetMode}
               onAutoBetModeChange={setIsAutoBetMode}
-              mode={mode}
-              onModeChange={setMode}
-              onGameSubmit={props.onSubmitGameForm}
-            />
-            <SceneContainer className="lg:wr-h-[740px] lg:wr-py-10 max-lg:!wr-border-0 max-lg:!wr-p-0">
-              <Mines.Scene
+            >
+              <Mines.Controller
+                {...props}
+                currentCashoutAmount={currentCashoutAmount}
+                maxWager={props?.maxWager || 2000}
+                minWager={props?.minWager || 2}
                 currentMultiplier={currentMultiplier}
-                isLoading={props.isLoading}
                 isAutoBetMode={isAutoBetMode}
+                onAutoBetModeChange={setIsAutoBetMode}
+                mode={mode}
+                onModeChange={setMode}
+                onGameSubmit={props.onSubmitGameForm}
               />
-              <WinAnimation />
-            </SceneContainer>
-          </Mines.Game>
-        </GameContainer>
-      </form>
-    </Form>
+              <SceneContainer className="lg:wr-h-[740px] lg:wr-py-10 max-lg:!wr-border-0 max-lg:!wr-p-0">
+                <Mines.Scene
+                  currentMultiplier={currentMultiplier}
+                  isLoading={props.isLoading}
+                  isAutoBetMode={isAutoBetMode}
+                />
+                <WinAnimation />
+              </SceneContainer>
+            </Mines.Game>
+          </GameContainer>
+        </form>
+      </Form>
+    </MinesThemeProvider>
   );
 };
 

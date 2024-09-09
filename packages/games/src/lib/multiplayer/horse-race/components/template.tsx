@@ -54,7 +54,7 @@ const HorseRaceTemplate = (props: TemplateProps) => {
     }),
     mode: 'all',
     defaultValues: {
-      wager: props?.minWager || 1,
+      wager: 1,
       horse: Horse.IDLE,
     },
   });

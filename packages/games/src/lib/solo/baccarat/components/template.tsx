@@ -114,7 +114,7 @@ const BaccaratTemplate: React.FC<TemplateProps> = ({
       async: true,
     }),
     defaultValues: {
-      wager: minWager || 1,
+      wager: 1,
       playerWager: 0,
       bankerWager: 0,
       tieWager: 0,

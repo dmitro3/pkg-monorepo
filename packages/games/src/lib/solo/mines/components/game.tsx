@@ -10,6 +10,7 @@ import {
   MinesGameResult,
   MinesGameResultOnComplete,
 } from '../types';
+import { initialBoard } from '../constants';
 
 export type MinesGameProps = React.ComponentProps<'div'> & {
   gameResults: MinesGameResult[];
@@ -39,6 +40,7 @@ export const MinesGame = ({
     ]);
 
   const isAutoBetModeRef = React.useRef(isAutoBetMode);
+  const gameResultRef = React.useRef(gameResults);
 
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const form = useFormContext() as MinesForm;
@@ -54,10 +56,11 @@ export const MinesGame = ({
   React.useEffect(() => {
     if (isAutoBetMode && gameStatus === MINES_GAME_STATUS.ENDED) {
       updateMinesGameState({
-        submitType: MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT,
+        submitType: MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT,
       });
       timeoutRef.current = setTimeout(() => {
         if (isAutoBetModeRef.current) {
+          console.log(gameResultRef.current);
           processStrategy();
           const newBetCount = betCount - 1;
           betCount !== 0 && form.setValue('betCount', betCount - 1);
@@ -77,8 +80,12 @@ export const MinesGame = ({
 
   React.useEffect(() => {
     isAutoBetModeRef.current = isAutoBetMode;
-    if (!isAutoBetMode) clearTimeout(timeoutRef.current);
+    if (!isAutoBetMode) {
+      clearTimeout(timeoutRef.current);
+    }
   }, [isAutoBetMode]);
+
+  React.useEffect(() => {}, [gameResults]);
 
   return <>{children}</>;
 };

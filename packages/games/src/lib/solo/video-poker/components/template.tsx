@@ -72,7 +72,7 @@ const VideoPokerTemplate = ({
     }),
     mode: 'onSubmit',
     defaultValues: {
-      wager: minWager || 1,
+      wager: 1,
       cardsToSend: [
         CardStatus.CLOSED,
         CardStatus.CLOSED,
@@ -96,8 +96,6 @@ const VideoPokerTemplate = ({
     });
 
     if (status === VideoPokerStatus.Dealt) {
-      console.log('values', values.cardsToSend);
-
       await handleFinishGame(values);
     } else {
       await handleStartGame(values);

@@ -39,6 +39,7 @@ export const BetControllerContainer: React.FC<Props> = ({ children, className })
         'wr-flex wr-flex-shrink-0 wr-flex-col wr-justify-between wr-rounded-lg wr-bg-zinc-900 wr-bg-opacity-70 wr-px-4 wr-py-3 lg:wr-py-3 lg:wr-w-[340px]',
         className
       )}
+      data-bet-controller
     >
       {children}
     </section>

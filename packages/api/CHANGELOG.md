@@ -1,5 +1,17 @@
 # @winrlabs/api
 
+## 1.4.1
+
+### Patch Changes
+
+- 5787e65: allow set base url for reqs
+
+## 1.4.0
+
+### Minor Changes
+
+- e064044: custom
+
 ## 1.3.7
 
 ### Patch Changes

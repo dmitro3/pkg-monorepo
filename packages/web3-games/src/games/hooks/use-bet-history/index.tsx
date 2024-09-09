@@ -3,13 +3,13 @@
 import {
   baseUrl,
   GameControllerGlobalBetHistoryResponse,
-  useGameControllerGlobalBetHistory,
   useGameControllerBetHistory,
+  useGameControllerGlobalBetHistory,
 } from '@winrlabs/api';
 import { GameType } from '@winrlabs/games';
 import { BetHistoryCurrencyList, BetHistoryFilter } from '@winrlabs/games';
 import { useCurrentAccount, useTokenStore } from '@winrlabs/web3';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface IUseBetHistory {
   gameType: GameType;
@@ -35,16 +35,11 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
 
   const { data: initialData, isLoading } = useGameControllerGlobalBetHistory(
     {
-      queryParams:
-        filter.type === 'player'
-          ? {
-              player: address,
-              ...defaultParams,
-            }
-          : defaultParams,
+      queryParams: defaultParams,
     },
     {
       enabled: options?.enabled,
+      retry: false,
     }
   );
 
@@ -100,7 +95,8 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
           : defaultParams,
     },
     {
-      enabled: options?.enabled,
+      enabled: options?.enabled && filter.type == 'player' && !!address,
+      retry: false,
       refetchInterval: 7500,
     }
   );
@@ -126,7 +122,7 @@ export const useBetHistory = ({ gameType, options }: IUseBetHistory) => {
     historyFilter: filter,
     setHistoryFilter: setFilter,
     refetchHistory: () => {
-      refetchMyBets();
+      filter.type == 'player' && refetchMyBets();
     },
   };
 };

@@ -3,6 +3,7 @@
 import React from 'react';
 import { Unity } from 'react-unity-webgl';
 import { useDebounce } from 'use-debounce';
+import * as Progress from '@radix-ui/react-progress';
 
 import { UnityGameContainer } from '../../common/containers';
 import { useGameOptions } from '../../game-provider';
@@ -11,6 +12,8 @@ import { toDecimals, toFormatted } from '../../utils/web3';
 import { useUnityBonanza } from './hooks/use-bonanza-unity';
 import { useBonanzaGameStore } from './store';
 import { Bonanza_Unity_Events, ReelSpinSettled, SpinType, WinrBonanzaFormFields } from './types';
+import { CDN_URL } from '../../constants';
+import debug from 'debug';
 
 interface TemplateProps {
   onRefresh: () => void;
@@ -41,6 +44,8 @@ const unityEventDefaultValue: UnityEventData = {
   name: '',
   strParam: '',
 };
+
+const log = debug('worker:WinrBonanzaTemplate');
 
 export const WinrBonanzaTemplate = ({
   onRefresh,
@@ -94,6 +99,7 @@ export const WinrBonanzaTemplate = ({
   const [isInAutoPlay, setIsInAutoPlay] = React.useState(false);
   const [initialBuyEvent, setInitialBuyEvent] = React.useState<any>(undefined);
   const [wonFreeSpins, setWonFreeSpins] = React.useState(false);
+  const percentageRef = React.useRef(0);
 
   const [currentAction, setCurrentAction] = React.useState<
     'submit' | 'initialAutoplay' | 'buyFeature' | 'freeSpin' | 'autoPlay'
@@ -103,6 +109,10 @@ export const WinrBonanzaTemplate = ({
     () => account?.balanceAsDollar || 0,
     [account?.balanceAsDollar]
   );
+
+  React.useEffect(() => {
+    percentageRef.current = loadingProgression * 100;
+  }, [loadingProgression]);
 
   const actualBetAmount = isDoubleChance ? betAmount + betAmount * 0.5 : betAmount;
 
@@ -124,7 +134,7 @@ export const WinrBonanzaTemplate = ({
         }
 
         if (obj.name === 'M3_OnActiveAutoSpinMode') {
-          console.log('ACTIVATE AUTOPLAY');
+          log('ACTIVATE AUTOPLAY');
 
           handleInitialAutoPlay();
 
@@ -132,7 +142,7 @@ export const WinrBonanzaTemplate = ({
         }
 
         if (obj.name === 'M3_ScatterMatch') {
-          console.log('SCATTER MATCH');
+          log('SCATTER MATCH');
 
           if (currentAction == 'buyFeature') {
             handleEnterFreespinWithoutScatter();
@@ -152,7 +162,7 @@ export const WinrBonanzaTemplate = ({
         }
 
         if (obj.name === 'M3_OnDeactiveAutoSpinMode') {
-          console.log('DEACTIVATE AUTOPLAY');
+          log('DEACTIVATE AUTOPLAY');
 
           setIsInAutoPlay(false);
         }
@@ -168,9 +178,9 @@ export const WinrBonanzaTemplate = ({
         }
 
         if (obj.name === Bonanza_Unity_Events.DOUBLE_CHANCE_CLICK) {
-          console.log('DOUBLE CHANCE CLICK', obj.strParam);
+          log('DOUBLE CHANCE CLICK', obj.strParam);
 
-          console.log('DOUBLE CHANCE CLICK VAL', obj.strParam === 'true');
+          log('DOUBLE CHANCE CLICK VAL', obj.strParam === 'true');
 
           setIsDoubleChance(obj.strParam === 'true');
         }
@@ -180,7 +190,7 @@ export const WinrBonanzaTemplate = ({
         } */
 
         if (obj.name === Bonanza_Unity_Events.GRID_ANIMATION_FINISHED) {
-          console.log('GRID ANIMATION FINISHED');
+          log('GRID ANIMATION FINISHED');
 
           if (isInFreeSpinMode) {
             sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SetFreeSpinCount|${freeSpins}`);
@@ -203,7 +213,7 @@ export const WinrBonanzaTemplate = ({
               handleFreespin();
             }
           } else if (isInAutoPlay && !wonFreeSpins) {
-            console.log('GRID ANIMATION FINISHED AND CALLED AUTOPLAY');
+            log('GRID ANIMATION FINISHED AND CALLED AUTOPLAY');
 
             handleAutoPlay();
           } else if (!wonFreeSpins) {
@@ -282,7 +292,7 @@ export const WinrBonanzaTemplate = ({
   );
 
   const handleFreespin = async () => {
-    console.log('FREESPIN');
+    log('FREESPIN');
     await wait(300);
     setCurrentPayoutAmount(0);
     setWonFreeSpins(false);
@@ -354,7 +364,7 @@ export const WinrBonanzaTemplate = ({
   };
 
   const handleInitialAutoPlay = async () => {
-    console.log('INITIAL AUTOPLAY');
+    log('INITIAL AUTOPLAY');
 
     setInitialBuyEvent(undefined);
 
@@ -379,7 +389,7 @@ export const WinrBonanzaTemplate = ({
       handleSendGrid(gameEvent.grid);
 
       onFormChange({ betAmount, actualBetAmount, isDoubleChance });
-      console.log('SUBMIT gameEvent', gameEvent);
+      log('SUBMIT gameEvent', gameEvent);
 
       if (gameEvent.freeSpinsLeft > 0) {
         setWonFreeSpins(true);
@@ -390,7 +400,7 @@ export const WinrBonanzaTemplate = ({
       if (gameEvent.payoutMultiplier > 0) {
         let _wager = gameEvent.betAmount;
 
-        console.log('betamount', gameEvent.betAmount);
+        log('betamount', gameEvent.betAmount);
 
         if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
           _wager = (gameEvent.betAmount * 2) / 3;
@@ -398,7 +408,7 @@ export const WinrBonanzaTemplate = ({
           _wager = gameEvent.betAmount;
         }
 
-        console.log('WAGER', _wager);
+        log('WAGER', _wager);
 
         const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
@@ -417,8 +427,8 @@ export const WinrBonanzaTemplate = ({
         window.GetMessageFromUnity = handleMessageFromUnity;
       }
 
-      console.log('buy feature event', gameEvent.grid);
-      console.log('grid', JSON.stringify(gameEvent.grid).replace(/,/g, ', '));
+      log('buy feature event', gameEvent.grid);
+      log('grid', JSON.stringify(gameEvent.grid).replace(/,/g, ', '));
 
       sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SpinClickAction`);
 
@@ -446,9 +456,9 @@ export const WinrBonanzaTemplate = ({
 
       sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SpinClickAction`);
 
-      console.log('free spin event', gameEvent);
+      log('free spin event', gameEvent);
 
-      console.log('grid', JSON.stringify(gameEvent.grid).replace(/,/g, ', '));
+      log('grid', JSON.stringify(gameEvent.grid).replace(/,/g, ', '));
 
       handleSendGrid(gameEvent.grid);
 
@@ -464,7 +474,7 @@ export const WinrBonanzaTemplate = ({
     }
 
     if (currentAction == 'autoPlay' && gameEvent?.type == 'Game') {
-      console.log('AUTOPLAY SUCCESS');
+      log('AUTOPLAY SUCCESS');
 
       if (
         !window.GetMessageFromUnity ||
@@ -487,7 +497,7 @@ export const WinrBonanzaTemplate = ({
       if (gameEvent.payoutMultiplier > 0) {
         let _wager = gameEvent.betAmount;
 
-        console.log('betamount', gameEvent.betAmount);
+        log('betamount', gameEvent.betAmount);
 
         if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
           _wager = (gameEvent.betAmount * 2) / 3;
@@ -495,7 +505,7 @@ export const WinrBonanzaTemplate = ({
           _wager = gameEvent.betAmount;
         }
 
-        console.log('WAGER', _wager);
+        log('WAGER', _wager);
 
         const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
@@ -516,7 +526,7 @@ export const WinrBonanzaTemplate = ({
 
       sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SpinClickAction`);
 
-      console.log('INITIAL AUTOPLAY RESULT');
+      log('INITIAL AUTOPLAY RESULT');
 
       handleSendGrid(gameEvent.grid);
 
@@ -529,7 +539,7 @@ export const WinrBonanzaTemplate = ({
       if (gameEvent.payoutMultiplier > 0) {
         let _wager = gameEvent.betAmount;
 
-        console.log('betamount', gameEvent.betAmount);
+        log('betamount', gameEvent.betAmount);
 
         if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
           _wager = (gameEvent.betAmount * 2) / 3;
@@ -537,7 +547,7 @@ export const WinrBonanzaTemplate = ({
           _wager = gameEvent.betAmount;
         }
 
-        console.log('WAGER', _wager);
+        log('WAGER', _wager);
 
         const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
 
@@ -619,7 +629,7 @@ export const WinrBonanzaTemplate = ({
     [betAmount, actualBetAmount, isDoubleChance]
   );
 
-  const debouncedFormFields = useDebounce(formFields, 400);
+  const debouncedFormFields = useDebounce(formFields, 0);
 
   React.useEffect(() => {
     onFormChange(debouncedFormFields[0]);
@@ -628,6 +638,45 @@ export const WinrBonanzaTemplate = ({
   return (
     <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[672px]">
       <div className="wr-w-full max-lg:wr-border-b  max-lg:wr-border-zinc-800">
+        {percentageRef.current !== 100 && (
+          <div className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-flex wr-h-full wr-w-full wr-flex-col wr-items-center wr-justify-center wr-gap-4">
+            <img
+              src={`${CDN_URL}/winr-bonanza/loader.jpg`}
+              className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-h-full wr-w-full wr-rounded-md wr-object-cover"
+            />
+            <span
+              style={{
+                textShadow: '0 0 5px black, 0 0 5px black',
+              }}
+              className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
+            >
+              {toFormatted(percentageRef.current, 2)} %
+            </span>
+            <Progress.Root
+              className="wr-radius-[1000px] wr-relative wr-z-50 wr-h-[25px] wr-w-[320px] wr-overflow-hidden wr-rounded-md wr-bg-black"
+              style={{
+                transform: 'translateZ(0)',
+              }}
+              value={percentageRef.current}
+            >
+              <Progress.Indicator
+                className="wr-h-full wr-w-full wr-bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400"
+                style={{
+                  transform: `translateX(-${100 - percentageRef.current}%)`,
+                  transition: 'transform 660ms cubic-bezier(0.65, 0, 0.35, 1)',
+                }}
+              />
+            </Progress.Root>
+            <span
+              style={{
+                textShadow: '0 0 5px black, 0 0 5px black',
+              }}
+              className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
+            >
+              WINR Bonanza
+            </span>
+          </div>
+        )}
         <Unity
           unityProvider={unityProvider}
           devicePixelRatio={2}

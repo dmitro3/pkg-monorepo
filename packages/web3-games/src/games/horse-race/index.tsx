@@ -15,13 +15,16 @@ import {
 import {
   controllerAbi,
   useCurrentAccount,
-  useHandleTx,
   usePriceFeed,
+  useSendTx,
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
+  useWrapWinr,
+  WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
-import React, { useEffect, useMemo, useState } from 'react';
+import debug from 'debug';
+import React, { useEffect, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
 import { BaseGameProps } from '../../type';
@@ -34,6 +37,8 @@ import {
 } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { GAME_HUB_GAMES, prepareGameTransaction } from '../utils';
+
+const log = debug('worker:HorseRaceWeb3');
 
 type TemplateOptions = {
   scene?: {
@@ -110,11 +115,12 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
     onPlayerStatusUpdate: props.onPlayerStatusUpdate,
   });
 
-  console.log('gameEvent', gameEvent);
+  log('gameEvent', gameEvent);
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
 
   const allowance = useTokenAllowance({
@@ -127,8 +133,8 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
 
   const { priceFeed } = usePriceFeed();
 
-  const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei } = prepareGameTransaction({
+  const getEncodedBetTxData = () => {
+    const { wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
       stopGain: 0,
       stopLoss: 0,
@@ -144,7 +150,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       [wagerInWei, formValues.horse as any]
     );
 
-    const encodedData: `0x${string}` = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -155,41 +161,10 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
         encodedGameData,
       ],
     });
+  };
 
-    return {
-      tokenAddress,
-      encodedGameData,
-      encodedTxData: encodedData,
-    };
-  }, [
-    formValues?.horse,
-    formValues?.wager,
-    priceFeed[selectedToken.priceKey],
-    selectedToken.address,
-  ]);
-
-  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.horseRace,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'bet',
-        encodedParams.encodedGameData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {
-      method: 'sendGameOperation',
-    },
-    encodedTxData: encodedParams.encodedTxData,
-  });
-
-  const encodedClaimParams = useMemo(() => {
+  const getEncodedClaimTxData = () => {
     const encodedChoice = encodeAbiParameters([], []);
-
     const encodedParams = encodeAbiParameters(
       [
         { name: 'address', type: 'address' },
@@ -209,7 +184,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
       ]
     );
 
-    const encodedClaimData: `0x${string}` = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -220,61 +195,52 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
         encodedParams,
       ],
     });
+  };
 
-    return {
-      encodedClaimData,
-      encodedClaimTxData: encodedClaimData,
-      currentAccount,
-    };
-  }, [formValues.horse, formValues.wager, selectedToken.bankrollIndex]);
-
-  const handleClaimTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.horseRace,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'claim',
-        encodedClaimParams.encodedClaimData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {},
-    encodedTxData: encodedClaimParams.encodedClaimTxData,
-  });
-
+  const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
   }, [isPlayerHalted]);
 
+  const wrapWinrTx = useWrapWinr({
+    account: currentAccount.address || '0x',
+  });
+
   const onGameSubmit = async () => {
+    if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
+
     clearLiveResults();
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log('error', e);
+          log('error', e);
         },
       });
 
       if (!handledAllowance) return;
     }
 
-    console.log('submit');
+    log('submit');
     try {
-      await handleClaimTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedClaimTxData(),
+        target: controllerAddress,
+      });
     } catch (error) {}
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
-      await handleTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedBetTxData(),
+        target: controllerAddress,
+        method: 'sendGameOperation',
+      });
     } catch (e: any) {
-      console.log('error', e);
+      log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
     }
@@ -283,7 +249,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
   useEffect(() => {
     if (!gameEvent) return;
 
-    console.log('gameEvent:', gameEvent);
+    log('gameEvent:', gameEvent);
 
     const currentTime = new Date().getTime() / 1000;
 
@@ -393,9 +359,7 @@ const HorseRaceGame = (props: TemplateWithWeb3Props) => {
         buildedGameUrl={props.buildedGameUrl}
         onSubmitGameForm={onGameSubmit}
         onComplete={onGameCompleted}
-        onFormChange={(val) => {
-          setFormValues(val);
-        }}
+        onFormChange={setFormValues}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

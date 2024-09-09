@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { LiveResults, PlinkoGame, Web3GamesModals } from "@winrlabs/web3-games";
+import { LiveResults, PlinkoGame, Web3GamesModals } from '@winrlabs/web3-games';
 
 export default function PlinkoPage() {
   return (
@@ -8,8 +8,17 @@ export default function PlinkoPage() {
       <PlinkoGame
         options={{
           scene: {
-            backgroundImage: "url(/plinko.png)",
+            backgroundImage: 'url(/plinko.png)',
           },
+          // hideWager: true,
+          // disableStrategy: true,
+          maxPayout: {
+            label: 'Max Gems',
+            icon: '/custom/mines/rev-gem.png',
+          },
+          controllerHeader: <div>Plinko 2D</div>,
+          hideTabs: true,
+          hideTotalWagerInfo: true,
         }}
         minWager={0.1}
         maxWager={2000}

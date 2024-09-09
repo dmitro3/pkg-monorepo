@@ -14,15 +14,31 @@ import { MIN_BET_COUNT } from '../constants';
 import { PlinkoFormFields, PlinkoGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { PlinkoGameProps } from './game';
+import debug from 'debug';
 
-type TemplateOptions = {
+const log = debug('worker:PlinkoTemplate');
+
+export type PlinkoTemplateOptions = {
   scene?: {
     backgroundImage?: string;
+    backgroundColor?: string;
   };
+  hideWager?: boolean;
+  disableAuto?: boolean;
+  disableStrategy?: boolean;
+  hideTotalWagerInfo?: boolean;
+
+  maxPayout?: {
+    label?: string;
+    icon?: string;
+  };
+
+  controllerHeader?: React.ReactNode;
+  hideTabs?: boolean;
 };
 
 type TemplateProps = PlinkoGameProps & {
-  options: TemplateOptions;
+  options: PlinkoTemplateOptions;
   minWager?: number;
   maxWager?: number;
   onSubmitGameForm: (data: PlinkoFormFields) => void;
@@ -60,7 +76,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: 'onSubmit',
     defaultValues: {
-      wager: props?.minWager || 1,
+      wager: 1,
       betCount: 0,
       stopGain: 0,
       stopLoss: 0,
@@ -98,7 +114,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
 
   const processStrategy = (result: PlinkoGameResult[]) => {
     const payout = result[0]?.payoutInUsd || 0;
-    console.log(result, 'result');
+    log(result, 'result');
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
     const currentBalance = balanceAsDollar - wager + payout;
@@ -140,6 +156,13 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
             isAutoBetMode={isAutoBetMode}
             onAutoBetModeChange={setIsAutoBetMode}
             onLogin={props.onLogin}
+            hideWager={props.options.hideWager}
+            disableAuto={props.options.disableAuto}
+            disableStrategy={props.options.disableStrategy}
+            hideTotalWagerInfo={props.options.hideTotalWagerInfo}
+            maxPayout={props.options.maxPayout}
+            controllerHeader={props.options.controllerHeader}
+            hideTabs={props.options.hideTabs}
           />
           <SceneContainer
             className={cn(
@@ -147,6 +170,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
             )}
             style={{
               backgroundImage: options?.scene?.backgroundImage,
+              backgroundColor: options?.scene?.backgroundColor,
             }}
           >
             <Plinko.Body>

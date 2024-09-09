@@ -90,7 +90,6 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
             if (betCount >= 0 && newBetCount != 0) {
               onSubmitGameForm(form.getValues());
             } else {
-              console.log('auto bet finished!');
               onAutoBetModeChange(false);
             }
           }
@@ -99,7 +98,7 @@ export const KenoScene: React.FC<KenoSceneProps> = ({
     };
 
     turn();
-  }, [kenoGameResults]);
+  }, [kenoGameResults, form.getValues]);
 
   React.useEffect(() => {
     isAutoBetModeRef.current = isAutoBetMode;

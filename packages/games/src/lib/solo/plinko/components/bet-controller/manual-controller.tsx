@@ -7,6 +7,7 @@ import { useDebounce } from 'use-debounce';
 import { WagerFormField } from '../../../../common/controller';
 import { PreBetButton } from '../../../../common/pre-bet-button';
 import { TotalWager, WagerCurrencyIcon } from '../../../../common/wager';
+import { useGameOptions } from '../../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import { Button } from '../../../../ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../../ui/form';
@@ -15,14 +16,23 @@ import { cn } from '../../../../utils/style';
 import { toDecimals, toFormatted } from '../../../../utils/web3';
 import { rowMultipliers } from '../../constants';
 import { PlinkoForm } from '../../types';
+import { PlinkoTemplateOptions } from '../template';
 
-interface Props {
+interface Props extends Omit<PlinkoTemplateOptions, 'scene'> {
   minWager: number;
   maxWager: number;
   onLogin?: () => void;
 }
 
-export const ManualController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
+export const ManualController: React.FC<Props> = ({
+  minWager,
+  maxWager,
+  onLogin,
+  hideWager,
+  hideTotalWagerInfo,
+  maxPayout: maxPayoutOptions,
+}) => {
+  const { submitBtnText } = useGameOptions();
   const form = useFormContext() as PlinkoForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
@@ -37,28 +47,40 @@ export const ManualController: React.FC<Props> = ({ minWager, maxWager, onLogin 
     return toDecimals(wager * maxMultiplier, 2);
   }, [wager, rowSize]);
 
+  const maxPayoutLabel = maxPayoutOptions?.label || 'Max Payout';
   return (
     <>
-      <WagerFormField minWager={minWager} maxWager={maxWager} />
+      {!hideWager && <WagerFormField minWager={minWager} maxWager={maxWager} />}
+
       <PlinkoRowFormField minValue={6} maxValue={12} />
       <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
         <div>
-          <FormLabel>Max Payout</FormLabel>
+          <FormLabel>{maxPayoutLabel}</FormLabel>
           <div
             className={cn(
               'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
             )}
           >
-            <WagerCurrencyIcon />
+            {maxPayoutOptions?.icon ? (
+              <img
+                src={maxPayoutOptions.icon}
+                alt={maxPayoutLabel}
+                className="wr-mr-1 wr-h-5 wr-w-5"
+              />
+            ) : (
+              <WagerCurrencyIcon />
+            )}
             <span className={cn('wr-font-semibold wr-text-zinc-100')}>
               ${toFormatted(maxPayout, 2)}
             </span>
           </div>
         </div>
-        <div>
-          <FormLabel>Total Wager</FormLabel>
-          <TotalWager betCount={1} wager={form.getValues().wager} />
-        </div>
+        {!hideTotalWagerInfo && (
+          <div>
+            <FormLabel>Total Wager</FormLabel>
+            <TotalWager betCount={1} wager={form.getValues().wager} />
+          </div>
+        )}
       </div>
 
       <PreBetButton onLogin={onLogin}>
@@ -75,7 +97,7 @@ export const ManualController: React.FC<Props> = ({ minWager, maxWager, onLogin 
           size={'xl'}
           onClick={() => clickEffect.play()}
         >
-          Bet
+          {submitBtnText}
         </Button>
       </PreBetButton>
     </>

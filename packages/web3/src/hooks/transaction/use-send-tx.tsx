@@ -3,6 +3,7 @@ import { Hex, SwitchChainError } from 'viem';
 import { useSwitchChain } from 'wagmi';
 
 import { MutationHook } from '../../utils/types';
+import { useBundlerClient } from '../use-bundler-client';
 import { useCurrentAccount } from '../use-current-address';
 import { SendTxRequest } from './types';
 import { useSocialAccountTx } from './use-social-account-tx';
@@ -19,13 +20,22 @@ export const useSendTx: MutationHook<SendTxRequest, { status: string; hash: Hex 
 
   const { switchChainAsync } = useSwitchChain();
 
+  const { globalChainId } = useBundlerClient();
+
   return useMutation({
     ...options,
     mutationFn: async (request) => {
-      const { method, target, encodedTxData, customAccountApi, value, customBundlerClient } =
-        request;
+      const {
+        method,
+        target,
+        encodedTxData,
+        customAccountApi,
+        value,
+        customBundlerClient,
+        enforceSign,
+      } = request;
 
-      const networkId = request.networkId || 777777;
+      const networkId = request.networkId || globalChainId || 777777;
 
       if (isSocialLogin) {
         return await sendSocialAccountTx({
@@ -49,6 +59,7 @@ export const useSendTx: MutationHook<SendTxRequest, { status: string; hash: Hex 
           target,
           encodedTxData,
           value,
+          enforceSign,
         });
       }
     },

@@ -1,10 +1,12 @@
 'use client';
 
 import * as Progress from '@radix-ui/react-progress';
+import debug from 'debug';
 import React from 'react';
 import { Unity, useUnityContext } from 'react-unity-webgl';
 import { useDebounce } from 'use-debounce';
 
+import { RotatedBackButton } from '../../../common/rotated-back-button';
 import { CDN_URL } from '../../../constants';
 import { useListenUnityEvent } from '../../../hooks/use-listen-unity-event';
 import { useEqualizeUnitySound } from '../../../hooks/use-unity-sound';
@@ -15,12 +17,13 @@ import {
   UnityDealEvent,
   UnityFoldEvent,
   UnityNextGameAvailable,
-  UnityPlayerHandWin,
   UnitySlotBetValue,
   UnityWaitForResult,
 } from '../constants';
 import { HOLDEM_POKER_GAME_STATUS, HoldemPokerGameProps } from '../types';
 import { WagerBetController } from './bet-controller';
+
+const log = debug('worker:HoldemPokerScene');
 
 type HoldemPokerSceneProps = HoldemPokerGameProps & {
   buildedGameUrl: string;
@@ -44,7 +47,7 @@ export const HoldemPokerScene = ({
 }: HoldemPokerSceneProps) => {
   const [ante, setAnte] = React.useState<number>(0);
   const [aaBonus, setAaBonus] = React.useState<number>(0);
-  const [wager, setWager] = React.useState<number>(minWager || 1);
+  const [wager, setWager] = React.useState<number>(1);
   const [lastMove, setLastMove] = React.useState<'fold' | 'call'>('call');
 
   const [status, setStatus] = React.useState<HOLDEM_POKER_GAME_STATUS>(
@@ -85,8 +88,6 @@ export const HoldemPokerScene = ({
   }, [loadingProgression]);
 
   React.useEffect(() => {
-    console.log(unityEvent, 'unity event');
-
     if (unityEvent.name === UnityDealEvent) {
       handleDealEvent();
     }
@@ -102,7 +103,6 @@ export const HoldemPokerScene = ({
     }
 
     // if (unityEvent.name === UnityPlayerHandWin) {
-    //   console.log(activeGameData.payoutAmount, 'PAYOUT');
 
     //   sendMessage(
     //     'WebGLHandler',
@@ -118,7 +118,7 @@ export const HoldemPokerScene = ({
         `HP_SetWinResult|${toDecimals(activeGameData.result, 2)}`
       );
 
-      console.log(activeGameData.payoutAmount, 'PAYOUT');
+      log(activeGameData.payoutAmount, 'PAYOUT');
 
       sendMessage(
         'WebGLHandler',
@@ -135,9 +135,12 @@ export const HoldemPokerScene = ({
     }
 
     if (unityEvent.name == UnitySlotBetValue) {
-      const param = JSON.parse(unityEvent.strParam);
-
-      handleUnityChipEvent(param);
+      try {
+        const param = JSON.parse(unityEvent.strParam);
+        handleUnityChipEvent(param);
+      } catch (error) {
+        log('HOLDEM POKER HANDLE CHIP EVENT ERROR', error);
+      }
     }
   }, [unityEvent]);
 
@@ -153,7 +156,7 @@ export const HoldemPokerScene = ({
     try {
       await handleDeal();
     } catch {
-      console.log('DEAL ERROR template!');
+      log('DEAL ERROR template!');
       sendMessage(
         'WebGLHandler',
         'ReceiveMessage',
@@ -184,18 +187,18 @@ export const HoldemPokerScene = ({
   };
 
   React.useEffect(() => {
-    console.log(isInitialDataFetched, activeGameData, isUnityLoaded, 'effect');
+    log(isInitialDataFetched, activeGameData, isUnityLoaded, 'effect');
 
     if (isInitialDataFetched && activeGameData?.cards?.length && isUnityLoaded) {
       const { cards, aaBonusChipAmount, anteChipAmount, initialWager } = activeGameData;
 
       if (initialWager) setWager(initialWager);
 
-      console.log(cards, 'cards');
+      log(cards, 'cards');
 
       setTimeout(
         () => {
-          console.log(' sending data to unity ', activeGameData);
+          log(' sending data to unity ', activeGameData);
 
           sendMessage(
             'WebGLHandler',
@@ -331,7 +334,7 @@ export const HoldemPokerScene = ({
       )}
       <Unity
         unityProvider={unityProvider}
-        devicePixelRatio={1}
+        devicePixelRatio={1.5}
         className={cn('wr-h-full wr-w-full wr-rounded-md wr-bg-zinc-900')}
       />
       <WagerBetController
@@ -342,6 +345,9 @@ export const HoldemPokerScene = ({
         maxWager={maxWager || 2000}
         status={status}
       />
+      <div className="lg:wr-hidden">
+        <RotatedBackButton />
+      </div>
     </>
   );
 };

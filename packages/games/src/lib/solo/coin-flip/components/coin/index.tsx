@@ -92,7 +92,6 @@ export const Coin: React.FC<CoinProps> = ({
             if (betCount >= 0 && newBetCount != 0) {
               onSubmitGameForm(form.getValues());
             } else {
-              console.log('auto bet finished!');
               onAutoBetModeChange(false);
             }
           }
@@ -101,7 +100,7 @@ export const Coin: React.FC<CoinProps> = ({
     };
 
     turn();
-  }, [coinFlipGameResults]);
+  }, [coinFlipGameResults, form.getValues]);
 
   useEffect(() => {
     coinRotate.flipTo(coinSide, 1000);

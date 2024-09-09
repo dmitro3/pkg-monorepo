@@ -12,6 +12,7 @@ import { NumberInput } from '../../../../ui/number-input';
 import { cn } from '../../../../utils/style';
 import { toDecimals, toFormatted } from '../../../../utils/web3';
 import mineMultipliers from '../../constants/mines-multipliers.json';
+import { useMinesTheme } from '../../provider/theme';
 import useMinesGameStateStore from '../../store';
 import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm } from '../../types';
 import MinesCountButton from '../count-button';
@@ -36,6 +37,9 @@ export const ManualController: React.FC<Props> = ({
     'updateMinesGameState',
   ]);
   const { account } = useGameOptions();
+
+  const { hideWager, hideInfo } = useMinesTheme();
+
   const wager = form.watch('wager');
   const numMines = form.watch('minesCount');
 
@@ -60,12 +64,14 @@ export const ManualController: React.FC<Props> = ({
           <BetControllerTitle>Mines</BetControllerTitle>
         </div> */}
 
-        <WagerFormField
-          className="wr-mb-3 lg:wr-mb-6"
-          minWager={minWager}
-          maxWager={maxWager}
-          isDisabled={gameStatus !== MINES_GAME_STATUS.IDLE}
-        />
+        {!hideWager && (
+          <WagerFormField
+            className="wr-mb-3 lg:wr-mb-6"
+            minWager={minWager}
+            maxWager={maxWager}
+            // isDisabled={gameStatus !== MINES_GAME_STATUS.IDLE}
+          />
+        )}
 
         <FormField
           control={form.control}
@@ -129,29 +135,36 @@ export const ManualController: React.FC<Props> = ({
           }}
         />
 
-        <div className="lg:!wr-block wr-hidden">
+        <div
+          className={cn('lg:!wr-block wr-hidden', {
+            'wr-mb-6': hideInfo,
+          })}
+        >
           <MinesCountDisplay />
         </div>
 
-        <div className="wr-mb-6 wr-mt-6 lg:!wr-grid wr-grid-cols-2 wr-gap-2 wr-hidden">
-          <div>
-            <FormLabel>Max Payout</FormLabel>
-            <div
-              className={cn(
-                'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
-              )}
-            >
-              <WagerCurrencyIcon />
-              <span className={cn('wr-font-semibold wr-text-zinc-100')}>
-                ${toFormatted(maxPayout, 2)}
-              </span>
+        {!hideInfo && (
+          <div className="wr-mb-6 wr-mt-6 lg:!wr-grid wr-grid-cols-2 wr-gap-2 wr-hidden">
+            <div>
+              <FormLabel>Max Payout</FormLabel>
+              <div
+                className={cn(
+                  'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
+                )}
+              >
+                <WagerCurrencyIcon />
+                <span className={cn('wr-font-semibold wr-text-zinc-100')}>
+                  ${toFormatted(maxPayout, 2)}
+                </span>
+              </div>
+            </div>
+            <div>
+              <FormLabel>Total Wager</FormLabel>
+              <TotalWager betCount={1} wager={form.getValues().wager} />
             </div>
           </div>
-          <div>
-            <FormLabel>Total Wager</FormLabel>
-            <TotalWager betCount={1} wager={form.getValues().wager} />
-          </div>
-        </div>
+        )}
+
         <PreBetButton>
           {gameStatus === MINES_GAME_STATUS.ENDED ? (
             // <Button

@@ -39,8 +39,8 @@ export const MoveController: React.FC<MoveControllerProps> = ({
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   const hasBalanceForMove = (chipAmount: number): boolean => {
-    const _b = (account?.balanceAsDollar || 0) * wager;
-    return _b >= chipAmount;
+    const _b = account?.balanceAsDollar || 0;
+    return _b >= chipAmount * wager;
   };
 
   return (

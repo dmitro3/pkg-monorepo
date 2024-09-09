@@ -1,5 +1,150 @@
 # @winrlabs/web3
 
+## 0.11.8
+
+### Patch Changes
+
+- fdf8bd2: debug
+
+## 0.11.7
+
+### Patch Changes
+
+- 960de63: price feed logic
+
+## 0.11.6
+
+### Patch Changes
+
+- 515c1ff: support global chain id
+
+## 0.11.5
+
+### Patch Changes
+
+- Updated dependencies [5787e65]
+  - @winrlabs/api@1.4.1
+
+## 0.11.4
+
+### Patch Changes
+
+- 06b8cb9: change all game txs
+
+## 0.11.3
+
+### Patch Changes
+
+- 861cde0: wrap unwrap fix
+
+## 0.11.2
+
+### Patch Changes
+
+- a041c51: up
+
+## 0.11.1
+
+### Patch Changes
+
+- f114b55: up
+
+## 0.11.0
+
+### Minor Changes
+
+- e064044: custom
+
+### Patch Changes
+
+- Updated dependencies [e064044]
+  - @winrlabs/api@1.4.0
+
+## 0.10.108
+
+### Patch Changes
+
+- 0a76021: refactor
+
+## 0.10.107
+
+### Patch Changes
+
+- e11c4a7: session err
+
+## 0.10.106
+
+### Patch Changes
+
+- 9c9fcda: update usesendtx
+
+## 0.10.105
+
+### Patch Changes
+
+- 9eb20b4: mm auth unnecessary sign fix
+
+## 0.10.104
+
+### Patch Changes
+
+- bbabd6b: bet history fix
+
+## 0.10.103
+
+### Patch Changes
+
+- dc7122d: wrap unwrap improvement
+- ed5b338: fix
+
+## 0.10.102
+
+### Patch Changes
+
+- 4bf1693: update
+
+## 0.10.101
+
+### Patch Changes
+
+- f415b7b: wrap fix
+
+## 0.10.100
+
+### Patch Changes
+
+- f8fe052: mines fix
+
+## 0.10.99
+
+### Patch Changes
+
+- 2248db1: value fix
+
+## 0.10.98
+
+### Patch Changes
+
+- a29b735: remove allowance
+
+## 0.10.97
+
+### Patch Changes
+
+- 4078aa7: fix
+
+## 0.10.96
+
+### Patch Changes
+
+- 5cd0bc5: native balance fix
+
+## 0.10.95
+
+### Patch Changes
+
+- 29019b0: wrap unwrap
+
 ## 0.10.94
 
 ### Patch Changes

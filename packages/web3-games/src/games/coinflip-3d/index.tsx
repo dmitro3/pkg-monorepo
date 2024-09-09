@@ -10,8 +10,8 @@ import {
 import {
   controllerAbi,
   useCurrentAccount,
-  useHandleTx,
   usePriceFeed,
+  useSendTx,
   useTokenAllowance,
   useTokenStore,
 } from '@winrlabs/web3';
@@ -28,6 +28,9 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from '../utils';
+import debug from 'debug';
+
+const log = debug('worker:CoinFlip3DWeb3');
 
 type TemplateOptions = {
   scene?: {
@@ -95,8 +98,8 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
     }));
   }, [coinFlipResult]);
 
-  const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
+  const getEncodedTxData = () => {
+    const { wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
       wager: formValues.wager,
       stopGain: formValues.stopGain,
       stopLoss: formValues.stopLoss,
@@ -131,7 +134,7 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
       ]
     );
 
-    const encodedData: `0x${string}` = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -142,50 +145,22 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
         encodedGameData,
       ],
     });
+  };
 
-    return {
-      tokenAddress,
-      encodedGameData,
-      encodedTxData: encodedData,
-    };
-  }, [
-    formValues.betCount,
-    formValues.coinSide,
-    formValues.stopGain,
-    formValues.stopLoss,
-    formValues.wager,
-    selectedToken.address,
-    priceFeed[selectedToken.priceKey],
-  ]);
-
-  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.coinFlip as Address,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'bet',
-        encodedParams.encodedGameData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {},
-    encodedTxData: encodedParams.encodedTxData,
-  });
-
+  const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
+  const isReIterableRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
-  }, [isPlayerHalted]);
+    isReIterableRef.current = isReIterable;
+  }, [isPlayerHalted, isReIterable]);
 
   const onGameSubmit = async () => {
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log('error', e);
+          log('error', e);
         },
       });
 
@@ -196,9 +171,13 @@ export default function CoinFlip3DGame(props: TemplateWithWeb3Props) {
       if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
-      await handleTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedTxData(),
+        method: 'sendGameOperation',
+        target: controllerAddress,
+      });
     } catch (e: any) {
-      console.log('error', e);
+      log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
     }

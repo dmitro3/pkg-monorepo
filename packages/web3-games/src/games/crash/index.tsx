@@ -12,14 +12,18 @@ import {
 import { CrashFormFields, CrashTemplate } from '@winrlabs/games';
 import {
   controllerAbi,
+  useApiOptions,
   useCurrentAccount,
-  useHandleTx,
   usePriceFeed,
+  useSendTx,
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
+  useWrapWinr,
+  WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
-import React, { useEffect, useMemo, useState } from 'react';
+import debug from 'debug';
+import React, { useEffect, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits, fromHex } from 'viem';
 
 import { BaseGameProps } from '../../type';
@@ -32,6 +36,8 @@ import {
 } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { GAME_HUB_GAMES, prepareGameTransaction } from '../utils';
+
+const log = debug('worker:CrashWeb3');
 
 type TemplateOptions = {
   scene?: {
@@ -70,6 +76,7 @@ const CrashGame = (props: CrashTemplateProps) => {
   const allTokens = useTokenStore((s) => s.tokens);
   const selectedToken = useTokenStore((s) => s.selectedToken);
   const selectedTokenAddress = selectedToken.address;
+  const { baseUrl } = useApiOptions();
   const { data: betHistory, refetch: refetchBetHistory } =
     useGameControllerGetMultiplayerGameHistory({
       queryParams: {
@@ -78,9 +85,11 @@ const CrashGame = (props: CrashTemplateProps) => {
         // @ts-ignore
         limit: 7,
       },
+      baseUrl: baseUrl,
     });
   const { refetch: refetchBalances } = useTokenBalances({
     account: currentAccount.address || '0x0000000',
+    balancesToRead: [selectedToken.address],
   });
 
   useConfigureMultiplayerLiveResultStore();
@@ -119,8 +128,8 @@ const CrashGame = (props: CrashTemplateProps) => {
 
   const { priceFeed } = usePriceFeed();
 
-  const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei } = prepareGameTransaction({
+  const getEncodedBetTxData = () => {
+    const { wagerInWei } = prepareGameTransaction({
       wager: formValues?.wager || 0,
       stopGain: 0,
       stopLoss: 0,
@@ -136,7 +145,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       [wagerInWei, toDecimals(formValues.multiplier * 100)]
     );
 
-    const encodedData = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -147,36 +156,10 @@ const CrashGame = (props: CrashTemplateProps) => {
         encodedGameData,
       ],
     });
+  };
 
-    return {
-      tokenAddress,
-      encodedGameData,
-      encodedTxData: encodedData,
-    };
-  }, [formValues.multiplier, formValues.wager, priceFeed[selectedToken.priceKey]]);
-
-  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.crash,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'bet',
-        encodedParams.encodedGameData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {
-      method: 'sendGameOperation',
-    },
-    encodedTxData: encodedParams.encodedTxData,
-  });
-
-  const encodedClaimParams = useMemo(() => {
+  const getEncodedClaimTxData = () => {
     const encodedChoice = encodeAbiParameters([], []);
-
     const encodedParams = encodeAbiParameters(
       [
         { name: 'address', type: 'address' },
@@ -196,7 +179,7 @@ const CrashGame = (props: CrashTemplateProps) => {
       ]
     );
 
-    const encodedClaimData: `0x${string}` = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -207,62 +190,53 @@ const CrashGame = (props: CrashTemplateProps) => {
         encodedParams,
       ],
     });
+  };
 
-    return {
-      encodedClaimData,
-      encodedClaimTxData: encodedClaimData,
-      currentAccount,
-    };
-  }, [formValues.multiplier, formValues.wager]);
-
-  const handleClaimTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.crash,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'claim',
-        encodedClaimParams.encodedClaimData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {},
-    encodedTxData: encodedClaimParams.encodedClaimTxData,
-  });
-
+  const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
   }, [isPlayerHalted]);
 
+  const wrapWinrTx = useWrapWinr({
+    account: currentAccount.address || '0x',
+  });
+
   const onGameSubmit = async () => {
+    if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
     clearLiveResults();
+
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log('error', e);
+          log('error', e);
         },
       });
 
       if (!handledAllowance) return;
     }
     try {
-      await handleClaimTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedClaimTxData(),
+        target: controllerAddress,
+      });
     } catch (error) {
-      console.log('handleClaimTx error', error);
+      log('handleClaimTx error', error);
     }
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
-      await handleTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedBetTxData(),
+        method: 'sendGameOperation',
+        target: controllerAddress,
+      });
       setIsGamblerParticipant(true);
     } catch (e: any) {
-      console.log('handleTx error', e);
+      log('handleTx error', e);
       refetchPlayerGameStatus();
       setIsGamblerParticipant(false);
       // props.onError && props.onError(e);
@@ -382,9 +356,7 @@ const CrashGame = (props: CrashTemplateProps) => {
         maxWager={maxWagerBySelection}
         onComplete={onComplete}
         onSubmitGameForm={onGameSubmit}
-        onFormChange={(val) => {
-          setFormValues(val);
-        }}
+        onFormChange={setFormValues}
         gameUrl={props.gameUrl}
       />
       {!props.hideBetHistory && (

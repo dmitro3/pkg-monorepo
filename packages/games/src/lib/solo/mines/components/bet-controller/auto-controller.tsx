@@ -47,11 +47,7 @@ export const AutoController = ({
 
   const isDisabled = form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode;
 
-  const { gameStatus, updateMinesGameState } = useMinesGameStateStore([
-    'updateMinesGameState',
-    'gameStatus',
-    'board',
-  ]);
+  const { updateMinesGameState } = useMinesGameStateStore(['updateMinesGameState']);
 
   const { account } = useGameOptions();
 
@@ -158,7 +154,9 @@ export const AutoController = ({
 
             if (nextAutoBetMode) {
               updateMinesGameState({
-                submitType: MINES_SUBMIT_TYPE.FIRST_REVEAL_AND_CASHOUT,
+                submitType: MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT,
+                gameStatus: MINES_GAME_STATUS.IDLE,
+                board: initialBoard,
               });
 
               setTimeout(() => {
@@ -166,11 +164,22 @@ export const AutoController = ({
               });
             } else {
               updateMinesGameState({
-                submitType: MINES_SUBMIT_TYPE.IDLE,
+                submitType: MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT,
                 gameStatus: MINES_GAME_STATUS.IDLE,
                 board: initialBoard,
               });
+
               form.reset();
+
+              setTimeout(() => {
+                updateMinesGameState({
+                  submitType: MINES_SUBMIT_TYPE.REVEAL_AND_CASHOUT,
+                  gameStatus: MINES_GAME_STATUS.IDLE,
+                  board: initialBoard,
+                });
+
+                form.reset();
+              }, 1250);
             }
           }}
         >

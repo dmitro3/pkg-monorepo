@@ -1,12 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
-import { Hex } from 'viem';
+import { Address, Hex } from 'viem';
 
+import { ErrorCode, mmAuthSignErrors, mmAuthSessionErr } from '../../utils/error-codes';
 import { MutationHook } from '../../utils/types';
 import { useCreateSession, useSessionStore } from '../session';
 import { useBundlerClient } from '../use-bundler-client';
 import { useCurrentAccount } from '../use-current-address';
 import { BundlerClientNotFoundError } from './error';
 import { Web3AccountTxRequest } from './types';
+import { delay } from '../use-token-allowance';
 
 export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: string; hash: Hex }> = (
   options = {}
@@ -23,6 +25,7 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
       target = '0x0',
       encodedTxData = '0x0',
       value = 0,
+      enforceSign = false,
     }) => {
       const client = customBundlerClient || defaultClient;
       if (!client) throw new BundlerClientNotFoundError();
@@ -43,26 +46,44 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
         return { part: session.part, permit: session.permit };
       };
 
-      if (!_part || !_permit) {
-        ({ part: _part, permit: _permit } = await getNewSession());
-      }
+      let retryCount = 0;
+      const maxRetries = 3;
 
-      try {
-        return await client.request('call', {
-          call: { dest: target, data: encodedTxData, value },
-          owner: userAddress!,
-          part: _part,
-          permit: _permit,
-        });
-      } catch (error) {
-        ({ part: _part, permit: _permit } = await getNewSession());
-        return client.request('call', {
-          call: { dest: target, data: encodedTxData, value },
-          owner: userAddress!,
-          part: _part,
-          permit: _permit,
-        });
-      }
+      const makeRequest = async () => {
+        try {
+          if (!_part || !_permit || enforceSign) {
+            ({ part: _part, permit: _permit } = await getNewSession());
+          }
+          return await client.request('call', {
+            call: {
+              dest: target as Address,
+              data: encodedTxData,
+              value: Number(value),
+            },
+            owner: userAddress!,
+            part: _part,
+            permit: _permit,
+          });
+        } catch (error: any) {
+          if (retryCount < maxRetries) {
+            retryCount++;
+
+            if (
+              error?.code !== ErrorCode.InvalidNonce &&
+              (mmAuthSignErrors.includes(error?.message) ||
+                error?.message?.includes(mmAuthSessionErr))
+            ) {
+              ({ part: _part, permit: _permit } = await getNewSession());
+            }
+            await delay(200);
+            return await makeRequest();
+          } else {
+            throw error;
+          }
+        }
+      };
+
+      return makeRequest();
     },
   });
 };

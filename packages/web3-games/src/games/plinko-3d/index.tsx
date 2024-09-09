@@ -11,12 +11,15 @@ import {
   controllerAbi,
   useCurrentAccount,
   useFastOrVerified,
-  useHandleTx,
   usePriceFeed,
+  useSendTx,
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
+  useWrapWinr,
+  WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
+import debug from 'debug';
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
@@ -30,6 +33,8 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from '../utils';
+
+const log = debug('worker:Plinko3dWeb3');
 
 type TemplateOptions = {
   scene?: {
@@ -91,6 +96,7 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
 
   const allowance = useTokenAllowance({
@@ -111,8 +117,8 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
     }));
   }, [plinkoResult]);
 
-  const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
+  const getEncodedTxData = () => {
+    const { wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
       wager: formValues.wager,
       stopGain: formValues.stopGain,
       stopLoss: formValues.stopLoss,
@@ -147,7 +153,7 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
       ]
     );
 
-    const encodedData: `0x${string}` = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -158,52 +164,26 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
         encodedGameData,
       ],
     });
+  };
 
-    return {
-      tokenAddress,
-      encodedGameData,
-      encodedTxData: encodedData,
-    };
-  }, [
-    formValues.betCount,
-    formValues.plinkoSize,
-    formValues.stopGain,
-    formValues.stopLoss,
-    formValues.wager,
-    selectedToken.address,
-    priceFeed[selectedToken.priceKey],
-  ]);
-
-  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.plinko as Address,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'bet',
-        encodedParams.encodedGameData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {
-      method: 'sendGameOperation',
-    },
-    encodedTxData: encodedParams.encodedTxData,
-  });
-
+  const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
   }, [isPlayerHalted]);
 
+  const wrapWinrTx = useWrapWinr({
+    account: currentAccount.address || '0x',
+  });
+
   const onGameSubmit = async () => {
+    if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
+
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log('error', e);
+          log('error', e);
         },
       });
 
@@ -214,9 +194,13 @@ export default function Plinko3DGame(props: TemplateWithWeb3Props) {
       if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
-      await handleTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedTxData(),
+        target: controllerAddress,
+        method: 'sendGameOperation',
+      });
     } catch (e: any) {
-      console.log('error', e);
+      log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
     }

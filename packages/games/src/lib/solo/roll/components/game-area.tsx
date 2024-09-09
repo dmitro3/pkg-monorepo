@@ -110,7 +110,6 @@ export const GameArea: React.FC<GameAreaProps> = ({
               if (betCount >= 0 && newBetCount != 0) {
                 onSubmitGameForm(form.getValues());
               } else {
-                console.log('auto bet finished!');
                 onAutoBetModeChange(false);
               }
             }
@@ -120,7 +119,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
       }, 350);
     };
     turn();
-  }, [rollGameResults]);
+  }, [rollGameResults, form.getValues]);
 
   React.useEffect(() => {
     return () => {
@@ -145,7 +144,7 @@ export const GameArea: React.FC<GameAreaProps> = ({
   }, [selectedDices]);
 
   return (
-    <div className="wr-w-full lg:wr-max-w-[422px] wr-max-w-[240px] wr-relative wr-top-1/2 -wr-translate-y-[55%] lg:-wr-translate-y-1/2">
+    <div className="wr-w-full md:wr-max-w-[422px] wr-max-w-[240px] wr-relative wr-top-1/2 -wr-translate-y-[55%] lg:-wr-translate-y-1/2">
       <FormField
         control={form.control}
         name="dices"

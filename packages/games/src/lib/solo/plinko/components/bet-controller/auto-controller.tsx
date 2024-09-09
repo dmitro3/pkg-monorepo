@@ -22,6 +22,8 @@ interface AutoControllerProps {
   isAutoBetMode: boolean;
   onAutoBetModeChange: React.Dispatch<React.SetStateAction<boolean>>;
   onLogin?: () => void;
+  hideWager?: boolean;
+  disableStrategy?: boolean;
 }
 
 export const AutoController = ({
@@ -30,18 +32,22 @@ export const AutoController = ({
   isAutoBetMode,
   onAutoBetModeChange,
   onLogin,
+  hideWager,
+  disableStrategy,
 }: AutoControllerProps) => {
   const form = useFormContext() as PlinkoForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
   return (
     <div className="wr-flex wr-flex-col">
-      <WagerFormField
-        minWager={minWager}
-        maxWager={maxWager}
-        className="wr-order-0 lg:!wr-mb-3"
-        isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-      />
+      {!hideWager && (
+        <WagerFormField
+          minWager={minWager}
+          maxWager={maxWager}
+          className="wr-order-0 lg:!wr-mb-3"
+          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+        />
+      )}
 
       <PlinkoRowFormField
         minValue={6}
@@ -54,26 +60,30 @@ export const AutoController = ({
         <AutoBetCountFormField
           isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
         />
-        <div className="wr-flex wr-gap-2 md:wr-gap-3">
-          <AutoBetIncreaseOnWin
-            isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-            showSm
-          />
-          <AutoBetIncreaseOnLoss
-            isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-            showSm
-          />
-        </div>
+        {!disableStrategy && (
+          <div className="wr-flex wr-gap-2 md:wr-gap-3">
+            <AutoBetIncreaseOnWin
+              isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+              showSm
+            />
+            <AutoBetIncreaseOnLoss
+              isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+              showSm
+            />
+          </div>
+        )}
       </div>
 
-      <div className="wr-order-3 lg:wr-order-none wr-flex wr-gap-2">
-        <AutoBetStopGainFormField
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-        />
-        <AutoBetStopLossFormField
-          isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
-        />
-      </div>
+      {!disableStrategy && (
+        <div className="wr-order-3 lg:wr-order-none wr-flex wr-gap-2">
+          <AutoBetStopGainFormField
+            isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+          />
+          <AutoBetStopLossFormField
+            isDisabled={form.formState.isSubmitting || form.formState.isLoading || isAutoBetMode}
+          />
+        </div>
+      )}
 
       <PreBetButton onLogin={onLogin} className="wr-mb-3 lg:wr-mb-0">
         <Button

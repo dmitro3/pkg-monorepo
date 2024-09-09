@@ -35,6 +35,11 @@ interface GameContextProps {
      * Default values for the games
      */
     defaults?: Defaults;
+
+    /**
+     * Button text for the games
+     */
+    submitBtnText?: string;
   };
 }
 
@@ -49,6 +54,7 @@ const GameContext = createContext<
   }
 >({
   options: {
+    submitBtnText: 'Bet',
     currency: {
       icon: '',
       name: '',
@@ -65,7 +71,10 @@ export const GameProvider = ({ children, options }: GameProviderProps) => {
   return (
     <GameContext.Provider
       value={{
-        options,
+        options: {
+          ...options,
+          submitBtnText: options.submitBtnText || 'Bet',
+        },
         updateSkipAnimation: setIsAnimationSkipped,
         isAnimationSkipped,
       }}

@@ -7,6 +7,9 @@ import { Address, Hex } from 'viem';
 import { Config, useAccount } from 'wagmi';
 
 import { UserOperation } from '../smart-wallet';
+import debug from 'debug';
+
+const log = debug('worker:UseBundlerClient');
 
 const BundlerClientContext = createContext<UseBundlerClient>({
   client: undefined,
@@ -69,9 +72,9 @@ export type BundlerMethods = {
   'permit'(params: { owner: Address; signature: Hex }): {
     pubKey: Hex;
     hashKey: Hex;
-  }
+  };
 
-  'permitTypedMessage'(params: { owner: Address; }): {
+  'permitTypedMessage'(params: { owner: Address }): {
     typedMessage: Hex;
   };
 };
@@ -96,6 +99,7 @@ interface UseBundlerClient {
   isLoading: boolean;
   error?: Error;
   changeBundlerNetwork: (network: BundlerNetwork) => void;
+  globalChainId?: number;
 }
 
 export const fetchBundlerClient = async ({
@@ -123,13 +127,13 @@ export const fetchBundlerClient = async ({
             return client?.receive(jsonRPCResponse);
           });
         } else if (jsonRPCRequest.id !== undefined) {
-          console.log('Error fetching JSON-RPC response', response.statusText);
+          log('Error fetching JSON-RPC response', response.statusText);
 
           return Promise.reject(new Error(response.statusText));
         }
       })
       .catch((e) => {
-        console.log('Error fetching JSON-RPC response', e);
+        log('Error fetching JSON-RPC response', e);
         throw e;
       })
   );
@@ -142,7 +146,8 @@ export const BundlerClientProvider: React.FC<{
   rpcUrl: string;
   initialNetwork?: BundlerNetwork;
   config?: Config;
-}> = ({ children, rpcUrl, initialNetwork = BundlerNetwork.WINR, config }) => {
+  globalChainId?: number;
+}> = ({ children, rpcUrl, initialNetwork = BundlerNetwork.WINR, config, globalChainId }) => {
   const { address } = useAccount();
 
   const [network, setNetwork] = React.useState<BundlerNetwork>(initialNetwork);
@@ -170,7 +175,7 @@ export const BundlerClientProvider: React.FC<{
   });
 
   React.useEffect(() => {
-    console.log(client, 'client');
+    log(client, 'client');
   }, [client]);
 
   return (
@@ -180,6 +185,7 @@ export const BundlerClientProvider: React.FC<{
         isLoading,
         error: error as unknown as Error | undefined,
         changeBundlerNetwork,
+        globalChainId,
       }}
     >
       {children}

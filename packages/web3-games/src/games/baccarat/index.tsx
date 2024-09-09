@@ -13,13 +13,15 @@ import {
   delay,
   useCurrentAccount,
   useFastOrVerified,
-  useHandleTx,
   usePriceFeed,
+  useSendTx,
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
+  useWrapWinr,
+  WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
 import { BaseGameProps } from '../../type';
@@ -27,6 +29,9 @@ import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hook
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import { BaccaratSettledEvent, GAME_HUB_EVENT_TYPES, prepareGameTransaction } from '../utils';
+import debug from 'debug';
+
+const log = debug('worker:BaccaratWeb3');
 
 interface TemplateWithWeb3Props extends BaseGameProps {
   minWager?: number;
@@ -81,6 +86,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
   const { handleGetBadges } = useGetBadges({
     onPlayerStatusUpdate: props.onPlayerStatusUpdate,
@@ -94,9 +100,9 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     showDefaultToasts: false,
   });
 
-  const encodedParams = useMemo(() => {
-    const { tokenAddress, wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
-      wager: formValues.wager,
+  const getEncodedTxData = (v: BaccaratFormFields) => {
+    const { wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
+      wager: v.wager,
       stopGain: 0,
       stopLoss: 0,
       selectedCurrency: selectedToken,
@@ -118,7 +124,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
           type: 'uint16',
         },
       ],
-      [formValues.tieWager, formValues.bankerWager, formValues.playerWager]
+      [v.tieWager, v.bankerWager, v.playerWager]
     );
 
     const encodedGameData = encodeAbiParameters(
@@ -132,7 +138,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
       [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
     );
 
-    const encodedData: `0x${string}` = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -143,52 +149,28 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         encodedGameData,
       ],
     });
+  };
 
-    return {
-      tokenAddress,
-      encodedGameData,
-      encodedTxData: encodedData,
-    };
-  }, [
-    formValues.bankerWager,
-    formValues.playerWager,
-    formValues.tieWager,
-    formValues.wager,
-    selectedToken.address,
-    priceFeed[selectedToken.priceKey],
-  ]);
-
-  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.baccarat,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'bet',
-        encodedParams.encodedGameData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {
-      method: 'sendGameOperation',
-    },
-    encodedTxData: encodedParams.encodedTxData,
-  });
-
+  const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
+  const isReIterableRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
+    isReIterableRef.current = isReIterable;
   }, [isPlayerHalted]);
 
-  const onGameSubmit = async (f: BaccaratFormFields, errorCount = 0) => {
-    console.log('SUBMITTING!');
+  const wrapWinrTx = useWrapWinr({
+    account: currentAccount.address || '0x',
+  });
+
+  const onGameSubmit = async (v: BaccaratFormFields, errorCount = 0) => {
+    if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
+
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log('error', e);
+          log('error', e);
         },
       });
 
@@ -197,17 +179,21 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterable) await playerReIterate();
+      if (isReIterableRef.current) await playerReIterate();
 
-      await handleTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedTxData(v),
+        method: 'sendGameOperation',
+        target: controllerAddress,
+      });
     } catch (e: any) {
-      console.log('error', e);
+      log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
 
       if (errorCount < 3) {
         await delay(150);
-        onGameSubmit(f, errorCount + 1);
+        onGameSubmit(v, errorCount + 1);
       }
     }
   };
@@ -261,9 +247,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         baccaratResults={baccaratResults}
         baccaratSettledResults={baccaratSettledResult}
         onAnimationCompleted={onGameCompleted}
-        onFormChange={(val) => {
-          setFormValues(val);
-        }}
+        onFormChange={setFormValues}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

@@ -49,7 +49,7 @@ const MultiplierCarousel: React.FC<{ currentNumbers: number[][] }> = ({ currentN
         }}
         className="wr-w-full"
       >
-        <CarouselContent className="wr-mx-2 first:wr-ml-0 max-lg:wr-w-[87px]">
+        <CarouselContent className="wr-mx-2 first:wr-ml-0 max-md:wr-w-[87px]">
           {kenoMultipliers[selectionsLength]?.map((m, idx) => {
             if (
               (selectionsLength === 10 && idx === 0) ||

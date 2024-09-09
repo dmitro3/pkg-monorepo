@@ -17,6 +17,9 @@ import { ALL_DICES, LUCK_MULTIPLIER, MIN_BET_COUNT } from '../constant';
 import { DICE, RollFormFields, RollGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RollGameProps } from './game';
+import debug from 'debug';
+
+const log = debug('worker:RollTemplate');
 
 type TemplateOptions = {
   scene?: {
@@ -70,7 +73,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
     }),
     mode: 'all',
     defaultValues: {
-      wager: props?.minWager || 1,
+      wager: 1,
       betCount: 0,
       stopGain: 0,
       stopLoss: 0,
@@ -123,7 +126,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
 
   const processStrategy = (result: RollGameResult[]) => {
     const payout = result[0]?.payoutInUsd || 0;
-    console.log(result, 'result');
+    log(result, 'result');
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
     const currentBalance = balanceAsDollar - wager + payout;

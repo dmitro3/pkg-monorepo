@@ -11,12 +11,14 @@ import {
 import {
   controllerAbi,
   useCurrentAccount,
-  useHandleTx,
   usePriceFeed,
+  useSendTx,
   useTokenAllowance,
   useTokenBalances,
   useTokenStore,
+  useWrapWinr,
   videoPokerAbi,
+  WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
 import React from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
@@ -32,6 +34,9 @@ import {
 } from '../hooks';
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { prepareGameTransaction } from '../utils';
+import debug from 'debug';
+
+const log = debug('worker:VideoPokerWeb3');
 
 interface TemplateWithWeb3Props extends BaseGameProps {
   minWager?: number;
@@ -76,6 +81,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
+    balancesToRead: [selectedToken.address],
   });
 
   const allowance = useTokenAllowance({
@@ -86,8 +92,8 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     showDefaultToasts: false,
   });
 
-  const encodedParams = React.useMemo(() => {
-    const { tokenAddress, wagerInWei } = prepareGameTransaction({
+  const getEncodedStartTxData = () => {
+    const { wagerInWei } = prepareGameTransaction({
       wager: formValues.wager,
       stopGain: 0,
       stopLoss: 0,
@@ -97,7 +103,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
 
     const encodedGameData = encodeAbiParameters([{ name: 'wager', type: 'uint128' }], [wagerInWei]);
 
-    const encodedData: `0x${string}` = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -108,40 +114,9 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
         encodedGameData,
       ],
     });
+  };
 
-    return {
-      tokenAddress,
-      encodedGameData,
-      encodedTxData: encodedData,
-    };
-  }, [formValues.wager, selectedToken.address, priceFeed[selectedToken.priceKey]]);
-
-  const handleTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.videoPoker,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'start',
-        encodedParams.encodedGameData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {
-      method: 'sendGameOperation',
-    },
-    encodedTxData: encodedParams.encodedTxData,
-  });
-
-  const encodedFinishParams = React.useMemo(() => {
-    const { tokenAddress } = prepareGameTransaction({
-      wager: formValues.wager,
-      selectedCurrency: selectedToken,
-      lastPrice: 1,
-    });
-
+  const getEncodedFinishTxData = () => {
     const mappedCards = formValues.cardsToSend
       .map((item) => (item === 0 ? 1 : 0))
       .reverse()
@@ -154,7 +129,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       [_cardsToSend]
     );
 
-    const encodedData: `0x${string}` = encodeFunctionData({
+    return encodeFunctionData({
       abi: controllerAbi,
       functionName: 'perform',
       args: [
@@ -165,45 +140,27 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
         encodedGameData,
       ],
     });
+  };
 
-    return {
-      tokenAddress,
-      encodedGameData,
-      encodedTxData: encodedData,
-    };
-  }, [formValues.cardsToSend]);
-
-  const handleFinishTx = useHandleTx<typeof controllerAbi, 'perform'>({
-    writeContractVariables: {
-      abi: controllerAbi,
-      functionName: 'perform',
-      args: [
-        gameAddresses.videoPoker,
-        selectedToken.bankrollIndex,
-        uiOperatorAddress as Address,
-        'finish',
-        encodedFinishParams.encodedGameData,
-      ],
-      address: controllerAddress as Address,
-    },
-    options: {
-      method: 'sendGameOperation',
-    },
-    encodedTxData: encodedFinishParams.encodedTxData,
-  });
-
+  const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
   }, [isPlayerHalted]);
 
+  const wrapWinrTx = useWrapWinr({
+    account: currentAccount.address || '0x',
+  });
+
   const handleStartGame = async () => {
-    console.log('SUBMITTING!');
+    if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
+
+    log('SUBMITTING!');
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log('error', e);
+          log('error', e);
         },
       });
 
@@ -214,20 +171,24 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
-      await handleTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedStartTxData(),
+        target: controllerAddress,
+        method: 'sendGameOperation',
+      });
     } catch (e: any) {
-      console.log('error', e);
+      log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
     }
   };
 
   const handleFinishGame = async () => {
-    console.log('FINISHING!');
+    log('FINISHING!');
     if (!allowance.hasAllowance) {
       const handledAllowance = await allowance.handleAllowance({
         errorCb: (e: any) => {
-          console.log('error', e);
+          log('error', e);
         },
       });
 
@@ -238,9 +199,13 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
       if (isPlayerHaltedRef.current) await playerLevelUp();
       if (isReIterable) await playerReIterate();
 
-      await handleFinishTx.mutateAsync();
+      await sendTx.mutateAsync({
+        encodedTxData: getEncodedFinishTxData(),
+        target: controllerAddress,
+        method: 'sendGameOperation',
+      });
     } catch (e: any) {
-      console.log('error', e);
+      log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
     }
@@ -275,7 +240,7 @@ export default function VideoPokerGame(props: TemplateWithWeb3Props) {
     if (gameEvent?.program[0]?.type == 'Game') {
       const data = gameEvent.program[0].data;
 
-      console.log('event');
+      log('event');
 
       setSettledCards({
         cards: data.game.cards,
