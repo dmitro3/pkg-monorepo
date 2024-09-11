@@ -172,7 +172,6 @@ const MinesTemplate = ({ ...props }: TemplateProps) => {
   const processStrategy = () => {
     const isWon = !board.some((v) => v.isBomb == true);
     const payout = isWon ? currentCashoutAmount : 0;
-    console.log(currentCashoutAmount, 'curr cash');
 
     const p = strategist.process(parseToBigInt(wager, 8), parseToBigInt(payout, 8));
     const newWager = Number(p.wager) / 1e8;
