@@ -6,7 +6,15 @@ import React from 'react';
 const MinesPage = () => {
   return (
     <>
-      <MinesGame maxWager={100} minWager={0.01} />
+      <MinesGame
+        maxWager={100}
+        minWager={0.01}
+        theme={
+          {
+            // tokenPrefix: '',
+          }
+        }
+      />
       <Web3GamesModals />
     </>
   );

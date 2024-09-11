@@ -7,12 +7,14 @@ export interface MinesTheme {
   cellImage?: string;
   hideWager?: boolean;
   hideInfo?: boolean;
+  tokenPrefix?: string;
 }
 
 const defaultTheme: Partial<MinesTheme> = {
   gemImage: `${CDN_URL}/mines/revealed-gem.png`,
   hideWager: false,
   hideInfo: false,
+  tokenPrefix: '$',
 };
 
 const MinesThemeContext = createContext<Partial<MinesTheme>>(defaultTheme);

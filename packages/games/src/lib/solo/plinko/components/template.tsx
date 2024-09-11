@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import debug from 'debug';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -14,7 +15,6 @@ import { MIN_BET_COUNT } from '../constants';
 import { PlinkoFormFields, PlinkoGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { PlinkoGameProps } from './game';
-import debug from 'debug';
 
 const log = debug('worker:PlinkoTemplate');
 
@@ -35,6 +35,11 @@ export type PlinkoTemplateOptions = {
 
   controllerHeader?: React.ReactNode;
   hideTabs?: boolean;
+
+  /**
+   * @default '$'
+   */
+  tokenPrefix?: string;
 };
 
 type TemplateProps = PlinkoGameProps & {
@@ -163,6 +168,7 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
             maxPayout={props.options.maxPayout}
             controllerHeader={props.options.controllerHeader}
             hideTabs={props.options.hideTabs}
+            tokenPrefix={props.options.tokenPrefix}
           />
           <SceneContainer
             className={cn(

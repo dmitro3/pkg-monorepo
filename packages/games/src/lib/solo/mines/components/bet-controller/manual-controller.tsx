@@ -38,7 +38,7 @@ export const ManualController: React.FC<Props> = ({
   ]);
   const { account } = useGameOptions();
 
-  const { hideWager, hideInfo } = useMinesTheme();
+  const { hideWager, hideInfo, tokenPrefix } = useMinesTheme();
 
   const wager = form.watch('wager');
   const numMines = form.watch('minesCount');
@@ -234,7 +234,7 @@ export const ManualController: React.FC<Props> = ({
                 >
                   <span>Get </span>
                   <div className="wr-h-1 wr-w-1 wr-rounded-full wr-bg-white" />
-                  {`$${currentCashoutAmount} (${currentMultiplier}x)`}
+                  {`${tokenPrefix}${currentCashoutAmount} (${currentMultiplier}x)`}
                 </Button>
               )}
             </>

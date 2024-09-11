@@ -31,6 +31,7 @@ export const ManualController: React.FC<Props> = ({
   hideWager,
   hideTotalWagerInfo,
   maxPayout: maxPayoutOptions,
+  tokenPrefix,
 }) => {
   const { submitBtnText } = useGameOptions();
   const form = useFormContext() as PlinkoForm;
@@ -71,7 +72,8 @@ export const ManualController: React.FC<Props> = ({
               <WagerCurrencyIcon />
             )}
             <span className={cn('wr-font-semibold wr-text-zinc-100')}>
-              ${toFormatted(maxPayout, 2)}
+              {typeof tokenPrefix !== 'undefined' ? tokenPrefix : '$'}
+              {toFormatted(maxPayout, 2)}
             </span>
           </div>
         </div>

@@ -19,6 +19,8 @@ export default function PlinkoPage() {
           controllerHeader: <div>Plinko 2D</div>,
           hideTabs: true,
           hideTotalWagerInfo: true,
+          hideWager: true,
+          tokenPrefix: '',
         }}
         minWager={0.1}
         maxWager={2000}
