@@ -116,6 +116,99 @@ export const WinrBonanzaTemplate = ({
 
   const actualBetAmount = isDoubleChance ? betAmount + betAmount * 0.5 : betAmount;
 
+  const handleFreespin = async () => {
+    log('FREESPIN');
+    await wait(300);
+    setCurrentPayoutAmount(0);
+    setWonFreeSpins(false);
+    setInitialBuyEvent(undefined);
+    setCurrentAction('freeSpin');
+
+    try {
+      await freeSpin();
+    } catch (e: any) {}
+  };
+
+  const handleBuy = async () => {
+    setCurrentPayoutAmount(0);
+    handleUpdateWinText('0');
+    setFreeSpinWinAmount(0);
+    setInitialBuyEvent(undefined);
+    setWonFreeSpins(false);
+
+    setCurrentAction('buyFeature');
+
+    try {
+      await buyFreeSpins();
+    } catch (e: any) {
+      setInitialBuyEvent(undefined);
+      handleExitFreespin();
+      handleFreespinAmount(0);
+      hideFreeSpinText();
+      setIsInFreeSpinMode(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (isInFreeSpinMode) return;
+    if (isInAutoPlay) return;
+
+    setInitialBuyEvent(undefined);
+    hideFreeSpinText();
+    setCurrentPayoutAmount(0);
+    handleUpdateWinText('0');
+    setFreeSpinWinAmount(0);
+    setWonFreeSpins(false);
+    // for event handling
+    setCurrentAction('submit');
+
+    try {
+      await bet();
+    } catch (e: any) {
+      handleUnlockUi();
+    }
+  };
+
+  const handleAutoPlay = async () => {
+    setInitialBuyEvent(undefined);
+
+    if (isInFreeSpinMode) return;
+    if (!isInAutoPlay) return;
+
+    setCurrentPayoutAmount(0);
+    handleUpdateWinText('0');
+    setFreeSpinWinAmount(0);
+    setWonFreeSpins(false);
+    setCurrentAction('autoPlay');
+
+    try {
+      await bet();
+    } catch (e: any) {
+      handleUnlockUi();
+    }
+  };
+
+  const handleInitialAutoPlay = async () => {
+    log('INITIAL AUTOPLAY');
+
+    setInitialBuyEvent(undefined);
+
+    if (isInFreeSpinMode) return;
+
+    setCurrentPayoutAmount(0);
+    handleUpdateWinText('0');
+    setFreeSpinWinAmount(0);
+    setWonFreeSpins(false);
+
+    setCurrentAction('initialAutoplay');
+
+    try {
+      await bet();
+    } catch (e: any) {
+      handleUnlockUi();
+    }
+  };
+
   // Wrap the listener in a useCallback
   const handleMessageFromUnity = React.useCallback(
     (name: string, strParam: string) => {
@@ -288,101 +381,12 @@ export const WinrBonanzaTemplate = ({
       wonFreeSpins,
       previousFreeSpinCount,
       currentAction,
+      handleSubmit,
+      handleFreespin,
+      handleBuy,
+      handleAutoPlay,
     ]
   );
-
-  const handleFreespin = async () => {
-    log('FREESPIN');
-    await wait(300);
-    setCurrentPayoutAmount(0);
-    setWonFreeSpins(false);
-    setInitialBuyEvent(undefined);
-    setCurrentAction('freeSpin');
-
-    try {
-      await freeSpin();
-    } catch (e: any) {}
-  };
-
-  const handleBuy = async () => {
-    setCurrentPayoutAmount(0);
-    handleUpdateWinText('0');
-    setFreeSpinWinAmount(0);
-    setInitialBuyEvent(undefined);
-    setWonFreeSpins(false);
-
-    setCurrentAction('buyFeature');
-
-    try {
-      await buyFreeSpins();
-    } catch (e: any) {
-      setInitialBuyEvent(undefined);
-      handleExitFreespin();
-      handleFreespinAmount(0);
-      hideFreeSpinText();
-      setIsInFreeSpinMode(false);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (isInFreeSpinMode) return;
-    if (isInAutoPlay) return;
-
-    setInitialBuyEvent(undefined);
-    hideFreeSpinText();
-    setCurrentPayoutAmount(0);
-    handleUpdateWinText('0');
-    setFreeSpinWinAmount(0);
-    setWonFreeSpins(false);
-    // for event handling
-    setCurrentAction('submit');
-
-    try {
-      await bet();
-    } catch (e: any) {
-      handleUnlockUi();
-    }
-  };
-
-  const handleAutoPlay = async () => {
-    setInitialBuyEvent(undefined);
-
-    if (isInFreeSpinMode) return;
-    if (!isInAutoPlay) return;
-
-    setCurrentPayoutAmount(0);
-    handleUpdateWinText('0');
-    setFreeSpinWinAmount(0);
-    setWonFreeSpins(false);
-    setCurrentAction('autoPlay');
-
-    try {
-      await bet();
-    } catch (e: any) {
-      handleUnlockUi();
-    }
-  };
-
-  const handleInitialAutoPlay = async () => {
-    log('INITIAL AUTOPLAY');
-
-    setInitialBuyEvent(undefined);
-
-    if (isInFreeSpinMode) return;
-
-    setCurrentPayoutAmount(0);
-    handleUpdateWinText('0');
-    setFreeSpinWinAmount(0);
-    setWonFreeSpins(false);
-
-    setCurrentAction('initialAutoplay');
-
-    try {
-      await bet();
-    } catch (e: any) {
-      handleUnlockUi();
-    }
-  };
 
   React.useEffect(() => {
     if (currentAction == 'submit' && gameEvent?.type == 'Game') {
@@ -629,11 +633,9 @@ export const WinrBonanzaTemplate = ({
     [betAmount, actualBetAmount, isDoubleChance]
   );
 
-  const debouncedFormFields = useDebounce(formFields, 0);
-
   React.useEffect(() => {
-    onFormChange(debouncedFormFields[0]);
-  }, [debouncedFormFields[0]]);
+    onFormChange(formFields);
+  }, [formFields]);
 
   return (
     <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[672px]">
