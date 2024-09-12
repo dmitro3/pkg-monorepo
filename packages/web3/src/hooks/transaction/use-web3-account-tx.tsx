@@ -69,9 +69,11 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
             retryCount++;
 
             if (
-              error?.code !== ErrorCode.InvalidNonce &&
-              (mmAuthSignErrors.includes(error?.message) ||
-                error?.message?.includes(mmAuthSessionErr))
+              (error?.code !== ErrorCode.InvalidNonce &&
+                (mmAuthSignErrors.includes(error?.message) ||
+                  error?.message?.includes(mmAuthSessionErr))) ||
+              error?.code == ErrorCode.InvalidSigner ||
+              error?.code == ErrorCode.Expired
             ) {
               ({ part: _part, permit: _permit } = await getNewSession());
             }

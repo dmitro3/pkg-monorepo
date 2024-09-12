@@ -155,9 +155,11 @@ export const useHandleTx = <
               retryCount++;
               // If the first attempt fails, get a new session and try again
               if (
-                error?.code !== ErrorCode.InvalidNonce &&
-                (mmAuthSignErrors.includes(error?.message) ||
-                  error?.message?.includes(mmAuthSessionErr))
+                (error?.code !== ErrorCode.InvalidNonce &&
+                  (mmAuthSignErrors.includes(error?.message) ||
+                    error?.message?.includes(mmAuthSessionErr))) ||
+                error?.code == ErrorCode.InvalidSigner ||
+                error?.code == ErrorCode.Expired
               ) {
                 ({ part: _part, permit: _permit } = await getNewSession());
               }
