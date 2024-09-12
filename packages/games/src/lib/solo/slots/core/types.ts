@@ -1,4 +1,4 @@
-export enum Bonanza_Unity_Events {
+export enum Slots_Unity_Events {
   BET = 'M3_SpinClick',
   CHANGE_BET = 'M3_ChangeBet',
   DOUBLE_CHANCE_CLICK = 'M3_DoubleChanceClick',
@@ -8,7 +8,7 @@ export enum Bonanza_Unity_Events {
   GRID_ANIMATION_STARTED = 'M3_GridStart',
 }
 
-export enum Bonanza_Unity_Methods {
+export enum Slots_Unity_Methods {
   LOGIN = 'M3_Login',
   SET_CREDIT_VALUE = 'M3_SetCreditValue',
   UPDATE_WIN_TEXT = 'M3_UpdateWin',
@@ -40,10 +40,4 @@ export enum SpinType {
   NORMAL_SPIN,
   FREE_SPIN,
   DOUBLE_CHANCE,
-}
-
-export interface WinrBonanzaFormFields {
-  betAmount: number;
-  actualBetAmount: number;
-  isDoubleChance: boolean;
 }

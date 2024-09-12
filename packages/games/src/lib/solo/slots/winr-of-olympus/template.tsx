@@ -5,19 +5,15 @@ import debug from 'debug';
 import React from 'react';
 import { Unity } from 'react-unity-webgl';
 
-import { UnityGameContainer } from '../../common/containers';
-import { CDN_URL } from '../../constants';
-import { useGameOptions } from '../../game-provider';
-import { wait } from '../../utils/promise';
-import { toDecimals, toFormatted } from '../../utils/web3';
-import { useUnityBonanza } from './hooks/use-bonanza-unity';
-import { useBonanzaGameStore } from './store';
-import {
-  Bonanza_Unity_Events,
-  Bonanza_Unity_Methods,
-  ReelSpinSettled,
-  WinrBonanzaFormFields,
-} from './types';
+import { UnityGameContainer } from '../../../common/containers';
+import { CDN_URL } from '../../../constants';
+import { useGameOptions } from '../../../game-provider';
+import { wait } from '../../../utils/promise';
+import { toDecimals, toFormatted } from '../../../utils/web3';
+import { ReelSpinSettled, Slots_Unity_Events, Slots_Unity_Methods } from '../core/types';
+import { useUnityWinrOfOlympus } from './hooks/use-winr-of-olympus-unity';
+import { useWinrOfOlympusGameStore } from './store';
+import { WinrOfOlympusFormFields } from './types';
 
 interface TemplateProps {
   onRefresh: () => void;
@@ -25,7 +21,7 @@ interface TemplateProps {
   buyFreeSpins: () => Promise<void>;
   freeSpin: () => Promise<void>;
   onError?: (e: any) => void;
-  onFormChange: (fields: WinrBonanzaFormFields) => void;
+  onFormChange: (fields: WinrOfOlympusFormFields) => void;
 
   previousFreeSpinCount: number;
   gameEvent: ReelSpinSettled;
@@ -49,9 +45,9 @@ const unityEventDefaultValue: UnityEventData = {
   strParam: '',
 };
 
-const log = debug('worker:WinrBonanzaTemplate');
+const log = debug('worker:WinrOfOlympusTemplate');
 
-export const WinrBonanzaTemplate = ({
+export const WinrOfOlympusTemplate = ({
   onRefresh,
   bet,
   buyFreeSpins,
@@ -80,7 +76,7 @@ export const WinrBonanzaTemplate = ({
     handleFreespinAmount,
     hideFreeSpinText,
     handleSpinStatus,
-  } = useUnityBonanza({ buildedGameUrl, buildedGameUrlMobile });
+  } = useUnityWinrOfOlympus({ buildedGameUrl, buildedGameUrlMobile });
 
   const {
     betAmount,
@@ -95,7 +91,7 @@ export const WinrBonanzaTemplate = ({
     isInFreeSpinMode,
     isLoggedIn,
     setIsLoggedIn,
-  } = useBonanzaGameStore();
+  } = useWinrOfOlympusGameStore();
 
   const { account } = useGameOptions();
 
@@ -222,7 +218,7 @@ export const WinrBonanzaTemplate = ({
       };
 
       setTimeout(() => {
-        if (obj.name === Bonanza_Unity_Events.BET) {
+        if (obj.name === Slots_Unity_Events.BET) {
           if (!isInFreeSpinMode || !isInAutoPlay) {
             handleSubmit();
           } else {
@@ -270,11 +266,11 @@ export const WinrBonanzaTemplate = ({
           setIsLoggedIn(true);
         }
 
-        if (obj.name === Bonanza_Unity_Events.CHANGE_BET) {
+        if (obj.name === Slots_Unity_Events.CHANGE_BET) {
           setBetAmount(Number(obj.strParam));
         }
 
-        if (obj.name === Bonanza_Unity_Events.DOUBLE_CHANCE_CLICK) {
+        if (obj.name === Slots_Unity_Events.DOUBLE_CHANCE_CLICK) {
           log('DOUBLE CHANCE CLICK', obj.strParam);
 
           log('DOUBLE CHANCE CLICK VAL', obj.strParam === 'true');
@@ -286,7 +282,7 @@ export const WinrBonanzaTemplate = ({
           handleFreespin();
         } */
 
-        if (obj.name === Bonanza_Unity_Events.GRID_ANIMATION_FINISHED) {
+        if (obj.name === Slots_Unity_Events.GRID_ANIMATION_FINISHED) {
           log('GRID ANIMATION FINISHED');
 
           if (isInFreeSpinMode) {
@@ -303,7 +299,7 @@ export const WinrBonanzaTemplate = ({
                 sendMessage(
                   'WebGLHandler',
                   'ReceiveMessage',
-                  Bonanza_Unity_Methods.DEACTIVE_AUTOBET_MODE
+                  Slots_Unity_Methods.DEACTIVE_AUTOBET_MODE
                 );
 
                 sendMessage(
@@ -336,7 +332,7 @@ export const WinrBonanzaTemplate = ({
           onRefresh();
         }
 
-        if (obj.name === Bonanza_Unity_Events.BUY_FEATURE_CLICK) {
+        if (obj.name === Slots_Unity_Events.BUY_FEATURE_CLICK) {
           handleBuy();
 
           setIsInFreeSpinMode(true);
@@ -344,7 +340,7 @@ export const WinrBonanzaTemplate = ({
           // handleEnterFreespin();
         }
 
-        if (obj.name === Bonanza_Unity_Events.CLOSED_CONGRATULATIONS_PANEL) {
+        if (obj.name === Slots_Unity_Events.CLOSED_CONGRATULATIONS_PANEL) {
           if (isInFreeSpinMode && initialBuyEvent && initialBuyEvent?.freeSpinsLeft > 0) {
             const event = initialBuyEvent;
 
@@ -655,7 +651,7 @@ export const WinrBonanzaTemplate = ({
         {percentageRef.current !== 100 && (
           <div className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-flex wr-h-full wr-w-full wr-flex-col wr-items-center wr-justify-center wr-gap-4">
             <img
-              src={`${CDN_URL}/winr-bonanza/loader.jpg`}
+              src={`${CDN_URL}/winr-of-olympus/loader.jpg`}
               className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-h-full wr-w-full wr-rounded-md wr-object-cover"
             />
             <span
@@ -687,7 +683,7 @@ export const WinrBonanzaTemplate = ({
               }}
               className="wr-z-50 wr-text-2xl wr-font-bold wr-text-white"
             >
-              WINR Bonanza
+              WINR Of Olympus
             </span>
           </div>
         )}

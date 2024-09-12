@@ -1,25 +1,25 @@
 'use client';
 
+import debug from 'debug';
 import React, { useEffect } from 'react';
 import { useUnityContext } from 'react-unity-webgl';
 
-import { useEqualizeUnitySound } from '../../../hooks/use-unity-sound';
-import { useBonanzaGameStore } from '../store';
-import { Bonanza_Unity_Methods } from '../types';
-import debug from 'debug';
+import { useEqualizeUnitySound } from '../../../../hooks/use-unity-sound';
+import { Slots_Unity_Methods } from '../../core/types';
+import { useWinrOfOlympusGameStore } from '../store';
 
-interface UseUnityBonanzaParams {
+interface UseUnityWinrOfOlympusParams {
   buildedGameUrl: string;
   buildedGameUrlMobile: string;
 }
 
-const log = debug('worker:UseBonanzaUnity');
+const log = debug('worker:UseWinrOfOlympusUnity');
 
-export const useUnityBonanza = ({
+export const useUnityWinrOfOlympus = ({
   buildedGameUrl,
   buildedGameUrlMobile,
-}: UseUnityBonanzaParams) => {
-  const { gameUrl, setGameUrl, prevWidth, setPrevWidth } = useBonanzaGameStore();
+}: UseUnityWinrOfOlympusParams) => {
+  const { gameUrl, setGameUrl, prevWidth, setPrevWidth } = useWinrOfOlympusGameStore();
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,10 +62,10 @@ export const useUnityBonanza = ({
     addEventListener,
     removeEventListener,
   } = useUnityContext({
-    loaderUrl: `${buildedGameUrl}/WinrBonanza.loader.js`,
-    dataUrl: `${buildedGameUrl}/WinrBonanza.data.unityweb`,
-    frameworkUrl: `${buildedGameUrl}/WinrBonanza.framework.js.unityweb`,
-    codeUrl: `${buildedGameUrl}/WinrBonanza.wasm.unityweb`,
+    loaderUrl: `${buildedGameUrl}/WinrOfOlympus.loader.js`,
+    dataUrl: `${buildedGameUrl}/WinrOfOlympus.data.unityweb`,
+    frameworkUrl: `${buildedGameUrl}/WinrOfOlympus.framework.js.unityweb`,
+    codeUrl: `${buildedGameUrl}/WinrOfOlympus.wasm.unityweb`,
   });
 
   useEqualizeUnitySound({
@@ -79,7 +79,7 @@ export const useUnityBonanza = ({
       sendMessage(
         'WebGLHandler',
         'ReceiveMessage',
-        `${Bonanza_Unity_Methods.SET_CREDIT_VALUE}|${balance}`
+        `${Slots_Unity_Methods.SET_CREDIT_VALUE}|${balance}`
       );
     },
     [sendMessage]
@@ -92,7 +92,7 @@ export const useUnityBonanza = ({
       sendMessage(
         'WebGLHandler',
         'ReceiveMessage',
-        `${Bonanza_Unity_Methods.SET_SPIN_STATUS}|${status === 'active'}`
+        `${Slots_Unity_Methods.SET_SPIN_STATUS}|${status === 'active'}`
       );
     },
     [sendMessage]
@@ -106,7 +106,7 @@ export const useUnityBonanza = ({
 
       log(_grid, 'replaced grid');
 
-      sendMessage('WebGLHandler', 'ReceiveMessage', `${Bonanza_Unity_Methods.SEND_GRID}|${_grid}`);
+      sendMessage('WebGLHandler', 'ReceiveMessage', `${Slots_Unity_Methods.SEND_GRID}|${_grid}`);
     },
     [sendMessage]
   );
@@ -118,7 +118,7 @@ export const useUnityBonanza = ({
       sendMessage(
         'WebGLHandler',
         'ReceiveMessage',
-        `${Bonanza_Unity_Methods.UPDATE_WIN_TEXT}|${win}`
+        `${Slots_Unity_Methods.UPDATE_WIN_TEXT}|${win}`
       );
     },
     [sendMessage]
@@ -131,7 +131,7 @@ export const useUnityBonanza = ({
       sendMessage(
         'WebGLHandler',
         'ReceiveMessage',
-        `${Bonanza_Unity_Methods.SET_FREESPIN_AMOUNT}|${amount}`
+        `${Slots_Unity_Methods.SET_FREESPIN_AMOUNT}|${amount}`
       );
     },
     [sendMessage]
@@ -140,13 +140,13 @@ export const useUnityBonanza = ({
   const hideFreeSpinText = React.useCallback(() => {
     if (!sendMessage) return;
 
-    sendMessage('WebGLHandler', 'ReceiveMessage', `${Bonanza_Unity_Methods.HIDE_FREE_SPIN_COUNT}`);
+    sendMessage('WebGLHandler', 'ReceiveMessage', `${Slots_Unity_Methods.HIDE_FREE_SPIN_COUNT}`);
   }, [sendMessage]);
 
   const handleUnlockUi = React.useCallback(() => {
     if (!sendMessage) return;
 
-    sendMessage('WebGLHandler', 'ReceiveMessage', Bonanza_Unity_Methods.UNLOCK_UI);
+    sendMessage('WebGLHandler', 'ReceiveMessage', Slots_Unity_Methods.UNLOCK_UI);
   }, [sendMessage]);
 
   const handleEnterFreespin = React.useCallback(() => {
@@ -154,7 +154,7 @@ export const useUnityBonanza = ({
 
     log('ENTER WITH SCATTER');
 
-    sendMessage('WebGLHandler', 'ReceiveMessage', Bonanza_Unity_Methods.ENTER_FREE_SPIN);
+    sendMessage('WebGLHandler', 'ReceiveMessage', Slots_Unity_Methods.ENTER_FREE_SPIN);
   }, [sendMessage]);
 
   const handleEnterFreespinWithoutScatter = React.useCallback(() => {
@@ -168,13 +168,13 @@ export const useUnityBonanza = ({
   const handleExitFreespin = React.useCallback(() => {
     if (!sendMessage) return;
 
-    sendMessage('WebGLHandler', 'ReceiveMessage', Bonanza_Unity_Methods.EXIT_FREE_SPIN);
+    sendMessage('WebGLHandler', 'ReceiveMessage', Slots_Unity_Methods.EXIT_FREE_SPIN);
   }, [sendMessage]);
 
   const handleLogin = () => {
     if (!sendMessage) return;
 
-    sendMessage('WebGLHandler', 'ReceiveMessage', Bonanza_Unity_Methods.LOGIN);
+    sendMessage('WebGLHandler', 'ReceiveMessage', Slots_Unity_Methods.LOGIN);
   };
 
   return {

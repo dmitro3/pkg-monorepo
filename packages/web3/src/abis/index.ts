@@ -8,4 +8,5 @@ export { default as rankMiddlewareAbi } from './rank-middleware';
 export { default as strategyStoreAbi } from './strategy-store';
 export { default as videoPokerAbi } from './video-poker';
 export { default as winrBonanzaAbi } from './winr-bonanza';
+export { default as winrOfOlympusAbi } from './winr-of-olympus';
 export { default as wrappedWinrAbi } from './wrapped-winr';
