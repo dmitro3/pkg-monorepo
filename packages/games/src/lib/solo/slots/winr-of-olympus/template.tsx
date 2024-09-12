@@ -373,6 +373,19 @@ export const WinrOfOlympusTemplate = ({
           // handleEnterFreespin();
           // freeSpinTx();
         }
+
+        if (obj.name === Slots_Unity_Events.SCATTER_TUMBLE_AMOUNT) {
+          log('SCATTER TUMBLE AMOUNT', obj.strParam);
+          const event = gameEvent;
+
+          if (event.payoutMultiplier > 0) {
+            const payout = toDecimals(event.payoutMultiplier * event.betAmount, 2);
+
+            setCurrentPayoutAmount(payout);
+
+            handleUpdateWinText(payout.toString());
+          }
+        }
       }, 10);
     },
     [
@@ -486,7 +499,7 @@ export const WinrOfOlympusTemplate = ({
     }
 
     if (currentAction == 'autoPlay' && gameEvent?.type == 'Game') {
-      log('AUTOPLAY SUCCESS');
+      log('AUTOPLAY SUCCESS gameEvent', gameEvent);
 
       if (
         !window.GetMessageFromUnity ||

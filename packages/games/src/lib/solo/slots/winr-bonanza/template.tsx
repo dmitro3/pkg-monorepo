@@ -10,10 +10,10 @@ import { CDN_URL } from '../../../constants';
 import { useGameOptions } from '../../../game-provider';
 import { wait } from '../../../utils/promise';
 import { toDecimals, toFormatted } from '../../../utils/web3';
+import { ReelSpinSettled, Slots_Unity_Events, Slots_Unity_Methods } from '../core/types';
 import { useUnityBonanza } from './hooks/use-bonanza-unity';
 import { useBonanzaGameStore } from './store';
 import { WinrBonanzaFormFields } from './types';
-import { ReelSpinSettled, Slots_Unity_Events, Slots_Unity_Methods } from '../core/types';
 
 interface TemplateProps {
   onRefresh: () => void;
@@ -372,6 +372,19 @@ export const WinrBonanzaTemplate = ({
           // handleBuy();
           // handleEnterFreespin();
           // freeSpinTx();
+        }
+
+        if (obj.name === Slots_Unity_Events.SCATTER_TUMBLE_AMOUNT) {
+          log('SCATTER TUMBLE AMOUNT', obj.strParam);
+          const event = gameEvent;
+
+          if (event.payoutMultiplier > 0) {
+            const payout = toDecimals(event.payoutMultiplier * event.betAmount, 2);
+
+            setCurrentPayoutAmount(payout);
+
+            handleUpdateWinText(payout.toString());
+          }
         }
       }, 10);
     },

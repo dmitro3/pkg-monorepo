@@ -6,6 +6,7 @@ export enum Slots_Unity_Events {
   GRID_ANIMATION_FINISHED = 'M3_GridEnd',
   CLOSED_CONGRATULATIONS_PANEL = 'M3_OnCongInactive',
   GRID_ANIMATION_STARTED = 'M3_GridStart',
+  SCATTER_TUMBLE_AMOUNT = 'M3_ScatterTumbleAmount',
 }
 
 export enum Slots_Unity_Methods {
