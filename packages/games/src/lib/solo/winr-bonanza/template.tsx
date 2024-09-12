@@ -1,19 +1,23 @@
 'use client';
 
+import * as Progress from '@radix-ui/react-progress';
+import debug from 'debug';
 import React from 'react';
 import { Unity } from 'react-unity-webgl';
-import { useDebounce } from 'use-debounce';
-import * as Progress from '@radix-ui/react-progress';
 
 import { UnityGameContainer } from '../../common/containers';
+import { CDN_URL } from '../../constants';
 import { useGameOptions } from '../../game-provider';
 import { wait } from '../../utils/promise';
 import { toDecimals, toFormatted } from '../../utils/web3';
 import { useUnityBonanza } from './hooks/use-bonanza-unity';
 import { useBonanzaGameStore } from './store';
-import { Bonanza_Unity_Events, ReelSpinSettled, SpinType, WinrBonanzaFormFields } from './types';
-import { CDN_URL } from '../../constants';
-import debug from 'debug';
+import {
+  Bonanza_Unity_Events,
+  Bonanza_Unity_Methods,
+  ReelSpinSettled,
+  WinrBonanzaFormFields,
+} from './types';
 
 interface TemplateProps {
   onRefresh: () => void;
@@ -294,6 +298,14 @@ export const WinrBonanzaTemplate = ({
 
                 setIsInFreeSpinMode(false);
 
+                setIsInAutoPlay(false);
+
+                sendMessage(
+                  'WebGLHandler',
+                  'ReceiveMessage',
+                  Bonanza_Unity_Methods.DEACTIVE_AUTOBET_MODE
+                );
+
                 sendMessage(
                   'WebGLHandler',
                   'ReceiveMessage',
@@ -402,15 +414,15 @@ export const WinrBonanzaTemplate = ({
       setFreeSpins(gameEvent.freeSpinsLeft);
 
       if (gameEvent.payoutMultiplier > 0) {
-        let _wager = gameEvent.betAmount;
+        const _wager = gameEvent.betAmount;
 
         log('betamount', gameEvent.betAmount);
 
-        if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
-          _wager = (gameEvent.betAmount * 2) / 3;
-        } else {
-          _wager = gameEvent.betAmount;
-        }
+        // if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
+        //   _wager = (gameEvent.betAmount * 2) / 3;
+        // } else {
+        //   _wager = gameEvent.betAmount;
+        // }
 
         log('WAGER', _wager);
 
@@ -499,15 +511,15 @@ export const WinrBonanzaTemplate = ({
       setFreeSpins(gameEvent.freeSpinsLeft);
 
       if (gameEvent.payoutMultiplier > 0) {
-        let _wager = gameEvent.betAmount;
+        const _wager = gameEvent.betAmount;
 
         log('betamount', gameEvent.betAmount);
 
-        if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
-          _wager = (gameEvent.betAmount * 2) / 3;
-        } else {
-          _wager = gameEvent.betAmount;
-        }
+        // if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
+        //   _wager = (gameEvent.betAmount * 2) / 3;
+        // } else {
+        //   _wager = gameEvent.betAmount;
+        // }
 
         log('WAGER', _wager);
 
@@ -541,15 +553,15 @@ export const WinrBonanzaTemplate = ({
       setFreeSpins(gameEvent.freeSpinsLeft);
 
       if (gameEvent.payoutMultiplier > 0) {
-        let _wager = gameEvent.betAmount;
+        const _wager = gameEvent.betAmount;
 
         log('betamount', gameEvent.betAmount);
 
-        if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
-          _wager = (gameEvent.betAmount * 2) / 3;
-        } else {
-          _wager = gameEvent.betAmount;
-        }
+        // if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
+        //   _wager = (gameEvent.betAmount * 2) / 3;
+        // } else {
+        //   _wager = gameEvent.betAmount;
+        // }
 
         log('WAGER', _wager);
 

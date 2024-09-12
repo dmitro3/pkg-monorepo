@@ -20,6 +20,8 @@ export enum Bonanza_Unity_Methods {
   SET_FREESPIN_AMOUNT = 'M3_SetFreeSpinCount',
   UPDATE_FREE_SPIN_COUNT = 'M3_SetFreeSpinCount',
   HIDE_FREE_SPIN_COUNT = 'M3_DeActiveFreeSpinCountText',
+  DEACTIVE_AUTOBET_MODE = 'M3_DeactiveAutoplay',
+  ACTIVE_AUTOBET_MODE = 'M3_ActiveAutoplay',
 }
 
 export interface ReelSpinSettled {
