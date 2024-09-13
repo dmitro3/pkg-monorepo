@@ -46,7 +46,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
   ]);
 
   const { submitBtnText } = useGameOptions();
-  const { hideWager } = useWheelTheme();
+  const { hideWager, tokenPrefix } = useWheelTheme();
 
   const form = useFormContext() as WheelForm;
 
@@ -172,7 +172,8 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
             >
               <WagerCurrencyIcon />
               <span className={cn('wr-font-semibold wr-text-zinc-100')}>
-                ${toFormatted(maxPayout, 2)}
+                {tokenPrefix}
+                {toFormatted(maxPayout, 2)}
               </span>
             </div>
           </div>
