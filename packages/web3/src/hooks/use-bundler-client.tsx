@@ -92,6 +92,9 @@ export enum BundlerNetwork {
   ARBITRUM = 'ARBITRUM',
   BLAST = 'BLAST',
   OPTIMISM = 'OPTIMISM',
+  ETH = 'ETH',
+  BASE = 'BASE',
+  BSC = 'BSC',
 }
 
 interface JSONPCClientRequestParams {
