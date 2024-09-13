@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  TransactionResponse,
-  useRankControllerTakeLevelupSnapshot,
-  useRefundControllerRefundGame,
-  useRefundControllerReIterate,
-} from '@winrlabs/api';
+import { TransactionResponse, useRankControllerTakeLevelupSnapshot } from '@winrlabs/api';
 import { GameType, useWeb3GamesModalsStore } from '@winrlabs/games';
 import {
   controllerAbi,
@@ -28,17 +23,17 @@ const log = debug('UsePlayerGameStatus');
 
 const gameTypeEnvironmentStoreMap: Record<GameType, GameTypesEnvironmentStore> = {
   [GameType.BACCARAT]: GameTypesEnvironmentStore.baccarat,
-  [GameType.BLACKJACK]: GameTypesEnvironmentStore.blackjackprocessorsecond,
+  [GameType.BLACKJACK]: GameTypesEnvironmentStore.blackjackrouter,
   [GameType.COINFLIP]: GameTypesEnvironmentStore.coinflip,
   [GameType.DICE]: GameTypesEnvironmentStore.dice,
-  [GameType.HOLDEM_POKER]: GameTypesEnvironmentStore.baccarat,
+  [GameType.HOLDEM_POKER]: GameTypesEnvironmentStore.winrpoker,
   [GameType.HORSE_RACE]: GameTypesEnvironmentStore.horserace,
   [GameType.KENO]: GameTypesEnvironmentStore.keno,
   [GameType.LIMBO]: GameTypesEnvironmentStore.limbo,
   [GameType.LOTTERY]: GameTypesEnvironmentStore.lottery,
   [GameType.MINES]: GameTypesEnvironmentStore.mines,
   [GameType.MOON]: GameTypesEnvironmentStore.moon,
-  [GameType.ONE_HAND_BLACKJACK]: GameTypesEnvironmentStore.singleblackjackprocessorsecond,
+  [GameType.ONE_HAND_BLACKJACK]: GameTypesEnvironmentStore.singleblackjackrouter,
   [GameType.PLINKO]: GameTypesEnvironmentStore.plinko,
   [GameType.RANGE]: GameTypesEnvironmentStore.range,
   [GameType.ROULETTE]: GameTypesEnvironmentStore.roulette,

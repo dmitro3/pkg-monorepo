@@ -17,9 +17,10 @@ export enum GameTypesEnvironmentStore {
   roulette = 'roulette',
   baccarat = 'baccarat',
   horserace = 'horserace',
+  winrpoker = 'winrpoker',
   videopoker = 'videopoker',
   winrbonanza = 'winrbonanza',
+  blackjackrouter = 'blackjackrouter',
   rockpaperscissor = 'rockpaperscissor',
-  blackjackprocessorsecond = 'blackjackprocessorsecond',
-  singleblackjackprocessorsecond = 'singleblackjackprocessorsecond',
+  singleblackjackrouter = 'singleblackjackrouter',
 }
