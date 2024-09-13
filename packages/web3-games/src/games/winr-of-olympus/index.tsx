@@ -56,7 +56,7 @@ export default function WinrOfOlympusGame({
   const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
     usePlayerGameStatus({
       gameAddress: gameAddresses.winrOfOlympus,
-      gameType: GameType.WINR_BONANZA,
+      gameType: 'winr_of_olympus',
       wagmiConfig,
       onPlayerStatusUpdate,
     });

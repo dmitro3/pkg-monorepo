@@ -21,32 +21,34 @@ import { Badge } from '../use-get-badges';
 
 const log = debug('UsePlayerGameStatus');
 
-const gameTypeEnvironmentStoreMap: Record<GameType, GameTypesEnvironmentStore> = {
-  [GameType.BACCARAT]: GameTypesEnvironmentStore.baccarat,
-  [GameType.BLACKJACK]: GameTypesEnvironmentStore.blackjackrouter,
-  [GameType.COINFLIP]: GameTypesEnvironmentStore.coinflip,
-  [GameType.DICE]: GameTypesEnvironmentStore.dice,
-  [GameType.HOLDEM_POKER]: GameTypesEnvironmentStore.winrpoker,
-  [GameType.HORSE_RACE]: GameTypesEnvironmentStore.horserace,
-  [GameType.KENO]: GameTypesEnvironmentStore.keno,
-  [GameType.LIMBO]: GameTypesEnvironmentStore.limbo,
-  [GameType.LOTTERY]: GameTypesEnvironmentStore.lottery,
-  [GameType.MINES]: GameTypesEnvironmentStore.mines,
-  [GameType.MOON]: GameTypesEnvironmentStore.moon,
-  [GameType.ONE_HAND_BLACKJACK]: GameTypesEnvironmentStore.singleblackjackrouter,
-  [GameType.PLINKO]: GameTypesEnvironmentStore.plinko,
-  [GameType.RANGE]: GameTypesEnvironmentStore.range,
-  [GameType.ROULETTE]: GameTypesEnvironmentStore.roulette,
-  [GameType.RPS]: GameTypesEnvironmentStore.rockpaperscissor,
-  [GameType.SLOT]: GameTypesEnvironmentStore.winrbonanza,
-  [GameType.VIDEO_POKER]: GameTypesEnvironmentStore.videopoker,
-  [GameType.WHEEL]: GameTypesEnvironmentStore.wheel,
-  [GameType.WINR_BONANZA]: GameTypesEnvironmentStore.winrbonanza,
-};
+const gameTypeEnvironmentStoreMap: Record<GameType | 'winr_of_olympus', GameTypesEnvironmentStore> =
+  {
+    [GameType.BACCARAT]: GameTypesEnvironmentStore.baccarat,
+    [GameType.BLACKJACK]: GameTypesEnvironmentStore.blackjackrouter,
+    [GameType.COINFLIP]: GameTypesEnvironmentStore.coinflip,
+    [GameType.DICE]: GameTypesEnvironmentStore.dice,
+    [GameType.HOLDEM_POKER]: GameTypesEnvironmentStore.winrpoker,
+    [GameType.HORSE_RACE]: GameTypesEnvironmentStore.horserace,
+    [GameType.KENO]: GameTypesEnvironmentStore.keno,
+    [GameType.LIMBO]: GameTypesEnvironmentStore.limbo,
+    [GameType.LOTTERY]: GameTypesEnvironmentStore.lottery,
+    [GameType.MINES]: GameTypesEnvironmentStore.mines,
+    [GameType.MOON]: GameTypesEnvironmentStore.moon,
+    [GameType.ONE_HAND_BLACKJACK]: GameTypesEnvironmentStore.singleblackjackrouter,
+    [GameType.PLINKO]: GameTypesEnvironmentStore.plinko,
+    [GameType.RANGE]: GameTypesEnvironmentStore.range,
+    [GameType.ROULETTE]: GameTypesEnvironmentStore.roulette,
+    [GameType.RPS]: GameTypesEnvironmentStore.rockpaperscissor,
+    [GameType.SLOT]: GameTypesEnvironmentStore.winrbonanza,
+    [GameType.VIDEO_POKER]: GameTypesEnvironmentStore.videopoker,
+    [GameType.WHEEL]: GameTypesEnvironmentStore.wheel,
+    [GameType.WINR_BONANZA]: GameTypesEnvironmentStore.winrbonanza,
+    winr_of_olympus: GameTypesEnvironmentStore.gateofolympos,
+  };
 
 interface IUsePlayerStatusParams {
   gameAddress: Address;
-  gameType: GameType;
+  gameType: GameType | 'winr_of_olympus';
   wagmiConfig: Config;
   onPlayerStatusUpdate?: (d: {
     type: 'levelUp' | 'badgeUp';

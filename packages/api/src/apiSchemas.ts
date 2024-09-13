@@ -266,70 +266,6 @@ export type WagerInfoResponse = {
   multiplier: number;
 };
 
-export type VaultOutput = {
-  bankrollTokenAddress: string;
-  liquidityManagerAddress: string;
-  shareTokenAddress: string;
-  vaultAddress: string;
-  price: number;
-  lpPrice: number;
-  wallet: number;
-  poolSupply: number;
-  weeklyProfit: number;
-  allTimeProfit: number;
-  apr: number;
-};
-
-export type VaultDetailOutput = {
-  vaultIndex: string;
-  bankrollBytesIdentifier: string;
-  vaultAddress: string;
-  bankrollTokenAddress: string;
-  shareTokenAddress: string;
-  controllerAddress: string;
-  liquidityManagerAddress: string;
-};
-
-export type VaultAmountOutput = {
-  bankrollAmount: string;
-  shareTokenAmount: string;
-  epochAmount: string;
-  totalAmount: string;
-  bankrollTokenPrice: string;
-  isProfitEpcoh: number;
-  isProfitTotal: number;
-};
-
-export type PoolOutput = {
-  detail: VaultDetailOutput;
-  amount: VaultAmountOutput;
-};
-
-export type RefundInput = {
-  game:
-    | 'COINFLIP'
-    | 'RANGE'
-    | 'WHEEL'
-    | 'PLINKO'
-    | 'MOON'
-    | 'LOTTERY'
-    | 'RPS'
-    | 'DICE'
-    | 'LIMBO'
-    | 'SLOT'
-    | 'ROULETTE'
-    | 'MINES'
-    | 'VIDEO_POKER'
-    | 'KENO'
-    | 'BACCARAT'
-    | 'HORSE_RACE'
-    | 'BLACKJACK'
-    | 'HOLDEM_POKER'
-    | 'WINR_BONANZA'
-    | 'ONE_HAND_BLACKJACK';
-  player: string;
-};
-
 export type JustBetStats = {
   profitShared: number;
   totalVolume: number;
@@ -477,6 +413,45 @@ export type LeaderboardLossLegendsObject = {
 export type LeaderboardLossLegendsResponse = {
   leaderboard: LeaderboardLossLegendsObject[];
   playerStats: LeaderboardLossLegendsObject;
+};
+
+export type VaultOutput = {
+  bankrollTokenAddress: string;
+  liquidityManagerAddress: string;
+  shareTokenAddress: string;
+  vaultAddress: string;
+  price: number;
+  lpPrice: number;
+  wallet: number;
+  poolSupply: number;
+  weeklyProfit: number;
+  allTimeProfit: number;
+  apr: number;
+};
+
+export type VaultDetailOutput = {
+  vaultIndex: string;
+  bankrollBytesIdentifier: string;
+  vaultAddress: string;
+  bankrollTokenAddress: string;
+  shareTokenAddress: string;
+  controllerAddress: string;
+  liquidityManagerAddress: string;
+};
+
+export type VaultAmountOutput = {
+  bankrollAmount: string;
+  shareTokenAmount: string;
+  epochAmount: string;
+  totalAmount: string;
+  bankrollTokenPrice: string;
+  isProfitEpcoh: number;
+  isProfitTotal: number;
+};
+
+export type PoolOutput = {
+  detail: VaultDetailOutput;
+  amount: VaultAmountOutput;
 };
 
 export type ReferralRewardEntity = {
@@ -683,6 +658,7 @@ export type RewardSummary = {
 };
 
 export type SummaryResponse = {
+  apr: number;
   totalEarnings: number;
   totalWINRLocked: number;
   totalvWINRLocked: number;
