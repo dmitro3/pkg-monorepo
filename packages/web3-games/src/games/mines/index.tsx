@@ -15,6 +15,8 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
+  delay,
+  ErrorCode,
   minesAbi,
   Token,
   useCurrentAccount,
@@ -63,7 +65,7 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
 
-  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+  const { isPlayerHalted, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
     usePlayerGameStatus({
       gameAddress: gameAddresses.mines,
       gameType: GameType.MINES,
@@ -80,6 +82,8 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   const [formSetValue, setFormSetValue] = useState<FormSetValue>();
 
   const [revealCells, setRevealCells] = useState<boolean[]>([]);
+
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
 
   const [formValues, setFormValues] = useState<MinesFormField>({
     wager: props?.minWager || 0.01,
@@ -267,18 +271,16 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
   });
 
   const isPlayerHaltedRef = React.useRef<boolean>(false);
-  const isReIterableRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
-    isReIterableRef.current = isReIterable;
-  }, [isPlayerHalted, isReIterable]);
+  }, [isPlayerHalted]);
 
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
   });
 
-  const onGameSubmit = async (values: MinesFormField) => {
+  const onGameSubmit = async (values: MinesFormField, errorCount = 0) => {
     if (selectedTokenAddress.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     setIsWaitingResponse(true);
@@ -297,7 +299,6 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       log('submit Type:', submitType);
 
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterableRef.current) await playerReIterate();
 
       if (currentSubmitType.current === MINES_SUBMIT_TYPE.FIRST_REVEAL) {
         await handleFirstReveal(values);
@@ -348,13 +349,36 @@ const MinesTemplateWithWeb3 = ({ ...props }: TemplateWithWeb3Props) => {
       refetchPlayerGameStatus();
       setIsWaitingResponse(false);
       // props.onError && props.onError(e);
+      if (e?.code == ErrorCode.SessionWaitingIteration) {
+        log('SESSION WAITING ITERATION');
+        checkIsGameIterableAfterTx();
+        return;
+      }
+      if (
+        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
+        errorCount < 3
+      ) {
+        await delay(150);
+        onGameSubmit(values, errorCount + 1);
+      }
     }
+  };
+
+  const checkIsGameIterableAfterTx = () => {
+    const t = setTimeout(async () => {
+      await playerReIterate();
+    }, 3500);
+
+    iterationTimeoutRef.current = t;
   };
 
   useEffect(() => {
     if (!gameEvent) return;
 
     const gameData = gameEvent.program[0]?.data;
+
+    // clearIterationTimeout
+    clearTimeout(iterationTimeoutRef.current);
 
     if (gameData.status === Status.Final) {
       const hasMine = gameData.mines?.some((cell: boolean) => cell === true);

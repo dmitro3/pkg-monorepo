@@ -11,6 +11,7 @@ import {
 import {
   controllerAbi,
   delay,
+  ErrorCode,
   useCurrentAccount,
   useFastOrVerified,
   usePriceFeed,
@@ -64,7 +65,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
 
-  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+  const { isPlayerHalted, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
     usePlayerGameStatus({
       gameAddress: gameAddresses.roulette,
       gameType: GameType.ROULETTE,
@@ -100,6 +101,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
 
   const [rouletteResult, setRouletteResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
@@ -170,12 +172,10 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
   const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
-  const isReIterableRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
-    isReIterableRef.current = isReIterable;
-  }, [isPlayerHalted, isReIterable]);
+  }, [isPlayerHalted]);
 
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
@@ -196,7 +196,6 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterableRef.current) await playerReIterate();
 
       await sendTx.mutateAsync({
         encodedTxData: getEncodedTxData(v),
@@ -207,12 +206,27 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
       log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
-
-      if (errorCount < 3) {
+      if (e?.code == ErrorCode.SessionWaitingIteration) {
+        log('SESSION WAITING ITERATION');
+        checkIsGameIterableAfterTx();
+        return;
+      }
+      if (
+        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
+        errorCount < 3
+      ) {
         await delay(150);
         onGameSubmit(v, errorCount + 1);
       }
     }
+  };
+
+  const checkIsGameIterableAfterTx = () => {
+    const t = setTimeout(async () => {
+      await playerReIterate();
+    }, 3500);
+
+    iterationTimeoutRef.current = t;
   };
 
   React.useEffect(() => {
@@ -223,6 +237,8 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
       finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled
     ) {
       setRouletteResult(finalResult);
+      // clearIterationTimeout
+      clearTimeout(iterationTimeoutRef.current);
 
       const wager = formValues.wager;
       const selectedNumbers = formValues.selectedNumbers;

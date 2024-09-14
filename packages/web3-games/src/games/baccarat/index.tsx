@@ -11,6 +11,7 @@ import {
 import {
   controllerAbi,
   delay,
+  ErrorCode,
   useCurrentAccount,
   useFastOrVerified,
   usePriceFeed,
@@ -21,6 +22,7 @@ import {
   useWrapWinr,
   WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
+import debug from 'debug';
 import React, { useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
@@ -29,7 +31,6 @@ import { Badge, useBetHistory, useGetBadges, usePlayerGameStatus } from '../hook
 import { useContractConfigContext } from '../hooks/use-contract-config';
 import { useListenGameEvent } from '../hooks/use-listen-game-event';
 import { BaccaratSettledEvent, GAME_HUB_EVENT_TYPES, prepareGameTransaction } from '../utils';
-import debug from 'debug';
 
 const log = debug('worker:BaccaratWeb3');
 
@@ -50,7 +51,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
 
-  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+  const { isPlayerHalted, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
     usePlayerGameStatus({
       gameAddress: gameAddresses.baccarat,
       gameType: GameType.BACCARAT,
@@ -82,6 +83,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const [baccaratResults, setBaccaratResults] = useState<BaccaratGameResult | null>(null);
   const [baccaratSettledResult, setBaccaratSettledResult] =
     React.useState<BaccaratGameSettledResult | null>(null);
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
@@ -157,7 +159,6 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
-    isReIterableRef.current = isReIterable;
   }, [isPlayerHalted]);
 
   const wrapWinrTx = useWrapWinr({
@@ -179,7 +180,6 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterableRef.current) await playerReIterate();
 
       await sendTx.mutateAsync({
         encodedTxData: getEncodedTxData(v),
@@ -190,12 +190,27 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
       log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
-
-      if (errorCount < 3) {
+      if (e?.code == ErrorCode.SessionWaitingIteration) {
+        log('SESSION WAITING ITERATION');
+        checkIsGameIterableAfterTx();
+        return;
+      }
+      if (
+        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
+        errorCount < 3
+      ) {
         await delay(150);
         onGameSubmit(v, errorCount + 1);
       }
     }
+  };
+
+  const checkIsGameIterableAfterTx = () => {
+    const t = setTimeout(async () => {
+      await playerReIterate();
+    }, 3500);
+
+    iterationTimeoutRef.current = t;
   };
 
   React.useEffect(() => {
@@ -210,6 +225,8 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         bankerHand: hands.banker,
       });
 
+      // clearIterationTimeout
+      clearTimeout(iterationTimeoutRef.current);
       const { wager, tieWager, playerWager, bankerWager } = formValues;
       const totalWager = wager * (tieWager + playerWager + bankerWager);
 

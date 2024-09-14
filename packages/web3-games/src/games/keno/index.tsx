@@ -12,6 +12,7 @@ import {
 import {
   controllerAbi,
   delay,
+  ErrorCode,
   useCurrentAccount,
   useFastOrVerified,
   usePriceFeed,
@@ -22,6 +23,7 @@ import {
   useWrapWinr,
   WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
+import debug from 'debug';
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
@@ -35,7 +37,6 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from '../utils';
-import debug from 'debug';
 
 const log = debug('worker:KenoWeb3');
 
@@ -64,7 +65,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
 
-  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+  const { isPlayerHalted, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
     usePlayerGameStatus({
       gameAddress: gameAddresses.keno,
       gameType: GameType.KENO,
@@ -101,6 +102,8 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
 
   const [kenoResult, setKenoResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent<number[]>>>();
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
@@ -177,8 +180,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
-    isReIterableRef.current = isReIterable;
-  }, [isPlayerHalted, isReIterable]);
+  }, [isPlayerHalted]);
 
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
@@ -211,12 +213,27 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       log('error', e);
       refetchPlayerGameStatus();
       // props.onError && props.onError(e);
-
-      if (errorCount < 3) {
+      if (e?.code == ErrorCode.SessionWaitingIteration) {
+        log('SESSION WAITING ITERATION');
+        checkIsGameIterableAfterTx();
+        return;
+      }
+      if (
+        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
+        errorCount < 3
+      ) {
         await delay(150);
         onGameSubmit(v, errorCount + 1);
       }
     }
+  };
+
+  const checkIsGameIterableAfterTx = () => {
+    const t = setTimeout(async () => {
+      await playerReIterate();
+    }, 3500);
+
+    iterationTimeoutRef.current = t;
   };
 
   React.useEffect(() => {
@@ -227,6 +244,8 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
       finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled
     ) {
       setKenoResult(finalResult);
+      // clearIterationTimeout
+      clearTimeout(iterationTimeoutRef.current);
       updateGame({
         wager: formValues.wager || 0,
       });

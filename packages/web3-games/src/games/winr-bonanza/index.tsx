@@ -9,6 +9,8 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
+  delay,
+  ErrorCode,
   useCurrentAccount,
   usePriceFeed,
   useSendTx,
@@ -53,7 +55,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   const { gameAddresses, controllerAddress, cashierAddress, uiOperatorAddress, wagmiConfig } =
     useContractConfigContext();
 
-  const { isPlayerHalted, isReIterable, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
+  const { isPlayerHalted, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
     usePlayerGameStatus({
       gameAddress: gameAddresses.winrBonanza,
       gameType: GameType.WINR_BONANZA,
@@ -68,6 +70,8 @@ export default function WinrBonanzaTemplateWithWeb3({
   });
 
   const gameEvent = useListenGameEvent();
+
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
 
   const { selectedToken } = useTokenStore((s) => ({
     selectedToken: s.selectedToken,
@@ -164,6 +168,14 @@ export default function WinrBonanzaTemplateWithWeb3({
     account: currentAccount.address || '0x',
   });
 
+  const checkIsGameIterableAfterTx = () => {
+    const t = setTimeout(async () => {
+      await playerReIterate();
+    }, 3500);
+
+    iterationTimeoutRef.current = t;
+  };
+
   const handleBet = async (errorCount = 0) => {
     log('spin button called!');
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
@@ -184,7 +196,6 @@ export default function WinrBonanzaTemplateWithWeb3({
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterable) await playerReIterate();
 
       await sendTx.mutateAsync({
         encodedTxData: getEncodedBetTxData(),
@@ -193,13 +204,25 @@ export default function WinrBonanzaTemplateWithWeb3({
       });
     } catch (e: any) {
       refetchPlayerGameStatus();
-      if (errorCount < 10) handleBet(errorCount + 1);
       // onError && onError(e);
+      if (e?.code == ErrorCode.SessionWaitingIteration) {
+        log('SESSION WAITING ITERATION');
+        checkIsGameIterableAfterTx();
+        return;
+      }
+      if (
+        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
+        errorCount < 3
+      ) {
+        await delay(150);
+        handleBet(errorCount + 1);
+      }
+
       throw new Error(e);
     }
   };
 
-  const handleBuyFreeSpins = async () => {
+  const handleBuyFreeSpins = async (errorCount = 0) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
@@ -213,16 +236,27 @@ export default function WinrBonanzaTemplateWithWeb3({
     log('buy feature');
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterable) await playerReIterate();
 
       await sendTx.mutateAsync({
         encodedTxData: getEncodedBuyFreeSpinTxData(),
         target: controllerAddress,
         method: 'sendGameOperation',
       });
-    } catch (e) {
+    } catch (e: any) {
       refetchPlayerGameStatus();
       // onError && onError(e);
+      if (e?.code == ErrorCode.SessionWaitingIteration) {
+        log('SESSION WAITING ITERATION');
+        checkIsGameIterableAfterTx();
+        return;
+      }
+      if (
+        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
+        errorCount < 3
+      ) {
+        await delay(150);
+        handleBuyFreeSpins(errorCount + 1);
+      }
     }
   };
 
@@ -241,7 +275,6 @@ export default function WinrBonanzaTemplateWithWeb3({
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterable) await playerReIterate();
 
       await sendTx.mutateAsync({
         encodedTxData: getEncodedFreeSpinTxData(),
@@ -250,7 +283,18 @@ export default function WinrBonanzaTemplateWithWeb3({
       });
     } catch (e: any) {
       refetchPlayerGameStatus();
-      if (errorCount < 10) handleFreeSpin(errorCount + 1);
+      if (e?.code == ErrorCode.SessionWaitingIteration) {
+        log('SESSION WAITING ITERATION');
+        checkIsGameIterableAfterTx();
+        return;
+      }
+      if (
+        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
+        errorCount < 3
+      ) {
+        await delay(150);
+        handleFreeSpin(errorCount + 1);
+      }
     }
   };
 
@@ -280,7 +324,8 @@ export default function WinrBonanzaTemplateWithWeb3({
       const data = gameEvent.program[0].data;
       const betAmount =
         Number(formatUnits(data.wager, selectedToken.decimals)) * priceFeed[selectedToken.priceKey];
-
+      // clearIterationTimeout
+      clearTimeout(iterationTimeoutRef.current);
       setSettledResult({
         betAmount: betAmount,
         scatterCount: data.result.scatter,

@@ -25,6 +25,7 @@ import {
   useWrapWinr,
   WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
+import debug from 'debug';
 import React from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData, formatUnits } from 'viem';
 import { useReadContract } from 'wagmi';
@@ -49,7 +50,6 @@ import {
   BlackjackSettledEvent,
   BlackjackStandOffEvent,
 } from './types';
-import debug from 'debug';
 
 const log = debug('worker:BlackjackWeb3');
 
