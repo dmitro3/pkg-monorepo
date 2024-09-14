@@ -13,6 +13,7 @@ import {
 import {
   controllerAbi,
   delay,
+  ErrorCode,
   useCurrentAccount,
   useFastOrVerified,
   usePriceFeed,
@@ -102,6 +103,8 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
 
   const [diceResult, setDiceResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
@@ -202,24 +205,41 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterableRef.current) await playerReIterate();
 
       await sendTx.mutateAsync({
         encodedTxData: getEncodedTxData(v),
         method: 'sendGameOperation',
         target: controllerAddress,
       });
+
+      checkIsGameIterableAfterTx();
     } catch (e: any) {
-      log('error', e);
+      log('error', e, e?.code);
       refetchPlayerGameStatus();
       updateGameStatus('ENDED');
       // props.onError && props.onError(e);
+      if (e?.code == ErrorCode.SessionWaitingIteration) {
+        log('SESSION WAITING ITERATION');
+        checkIsGameIterableAfterTx();
 
-      if (errorCount < 3) {
+        return;
+      }
+      if (
+        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
+        errorCount < 2
+      ) {
         await delay(150);
         onGameSubmit(v, errorCount + 1);
       }
     }
+  };
+
+  const checkIsGameIterableAfterTx = () => {
+    const t = setTimeout(async () => {
+      await playerReIterate();
+    }, 3500);
+
+    iterationTimeoutRef.current = t;
   };
 
   React.useEffect(() => {
@@ -232,6 +252,9 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     ) {
       log('settled result');
       setDiceResult(finalResult);
+
+      // clearIterationTimeout
+      clearTimeout(iterationTimeoutRef.current);
       updateGame({
         wager: formValues.wager || 0,
       });

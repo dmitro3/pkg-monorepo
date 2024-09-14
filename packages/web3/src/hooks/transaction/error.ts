@@ -20,9 +20,11 @@ export class NoSignatureFound extends Error {
 }
 
 export class BundlerRequestError extends Error {
-  constructor(message: string = 'Bundler request error') {
+  code: string;
+  constructor(message: string = 'Bundler request error', code: string) {
     super(message);
     this.name = 'BundlerRequestError';
+    this.code = code;
   }
 }
 

@@ -98,7 +98,7 @@ export const useSocialAccountTx: MutationHook<
       } catch (e: any) {
         log('request error', e);
 
-        throw new BundlerRequestError(e.message);
+        throw new BundlerRequestError(e.message, e.code);
       }
     },
   });

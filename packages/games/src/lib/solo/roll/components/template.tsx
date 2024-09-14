@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import debug from 'debug';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
@@ -17,7 +18,6 @@ import { ALL_DICES, LUCK_MULTIPLIER, MIN_BET_COUNT } from '../constant';
 import { DICE, RollFormFields, RollGameResult } from '../types';
 import { BetController } from './bet-controller';
 import { RollGameProps } from './game';
-import debug from 'debug';
 
 const log = debug('worker:RollTemplate');
 
