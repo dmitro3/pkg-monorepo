@@ -103,7 +103,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
 
   const [diceResult, setDiceResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
-  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const iterationIntervalRef = React.useRef<NodeJS.Timeout>();
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
@@ -187,7 +187,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     account: currentAccount.address || '0x',
   });
 
-  const onGameSubmit = async (v: DiceFormFields, errorCount = 0) => {
+  const onGameSubmit = async (v: DiceFormFields) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     updateGameStatus('PLAYING');
@@ -210,33 +210,27 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
         target: controllerAddress,
       });
 
-      checkIsGameIterableAfterTx();
+      iterationIntervalRef.current = setInterval(() => retryGame(v), 2500);
     } catch (e: any) {
-      log('error', e, e?.code);
-      refetchPlayerGameStatus();
-      updateGameStatus('ENDED');
-      // props.onError && props.onError(e);
-      if (e?.code == ErrorCode.SessionWaitingIteration) {
-        log('SESSION WAITING ITERATION');
-        checkIsGameIterableAfterTx();
-        return;
-      }
-      if (
-        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
-        errorCount < 3
-      ) {
-        await delay(150);
-        onGameSubmit(v, errorCount + 1);
-      }
+      handleFail(v, e);
     }
   };
 
-  const checkIsGameIterableAfterTx = () => {
-    const t = setTimeout(async () => {
-      await playerReIterate();
-    }, 3500);
+  const retryGame = async (v: DiceFormFields) => onGameSubmit(v);
 
-    iterationTimeoutRef.current = t;
+  const handleFail = async (v: DiceFormFields, e: any) => {
+    log('error', e, e?.code);
+    refetchPlayerGameStatus();
+    updateGameStatus('ENDED');
+
+    if (e?.code == ErrorCode.SessionWaitingIteration) {
+      log('SESSION WAITING ITERATION');
+      await playerReIterate();
+      return;
+    } else {
+      await delay(500);
+      retryGame(v);
+    }
   };
 
   React.useEffect(() => {
@@ -250,8 +244,8 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       log('settled result');
       setDiceResult(finalResult);
 
-      // clearIterationTimeout
-      clearTimeout(iterationTimeoutRef.current);
+      // clearIterationInterval
+      clearInterval(iterationIntervalRef.current);
       updateGame({
         wager: formValues.wager || 0,
       });
