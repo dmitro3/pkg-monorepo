@@ -103,7 +103,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
 
   const [diceResult, setDiceResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
-  const iterationIntervalRef = React.useRef<NodeJS.Timeout>();
+  const iterationIntervalRef = React.useRef<NodeJS.Timeout[]>([]);
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
@@ -204,13 +204,16 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
 
+      const t = setInterval(async () => playerReIterate(), 2500);
+      iterationIntervalRef.current.push(t);
+
+      log('FUNCTION WORKED', iterationIntervalRef.current);
+
       await sendTx.mutateAsync({
         encodedTxData: getEncodedTxData(v),
         method: 'sendGameOperation',
         target: controllerAddress,
       });
-
-      iterationIntervalRef.current = setInterval(() => retryGame(v), 2500);
     } catch (e: any) {
       handleFail(v, e);
     }
@@ -223,12 +226,16 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     refetchPlayerGameStatus();
     updateGameStatus('ENDED');
 
+    if (e?.code == ErrorCode.ExecutionReverted) return;
+
     if (e?.code == ErrorCode.SessionWaitingIteration) {
       log('SESSION WAITING ITERATION');
       await playerReIterate();
       return;
     } else {
+      log('RETRY GAME');
       await delay(500);
+      log('RETRY GAME CALLED AFTER 500MS');
       retryGame(v);
     }
   };
@@ -245,7 +252,10 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       setDiceResult(finalResult);
 
       // clearIterationInterval
-      clearInterval(iterationIntervalRef.current);
+      iterationIntervalRef.current.forEach((t) => clearInterval(t));
+      iterationIntervalRef.current = [];
+      log('CLEAR TIMEOUT');
+
       updateGame({
         wager: formValues.wager || 0,
       });

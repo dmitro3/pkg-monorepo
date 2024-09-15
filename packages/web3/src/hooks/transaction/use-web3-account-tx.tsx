@@ -6,7 +6,7 @@ import { MutationHook } from '../../utils/types';
 import { useCreateSession, useSessionStore } from '../session';
 import { useBundlerClient } from '../use-bundler-client';
 import { useCurrentAccount } from '../use-current-address';
-import { BundlerClientNotFoundError } from './error';
+import { BundlerClientNotFoundError, BundlerRequestError } from './error';
 import { Web3AccountTxRequest } from './types';
 import { delay } from '../use-token-allowance';
 
@@ -47,14 +47,15 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
       };
 
       let retryCount = 0;
-      const maxRetries = 3;
+      const maxRetries = 2;
 
       const makeRequest = async () => {
         try {
           if (!_part || !_permit || enforceSign) {
             ({ part: _part, permit: _permit } = await getNewSession());
           }
-          return await client.request('call', {
+
+          const req = await client.request('call', {
             call: {
               dest: target as Address,
               data: encodedTxData,
@@ -64,24 +65,30 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
             part: _part,
             permit: _permit,
           });
-        } catch (error: any) {
-          if (retryCount < maxRetries) {
-            retryCount++;
 
-            if (
-              (error?.code !== ErrorCode.InvalidNonce &&
-                (mmAuthSignErrors.includes(error?.message) ||
-                  error?.message?.includes(mmAuthSessionErr))) ||
-              error?.code == ErrorCode.InvalidSigner ||
-              error?.code == ErrorCode.Expired
-            ) {
-              ({ part: _part, permit: _permit } = await getNewSession());
-            }
-            await delay(200);
-            return await makeRequest();
-          } else {
-            throw error;
+          if (req.status !== 'success') {
+            throw new Error(req.status);
           }
+
+          return req;
+        } catch (error: any) {
+          if (
+            (error?.code !== ErrorCode.InvalidNonce &&
+              (mmAuthSignErrors.includes(error?.message) ||
+                error?.message?.includes(mmAuthSessionErr))) ||
+            error?.code == ErrorCode.InvalidSigner ||
+            error?.code == ErrorCode.Expired
+          ) {
+            if (retryCount < maxRetries) {
+              retryCount++;
+
+              ({ part: _part, permit: _permit } = await getNewSession());
+              await delay(500);
+              return await makeRequest();
+            }
+          }
+
+          throw new BundlerRequestError(error.message, error.code);
         }
       };
 
