@@ -18,6 +18,7 @@ type WinrLabsWeb3GamesConfig = {
   contracts: ContractConfig;
   forceRefund?: boolean;
   dictionary?: GameDictionary;
+  winAnimationTokenPrefix?: string;
 };
 
 type WinrLabsWeb3GamesProviderProps = {
@@ -43,6 +44,7 @@ export const WinrLabsWeb3GamesProvider = ({ children, config }: WinrLabsWeb3Game
         options={{
           dictionary: config?.dictionary || {},
           forceRefund: config?.forceRefund,
+          winAnimationTokenPrefix: config?.winAnimationTokenPrefix,
           currency: {
             icon: selectedToken.icon,
             name: selectedToken.symbol,

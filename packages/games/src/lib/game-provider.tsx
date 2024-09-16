@@ -49,6 +49,7 @@ interface GameContextProps {
 
     /**
      * Dictionary for the game texts
+     *
      */
     dictionary?: GameDictionary;
 
@@ -56,6 +57,13 @@ interface GameContextProps {
      * Disable refund popup and force refund the game
      */
     forceRefund?: boolean;
+
+    /**
+     * Token for the game
+     *
+     * @default '$'
+     */
+    winAnimationTokenPrefix?: string;
   };
 }
 
@@ -87,6 +95,7 @@ const GameContext = createContext<
       symbol: '',
     },
     forceRefund: false,
+    winAnimationTokenPrefix: '$',
   },
   isAnimationSkipped: false,
   updateSkipAnimation: () => null,
@@ -101,6 +110,7 @@ export const GameProvider = ({ children, options }: GameProviderProps) => {
         options: {
           ...options,
           forceRefund: options.forceRefund,
+          winAnimationTokenPrefix: options.winAnimationTokenPrefix || '$',
           dictionary: {
             ...defaultDictionary,
             ...options.dictionary,

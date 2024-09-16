@@ -1,11 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
+import { useGameOptions } from '../../game-provider';
 import { useOutsideClick } from '../../hooks/use-outside-click';
 import { toFormatted } from '../../utils/web3';
 import { useWinAnimationStore } from './store';
 
 export const WinAnimation = () => {
   const { show, multiplier, payout, updateWinAnimationState } = useWinAnimationStore();
+  const { winAnimationTokenPrefix } = useGameOptions();
 
   const handleOutsideClick = () =>
     updateWinAnimationState({
@@ -35,7 +37,10 @@ export const WinAnimation = () => {
             <div className="wr-absolute wr-top-1/2 wr-left-1/2 -wr-translate-x-1/2 -wr-translate-y-1/2 wr-flex wr-justify-center wr-items-center wr-gap-3 wr-flex-col">
               <h1 className="wr-text-4xl wr-font-bold">{toFormatted(multiplier, 2)}x</h1>
               <div className="wr-w-[60px] wr-h-[5px] wr-bg-[#366b55] wr-rounded-lg" />
-              <p className="wr-font-semibold wr-text-3xl">${toFormatted(payout, 2)}</p>
+              <p className="wr-font-semibold wr-text-3xl">
+                {winAnimationTokenPrefix}
+                {toFormatted(payout, 2)}
+              </p>
             </div>
           </div>
         </motion.div>
