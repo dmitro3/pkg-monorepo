@@ -202,31 +202,29 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
         target: controllerAddress,
         method: 'sendGameOperation',
       });
+
+      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      log('error', e);
-      refetchPlayerGameStatus();
-      // props.onError && props.onError(e);
-      if (e?.code == ErrorCode.SessionWaitingIteration) {
-        log('SESSION WAITING ITERATION');
-        checkIsGameIterableAfterTx();
-        return;
-      }
-      if (
-        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
-        errorCount < 3
-      ) {
-        await delay(150);
-        onGameSubmit(v, errorCount + 1);
-      }
+      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
-  const checkIsGameIterableAfterTx = () => {
-    const t = setTimeout(async () => {
-      await playerReIterate();
-    }, 3500);
+  const retryGame = async (v: RouletteFormFields) => onGameSubmit(v);
 
-    iterationTimeoutRef.current = t;
+  const handleFail = async (v: RouletteFormFields, e?: any) => {
+    log('error', e, e?.code);
+    refetchPlayerGameStatus();
+
+    if (e?.code == ErrorCode.UserRejectedRequest) return;
+
+    if (e?.code == ErrorCode.SessionWaitingIteration) {
+      log('SESSION WAITING ITERATION');
+      await playerReIterate();
+      return;
+    }
+
+    log('RETRY GAME CALLED AFTER 500MS');
+    retryGame(v);
   };
 
   React.useEffect(() => {

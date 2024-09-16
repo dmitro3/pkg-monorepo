@@ -168,15 +168,7 @@ export default function WinrOfOlympusGame({
     account: currentAccount.address || '0x',
   });
 
-  const checkIsGameIterableAfterTx = () => {
-    const t = setTimeout(async () => {
-      await playerReIterate();
-    }, 3500);
-
-    iterationTimeoutRef.current = t;
-  };
-
-  const handleBet = async (errorCount = 0) => {
+  const handleBet = async () => {
     log('spin button called!');
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
@@ -202,27 +194,15 @@ export default function WinrOfOlympusGame({
         target: controllerAddress,
         method: 'sendGameOperation',
       });
-    } catch (e: any) {
-      refetchPlayerGameStatus();
-      // onError && onError(e);
-      if (e?.code == ErrorCode.SessionWaitingIteration) {
-        log('SESSION WAITING ITERATION');
-        checkIsGameIterableAfterTx();
-        return;
-      }
-      if (
-        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
-        errorCount < 3
-      ) {
-        await delay(150);
-        handleBet(errorCount + 1);
-      }
 
+      iterationTimeoutRef.current = setTimeout(() => handleFail(handleFreeSpin), 2000);
+    } catch (e: any) {
+      iterationTimeoutRef.current = setTimeout(() => handleFail(handleFreeSpin, e), 500);
       throw new Error(e);
     }
   };
 
-  const handleBuyFreeSpins = async (errorCount = 0) => {
+  const handleBuyFreeSpins = async () => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
@@ -244,23 +224,11 @@ export default function WinrOfOlympusGame({
       });
     } catch (e: any) {
       refetchPlayerGameStatus();
-      if (e?.code == ErrorCode.SessionWaitingIteration) {
-        log('SESSION WAITING ITERATION');
-        checkIsGameIterableAfterTx();
-        return;
-      }
-      if (
-        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
-        errorCount < 3
-      ) {
-        await delay(150);
-        handleBuyFreeSpins(errorCount + 1);
-      }
       // onError && onError(e);
     }
   };
 
-  const handleFreeSpin = async (errorCount = 0) => {
+  const handleFreeSpin = async () => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
     // if (!allowance.hasAllowance) {
     //   const handledAllowance = await allowance.handleAllowance({
@@ -281,21 +249,28 @@ export default function WinrOfOlympusGame({
         target: controllerAddress,
         method: 'sendGameOperation',
       });
+
+      iterationTimeoutRef.current = setTimeout(() => handleFail(handleFreeSpin), 2000);
     } catch (e: any) {
-      refetchPlayerGameStatus();
-      if (e?.code == ErrorCode.SessionWaitingIteration) {
-        log('SESSION WAITING ITERATION');
-        checkIsGameIterableAfterTx();
-        return;
-      }
-      if (
-        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
-        errorCount < 3
-      ) {
-        await delay(150);
-        handleFreeSpin(errorCount + 1);
-      }
+      iterationTimeoutRef.current = setTimeout(() => handleFail(handleFreeSpin, e), 500);
+      throw new Error(e);
     }
+  };
+
+  const handleFail = async (submit: () => void, e?: any) => {
+    log('error', e, e?.code);
+    refetchPlayerGameStatus();
+
+    if (e?.code == ErrorCode.UserRejectedRequest) return;
+
+    if (e?.code == ErrorCode.SessionWaitingIteration) {
+      log('SESSION WAITING ITERATION');
+      await playerReIterate();
+      return;
+    }
+
+    log('RETRY GAME CALLED AFTER 500MS');
+    submit();
   };
 
   const gameDataRead = useReadContract({

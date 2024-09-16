@@ -10,7 +10,6 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
-  delay,
   ErrorCode,
   useCurrentAccount,
   useFastOrVerified,
@@ -155,7 +154,6 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
 
   const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
-  const isReIterableRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
@@ -186,31 +184,28 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         method: 'sendGameOperation',
         target: controllerAddress,
       });
+      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      log('error', e);
-      refetchPlayerGameStatus();
-      // props.onError && props.onError(e);
-      if (e?.code == ErrorCode.SessionWaitingIteration) {
-        log('SESSION WAITING ITERATION');
-        checkIsGameIterableAfterTx();
-        return;
-      }
-      if (
-        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
-        errorCount < 3
-      ) {
-        await delay(150);
-        onGameSubmit(v, errorCount + 1);
-      }
+      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
-  const checkIsGameIterableAfterTx = () => {
-    const t = setTimeout(async () => {
-      await playerReIterate();
-    }, 3500);
+  const retryGame = async (v: BaccaratFormFields) => onGameSubmit(v);
 
-    iterationTimeoutRef.current = t;
+  const handleFail = async (v: BaccaratFormFields, e?: any) => {
+    log('error', e, e?.code);
+    refetchPlayerGameStatus();
+
+    if (e?.code == ErrorCode.UserRejectedRequest) return;
+
+    if (e?.code == ErrorCode.SessionWaitingIteration) {
+      log('SESSION WAITING ITERATION');
+      await playerReIterate();
+      return;
+    }
+
+    log('RETRY GAME CALLED AFTER 500MS');
+    retryGame(v);
   };
 
   React.useEffect(() => {

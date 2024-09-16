@@ -183,7 +183,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
     account: currentAccount.address || '0x',
   });
 
-  const onGameSubmit = async (v: CoinFlipFormFields, errorCount = 0) => {
+  const onGameSubmit = async (v: CoinFlipFormFields) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
@@ -205,32 +205,30 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
         method: 'sendGameOperation',
         target: controllerAddress,
       });
+
+      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      log('error', e);
-      refetchPlayerGameStatus();
-      setIsLoading(false); // Set loading state to false
-      // props.onError && props.onError(e);
-      if (e?.code == ErrorCode.SessionWaitingIteration) {
-        log('SESSION WAITING ITERATION');
-        checkIsGameIterableAfterTx();
-        return;
-      }
-      if (
-        (e?.code == ErrorCode.InvalidInputRpcError || e?.code == ErrorCode.FailedOp) &&
-        errorCount < 3
-      ) {
-        await delay(150);
-        onGameSubmit(v, errorCount + 1);
-      }
+      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
-  const checkIsGameIterableAfterTx = () => {
-    const t = setTimeout(async () => {
-      await playerReIterate();
-    }, 3500);
+  const retryGame = async (v: CoinFlipFormFields) => onGameSubmit(v);
 
-    iterationTimeoutRef.current = t;
+  const handleFail = async (v: CoinFlipFormFields, e?: any) => {
+    log('error', e, e?.code);
+    refetchPlayerGameStatus();
+    setIsLoading(false); // Set loading state to false
+
+    if (e?.code == ErrorCode.UserRejectedRequest) return;
+
+    if (e?.code == ErrorCode.SessionWaitingIteration) {
+      log('SESSION WAITING ITERATION');
+      await playerReIterate();
+      return;
+    }
+
+    log('RETRY GAME CALLED AFTER 500MS');
+    retryGame(v);
   };
 
   React.useEffect(() => {

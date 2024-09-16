@@ -103,7 +103,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
 
   const [diceResult, setDiceResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
-  const iterationIntervalRef = React.useRef<NodeJS.Timeout>();
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
@@ -210,9 +210,9 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
         target: controllerAddress,
       });
 
-      iterationIntervalRef.current = setTimeout(() => handleFail(v), 2000);
+      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      iterationIntervalRef.current = setTimeout(() => handleFail(v, e), 500);
+      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
@@ -247,7 +247,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       setDiceResult(finalResult);
 
       // clearIterationInterval
-      clearTimeout(iterationIntervalRef.current);
+      clearTimeout(iterationTimeoutRef.current);
       log('CLEAR TIMEOUT');
 
       updateGame({
