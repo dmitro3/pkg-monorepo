@@ -8,10 +8,12 @@ export default function WheelPage() {
       <WheelGame
         minWager={1}
         maxWager={1}
-        theme={{
-          wheelBackground: '#000',
-          // hideWager: true,
-        }}
+        theme={
+          {
+            // wheelBackground: '#000',
+            // hideWager: true,
+          }
+        }
       />
       ;
       <Web3GamesModals />

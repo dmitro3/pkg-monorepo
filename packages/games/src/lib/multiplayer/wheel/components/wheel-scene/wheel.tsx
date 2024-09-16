@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { CDN_URL } from '../../../../constants';
 import { genNumberArray } from '../../../../utils/number';
 import { cn } from '../../../../utils/style';
 import { WheelColor } from '../../constants';
@@ -101,7 +100,7 @@ export const Wheel: React.FC<WheelContainerProps> = ({ units, spin, degree, onCo
       <div
         className={styles.cursor}
         style={{
-          backgroundImage: `url(${theme.wheelBackground})`,
+          backgroundImage: `url(${theme.cursorBackground})`,
         }}
       />
 
@@ -110,7 +109,7 @@ export const Wheel: React.FC<WheelContainerProps> = ({ units, spin, degree, onCo
           width={278}
           height={278}
           className={styles.circleTurret}
-          src={`${CDN_URL}/wheel/circle.svg`}
+          src={theme.wheelBackground}
           alt="JustBet WINR Chain"
         />
 

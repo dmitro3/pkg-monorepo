@@ -6,10 +6,12 @@ export interface WheelTheme {
   wheelBackground?: string;
   hideWager?: boolean;
   tokenPrefix?: string;
+  cursorBackground?: string;
 }
 
 const defaultTheme: Partial<WheelTheme> = {
-  wheelBackground: `${CDN_URL}/wheel/cursor-wheel.svg`,
+  wheelBackground: `${CDN_URL}/wheel/circle.svg`,
+  cursorBackground: `${CDN_URL}/wheel/cursor-wheel.svg`,
   hideWager: false,
   tokenPrefix: '$',
 };
