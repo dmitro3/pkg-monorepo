@@ -10,7 +10,6 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
-  delay,
   ErrorCode,
   useCurrentAccount,
   useFastOrVerified,
@@ -102,6 +101,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
   const [rouletteResult, setRouletteResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const isMountedRef = React.useRef<boolean>(true);
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
@@ -181,7 +181,7 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
     account: currentAccount.address || '0x',
   });
 
-  const onGameSubmit = async (v: RouletteFormFields, errorCount = 0) => {
+  const onGameSubmit = async (v: RouletteFormFields) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
@@ -203,9 +203,10 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
         method: 'sendGameOperation',
       });
 
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
+      if (isMountedRef.current)
+        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
@@ -307,6 +308,9 @@ export default function RouletteGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     return () => {
+      isMountedRef.current = false;
+      clearTimeout(iterationTimeoutRef.current);
+
       clearLiveResults();
     };
   }, []);

@@ -104,6 +104,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
 
   const [diceResult, setDiceResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const isMountedRef = React.useRef<boolean>(true);
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
@@ -210,9 +211,10 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
         target: controllerAddress,
       });
 
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
+      if (isMountedRef.current)
+        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
@@ -293,6 +295,9 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     return () => {
+      isMountedRef.current = false;
+      clearTimeout(iterationTimeoutRef.current);
+
       clearLiveResults();
     };
   }, []);

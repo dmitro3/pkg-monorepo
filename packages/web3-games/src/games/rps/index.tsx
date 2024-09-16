@@ -102,6 +102,7 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
 
   const [rpsResult, setRpsResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const isMountedRef = React.useRef<boolean>(true);
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
@@ -200,9 +201,10 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
         method: 'sendGameOperation',
       });
 
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
+      if (isMountedRef.current)
+        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
@@ -294,6 +296,9 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     return () => {
+      isMountedRef.current = false;
+      clearTimeout(iterationTimeoutRef.current);
+
       clearLiveResults();
     };
   }, []);

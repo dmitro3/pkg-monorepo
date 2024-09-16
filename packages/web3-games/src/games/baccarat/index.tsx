@@ -83,6 +83,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const [baccaratSettledResult, setBaccaratSettledResult] =
     React.useState<BaccaratGameSettledResult | null>(null);
   const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const isMountedRef = React.useRef<boolean>(true);
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
@@ -184,9 +185,10 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         method: 'sendGameOperation',
         target: controllerAddress,
       });
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
+      if (isMountedRef.current)
+        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
@@ -251,6 +253,14 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
       totalPayout: result.payout,
     });
   };
+
+  React.useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+      clearTimeout(iterationTimeoutRef.current);
+    };
+  }, []);
+
   return (
     <>
       <BaccaratTemplate

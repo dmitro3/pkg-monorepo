@@ -87,6 +87,13 @@ const GameArea: React.FC<GameAreaProps> = ({
     if (!isAutoBetMode) clearTimeout(timeoutRef.current);
   }, [isAutoBetMode]);
 
+  React.useEffect(() => {
+    return () => {
+      onAutoBetModeChange(false);
+      clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   return (
     <div
       className={cn(

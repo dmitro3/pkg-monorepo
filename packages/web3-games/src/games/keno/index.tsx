@@ -103,6 +103,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
   const [kenoResult, setKenoResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent<number[]>>>();
   const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const isMountedRef = React.useRef<boolean>(true);
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
@@ -176,7 +177,6 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
 
   const sendTx = useSendTx();
   const isPlayerHaltedRef = React.useRef<boolean>(false);
-  const isReIterableRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     isPlayerHaltedRef.current = isPlayerHalted;
@@ -186,7 +186,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
     account: currentAccount.address || '0x',
   });
 
-  const onGameSubmit = async (v: KenoFormField, errorCount = 0) => {
+  const onGameSubmit = async (v: KenoFormField) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     updateGameStatus('PLAYING');
@@ -202,16 +202,16 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
 
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
-      if (isReIterableRef.current) await playerReIterate();
 
       await sendTx.mutateAsync({
         encodedTxData: getEncodedTxData(v),
         target: controllerAddress,
         method: 'sendGameOperation',
       });
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
+      if (isMountedRef.current)
+        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
@@ -290,6 +290,9 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     return () => {
+      isMountedRef.current = false;
+      clearTimeout(iterationTimeoutRef.current);
+
       clearLiveResults();
     };
   }, []);

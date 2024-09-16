@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import debug from 'debug';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
@@ -11,7 +12,6 @@ import { parseToBigInt } from '../../../utils/number';
 import { Limbo, LimboFormField, LimboGameResult } from '..';
 import { BetController } from './bet-controller';
 import { LimboGameProps } from './game';
-import debug from 'debug';
 
 const log = debug('worker:LimboTemplate');
 

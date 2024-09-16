@@ -10,7 +10,6 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
-  delay,
   ErrorCode,
   useCurrentAccount,
   useFastOrVerified,
@@ -22,6 +21,7 @@ import {
   useWrapWinr,
   WRAPPED_WINR_BANKROLL,
 } from '@winrlabs/web3';
+import debug from 'debug';
 import React, { useMemo, useState } from 'react';
 import { Address, encodeAbiParameters, encodeFunctionData } from 'viem';
 
@@ -35,7 +35,6 @@ import {
   prepareGameTransaction,
   SingleStepSettledEvent,
 } from '../utils';
-import debug from 'debug';
 
 const log = debug('worker:RollWeb3');
 
@@ -101,6 +100,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
 
   const [rollResult, setRollResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const isMountedRef = React.useRef<boolean>(true);
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
@@ -201,9 +201,10 @@ export default function RollGame(props: TemplateWithWeb3Props) {
         method: 'sendGameOperation',
       });
 
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
+      if (isMountedRef.current)
+        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
@@ -295,6 +296,9 @@ export default function RollGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     return () => {
+      isMountedRef.current = false;
+      clearTimeout(iterationTimeoutRef.current);
+
       clearLiveResults();
     };
   }, []);

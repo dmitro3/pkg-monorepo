@@ -105,6 +105,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
 
   const [limboResult, setLimboResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
   const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const isMountedRef = React.useRef<boolean>(true);
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
     account: currentAccount.address || '0x',
@@ -183,7 +184,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     account: currentAccount.address || '0x',
   });
 
-  const onGameSubmit = async (v: LimboFormField, errorCount = 0) => {
+  const onGameSubmit = async (v: LimboFormField) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     updateGameStatus('PLAYING');
@@ -205,9 +206,11 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
         target: controllerAddress,
         method: 'sendGameOperation',
       });
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+
+      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
+      if (isMountedRef.current)
+        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
@@ -285,6 +288,9 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
 
   React.useEffect(() => {
     return () => {
+      isMountedRef.current = false;
+      clearTimeout(iterationTimeoutRef.current);
+
       clearLiveResults();
     };
   }, []);
