@@ -21,6 +21,11 @@ interface Defaults {
   maxBet: number;
 }
 
+export interface GameDictionary {
+  submitBtn?: string;
+  maxPayout?: string;
+}
+
 interface GameContextProps {
   options: {
     /**
@@ -39,7 +44,11 @@ interface GameContextProps {
     /**
      * Button text for the games
      */
-    submitBtnText?: string;
+
+    /**
+     * Dictionary for the game texts
+     */
+    dictionary?: GameDictionary;
 
     /**
      * Disable refund popup and force refund the game
@@ -52,14 +61,22 @@ interface GameProviderProps extends GameContextProps {
   children: React.ReactNode;
 }
 
+const defaultDictionary: GameDictionary = {
+  submitBtn: 'Bet',
+  maxPayout: 'Max Payout',
+};
+
 const GameContext = createContext<
   GameContextProps & {
     isAnimationSkipped: boolean;
     updateSkipAnimation: (b: boolean) => void;
+    options: GameContextProps['options'] & {
+      dictionary: GameDictionary;
+    };
   }
 >({
   options: {
-    submitBtnText: 'Bet',
+    dictionary: defaultDictionary,
     currency: {
       icon: '',
       name: '',
@@ -79,8 +96,11 @@ export const GameProvider = ({ children, options }: GameProviderProps) => {
       value={{
         options: {
           ...options,
-          submitBtnText: options.submitBtnText || 'Bet',
           forceRefund: options.forceRefund,
+          dictionary: {
+            ...defaultDictionary,
+            ...options.dictionary,
+          },
         },
         updateSkipAnimation: setIsAnimationSkipped,
         isAnimationSkipped,

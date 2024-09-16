@@ -13,7 +13,6 @@ export default function PlinkoPage() {
           // hideWager: true,
           // disableStrategy: true,
           maxPayout: {
-            label: 'Max Gems',
             icon: '/custom/mines/rev-gem.png',
           },
           controllerHeader: <div>Plinko 2D</div>,

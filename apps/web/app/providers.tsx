@@ -148,6 +148,10 @@ export function Providers(props: { children: ReactNode }) {
           <AppUiProviders wagmiConfig={config}>
             <WinrLabsWeb3GamesProvider
               config={{
+                dictionary: {
+                  submitBtn: 'Submit',
+                  maxPayout: 'Max Reward',
+                },
                 wagmiConfig: config,
                 bundlerWsUrl,
                 network,

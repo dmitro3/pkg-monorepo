@@ -25,7 +25,7 @@ export const PreBetButton = ({
 
   const _totalWager = totalWager ? totalWager : wager;
 
-  const { submitBtnText } = useGameOptions();
+  const { dictionary } = useGameOptions();
 
   if (!account?.isLoggedIn)
     return (
@@ -36,7 +36,7 @@ export const PreBetButton = ({
         type="button"
         onClick={onLogin}
       >
-        {submitBtnText}
+        {dictionary.submitBtn}
       </Button>
     );
 

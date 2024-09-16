@@ -45,7 +45,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
     'setIsGamblerParticipant',
   ]);
 
-  const { submitBtnText } = useGameOptions();
+  const { dictionary } = useGameOptions();
   const { hideWager, tokenPrefix } = useWheelTheme();
 
   const form = useFormContext() as WheelForm;
@@ -164,7 +164,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
 
         <div className="wr-mb-6 lg:!wr-block wr-hidden">
           <div>
-            <FormLabel>Max Payout</FormLabel>
+            <FormLabel>{dictionary.maxPayout}</FormLabel>
             <div
               className={cn(
                 'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px]'
@@ -199,7 +199,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
             {timeLeft >= 0 && status === MultiplayerGameStatus.Finish
               ? `Next game in ${timeLeft} seconds`
               : chosenColor !== WheelColor.IDLE
-                ? submitBtnText
+                ? dictionary.submitBtn
                 : 'CHOOSE COLOR'}
           </Button>
         </PreBetButton>

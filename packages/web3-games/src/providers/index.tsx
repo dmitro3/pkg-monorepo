@@ -1,4 +1,4 @@
-import { GameProvider } from '@winrlabs/games';
+import { GameDictionary, GameProvider } from '@winrlabs/games';
 import {
   BundlerNetwork,
   useBalanceStore,
@@ -16,8 +16,8 @@ type WinrLabsWeb3GamesConfig = {
   bundlerWsUrl: string;
   network: BundlerNetwork;
   contracts: ContractConfig;
-  submitBtnText?: string;
   forceRefund?: boolean;
+  dictionary?: GameDictionary;
 };
 
 type WinrLabsWeb3GamesProviderProps = {
@@ -41,7 +41,7 @@ export const WinrLabsWeb3GamesProvider = ({ children, config }: WinrLabsWeb3Game
     <ContractConfigProvider wagmiConfig={config.wagmiConfig} config={config.contracts}>
       <GameProvider
         options={{
-          submitBtnText: config?.submitBtnText,
+          dictionary: config?.dictionary || {},
           forceRefund: config?.forceRefund,
           currency: {
             icon: selectedToken.icon,

@@ -33,7 +33,7 @@ export const ManualController: React.FC<Props> = ({
   maxPayout: maxPayoutOptions,
   tokenPrefix,
 }) => {
-  const { submitBtnText } = useGameOptions();
+  const { dictionary } = useGameOptions();
   const form = useFormContext() as PlinkoForm;
   const clickEffect = useAudioEffect(SoundEffects.BET_BUTTON_CLICK);
 
@@ -48,7 +48,6 @@ export const ManualController: React.FC<Props> = ({
     return toDecimals(wager * maxMultiplier, 2);
   }, [wager, rowSize]);
 
-  const maxPayoutLabel = maxPayoutOptions?.label || 'Max Payout';
   return (
     <>
       {!hideWager && <WagerFormField minWager={minWager} maxWager={maxWager} />}
@@ -56,7 +55,7 @@ export const ManualController: React.FC<Props> = ({
       <PlinkoRowFormField minValue={6} maxValue={12} />
       <div className="wr-mb-6 wr-grid-cols-2 wr-gap-2 lg:!wr-grid wr-hidden">
         <div>
-          <FormLabel>{maxPayoutLabel}</FormLabel>
+          <FormLabel>{dictionary.maxPayout}</FormLabel>
           <div
             className={cn(
               'wr-flex wr-w-full wr-items-center wr-gap-1 wr-rounded-lg wr-bg-zinc-800 wr-px-2 wr-py-[10px] wr-overflow-hidden'
@@ -65,7 +64,7 @@ export const ManualController: React.FC<Props> = ({
             {maxPayoutOptions?.icon ? (
               <img
                 src={maxPayoutOptions.icon}
-                alt={maxPayoutLabel}
+                alt={dictionary.maxPayout}
                 className="wr-mr-1 wr-h-5 wr-w-5"
               />
             ) : (
@@ -99,7 +98,7 @@ export const ManualController: React.FC<Props> = ({
           size={'xl'}
           onClick={() => clickEffect.play()}
         >
-          {submitBtnText}
+          {dictionary.submitBtn}
         </Button>
       </PreBetButton>
     </>
