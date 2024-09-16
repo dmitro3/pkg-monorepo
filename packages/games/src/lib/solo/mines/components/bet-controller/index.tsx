@@ -10,6 +10,7 @@ import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect
 import { useWinAnimation } from '../../../../hooks/use-win-animation';
 import { cn } from '../../../../utils/style';
 import { initialBoard, MINES_MODES } from '../../constants';
+import { MinesTheme } from '../../provider/theme';
 import useMinesGameStateStore from '../../store';
 import { MINES_GAME_STATUS, MINES_SUBMIT_TYPE, MinesForm, MinesFormField } from '../../types';
 import { AutoController } from './auto-controller';
@@ -30,6 +31,7 @@ export interface MinesBetControllerProps {
     React.SetStateAction<(typeof MINES_MODES)[keyof typeof MINES_MODES]>
   >;
   onGameSubmit: (values: MinesFormField) => void;
+  theme?: Partial<MinesTheme>;
 }
 
 const MinesBetController: React.FC<MinesBetControllerProps> = (props) => {
@@ -99,28 +101,30 @@ const MinesBetController: React.FC<MinesBetControllerProps> = (props) => {
             props.onModeChange(v as (typeof MINES_MODES)[keyof typeof MINES_MODES]);
           }}
         >
-          <Tabs.List className="wr-flex wr-w-full wr-justify-between wr-items-center wr-gap-2 wr-font-semibold wr-mb-3">
-            <Tabs.Trigger
-              className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
-                'wr-bg-zinc-800 wr-text-grey-500': props.mode !== 'manual',
-                'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
-              })}
-              value={MINES_MODES.MANUAL}
-              disabled={gameStatus === MINES_GAME_STATUS.IN_PROGRESS}
-            >
-              Manual
-            </Tabs.Trigger>
-            <Tabs.Trigger
-              className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
-                'wr-bg-zinc-800 wr-text-grey-500': props.mode !== 'auto',
-                'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
-              })}
-              value="auto"
-              disabled={gameStatus === MINES_GAME_STATUS.IN_PROGRESS}
-            >
-              Auto
-            </Tabs.Trigger>
-          </Tabs.List>
+          {!props.theme?.hideTabs && (
+            <Tabs.List className="wr-flex wr-w-full wr-justify-between wr-items-center wr-gap-2 wr-font-semibold wr-mb-3">
+              <Tabs.Trigger
+                className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
+                  'wr-bg-zinc-800 wr-text-grey-500': props.mode !== 'manual',
+                  'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
+                })}
+                value={MINES_MODES.MANUAL}
+                disabled={gameStatus === MINES_GAME_STATUS.IN_PROGRESS}
+              >
+                Manual
+              </Tabs.Trigger>
+              <Tabs.Trigger
+                className={cn('wr-w-full wr-px-4 wr-py-2 wr-bg-zinc-700 wr-rounded-md', {
+                  'wr-bg-zinc-800 wr-text-grey-500': props.mode !== 'auto',
+                  'wr-pointer-events-none wr-bg-zinc-800 wr-text-grey-500': props.isAutoBetMode,
+                })}
+                value="auto"
+                disabled={gameStatus === MINES_GAME_STATUS.IN_PROGRESS}
+              >
+                Auto
+              </Tabs.Trigger>
+            </Tabs.List>
+          )}
 
           <AnimatedTabContent value={MINES_MODES.MANUAL}>
             <ManualController {...props} />

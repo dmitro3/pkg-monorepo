@@ -8,6 +8,7 @@ export interface MinesTheme {
   hideWager?: boolean;
   hideInfo?: boolean;
   tokenPrefix?: string;
+  hideTabs?: boolean;
 }
 
 const defaultTheme: Partial<MinesTheme> = {
@@ -15,6 +16,7 @@ const defaultTheme: Partial<MinesTheme> = {
   hideWager: false,
   hideInfo: false,
   tokenPrefix: '$',
+  hideTabs: false,
 };
 
 const MinesThemeContext = createContext<Partial<MinesTheme>>(defaultTheme);
