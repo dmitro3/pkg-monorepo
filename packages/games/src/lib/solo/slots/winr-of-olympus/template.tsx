@@ -10,7 +10,12 @@ import { CDN_URL } from '../../../constants';
 import { useGameOptions } from '../../../game-provider';
 import { wait } from '../../../utils/promise';
 import { toDecimals, toFormatted } from '../../../utils/web3';
-import { ReelSpinSettled, Slots_Unity_Events, Slots_Unity_Methods } from '../core/types';
+import {
+  ReelSpinSettled,
+  Slots_Unity_Events,
+  Slots_Unity_Methods,
+  WinrOfOlympus_Unity_Methods,
+} from '../core/types';
 import { useUnityWinrOfOlympus } from './hooks/use-winr-of-olympus-unity';
 import { useWinrOfOlympusGameStore } from './store';
 import { WinrOfOlympusFormFields } from './types';
@@ -368,10 +373,6 @@ export const WinrOfOlympusTemplate = ({
           if (isInFreeSpinMode && !initialBuyEvent) {
             handleFreespin();
           }
-
-          // handleBuy();
-          // handleEnterFreespin();
-          // freeSpinTx();
         }
 
         if (obj.name === Slots_Unity_Events.SCATTER_TUMBLE_AMOUNT) {
@@ -386,6 +387,12 @@ export const WinrOfOlympusTemplate = ({
             handleUpdateWinText(payout.toString());
           }
         }
+
+        // if (obj.name === Slots_Unity_Events.TUMBLE_AMOUNT) {
+        //   log('TUMBLE AMOUNT', obj.strParam);
+        //   setCurrentPayoutAmount(currentPayoutAmount + Number(obj.strParam));
+        //   handleUpdateWinText((currentPayoutAmount + Number(obj.strParam)).toString());
+        // }
       }, 10);
     },
     [
@@ -439,8 +446,6 @@ export const WinrOfOlympusTemplate = ({
 
         setCurrentPayoutAmount(payout);
       }
-
-      onRefresh();
     }
 
     if (currentAction == 'buyFeature' && gameEvent?.type == 'Game') {
@@ -464,6 +469,7 @@ export const WinrOfOlympusTemplate = ({
       }
 
       setFreeSpins(gameEvent.freeSpinsLeft);
+      onRefresh();
     }
 
     if (currentAction == 'freeSpin' && gameEvent?.type == 'Game') {
@@ -536,8 +542,6 @@ export const WinrOfOlympusTemplate = ({
 
         setCurrentPayoutAmount(payout);
       }
-
-      onRefresh();
     }
 
     if (currentAction == 'initialAutoplay' && gameEvent?.type == 'Game') {
@@ -578,8 +582,20 @@ export const WinrOfOlympusTemplate = ({
 
         setCurrentPayoutAmount(payout);
       }
+    }
 
-      onRefresh();
+    if (gameEvent?.grid) {
+      const multipliers = [];
+      gameEvent?.grid.forEach((arr) => {
+        arr.forEach((n) => n >= 1000 && multipliers.push(n));
+      });
+
+      if (multipliers.length)
+        sendMessage(
+          'WebGLHandler',
+          'ReceiveMessage',
+          WinrOfOlympus_Unity_Methods.ZEUS_ANIMATION_PLAY
+        );
     }
   }, [gameEvent]);
 

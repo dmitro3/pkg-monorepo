@@ -368,10 +368,6 @@ export const WinrBonanzaTemplate = ({
           if (isInFreeSpinMode && !initialBuyEvent) {
             handleFreespin();
           }
-
-          // handleBuy();
-          // handleEnterFreespin();
-          // freeSpinTx();
         }
 
         if (obj.name === Slots_Unity_Events.SCATTER_TUMBLE_AMOUNT) {
@@ -439,8 +435,6 @@ export const WinrBonanzaTemplate = ({
 
         setCurrentPayoutAmount(payout);
       }
-
-      onRefresh();
     }
 
     if (currentAction == 'buyFeature' && gameEvent?.type == 'Game') {
@@ -464,6 +458,7 @@ export const WinrBonanzaTemplate = ({
       }
 
       setFreeSpins(gameEvent.freeSpinsLeft);
+      onRefresh();
     }
 
     if (currentAction == 'freeSpin' && gameEvent?.type == 'Game') {
@@ -536,8 +531,6 @@ export const WinrBonanzaTemplate = ({
 
         setCurrentPayoutAmount(payout);
       }
-
-      onRefresh();
     }
 
     if (currentAction == 'initialAutoplay' && gameEvent?.type == 'Game') {

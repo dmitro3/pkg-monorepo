@@ -7,6 +7,7 @@ export enum Slots_Unity_Events {
   CLOSED_CONGRATULATIONS_PANEL = 'M3_OnCongInactive',
   GRID_ANIMATION_STARTED = 'M3_GridStart',
   SCATTER_TUMBLE_AMOUNT = 'M3_ScatterTumbleAmount',
+  TUMBLE_AMOUNT = 'M3_TumbleAmount',
 }
 
 export enum Slots_Unity_Methods {
@@ -23,6 +24,10 @@ export enum Slots_Unity_Methods {
   HIDE_FREE_SPIN_COUNT = 'M3_DeActiveFreeSpinCountText',
   DEACTIVE_AUTOBET_MODE = 'M3_DeactiveAutoplay',
   ACTIVE_AUTOBET_MODE = 'M3_ActiveAutoplay',
+}
+
+export enum WinrOfOlympus_Unity_Methods {
+  ZEUS_ANIMATION_PLAY = 'G_ZeusAnimationPlay',
 }
 
 export interface ReelSpinSettled {
