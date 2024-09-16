@@ -195,6 +195,34 @@ export enum ErrorCode {
   ReentrancyGuardReentrantCall,
   SenderAddressResult,
   SignatureValidationFailed,
+
+  // Vrf coordintator errors
+
+  BlockhashNotInStore = 2900,
+  IncorrectCommitment,
+  InvalidConsumer,
+  InvalidRequestConfirmations,
+  InvalidSubscription,
+  MustBeRequestedOwner,
+  MustBeSubOwner,
+  NoCorrespondingRequest,
+  NoSuchProvingKey,
+  NumWordsTooBig,
+  PendingRequestExists,
+  ProvingKeyAlreadyRegistered,
+  Reentrant,
+  TooManyConsumers,
+
+  // Erc20 errors
+
+  ERC20InsufficientAllowance = 3000,
+  ERC20InsufficientBalance,
+  ERC20InvalidApprover,
+  ERC20InvalidReceiver,
+  ERC20InvalidSender,
+  ERC20InvalidSpender,
+
+  UserRejectedRequest = 4001,
 }
 
 // FIXME: TEMPORARY FIX

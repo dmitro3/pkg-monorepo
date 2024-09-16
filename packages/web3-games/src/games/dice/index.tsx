@@ -103,7 +103,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
 
   const [diceResult, setDiceResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
-  const iterationIntervalRef = React.useRef<NodeJS.Timeout[]>([]);
+  const iterationIntervalRef = React.useRef<NodeJS.Timeout>();
 
   const currentAccount = useCurrentAccount();
   const { refetch: updateBalances } = useTokenBalances({
@@ -204,40 +204,35 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
 
-      const t = setInterval(async () => playerReIterate(), 2500);
-      iterationIntervalRef.current.push(t);
-
-      log('FUNCTION WORKED', iterationIntervalRef.current);
-
       await sendTx.mutateAsync({
         encodedTxData: getEncodedTxData(v),
         method: 'sendGameOperation',
         target: controllerAddress,
       });
+
+      iterationIntervalRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
-      handleFail(v, e);
+      iterationIntervalRef.current = setTimeout(() => handleFail(v, e), 500);
     }
   };
 
   const retryGame = async (v: DiceFormFields) => onGameSubmit(v);
 
-  const handleFail = async (v: DiceFormFields, e: any) => {
+  const handleFail = async (v: DiceFormFields, e?: any) => {
     log('error', e, e?.code);
     refetchPlayerGameStatus();
     updateGameStatus('ENDED');
 
-    if (e?.code == ErrorCode.ExecutionReverted) return;
+    if (e?.code == ErrorCode.UserRejectedRequest) return;
 
     if (e?.code == ErrorCode.SessionWaitingIteration) {
       log('SESSION WAITING ITERATION');
       await playerReIterate();
       return;
-    } else {
-      log('RETRY GAME');
-      await delay(500);
-      log('RETRY GAME CALLED AFTER 500MS');
-      retryGame(v);
     }
+
+    log('RETRY GAME CALLED AFTER 500MS');
+    retryGame(v);
   };
 
   React.useEffect(() => {
@@ -252,8 +247,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       setDiceResult(finalResult);
 
       // clearIterationInterval
-      iterationIntervalRef.current.forEach((t) => clearInterval(t));
-      iterationIntervalRef.current = [];
+      clearTimeout(iterationIntervalRef.current);
       log('CLEAR TIMEOUT');
 
       updateGame({
