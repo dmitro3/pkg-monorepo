@@ -1,7 +1,7 @@
 'use client';
 
 import { TransactionResponse, useRankControllerTakeLevelupSnapshot } from '@winrlabs/api';
-import { GameType, useWeb3GamesModalsStore } from '@winrlabs/games';
+import { GameType, useGameOptions, useWeb3GamesModalsStore } from '@winrlabs/games';
 import {
   controllerAbi,
   rankMiddlewareAbi,
@@ -70,6 +70,7 @@ export const usePlayerGameStatus = ({
   wagmiConfig,
   onPlayerStatusUpdate,
 }: IUsePlayerStatusParams) => {
+  const { forceRefund } = useGameOptions();
   const [sessionStatus, setSessionStatus] = React.useState<SessionStatus>(SessionStatus.Idle);
   const [lastSeen, setLastSeen] = React.useState<number>(0);
   const [refundCooldown, setRefundCooldown] = React.useState<number>(0);
@@ -222,13 +223,17 @@ export const usePlayerGameStatus = ({
     if (!client || !currentAccount.address) return;
 
     if (isRefundable)
-      openModal('refund', {
-        refund: {
-          isRefunding: false,
-          isRefundable,
-          playerRefund: handlePlayerRefund,
-        },
-      });
+      if (forceRefund) {
+        handlePlayerRefund();
+      } else {
+        openModal('refund', {
+          refund: {
+            isRefunding: false,
+            isRefundable,
+            playerRefund: handlePlayerRefund,
+          },
+        });
+      }
   }, [isRefundable, client, currentAccount.address]);
 
   const handleRefetchPlayerGameStatus = () => {

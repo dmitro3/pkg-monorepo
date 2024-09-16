@@ -40,6 +40,11 @@ interface GameContextProps {
      * Button text for the games
      */
     submitBtnText?: string;
+
+    /**
+     * Disable refund popup and force refund the game
+     */
+    forceRefund?: boolean;
   };
 }
 
@@ -60,6 +65,7 @@ const GameContext = createContext<
       name: '',
       symbol: '',
     },
+    forceRefund: false,
   },
   isAnimationSkipped: false,
   updateSkipAnimation: () => null,
@@ -74,6 +80,7 @@ export const GameProvider = ({ children, options }: GameProviderProps) => {
         options: {
           ...options,
           submitBtnText: options.submitBtnText || 'Bet',
+          forceRefund: options.forceRefund,
         },
         updateSkipAnimation: setIsAnimationSkipped,
         isAnimationSkipped,

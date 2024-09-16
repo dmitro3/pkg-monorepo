@@ -17,6 +17,7 @@ type WinrLabsWeb3GamesConfig = {
   network: BundlerNetwork;
   contracts: ContractConfig;
   submitBtnText?: string;
+  forceRefund?: boolean;
 };
 
 type WinrLabsWeb3GamesProviderProps = {
@@ -41,6 +42,7 @@ export const WinrLabsWeb3GamesProvider = ({ children, config }: WinrLabsWeb3Game
       <GameProvider
         options={{
           submitBtnText: config?.submitBtnText,
+          forceRefund: config?.forceRefund,
           currency: {
             icon: selectedToken.icon,
             name: selectedToken.symbol,
