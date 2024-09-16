@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useGameOptions } from '../../../../game-provider';
 import { SoundEffects, useAudioEffect } from '../../../../hooks/use-audio-effect';
 import {
   CountdownContextState,
@@ -15,6 +16,7 @@ import { Wheel } from './wheel';
 import styles from './wheel-scene.module.css';
 
 export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
+  const { dictionary } = useGameOptions();
   const { winnerAngle, winnerColor, joiningFinish, status, showResult, setShowResult } =
     useWheelGameStore([
       'winnerAngle',
@@ -37,9 +39,9 @@ export const WheelScene = ({ onComplete }: { onComplete?: () => void }) => {
         <div className={styles.status}>
           {status === MultiplayerGameStatus.None && (
             <div className="wr-text-xl wr-leading-6 wr-text-zinc-100 wr-font-semibold">
-              Bet to Start <br />
+              {dictionary.betToStart} <br />
               <p className="wr-text-base wr-leading-2 wr-text-zinc-500 wr-mt-1">
-                The game will start after someone places a bet
+                {dictionary.betToStartDescription}
               </p>
             </div>
           )}

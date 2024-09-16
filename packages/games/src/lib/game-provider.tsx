@@ -24,6 +24,8 @@ interface Defaults {
 export interface GameDictionary {
   submitBtn?: string;
   maxPayout?: string;
+  betToStart?: string;
+  betToStartDescription?: string;
 }
 
 interface GameContextProps {
@@ -64,6 +66,8 @@ interface GameProviderProps extends GameContextProps {
 const defaultDictionary: GameDictionary = {
   submitBtn: 'Bet',
   maxPayout: 'Max Payout',
+  betToStart: 'Bet to Start',
+  betToStartDescription: 'The game will start after someone places a bet',
 };
 
 const GameContext = createContext<
