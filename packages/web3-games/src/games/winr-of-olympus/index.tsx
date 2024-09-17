@@ -365,6 +365,7 @@ export default function WinrOfOlympusGame({
         freeSpin={handleFreeSpin}
         gameEvent={settledResult as ReelSpinSettled}
         previousFreeSpinCount={previousFreeSpinCount}
+        selectedToken={selectedToken}
       />
       {!hideBetHistory && (
         <BetHistoryTemplate

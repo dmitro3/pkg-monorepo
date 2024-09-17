@@ -95,7 +95,7 @@ export const WinrBonanzaTemplate = ({
 
   const { account } = useGameOptions();
 
-  const [freeSpinWinAmount, setFreeSpinWinAmount] = React.useState(0);
+  const [currentTumbleAmount, setCurrentTumbleAmount] = React.useState(0);
   const [isInAutoPlay, setIsInAutoPlay] = React.useState(false);
   const [initialBuyEvent, setInitialBuyEvent] = React.useState<any>(undefined);
   const [wonFreeSpins, setWonFreeSpins] = React.useState(false);
@@ -119,7 +119,7 @@ export const WinrBonanzaTemplate = ({
   const handleFreespin = async () => {
     log('FREESPIN');
     await wait(300);
-    setCurrentPayoutAmount(0);
+    setCurrentTumbleAmount(0);
     setWonFreeSpins(false);
     setInitialBuyEvent(undefined);
     setCurrentAction('freeSpin');
@@ -131,8 +131,8 @@ export const WinrBonanzaTemplate = ({
 
   const handleBuy = async () => {
     setCurrentPayoutAmount(0);
+    setCurrentTumbleAmount(0);
     handleUpdateWinText('0');
-    setFreeSpinWinAmount(0);
     setInitialBuyEvent(undefined);
     setWonFreeSpins(false);
 
@@ -156,8 +156,7 @@ export const WinrBonanzaTemplate = ({
     setInitialBuyEvent(undefined);
     hideFreeSpinText();
     setCurrentPayoutAmount(0);
-    handleUpdateWinText('0');
-    setFreeSpinWinAmount(0);
+    setCurrentTumbleAmount(0);
     setWonFreeSpins(false);
     // for event handling
     setCurrentAction('submit');
@@ -176,8 +175,7 @@ export const WinrBonanzaTemplate = ({
     if (!isInAutoPlay) return;
 
     setCurrentPayoutAmount(0);
-    handleUpdateWinText('0');
-    setFreeSpinWinAmount(0);
+    setCurrentTumbleAmount(0);
     setWonFreeSpins(false);
     setCurrentAction('autoPlay');
 
@@ -196,8 +194,7 @@ export const WinrBonanzaTemplate = ({
     if (isInFreeSpinMode) return;
 
     setCurrentPayoutAmount(0);
-    handleUpdateWinText('0');
-    setFreeSpinWinAmount(0);
+    setCurrentTumbleAmount(0);
     setWonFreeSpins(false);
 
     setCurrentAction('initialAutoplay');
@@ -277,13 +274,15 @@ export const WinrBonanzaTemplate = ({
 
           setIsDoubleChance(obj.strParam === 'true');
         }
-        /* 
-        if (obj.name === "M3_EnterFreeSpinAnimEnd") {
-          handleFreespin();
-        } */
 
         if (obj.name === Slots_Unity_Events.GRID_ANIMATION_FINISHED) {
           log('GRID ANIMATION FINISHED');
+          const payout = toDecimals(gameEvent?.payoutMultiplier * gameEvent?.betAmount, 2);
+
+          if (payout > 0 && gameEvent.payoutMultiplier > 0) {
+            setCurrentPayoutAmount(currentPayoutAmount + payout);
+            handleUpdateWinText((currentPayoutAmount + payout).toString());
+          }
 
           if (isInFreeSpinMode) {
             sendMessage('WebGLHandler', 'ReceiveMessage', `M3_SetFreeSpinCount|${freeSpins}`);
@@ -305,7 +304,7 @@ export const WinrBonanzaTemplate = ({
                 sendMessage(
                   'WebGLHandler',
                   'ReceiveMessage',
-                  `M3_OpenCongForEndFreeSpin|${toDecimals(freeSpinWinAmount, 2)}`
+                  `M3_OpenCongForEndFreeSpin|${toDecimals(currentPayoutAmount + payout, 2)}`
                 );
 
                 handleUnlockUi();
@@ -321,23 +320,17 @@ export const WinrBonanzaTemplate = ({
             handleUnlockUi();
           }
 
-          if (currentPayoutAmount > 0) {
-            if (!isInFreeSpinMode) {
-              handleUpdateWinText(currentPayoutAmount.toString());
-            } else {
-              handleUpdateWinText(freeSpinWinAmount.toString());
-            }
-          }
-
           onRefresh();
+        }
+
+        if (obj.name === Slots_Unity_Events.GRID_ANIMATION_STARTED) {
+          if (!isInFreeSpinMode) handleUpdateWinText('0');
         }
 
         if (obj.name === Slots_Unity_Events.BUY_FEATURE_CLICK) {
           handleBuy();
 
           setIsInFreeSpinMode(true);
-
-          // handleEnterFreespin();
         }
 
         if (obj.name === Slots_Unity_Events.CLOSED_CONGRATULATIONS_PANEL) {
@@ -355,14 +348,6 @@ export const WinrBonanzaTemplate = ({
               'ReceiveMessage',
               `M3_SetFreeSpinCount|${event.freeSpinsLeft}`
             );
-
-            if (event.payoutMultiplier > 0) {
-              const payout = toDecimals(event.payoutMultiplier * event.betAmount, 2);
-
-              setCurrentPayoutAmount(payout);
-
-              setFreeSpinWinAmount(payout);
-            }
           }
 
           if (isInFreeSpinMode && !initialBuyEvent) {
@@ -382,14 +367,23 @@ export const WinrBonanzaTemplate = ({
             handleUpdateWinText(payout.toString());
           }
         }
+
+        if (obj.name === Slots_Unity_Events.TUMBLE_AMOUNT) {
+          log('TUMBLE AMOUNT', obj.strParam);
+
+          setCurrentTumbleAmount(currentTumbleAmount + Number(obj.strParam));
+          handleUpdateWinText(
+            (currentPayoutAmount + currentTumbleAmount + Number(obj.strParam)).toString()
+          );
+        }
       }, 10);
     },
     [
       sendMessage,
       betAmount,
       currentPayoutAmount,
+      currentTumbleAmount,
       isInFreeSpinMode,
-      freeSpinWinAmount,
       freeSpins,
       initialBuyEvent,
       isInAutoPlay,
@@ -417,24 +411,6 @@ export const WinrBonanzaTemplate = ({
       }
 
       setFreeSpins(gameEvent.freeSpinsLeft);
-
-      if (gameEvent.payoutMultiplier > 0) {
-        const _wager = gameEvent.betAmount;
-
-        log('betamount', gameEvent.betAmount);
-
-        // if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
-        //   _wager = (gameEvent.betAmount * 2) / 3;
-        // } else {
-        //   _wager = gameEvent.betAmount;
-        // }
-
-        log('WAGER', _wager);
-
-        const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
-
-        setCurrentPayoutAmount(payout);
-      }
     }
 
     if (currentAction == 'buyFeature' && gameEvent?.type == 'Game') {
@@ -483,14 +459,6 @@ export const WinrBonanzaTemplate = ({
       handleSendGrid(gameEvent.grid);
 
       setFreeSpins(gameEvent.freeSpinsLeft);
-
-      if (gameEvent.payoutMultiplier > 0) {
-        const payout = toDecimals(gameEvent.payoutMultiplier * gameEvent.betAmount, 2);
-
-        setCurrentPayoutAmount(payout);
-
-        setFreeSpinWinAmount(freeSpinWinAmount + payout);
-      }
     }
 
     if (currentAction == 'autoPlay' && gameEvent?.type == 'Game') {
@@ -513,24 +481,6 @@ export const WinrBonanzaTemplate = ({
       handleSendGrid(gameEvent.grid);
 
       setFreeSpins(gameEvent.freeSpinsLeft);
-
-      if (gameEvent.payoutMultiplier > 0) {
-        const _wager = gameEvent.betAmount;
-
-        log('betamount', gameEvent.betAmount);
-
-        // if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
-        //   _wager = (gameEvent.betAmount * 2) / 3;
-        // } else {
-        //   _wager = gameEvent.betAmount;
-        // }
-
-        log('WAGER', _wager);
-
-        const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
-
-        setCurrentPayoutAmount(payout);
-      }
     }
 
     if (currentAction == 'initialAutoplay' && gameEvent?.type == 'Game') {
@@ -554,24 +504,6 @@ export const WinrBonanzaTemplate = ({
 
       setFreeSpins(gameEvent.freeSpinsLeft);
 
-      if (gameEvent.payoutMultiplier > 0) {
-        const _wager = gameEvent.betAmount;
-
-        log('betamount', gameEvent.betAmount);
-
-        // if (gameEvent.spinType === SpinType.DOUBLE_CHANCE) {
-        //   _wager = (gameEvent.betAmount * 2) / 3;
-        // } else {
-        //   _wager = gameEvent.betAmount;
-        // }
-
-        log('WAGER', _wager);
-
-        const payout = toDecimals(gameEvent.payoutMultiplier * _wager, 2);
-
-        setCurrentPayoutAmount(payout);
-      }
-
       onRefresh();
     }
   }, [gameEvent]);
@@ -593,7 +525,7 @@ export const WinrBonanzaTemplate = ({
     handleMessageFromUnity,
     isInFreeSpinMode,
     currentPayoutAmount,
-    freeSpinWinAmount,
+    currentTumbleAmount,
     freeSpins,
     wonFreeSpins,
   ]);
