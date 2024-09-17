@@ -152,6 +152,7 @@ export function Providers(props: { children: ReactNode }) {
                   submitBtn: 'Submit',
                   maxPayout: 'Max Reward',
                 },
+                winAnimationTokenPrefix: '',
                 wagmiConfig: config,
                 bundlerWsUrl,
                 network,

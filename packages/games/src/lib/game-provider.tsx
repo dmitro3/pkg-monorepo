@@ -110,7 +110,10 @@ export const GameProvider = ({ children, options }: GameProviderProps) => {
         options: {
           ...options,
           forceRefund: options.forceRefund,
-          winAnimationTokenPrefix: options.winAnimationTokenPrefix || '$',
+          winAnimationTokenPrefix:
+            typeof options.winAnimationTokenPrefix === 'string'
+              ? options.winAnimationTokenPrefix
+              : '$',
           dictionary: {
             ...defaultDictionary,
             ...options.dictionary,
