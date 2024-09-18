@@ -103,7 +103,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
   const { priceFeed } = usePriceFeed();
 
   const [diceResult, setDiceResult] = useState<DecodedEvent<any, SingleStepSettledEvent>>();
-  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout[]>([]);
   const isMountedRef = React.useRef<boolean>(true);
 
   const currentAccount = useCurrentAccount();
@@ -211,10 +211,15 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
         target: controllerAddress,
       });
 
-      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(v), 2000);
+        iterationTimeoutRef.current.push(t);
+      }
     } catch (e: any) {
-      if (isMountedRef.current)
-        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 750);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(v, e), 750);
+        iterationTimeoutRef.current.push(t);
+      }
     }
   };
 
@@ -249,7 +254,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
       setDiceResult(finalResult);
 
       // clearIterationInterval
-      clearTimeout(iterationTimeoutRef.current);
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
       log('CLEAR TIMEOUT');
 
       updateGame({
@@ -297,7 +302,7 @@ export default function DiceGame(props: TemplateWithWeb3Props) {
     isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
-      clearTimeout(iterationTimeoutRef.current);
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
 
       clearLiveResults();
     };

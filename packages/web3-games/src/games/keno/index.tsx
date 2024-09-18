@@ -102,7 +102,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
 
   const [kenoResult, setKenoResult] =
     useState<DecodedEvent<any, SingleStepSettledEvent<number[]>>>();
-  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout[]>([]);
   const isMountedRef = React.useRef<boolean>(true);
 
   const currentAccount = useCurrentAccount();
@@ -208,10 +208,15 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
         target: controllerAddress,
         method: 'sendGameOperation',
       });
-      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(v), 2000);
+        iterationTimeoutRef.current.push(t);
+      }
     } catch (e: any) {
-      if (isMountedRef.current)
-        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 750);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(v, e), 750);
+        iterationTimeoutRef.current.push(t);
+      }
     }
   };
 
@@ -242,7 +247,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
     ) {
       setKenoResult(finalResult);
       // clearIterationTimeout
-      clearTimeout(iterationTimeoutRef.current);
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
       updateGame({
         wager: formValues.wager || 0,
       });
@@ -292,7 +297,7 @@ export default function KenoGame(props: TemplateWithWeb3Props) {
     isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
-      clearTimeout(iterationTimeoutRef.current);
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
 
       clearLiveResults();
     };

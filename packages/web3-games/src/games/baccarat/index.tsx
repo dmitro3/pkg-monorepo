@@ -82,7 +82,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
   const [baccaratResults, setBaccaratResults] = useState<BaccaratGameResult | null>(null);
   const [baccaratSettledResult, setBaccaratSettledResult] =
     React.useState<BaccaratGameSettledResult | null>(null);
-  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout[]>([]);
   const isMountedRef = React.useRef<boolean>(true);
 
   const currentAccount = useCurrentAccount();
@@ -164,7 +164,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     account: currentAccount.address || '0x',
   });
 
-  const onGameSubmit = async (v: BaccaratFormFields, errorCount = 0) => {
+  const onGameSubmit = async (v: BaccaratFormFields) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
@@ -185,10 +185,15 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         method: 'sendGameOperation',
         target: controllerAddress,
       });
-      if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(v), 2000);
+        iterationTimeoutRef.current.push(t);
+      }
     } catch (e: any) {
-      if (isMountedRef.current)
-        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 750);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(v, e), 750);
+        iterationTimeoutRef.current.push(t);
+      }
     }
   };
 
@@ -223,7 +228,8 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
       });
 
       // clearIterationTimeout
-      clearTimeout(iterationTimeoutRef.current);
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+
       const { wager, tieWager, playerWager, bankerWager } = formValues;
       const totalWager = wager * (tieWager + playerWager + bankerWager);
 
@@ -258,7 +264,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
-      clearTimeout(iterationTimeoutRef.current);
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
     };
   }, []);
 

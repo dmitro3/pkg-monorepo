@@ -71,7 +71,7 @@ export default function WinrOfOlympusGame({
 
   const gameEvent = useListenGameEvent();
 
-  const iterationTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const iterationTimeoutRef = React.useRef<NodeJS.Timeout[]>([]);
   const isMountedRef = React.useRef<boolean>(true);
 
   const { selectedToken } = useTokenStore((s) => ({
@@ -196,11 +196,15 @@ export default function WinrOfOlympusGame({
         method: 'sendGameOperation',
       });
 
-      if (isMountedRef.current)
-        iterationTimeoutRef.current = setTimeout(() => handleFail(handleBet), 2000);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(handleBet), 2000);
+        iterationTimeoutRef.current.push(t);
+      }
     } catch (e: any) {
-      if (isMountedRef.current)
-        iterationTimeoutRef.current = setTimeout(() => handleFail(handleBet, e), 500);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(handleBet, e), 750);
+        iterationTimeoutRef.current.push(t);
+      }
       throw new Error(e);
     }
   };
@@ -253,11 +257,15 @@ export default function WinrOfOlympusGame({
         method: 'sendGameOperation',
       });
 
-      if (isMountedRef.current)
-        iterationTimeoutRef.current = setTimeout(() => handleFail(handleFreeSpin), 2000);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(handleFreeSpin), 2000);
+        iterationTimeoutRef.current.push(t);
+      }
     } catch (e: any) {
-      if (isMountedRef.current)
-        iterationTimeoutRef.current = setTimeout(() => handleFail(handleFreeSpin, e), 500);
+      if (isMountedRef.current) {
+        const t = setTimeout(() => handleFail(handleFreeSpin, e), 750);
+        iterationTimeoutRef.current.push(t);
+      }
       throw new Error(e);
     }
   };
@@ -306,7 +314,7 @@ export default function WinrOfOlympusGame({
         Number(formatUnits(data.wager, selectedToken.decimals)) * priceFeed[selectedToken.priceKey];
 
       // clearIterationTimeout
-      clearTimeout(iterationTimeoutRef.current);
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
 
       setSettledResult({
         betAmount: betAmount,
@@ -350,7 +358,7 @@ export default function WinrOfOlympusGame({
     isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
-      clearTimeout(iterationTimeoutRef.current);
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
     };
   }, []);
 
