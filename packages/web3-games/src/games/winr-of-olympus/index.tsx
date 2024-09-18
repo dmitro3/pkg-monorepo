@@ -347,6 +347,7 @@ export default function WinrOfOlympusGame({
   };
 
   React.useEffect(() => {
+    isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
       clearTimeout(iterationTimeoutRef.current);

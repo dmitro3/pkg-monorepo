@@ -344,6 +344,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   };
 
   React.useEffect(() => {
+    isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
       clearTimeout(iterationTimeoutRef.current);

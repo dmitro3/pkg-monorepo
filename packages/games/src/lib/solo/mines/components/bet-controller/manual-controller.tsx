@@ -165,32 +165,31 @@ export const ManualController: React.FC<Props> = ({
           </div>
         )}
 
-        <PreBetButton>
-          {gameStatus === MINES_GAME_STATUS.ENDED ? (
-            // <Button
-            //   variant={"default"}
-            //   className="wr-w-full wr-bg-yellow-600 hover:wr-bg-yellow-700"
-            //   size={"xl"}
-            //   type="button"
-            //   onClick={() => {
-            //     updateMinesGameState({
-            //       gameStatus: MINES_GAME_STATUS.IDLE,
-            //       submitType: MINES_SUBMIT_TYPE.IDLE,
-            //     });
+        {gameStatus === MINES_GAME_STATUS.ENDED ? (
+          // <Button
+          //   variant={"default"}
+          //   className="wr-w-full wr-bg-yellow-600 hover:wr-bg-yellow-700"
+          //   size={"xl"}
+          //   type="button"
+          //   onClick={() => {
+          //     updateMinesGameState({
+          //       gameStatus: MINES_GAME_STATUS.IDLE,
+          //       submitType: MINES_SUBMIT_TYPE.IDLE,
+          //     });
 
-            //     form.resetField("selectedCells");
+          //     form.resetField("selectedCells");
 
-            //     updateMinesGameState({
-            //       board: initialBoard,
-            //     });
-            //   }}
-            // >
-            //   Reset
-            // </Button>
-            <></>
-          ) : (
-            <>
-              {/* <Button
+          //     updateMinesGameState({
+          //       board: initialBoard,
+          //     });
+          //   }}
+          // >
+          //   Reset
+          // </Button>
+          <></>
+        ) : (
+          <>
+            {/* <Button
                 type="submit"
                 variant={"success"}
                 className="wr-w-full"
@@ -218,28 +217,27 @@ export const ManualController: React.FC<Props> = ({
               >
                 Reveal
               </Button> */}
-              {gameStatus == MINES_GAME_STATUS.IN_PROGRESS && (
-                <Button
-                  type="submit"
-                  variant={'success'}
-                  className="wr-mt-2 wr-flex wr-w-full wr-items-center wr-gap-2 wr-uppercase"
-                  size={'xl'}
-                  isLoading={form.formState.isSubmitting || form.formState.isLoading}
-                  onClick={() => {
-                    updateMinesGameState({
-                      submitType: MINES_SUBMIT_TYPE.CASHOUT,
-                    });
-                  }}
-                  disabled={form.formState.isSubmitting || form.formState.isLoading}
-                >
-                  <span>Get </span>
-                  <div className="wr-h-1 wr-w-1 wr-rounded-full wr-bg-white" />
-                  {`${tokenPrefix}${currentCashoutAmount} (${currentMultiplier}x)`}
-                </Button>
-              )}
-            </>
-          )}
-        </PreBetButton>
+            {gameStatus == MINES_GAME_STATUS.IN_PROGRESS && (
+              <Button
+                type="submit"
+                variant={'success'}
+                className="wr-mt-2 wr-flex wr-w-full wr-items-center wr-gap-2 wr-uppercase"
+                size={'xl'}
+                isLoading={form.formState.isSubmitting || form.formState.isLoading}
+                onClick={() => {
+                  updateMinesGameState({
+                    submitType: MINES_SUBMIT_TYPE.CASHOUT,
+                  });
+                }}
+                disabled={form.formState.isSubmitting || form.formState.isLoading}
+              >
+                <span>Get </span>
+                <div className="wr-h-1 wr-w-1 wr-rounded-full wr-bg-white" />
+                {`${tokenPrefix}${currentCashoutAmount} (${currentMultiplier}x)`}
+              </Button>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

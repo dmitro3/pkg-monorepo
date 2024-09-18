@@ -289,6 +289,7 @@ export default function CoinFlipGame(props: TemplateWithWeb3Props) {
   );
 
   React.useEffect(() => {
+    isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
       clearTimeout(iterationTimeoutRef.current);

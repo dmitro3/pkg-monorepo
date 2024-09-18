@@ -207,10 +207,12 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
         method: 'sendGameOperation',
       });
 
+      console.log(isMountedRef);
       if (isMountedRef.current) iterationTimeoutRef.current = setTimeout(() => handleFail(v), 2000);
     } catch (e: any) {
+      console.log('CATCH!', isMountedRef);
       if (isMountedRef.current)
-        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 500);
+        iterationTimeoutRef.current = setTimeout(() => handleFail(v, e), 750);
     }
   };
 
@@ -287,6 +289,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
   );
 
   React.useEffect(() => {
+    isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
       clearTimeout(iterationTimeoutRef.current);
