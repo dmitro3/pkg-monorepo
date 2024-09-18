@@ -48,6 +48,7 @@ type TemplateProps = PlinkoGameProps & {
   maxWager?: number;
   onSubmitGameForm: (data: PlinkoFormFields) => void;
   onFormChange?: (fields: PlinkoFormFields) => void;
+  onAutoBetModeChange?: (isAutoBetMode: boolean) => void;
   onLogin?: () => void;
 };
 
@@ -150,6 +151,10 @@ const PlinkoTemplate = ({ ...props }: TemplateProps) => {
       return;
     }
   };
+
+  React.useEffect(() => {
+    props.onAutoBetModeChange?.(isAutoBetMode);
+  }, [isAutoBetMode]);
 
   return (
     <Form {...form}>

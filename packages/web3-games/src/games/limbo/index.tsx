@@ -292,6 +292,8 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     [limboResult]
   );
 
+  const onAutoBetModeChange = () => iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+
   React.useEffect(() => {
     isMountedRef.current = true;
     return () => {
@@ -312,6 +314,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
         onAnimationCompleted={onGameCompleted}
         onAnimationStep={onAnimationStep}
         onFormChange={setFormValues}
+        onAutoBetModeChange={onAutoBetModeChange}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

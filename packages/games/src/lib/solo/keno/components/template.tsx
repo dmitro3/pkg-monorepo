@@ -26,6 +26,7 @@ type TemplateProps = KenoGameProps & {
   maxWager?: number;
   onSubmitGameForm: (data: KenoFormField) => void;
   onFormChange?: (fields: KenoFormField) => void;
+  onAutoBetModeChange?: (isAutoBetMode: boolean) => void;
   onLogin?: () => void;
 };
 
@@ -126,6 +127,10 @@ const KenoTemplate = ({ ...props }: TemplateProps) => {
       return;
     }
   };
+
+  React.useEffect(() => {
+    props.onAutoBetModeChange?.(isAutoBetMode);
+  }, [isAutoBetMode]);
 
   return (
     <Form {...form}>

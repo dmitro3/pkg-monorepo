@@ -260,6 +260,8 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
     });
   };
 
+  const onAutoBetModeChange = () => iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+
   React.useEffect(() => {
     isMountedRef.current = true;
     return () => {
@@ -277,6 +279,7 @@ export default function BaccaratGame(props: TemplateWithWeb3Props) {
         baccaratSettledResults={baccaratSettledResult}
         onAnimationCompleted={onGameCompleted}
         onFormChange={setFormValues}
+        onAutoBetModeChange={onAutoBetModeChange}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

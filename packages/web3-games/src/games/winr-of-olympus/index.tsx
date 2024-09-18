@@ -354,6 +354,8 @@ export default function WinrOfOlympusGame({
     });
   };
 
+  const onAutoBetModeChange = () => iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+
   React.useEffect(() => {
     isMountedRef.current = true;
     return () => {
@@ -375,6 +377,7 @@ export default function WinrOfOlympusGame({
         gameEvent={settledResult as ReelSpinSettled}
         previousFreeSpinCount={previousFreeSpinCount}
         selectedToken={selectedToken}
+        onAutoBetModeChange={onAutoBetModeChange}
       />
       {!hideBetHistory && (
         <BetHistoryTemplate

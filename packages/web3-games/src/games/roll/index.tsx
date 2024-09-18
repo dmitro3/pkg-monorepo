@@ -300,6 +300,8 @@ export default function RollGame(props: TemplateWithWeb3Props) {
     [rollResult]
   );
 
+  const onAutoBetModeChange = () => iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+
   React.useEffect(() => {
     isMountedRef.current = true;
     return () => {
@@ -320,6 +322,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
         onFormChange={setFormValues}
         onAnimationStep={onAnimationStep}
         onAnimationSkipped={onAnimationSkipped}
+        onAutoBetModeChange={onAutoBetModeChange}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

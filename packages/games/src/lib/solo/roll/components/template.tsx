@@ -33,6 +33,7 @@ type TemplateProps = RollGameProps & {
   maxWager?: number;
   onSubmitGameForm: (data: RollFormFields) => void;
   onFormChange?: (fields: RollFormFields) => void;
+  onAutoBetModeChange?: (isAutoBetMode: boolean) => void;
   onLogin?: () => void;
 };
 
@@ -158,6 +159,10 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
       return;
     }
   };
+
+  React.useEffect(() => {
+    props.onAutoBetModeChange?.(isAutoBetMode);
+  }, [isAutoBetMode]);
 
   return (
     <Form {...form}>

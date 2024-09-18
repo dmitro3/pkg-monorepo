@@ -299,6 +299,8 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
     [rpsResult]
   );
 
+  const onAutoBetModeChange = () => iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+
   React.useEffect(() => {
     isMountedRef.current = true;
     return () => {
@@ -319,6 +321,7 @@ export default function RpsGame(props: TemplateWithWeb3Props) {
         onFormChange={setFormValues}
         onAnimationStep={onAnimationStep}
         onAnimationSkipped={onAnimationSkipped}
+        onAutoBetModeChange={onAutoBetModeChange}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

@@ -285,6 +285,8 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     [plinkoResult]
   );
 
+  const onAutoBetModeChange = () => iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+
   React.useEffect(() => {
     isMountedRef.current = true;
     return () => {
@@ -304,6 +306,7 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
         onAnimationCompleted={onGameCompleted}
         onFormChange={setFormValues}
         onAnimationStep={onAnimationStep}
+        onAutoBetModeChange={onAutoBetModeChange}
       />
       {!props.hideBetHistory && (
         <BetHistoryTemplate

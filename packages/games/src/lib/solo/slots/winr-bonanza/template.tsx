@@ -22,6 +22,7 @@ interface TemplateProps {
   freeSpin: () => Promise<void>;
   onError?: (e: any) => void;
   onFormChange: (fields: WinrBonanzaFormFields) => void;
+  onAutoBetModeChange?: (isAutoBetMode: boolean) => void;
 
   previousFreeSpinCount: number;
   gameEvent: ReelSpinSettled;
@@ -54,6 +55,7 @@ export const WinrBonanzaTemplate = ({
   freeSpin,
   onError,
   onFormChange,
+  onAutoBetModeChange,
 
   gameEvent,
   previousFreeSpinCount,
@@ -582,6 +584,10 @@ export const WinrBonanzaTemplate = ({
   React.useEffect(() => {
     onFormChange(formFields);
   }, [formFields]);
+
+  React.useEffect(() => {
+    onAutoBetModeChange?.(isInAutoPlay);
+  }, [isInAutoPlay]);
 
   return (
     <UnityGameContainer className="wr-flex wr-overflow-hidden wr-rounded-xl wr-border wr-border-zinc-800 max-lg:wr-flex-col-reverse lg:wr-h-[672px]">

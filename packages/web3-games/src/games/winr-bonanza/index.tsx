@@ -351,6 +351,8 @@ export default function WinrBonanzaTemplateWithWeb3({
     });
   };
 
+  const onAutoBetModeChange = () => iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+
   React.useEffect(() => {
     isMountedRef.current = true;
     return () => {
@@ -371,6 +373,7 @@ export default function WinrBonanzaTemplateWithWeb3({
         freeSpin={handleFreeSpin}
         gameEvent={settledResult as ReelSpinSettled}
         previousFreeSpinCount={previousFreeSpinCount}
+        onAutoBetModeChange={onAutoBetModeChange}
       />
       {!hideBetHistory && (
         <BetHistoryTemplate
