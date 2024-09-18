@@ -46,7 +46,7 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
   ]);
 
   const { dictionary } = useGameOptions();
-  const { hideWager, tokenPrefix } = useWheelTheme();
+  const { hideWager, tokenPrefix, controllerHeader } = useWheelTheme();
 
   const form = useFormContext() as WheelForm;
 
@@ -70,9 +70,13 @@ const BetController: React.FC<Props> = ({ minWager, maxWager, onLogin }) => {
   return (
     <BetControllerContainer data-wheel-bet-controller>
       <div className="max-lg:wr-flex max-lg:wr-flex-col">
-        <div className="lg:wr-mb-3">
-          <BetControllerTitle>Wheel</BetControllerTitle>
-        </div>
+        {controllerHeader ? (
+          controllerHeader
+        ) : (
+          <div className="lg:wr-mb-3">
+            <BetControllerTitle>Wheel</BetControllerTitle>
+          </div>
+        )}
 
         {!hideWager && (
           <WagerFormField

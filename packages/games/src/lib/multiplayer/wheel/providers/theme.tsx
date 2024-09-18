@@ -7,6 +7,7 @@ export interface WheelTheme {
   hideWager?: boolean;
   tokenPrefix?: string;
   cursorBackground?: string;
+  controllerHeader?: React.ReactNode;
 }
 
 const defaultTheme: Partial<WheelTheme> = {
@@ -14,6 +15,7 @@ const defaultTheme: Partial<WheelTheme> = {
   cursorBackground: `${CDN_URL}/wheel/cursor-wheel.svg`,
   hideWager: false,
   tokenPrefix: '$',
+  controllerHeader: null,
 };
 
 const WheelThemeContext = createContext<Partial<WheelTheme>>(defaultTheme);
