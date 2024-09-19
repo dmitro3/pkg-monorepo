@@ -250,7 +250,7 @@ const RouletteTemplate: React.FC<TemplateProps> = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(prepareSubmit)}>
+      <form onSubmit={form.handleSubmit((v) => prepareSubmit(v))}>
         <GameContainer className="wr-relative wr-overflow-hidden wr-pt-0">
           <Roulette.BetController
             isPrepared={isPrepared}

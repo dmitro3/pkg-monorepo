@@ -184,7 +184,7 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
     account: currentAccount.address || '0x',
   });
 
-  const onGameSubmit = async (v: LimboFormField) => {
+  const onGameSubmit = async (v: LimboFormField, errCount = 0) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     updateGameStatus('PLAYING');
@@ -212,19 +212,23 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
         iterationTimeoutRef.current.push(t);
       }
     } catch (e: any) {
-      console.log('CATCH!', isMountedRef);
       if (isMountedRef.current) {
-        const t = setTimeout(() => handleFail(v, e), 750);
+        const t = setTimeout(() => handleFail(v, errCount + 1, e), 750);
         iterationTimeoutRef.current.push(t);
       }
     }
   };
 
-  const retryGame = async (v: LimboFormField) => onGameSubmit(v);
+  const retryGame = async (v: LimboFormField, errCount = 0) => onGameSubmit(v, errCount);
 
-  const handleFail = async (v: LimboFormField, e?: any) => {
+  const handleFail = async (v: LimboFormField, errCount = 0, e?: any) => {
     log('error', e, e?.code);
     refetchPlayerGameStatus();
+
+    if (errCount > 3) {
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+      return;
+    }
 
     if (e?.code == ErrorCode.UserRejectedRequest) return;
 
@@ -234,8 +238,8 @@ export default function LimboGame(props: TemplateWithWeb3Props) {
       return;
     }
 
-    log('RETRY GAME CALLED AFTER 500MS');
-    retryGame(v);
+    log('RETRY GAME CALLED AFTER 750MS');
+    retryGame(v, errCount);
   };
 
   React.useEffect(() => {

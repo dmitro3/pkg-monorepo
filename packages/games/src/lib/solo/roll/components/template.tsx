@@ -166,7 +166,7 @@ const RollTemplate = ({ ...props }: TemplateProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(props.onSubmitGameForm)}>
+      <form onSubmit={form.handleSubmit((v) => props.onSubmitGameForm(v))}>
         <GameContainer>
           <BetController
             maxWager={props?.maxWager || 2000}

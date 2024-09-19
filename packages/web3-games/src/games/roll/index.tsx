@@ -179,7 +179,7 @@ export default function RollGame(props: TemplateWithWeb3Props) {
     account: currentAccount.address || '0x',
   });
 
-  const onGameSubmit = async (v: RollFormFields) => {
+  const onGameSubmit = async (v: RollFormFields, errCount = 0) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
     if (!allowance.hasAllowance) {
@@ -207,17 +207,22 @@ export default function RollGame(props: TemplateWithWeb3Props) {
       }
     } catch (e: any) {
       if (isMountedRef.current) {
-        const t = setTimeout(() => handleFail(v, e), 750);
+        const t = setTimeout(() => handleFail(v, errCount + 1, e), 750);
         iterationTimeoutRef.current.push(t);
       }
     }
   };
 
-  const retryGame = async (v: RollFormFields) => onGameSubmit(v);
+  const retryGame = async (v: RollFormFields, errCount = 0) => onGameSubmit(v, errCount);
 
-  const handleFail = async (v: RollFormFields, e?: any) => {
+  const handleFail = async (v: RollFormFields, errCount = 0, e?: any) => {
     log('error', e, e?.code);
     refetchPlayerGameStatus();
+
+    if (errCount > 3) {
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+      return;
+    }
 
     if (e?.code == ErrorCode.UserRejectedRequest) return;
 
@@ -227,8 +232,8 @@ export default function RollGame(props: TemplateWithWeb3Props) {
       return;
     }
 
-    log('RETRY GAME CALLED AFTER 500MS');
-    retryGame(v);
+    log('RETRY GAME CALLED AFTER 750MS');
+    retryGame(v, errCount);
   };
 
   React.useEffect(() => {

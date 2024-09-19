@@ -168,7 +168,7 @@ export default function WinrBonanzaTemplateWithWeb3({
   const wrapWinrTx = useWrapWinr({
     account: currentAccount.address || '0x',
   });
-  const handleBet = async () => {
+  const handleBet = async (errCount = 0) => {
     log('spin button called!');
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
 
@@ -201,7 +201,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       }
     } catch (e: any) {
       if (isMountedRef.current) {
-        const t = setTimeout(() => handleFail(handleBet, e), 750);
+        const t = setTimeout(() => handleFail(handleBet, errCount + 1, e), 750);
         iterationTimeoutRef.current.push(t);
       }
       throw new Error(e);
@@ -234,7 +234,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     }
   };
 
-  const handleFreeSpin = async () => {
+  const handleFreeSpin = async (errCount = 0) => {
     if (selectedToken.bankrollIndex == WRAPPED_WINR_BANKROLL) await wrapWinrTx();
     // if (!allowance.hasAllowance) {
     //   const handledAllowance = await allowance.handleAllowance({
@@ -262,16 +262,21 @@ export default function WinrBonanzaTemplateWithWeb3({
       }
     } catch (e: any) {
       if (isMountedRef.current) {
-        const t = setTimeout(() => handleFail(handleFreeSpin, e), 750);
+        const t = setTimeout(() => handleFail(handleFreeSpin, errCount + 1, e), 750);
         iterationTimeoutRef.current.push(t);
       }
       throw new Error(e);
     }
   };
 
-  const handleFail = async (submit: () => void, e?: any) => {
+  const handleFail = async (submit: (e?: number) => void, errCount = 0, e?: any) => {
     log('error', e, e?.code);
     refetchPlayerGameStatus();
+
+    if (errCount > 3) {
+      iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
+      return;
+    }
 
     if (e?.code == ErrorCode.UserRejectedRequest) return;
 
@@ -282,7 +287,7 @@ export default function WinrBonanzaTemplateWithWeb3({
     }
 
     log('RETRY GAME CALLED AFTER 500MS');
-    submit();
+    submit(errCount);
   };
 
   const gameDataRead = useReadContract({
