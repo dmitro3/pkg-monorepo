@@ -11,7 +11,6 @@ import {
 } from '@winrlabs/games';
 import {
   controllerAbi,
-  delay,
   ErrorCode,
   useCurrentAccount,
   useFastOrVerified,
@@ -68,7 +67,7 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     });
 
   const [formValues, setFormValues] = useState<PlinkoFormFields>({
-    betCount: 0,
+    betCount: 1,
     stopGain: 0,
     stopLoss: 0,
     increaseOnLoss: 0,
@@ -147,7 +146,13 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
         { name: 'count', type: 'uint8' },
         { name: 'data', type: 'bytes' },
       ],
-      [wagerInWei, stopGainInWei as bigint, stopLossInWei as bigint, 1, encodedChoice]
+      [
+        wagerInWei,
+        stopGainInWei as bigint,
+        stopLossInWei as bigint,
+        formValues.betCount || 1,
+        encodedChoice,
+      ]
     );
 
     return encodeFunctionData({

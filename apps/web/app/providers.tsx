@@ -151,6 +151,7 @@ export function Providers(props: { children: ReactNode }) {
                 dictionary: {
                   submitBtn: 'Submit',
                   maxPayout: 'Max Reward',
+                  betCount: 'Bet Count',
                 },
                 winAnimationTokenPrefix: '',
                 wagmiConfig: config,

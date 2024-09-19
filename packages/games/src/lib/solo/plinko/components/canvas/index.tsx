@@ -194,7 +194,7 @@ export const Canvas: React.FC<CanvasProps> = ({
   return (
     <div className="wr-w-full wr-h-full wr-flex wr-justify-center wr-items-center max-md:wr-max-w-[280px] max-md:wr-mx-auto">
       <div className="wr-relative wr-pt-[5px] max-md:wr-pt-[2px]">
-        <Balls count={1} paths={paths} onAnimationEnd={handleAnimationEnd} />
+        <Balls count={betCount || 1} paths={paths} onAnimationEnd={handleAnimationEnd} />
         <DotRows size={plinkoSize} />
         <Buckets size={plinkoSize} multipliers={multipliers} values={state.results} />
       </div>

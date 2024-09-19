@@ -12,14 +12,15 @@ export default function PlinkoPage() {
           },
           // hideWager: true,
           // disableStrategy: true,
-          maxPayout: {
-            icon: '/custom/mines/rev-gem.png',
-          },
-          controllerHeader: <div>Plinko 2D</div>,
-          hideTabs: true,
-          hideTotalWagerInfo: true,
-          hideWager: true,
-          tokenPrefix: '',
+          // maxPayout: {
+          //   icon: '/custom/mines/rev-gem.png',
+          // },
+          // controllerHeader: <div>Plinko 2D</div>,
+          // // hideTabs: true,
+          // hideTotalWagerInfo: true,
+          // hideWager: true,
+          // tokenPrefix: '',
+          // showBetCount: true,
         }}
         minWager={0.1}
         maxWager={2000}
