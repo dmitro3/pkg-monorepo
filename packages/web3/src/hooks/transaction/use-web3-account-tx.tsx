@@ -59,7 +59,7 @@ export const useWeb3AccountTx: MutationHook<Web3AccountTxRequest, { status: stri
             call: {
               dest: target as Address,
               data: encodedTxData,
-              value: Number(value),
+              value: value,
             },
             owner: userAddress!,
             part: _part,
