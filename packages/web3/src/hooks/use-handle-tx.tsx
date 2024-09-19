@@ -144,7 +144,9 @@ export const useHandleTx = <
               call: {
                 dest: writeContractVariables.address as Address,
                 data: encodedData,
-                value: (writeContractVariables.value?.toString() + 'n') as any,
+                value: writeContractVariables.value
+                  ? ((writeContractVariables.value?.toString() + 'n') as any)
+                  : ('0n' as any),
               },
               owner: rootAddress!,
               part: _part ?? '0x',
