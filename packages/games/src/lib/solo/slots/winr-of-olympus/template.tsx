@@ -512,19 +512,19 @@ export const WinrOfOlympusTemplate = ({
       setFreeSpins(gameEvent.freeSpinsLeft);
     }
 
-    if (gameEvent?.grid) {
-      const multipliers = [];
-      gameEvent?.grid.forEach((arr) => {
-        arr.forEach((n) => n >= 1000 && multipliers.push(n));
-      });
+    // if (gameEvent?.grid) {
+    //   const multipliers = [];
+    //   gameEvent?.grid.forEach((arr) => {
+    //     arr.forEach((n) => n >= 1000 && multipliers.push(n));
+    //   });
 
-      if (multipliers.length)
-        sendMessage(
-          'WebGLHandler',
-          'ReceiveMessage',
-          WinrOfOlympus_Unity_Methods.ZEUS_ANIMATION_PLAY
-        );
-    }
+    //   if (multipliers.length)
+    //     sendMessage(
+    //       'WebGLHandler',
+    //       'ReceiveMessage',
+    //       WinrOfOlympus_Unity_Methods.ZEUS_ANIMATION_PLAY
+    //     );
+    // }
   }, [gameEvent]);
 
   React.useEffect(() => {

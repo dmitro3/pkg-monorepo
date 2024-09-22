@@ -286,7 +286,7 @@ export default function WinrBonanzaTemplateWithWeb3({
       return;
     }
 
-    log('RETRY GAME CALLED AFTER 500MS');
+    log('RETRY GAME CALLED AFTER 750MS');
     submit(errCount);
   };
 
