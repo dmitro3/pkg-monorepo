@@ -7,16 +7,11 @@ import React from 'react';
 import { Unity } from 'react-unity-webgl';
 
 import { UnityGameContainer } from '../../../common/containers';
-import { CDN_URL } from '../../../constants';
 import { useGameOptions } from '../../../game-provider';
+import useMediaQuery from '../../../hooks/use-media-query';
 import { wait } from '../../../utils/promise';
 import { toDecimals, toFormatted } from '../../../utils/web3';
-import {
-  ReelSpinSettled,
-  Slots_Unity_Events,
-  Slots_Unity_Methods,
-  WinrOfOlympus_Unity_Methods,
-} from '../core/types';
+import { ReelSpinSettled, Slots_Unity_Events, Slots_Unity_Methods } from '../core/types';
 import { useUnityWinrOfOlympus } from './hooks/use-winr-of-olympus-unity';
 import { useWinrOfOlympusGameStore } from './store';
 import { WinrOfOlympusFormFields } from './types';
@@ -104,6 +99,7 @@ export const WinrOfOlympusTemplate = ({
   } = useWinrOfOlympusGameStore();
 
   const { account } = useGameOptions();
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const [currentTumbleAmount, setCurrentTumbleAmount] = React.useState(0);
   const [isInAutoPlay, setIsInAutoPlay] = React.useState(false);
@@ -606,7 +602,7 @@ export const WinrOfOlympusTemplate = ({
         {percentageRef.current !== 100 && (
           <div className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-flex wr-h-full wr-w-full wr-flex-col wr-items-center wr-justify-center wr-gap-4">
             <img
-              src={`${CDN_URL}/winr-of-olympus/loader.jpg`}
+              src={`${isMobile ? buildedGameUrlMobile + '/loader.jpg' : buildedGameUrl + '/loader.jpg'}`}
               className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-h-full wr-w-full wr-rounded-md wr-object-cover"
             />
             <span
