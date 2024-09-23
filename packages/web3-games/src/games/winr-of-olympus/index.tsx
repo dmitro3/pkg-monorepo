@@ -58,7 +58,7 @@ export default function WinrOfOlympusGame({
   const { isPlayerHalted, playerLevelUp, playerReIterate, refetchPlayerGameStatus } =
     usePlayerGameStatus({
       gameAddress: gameAddresses.winrOfOlympus,
-      gameType: 'winr_of_olympus',
+      gameType: GameType.WINR_OLYMPUS,
       wagmiConfig,
       onPlayerStatusUpdate,
     });
@@ -336,7 +336,7 @@ export default function WinrOfOlympusGame({
 
   const { betHistory, isHistoryLoading, mapHistoryTokens, setHistoryFilter, refetchHistory } =
     useBetHistory({
-      gameType: GameType.WINR_BONANZA,
+      gameType: GameType.WINR_OLYMPUS,
       options: {
         enabled: !hideBetHistory,
       },
