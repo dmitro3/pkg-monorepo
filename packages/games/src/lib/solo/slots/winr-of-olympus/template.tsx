@@ -602,7 +602,7 @@ export const WinrOfOlympusTemplate = ({
         {percentageRef.current !== 100 && (
           <div className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-flex wr-h-full wr-w-full wr-flex-col wr-items-center wr-justify-center wr-gap-4">
             <img
-              src={`${isMobile ? buildedGameUrlMobile + '/loader.jpg' : buildedGameUrl + '/loader.jpg'}`}
+              src={`${buildedGameUrl + '/loader.jpg'}`}
               className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-h-full wr-w-full wr-rounded-md wr-object-cover"
             />
             <span
@@ -621,7 +621,7 @@ export const WinrOfOlympusTemplate = ({
               value={percentageRef.current}
             >
               <Progress.Indicator
-                className="wr-h-full wr-w-full wr-bg-gradient-to-t wr-from-unity-coinflip-purple-700 wr-to-unity-coinflip-purple-400"
+                className="wr-h-full wr-w-full wr-bg-gradient-to-l wr-from-cyan-400 wr-to-cyan-700"
                 style={{
                   transform: `translateX(-${100 - percentageRef.current}%)`,
                   transition: 'transform 660ms cubic-bezier(0.65, 0, 0.35, 1)',

@@ -596,7 +596,7 @@ export const WinrBonanzaTemplate = ({
         {percentageRef.current !== 100 && (
           <div className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-flex wr-h-full wr-w-full wr-flex-col wr-items-center wr-justify-center wr-gap-4">
             <img
-              src={`${isMobile ? buildedGameUrlMobile + '/loader.jpg' : buildedGameUrl + '/loader.jpg'}`}
+              src={`${buildedGameUrl + '/loader.jpg'}`}
               className="wr-absolute wr-left-0 wr-top-0 wr-z-[5] wr-h-full wr-w-full wr-rounded-md wr-object-cover"
             />
             <span
