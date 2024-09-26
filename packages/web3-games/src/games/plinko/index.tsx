@@ -45,9 +45,11 @@ interface TemplateWithWeb3Props extends BaseGameProps {
   maxWager?: number;
   hideBetHistory?: boolean;
   forceNoRetry?: boolean;
+  divideWagerByBetCount?: boolean;
 
   onAnimationStep?: (step: number) => void;
   onAnimationCompleted?: (result: PlinkoGameResult[]) => void;
+  onTransactionStatusUpdate?: (type: 'awaiting' | 'received') => void;
   onPlayerStatusUpdate?: (d: {
     type: 'levelUp' | 'badgeUp';
     awardBadges: Badge[] | undefined;
@@ -121,8 +123,9 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
   }, [plinkoResult]);
 
   const getEncodedTxData = (v: PlinkoFormFields) => {
+    const _wager = props.divideWagerByBetCount ? v.wager / v.betCount : v.wager;
     const { wagerInWei, stopGainInWei, stopLossInWei } = prepareGameTransaction({
-      wager: v.wager,
+      wager: _wager,
       stopGain: v.stopGain,
       stopLoss: v.stopLoss,
       selectedCurrency: selectedToken,
@@ -196,6 +199,8 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
     try {
       if (isPlayerHaltedRef.current) await playerLevelUp();
 
+      props.onTransactionStatusUpdate && props.onTransactionStatusUpdate('awaiting');
+
       await sendTx.mutateAsync({
         encodedTxData: getEncodedTxData(v),
         target: controllerAddress,
@@ -253,6 +258,7 @@ export default function PlinkoGame(props: TemplateWithWeb3Props) {
       finalResult?.program[0]?.type === GAME_HUB_EVENT_TYPES.Settled
     ) {
       setPlinkoResult(finalResult);
+      props.onTransactionStatusUpdate && props.onTransactionStatusUpdate('received');
 
       // clearIterationTimeout
       iterationTimeoutRef.current.forEach((t) => clearTimeout(t));
