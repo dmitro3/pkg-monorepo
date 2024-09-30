@@ -27,6 +27,7 @@ export interface GameDictionary {
   betToStart?: string;
   betToStartDescription?: string;
   betCount?: string;
+  gems?: string;
 }
 
 interface GameContextProps {
@@ -78,6 +79,7 @@ const defaultDictionary: GameDictionary = {
   betToStart: 'Bet to Start',
   betToStartDescription: 'The game will start after someone places a bet',
   betCount: 'Bet Count',
+  gems: 'GEMS',
 };
 
 const GameContext = createContext<
